@@ -2,7 +2,8 @@ FROM node:14-alpine
 
 ENV PORT 8601
 
-RUN apk add --no-cache git \
+RUN apk add --no-cache git python2 openjdk11 \
+    && python --version \
     && git clone https://github.com/robotical/MartyBlocks.git \
     && cd /MartyBlocks \
     && git submodule update --init --recursive \
@@ -17,7 +18,7 @@ RUN apk add --no-cache git \
     && cd /MartyBlocks/scratch3-gui && npm link /MartyBlocks/scratch-blocks /MartyBlocks/scratch3-vm \
     # then build out scratch blocks
     && cd /MartyBlocks/scratch-blocks && npm run prepublish \
-    && cd /MartyBlocks/scratch-gui && BUILD_MODE=dist npm run build
+    && cd /MartyBlocks/scratch3-gui && BUILD_MODE=dist npm run build
 
 WORKDIR /MartyBlocks/scratch3-gui
 EXPOSE 8601
