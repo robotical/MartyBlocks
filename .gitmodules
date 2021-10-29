@@ -1,0 +1,12 @@
+[submodule "scratch3-vm"]
+	path = scratch3-vm
+	url = https://github.com/robotical/scratch3-vm.git
+	branch = mv2app
+[submodule "scratch3-gui"]
+	path = scratch3-gui
+	url = https://github.com/robotical/scratch3-gui.git
+	branch = mv2app
+[submodule "scratch-blocks"]
+	path = scratch-blocks
+	url = https://github.com/robotical/scratch-blocks.git
+	branch = mv2app
