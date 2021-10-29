@@ -10,3 +10,7 @@
 	path = scratch-blocks
 	url = https://github.com/robotical/scratch-blocks.git
 	branch = mv2app
+[submodule "marty2js"]
+	path = marty2js
+	url = https://github.com/robotical/marty2js.git
+	branch = main
