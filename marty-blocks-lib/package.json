@@ -1,0 +1,16 @@
+{
+  "name": "marty-blocks-lib",
+  "version": "1.0.0",
+  "description": "Library code for Marty Blocks",
+  "main": "src/index.js",
+  "type": "module",
+  "keywords": [
+    "MartyBlocks"
+  ],
+  "author": "Rob Dobson",
+  "license": "Apache 2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/debug": "^4.1.5"
+  }
+}
