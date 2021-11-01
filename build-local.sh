@@ -1,5 +1,9 @@
-git submodule update --init --recursive
 CWD=$(pwd -P)
+
+# checkout the branches we want
+cd $CWD/scratch-blocks && git checkout -f mv2app;
+cd $CWD/scratch3-vm && git checkout -f mv2app
+cd $CWD/scratch3-gui && git checkout -f mv2app
 
 # first we npm install each
 cd $CWD/marty2js && npm install;
@@ -13,7 +17,7 @@ cd $CWD/marty2js && npm link;
 cd $CWD/marty-blocks-lib && npm link && npm link marty2js;
 cd $CWD/scratch-blocks && npm link && npm link marty-blocks-lib;
 cd $CWD/scratch3-vm && npm link && npm link marty-blocks-lib scratch-blocks;
-cd $CWD/scratch3-gui && npm link marty-blocks-lib scratch-blocks scratch3-vm;
+cd $CWD/scratch3-gui && npm link marty-blocks-lib scratch-blocks scratch-vm;
 
 # then build out scratch blocks
 # cd $CWD/scratch-blocks && npm run prepublish;
