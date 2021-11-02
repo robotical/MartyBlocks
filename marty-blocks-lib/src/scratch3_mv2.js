@@ -1,7 +1,5 @@
 // const Cast = require('cast'); // TODO
 const Marty2 = require('./mv2-rn');
-const ArgumentType = require('scratch-vm/src/extension-support/argument-type');
-const BlockType = require('scratch-vm/src//extension-support/block-type');
 
 mv2Interface = new Marty2();
 
