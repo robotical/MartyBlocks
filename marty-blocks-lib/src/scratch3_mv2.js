@@ -1,5 +1,7 @@
 // const Cast = require('cast'); // TODO
 const Marty2 = require('./mv2-rn');
+const ArgumentType = require('scratch-vm/src/extension-support/argument-type');
+const BlockType = require('scratch-vm/src//extension-support/block-type');
 
 mv2Interface = new Marty2();
 
@@ -38,37 +40,7 @@ class Scratch3Mv2Blocks {
          * @type {Runtime}
          */
         this.runtime = runtime;
-        // this.ip ="192.168.0.27";
-        // mv2Local = new Marty2();
     }
-
-    // getInfo () {
-    //     return {
-    //         id: 'someBlocks',
-    //         name: 'Some Blocks',
-    //         blocks: [
-    //             {
-    //                 opcode: 'myReporter',
-    //                 blockType: BlockType.REPORTER,
-    //                 text: 'letter [LETTER_NUM] of [TEXT]',
-    //                 arguments: {
-    //                     LETTER_NUM: {
-    //                         type: ArgumentType.STRING,
-    //                         defaultValue: '1'
-    //                     },
-    //                     TEXT: {
-    //                         type: ArgumentType.STRING,
-    //                         defaultValue: 'text'
-    //                     }
-    //                 }
-    //             }
-    //         ]
-    //     };
-    // }
-
-    // myReporter (args) {
-    //     return args.TEXT.charAt(args.LETTER_NUM);
-    // };
 
     /**
      * Retrieve the block primitives implemented by this package.
