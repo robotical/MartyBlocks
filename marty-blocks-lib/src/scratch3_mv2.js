@@ -1,5 +1,6 @@
 // const Cast = require('cast'); // TODO
 const Marty2 = require('./mv2-rn');
+const lamejs = require("./lame-all");
 
 mv2Interface = new Marty2();
 
@@ -958,13 +959,120 @@ class Scratch3Mv2Blocks {
 
     // SOUND
 
+    // playSound (args, util) {
+    //     const filename = args.SOUND;
+    //     console.log(`filerun/spiffs/${filename}`);
+    //     mv2Interface.send_REST(`filerun/spiffs/${filename}`);
+    //     return new Promise(resolve =>
+    //         setTimeout(resolve));
+    // }
+
     playSound (args, util) {
-        const filename = args.SOUND;
-        console.log(`filerun/spiffs/${filename}`);
-        mv2Interface.send_REST(`filerun/spiffs/${filename}`);
-        return new Promise(resolve =>
-            setTimeout(resolve));
+        const index = this._getSoundIndex(args.SOUND_MENU, util);
+        if (index >= 0) {
+            const {target} = util;
+            const {sprite} = target;
+            const {soundId} = sprite.sounds[index];
+            if (sprite.soundBank) {
+                console.log(`SOUND ${soundId} len ${sprite.soundBank.soundPlayers[soundId].buffer.length}`);
+                // const rawSoundData = this._convertSoundToRICRAW(sprite.soundBank.soundPlayers[soundId]);
+                // console.log(`CONVERTED len ${rawSoundData.length}`);
+                // mv2.playRawSound(rawSoundData);
+                // audioEncoder(sprite.soundBank.soundPlayers[soundId], 32, null, function onComplete(blob) {
+                //     console.log(`Audio MP3 ready len ${blob.length}`)
+                // });
+                const mp3SoundData = this._convertSoundToMP3(sprite.soundBank.soundPlayers[soundId]);
+                console.log(`encoded to MP3 len ${mp3SoundData.length}`);
+                // var blob = new Blob(mp3Data, {type: 'audio/mp3'});
+                // var url = window.URL.createObjectURL(blob);
+                // console.log('MP3 URl: ', url);
+            }
+        }        
     }
+
+    _convertSoundToMP3(audioBuffer) {
+        const sampleRatio = audioBuffer.buffer.sampleRate / 11025;
+        const finalLen = Math.floor(audioBuffer.buffer.length / sampleRatio);
+        const rawSoundData = new Int16Array(finalLen);
+        const inSoundData = audioBuffer.buffer.getChannelData(0);
+        for (let i = 0; i < finalLen; i++) {
+            // Nominal range of AudioBuffer data is -1.0 to +1.0 (each sample is a 32 bit float)
+            rawSoundData[i] = inSoundData[Math.floor(i*sampleRatio)] * 32767;
+        }
+
+        // //can be anything but make it a multiple of 576 to make encoders life easier
+        // const sampleBlockSize = 1152; 
+        // const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
+        // const mp3Data = [];
+        // for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
+        //     const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);
+        //     var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+        //     if (mp3buf.length > 0) {
+        //         mp3Data.push(mp3buf);
+        //     }
+        // }
+        // var mp3buf = mp3encoder.flush();   //finish writing mp3
+
+        //can be anything but make it a multiple of 576 to make encoders life easier
+        const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
+        const mp3samples = mp3encoder.encodeBuffer(rawSoundData);
+        const mp3final = mp3encoder.flush();   //finish writing mp3
+        if ((mp3samples.length > 0) && (mp3final.length > 0)) {
+            const mp3Data = new Int8Array(mp3samples.length + mp3final.length);
+            mp3Data.set(mp3samples, 0);
+            mp3Data.set(mp3final, mp3samples.length);
+            // const blob = new Blob(mp3Data, {type: 'audio/mp3'});
+            // const file = new File([blob], "testMP3.mp3");
+            return mp3Data;
+        }
+        return null;
+    }
+
+    _convertSoundToRICRAW(audioBuffer) {
+        const sampleRatio = audioBuffer.buffer.sampleRate / 11025;
+        const finalLen = Math.floor(audioBuffer.buffer.length / sampleRatio);
+        const outSoundData = new Int8Array(finalLen);
+        const inSoundData = audioBuffer.buffer.getChannelData(0);
+        for (let i = 0; i < finalLen; i++) {
+            // Nominal range of AudioBuffer data is -1.0 to +1.0 (each sample is a 32 bit float)
+            outSoundData[i] = inSoundData[Math.floor(i*sampleRatio)] * 127;
+        }
+        return outSoundData;
+    }
+
+    _getSoundIndex (soundName, util) {
+        // if the sprite has no sounds, return -1
+        const len = util.target.sprite.sounds.length;
+        if (len === 0) {
+            return -1;
+        }
+
+        // look up by name first
+        const index = this.getSoundIndexByName(soundName, util);
+        if (index !== -1) {
+            return index;
+        }
+
+        // then try using the sound name as a 1-indexed index
+        const oneIndexedIndex = parseInt(soundName, 10);
+        if (!isNaN(oneIndexedIndex)) {
+            return MathUtil.wrapClamp(oneIndexedIndex - 1, 0, len - 1);
+        }
+
+        // could not be found as a name or converted to index, return -1
+        return -1;
+    }    
+
+    getSoundIndexByName (soundName, util) {
+        const sounds = util.target.sprite.sounds;
+        for (let i = 0; i < sounds.length; i++) {
+            if (sounds[i].name === soundName) {
+                return i;
+            }
+        }
+        // if there is no sound by that name, return -1
+        return -1;
+    }    
 
     // MISC/PROPOSED/DEPRECATED
 
