@@ -1,7 +1,7 @@
 // const Cast = require('cast'); // TODO
-const Marty2 = require('./mv2-rn');
+const Mv2Interface = require('./Mv2Interface');
 
-mv2Interface = new Marty2();
+mv2Interface = new Mv2Interface();
 
 // device type IDs for Robotical Standard Add-ons
 const MV2_DTID_DISTANCE     = 0x83;
