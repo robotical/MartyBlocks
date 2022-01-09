@@ -983,9 +983,21 @@ class Scratch3Mv2Blocks {
                 // });
                 const mp3SoundData = this._convertSoundToMP3(sprite.soundBank.soundPlayers[soundId]);
                 console.log(`encoded to MP3 len ${mp3SoundData.length}`);
-                // var blob = new Blob(mp3Data, {type: 'audio/mp3'});
+
+                // // Test code to play locally
+                // var blob = new Blob(mp3SoundData, {type: 'audio/mp3'});
                 // var url = window.URL.createObjectURL(blob);
                 // console.log('MP3 URl: ', url);
+                // const context = new AudioContext();
+                // window.fetch(url)
+                //     .then(response => response.arrayBuffer())
+                //     .then(arrayBuffer => context.decodeAudioData(arrayBuffer))
+                //     .then(audioBuffer => {
+                //         const source = context.createBufferSource();
+                //         source.buffer = audioBuffer;
+                //         source.connect(context.destination);
+                //         source.start();
+                //     });
             }
         }        
     }
@@ -1000,32 +1012,36 @@ class Scratch3Mv2Blocks {
             rawSoundData[i] = inSoundData[Math.floor(i*sampleRatio)] * 32767;
         }
 
-        // //can be anything but make it a multiple of 576 to make encoders life easier
-        // const sampleBlockSize = 1152; 
-        // const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
-        // const mp3Data = [];
-        // for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
-        //     const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);
-        //     var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
-        //     if (mp3buf.length > 0) {
-        //         mp3Data.push(mp3buf);
-        //     }
-        // }
-        // var mp3buf = mp3encoder.flush();   //finish writing mp3
-
         //can be anything but make it a multiple of 576 to make encoders life easier
+        const sampleBlockSize = 1152; 
         const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
-        const mp3samples = mp3encoder.encodeBuffer(rawSoundData);
-        const mp3final = mp3encoder.flush();   //finish writing mp3
-        if ((mp3samples.length > 0) && (mp3final.length > 0)) {
-            const mp3Data = new Int8Array(mp3samples.length + mp3final.length);
-            mp3Data.set(mp3samples, 0);
-            mp3Data.set(mp3final, mp3samples.length);
-            // const blob = new Blob(mp3Data, {type: 'audio/mp3'});
-            // const file = new File([blob], "testMP3.mp3");
-            return mp3Data;
+        const mp3Data = [];
+        for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
+            const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);
+            var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+            if (mp3buf.length > 0) {
+                mp3Data.push(mp3buf);
+            }
         }
-        return null;
+        var mp3buf = mp3encoder.flush();   //finish writing mp3
+        if (mp3buf.length > 0) {
+            mp3Data.push(mp3buf);
+        }
+        return mp3Data;
+
+        // //can be anything but make it a multiple of 576 to make encoders life easier
+        // const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
+        // const mp3samples = mp3encoder.encodeBuffer(rawSoundData);
+        // const mp3final = mp3encoder.flush();   //finish writing mp3
+        // if ((mp3samples.length > 0) && (mp3final.length > 0)) {
+        //     const mp3Data = new Int8Array(mp3samples.length + mp3final.length);
+        //     mp3Data.set(mp3samples, 0);
+        //     mp3Data.set(mp3final, mp3samples.length);
+        //     // const blob = new Blob(mp3Data, {type: 'audio/mp3'});
+        //     // const file = new File([blob], "testMP3.mp3");
+        //     return mp3Data;
+        // }
+        // return null;
     }
 
     _convertSoundToRICRAW(audioBuffer) {
