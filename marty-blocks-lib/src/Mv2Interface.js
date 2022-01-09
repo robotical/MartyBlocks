@@ -42,7 +42,7 @@ class EventDispatcher {
 }
 
 
-class Marty2 extends EventDispatcher {
+class Mv2Interface extends EventDispatcher {
     constructor () {
         super();
         this.isConnected = false;
@@ -62,6 +62,14 @@ class Marty2 extends EventDispatcher {
         this.setRSSI = this.setRSSI.bind(this);
     }
 
+    handleProjectRunStart() {
+        // eslint-disable-next-line no-undef
+        if (!mv2Interface.isConnected) {
+            // eslint-disable-next-line no-alert
+            alert('You are not currently connected to a Marty. Please close scratch and connect.');
+        }
+    }
+    
     setRSSI (rssi) {
         if (rssi !== this.rssi) {
             this.rssi = rssi;
@@ -225,4 +233,4 @@ class Marty2 extends EventDispatcher {
     }
 }
 
-module.exports = Marty2;
+module.exports = Mv2Interface;

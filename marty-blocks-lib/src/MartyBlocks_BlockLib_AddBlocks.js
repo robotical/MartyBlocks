@@ -1,6 +1,203 @@
 
 export function MartyBlocks_BlockLib_AddBlocks(Blockly) {
 
+  Blockly.Categories.mv2 = "mv2";
+
+  Blockly.Colours.mv2 = {
+    "primary": "#37ABC8",
+    "secondary": "#133C46",
+    "tertiary": "#FFDA61"
+  };
+
+    // Marty V2 Disco Blocks
+  Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';
+  Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
+  Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
+
+  // MARTY V2 Motion Blocks
+  Blockly.Msg.MV2_GETREADY = '%1 %2 Get ready!';
+  Blockly.Msg.MV2_WALK_FW = '%1 %2 Walk %3 steps forwards';
+  Blockly.Msg.MV2_WALK_BW = '%1 %2 Walk %3 steps backwards';
+  Blockly.Msg.MV2_WALK = '%1 %2 Walk %3 steps with step length %4mm and step time %5s, and turn %6°';
+  Blockly.Msg.MV2_TURN = '%1 %2 Turn %3 steps %4';
+  Blockly.Msg.MV2_WIGGLE = '%1 %2 Wiggle';
+  Blockly.Msg.MV2_CIRCLE = '%1 %2 Circle dance %3 for %4s';
+  Blockly.Msg.MV2_KICK = '%1 %2 Kick %3 leg';
+  Blockly.Msg.MV2_SLIDE = '%1 %2 Slide %3 times to the %4';
+  Blockly.Msg.MV2_LEAN = '%1 %2 Lean %3 for %4s';
+  Blockly.Msg.MV2_EYES = '%1 %2 Eyes: %3';
+  Blockly.Msg.MV2_MOVELEG = '%1 %2 Move %3 leg %4';
+  Blockly.Msg.MV2_LIFTFOOT = '%1 %2 Lift %3 foot';
+  Blockly.Msg.MV2_LOWERFOOT = '%1 %2 Lower %3 foot';
+  Blockly.Msg.MV2_MOVEJOINT = '%1 %2 Move %3 to %4° in %5s';
+  Blockly.Msg.MV2_WAVE = '%1 %2 Wave %3 arm';
+  Blockly.Msg.MV2_DANCE = '%1 %2 Dance!';
+  Blockly.Msg.MV2_STANDSTRAIGHT = '%1 %2 Stand straight in %3s';
+  Blockly.Msg.MV2_HOLD = '%1 %2 Hold this position for %3s';
+  Blockly.Msg.MV2_GRIPPERARMBASIC = '%1 %2 %3 gripper';
+  Blockly.Msg.MV2_GRIPPERARMTIMED = '%1 %2 %3 gripper in %4s';
+
+  // Operators blocks
+  Blockly.Msg.OPERATORS_ADD = '%1 + %2';
+  Blockly.Msg.OPERATORS_SUBTRACT = '%1 - %2';
+  Blockly.Msg.OPERATORS_MULTIPLY = '%1 * %2';
+  Blockly.Msg.OPERATORS_DIVIDE = '%1 / %2';
+  Blockly.Msg.OPERATORS_RANDOM = 'pick random %1 to %2';
+  Blockly.Msg.OPERATORS_GT = '%1 > %2';
+  Blockly.Msg.OPERATORS_LT = '%1 < %2';
+  Blockly.Msg.OPERATORS_EQUALS = '%1 = %2';
+  Blockly.Msg.OPERATORS_AND = '%1 and %2';
+  Blockly.Msg.OPERATORS_OR = '%1 or %2';
+  Blockly.Msg.OPERATORS_NOT = 'not %1';
+  Blockly.Msg.OPERATORS_JOIN = 'join %1 %2';
+  Blockly.Msg.OPERATORS_JOIN_APPLE = 'apple';
+  Blockly.Msg.OPERATORS_JOIN_BANANA = 'banana';
+  Blockly.Msg.OPERATORS_LETTEROF = 'letter %1 of %2';
+  Blockly.Msg.OPERATORS_LETTEROF_APPLE = 'a';
+  Blockly.Msg.OPERATORS_LENGTH = 'length of %1';
+  Blockly.Msg.OPERATORS_CONTAINS = '%1 contains %2?';
+  Blockly.Msg.OPERATORS_MOD = '%1 mod %2';
+  Blockly.Msg.OPERATORS_ROUND = 'round %1';
+  Blockly.Msg.OPERATORS_MATHOP = '%1 of %2';
+  Blockly.Msg.OPERATORS_MATHOP_ABS = 'abs';
+  Blockly.Msg.OPERATORS_MATHOP_FLOOR = 'floor';
+  Blockly.Msg.OPERATORS_MATHOP_CEILING = 'ceiling';
+  Blockly.Msg.OPERATORS_MATHOP_SQRT = 'sqrt';
+  Blockly.Msg.OPERATORS_MATHOP_SIN = 'sin';
+  Blockly.Msg.OPERATORS_MATHOP_COS = 'cos';
+  Blockly.Msg.OPERATORS_MATHOP_TAN = 'tan';
+  Blockly.Msg.OPERATORS_MATHOP_ASIN = 'asin';
+  Blockly.Msg.OPERATORS_MATHOP_ACOS = 'acos';
+  Blockly.Msg.OPERATORS_MATHOP_ATAN = 'atan';
+  Blockly.Msg.OPERATORS_MATHOP_LN = 'ln';
+  Blockly.Msg.OPERATORS_MATHOP_LOG = 'log';
+  Blockly.Msg.OPERATORS_MATHOP_EEXP = 'e ^';
+  Blockly.Msg.OPERATORS_MATHOP_10EXP = '10 ^';
+
+  // Procedures blocks
+  Blockly.Msg.PROCEDURES_DEFINITION = 'define %1';
+
+  // Sensing blocks
+  Blockly.Msg.SENSING_TOUCHINGOBJECT = 'touching %1?';
+  Blockly.Msg.SENSING_TOUCHINGOBJECT_POINTER = 'mouse-pointer';
+  Blockly.Msg.SENSING_TOUCHINGOBJECT_EDGE = 'edge';
+  Blockly.Msg.SENSING_TOUCHINGCOLOR = 'touching color %1?';
+  Blockly.Msg.SENSING_COLORISTOUCHINGCOLOR = 'color %1 is touching %2?';
+  Blockly.Msg.SENSING_DISTANCETO = 'distance to %1';
+  Blockly.Msg.SENSING_DISTANCETO_POINTER = 'mouse-pointer';
+  Blockly.Msg.SENSING_ASKANDWAIT = 'ask %1 and wait';
+  Blockly.Msg.SENSING_ASK_TEXT = 'What\'s your name?';
+  Blockly.Msg.SENSING_ANSWER = 'answer';
+  Blockly.Msg.SENSING_KEYPRESSED = 'key %1 pressed?';
+  Blockly.Msg.SENSING_MOUSEDOWN = 'mouse down?';
+  Blockly.Msg.SENSING_MOUSEX = 'mouse x';
+  Blockly.Msg.SENSING_MOUSEY = 'mouse y';
+  Blockly.Msg.SENSING_SETDRAGMODE = 'set drag mode %1';
+  Blockly.Msg.SENSING_SETDRAGMODE_DRAGGABLE = 'draggable';
+  Blockly.Msg.SENSING_SETDRAGMODE_NOTDRAGGABLE = 'not draggable';
+  Blockly.Msg.SENSING_LOUDNESS = 'loudness';
+  Blockly.Msg.SENSING_LOUD = 'loud?';
+  Blockly.Msg.SENSING_TIMER = 'timer';
+  Blockly.Msg.SENSING_RESETTIMER = 'reset timer';
+  Blockly.Msg.SENSING_OF = '%1 of %2';
+  Blockly.Msg.SENSING_OF_XPOSITION = 'x position';
+  Blockly.Msg.SENSING_OF_YPOSITION = 'y position';
+  Blockly.Msg.SENSING_OF_DIRECTION = 'direction';
+  Blockly.Msg.SENSING_OF_COSTUMENUMBER = 'costume #';
+  Blockly.Msg.SENSING_OF_COSTUMENAME = 'costume name';
+  Blockly.Msg.SENSING_OF_SIZE = 'size';
+  Blockly.Msg.SENSING_OF_VOLUME = 'volume';
+  Blockly.Msg.SENSING_OF_BACKDROPNUMBER = 'backdrop #';
+  Blockly.Msg.SENSING_OF_BACKDROPNAME = 'backdrop name';
+  Blockly.Msg.SENSING_OF_STAGE = 'Stage';
+  Blockly.Msg.SENSING_CURRENT = 'current %1';
+  Blockly.Msg.SENSING_CURRENT_YEAR = 'year';
+  Blockly.Msg.SENSING_CURRENT_MONTH = 'month';
+  Blockly.Msg.SENSING_CURRENT_DATE = 'date';
+  Blockly.Msg.SENSING_CURRENT_DAYOFWEEK = 'day of week';
+  Blockly.Msg.SENSING_CURRENT_HOUR = 'hour';
+  Blockly.Msg.SENSING_CURRENT_MINUTE = 'minute';
+  Blockly.Msg.SENSING_CURRENT_SECOND = 'second';
+  Blockly.Msg.SENSING_DAYSSINCE2000 = 'days since 2000';
+  Blockly.Msg.SENSING_USERNAME = 'username';
+  Blockly.Msg.SENSING_USERID = 'user id';
+
+  // MARTY V2 sensing blocks
+
+  Blockly.Msg.MV2_BATTERYLEVEL = '%1 %2 Remaining battery (%)';
+  Blockly.Msg.MV2_POSITION = '%1 %2 Position of %3 joint (in ° from \'zero\')';
+  Blockly.Msg.MV2_CURRENT = '%1 %2 Current at %3 joint (in mA)';
+  Blockly.Msg.MV2_ACCELEROMETERX = '%1 %2 Accelerometer X';
+  Blockly.Msg.MV2_ACCELEROMETERY = '%1 %2 Accelerometer Y';
+  Blockly.Msg.MV2_ACCELEROMETERZ = '%1 %2 Accelerometer Z';
+  Blockly.Msg.MV2_OBSTACLE = "%1 %2 %3 Foot Obstacle Sensed";
+  Blockly.Msg.MV2_GROUND = "%1 %2 %3 Foot sensor on the ground";
+  Blockly.Msg.MV2_COLOUR = "%1 %2 %3 Colour Sensor";
+  Blockly.Msg.MV2_COLOUR_RAW = "%1 %2 %3 Colour Sensor %4 channel";
+  Blockly.Msg.MV2_DISTANCE = "%1 %2 Distance sensor";
+  Blockly.Msg.MV2_LIGHT_SENSOR = "%1 %2 %3 Light sensor %4";
+  Blockly.Msg.MV2_NOISE_SENSOR = "%1 %2 %3 Noise sensor";
+
+  // Sound blocks
+  Blockly.Msg.SOUND_PLAY = 'start sound %1';
+  Blockly.Msg.SOUND_PLAYUNTILDONE = 'play sound %1 until done';
+  Blockly.Msg.SOUND_STOPALLSOUNDS = 'stop all sounds';
+  Blockly.Msg.SOUND_SETEFFECTO = 'set %1 effect to %2';
+  Blockly.Msg.SOUND_CHANGEEFFECTBY = 'change %1 effect by %2';
+  Blockly.Msg.SOUND_CLEAREFFECTS = 'clear sound effects';
+  Blockly.Msg.SOUND_EFFECTS_PITCH = 'pitch';
+  Blockly.Msg.SOUND_EFFECTS_PAN = 'pan left/right';
+  Blockly.Msg.SOUND_CHANGEVOLUMEBY = 'change volume by %1';
+  Blockly.Msg.SOUND_SETVOLUMETO = 'set volume to %1%';
+  Blockly.Msg.SOUND_VOLUME = 'volume';
+  Blockly.Msg.SOUND_RECORD = 'record...';
+
+  // MARTY V2 sound blocks
+  Blockly.Msg.MV2_PLAYSOUND = '%1 %2 Play sound: %3';
+
+  // MARTY V2 block drop-down options
+  Blockly.Msg.DROPDOWN_OPTION_LEFT = 'left';
+  Blockly.Msg.DROPDOWN_OPTION_RIGHT = 'right';
+  Blockly.Msg.DROPDOWN_OPTION_FORWARD = 'forward';
+  Blockly.Msg.DROPDOWN_OPTION_BACKWARD = 'backward';
+  Blockly.Msg.DROPDOWN_OPTION_OPEN = 'open';
+  Blockly.Msg.DROPDOWN_OPTION_CLOSE = 'close';
+  Blockly.Msg.DROPDOWN_OPTION_EXCITED = 'excited';
+  Blockly.Msg.DROPDOWN_OPTION_WIDE = 'wide';
+  Blockly.Msg.DROPDOWN_OPTION_ANGRY = 'angry';
+  Blockly.Msg.DROPDOWN_OPTION_NORMAL = 'normal';
+  Blockly.Msg.DROPDOWN_OPTION_WIGGLE = 'wiggle';
+  Blockly.Msg.DROPDOWN_OPTION_LEFTHIP = 'left hip';
+  Blockly.Msg.DROPDOWN_OPTION_LEFTTWIST = 'left twist';
+  Blockly.Msg.DROPDOWN_OPTION_LEFTKNEE = 'left knee';
+  Blockly.Msg.DROPDOWN_OPTION_RIGHTHIP = 'right hip';
+  Blockly.Msg.DROPDOWN_OPTION_RIGHTTWIST = 'right twist';
+  Blockly.Msg.DROPDOWN_OPTION_RIGHTKNEE = 'right knee';
+  Blockly.Msg.DROPDOWN_OPTION_LEFTARM = 'left arm';
+  Blockly.Msg.DROPDOWN_OPTION_RIGHTARM = 'right arm';
+  Blockly.Msg.DROPDOWN_OPTION_EYES = 'eyes';
+  Blockly.Msg.DROPDOWN_OPTION_ARMS = 'arms';
+  Blockly.Msg.DROPDOWN_OPTION_FEET = 'feet';
+  Blockly.Msg.DROPDOWN_OPTION_ALL = 'all';
+  Blockly.Msg.DROPDOWN_OPTION_CONFUSIONSOUND = 'confusion';
+  Blockly.Msg.DROPDOWN_OPTION_DISBELIEFSOUND = 'disbelief';
+  Blockly.Msg.DROPDOWN_OPTION_EXCITEMENTSOUND = 'excitement';
+  Blockly.Msg.DROPDOWN_OPTION_NOWAYSOUND = 'no way!';
+  Blockly.Msg.DROPDOWN_OPTION_NOSOUND = 'no!';
+  Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND = 'whistle';
+  Blockly.Msg.DROPDOWN_OPTION_CLEAR = 'clear';
+  Blockly.Msg.DROPDOWN_OPTION_RED = 'red';
+  Blockly.Msg.DROPDOWN_OPTION_GREEN = 'green';
+  Blockly.Msg.DROPDOWN_OPTION_BLUE = 'blue';
+  Blockly.Msg.DROPDOWN_OPTION_PINK = 'pink';
+  Blockly.Msg.DROPDOWN_OPTION_YELLOW = 'yellow';
+  Blockly.Msg.DROPDOWN_OPTION_WHITE = 'white';
+  Blockly.Msg.DROPDOWN_OPTION_OFF = 'off';
+  Blockly.Msg.DROPDOWN_OPTION_ZERO = '0';
+  Blockly.Msg.DROPDOWN_OPTION_ONE = '1';
+  Blockly.Msg.DROPDOWN_OPTION_TWO = '2';
+  Blockly.Msg.DROPDOWN_OPTION_THREE = '3';
+
   Blockly.Blocks['mv2_getReady'] = {
     /**
      * Block to make Marty freeze
