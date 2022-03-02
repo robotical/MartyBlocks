@@ -7,8 +7,6 @@ RUN apk add --no-cache git python2 openjdk11 \
     && echo "Cloning MartyBlocks -----------------------------------------" \
     && git clone https://github.com/robotical/MartyBlocks.git \
     && cd /MartyBlocks \
-    && echo "Cloning marty2js -----------------------------------------" \
-    && git clone https://github.com/robotical/marty2js.git \
     && echo "Cloning stratch-blocks -----------------------------------------" \
     && git clone https://github.com/robotical/scratch-blocks.git \
     && echo "Cloning stratch3-vm -----------------------------------------" \
@@ -19,8 +17,6 @@ RUN apk add --no-cache git python2 openjdk11 \
     && cd /MartyBlocks/scratch-blocks && git checkout -f feature/refactorMartyBlocks \
     && cd /MartyBlocks/scratch3-vm && git checkout -f feature/refactorMartyBlocks \
     && cd /MartyBlocks/scratch3-gui && git checkout -f feature/refactorMartyBlocks \
-    && echo "Perform npm install on marty2js -----------------------------------------" \
-    && cd /MartyBlocks/marty2js && npm install --also=dev \
     && echo "Perform npm install on marty-blocks-lib -----------------------------------------" \
     && cd /MartyBlocks/marty-blocks-lib && npm install \
     && echo "Perform npm install on scratch-blocks -----------------------------------------" \
@@ -30,15 +26,12 @@ RUN apk add --no-cache git python2 openjdk11 \
     && echo "Perform npm install on scratch3-gui -----------------------------------------" \
     && cd /MartyBlocks/scratch3-gui && npm install \
     && echo "NPM Linking -----------------------------------------" \
-    && cd /MartyBlocks/marty2js && npm link \
     && cd /MartyBlocks/marty-blocks-lib && npm link \
     && cd /MartyBlocks/scratch-blocks && npm link && npm link marty-blocks-lib \
-    && cd /MartyBlocks/scratch3-vm && npm link && npm link marty-blocks-lib scratch-blocks marty2js \
+    && cd /MartyBlocks/scratch3-vm && npm link && npm link marty-blocks-lib scratch-blocks \
     && echo "NPM Linking scratch3gui -----------------------------------------" \
-    && cd /MartyBlocks/scratch3-gui && npm update && npm link marty-blocks-lib scratch-blocks scratch-vm marty2js \
+    && cd /MartyBlocks/scratch3-gui && npm update && npm link marty-blocks-lib scratch-blocks scratch-vm \
     && ls -al ./node_modules \
-    && echo "Build marty2js -----------------------------------------" \
-    && cd /MartyBlocks/marty2js && tsc --build tsconfig.json \
     && echo "Scratch blocks prepublish -----------------------------------------" \
     && cd /MartyBlocks/scratch-blocks && npm run prepublish \
     && echo "Scratch gui build -----------------------------------------" \

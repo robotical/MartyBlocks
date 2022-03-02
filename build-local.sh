@@ -6,15 +6,13 @@ cd $CWD/scratch3-vm && git checkout -f mv2app
 cd $CWD/scratch3-gui && git checkout -f mv2app
 
 # first we npm install each
-cd $CWD/marty2js && npm install;
 cd $CWD/marty-blocks-lib && npm install;
 cd $CWD/scratch-blocks && npm install;
 cd $CWD/scratch3-vm && npm install;
 cd $CWD/scratch3-gui && npm install;
 
 # then we link everything
-cd $CWD/marty2js && npm link;
-cd $CWD/marty-blocks-lib && npm link && npm link marty2js;
+cd $CWD/marty-blocks-lib && npm link && npm link;
 cd $CWD/scratch-blocks && npm link && npm link marty-blocks-lib;
 cd $CWD/scratch3-vm && npm link && npm link marty-blocks-lib scratch-blocks;
 cd $CWD/scratch3-gui && npm link marty-blocks-lib scratch-blocks scratch-vm;
