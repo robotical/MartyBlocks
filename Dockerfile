@@ -1,42 +1,39 @@
-FROM node:14-alpine
+FROM library/ubuntu:18.04
+
+LABEL description="Base image MartyBlocks developement"
+LABEL maintainer="Rob Dobson <rob@dobson.com>"
 
 ENV PORT 8601
 
-RUN apk add --no-cache git python2 openjdk11 \
-    && npm install -g typescript \
-    && echo "Cloning MartyBlocks -----------------------------------------" \
-    && git clone https://github.com/robotical/MartyBlocks.git \
-    && cd /MartyBlocks \
-    && echo "Cloning stratch-blocks -----------------------------------------" \
-    && git clone https://github.com/robotical/scratch-blocks.git \
-    && echo "Cloning stratch3-vm -----------------------------------------" \
-    && git clone https://github.com/robotical/scratch3-vm.git \
-    && echo "Cloning stratch3-gui -----------------------------------------" \
-    && git clone https://github.com/robotical/scratch3-gui.git \
-    && echo "Checkout desired branch -----------------------------------------" \
-    && cd /MartyBlocks/scratch-blocks && git checkout -f feature/refactorMartyBlocks \
-    && cd /MartyBlocks/scratch3-vm && git checkout -f feature/refactorMartyBlocks \
-    && cd /MartyBlocks/scratch3-gui && git checkout -f feature/refactorMartyBlocks \
-    && echo "Perform npm install on marty-blocks-lib -----------------------------------------" \
-    && cd /MartyBlocks/marty-blocks-lib && npm install \
-    && echo "Perform npm install on scratch-blocks -----------------------------------------" \
-    && cd /MartyBlocks/scratch-blocks && npm install \
-    && echo "Perform npm install on scratch3-vm -----------------------------------------" \
-    && cd /MartyBlocks/scratch3-vm && npm install \
-    && echo "Perform npm install on scratch3-gui -----------------------------------------" \
-    && cd /MartyBlocks/scratch3-gui && npm install \
-    && echo "NPM Linking -----------------------------------------" \
-    && cd /MartyBlocks/marty-blocks-lib && npm link \
-    && cd /MartyBlocks/scratch-blocks && npm link && npm link marty-blocks-lib \
-    && cd /MartyBlocks/scratch3-vm && npm link && npm link marty-blocks-lib scratch-blocks \
-    && echo "NPM Linking scratch3gui -----------------------------------------" \
-    && cd /MartyBlocks/scratch3-gui && npm update && npm link marty-blocks-lib scratch-blocks scratch-vm \
-    && ls -al ./node_modules \
-    && echo "Scratch blocks prepublish -----------------------------------------" \
-    && cd /MartyBlocks/scratch-blocks && npm run prepublish \
-    && echo "Scratch gui build -----------------------------------------" \
-    && cd /MartyBlocks/scratch3-gui && BUILD_MODE=dist npm run build
-
+RUN apt update && apt install git npm -y
+RUN npm install -g typescript
+RUN echo "Cloning MartyBlocks -----------------------------------------"
+RUN git clone https://github.com/robotical/MartyBlocks.git
+RUN cd /MartyBlocks
+RUN echo "Cloning stratch-blocks -----------------------------------------"
+RUN git clone -b feature/refactorMartyBlocks https://github.com/robotical/scratch-blocks.git /MartyBlocks/scratch-blocks
+RUN echo "Cloning stratch3-vm -----------------------------------------"
+RUN git clone -b feature/refactorMartyBlocks https://github.com/robotical/scratch3-vm.git /MartyBlocks/scratch3-vm
+RUN echo "Cloning stratch3-gui -----------------------------------------"
+RUN git clone -b feature/refactorMartyBlocks https://github.com/robotical/scratch3-gui.git /MartyBlocks/scratch3-gui
+RUN echo "Perform npm install on marty-blocks-lib -----------------------------------------"
+RUN cd /MartyBlocks/marty-blocks-lib && npm install
+RUN echo "Perform npm install on scratch-blocks -----------------------------------------"
+RUN cd /MartyBlocks/scratch-blocks && npm install
+RUN echo "Perform npm install on scratch3-vm -----------------------------------------"
+RUN cd /MartyBlocks/scratch3-vm && npm install
+RUN echo "Perform npm install on scratch3-gui -----------------------------------------"
+RUN cd /MartyBlocks/scratch3-gui && npm install
+RUN echo "NPM Linking -----------------------------------------"
+RUN cd /MartyBlocks/marty-blocks-lib && npm link
+RUN cd /MartyBlocks/scratch-blocks && npm link && npm link marty-blocks-lib
+RUN cd /MartyBlocks/scratch3-vm && npm link && npm link marty-blocks-lib scratch-blocks
+RUN echo "NPM Linking scratch3gui -----------------------------------------"
+RUN cd /MartyBlocks/scratch3-gui && npm update && npm link marty-blocks-lib scratch-blocks scratch-vm
+RUN echo "Scratch blocks prepublish -----------------------------------------"
+RUN cd /MartyBlocks/scratch-blocks && npm run prepublish
+RUN echo "Scratch gui build -----------------------------------------"
+RUN cd /MartyBlocks/scratch3-gui && BUILD_MODE=dist npm run build
 
 WORKDIR /MartyBlocks/scratch3-gui
 EXPOSE 8601
