@@ -1,18 +1,19 @@
 // const Cast = require('cast'); // TODO
 const Mv2Interface = require('./Mv2Interface');
+const lamejs = require("./lame-all");
 
 mv2Interface = new Mv2Interface();
 
 // device type IDs for Robotical Standard Add-ons
-const MV2_DTID_DISTANCE     = 0x83;
-const MV2_DTID_LIGHT        = 0x84;
-const MV2_DTID_COLOUR       = 0x85;
-const MV2_DTID_IRFOOT       = 0x86;
-const MV2_DTID_LEDFOOT      = 0x87;
-const MV2_DTID_LEDARM       = 0x88;
-const MV2_DTID_LEDEYE       = 0x89;
-const MV2_DTID_NOISE        = 0x8A;
-const MV2_DTID_GRIPSERVO    = 0x8B;
+const MV2_DTID_DISTANCE = 0x83;
+const MV2_DTID_LIGHT = 0x84;
+const MV2_DTID_COLOUR = 0x85;
+const MV2_DTID_IRFOOT = 0x86;
+const MV2_DTID_LEDFOOT = 0x87;
+const MV2_DTID_LEDARM = 0x88;
+const MV2_DTID_LEDEYE = 0x89;
+const MV2_DTID_NOISE = 0x8A;
+const MV2_DTID_GRIPSERVO = 0x8B;
 
 /**
  * Questions:
@@ -32,7 +33,7 @@ const MV2_DTID_GRIPSERVO    = 0x8B;
 
 class Scratch3Mv2Blocks {
 
-    constructor (runtime) {
+    constructor(runtime) {
         /**
          * The runtime instantiating this block package.
          * @type {Runtime}
@@ -44,7 +45,7 @@ class Scratch3Mv2Blocks {
      * Retrieve the block primitives implemented by this package.
      * @return {object.<string, Function>} Mapping of opcode to Function.
      */
-    getPrimitives () {
+    getPrimitives() {
         return {
             // motion commands
 
@@ -120,50 +121,50 @@ class Scratch3Mv2Blocks {
 
     // DISCO Utils
 
-    getColourHexString(colourChoiceStr){
+    getColourHexString(colourChoiceStr) {
         let colour;
         let colourChoice = parseInt(colourChoiceStr);
 
         switch (colourChoice) {
-        case 0:
-            //RED
-            colour = 'ff0000';
-            break;
-        case 1:
-            //GREEN
-            colour = '00ff00';
-            break;
-        case 2:
-            //BLUE
-            colour = '0000ff';
-            break;
-        case 3:
-            //PINK
-            colour = 'ff00d9';
-            break;
-        case 4:
-            //YELLOW
-            colour = 'fcec00';
-            break;
-        case 5:
-            //WHITE
-            colour = 'ffffff';
-            break;
-        case 6:
-            //OFF
-            colour = '000000';
-            break;
-            
-        default:
-            //set default to mode 01 (OFF)
-            colour = '000000';
-            break;
+            case 0:
+                //RED
+                colour = 'ff0000';
+                break;
+            case 1:
+                //GREEN
+                colour = '00ff00';
+                break;
+            case 2:
+                //BLUE
+                colour = '0000ff';
+                break;
+            case 3:
+                //PINK
+                colour = 'ff00d9';
+                break;
+            case 4:
+                //YELLOW
+                colour = 'fcec00';
+                break;
+            case 5:
+                //WHITE
+                colour = 'ffffff';
+                break;
+            case 6:
+                //OFF
+                colour = '000000';
+                break;
+
+            default:
+                //set default to mode 01 (OFF)
+                colour = '000000';
+                break;
         }
 
         return colour;
     }
 
-    getDiscoBoardType(boardChoiceStr){
+    getDiscoBoardType(boardChoiceStr) {
         let boardDeviceType;
         let boardChoice = parseInt(boardChoiceStr);
 
@@ -179,7 +180,7 @@ class Scratch3Mv2Blocks {
             case 2:
                 // FOOT
                 boardDeviceType = MV2_DTID_LEDFOOT;
-                break;     
+                break;
             case 3:
                 // ALL
                 boardDeviceType = 'all';
@@ -197,43 +198,43 @@ class Scratch3Mv2Blocks {
 
 
     //utility functions
-    colorToLEDAddonStr(color){
+    colorToLEDAddonStr(color) {
         // the LEDs are capped at about brightness level 20 on each channel, so we need to scale down the RGB values
         const divisor = 20;
-        return this.hexstr(parseInt(color[0]/divisor), 2) + this.hexstr(parseInt(color[1]/divisor), 2) + this.hexstr(parseInt(color[2]/20), 2);
+        return this.hexstr(parseInt(color[0] / divisor), 2) + this.hexstr(parseInt(color[1] / divisor), 2) + this.hexstr(parseInt(color[2] / 20), 2);
     }
 
 
-    decTo4cHexString (decimal) {
+    decTo4cHexString(decimal) {
 
         let hexString = decimal.toString(16);
         hexString = hexString.toUpperCase();
 
-        if(hexString.length == 1){
+        if (hexString.length == 1) {
             hexString = "000" + hexString;
-        } else if(hexString.length == 2){
+        } else if (hexString.length == 2) {
             hexString = "00" + hexString;
-        } else if(hexString.length == 3) {
+        } else if (hexString.length == 3) {
             hexString = "0" + hexString;
-        } else if(hexString.length > 4 || hexString.length == 0) {
+        } else if (hexString.length > 4 || hexString.length == 0) {
             hexString = "0000";
         }
         return hexString;
     }
 
     // return padded hex string, up to 8 nibbles long
-    hexstr(val, length){
+    hexstr(val, length) {
         // for negative numbers, zero right shift fill, convert and then get the end of the resulting 32 bit number
-        if (val < 0) return (val >>> 0).toString(16).substr(0-length);
+        if (val < 0) return (val >>> 0).toString(16).substr(0 - length);
         // for positive numbers, convert to hex and pad with zeros
         return val.toString(16).padStart(length, '0');
     }
 
     // return name of first addon found with a specific Device Type ID
-    addonNameByDTID(dtid){
+    addonNameByDTID(dtid) {
         const addons = JSON.parse(mv2Interface.addons).addons;
-        for (var i=0; i < addons.length; i++){
-            if (addons[i].deviceTypeID == dtid){
+        for (var i = 0; i < addons.length; i++) {
+            if (addons[i].deviceTypeID == dtid) {
                 return addons[i].name;
             }
         }
@@ -242,33 +243,33 @@ class Scratch3Mv2Blocks {
 
     // MOTION
 
-    getReady (args, util) {
+    getReady(args, util) {
         const moveTime = 3000;
         console.log('Ready, set, go!');
         mv2Interface.send_REST(`traj/getReady/?moveTime=${moveTime}`);
         return new Promise(resolve => setTimeout(resolve, moveTime));
     }
 
-    getAllDiscoBoards(addons){
+    getAllDiscoBoards(addons) {
         var addressList = [];
 
-        for (var i=0; i < addons.length; i++){
+        for (var i = 0; i < addons.length; i++) {
 
-            if (   addons[i].deviceTypeID == MV2_DTID_LEDEYE
-                || addons[i].deviceTypeID == MV2_DTID_LEDARM
-                || addons[i].deviceTypeID == MV2_DTID_LEDFOOT){
-                
+            if (addons[i].deviceTypeID == MV2_DTID_LEDEYE ||
+                addons[i].deviceTypeID == MV2_DTID_LEDARM ||
+                addons[i].deviceTypeID == MV2_DTID_LEDFOOT) {
+
                 addressList.push(addons[i].name);
             }
         }
         return addressList;
     }
 
-    getFilteredDiscoBoards(addons, filterBoardType){
+    getFilteredDiscoBoards(addons, filterBoardType) {
         var addressList = [];
 
-        for (var i=0; i < addons.length; i++){
-            if (addons[i].deviceTypeID == filterBoardType){
+        for (var i = 0; i < addons.length; i++) {
+            if (addons[i].deviceTypeID == filterBoardType) {
                 addressList.push(addons[i].name);
             }
         }
@@ -277,7 +278,7 @@ class Scratch3Mv2Blocks {
     }
 
 
-    discoChangeBlockPattern (args, util) {
+    discoChangeBlockPattern(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         //so if it's set in a forever loop give 0.2s break between each update 
         const resolveTime = 200;
@@ -286,16 +287,16 @@ class Scratch3Mv2Blocks {
         const patternChoice = args.PATTERN;
         let patternProgram = '10';
 
-        if(patternChoice == '0'){
+        if (patternChoice == '0') {
             presetProgram = '10';
 
-        } else if(patternChoice == '1'){
+        } else if (patternChoice == '1') {
             patternProgram = '11';
 
-        } else if(patternChoice == '2'){
+        } else if (patternChoice == '2') {
             patternProgram = '01';
 
-        }  else {
+        } else {
             //default to off
             patternProgram = '01';
         }
@@ -303,7 +304,7 @@ class Scratch3Mv2Blocks {
         // select all LED addons found
         let addressList = [];
 
-        if( filterBoardType == 'all') {
+        if (filterBoardType == 'all') {
             addressList = this.getAllDiscoBoards(addons);
         } else {
             addressList = this.getFilteredDiscoBoards(addons, filterBoardType)
@@ -311,7 +312,7 @@ class Scratch3Mv2Blocks {
 
         let numberOfLEDAddons = addressList.length;
 
-        for(var i=0; i < numberOfLEDAddons; i++){
+        for (var i = 0; i < numberOfLEDAddons; i++) {
             let ledDeviceName = addressList.pop();
             // console.log(`elem/${ledDeviceName}/json?cmd=raw&hexWr=${patternProgram}`);
             mv2Interface.send_REST(`elem/${ledDeviceName}/json?cmd=raw&hexWr=${patternProgram}`);
@@ -322,10 +323,10 @@ class Scratch3Mv2Blocks {
     }
 
 
-    discoChangeBlockColour (args, util) {
+    discoChangeBlockColour(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         const resolveTime = 200;
-        const color = 0 ;//TODO Cast.toRgbColorList(args.COLOR);
+        const color = 0; //TODO Cast.toRgbColorList(args.COLOR);
         const boardChoice = args.BOARDTYPE;
 
         const colorStr = this.colorToLEDAddonStr(color);
@@ -334,14 +335,14 @@ class Scratch3Mv2Blocks {
         // select all LED addons found that match the board type
         let addressList = [];
 
-        if( filterBoardType == 'all') {
+        if (filterBoardType == 'all') {
             addressList = this.getAllDiscoBoards(addons);
         } else {
             addressList = this.getFilteredDiscoBoards(addons, filterBoardType)
         }
-     
+
         let numberOfLEDAddons = addressList.length;
-        for(var i=0; i < numberOfLEDAddons; i++){
+        for (var i = 0; i < numberOfLEDAddons; i++) {
             let ledDeviceName = addressList.pop();
             mv2Interface.send_REST(`elem/${ledDeviceName}/json?cmd=raw&hexWr=02${colorStr}`);
         }
@@ -349,7 +350,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, resolveTime));
     }
 
-    discoChangeRegionColour (args, util) {
+    discoChangeRegionColour(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         const resolveTime = 200;
         const color = 0; // TODO Cast.toRgbColorList(args.COLOR);
@@ -361,15 +362,15 @@ class Scratch3Mv2Blocks {
         // select all LED addons found that match the board type
         let addressList = [];
 
-        if( filterBoardType == 'all') {
+        if (filterBoardType == 'all') {
             addressList = this.getAllDiscoBoards(addons);
         } else {
             addressList = this.getFilteredDiscoBoards(addons, filterBoardType)
         }
-     
+
         let numberOfLEDAddons = addressList.length;
 
-        for(var i=0; i < numberOfLEDAddons; i++){
+        for (var i = 0; i < numberOfLEDAddons; i++) {
             let ledDeviceName = addressList.pop();
             mv2Interface.send_REST(`elem/${ledDeviceName}/json?cmd=raw&hexWr=040${regionChoice}${colorStr}`);
         }
@@ -377,7 +378,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, resolveTime));
     }
 
-    walk_fw (args, util) {
+    walk_fw(args, util) {
         const moveTime = 1500;
         let steps = parseInt(args.STEPS);
         steps = Math.min(Math.max(steps, 1), 20);
@@ -388,7 +389,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime * steps));
     }
 
-    walk_bw (args, util) {
+    walk_bw(args, util) {
         const moveTime = 1500;
         let steps = parseInt(args.STEPS);
         steps = Math.min(Math.max(steps, 1), 20);
@@ -399,7 +400,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime * steps));
     }
 
-    walk (args, util) {
+    walk(args, util) {
         let moveTime = parseFloat(args.MOVETIME) * 1000;
         moveTime = Math.min(Math.max(moveTime, 1), 10000);
         let stepLength = parseInt(args.STEPLEN);
@@ -414,13 +415,13 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime * steps));
     }
 
-    turn (args, util) {
+    turn(args, util) {
         const moveTime = 1500;
         let steps = parseInt(args.STEPS);
         steps = Math.min(Math.max(steps, 1), 20);
         let turn = 20;
         const side = args.SIDE;
-        if (side === '1'){
+        if (side === '1') {
             turn *= -1;
         }
         console.log(`traj/step/${steps}/?moveTime=${moveTime}&turn=${turn}&stepLength=1`);
@@ -429,7 +430,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime * steps));
     }
 
-    wiggle (args, util) {
+    wiggle(args, util) {
         const moveTime = 4000;
         console.log(`traj/wiggle/1/?moveTime=${moveTime}`);
         mv2Interface.send_REST(`traj/wiggle/1/?moveTime=${moveTime}`);
@@ -437,7 +438,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    circle (args, util) {
+    circle(args, util) {
         let moveTime = parseFloat(args.MOVETIME) * 1000;
         moveTime = Math.min(Math.max(moveTime, 1), 10000);
         const side = args.SIDE;
@@ -447,7 +448,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    kick (args, util) {
+    kick(args, util) {
         const moveTime = 3000;
         const side = args.SIDE;
         console.log(`traj/kick/1/?moveTime=${moveTime}&side=${side}`);
@@ -456,7 +457,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    lean (args, util) {
+    lean(args, util) {
         let moveTime = parseFloat(args.MOVETIME) * 1000;
         moveTime = Math.min(Math.max(moveTime, 1), 10000);
         const side = args.SIDE;
@@ -466,7 +467,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    slide (args, util) {
+    slide(args, util) {
         const moveTime = 1000;
         let steps = parseInt(args.STEPS);
         steps = Math.min(Math.max(steps, 1), 20);
@@ -477,19 +478,19 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime * steps));
     }
 
-    eyes (args, util) {
+    eyes(args, util) {
         const eyeCommand = args.COMMAND;
         console.log(`traj/${eyeCommand}`);
         mv2Interface.send_REST(`traj/${eyeCommand}`);
         let moveTime = 1000;
-        if (eyeCommand === 'wiggleEyes'){
+        if (eyeCommand === 'wiggleEyes') {
             moveTime = 2000;
         }
         return new Promise(resolve =>
             setTimeout(resolve, moveTime));
     }
 
-    moveLeg (args, util) {
+    moveLeg(args, util) {
         const moveTime = 1000;
         const side = args.SIDE;
         const direction = args.DIRECTION;
@@ -499,7 +500,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    liftFoot (args, util) {
+    liftFoot(args, util) {
         const side = args.SIDE;
         console.log(`traj/liftFoot/1/?side=${side}`);
         mv2Interface.send_REST(`traj/liftFoot/1/?side=${side}`);
@@ -507,7 +508,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, 1000));
     }
 
-    lowerFoot (args, util) {
+    lowerFoot(args, util) {
         const side = args.SIDE;
         console.log(`traj/lowerFoot/1/?side=${side}`);
         mv2Interface.send_REST(`traj/lowerFoot/1/?side=${side}`);
@@ -515,7 +516,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, 1000));
     }
 
-    moveJoint (args, util) {
+    moveJoint(args, util) {
         let moveTime = parseFloat(args.MOVETIME) * 1000;
         moveTime = Math.min(Math.max(moveTime, 1), 10000);
         const jointID = args.SERVOCHOICE;
@@ -526,7 +527,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    wave (args, util) {
+    wave(args, util) {
         const side = args.SIDE;
         console.log(`traj/wave/1/?side=${side}`);
         mv2Interface.send_REST(`traj/wave/1/?side=${side}`);
@@ -541,7 +542,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve));
     } */
 
-    dance (args, util) {
+    dance(args, util) {
         console.log('Let\'s dance!');
         const moveTime = 3000;
         let marty_cmd = `traj/dance/1?moveTime=${moveTime}`;
@@ -554,7 +555,7 @@ class Scratch3Mv2Blocks {
 
     }
 
-    standStraight (args, util) {
+    standStraight(args, util) {
         const moveTime = parseFloat(args.MOVETIME) * 1000;
         // minimum?
         console.log(`traj/standStraight/?moveTime=${moveTime}`);
@@ -563,7 +564,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    hold (args, util) {
+    hold(args, util) {
         const moveTime = parseFloat(args.MOVETIME) * 1000;
         console.log(`traj/hold/?moveTime=${moveTime}`);
         mv2Interface.send_REST(`traj/hold/?moveTime=${moveTime}`);
@@ -571,10 +572,10 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve, moveTime));
     }
 
-    gripperArmMove(keypoints, name=null, enable=true){
+    gripperArmMove(keypoints, name = null, enable = true) {
         // keypoints should be array of [angle, time]
         // angle in degrees, time in ms
-        if (!name){
+        if (!name) {
             name = this.addonNameByDTID(MV2_DTID_GRIPSERVO);
             if (!name) return false;
         }
@@ -582,14 +583,14 @@ class Scratch3Mv2Blocks {
         if (!numKeypoints) return false;
         // servo opcode 00 is move, overwriting current movequeue. number of keypoints is given in second byte
         var cmdStr = "00" + this.hexstr(numKeypoints, 2);
-        for (i in keypoints){
+        for (i in keypoints) {
             // servo expects 0.1 degree resolution, as an int16. So x10 and floor.
-            cmdStr += this.hexstr(parseInt(keypoints[i][0]*10), 4);
+            cmdStr += this.hexstr(parseInt(keypoints[i][0] * 10), 4);
             // movement time, in ms as uint16
             cmdStr += this.hexstr(keypoints[i][1], 4);
         }
 
-        if (enable){
+        if (enable) {
             // enable motor
             mv2Interface.send_REST(`elem/${name}/json?cmd=raw&hexWr=2001`);
         }
@@ -599,18 +600,23 @@ class Scratch3Mv2Blocks {
         return true;
     }
 
-    gripperArmBasic (args, util) {
+    gripperArmBasic(args, util) {
         //default time is set to 1 second
         const moveTime = 1 * 1000;
         //This block sets hand to open or closed
         const handPosition = args.HAND_POSITION;
 
         var keypoints = null;
-        if (handPosition == 1){ //closed
+        if (handPosition == 1) { //closed
             // close hand and hold for 30s. 90 degree angle
-            keypoints = [[90, moveTime], [90, 30000]];
-        } else {                //open
-            keypoints = [[0, moveTime]];
+            keypoints = [
+                [90, moveTime],
+                [90, 30000]
+            ];
+        } else { //open
+            keypoints = [
+                [0, moveTime]
+            ];
         }
 
         if (!this.gripperArmMove(keypoints)) return false;
@@ -620,23 +626,28 @@ class Scratch3Mv2Blocks {
 
     }
 
-    gripperArmTimed (args, util) {
+    gripperArmTimed(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         var moveTime = parseFloat(args.MOVETIME) * 1000;
         //set upper threshold 65.5s as ffff is 65535
-        if (moveTime > 65500){
+        if (moveTime > 65500) {
             moveTime = 65500;
         }
         //Open or closed
         const handPosition = args.HAND_POSITION;
 
         let keypoints = null;
-        if (handPosition == 1){
+        if (handPosition == 1) {
             // close and and hold for 30s
-            keypoints = [[90, moveTime], [90, 30000]];
+            keypoints = [
+                [90, moveTime],
+                [90, 30000]
+            ];
         } else {
             //open
-            keypoints= [[0, moveTime]];
+            keypoints = [
+                [0, moveTime]
+            ];
         }
 
         if (!this.gripperArmMove(keypoints)) return false;
@@ -647,7 +658,7 @@ class Scratch3Mv2Blocks {
 
     // SENSORS
 
-    position (args, util) {
+    position(args, util) {
         //console.log("Report a servo's position!");
         let servoChoice = parseInt(args.SERVOCHOICE);
         if (servoChoice < 0 || servoChoice > 8) {
@@ -656,41 +667,41 @@ class Scratch3Mv2Blocks {
         const servoObj = JSON.parse(mv2Interface.servos);
         let servo;
         switch (servoChoice) {
-        case 0:
-            servo = 'Left Hip: ';
-            break;
-        case 1:
-            servo = 'Left Twist: ';
-            break;
-        case 2:
-            servo = 'Left Knee: ';
-            break;
-        case 3:
-            servo = 'Right Hip: ';
-            break;
-        case 4:
-            servo = 'Right Twist';
-            break;
-        case 5:
-            servo = 'Right Knee: ';
-            break;
-        case 6:
-            servo = 'Left Arm: ';
-            break;
-        case 7:
-            servo = 'Right Arm: ';
-            break;
-        case 8:
-            servo = 'Eyes: ';
-            break;
-        default:
-            break;
+            case 0:
+                servo = 'Left Hip: ';
+                break;
+            case 1:
+                servo = 'Left Twist: ';
+                break;
+            case 2:
+                servo = 'Left Knee: ';
+                break;
+            case 3:
+                servo = 'Right Hip: ';
+                break;
+            case 4:
+                servo = 'Right Twist';
+                break;
+            case 5:
+                servo = 'Right Knee: ';
+                break;
+            case 6:
+                servo = 'Left Arm: ';
+                break;
+            case 7:
+                servo = 'Right Arm: ';
+                break;
+            case 8:
+                servo = 'Eyes: ';
+                break;
+            default:
+                break;
         }
         //return servo + servoObj.smartServos[servoChoice].pos;
         return servoObj.smartServos[servoChoice].pos;
     }
 
-    current (args, util) {
+    current(args, util) {
         //console.log("Report a servo's current!");
         let servoChoice = parseInt(args.SERVOCHOICE);
         if (servoChoice < 0 || servoChoice > 8) {
@@ -699,86 +710,86 @@ class Scratch3Mv2Blocks {
         const servoObj = JSON.parse(mv2Interface.servos);
         let servo;
         switch (servoChoice) {
-        case 0:
-            servo = 'Left Hip: ';
-            break;
-        case 1:
-            servo = 'Left Twist: ';
-            break;
-        case 2:
-            servo = 'Left Knee: ';
-            break;
-        case 3:
-            servo = 'Right Hip: ';
-            break;
-        case 4:
-            servo = 'Right Twist';
-            break;
-        case 5:
-            servo = 'Right Knee: ';
-            break;
-        case 6:
-            servo = 'Left Arm: ';
-            break;
-        case 7:
-            servo = 'Right Arm: ';
-            break;
-        case 8:
-            servo = 'Eyes: ';
-            break;
-        default:
-            break;
+            case 0:
+                servo = 'Left Hip: ';
+                break;
+            case 1:
+                servo = 'Left Twist: ';
+                break;
+            case 2:
+                servo = 'Left Knee: ';
+                break;
+            case 3:
+                servo = 'Right Hip: ';
+                break;
+            case 4:
+                servo = 'Right Twist';
+                break;
+            case 5:
+                servo = 'Right Knee: ';
+                break;
+            case 6:
+                servo = 'Left Arm: ';
+                break;
+            case 7:
+                servo = 'Right Arm: ';
+                break;
+            case 8:
+                servo = 'Eyes: ';
+                break;
+            default:
+                break;
         }
         //return servo + servoObj.smartServos[servoChoice].current;
         return servoObj.smartServos[servoChoice].current;
     }
 
-    accelerometerX (args, util) {
+    accelerometerX(args, util) {
         //console.log('Report accelerometer reading!');
         const accelObj = JSON.parse(mv2Interface.accel);
         const xAccel = accelObj.accel.x;
         return xAccel;
     }
 
-    accelerometerY (args, util) {
+    accelerometerY(args, util) {
         //console.log('Report accelerometer reading!');
         const accelObj = JSON.parse(mv2Interface.accel);
         const yAccel = accelObj.accel.y;
         return yAccel;
     }
 
-    accelerometerZ (args, util) {
+    accelerometerZ(args, util) {
         //console.log('Report accelerometer reading!');
         const accelObj = JSON.parse(mv2Interface.accel);
         const zAccel = accelObj.accel.z;
         return zAccel;
     }
 
-    proximity (args, util) {
+    proximity(args, util) {
         //console.log('Report proximity!');
         // TODO: Do we have a proximity sensor yet?
         return;
     }
 
-    batteryLevel (args, util) {
+    batteryLevel(args, util) {
         //console.log('Report the battery percentage!');
         return mv2Interface.battRemainCapacityPercent;
     }
 
     // TODO: redo the obsctacle sense (and other sensor blocks) to use names of actual connected addons from dynamically populated list
-    obstacleSense (args, util) {
+    obstacleSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
 
         // if ir sensor not found we will check for colour sensor with the same side in its name
         const side = args.SENSORCHOICE.includes("Right") ? "Right" : "Left";
 
         let colourSensorVal = null;
-        for (var i=0; i < addons.length; i++){
-            if (args.SENSORCHOICE in addons[i].vals){
+        for (var i = 0; i < addons.length; i++) {
+            if (args.SENSORCHOICE in addons[i].vals) {
                 //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
                 return addons[i].vals[args.SENSORCHOICE];
             }
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR && addons[i].name.includes(side)){
+            if (addons[i].deviceTypeID == MV2_DTID_COLOUR && addons[i].name.includes(side)) {
                 colourSensorVal = addons[i].vals[addons[i].name + 'Touch']
             }
 
@@ -787,19 +798,19 @@ class Scratch3Mv2Blocks {
         return false;
     }
 
-    groundSense (args, util) {
+    groundSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         // if ir sensor not found we will check for colour sensor with the same side in its name
         const side = args.SENSORCHOICE.includes("Right") ? "Right" : "Left";
 
         let colourSensorVal = null;
-        for (var i=0; i < addons.length; i++){
-            if (args.SENSORCHOICE in addons[i].vals){
+        for (var i = 0; i < addons.length; i++) {
+            if (args.SENSORCHOICE in addons[i].vals) {
                 //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
                 // sensor tells you if if the foot is in the air
                 return !addons[i].vals[args.SENSORCHOICE];
             }
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR && addons[i].name.includes(side)){
+            if (addons[i].deviceTypeID == MV2_DTID_COLOUR && addons[i].name.includes(side)) {
                 colourSensorVal = !addons[i].vals[addons[i].name + 'Air']
             }
         }
@@ -808,43 +819,44 @@ class Scratch3Mv2Blocks {
         return false;
     }
 
-    getHueChroma(r, g, b){
+    getHueChroma(r, g, b) {
         const maxVal = Math.max(r, g, b);
         const minVal = Math.min(r, g, b);
         const chroma = maxVal - minVal;
         let hue = 0;
-        if (r > g && r > b){
-            hue = (((g-b)/chroma)%6) * 60;
-        } else if (g > b){
-            hue = (((b-r)/chroma) + 2) * 60;
+        if (r > g && r > b) {
+            hue = (((g - b) / chroma) % 6) * 60;
+        } else if (g > b) {
+            hue = (((b - r) / chroma) + 2) * 60;
         } else {
-            hue = (((r-g)/chroma) + 4) * 60;
+            hue = (((r - g) / chroma) + 4) * 60;
         }
         if (hue < 0) hue += 360;
         return [hue, chroma];
     }
 
-    colourSense (args, util) {
+    colourSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
-        let csID = -1, selectedID = -1;
-        for (var i=0; i < addons.length; i++){
-            if ((args.SENSORCHOICE + "Red") in addons[i].vals){
+        let csID = -1,
+            selectedID = -1;
+        for (var i = 0; i < addons.length; i++) {
+            if ((args.SENSORCHOICE + "Red") in addons[i].vals) {
                 selectedID = i;
             }
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR){
+            if (addons[i].deviceTypeID == MV2_DTID_COLOUR) {
                 csID = i;
             }
         }
 
         let sensorname = args.SENSORCHOICE;
         // check if we found the specified sensor. If not, fall back to the last correctly typed sensor
-        if (selectedID < 0){
+        if (selectedID < 0) {
             if (csID < 0) return null;
             selectedID = csID;
             sensorname = addons[selectedID].name;
         }
 
-        if (addons[selectedID].vals[sensorname + "Air"]){
+        if (addons[selectedID].vals[sensorname + "Air"]) {
             return "air";
         } else {
             //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
@@ -854,39 +866,39 @@ class Scratch3Mv2Blocks {
             const clear = addons[selectedID].vals[sensorname + "Clear"];
 
             const colours = [
-                {hue: [0, 10],    chroma: [100, 175], clear: [40, 150],  name: "red"},
-                {hue: [20, 50],   chroma: [150, 300], clear: [100, 255], name: "yellow"},
-                {hue: [100, 145], chroma: [10, 100],  clear: [40, 150],  name: "green"},
-                {hue: [190, 220], chroma: [95, 230],  clear: [90, 255],  name: "blue"},
-                {hue: [250, 280], chroma: [10, 50],   clear: [40, 150],  name: "purple"},
-                {hue: [345, 361], chroma: [100, 200], clear: [40, 150],  name: "red"}
+                { hue: [0, 10], chroma: [100, 175], clear: [40, 150], name: "red" },
+                { hue: [20, 50], chroma: [150, 300], clear: [100, 255], name: "yellow" },
+                { hue: [100, 145], chroma: [10, 100], clear: [40, 150], name: "green" },
+                { hue: [190, 220], chroma: [95, 230], clear: [90, 255], name: "blue" },
+                { hue: [250, 280], chroma: [10, 50], clear: [40, 150], name: "purple" },
+                { hue: [345, 361], chroma: [100, 200], clear: [40, 150], name: "red" }
             ];
 
             const [hue, chroma] = this.getHueChroma(red, green, blue);
             //mv2Interface.send_REST(`hue: ${hue}, chroma: ${chroma}, clear: ${clear} | RGB: ${red} ${green} ${blue}`);
-            for (let i=0; i<colours.length; i++){
+            for (let i = 0; i < colours.length; i++) {
                 if ((colours[i].hue[0] <= hue && hue <= colours[i].hue[1]) &&
                     (colours[i].chroma[0] <= chroma && chroma <= colours[i].chroma[1]) &&
-                    (colours[i].clear[0] <= clear && clear <= colours[i].clear[1])){
-                        return colours[i].name;
-                    }
+                    (colours[i].clear[0] <= clear && clear <= colours[i].clear[1])) {
+                    return colours[i].name;
+                }
             }
 
             return "unclear";
         }
     }
 
-    colourSenseRaw (args, util){
+    colourSenseRaw(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let csVal = null;
-        for (var i=0; i < addons.length; i++){
-            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addons[i].vals){
+        for (var i = 0; i < addons.length; i++) {
+            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addons[i].vals) {
                 return addons[i].vals[args.SENSORCHOICE + args.SENSORCHANNEL];
             }
             // in case we don't find the specific sensor, we'll return the last correctly device typed value
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR){
+            if (addons[i].deviceTypeID == MV2_DTID_COLOUR) {
                 // device is a colour sensor. iterate through channels to find correct one
-                for (const addon in addons[i].vals){
+                for (const addon in addons[i].vals) {
                     if (addon.includes(args.SENSORCHANNEL))
                         csVal = addons[i].vals[addon];
                 }
@@ -896,17 +908,17 @@ class Scratch3Mv2Blocks {
         return null;
     }
 
-    distanceSense (args, util) {
+    distanceSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let dsVal = null;
-        for (var i=0; i < addons.length; i++){
-            if ("DistanceSensorReading" in addons[i].vals){
+        for (var i = 0; i < addons.length; i++) {
+            if ("DistanceSensorReading" in addons[i].vals) {
                 //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
                 let reading = addons[i].vals["DistanceSensorReading"];
                 return reading;
             }
-            if (addons[i].deviceTypeID == MV2_DTID_DISTANCE){
-                for (const val in addons[i].vals){
+            if (addons[i].deviceTypeID == MV2_DTID_DISTANCE) {
+                for (const val in addons[i].vals) {
                     if (val.includes("Reading"))
                         dsVal = addons[i].vals[val];
                 }
@@ -916,17 +928,17 @@ class Scratch3Mv2Blocks {
         return false;
     }
 
-    lightSense (args, util){
+    lightSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let sensorVal = null;
-        for (var i=0; i < addons.length; i++){
-            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addons[i].vals){
+        for (var i = 0; i < addons.length; i++) {
+            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addons[i].vals) {
                 return addons[i].vals[args.SENSORCHOICE + args.SENSORCHANNEL];
             }
             // in case we don't find the specific sensor, we'll return the last correctly device typed value
-            if (addons[i].deviceTypeID == MV2_DTID_LIGHT){
+            if (addons[i].deviceTypeID == MV2_DTID_LIGHT) {
                 // device is a light sensor. iterate through channels to find correct one
-                for (const addon in addons[i].vals){
+                for (const addon in addons[i].vals) {
                     if (addon.includes(args.SENSORCHANNEL))
                         sensorVal = addons[i].vals[addon];
                 }
@@ -936,17 +948,17 @@ class Scratch3Mv2Blocks {
         return null;
     }
 
-    noiseSense (args, util){
+    noiseSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let sensorVal = null;
-        for (var i=0; i < addons.length; i++){
-            if ((args.SENSORCHOICE + "HighestSinceLastReading") in addons[i].vals){
+        for (var i = 0; i < addons.length; i++) {
+            if ((args.SENSORCHOICE + "HighestSinceLastReading") in addons[i].vals) {
                 return addons[i].vals[args.SENSORCHOICE + "HighestSinceLastReading"];
             }
             // in case we don't find the specific sensor, we'll return the last correctly device typed value
-            if (addons[i].deviceTypeID == MV2_DTID_NOISE){
+            if (addons[i].deviceTypeID == MV2_DTID_NOISE) {
                 // device is a light sensor. iterate through channels to find correct one
-                for (const addon in addons[i].vals){
+                for (const addon in addons[i].vals) {
                     if (addon.includes("HighestSinceLastReading"))
                         sensorVal = addons[i].vals[addon];
                 }
@@ -958,12 +970,135 @@ class Scratch3Mv2Blocks {
 
     // SOUND
 
-    playSound (args, util) {
-        const filename = args.SOUND;
-        console.log(`filerun/spiffs/${filename}`);
-        mv2Interface.send_REST(`filerun/spiffs/${filename}`);
-        return new Promise(resolve =>
-            setTimeout(resolve));
+    // playSound (args, util) {
+    //     const filename = args.SOUND;
+    //     console.log(`filerun/spiffs/${filename}`);
+    //     mv2Interface.send_REST(`filerun/spiffs/${filename}`);
+    //     return new Promise(resolve =>
+    //         setTimeout(resolve));
+    // }
+
+    playSound(args, util) {
+        const index = this._getSoundIndex(args.SOUND_MENU, util);
+        if (index >= 0) {
+            const { target } = util;
+            const { sprite } = target;
+            const { soundId } = sprite.sounds[index];
+            if (sprite.soundBank) {
+                console.log(`SOUND ${soundId} len ${sprite.soundBank.soundPlayers[soundId].buffer.length}`);
+                // const rawSoundData = this._convertSoundToRICRAW(sprite.soundBank.soundPlayers[soundId]);
+                // console.log(`CONVERTED len ${rawSoundData.length}`);
+                // mv2.playRawSound(rawSoundData);
+                // audioEncoder(sprite.soundBank.soundPlayers[soundId], 32, null, function onComplete(blob) {
+                //     console.log(`Audio MP3 ready len ${blob.length}`)
+                // });
+                const mp3SoundData = this._convertSoundToMP3(sprite.soundBank.soundPlayers[soundId]);
+                console.log(`encoded to MP3 len ${mp3SoundData.length}`);
+
+                // // Test code to play locally
+                // var blob = new Blob(mp3SoundData, {type: 'audio/mp3'});
+                // var url = window.URL.createObjectURL(blob);
+                // console.log('MP3 URl: ', url);
+                // const context = new AudioContext();
+                // window.fetch(url)
+                //     .then(response => response.arrayBuffer())
+                //     .then(arrayBuffer => context.decodeAudioData(arrayBuffer))
+                //     .then(audioBuffer => {
+                //         const source = context.createBufferSource();
+                //         source.buffer = audioBuffer;
+                //         source.connect(context.destination);
+                //         source.start();
+                //     });
+            }
+        }
+    }
+
+    _convertSoundToMP3(audioBuffer) {
+        const sampleRatio = audioBuffer.buffer.sampleRate / 11025;
+        const finalLen = Math.floor(audioBuffer.buffer.length / sampleRatio);
+        const rawSoundData = new Int16Array(finalLen);
+        const inSoundData = audioBuffer.buffer.getChannelData(0);
+        for (let i = 0; i < finalLen; i++) {
+            // Nominal range of AudioBuffer data is -1.0 to +1.0 (each sample is a 32 bit float)
+            rawSoundData[i] = inSoundData[Math.floor(i * sampleRatio)] * 32767;
+        }
+
+        //can be anything but make it a multiple of 576 to make encoders life easier
+        const sampleBlockSize = 1152;
+        const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
+        const mp3Data = [];
+        for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
+            const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);
+            var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+            if (mp3buf.length > 0) {
+                mp3Data.push(mp3buf);
+            }
+        }
+        var mp3buf = mp3encoder.flush(); //finish writing mp3
+        if (mp3buf.length > 0) {
+            mp3Data.push(mp3buf);
+        }
+        return mp3Data;
+
+        // //can be anything but make it a multiple of 576 to make encoders life easier
+        // const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
+        // const mp3samples = mp3encoder.encodeBuffer(rawSoundData);
+        // const mp3final = mp3encoder.flush();   //finish writing mp3
+        // if ((mp3samples.length > 0) && (mp3final.length > 0)) {
+        //     const mp3Data = new Int8Array(mp3samples.length + mp3final.length);
+        //     mp3Data.set(mp3samples, 0);
+        //     mp3Data.set(mp3final, mp3samples.length);
+        //     // const blob = new Blob(mp3Data, {type: 'audio/mp3'});
+        //     // const file = new File([blob], "testMP3.mp3");
+        //     return mp3Data;
+        // }
+        // return null;
+    }
+
+    _convertSoundToRICRAW(audioBuffer) {
+        const sampleRatio = audioBuffer.buffer.sampleRate / 11025;
+        const finalLen = Math.floor(audioBuffer.buffer.length / sampleRatio);
+        const outSoundData = new Int8Array(finalLen);
+        const inSoundData = audioBuffer.buffer.getChannelData(0);
+        for (let i = 0; i < finalLen; i++) {
+            // Nominal range of AudioBuffer data is -1.0 to +1.0 (each sample is a 32 bit float)
+            outSoundData[i] = inSoundData[Math.floor(i * sampleRatio)] * 127;
+        }
+        return outSoundData;
+    }
+
+    _getSoundIndex(soundName, util) {
+        // if the sprite has no sounds, return -1
+        const len = util.target.sprite.sounds.length;
+        if (len === 0) {
+            return -1;
+        }
+
+        // look up by name first
+        const index = this.getSoundIndexByName(soundName, util);
+        if (index !== -1) {
+            return index;
+        }
+
+        // then try using the sound name as a 1-indexed index
+        const oneIndexedIndex = parseInt(soundName, 10);
+        if (!isNaN(oneIndexedIndex)) {
+            return MathUtil.wrapClamp(oneIndexedIndex - 1, 0, len - 1);
+        }
+
+        // could not be found as a name or converted to index, return -1
+        return -1;
+    }
+
+    getSoundIndexByName(soundName, util) {
+        const sounds = util.target.sprite.sounds;
+        for (let i = 0; i < sounds.length; i++) {
+            if (sounds[i].name === soundName) {
+                return i;
+            }
+        }
+        // if there is no sound by that name, return -1
+        return -1;
     }
 
     // MISC/PROPOSED/DEPRECATED
@@ -1096,16 +1231,16 @@ class Scratch3Mv2Blocks {
         return;
     }*/
 
-    demo_sensor (args, util) {
+    demo_sensor(args, util) {
         return mv2Interface.demo_sensor;
     }
 
-    set_demo_sensor (args, util) {
+    set_demo_sensor(args, util) {
         const sensorval = parseFloat(args.SENSORVAL);
         mv2Interface.demo_sensor = sensorval;
     }
 
-    set_ip (args, util) {
+    set_ip(args, util) {
         mv2Interface.set_ip(args.IP);
     }
 

@@ -1,0 +1,10 @@
+services:
+  app:
+    container_name: martyblocks
+    build: .
+    ports:
+      - 8081:8081
+    volumes:
+      - ./MartyBlocks/:/MartyBlocks
+    tty: true
+    stdin_open: true

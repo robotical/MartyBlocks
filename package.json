@@ -1,0 +1,24 @@
+{
+  "name": "martyblocks",
+  "version": "1.0.0",
+  "description": "MartyBlocks based on Scratch for Marty the Robot",
+  "main": "scratch3-gui/build/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robotical/MartyBlocks.git"
+  },
+  "keywords": [
+    "marty",
+    "robot",
+    "scratch"
+  ],
+  "author": "Rob Dobson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robotical/MartyBlocks/issues"
+  },
+  "homepage": "https://github.com/robotical/MartyBlocks#readme"
+}
