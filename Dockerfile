@@ -16,8 +16,7 @@ RUN apt install git openjdk-8* -y
 RUN npm install -g typescript
 
 # configure npm
-RUN npm config set spin=false && \
-    npm config set progress=false
+RUN npm config set spin=false && npm config set progress=false
     
 RUN echo "Cloning MartyBlocks -----------------------------------------"
 RUN git clone https://github.com/robotical/MartyBlocks.git
@@ -29,6 +28,7 @@ RUN echo "Cloning stratch-blocks -----------------------------------------"
 RUN git clone -b develop https://github.com/llk/scratch-blocks.git /MartyBlocks/scratch-blocks
 RUN echo "Cloning stratch-vm -----------------------------------------"
 RUN git clone -b develop https://github.com/llk/scratch-vm.git /MartyBlocks/scratch-vm
+
 RUN echo "Cloning stratch-gui -----------------------------------------"
 RUN git clone -b develop https://github.com/llk/scratch-gui.git /MartyBlocks/scratch-gui
 
@@ -50,7 +50,7 @@ RUN echo "NPM Linking -----------------------------------------"
 RUN cd /MartyBlocks/marty-blocks-lib && npm link
 RUN cd /MartyBlocks/scratch-blocks && npm link && npm link marty-blocks-lib
 RUN cd /MartyBlocks/scratch-vm && npm link && npm link marty-blocks-lib scratch-blocks
-RUN cd /MartyBlocks/scratch-gui && npm update && npm link marty-blocks-lib scratch-blocks scratch-vm
+RUN cd /MartyBlocks/scratch-gui && npm link marty-blocks-lib scratch-blocks scratch-vm
 
 RUN echo "Build Scratch blocks -----------------------------------------"
 RUN cd /MartyBlocks/scratch-blocks && npm run prepublish
