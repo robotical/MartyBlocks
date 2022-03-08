@@ -59,4 +59,9 @@ RUN cd /MartyBlocks/scratch-gui && BUILD_MODE=dist npm run build
 
 WORKDIR /MartyBlocks/scratch-gui
 EXPOSE 8601
+# Comment or uncomment the following line depending on whether you want the container
+# to continue running after the build (serving MartyBlocks on localhost:8601) or not.
+# If you choose not to run the container after the build, you can obtain the files in 
+# the container by running the following command on the host's command line:
+# docker cp <container_id>:/MartyBlocks/scratch-gui/build/ ./build
 # CMD ["npm","start"]
