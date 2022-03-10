@@ -40,7 +40,7 @@ const defaultBlockPackages = {
     scratch3_sensing: require('../blocks/scratch3_sensing'),
     scratch3_data: require('../blocks/scratch3_data'),
     scratch3_procedures: require('../blocks/scratch3_procedures'),
-    scratch3_mv2: require('marty-blocks-lib/src/scratch3_mv2')
+    scratch3_mv2: require('marty-blocks-lib/src/Scratch3Mv2Blocks')
 };
 
 const defaultExtensionColors = ['#0FBD8C', '#0DA57A', '#0B8E69'];
