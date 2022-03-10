@@ -1,6 +1,8 @@
 
 export function MartyBlocks_BlockLib_AddBlocks(Blockly) {
 
+  console.log("MartyBlocks_BlockLib_AddBlocks()");
+  
   Blockly.Categories.mv2 = "mv2";
 
   Blockly.Colours.mv2 = {
