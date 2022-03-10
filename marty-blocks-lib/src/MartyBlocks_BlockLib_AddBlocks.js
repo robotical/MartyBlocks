@@ -2,7 +2,7 @@
 export function MartyBlocks_BlockLib_AddBlocks(Blockly) {
 
   console.log("MartyBlocks_BlockLib_AddBlocks()");
-  
+
   Blockly.Categories.mv2 = "mv2";
 
   Blockly.Colours.mv2 = {
@@ -10,6 +10,8 @@ export function MartyBlocks_BlockLib_AddBlocks(Blockly) {
     "secondary": "#133C46",
     "tertiary": "#FFDA61"
   };
+
+  // Blockly.Msg.MV2_CONNECTVIAIP ='%1 %2 Connect via IP: %3';
 
     // Marty V2 Disco Blocks
   Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';
