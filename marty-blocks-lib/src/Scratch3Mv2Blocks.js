@@ -1,19 +1,18 @@
-// const Cast = require('cast'); // TODO
 const Mv2Interface = require('./Mv2Interface');
 const lamejs = require("./lame-all");
 
 mv2Interface = new Mv2Interface();
 
 // device type IDs for Robotical Standard Add-ons
-const MV2_DTID_DISTANCE = 0x83;
-const MV2_DTID_LIGHT = 0x84;
-const MV2_DTID_COLOUR = 0x85;
-const MV2_DTID_IRFOOT = 0x86;
-const MV2_DTID_LEDFOOT = 0x87;
-const MV2_DTID_LEDARM = 0x88;
-const MV2_DTID_LEDEYE = 0x89;
-const MV2_DTID_NOISE = 0x8A;
-const MV2_DTID_GRIPSERVO = 0x8B;
+const RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE = "VCNL4200";
+const RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT = "lightsensor";
+const RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR = "coloursensor";
+const RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT = "IRFoot";
+const RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT = "LEDfoot";
+const RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM = "LEDarm";
+const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
+const RIC_WHOAMI_TYPE_CODE_ADDON_NOISE = "noisesensor";
+const RIC_WHOAMI_TYPE_CODE_ADDON_GRIPSERVO = "roboservo3";
 
 /**
  * Questions:
@@ -171,15 +170,15 @@ class Scratch3Mv2Blocks {
         switch (boardChoice) {
             case 0:
                 // EYE
-                boardDeviceType = MV2_DTID_LEDEYE;
+                boardDeviceType = RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE;
                 break;
             case 1:
                 // ARM
-                boardDeviceType = MV2_DTID_LEDARM;
+                boardDeviceType = RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM;
                 break;
             case 2:
                 // FOOT
-                boardDeviceType = MV2_DTID_LEDFOOT;
+                boardDeviceType = RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT;
                 break;
             case 3:
                 // ALL
@@ -230,12 +229,12 @@ class Scratch3Mv2Blocks {
         return val.toString(16).padStart(length, '0');
     }
 
-    // return name of first addon found with a specific Device Type ID
-    addonNameByDTID(dtid) {
-        const addons = JSON.parse(mv2Interface.addons).addons;
-        for (var i = 0; i < addons.length; i++) {
-            if (addons[i].deviceTypeID == dtid) {
-                return addons[i].name;
+    // return name of first addon found with a specific whoAmI value
+    addonNameByWhoAmI(whoAmI){
+        const addons = JSON.parse(mv2.addons).addons;
+        for (let addon of addons){
+            if (addon.whoAmI == whoAmI){
+                return addon.name;
             }
         }
         return null;
@@ -253,13 +252,12 @@ class Scratch3Mv2Blocks {
     getAllDiscoBoards(addons) {
         var addressList = [];
 
-        for (var i = 0; i < addons.length; i++) {
-
-            if (addons[i].deviceTypeID == MV2_DTID_LEDEYE ||
-                addons[i].deviceTypeID == MV2_DTID_LEDARM ||
-                addons[i].deviceTypeID == MV2_DTID_LEDFOOT) {
-
-                addressList.push(addons[i].name);
+        for (let addon of addons){
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
+                || addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM
+                || addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT)
+                {
+                    addressList.push(addon.name);
             }
         }
         return addressList;
@@ -268,9 +266,9 @@ class Scratch3Mv2Blocks {
     getFilteredDiscoBoards(addons, filterBoardType) {
         var addressList = [];
 
-        for (var i = 0; i < addons.length; i++) {
-            if (addons[i].deviceTypeID == filterBoardType) {
-                addressList.push(addons[i].name);
+        for (let addon of addons){
+            if (addon.whoAmI == filterBoardType){
+                addressList.push(addon.name);
             }
         }
 
@@ -285,11 +283,10 @@ class Scratch3Mv2Blocks {
         const boardChoice = args.BOARDTYPE;
         let filterBoardType = this.getDiscoBoardType(boardChoice);
         const patternChoice = args.PATTERN;
-        let patternProgram = '10';
+        let patternProgram;
 
         if (patternChoice == '0') {
-            presetProgram = '10';
-
+            patternProgram = '10';
         } else if (patternChoice == '1') {
             patternProgram = '11';
 
@@ -326,7 +323,7 @@ class Scratch3Mv2Blocks {
     discoChangeBlockColour(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         const resolveTime = 200;
-        const color = 0; //TODO Cast.toRgbColorList(args.COLOR);
+        const color = this.toRgbColorList(args.COLOR);
         const boardChoice = args.BOARDTYPE;
 
         const colorStr = this.colorToLEDAddonStr(color);
@@ -353,7 +350,7 @@ class Scratch3Mv2Blocks {
     discoChangeRegionColour(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         const resolveTime = 200;
-        const color = 0; // TODO Cast.toRgbColorList(args.COLOR);
+        const color = this.toRgbColorList(args.COLOR);
         const boardChoice = args.BOARDTYPE;
         const regionChoice = args.REGION;
 
@@ -576,7 +573,7 @@ class Scratch3Mv2Blocks {
         // keypoints should be array of [angle, time]
         // angle in degrees, time in ms
         if (!name) {
-            name = this.addonNameByDTID(MV2_DTID_GRIPSERVO);
+            name = this.addonNameByWhoAmI(RIC_WHOAMI_TYPE_CODE_ADDON_GRIPSERVO);
             if (!name) return false;
         }
         const numKeypoints = keypoints.length;
@@ -609,14 +606,9 @@ class Scratch3Mv2Blocks {
         var keypoints = null;
         if (handPosition == 1) { //closed
             // close hand and hold for 30s. 90 degree angle
-            keypoints = [
-                [90, moveTime],
-                [90, 30000]
-            ];
+            keypoints = [[90, moveTime], [90, 30000]];
         } else { //open
-            keypoints = [
-                [0, moveTime]
-            ];
+            keypoints = [[0, moveTime]];
         }
 
         if (!this.gripperArmMove(keypoints)) return false;
@@ -639,15 +631,10 @@ class Scratch3Mv2Blocks {
         let keypoints = null;
         if (handPosition == 1) {
             // close and and hold for 30s
-            keypoints = [
-                [90, moveTime],
-                [90, 30000]
-            ];
+            keypoints = [[90, moveTime], [90, 30000]];
         } else {
             //open
-            keypoints = [
-                [0, moveTime]
-            ];
+            keypoints= [[0, moveTime]];
         }
 
         if (!this.gripperArmMove(keypoints)) return false;
@@ -784,15 +771,14 @@ class Scratch3Mv2Blocks {
         const side = args.SENSORCHOICE.includes("Right") ? "Right" : "Left";
 
         let colourSensorVal = null;
-        for (var i = 0; i < addons.length; i++) {
-            if (args.SENSORCHOICE in addons[i].vals) {
-                //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
-                return addons[i].vals[args.SENSORCHOICE];
+        for (let addon of addons){
+            if (args.SENSORCHOICE in addon.vals){
+                //mv2.send_REST('return val: ' + addon.vals[args.SENSORCHOICE]);
+                return addon.vals[args.SENSORCHOICE];
             }
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR && addons[i].name.includes(side)) {
-                colourSensorVal = addons[i].vals[addons[i].name + 'Touch']
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR && addon.name.includes(side)){
+                colourSensorVal = addon.vals[addon.name + 'Touch']
             }
-
         }
         if (colourSensorVal !== null) return colourSensorVal;
         return false;
@@ -804,14 +790,13 @@ class Scratch3Mv2Blocks {
         const side = args.SENSORCHOICE.includes("Right") ? "Right" : "Left";
 
         let colourSensorVal = null;
-        for (var i = 0; i < addons.length; i++) {
-            if (args.SENSORCHOICE in addons[i].vals) {
-                //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
-                // sensor tells you if if the foot is in the air
-                return !addons[i].vals[args.SENSORCHOICE];
+        for (let addon of addons){
+            if (args.SENSORCHOICE in addon.vals){
+                // sensor tells you if the foot is in the air
+                return !addon.vals[args.SENSORCHOICE];
             }
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR && addons[i].name.includes(side)) {
-                colourSensorVal = !addons[i].vals[addons[i].name + 'Air']
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR && addon.name.includes(side)){
+                colourSensorVal = !addon.vals[addon.name + 'Air']
             }
         }
         if (colourSensorVal !== null) return colourSensorVal;
@@ -837,13 +822,12 @@ class Scratch3Mv2Blocks {
 
     colourSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
-        let csID = -1,
-            selectedID = -1;
+        let csID = -1, selectedID = -1;
         for (var i = 0; i < addons.length; i++) {
             if ((args.SENSORCHOICE + "Red") in addons[i].vals) {
                 selectedID = i;
             }
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR) {
+            if (addons[i].whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR){
                 csID = i;
             }
         }
@@ -866,21 +850,21 @@ class Scratch3Mv2Blocks {
             const clear = addons[selectedID].vals[sensorname + "Clear"];
 
             const colours = [
-                { hue: [0, 10], chroma: [100, 175], clear: [40, 150], name: "red" },
-                { hue: [20, 50], chroma: [150, 300], clear: [100, 255], name: "yellow" },
-                { hue: [100, 145], chroma: [10, 100], clear: [40, 150], name: "green" },
+                {hue: [0, 10],    chroma: [75, 200], clear: [40, 150],  name: "red"},
+                {hue: [20, 50],   chroma: [100, 300], clear: [100, 255], name: "yellow"},
+                {hue: [100, 160], chroma: [10, 100],  clear: [40, 150],  name: "green"},
                 { hue: [190, 220], chroma: [95, 230], clear: [90, 255], name: "blue" },
-                { hue: [250, 280], chroma: [10, 50], clear: [40, 150], name: "purple" },
-                { hue: [345, 361], chroma: [100, 200], clear: [40, 150], name: "red" }
+                {hue: [240, 320], chroma: [10, 70],   clear: [40, 150],  name: "purple"},
+                {hue: [345, 361], chroma: [75, 200], clear: [40, 150],  name: "red"}
             ];
 
             const [hue, chroma] = this.getHueChroma(red, green, blue);
             //mv2Interface.send_REST(`hue: ${hue}, chroma: ${chroma}, clear: ${clear} | RGB: ${red} ${green} ${blue}`);
-            for (let i = 0; i < colours.length; i++) {
-                if ((colours[i].hue[0] <= hue && hue <= colours[i].hue[1]) &&
-                    (colours[i].chroma[0] <= chroma && chroma <= colours[i].chroma[1]) &&
-                    (colours[i].clear[0] <= clear && clear <= colours[i].clear[1])) {
-                    return colours[i].name;
+            for (let colour of colours){
+                if ((colour.hue[0] <= hue && hue <= colour.hue[1]) &&
+                    (colour.chroma[0] <= chroma && chroma <= colour.chroma[1]) &&
+                    (colour.clear[0] <= clear && clear <= colour.clear[1])){
+                        return colour.name;
                 }
             }
 
@@ -891,16 +875,16 @@ class Scratch3Mv2Blocks {
     colourSenseRaw(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let csVal = null;
-        for (var i = 0; i < addons.length; i++) {
-            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addons[i].vals) {
-                return addons[i].vals[args.SENSORCHOICE + args.SENSORCHANNEL];
+        for (let addon of addons){
+            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addon.vals){
+                return addon.vals[args.SENSORCHOICE + args.SENSORCHANNEL];
             }
             // in case we don't find the specific sensor, we'll return the last correctly device typed value
-            if (addons[i].deviceTypeID == MV2_DTID_COLOUR) {
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR){
                 // device is a colour sensor. iterate through channels to find correct one
-                for (const addon in addons[i].vals) {
-                    if (addon.includes(args.SENSORCHANNEL))
-                        csVal = addons[i].vals[addon];
+                for (const val in addon.vals){
+                    if (val.includes(args.SENSORCHANNEL))
+                        csVal = addon.vals[val];
                 }
             }
         }
@@ -911,16 +895,15 @@ class Scratch3Mv2Blocks {
     distanceSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let dsVal = null;
-        for (var i = 0; i < addons.length; i++) {
-            if ("DistanceSensorReading" in addons[i].vals) {
-                //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
-                let reading = addons[i].vals["DistanceSensorReading"];
-                return reading;
+        for (let addon of addons){
+            if ("DistanceSensorReading" in addon.vals){
+                //mv2.send_REST('return val: ' + addon.vals[args.SENSORCHOICE]);
+                return addon.vals["DistanceSensorReading"];
             }
-            if (addons[i].deviceTypeID == MV2_DTID_DISTANCE) {
-                for (const val in addons[i].vals) {
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE){
+                for (const val in addon.vals){
                     if (val.includes("Reading"))
-                        dsVal = addons[i].vals[val];
+                        dsVal = addon.vals[val];
                 }
             }
         }
@@ -931,16 +914,16 @@ class Scratch3Mv2Blocks {
     lightSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let sensorVal = null;
-        for (var i = 0; i < addons.length; i++) {
-            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addons[i].vals) {
-                return addons[i].vals[args.SENSORCHOICE + args.SENSORCHANNEL];
+        for (let addon of addons){
+            if ((args.SENSORCHOICE + args.SENSORCHANNEL) in addon.vals){
+                return addon.vals[args.SENSORCHOICE + args.SENSORCHANNEL];
             }
             // in case we don't find the specific sensor, we'll return the last correctly device typed value
-            if (addons[i].deviceTypeID == MV2_DTID_LIGHT) {
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT){
                 // device is a light sensor. iterate through channels to find correct one
-                for (const addon in addons[i].vals) {
-                    if (addon.includes(args.SENSORCHANNEL))
-                        sensorVal = addons[i].vals[addon];
+                for (const val in addon.vals){
+                    if (val.includes(args.SENSORCHANNEL))
+                        sensorVal = addon.vals[val];
                 }
             }
         }
@@ -951,16 +934,16 @@ class Scratch3Mv2Blocks {
     noiseSense(args, util) {
         const addons = JSON.parse(mv2Interface.addons).addons;
         let sensorVal = null;
-        for (var i = 0; i < addons.length; i++) {
-            if ((args.SENSORCHOICE + "HighestSinceLastReading") in addons[i].vals) {
-                return addons[i].vals[args.SENSORCHOICE + "HighestSinceLastReading"];
+        for (let addon of addons){
+            if ((args.SENSORCHOICE + "HighestSinceLastReading") in addon.vals){
+                return addon.vals[args.SENSORCHOICE + "HighestSinceLastReading"];
             }
             // in case we don't find the specific sensor, we'll return the last correctly device typed value
-            if (addons[i].deviceTypeID == MV2_DTID_NOISE) {
+            if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_NOISE){
                 // device is a light sensor. iterate through channels to find correct one
-                for (const addon in addons[i].vals) {
-                    if (addon.includes("HighestSinceLastReading"))
-                        sensorVal = addons[i].vals[addon];
+                for (const val in addon.vals){
+                    if (val.includes("HighestSinceLastReading"))
+                        sensorVal = addon.vals[val];
                 }
             }
         }
@@ -970,15 +953,15 @@ class Scratch3Mv2Blocks {
 
     // SOUND
 
-    // playSound (args, util) {
-    //     const filename = args.SOUND;
-    //     console.log(`filerun/spiffs/${filename}`);
-    //     mv2Interface.send_REST(`filerun/spiffs/${filename}`);
-    //     return new Promise(resolve =>
-    //         setTimeout(resolve));
-    // }
+    playSound (args, util) {
+        const filename = args.SOUND;
+        console.log(`filerun/spiffs/${filename}`);
+        mv2Interface.send_REST(`filerun/spiffs/${filename}`);
+        return new Promise(resolve =>
+            setTimeout(resolve));
+    }
 
-    playSound(args, util) {
+    playSoundMP3(args, util) {
         const index = this._getSoundIndex(args.SOUND_MENU, util);
         if (index >= 0) {
             const { target } = util;
@@ -1242,6 +1225,16 @@ class Scratch3Mv2Blocks {
 
     set_ip(args, util) {
         mv2Interface.set_ip(args.IP);
+    }
+
+    /**
+     * Cast any Scratch argument to an RGB color array to be used for the renderer.
+     * @param {*} value Value to convert to RGB color array.
+     * @return {Array.<number>} [r,g,b], values between 0-255.
+     */
+    static toRgbColorList (value) {
+        const color = Cast.toRgbColorObject(value);
+        return [color.r, color.g, color.b];
     }
 
 }
