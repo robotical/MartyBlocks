@@ -58,7 +58,6 @@ const StageComponent = props => {
                         }}
                         {...boxProps}
                     />
-                    </Box>
                     <Box className={styles.frameWrapper}>
                         <TargetHighlight
                             className={styles.frame}

@@ -58,12 +58,11 @@ const ProjectFetcherHOC = function (WrappedComponent) {
                 storage.setAssetHost(this.props.assetHost);
             }
             if (this.props.isFetchingWithId && !prevProps.isFetchingWithId) {
-                this.fetchProject(this.props.reduxProjectId, this.props.loadingState).then(
-                    // eslint-disable-next-line no-console
-                    () => console.log('Fetch project success'),
-                    // eslint-disable-next-line no-console
-                    error => console.error("Error fetching project", error.message)
-                );
+                this.fetchProject(this.props.reduxProjectId, this.props.loadingState);
+                // eslint-disable-next-line no-console
+                () => console.log('Fetch project success'),
+                // eslint-disable-next-line no-console
+                error => console.error("Error fetching project", error.message)
             }
             if (this.props.isShowingProject && !prevProps.isShowingProject) {
                 this.props.onProjectUnchanged();
@@ -72,29 +71,30 @@ const ProjectFetcherHOC = function (WrappedComponent) {
                 this.props.onActivateTab(BLOCKS_TAB_INDEX);
             }
         }
-        async fetchProject (projectId, loadingState) {
+        fetchProject (projectId, loadingState) {
             // try and load from the autosave file
             try {
                 // eslint-disable-next-line no-undef
-                const data = await mv2Interface.loadScratchFile('__autosave');
-                if (!data || !data.contents || !confirm("Would you like to load the last autosave?")) {
-                    // not really an error, but it will dump us out to the
-                    // normal loading of default projects
-                    throw new Error('No autosave file');
+                mv2Interface.loadScratchFile('__autosave').then(data => {
+                    if (data && data.contents && confirm("Would you like to load the last autosave?")) {
+                        // eslint-disable-next-line no-console
+                        console.log('Using autosave file'); //, data.contents);
+                        fetch(data.contents).then(blob => {
+                            blob.arrayBuffer().then(arrayBuffer => {
+                                return this.props.onFetchedProjectData(arrayBuffer, loadingState);
+                            });
+                        });
                     }
-                // eslint-disable-next-line no-console
-                console.log('Using autosave file'); //, data.contents);
-                const blob = await fetch(data.contents);
-                const arrayBuffer = await blob.arrayBuffer();
-                return this.props.onFetchedProjectData(arrayBuffer, loadingState);
+                });
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.warn('No autosave data available');
             }
             // eslint-disable-next-line no-console
             console.log('Falling back to default project');
-            const projectAsset = await storage.load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
-            return this.props.onFetchedProjectData(projectAsset.data, loadingState);
+            storage.load(storage.AssetType.Project, projectId, storage.DataFormat.JSON).then(projectAsset => {
+                return this.props.onFetchedProjectData(projectAsset.data, loadingState);
+            });
         }
         render () {
             const {

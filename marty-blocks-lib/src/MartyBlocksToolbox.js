@@ -44,7 +44,7 @@ export function MartyBlocksToolbox_motion() {
             </shadow>
         </value>
         <value name="SIDE">
-                <field></field>
+                <field name="SIDE_"></field>
         </value>
     </block>
 

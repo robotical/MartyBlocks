@@ -42,12 +42,12 @@ class SB3Downloader extends React.Component {
                 this.props.onSaveFinished();
             }
             // convert to base64 -> convert to string -> send through webview
-            (async () => {
-                const b64 = await blobToBase64(content);
-
-                // eslint-disable-next-line no-undef
-                mv2Interface.savedProjectStates[slot.toString()] = b64;
-                mv2Interface.send_REST(`save${JSON.stringify(mv2Interface.savedProjectStates)}`);
+            (() => {
+                blobToBase64(content).then(b64 => {
+                    // eslint-disable-next-line no-undef
+                    mv2Interface.savedProjectStates[slot.toString()] = b64;
+                    mv2Interface.send_REST(`save${JSON.stringify(mv2Interface.savedProjectStates)}`);
+                });
             })();
 
             // eslint-disable-next-line no-alert

@@ -5,6 +5,8 @@ import VM from 'scratch-vm';
 
 import {connect} from 'react-redux';
 
+import debounce from 'lodash.debounce';
+
 import {updateTargets} from '../reducers/targets';
 import {updateBlockDrag} from '../reducers/block-drag';
 import {updateMonitors} from '../reducers/monitors';
@@ -91,18 +93,20 @@ const vmListenerHOC = function (WrappedComponent) {
             }
             this.autoSaveProject();
         }
-        async autoSaveProject () {
+        autoSaveProject () {
             // eslint-disable-next-line no-console
             console.log('Saving project to "__autosave"');
-            const sb3Content = await this.props.vm.saveProjectSb3();
-            const base64sb3 = await blobToBase64(sb3Content);
-            try {
-                // eslint-disable-next-line no-undef
-                await mv2Interface.saveScratchFile('__autosave', base64sb3);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error('Failed to auto save project', error.message);
-            }
+            this.props.vm.saveProjectSb3().then(sb3Content => {
+                blobToBase64(sb3Content).then(base64sb3 => {
+                    try {
+                        // eslint-disable-next-line no-undef
+                        mv2Interface.saveScratchFile('__autosave', base64sb3);
+                    } catch (error) {
+                        // eslint-disable-next-line no-console
+                        console.error('Failed to auto save project', error.message);
+                    }
+                });
+            });
         }
         handleTargetsUpdate (data) {
             if (this.props.shouldUpdateTargets) {
