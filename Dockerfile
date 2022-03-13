@@ -64,4 +64,4 @@ EXPOSE 8601
 # If you choose not to run the container after the build, you can obtain the files in 
 # the container by running the following command on the host's command line:
 # docker cp <container_id>:/MartyBlocks/scratch-gui/build/ ./build
-# CMD ["npm","start"]
+CMD ["npm","start"]
