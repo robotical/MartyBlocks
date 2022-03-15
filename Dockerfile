@@ -19,22 +19,22 @@ RUN npm install -g typescript
 RUN npm config set spin=false && npm config set progress=false
     
 RUN echo "Cloning MartyBlocks -----------------------------------------"
-./scripts/clone-martyblocks.sh
+RUN ./scripts/clone-martyblocks.sh
 
 RUN echo "Cloning stratch -----------------------------------------"
-./scripts/clone-scratch.sh
+RUN ./scripts/clone-scratch.sh
 
 RUN echo "Checkout specific scratch commits -----------------------------------------"
-./scripts/checkout-scratch.sh
+RUN ./scripts/checkout-scratch.sh
 
 RUN echo "Perform npm install on scratch -----------------------------------------"
-./scripts/npm-install-scratch.sh
+RUN ./scripts/npm-install-scratch.sh
 
 RUN echo "NPM Linking -----------------------------------------"
-./scripts/npm-link-all.sh
+RUN ./scripts/npm-link-all.sh
 
 RUN echo "Build Scratch blocks -----------------------------------------"
-./scripts/build-martyblocks.sh
+RUN ./scripts/build-martyblocks.sh
 
 WORKDIR /MartyBlocks/scratch-gui
 EXPOSE 8601
