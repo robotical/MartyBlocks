@@ -1,0 +1,1 @@
+docker run -it --name marty_blocks_ctr -p 8601:8601 marty_blocks_img

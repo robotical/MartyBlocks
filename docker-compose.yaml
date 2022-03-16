@@ -1,6 +1,7 @@
 services:
   app:
     container_name: martyblocks
+    image: martyblocks_image
     build: .
     ports:
       - 8601:8601
