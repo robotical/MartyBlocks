@@ -19,7 +19,7 @@ RUN npm install -g typescript
 RUN npm config set spin=false && npm config set progress=false
     
 RUN echo "Cloning MartyBlocks -----------------------------------------"
-RUN git clone -b "feature/latest-scratch" https://github.com/robotical/MartyBlocks.git
+RUN git clone https://github.com/robotical/MartyBlocks.git
 RUN cd /MartyBlocks/marty-blocks-lib && npm install
 
 RUN echo "Cloning stratch -----------------------------------------"
