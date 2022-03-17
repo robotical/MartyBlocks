@@ -30,9 +30,6 @@ RUN git clone -b develop https://github.com/llk/scratch-gui.git /MartyBlocks/scr
 RUN echo "Checkout specific scratch commits -----------------------------------------"
 RUN chmod +x /MartyBlocks/scripts/checkout-scratch.sh && /MartyBlocks/scripts/checkout-scratch.sh
 
-RUN echo "Copy replacements over the scratch-blocks -----------------------------------------"
-RUN cp -r /MartyBlocks/marty-blocks-lib/replacements/* /MartyBlocks/
-
 RUN echo "Perform npm install on scratch -----------------------------------------"
 RUN cd /MartyBlocks/scratch-blocks && npm install && \
     cd /MartyBlocks/scratch-vm && npm install && \
@@ -43,6 +40,9 @@ RUN cd /MartyBlocks/marty-blocks-lib && npm link && \
     cd /MartyBlocks/scratch-blocks && npm link && npm link marty-blocks-lib && \
     cd /MartyBlocks/scratch-vm && npm link && npm link marty-blocks-lib scratch-blocks && \
     cd /MartyBlocks/scratch-gui && npm link marty-blocks-lib scratch-blocks scratch-vm
+
+RUN echo "Copy replacements over the scratch-blocks -----------------------------------------"
+RUN cp -r /MartyBlocks/marty-blocks-lib/replacements/* /MartyBlocks/
 
 RUN echo "Build Scratch blocks -----------------------------------------"
 RUN cd /MartyBlocks/scratch-blocks && npm run prepublish
