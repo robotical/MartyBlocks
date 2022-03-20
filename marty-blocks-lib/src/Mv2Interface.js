@@ -117,6 +117,10 @@ class Mv2Interface extends EventDispatcher {
         }
     }
 
+    streamAudio (audioData) {
+        console.log(`streamAudio ${audioData.length}`);
+    }
+    
     /**
      * Save a scratch file
      * @param {string} fileName Filename to save to

@@ -931,6 +931,36 @@ Blockly.Blocks['mv2_playSound'] = {
   }
 };
 
+Blockly.Blocks['mv2_playSound_stream'] = {
+  /**
+   * Block to make Marty play a specified sound
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_PLAYSOUND_STREAM,
+      "category": Blockly.Categories.sound,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "SOUND_MENU"
+        },
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
 // SENSING
 
 Blockly.Blocks['BatteryPercentage'] = {

@@ -501,6 +501,7 @@ Blockly.Msg.SOUND_RECORD = 'record...';
 
 // MARTY V2 sound blocks
 Blockly.Msg.MV2_PLAYSOUND = '%1 %2 Play sound: %3';
+Blockly.Msg.MV2_PLAYSOUND_STREAM = '%1 %2 Play sound: %3';
 
 // MARTY V2 block drop-down options
 Blockly.Msg.DROPDOWN_OPTION_LEFT = 'left';

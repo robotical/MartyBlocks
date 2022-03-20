@@ -390,18 +390,14 @@ export function MartyBlocksToolbox_sound(soundName) {
                     <field name="SOUND"></field>
             </value>
         </block>
+        <block type="mv2_playSound_stream" >
+            <value name="SOUND_MENU">
+                <shadow type="sound_sounds_menu">
+                    <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
     `
-    // return `
-    // <!--Marty blocks-->
-
-    // <block type="mv2_playSound" >
-    //     <value name="SOUND_MENU">
-    //         <shadow type="sound_sounds_menu">
-    //             <field name="SOUND_MENU">${soundName}</field>
-    //         </shadow>
-    //     </value>
-    // </block>
-    // `
 }
 
 export function MartyBlocksToolbox_sensing() {

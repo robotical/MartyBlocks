@@ -94,6 +94,7 @@ class Scratch3Mv2Blocks {
             // sound commands
 
             mv2_playSound: this.playSound,
+            mv2_playSound_stream: this.playSound_stream,
 
             // misc/debugging commands (including proposed/deprecated blocks)
 
@@ -961,7 +962,7 @@ class Scratch3Mv2Blocks {
             setTimeout(resolve));
     }
 
-    playSoundMP3(args, util) {
+    playSound_stream(args, util) {
         const index = this._getSoundIndex(args.SOUND_MENU, util);
         if (index >= 0) {
             const { target } = util;
@@ -975,8 +976,20 @@ class Scratch3Mv2Blocks {
                 // audioEncoder(sprite.soundBank.soundPlayers[soundId], 32, null, function onComplete(blob) {
                 //     console.log(`Audio MP3 ready len ${blob.length}`)
                 // });
-                const mp3SoundData = this._convertSoundToMP3(sprite.soundBank.soundPlayers[soundId]);
+                const mp3SoundBuffers = this._convertSoundToMP3(sprite.soundBank.soundPlayers[soundId]);
+                let mp3Len = 0;
+                for (let mp3Buf of mp3SoundBuffers) {
+                    mp3Len += mp3Buf.length;
+                }
+                const mp3SoundData = new Int8Array(mp3Len);
+                let curPos = 0;
+                for (let mp3Buf of mp3SoundBuffers) {
+                    mp3SoundData.set(mp3Buf, curPos);
+                    curPos += mp3Buf.length;
+                }
                 console.log(`encoded to MP3 len ${mp3SoundData.length}`);
+
+                mv2Interface.streamAudio(mp3SoundData);
 
                 // // Test code to play locally
                 // var blob = new Blob(mp3SoundData, {type: 'audio/mp3'});
