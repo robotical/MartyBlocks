@@ -1,3 +1,5 @@
+name: Build MartyBlocks
+on: [workflow_dispatch]
 jobs:
   build_martyblocks_job:
     runs-on: ubuntu-latest
@@ -20,4 +22,3 @@ jobs:
         with:
           path: ${{ steps.extract.outputs.destination }}
           name: dist
-          
