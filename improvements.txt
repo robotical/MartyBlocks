@@ -1,0 +1,2 @@
+shallow clone at specific commit --depth=1
+git clone --depth=1 https://github.com/apache/flink.git c0cf91ce6fbe55f9f1df1fb1626a50e79cb9fc50

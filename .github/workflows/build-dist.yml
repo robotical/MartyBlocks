@@ -1,0 +1,23 @@
+jobs:
+  build_martyblocks_job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build MartyBlocks using Docker Image
+        uses: docker/build-push-action@v2
+        id: build-martyblocks
+        with:
+          repository: martyblocks-image
+          tags: latest
+          push: false
+      - uses: shrink/actions-docker-extract@v1
+        id: extract
+        with:
+          image: martyblocks-image
+          path: /MartyBlocks/scratch-gui/build.
+      - name: Upload Dist
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ steps.extract.outputs.destination }}
+          name: dist
+          
