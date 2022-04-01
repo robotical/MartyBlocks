@@ -1,8 +1,8 @@
 {
-  "name": "martyblocks",
+  "name": "@robotical/martyblocks",
   "version": "1.0.0",
-  "description": "MartyBlocks based on Scratch for Marty the Robot",
-  "main": "scratch3-gui/build/index.html",
+  "description": "MartyBlocks based on Scratch for Marty the Robot by Robotical",
+  "main": "README.md",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,12 +13,17 @@
   "keywords": [
     "marty",
     "robot",
-    "scratch"
+    "scratch",
+    "Robotical"
   ],
   "author": "Rob Dobson",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/robotical/MartyBlocks/issues"
   },
-  "homepage": "https://github.com/robotical/MartyBlocks#readme"
+  "homepage": "https://github.com/robotical/MartyBlocks#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
 }

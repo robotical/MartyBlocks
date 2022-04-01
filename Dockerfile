@@ -1,6 +1,6 @@
 FROM library/ubuntu:18.04
 
-LABEL description="Base image MartyBlocks development"
+LABEL description="Base image MartyBlocks build"
 LABEL maintainer="Rob Dobson <rob@dobson.com>"
 
 ENV PORT 8601
@@ -56,4 +56,4 @@ EXPOSE 8601
 # If you choose not to run the container after the build, you can obtain the files in 
 # the container by running the following command on the host's command line:
 # docker cp <container_id>:/MartyBlocks/scratch-gui/build/ ./build
-CMD ["npm","start"]
+# CMD ["npm","start"]
