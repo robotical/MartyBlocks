@@ -406,17 +406,17 @@ export function MartyBlocksToolbox_sound(soundName) {
         <block type="mv2_playTone" >
             <value name="HZ1">
                 <shadow type="math_number">
-                    <field name="HZ1">200</field>
+                    <field name="NUM">200</field>
                 </shadow>
             </value>
             <value name="HZ2">
                 <shadow type="math_number">
-                    <field name="HZ2">300</field>
+                    <field name="NUM">300</field>
                 </shadow>
             </value>
             <value name="SECONDS">
                 <shadow type="math_number">
-                    <field name="SECONDS">3</field>
+                    <field name="NUM">3</field>
                 </shadow>
             </value>
         </block>
