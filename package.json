@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robotical/MartyBlocks.git"
+    "url": "git+https://github.com/robotical/MartyBlocks-without-nested-repos.git"
   },
   "keywords": [
     "marty",
@@ -16,12 +16,12 @@
     "scratch",
     "Robotical"
   ],
-  "author": "Rob Dobson",
+  "author": "Nikos Theodoropoulos",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/robotical/MartyBlocks/issues"
+    "url": "https://github.com/robotical/MartyBlocks-without-nested-repos/issues"
   },
-  "homepage": "https://github.com/robotical/MartyBlocks#readme",
+  "homepage": "https://github.com/robotical/MartyBlocks-without-nested-repos#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

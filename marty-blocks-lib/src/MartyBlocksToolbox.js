@@ -384,19 +384,43 @@ export function MartyBlocksToolbox_disco() {
 export function MartyBlocksToolbox_sound(soundName) {
     return `
         <!--Marty blocks-->
-
         <block type="mv2_playSound" >
-            <value name="SOUND">
-                    <field name="SOUND"></field>
-            </value>
-        </block>
-        <block type="mv2_playSound_stream" >
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
                     <field name="SOUND_MENU">${soundName}</field>
                 </shadow>
             </value>
         </block>
+        <block type="mv2_playSoundUntilDone" >
+            <value name="SOUND_MENU">
+                <shadow type="sound_sounds_menu">
+                    <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="mv2_playNote" >
+            <value name="NOTES_MENU">
+                <field name="NOTES_MENU"></field>
+            </value>
+        </block>
+        <block type="mv2_playTone" >
+            <value name="HZ1">
+                <shadow type="math_number">
+                    <field name="HZ1">200</field>
+                </shadow>
+            </value>
+            <value name="HZ2">
+                <shadow type="math_number">
+                    <field name="HZ2">300</field>
+                </shadow>
+            </value>
+            <value name="SECONDS">
+                <shadow type="math_number">
+                    <field name="SECONDS">3</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="mv2_stopSounds" />
     `
 }
 

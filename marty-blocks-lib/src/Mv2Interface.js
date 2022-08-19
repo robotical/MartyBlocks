@@ -66,7 +66,7 @@ class Mv2Interface extends EventDispatcher {
         // eslint-disable-next-line no-undef
         if (!mv2Interface.isConnected) {
             // eslint-disable-next-line no-alert
-            alert('You are not currently connected to a Marty. Please close scratch and connect.');
+            alert('You are not currently connected to a Marty. Please connect.');
         }
     }
     

@@ -27,6 +27,10 @@ const base = {
         filename: '[name].js',
         chunkFilename: 'chunks/[name].js'
     },
+    externals: {
+        React: 'react',
+        ReactDOM: 'react-dom'
+    },
     resolve: {
         symlinks: false
     },
@@ -46,13 +50,12 @@ const base = {
                 babelrc: false,
                 plugins: [
                     '@babel/plugin-syntax-dynamic-import',
-                    '@babel/plugin-transform-async-to-generator',
                     '@babel/plugin-proposal-object-rest-spread',
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
-                presets: ['@babel/preset-env', '@babel/preset-react']
-            }
+                    presets: [['@babel/preset-env', {exclude: ['transform-regenerator']}], '@babel/preset-react']
+                }
         },
         {
             test: /\.css$/,
@@ -108,6 +111,10 @@ module.exports = [
         output: {
             path: path.resolve(__dirname, 'build'),
             filename: '[name].js'
+        },
+        externals: {
+            React: 'react',
+            ReactDOM: 'react-dom'
         },
         module: {
             rules: base.module.rules.concat([

@@ -1,12 +1,16 @@
 import React from "react";
 import bindAll from "lodash.bindall";
-import styles from './marty-connect-btn.css';
+import styles from "./marty-connect-btn.css";
+import ConnectBtnSVG from "./svg-components/connect-btn.jsx";
+import DisconnectBtnSVG from "./svg-components/disconnect-btn.jsx";
+import MartyBatteryLevel from "../marty-battery-level/marty-battery-level.jsx";
+import MartySignalStrength from "../marty-signal-strength/marty-signal-strength.jsx";
 
 class ConnectBtn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        isConnected: mv2Interface.isConnected,
+      isConnected: mv2Interface.isConnected,
     };
     bindAll(this, ["clickBtnHandler"]);
     this.onIsConnectedChange = this.onIsConnectedChange.bind(this);
@@ -29,10 +33,18 @@ class ConnectBtn extends React.Component {
 
   render() {
     return (
-      <div>
-        <button onClick={this.clickBtnHandler} className={styles.btn}>
-          {this.state.isConnected ? "Disconnect" : "Connect to Marty!"}
-        </button>
+      <div className={styles.martyConnectBtnContainer} onClick={this.clickBtnHandler}>
+        {this.state.isConnected ? (
+          <div className={styles.batterySignalContainer}>
+            <MartyBatteryLevel />
+            <MartySignalStrength />
+            <div className={styles.disconnectBtnContainer} >
+              <DisconnectBtnSVG />
+            </div>
+          </div>
+        ) : (
+          <ConnectBtnSVG />
+        )}
       </div>
     );
   }

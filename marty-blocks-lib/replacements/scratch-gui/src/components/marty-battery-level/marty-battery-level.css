@@ -1,3 +1,17 @@
+.container {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: "batt-perc" "battery";
+}
+
+.battery-percent {
+    transform: translateY(-2px);
+    justify-self: center;
+    grid-area: batt-perc;
+    font-size: 8px;
+    margin: 0;
+}
+
 .battery-flash {
     opacity: 1;
     animation: fade 2s linear infinite;
@@ -10,18 +24,20 @@
 }
 
 .battery-container {
+    grid-area: battery;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 80%;
-    padding: 5px
+    width: 30px;
+    height: 200%;
+    /* padding: 5px; */
+    transform: translateY(-60%) rotate(90deg) translateX(5px);
 }
 
 .battery-cap {
-    width: 5px;
-    height: 2px;
+    width: 4px;
+    height: 1px;
 }
 
 .battery-cylinder {

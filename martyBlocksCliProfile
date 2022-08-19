@@ -1,0 +1,48 @@
+export WebappHome=/Users/nikolastheodoropoulos/Documents/Robotical/marty-web-app
+export MBHome=/Users/nikolastheodoropoulos/Documents/Robotical/MartyBlocks
+
+
+export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
+export blocks_original=$MBHome/scratch-blocks
+export vm_original=$MBHome/scratch-vm
+export gui_original=$MBHome/scratch-gui
+alias cdhome='cd $MBHome'
+alias sourceMBProf='cdhome && source martyBlocksCliProfile'
+export PATH=$(pyenv root)/shims:$PATH
+
+buildAllAndCpToWebApp () {
+    local type="${1:-all}"
+    cpReplacements
+    buildScratch $type
+    cpToWebapp
+}
+
+cpReplacements ()
+{
+    cp -r $REPLACEMENTS/* $MBHome
+}
+
+buildScratch () {
+    local type="${1:-all}"
+    if [ $type = all ]; then buildBlocks; buildVm; buildGui; fi
+    if [ $type = blocks ]; then buildBlocks; fi
+    if [ $type = vm ]; then buildVm; fi
+    if [ $type = gui ]; then buildGui; fi
+}
+
+cpToWebapp () {
+    rm -rf $WebappHome/public/MartyBlocks/*
+    cp -r $gui_original/build/* $WebappHome/public/MartyBlocks
+}
+
+buildBlocks() {
+    cd $blocks_original && npm run prepublish
+}
+
+buildVm() {
+    cd $vm_original && npm run build
+}
+
+buildGui() {
+    cd $gui_original && BUILD_MODE=dist npm run build
+}

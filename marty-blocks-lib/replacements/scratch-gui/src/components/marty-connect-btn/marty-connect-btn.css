@@ -1,4 +1,3 @@
-
 .btn {
   margin-bottom: 3px;
   background-color: #f8f9fa;
@@ -22,11 +21,36 @@
 
 .btn:hover {
   border-color: #dadce0;
-  box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
   color: #202124;
 }
 
 .btn:focus,
 .btn:visited {
   outline: none;
+}
+
+.marty-connect-btn-container {
+  display: grid;
+  align-items: center;
+  height: 100%;
+  border-radius: 4px;
+  margin: 1px;
+}
+
+.battery-signal-container {
+  background-color: #94cddc;
+  display: grid;
+  border-radius: 4px;
+  align-items: end;
+  grid-auto-flow: column;
+}
+
+.disconnect-btn-container {
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  margin: 3px 0;
+  padding-left: 5px;
+  padding-right: 2px;
+  cursor: pointer;
 }
