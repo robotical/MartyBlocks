@@ -61,14 +61,6 @@ class Mv2Interface extends EventDispatcher {
         this.deleteScratchFile = this.deleteScratchFile.bind(this);
         this.setRSSI = this.setRSSI.bind(this);
     }
-
-    handleProjectRunStart() {
-        // eslint-disable-next-line no-undef
-        if (!mv2Interface.isConnected) {
-            // eslint-disable-next-line no-alert
-            alert('You are not currently connected to a Marty. Please connect.');
-        }
-    }
     
     setRSSI (rssi) {
         if (rssi !== this.rssi) {
@@ -114,6 +106,7 @@ class Mv2Interface extends EventDispatcher {
         } catch (err) {
             // eslint-disable-next-line no-console
             console.log(`Error sending to react native: ${err}`);
+            // alert('You are not currently connected to a Marty. Please connect.');
         }
     }
 

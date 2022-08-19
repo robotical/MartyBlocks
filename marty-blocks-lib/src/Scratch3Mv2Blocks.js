@@ -47,62 +47,62 @@ class Scratch3Mv2Blocks {
     return {
       // motion commands
 
-      mv2_getReady: this.getReady,
-      mv2_discoChangeBlockColour: this.discoChangeBlockColour,
-      mv2_discoChangeBlockPattern: this.discoChangeBlockPattern,
-      mv2_discoChangeRegionColour: this.discoChangeRegionColour,
-      mv2_walk_fw: this.walk_fw,
-      mv2_walk_bw: this.walk_bw,
-      mv2_walk: this.walk,
-      mv2_turn: this.turn,
-      mv2_wiggle: this.wiggle,
-      mv2_circle: this.circle,
-      mv2_kick: this.kick,
-      mv2_lean: this.lean,
-      mv2_slide: this.slide,
-      mv2_eyes: this.eyes,
-      mv2_moveLeg: this.moveLeg,
-      mv2_liftFoot: this.liftFoot,
-      mv2_lowerFoot: this.lowerFoot,
-      mv2_moveJoint: this.moveJoint,
-      mv2_wave: this.wave,
-      mv2_dance: this.dance,
-      mv2_standStraight: this.standStraight,
-      mv2_hold: this.hold,
-      mv2_gripperArmBasic: this.gripperArmBasic,
-      mv2_gripperArmTimed: this.gripperArmTimed,
+      mv2_getReady: (args, utils) => this._martyIsConnectedWrapper(this, this.getReady.bind(this, args, utils)),
+      mv2_discoChangeBlockColour: (args, utils) => this._martyIsConnectedWrapper(this, this.discoChangeBlockColour.bind(this, args, utils)),
+      mv2_discoChangeBlockPattern: (args, utils) => this._martyIsConnectedWrapper(this, this.discoChangeBlockPattern.bind(this, args, utils)),
+      mv2_discoChangeRegionColour: (args, utils) => this._martyIsConnectedWrapper(this, this.discoChangeRegionColour.bind(this, args, utils)),
+      mv2_walk_fw: (args, utils) => this._martyIsConnectedWrapper(this, this.walk_fw.bind(this, args, utils)),
+      mv2_walk_bw: (args, utils) => this._martyIsConnectedWrapper(this, this.walk_bw.bind(this, args, utils)),
+      mv2_walk: (args, utils) => this._martyIsConnectedWrapper(this, this.walk.bind(this, args, utils)),
+      mv2_turn: (args, utils) => this._martyIsConnectedWrapper(this, this.turn.bind(this, args, utils)),
+      mv2_wiggle: (args, utils) => this._martyIsConnectedWrapper(this, this.wiggle.bind(this, args, utils)),
+      mv2_circle: (args, utils) => this._martyIsConnectedWrapper(this, this.circle.bind(this, args, utils)),
+      mv2_kick: (args, utils) => this._martyIsConnectedWrapper(this, this.kick.bind(this, args, utils)),
+      mv2_lean: (args, utils) => this._martyIsConnectedWrapper(this, this.lean.bind(this, args, utils)),
+      mv2_slide: (args, utils) => this._martyIsConnectedWrapper(this, this.slide.bind(this, args, utils)),
+      mv2_eyes: (args, utils) => this._martyIsConnectedWrapper(this, this.eyes.bind(this, args, utils)),
+      mv2_moveLeg: (args, utils) => this._martyIsConnectedWrapper(this, this.moveLeg.bind(this, args, utils)),
+      mv2_liftFoot: (args, utils) => this._martyIsConnectedWrapper(this, this.liftFoot.bind(this, args, utils)),
+      mv2_lowerFoot: (args, utils) => this._martyIsConnectedWrapper(this, this.lowerFoot.bind(this, args, utils)),
+      mv2_moveJoint: (args, utils) => this._martyIsConnectedWrapper(this, this.moveJoint.bind(this, args, utils)),
+      mv2_wave: (args, utils) => this._martyIsConnectedWrapper(this, this.wave.bind(this, args, utils)),
+      mv2_dance: (args, utils) => this._martyIsConnectedWrapper(this, this.dance.bind(this, args, utils)),
+      mv2_standStraight: (args, utils) => this._martyIsConnectedWrapper(this, this.standStraight.bind(this, args, utils)),
+      mv2_hold: (args, utils) => this._martyIsConnectedWrapper(this, this.hold.bind(this, args, utils)),
+      mv2_gripperArmBasic: (args, utils) => this._martyIsConnectedWrapper(this, this.gripperArmBasic.bind(this, args, utils)),
+      mv2_gripperArmTimed: (args, utils) => this._martyIsConnectedWrapper(this, this.gripperArmTimed.bind(this, args, utils)),
 
       // sensors
 
-      ServoPosition: this.position,
-      ServoCurrent: this.current,
-      XAxisMovement: this.accelerometerX,
-      YAxisMovement: this.accelerometerY,
-      ZAxisMovement: this.accelerometerZ,
-      ObstacleProximity: this.proximity,
-      BatteryPercentage: this.batteryLevel,
-      mv2_obstaclesense: this.obstacleSense,
-      mv2_groundsense: this.groundSense,
-      mv2_coloursense: this.colourSense,
-      mv2_coloursenseraw: this.colourSenseRaw,
-      mv2_distancesense: this.distanceSense,
-      mv2_lightsense: this.lightSense,
-      mv2_noisesense: this.noiseSense,
+      ServoPosition: (args, utils) => this._martyIsConnectedWrapper(this, this.position.bind(this, args, utils)),
+      ServoCurrent: (args, utils) => this._martyIsConnectedWrapper(this, this.current.bind(this, args, utils)),
+      XAxisMovement: (args, utils) => this._martyIsConnectedWrapper(this, this.accelerometerX.bind(this, args, utils)),
+      YAxisMovement: (args, utils) => this._martyIsConnectedWrapper(this, this.accelerometerY.bind(this, args, utils)),
+      ZAxisMovement: (args, utils) => this._martyIsConnectedWrapper(this, this.accelerometerZ.bind(this, args, utils)),
+      ObstacleProximity: (args, utils) => this._martyIsConnectedWrapper(this, this.proximity.bind(this, args, utils)),
+      BatteryPercentage: (args, utils) => this._martyIsConnectedWrapper(this, this.batteryLevel.bind(this, args, utils)),
+      mv2_obstaclesense: (args, utils) => this._martyIsConnectedWrapper(this, this.obstacleSense.bind(this, args, utils)),
+      mv2_groundsense: (args, utils) => this._martyIsConnectedWrapper(this, this.groundSense.bind(this, args, utils)),
+      mv2_coloursense: (args, utils) => this._martyIsConnectedWrapper(this, this.colourSense.bind(this, args, utils)),
+      mv2_coloursenseraw: (args, utils) => this._martyIsConnectedWrapper(this, this.colourSenseRaw.bind(this, args, utils)),
+      mv2_distancesense: (args, utils) => this._martyIsConnectedWrapper(this, this.distanceSense.bind(this, args, utils)),
+      mv2_lightsense: (args, utils) => this._martyIsConnectedWrapper(this, this.lightSense.bind(this, args, utils)),
+      mv2_noisesense: (args, utils) => this._martyIsConnectedWrapper(this, this.noiseSense.bind(this, args, utils)),
 
       // sound commands
 
-      // mv2_playSound: this.playSound,
-      mv2_playSound: this.playSound,
-      mv2_playSoundUntilDone: this.playSoundUntilDone,
-      mv2_playNote: this.playNote,
-      mv2_playTone: this.playTone,
-      mv2_stopSounds: this.stopSounds,
+      // mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(this, this.playSound.bind(this, args, utils)),
+      mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
+      mv2_playSoundUntilDone: (args, utils) => this._martyIsConnectedWrapper(this.playSoundUntilDone.bind(this, args, utils)),
+      mv2_playNote: (args, utils) => this._martyIsConnectedWrapper(this, this.playNote.bind(this, args, utils)),
+      mv2_playTone: (args, utils) => this._martyIsConnectedWrapper(this, this.playTone.bind(this, args, utils)),
+      mv2_stopSounds: (args, utils) => this._martyIsConnectedWrapper(this, this.stopSounds.bind(this, args, utils)),
 
       // misc/debugging commands (including proposed/deprecated blocks)
 
-      mv2_demo_sensor: this.demo_sensor,
-      mv2_set_demo_sensor: this.set_demo_sensor,
-      mv2_set_ip: this.set_ip,
+      mv2_demo_sensor: (args, utils) => this._martyIsConnectedWrapper(this, this.demo_sensor.bind(this, args, utils)),
+      mv2_set_demo_sensor: (args, utils) => this._martyIsConnectedWrapper(this, this.set_demo_sensor.bind(this, args, utils)),
+      mv2_set_ip: (args, utils) => this._martyIsConnectedWrapper(this, this.set_ip.bind(this, args, utils)),
 
       /* mv2_kickLeft: this.kickLeft,
 
@@ -118,6 +118,11 @@ class Scratch3Mv2Blocks {
             mv2_waveRight: this.waveRight,
             mv2_kickRight: this.kickRight, */
     };
+  }
+
+  _martyIsConnectedWrapper(martyBlock) {
+    if (!mv2Interface.isConnected) return alert('You are not currently connected to a Marty. Please connect.');
+    martyBlock && martyBlock();
   }
 
   // DISCO Utils
@@ -246,6 +251,7 @@ class Scratch3Mv2Blocks {
   // MOTION
 
   getReady(args, util) {
+    
     const moveTime = 3000;
     console.log("Ready, set, go!");
     mv2Interface.send_REST(`traj/getReady/?moveTime=${moveTime}`);
