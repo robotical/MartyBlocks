@@ -46,3 +46,11 @@ buildVm() {
 buildGui() {
     cd $gui_original && BUILD_MODE=dist npm run build
 }
+
+publishPackage() {
+    cdhome;
+    rm -rf dist;
+    mkdir dist;
+    cp -r $gui_original/build/* dist/;
+    npm publish;
+}
