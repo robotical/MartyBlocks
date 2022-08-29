@@ -837,6 +837,100 @@ Blockly.Blocks['mv2_discoChangeBlockColour'] = {
   }
 };
 
+Blockly.Blocks['mv2_discoChangeBackColour'] = {
+  /**
+   * DISCO MARTY BACK
+   * Block to change the colour of the back LED
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_DISCOCHANGEBACKCOLOUR,
+      "category": Blockly.Categories.looks,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "COLOR"
+        }
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_discoSetBreatheBackColour'] = {
+  /**
+   * DISCO MARTY BACK
+   * Block to change the colour of the back LED 
+   * and set it to breathe mode
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_DISCOSETBREATHEBACKCOLOUR,
+      "category": Blockly.Categories.looks,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "COLOR"
+        },
+        {
+          "type": "input_value",
+          "name": "MILLISECONDS"
+        },
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_discoTurnOffBackColour'] = {
+  /**
+   * DISCO MARTY BACK
+   * Block to turn off the colour of the back LED
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR,
+      "category": Blockly.Categories.looks,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
 
 
 Blockly.Blocks['mv2_discoChangeRegionColour'] = {
@@ -2056,6 +2150,7 @@ Blockly.Blocks['ServoCurrent'] = {
     this.jsonInit({
       "message0": Blockly.Msg.MV2_CURRENT,
       "category": Blockly.Categories.sensing,
+      "type": "dynamic_dropdown",
       "colour": 164,
       "checkboxInFlyout": true,
       "args0": [
@@ -2069,22 +2164,11 @@ Blockly.Blocks['ServoCurrent'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SERVOCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, '0'],
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTTWIST, '1'],
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTKNEE, '2'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTHIP, '3'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTTWIST, '4'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTKNEE, '5'],
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTARM, '6'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTARM, '7'],
-            [Blockly.Msg.DROPDOWN_OPTION_EYES, '8']
-          ]
         },
       ],
-      "extensions": ["output_number"]
+      "extensions": ["output_number", "dynamic_menu_servo_current_extension"]
     });
   }
 };

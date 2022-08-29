@@ -367,6 +367,25 @@ export function MartyBlocksToolbox_disco() {
         </value>
     </block>
 
+    <block type="mv2_discoChangeBackColour" >
+        <value name="COLOR">
+            <shadow type="colour_picker"/>
+        </value>
+    </block>
+
+    <block type="mv2_discoSetBreatheBackColour" >
+        <value name="COLOR">
+            <shadow type="colour_picker"/>
+        </value>
+        <value name="MILLISECONDS">
+            <shadow type="math_number">
+                <field name="NUM">1000</field>
+            </shadow>
+        </value>
+    </block>
+    
+    <block type="mv2_discoTurnOffBackColour" />
+
     <block type="mv2_discoChangeRegionColour" >
         <value>
             <field name="BOARDTYPE"></field>
@@ -382,6 +401,7 @@ export function MartyBlocksToolbox_disco() {
 }
 
 export function MartyBlocksToolbox_sound(soundName) {
+    return "";
     return `
         <!--Marty blocks-->
         <block type="mv2_playSound" >

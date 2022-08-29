@@ -47,62 +47,150 @@ class Scratch3Mv2Blocks {
     return {
       // motion commands
 
-      mv2_getReady: (args, utils) => this._martyIsConnectedWrapper(this.getReady.bind(this, args, utils)),
-      mv2_discoChangeBlockColour: (args, utils) => this._martyIsConnectedWrapper(this.discoChangeBlockColour.bind(this, args, utils)),
-      mv2_discoChangeBlockPattern: (args, utils) => this._martyIsConnectedWrapper(this.discoChangeBlockPattern.bind(this, args, utils)),
-      mv2_discoChangeRegionColour: (args, utils) => this._martyIsConnectedWrapper(this.discoChangeRegionColour.bind(this, args, utils)),
-      mv2_walk_fw: (args, utils) => this._martyIsConnectedWrapper(this.walk_fw.bind(this, args, utils)),
-      mv2_walk_bw: (args, utils) => this._martyIsConnectedWrapper(this.walk_bw.bind(this, args, utils)),
-      mv2_walk: (args, utils) => this._martyIsConnectedWrapper(this.walk.bind(this, args, utils)),
-      mv2_turn: (args, utils) => this._martyIsConnectedWrapper(this.turn.bind(this, args, utils)),
-      mv2_wiggle: (args, utils) => this._martyIsConnectedWrapper(this.wiggle.bind(this, args, utils)),
-      mv2_circle: (args, utils) => this._martyIsConnectedWrapper(this.circle.bind(this, args, utils)),
-      mv2_kick: (args, utils) => this._martyIsConnectedWrapper(this.kick.bind(this, args, utils)),
-      mv2_lean: (args, utils) => this._martyIsConnectedWrapper(this.lean.bind(this, args, utils)),
-      mv2_slide: (args, utils) => this._martyIsConnectedWrapper(this.slide.bind(this, args, utils)),
-      mv2_eyes: (args, utils) => this._martyIsConnectedWrapper(this.eyes.bind(this, args, utils)),
-      mv2_moveLeg: (args, utils) => this._martyIsConnectedWrapper(this.moveLeg.bind(this, args, utils)),
-      mv2_liftFoot: (args, utils) => this._martyIsConnectedWrapper(this.liftFoot.bind(this, args, utils)),
-      mv2_lowerFoot: (args, utils) => this._martyIsConnectedWrapper(this.lowerFoot.bind(this, args, utils)),
-      mv2_moveJoint: (args, utils) => this._martyIsConnectedWrapper(this.moveJoint.bind(this, args, utils)),
-      mv2_wave: (args, utils) => this._martyIsConnectedWrapper(this.wave.bind(this, args, utils)),
-      mv2_dance: (args, utils) => this._martyIsConnectedWrapper(this.dance.bind(this, args, utils)),
-      mv2_standStraight: (args, utils) => this._martyIsConnectedWrapper(this.standStraight.bind(this, args, utils)),
-      mv2_hold: (args, utils) => this._martyIsConnectedWrapper(this.hold.bind(this, args, utils)),
-      mv2_gripperArmBasic: (args, utils) => this._martyIsConnectedWrapper(this.gripperArmBasic.bind(this, args, utils)),
-      mv2_gripperArmTimed: (args, utils) => this._martyIsConnectedWrapper(this.gripperArmTimed.bind(this, args, utils)),
+      mv2_getReady: (args, utils) =>
+        this._martyIsConnectedWrapper(this.getReady.bind(this, args, utils)),
+      mv2_discoChangeBlockColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeBlockColour.bind(this, args, utils)
+        ),
+      mv2_discoChangeBackColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeBackColour.bind(this, args, utils)
+        ),
+      mv2_discoSetBreatheBackColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoSetBreatheBackColour.bind(this, args, utils)
+        ),
+      mv2_discoTurnOffBackColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoTurnOffBackColour.bind(this, args, utils)
+        ),
+      mv2_discoChangeBlockPattern: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeBlockPattern.bind(this, args, utils)
+        ),
+      mv2_discoChangeRegionColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeRegionColour.bind(this, args, utils)
+        ),
+      mv2_walk_fw: (args, utils) =>
+        this._martyIsConnectedWrapper(this.walk_fw.bind(this, args, utils)),
+      mv2_walk_bw: (args, utils) =>
+        this._martyIsConnectedWrapper(this.walk_bw.bind(this, args, utils)),
+      mv2_walk: (args, utils) =>
+        this._martyIsConnectedWrapper(this.walk.bind(this, args, utils)),
+      mv2_turn: (args, utils) =>
+        this._martyIsConnectedWrapper(this.turn.bind(this, args, utils)),
+      mv2_wiggle: (args, utils) =>
+        this._martyIsConnectedWrapper(this.wiggle.bind(this, args, utils)),
+      mv2_circle: (args, utils) =>
+        this._martyIsConnectedWrapper(this.circle.bind(this, args, utils)),
+      mv2_kick: (args, utils) =>
+        this._martyIsConnectedWrapper(this.kick.bind(this, args, utils)),
+      mv2_lean: (args, utils) =>
+        this._martyIsConnectedWrapper(this.lean.bind(this, args, utils)),
+      mv2_slide: (args, utils) =>
+        this._martyIsConnectedWrapper(this.slide.bind(this, args, utils)),
+      mv2_eyes: (args, utils) =>
+        this._martyIsConnectedWrapper(this.eyes.bind(this, args, utils)),
+      mv2_moveLeg: (args, utils) =>
+        this._martyIsConnectedWrapper(this.moveLeg.bind(this, args, utils)),
+      mv2_liftFoot: (args, utils) =>
+        this._martyIsConnectedWrapper(this.liftFoot.bind(this, args, utils)),
+      mv2_lowerFoot: (args, utils) =>
+        this._martyIsConnectedWrapper(this.lowerFoot.bind(this, args, utils)),
+      mv2_moveJoint: (args, utils) =>
+        this._martyIsConnectedWrapper(this.moveJoint.bind(this, args, utils)),
+      mv2_wave: (args, utils) =>
+        this._martyIsConnectedWrapper(this.wave.bind(this, args, utils)),
+      mv2_dance: (args, utils) =>
+        this._martyIsConnectedWrapper(this.dance.bind(this, args, utils)),
+      mv2_standStraight: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.standStraight.bind(this, args, utils)
+        ),
+      mv2_hold: (args, utils) =>
+        this._martyIsConnectedWrapper(this.hold.bind(this, args, utils)),
+      mv2_gripperArmBasic: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.gripperArmBasic.bind(this, args, utils)
+        ),
+      mv2_gripperArmTimed: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.gripperArmTimed.bind(this, args, utils)
+        ),
 
       // sensors
 
-      ServoPosition: (args, utils) => this._martyIsConnectedWrapper(this.position.bind(this, args, utils)),
-      ServoCurrent: (args, utils) => this._martyIsConnectedWrapper(this.current.bind(this, args, utils)),
-      XAxisMovement: (args, utils) => this._martyIsConnectedWrapper(this.accelerometerX.bind(this, args, utils)),
-      YAxisMovement: (args, utils) => this._martyIsConnectedWrapper(this.accelerometerY.bind(this, args, utils)),
-      ZAxisMovement: (args, utils) => this._martyIsConnectedWrapper(this.accelerometerZ.bind(this, args, utils)),
-      ObstacleProximity: (args, utils) => this._martyIsConnectedWrapper(this.proximity.bind(this, args, utils)),
-      BatteryPercentage: (args, utils) => this._martyIsConnectedWrapper(this.batteryLevel.bind(this, args, utils)),
-      mv2_obstaclesense: (args, utils) => this._martyIsConnectedWrapper(this.obstacleSense.bind(this, args, utils)),
-      mv2_groundsense: (args, utils) => this._martyIsConnectedWrapper(this.groundSense.bind(this, args, utils)),
-      mv2_coloursense: (args, utils) => this._martyIsConnectedWrapper(this.colourSense.bind(this, args, utils)),
-      mv2_coloursenseraw: (args, utils) => this._martyIsConnectedWrapper(this.colourSenseRaw.bind(this, args, utils)),
-      mv2_distancesense: (args, utils) => this._martyIsConnectedWrapper(this.distanceSense.bind(this, args, utils)),
-      mv2_lightsense: (args, utils) => this._martyIsConnectedWrapper(this.lightSense.bind(this, args, utils)),
-      mv2_noisesense: (args, utils) => this._martyIsConnectedWrapper(this.noiseSense.bind(this, args, utils)),
+      ServoPosition: (args, utils) =>
+        this._martyIsConnectedWrapper(this.position.bind(this, args, utils)),
+      ServoCurrent: (args, utils) =>
+        this._martyIsConnectedWrapper(this.current.bind(this, args, utils)),
+      XAxisMovement: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.accelerometerX.bind(this, args, utils)
+        ),
+      YAxisMovement: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.accelerometerY.bind(this, args, utils)
+        ),
+      ZAxisMovement: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.accelerometerZ.bind(this, args, utils)
+        ),
+      ObstacleProximity: (args, utils) =>
+        this._martyIsConnectedWrapper(this.proximity.bind(this, args, utils)),
+      BatteryPercentage: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.batteryLevel.bind(this, args, utils)
+        ),
+      mv2_obstaclesense: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.obstacleSense.bind(this, args, utils)
+        ),
+      mv2_groundsense: (args, utils) =>
+        this._martyIsConnectedWrapper(this.groundSense.bind(this, args, utils)),
+      mv2_coloursense: (args, utils) =>
+        this._martyIsConnectedWrapper(this.colourSense.bind(this, args, utils)),
+      mv2_coloursenseraw: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.colourSenseRaw.bind(this, args, utils)
+        ),
+      mv2_distancesense: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.distanceSense.bind(this, args, utils)
+        ),
+      mv2_lightsense: (args, utils) =>
+        this._martyIsConnectedWrapper(this.lightSense.bind(this, args, utils)),
+      mv2_noisesense: (args, utils) =>
+        this._martyIsConnectedWrapper(this.noiseSense.bind(this, args, utils)),
 
       // sound commands
 
       // mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
-      mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
-      mv2_playSoundUntilDone: (args, utils) => this._martyIsConnectedWrapper(this.playSoundUntilDone.bind(this, args, utils)),
-      mv2_playNote: (args, utils) => this._martyIsConnectedWrapper(this.playNote.bind(this, args, utils)),
-      mv2_playTone: (args, utils) => this._martyIsConnectedWrapper(this.playTone.bind(this, args, utils)),
-      mv2_stopSounds: (args, utils) => this._martyIsConnectedWrapper(this.stopSounds.bind(this, args, utils)),
+      mv2_playSound: (args, utils) =>
+        this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
+      mv2_playSoundUntilDone: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.playSoundUntilDone.bind(this, args, utils)
+        ),
+      mv2_playNote: (args, utils) =>
+        this._martyIsConnectedWrapper(this.playNote.bind(this, args, utils)),
+      mv2_playTone: (args, utils) =>
+        this._martyIsConnectedWrapper(this.playTone.bind(this, args, utils)),
+      mv2_stopSounds: (args, utils) =>
+        this._martyIsConnectedWrapper(this.stopSounds.bind(this, args, utils)),
 
       // misc/debugging commands (including proposed/deprecated blocks)
 
-      mv2_demo_sensor: (args, utils) => this._martyIsConnectedWrapper(this.demo_sensor.bind(this, args, utils)),
-      mv2_set_demo_sensor: (args, utils) => this._martyIsConnectedWrapper(this.set_demo_sensor.bind(this, args, utils)),
-      mv2_set_ip: (args, utils) => this._martyIsConnectedWrapper(this.set_ip.bind(this, args, utils)),
+      mv2_demo_sensor: (args, utils) =>
+        this._martyIsConnectedWrapper(this.demo_sensor.bind(this, args, utils)),
+      mv2_set_demo_sensor: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.set_demo_sensor.bind(this, args, utils)
+        ),
+      mv2_set_ip: (args, utils) =>
+        this._martyIsConnectedWrapper(this.set_ip.bind(this, args, utils)),
 
       /* mv2_kickLeft: this.kickLeft,
 
@@ -121,7 +209,10 @@ class Scratch3Mv2Blocks {
   }
 
   _martyIsConnectedWrapper(martyBlock) {
-    if (!mv2Interface.isConnected) return alert('You are not currently connected to a Marty. Please connect.');
+    if (!mv2Interface.isConnected)
+      return alert(
+        "You are not currently connected to a Marty. Please connect."
+      );
     martyBlock && martyBlock();
   }
 
@@ -251,7 +342,6 @@ class Scratch3Mv2Blocks {
   // MOTION
 
   getReady(args, util) {
-    
     const moveTime = 3000;
     console.log("Ready, set, go!");
     mv2Interface.send_REST(`traj/getReady/?moveTime=${moveTime}`);
@@ -325,6 +415,32 @@ class Scratch3Mv2Blocks {
       // console.log(addressList.length);
     }
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
+  }
+
+  discoChangeBackColour(args, util) {
+    console.log(args.COLOR, 'Scratch3Mv2Blocks.js', 'line: ', '421');
+    const r = args.COLOR.slice(1, 3);
+    const g = args.COLOR.slice(3, 5);
+    const b = args.COLOR.slice(5, 7);
+    mv2Interface.send_REST(
+      `indicator/set?pixIdx=1;blinkType=on;r=${r};g=${g};b=${b};rateMs=1000`
+    );
+  }
+
+  discoSetBreatheBackColour(args, util) {
+    const ms = +args.MILLISECONDS || 100;
+    const r = args.COLOR.slice(1, 3);
+    const g = args.COLOR.slice(3, 5);
+    const b = args.COLOR.slice(5, 7);
+    mv2Interface.send_REST(
+      `indicator/set?pixIdx=1;blinkType=breathe;r=${r};g=${g};b=${b};rateMs=${ms}`
+    );
+  }
+
+  discoTurnOffBackColour(args, util) {
+    mv2Interface.send_REST(
+      `indicator/set?pixIdx=1;blinkType=off;r=0;g=0;b=0;rateMs=1000`
+    );
   }
 
   discoChangeBlockColour(args, util) {
@@ -711,43 +827,10 @@ class Scratch3Mv2Blocks {
   current(args, util) {
     //console.log("Report a servo's current!");
     let servoChoice = parseInt(args.SERVOCHOICE);
-    if (servoChoice < 0 || servoChoice > 8) {
+    if (Number.isNaN(servoChoice) || servoChoice < 0 || servoChoice > 8) {
       servoChoice = 0;
     }
     const servoObj = JSON.parse(mv2Interface.servos);
-    let servo;
-    switch (servoChoice) {
-      case 0:
-        servo = "Left Hip: ";
-        break;
-      case 1:
-        servo = "Left Twist: ";
-        break;
-      case 2:
-        servo = "Left Knee: ";
-        break;
-      case 3:
-        servo = "Right Hip: ";
-        break;
-      case 4:
-        servo = "Right Twist";
-        break;
-      case 5:
-        servo = "Right Knee: ";
-        break;
-      case 6:
-        servo = "Left Arm: ";
-        break;
-      case 7:
-        servo = "Right Arm: ";
-        break;
-      case 8:
-        servo = "Eyes: ";
-        break;
-      default:
-        break;
-    }
-    //return servo + servoObj.smartServos[servoChoice].current;
     return servoObj.smartServos[servoChoice].current;
   }
 
@@ -1044,43 +1127,33 @@ class Scratch3Mv2Blocks {
 
     let context;
     if (window.OfflineAudioContext) {
-      context = new window.OfflineAudioContext(
-        1,
-        44100*seconds,
-        44100
-      );
+      context = new window.OfflineAudioContext(1, 44100 * seconds, 44100);
     } else {
-      context = new window.webkitOfflineAudioContext(
-        1,
-        44100*seconds,
-        44100
-      );
+      context = new window.webkitOfflineAudioContext(1, 44100 * seconds, 44100);
     }
-    var osc = context.createOscillator(); 
+    var osc = context.createOscillator();
     // Sine is the default type. Also available: square, sawtooth and triangle waveforms.
-    osc.type = 'sine'; 
+    osc.type = "sine";
     var now = context.currentTime;
     // Frequency in Hz.
     // Set initial value. (you can use .value=freq if you want)
     osc.frequency.setValueAtTime(hz1, now);
     // set a ramp to hz2 over the next SECONDS seconds.
-    osc.frequency.linearRampToValueAtTime(hz2,now+seconds)
-    osc.connect(context.destination); 
+    osc.frequency.linearRampToValueAtTime(hz2, now + seconds);
+    osc.connect(context.destination);
     osc.start(now);
     osc.stop(now + seconds);
     context.startRendering();
     context.oncomplete = ({ renderedBuffer }) => {
-        const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
+      const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
         renderedBuffer
-        );
-        const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
+      );
+      const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
         mp3SoundBuffers
-        );
-        mv2Interface.streamAudio(mp3SoundData);
+      );
+      mv2Interface.streamAudio(mp3SoundData);
     };
-    return new Promise((resolve) =>
-          setTimeout(resolve, seconds * 1000 + 800)
-        );
+    return new Promise((resolve) => setTimeout(resolve, seconds * 1000 + 800));
   }
 
   playSoundUntilDone(args, util) {

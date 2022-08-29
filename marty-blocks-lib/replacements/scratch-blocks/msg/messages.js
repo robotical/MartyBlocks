@@ -358,6 +358,11 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
 // Marty V2 Disco Blocks
 Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';
+
+Blockly.Msg.MV2_DISCOCHANGEBACKCOLOUR = '%1 %2 Set back LED to %3';
+Blockly.Msg.MV2_DISCOSETBREATHEBACKCOLOUR = '%1 %2 Set back LED to %3 every %4ms';
+Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off back LED';
+
 Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
 Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
 
