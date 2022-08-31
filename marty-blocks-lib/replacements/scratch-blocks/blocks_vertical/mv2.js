@@ -2109,6 +2109,7 @@ Blockly.Blocks['ServoPosition'] = {
       "message0": Blockly.Msg.MV2_POSITION,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2121,22 +2122,11 @@ Blockly.Blocks['ServoPosition'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SERVOCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, '0'],
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTTWIST, '1'],
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTKNEE, '2'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTHIP, '3'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTTWIST, '4'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTKNEE, '5'],
-            [Blockly.Msg.DROPDOWN_OPTION_LEFTARM, '6'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHTARM, '7'],
-            [Blockly.Msg.DROPDOWN_OPTION_EYES, '8']
-          ]
         },
       ],
-      "extensions": ["output_number"]
+      "extensions": ["output_number", "dynamic_menu_servo_position_extension"]
     });
   }
 };
@@ -2264,6 +2254,7 @@ Blockly.Blocks['mv2_obstaclesense'] = {
       "message0": Blockly.Msg.MV2_OBSTACLE,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2276,15 +2267,11 @@ Blockly.Blocks['mv2_obstaclesense'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SENSORCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, 'LeftIRFootTouch'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, 'RightIRFootTouch']
-          ]
         },
       ],
-      "extensions": ["output_boolean"]
+      "extensions": ["output_boolean", "dynamic_menu_sensor_IRF_extension"]
     });
   }
 };
@@ -2299,6 +2286,7 @@ Blockly.Blocks['mv2_groundsense'] = {
       "message0": Blockly.Msg.MV2_GROUND,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2311,15 +2299,11 @@ Blockly.Blocks['mv2_groundsense'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SENSORCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, 'LeftIRFootAir'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, 'RightIRFootAir']
-          ]
         },
       ],
-      "extensions": ["output_boolean"]
+      "extensions": ["output_boolean","dynamic_menu_sensor_IRF_extension"]
     });
   }
 };
@@ -2334,6 +2318,7 @@ Blockly.Blocks['mv2_coloursense'] = {
       "message0": Blockly.Msg.MV2_COLOUR,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2346,15 +2331,11 @@ Blockly.Blocks['mv2_coloursense'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SENSORCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, 'LeftColourSensor'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, 'RightColourSensor']
-          ]
         },
       ],
-      "extensions": ["output_string"]
+      "extensions": ["output_string", "dynamic_menu_sensor_colour_extension"]
     });
   }
 };
@@ -2369,6 +2350,7 @@ Blockly.Blocks['mv2_coloursenseraw'] = {
       "message0": Blockly.Msg.MV2_COLOUR_RAW,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2381,12 +2363,8 @@ Blockly.Blocks['mv2_coloursenseraw'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SENSORCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, 'LeftColourSensor'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, 'RightColourSensor']
-          ]
         },
         {
           "type": "field_dropdown",
@@ -2399,7 +2377,7 @@ Blockly.Blocks['mv2_coloursenseraw'] = {
           ]
         },
       ],
-      "extensions": ["output_number"]
+      "extensions": ["output_number", "dynamic_menu_sensor_colour_extension"]
     });
   }
 };
@@ -2441,6 +2419,7 @@ Blockly.Blocks['mv2_lightsense'] = {
       "message0": Blockly.Msg.MV2_LIGHT_SENSOR,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2453,12 +2432,8 @@ Blockly.Blocks['mv2_lightsense'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SENSORCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, 'LeftLightSensor'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, 'RightLightSensor']
-          ]
         },
         {
           "type": "field_dropdown",
@@ -2470,7 +2445,7 @@ Blockly.Blocks['mv2_lightsense'] = {
           ]
         }
       ],
-      "extensions": ["output_number"]
+      "extensions": ["output_number", "dynamic_menu_sensor_light_extension"]
     });
   }
 };
@@ -2485,6 +2460,7 @@ Blockly.Blocks['mv2_noisesense'] = {
       "message0": Blockly.Msg.MV2_NOISE_SENSOR,
       "category": Blockly.Categories.sensing,
       "colour": 164,
+      "type": "dynamic_dropdown",
       "checkboxInFlyout": true,
       "args0": [
         {
@@ -2497,15 +2473,11 @@ Blockly.Blocks['mv2_noisesense'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "SENSORCHOICE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, 'LeftNoiseSensor'],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, 'RightNoiseSensor']
-          ]
         },
       ],
-      "extensions": ["output_number"]
+      "extensions": ["output_number", "dynamic_menu_sensor_noise_extension"]
     });
   }
 };

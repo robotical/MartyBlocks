@@ -401,7 +401,6 @@ export function MartyBlocksToolbox_disco() {
 }
 
 export function MartyBlocksToolbox_sound(soundName) {
-    return "";
     return `
         <!--Marty blocks-->
         <block type="mv2_playSound" >

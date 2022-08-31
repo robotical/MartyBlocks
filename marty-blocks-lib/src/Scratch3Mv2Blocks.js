@@ -13,7 +13,6 @@ const RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM = "LEDarm";
 const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
 const RIC_WHOAMI_TYPE_CODE_ADDON_NOISE = "noisesensor";
 const RIC_WHOAMI_TYPE_CODE_ADDON_GRIPSERVO = "roboservo3";
-
 /**
  * Questions:
  * - what is the util parameter for? // irrelevant
@@ -213,7 +212,7 @@ class Scratch3Mv2Blocks {
       return alert(
         "You are not currently connected to a Marty. Please connect."
       );
-    martyBlock && martyBlock();
+    return martyBlock();
   }
 
   // DISCO Utils
@@ -418,7 +417,7 @@ class Scratch3Mv2Blocks {
   }
 
   discoChangeBackColour(args, util) {
-    console.log(args.COLOR, 'Scratch3Mv2Blocks.js', 'line: ', '421');
+    console.log(args.COLOR, "Scratch3Mv2Blocks.js", "line: ", "421");
     const r = args.COLOR.slice(1, 3);
     const g = args.COLOR.slice(3, 5);
     const b = args.COLOR.slice(5, 7);
@@ -782,45 +781,12 @@ class Scratch3Mv2Blocks {
   // SENSORS
 
   position(args, util) {
-    //console.log("Report a servo's position!");
+    //console.log("Report a servo's current!");
     let servoChoice = parseInt(args.SERVOCHOICE);
-    if (servoChoice < 0 || servoChoice > 8) {
+    if (Number.isNaN(servoChoice) || servoChoice < 0 || servoChoice > 8) {
       servoChoice = 0;
     }
     const servoObj = JSON.parse(mv2Interface.servos);
-    let servo;
-    switch (servoChoice) {
-      case 0:
-        servo = "Left Hip: ";
-        break;
-      case 1:
-        servo = "Left Twist: ";
-        break;
-      case 2:
-        servo = "Left Knee: ";
-        break;
-      case 3:
-        servo = "Right Hip: ";
-        break;
-      case 4:
-        servo = "Right Twist";
-        break;
-      case 5:
-        servo = "Right Knee: ";
-        break;
-      case 6:
-        servo = "Left Arm: ";
-        break;
-      case 7:
-        servo = "Right Arm: ";
-        break;
-      case 8:
-        servo = "Eyes: ";
-        break;
-      default:
-        break;
-    }
-    //return servo + servoObj.smartServos[servoChoice].pos;
     return servoObj.smartServos[servoChoice].pos;
   }
 
@@ -866,50 +832,37 @@ class Scratch3Mv2Blocks {
     return mv2Interface.battRemainCapacityPercent;
   }
 
-  // TODO: redo the obsctacle sense (and other sensor blocks) to use names of actual connected addons from dynamically populated list
   obstacleSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
+    const sensorChoice = args.SENSORCHOICE;
 
-    // if ir sensor not found we will check for colour sensor with the same side in its name
-    const side = args.SENSORCHOICE.includes("Right") ? "Right" : "Left";
-
-    let colourSensorVal = null;
-    for (let addon of addons) {
-      if (args.SENSORCHOICE in addon.vals) {
-        //mv2.send_REST('return val: ' + addon.vals[args.SENSORCHOICE]);
-        return addon.vals[args.SENSORCHOICE];
-      }
-      if (
-        addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR &&
-        addon.name.includes(side)
-      ) {
-        colourSensorVal = addon.vals[addon.name + "Touch"];
+    for (const addon of addons) {
+      if (addon.name === sensorChoice) {
+        for (const addonValKey in addon.vals) {
+          const addonVal = addon.vals[addonValKey];
+          if (addonValKey.includes("Touch")) {
+            return addonVal;
+          }
+        }
       }
     }
-    if (colourSensorVal !== null) return colourSensorVal;
     return false;
   }
 
   groundSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
-    // if ir sensor not found we will check for colour sensor with the same side in its name
-    const side = args.SENSORCHOICE.includes("Right") ? "Right" : "Left";
+    const sensorChoice = args.SENSORCHOICE;
 
-    let colourSensorVal = null;
-    for (let addon of addons) {
-      if (args.SENSORCHOICE in addon.vals) {
-        // sensor tells you if the foot is in the air
-        return !addon.vals[args.SENSORCHOICE];
-      }
-      if (
-        addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR &&
-        addon.name.includes(side)
-      ) {
-        colourSensorVal = !addon.vals[addon.name + "Air"];
+    for (const addon of addons) {
+      if (addon.name === sensorChoice) {
+        for (const addonValKey in addon.vals) {
+          const addonVal = addon.vals[addonValKey];
+          if (addonValKey.includes("Air")) {
+            return addonVal;
+          }
+        }
       }
     }
-    if (colourSensorVal !== null) return colourSensorVal;
-
     return false;
   }
 
@@ -931,83 +884,92 @@ class Scratch3Mv2Blocks {
 
   colourSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
-    let csID = -1,
-      selectedID = -1;
-    for (var i = 0; i < addons.length; i++) {
-      if (args.SENSORCHOICE + "Red" in addons[i].vals) {
-        selectedID = i;
-      }
-      if (addons[i].whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
-        csID = i;
-      }
-    }
+    for (const addon of addons) {
+      if (addon.name === args.SENSORCHOICE) {
+        let red, green, blue, clear, isOnAir;
+        for (const addonValKey in addon.vals) {
+          const addonVal = addon.vals[addonValKey];
+          if (addonValKey.includes("Red")) red = addonVal;
+          if (addonValKey.includes("Green")) green = addonVal;
+          if (addonValKey.includes("Blue")) blue = addonVal;
+          if (addonValKey.includes("Clear")) clear = addonVal;
+          if (addonValKey.includes("Air")) isOnAir = addonVal;
+        }
+        if (isOnAir) return "air";
+        else {
+          const colours = [
+            {
+              hue: [0, 10],
+              chroma: [75, 200],
+              clear: [40, 150],
+              name: "red",
+            },
+            {
+              hue: [20, 50],
+              chroma: [100, 300],
+              clear: [100, 255],
+              name: "yellow",
+            },
+            {
+              hue: [100, 160],
+              chroma: [10, 100],
+              clear: [40, 150],
+              name: "green",
+            },
+            {
+              hue: [190, 220],
+              chroma: [95, 230],
+              clear: [90, 255],
+              name: "blue",
+            },
+            {
+              hue: [240, 320],
+              chroma: [10, 70],
+              clear: [40, 150],
+              name: "purple",
+            },
+            {
+              hue: [345, 361],
+              chroma: [75, 200],
+              clear: [40, 150],
+              name: "red",
+            },
+          ];
 
-    let sensorname = args.SENSORCHOICE;
-    // check if we found the specified sensor. If not, fall back to the last correctly typed sensor
-    if (selectedID < 0) {
-      if (csID < 0) return null;
-      selectedID = csID;
-      sensorname = addons[selectedID].name;
-    }
+          const [hue, chroma] = this.getHueChroma(red, green, blue);
+          for (let colour of colours) {
+            if (
+              colour.hue[0] <= hue &&
+              hue <= colour.hue[1] &&
+              colour.chroma[0] <= chroma &&
+              chroma <= colour.chroma[1] &&
+              colour.clear[0] <= clear &&
+              clear <= colour.clear[1]
+            ) {
+              return colour.name;
+            }
+          }
 
-    if (addons[selectedID].vals[sensorname + "Air"]) {
-      return "air";
-    } else {
-      //mv2Interface.send_REST('return val: ' + addons[i].vals[args.SENSORCHOICE]);
-      const red = addons[selectedID].vals[sensorname + "Red"];
-      const green = addons[selectedID].vals[sensorname + "Green"];
-      const blue = addons[selectedID].vals[sensorname + "Blue"];
-      const clear = addons[selectedID].vals[sensorname + "Clear"];
-
-      const colours = [
-        { hue: [0, 10], chroma: [75, 200], clear: [40, 150], name: "red" },
-        {
-          hue: [20, 50],
-          chroma: [100, 300],
-          clear: [100, 255],
-          name: "yellow",
-        },
-        { hue: [100, 160], chroma: [10, 100], clear: [40, 150], name: "green" },
-        { hue: [190, 220], chroma: [95, 230], clear: [90, 255], name: "blue" },
-        { hue: [240, 320], chroma: [10, 70], clear: [40, 150], name: "purple" },
-        { hue: [345, 361], chroma: [75, 200], clear: [40, 150], name: "red" },
-      ];
-
-      const [hue, chroma] = this.getHueChroma(red, green, blue);
-      //mv2Interface.send_REST(`hue: ${hue}, chroma: ${chroma}, clear: ${clear} | RGB: ${red} ${green} ${blue}`);
-      for (let colour of colours) {
-        if (
-          colour.hue[0] <= hue &&
-          hue <= colour.hue[1] &&
-          colour.chroma[0] <= chroma &&
-          chroma <= colour.chroma[1] &&
-          colour.clear[0] <= clear &&
-          clear <= colour.clear[1]
-        ) {
-          return colour.name;
+          return "unclear";
         }
       }
-
-      return "unclear";
     }
   }
 
   colourSenseRaw(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
-    let csVal = null;
-    for (let addon of addons) {
-      if (args.SENSORCHOICE + args.SENSORCHANNEL in addon.vals) {
-        return addon.vals[args.SENSORCHOICE + args.SENSORCHANNEL];
-      }
-      // in case we don't find the specific sensor, we'll return the last correctly device typed value
-      if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
-        // device is a colour sensor. iterate through channels to find correct one
-        for (const val in addon.vals) {
-          if (val.includes(args.SENSORCHANNEL)) csVal = addon.vals[val];
+    const sensorChoice = args.SENSORCHOICE;
+
+    for (const addon of addons) {
+      if (addon.name === sensorChoice) {
+        for (const addonValKey in addon.vals) {
+          const addonVal = addon.vals[addonValKey];
+          if (addonValKey.includes(args.SENSORCHANNEL)) {
+            return addonVal;
+          }
         }
       }
     }
-    if (csVal !== null) return csVal;
     return null;
   }
 
@@ -1016,7 +978,6 @@ class Scratch3Mv2Blocks {
     let dsVal = null;
     for (let addon of addons) {
       if ("DistanceSensorReading" in addon.vals) {
-        //mv2.send_REST('return val: ' + addon.vals[args.SENSORCHOICE]);
         return addon.vals["DistanceSensorReading"];
       }
       if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE) {
@@ -1031,40 +992,33 @@ class Scratch3Mv2Blocks {
 
   lightSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
-    let sensorVal = null;
-    for (let addon of addons) {
-      if (args.SENSORCHOICE + args.SENSORCHANNEL in addon.vals) {
-        return addon.vals[args.SENSORCHOICE + args.SENSORCHANNEL];
-      }
-      // in case we don't find the specific sensor, we'll return the last correctly device typed value
-      if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
-        // device is a light sensor. iterate through channels to find correct one
-        for (const val in addon.vals) {
-          if (val.includes(args.SENSORCHANNEL)) sensorVal = addon.vals[val];
+    const sensorChoice = args.SENSORCHOICE;
+
+    for (const addon of addons) {
+      if (addon.name === sensorChoice) {
+        for (const addonValKey in addon.vals) {
+          const addonVal = addon.vals[addonValKey];
+          if (addonValKey.includes(args.SENSORCHANNEL)) {
+            return addonVal;
+          }
         }
       }
     }
-    if (sensorVal !== null) return sensorVal;
     return null;
   }
 
   noiseSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
-    let sensorVal = null;
     for (let addon of addons) {
-      if (args.SENSORCHOICE + "HighestSinceLastReading" in addon.vals) {
-        return addon.vals[args.SENSORCHOICE + "HighestSinceLastReading"];
-      }
-      // in case we don't find the specific sensor, we'll return the last correctly device typed value
-      if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_NOISE) {
-        // device is a light sensor. iterate through channels to find correct one
-        for (const val in addon.vals) {
-          if (val.includes("HighestSinceLastReading"))
-            sensorVal = addon.vals[val];
+      if (addon.name === args.SENSORCHOICE) {
+        for (const addonValKey in addon.vals) {
+          const addonVal = addon.vals[addonValKey];
+          if (addonValKey.includes("HighestSinceLastReading")) {
+            return addonVal;
+          }
         }
       }
     }
-    if (sensorVal !== null) return sensorVal;
     return null;
   }
 

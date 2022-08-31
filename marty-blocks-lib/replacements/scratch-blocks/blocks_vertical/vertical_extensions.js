@@ -27,6 +27,7 @@
  */
 "use strict";
 
+
 goog.provide("Blockly.ScratchBlocks.VerticalExtensions");
 
 goog.require("Blockly.Colours");
@@ -305,22 +306,35 @@ Blockly.Extensions.register(
   function () {
     this.getInput("SERVOCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
-        var options = [["Select an option", "Select an option"],["No sensor found", "No sensor found"]];
-        if (!mv2Interface.isConnected) return options
+        var options = [
+          ["Select an option", "Select an option"],
+          ["No sensor found", "No sensor found"],
+        ];
+        if (!mv2Interface.isConnected) return options;
         const servoObj = JSON.parse(mv2Interface.servos);
-        if (!servoObj || !servoObj.hasOwnProperty("smartServos")) return options;
+        if (!servoObj || !servoObj.hasOwnProperty("smartServos"))
+          return options;
         const servoIds = Object.keys(servoObj.smartServos);
         return servoIds.map((servoId) => {
           const servoIdStr = servoId + "";
-          if (servoIdStr === "0") return [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, servoIdStr];
-          if (servoIdStr === "1") return [Blockly.Msg.DROPDOWN_OPTION_LEFTTWIST, servoIdStr];
-          if (servoIdStr === "2") return [Blockly.Msg.DROPDOWN_OPTION_LEFTKNEE, servoIdStr];
-          if (servoIdStr === "3") return [Blockly.Msg.DROPDOWN_OPTION_RIGHTHIP, servoIdStr];
-          if (servoIdStr === "4") return [Blockly.Msg.DROPDOWN_OPTION_RIGHTTWIST, servoIdStr];
-          if (servoIdStr === "5") return [Blockly.Msg.DROPDOWN_OPTION_RIGHTKNEE, servoIdStr];
-          if (servoIdStr === "6") return [Blockly.Msg.DROPDOWN_OPTION_LEFTARM, servoIdStr];
-          if (servoIdStr === "7") return [Blockly.Msg.DROPDOWN_OPTION_RIGHTARM, servoIdStr];
-          if (servoIdStr === "8") return [Blockly.Msg.DROPDOWN_OPTION_EYES, servoIdStr];
+          if (servoIdStr === "0")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, servoIdStr];
+          if (servoIdStr === "1")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTTWIST, servoIdStr];
+          if (servoIdStr === "2")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTKNEE, servoIdStr];
+          if (servoIdStr === "3")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTHIP, servoIdStr];
+          if (servoIdStr === "4")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTTWIST, servoIdStr];
+          if (servoIdStr === "5")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTKNEE, servoIdStr];
+          if (servoIdStr === "6")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTARM, servoIdStr];
+          if (servoIdStr === "7")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTARM, servoIdStr];
+          if (servoIdStr === "8")
+            return [Blockly.Msg.DROPDOWN_OPTION_EYES, servoIdStr];
           return [["Unknown servo", "n/a"]];
         });
       }),
@@ -328,5 +342,153 @@ Blockly.Extensions.register(
     );
   }
 );
+
+Blockly.Extensions.register(
+  "dynamic_menu_servo_position_extension",
+  function () {
+    this.getInput("SERVOCHOICE").appendField(
+      new Blockly.FieldDropdown(function () {
+        var options = [
+          ["Select an option", "Select an option"],
+          ["No sensor found", "No sensor found"],
+        ];
+        if (!mv2Interface.isConnected) return options;
+        const servoObj = JSON.parse(mv2Interface.servos);
+        if (!servoObj || !servoObj.hasOwnProperty("smartServos"))
+          return options;
+        const servoIds = Object.keys(servoObj.smartServos);
+        return servoIds.map((servoId) => {
+          const servoIdStr = servoId + "";
+          if (servoIdStr === "0")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, servoIdStr];
+          if (servoIdStr === "1")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTTWIST, servoIdStr];
+          if (servoIdStr === "2")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTKNEE, servoIdStr];
+          if (servoIdStr === "3")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTHIP, servoIdStr];
+          if (servoIdStr === "4")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTTWIST, servoIdStr];
+          if (servoIdStr === "5")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTKNEE, servoIdStr];
+          if (servoIdStr === "6")
+            return [Blockly.Msg.DROPDOWN_OPTION_LEFTARM, servoIdStr];
+          if (servoIdStr === "7")
+            return [Blockly.Msg.DROPDOWN_OPTION_RIGHTARM, servoIdStr];
+          if (servoIdStr === "8")
+            return [Blockly.Msg.DROPDOWN_OPTION_EYES, servoIdStr];
+          return [["Unknown servo", "n/a"]];
+        });
+      }),
+      "SERVOCHOICE"
+    );
+  }
+);
+
+Blockly.Extensions.register(
+  "dynamic_menu_sensor_IRF_extension",
+  function () {
+    const RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT = "IRFoot";
+    this.getInput("SENSORCHOICE").appendField(
+      new Blockly.FieldDropdown(function () {
+        var defaultOptions = [
+          ["Select an option", "Select an option"],
+          ["No sensor found", "No sensor found"],
+        ];
+        if (!mv2Interface.isConnected) return defaultOptions;
+        const addons = JSON.parse(mv2Interface.addons).addons;
+        if (!addons) return defaultOptions;
+        const addonOptions = [];
+        for (const addon of addons) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
+            addonOptions.push([addon.name, addon.name]);
+          }
+        }
+        return addonOptions.length ? addonOptions : defaultOptions;
+      }),
+      "SENSORCHOICE"
+    );
+  }
+);
+
+Blockly.Extensions.register(
+  "dynamic_menu_sensor_colour_extension",
+  function () {
+    const RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR = "coloursensor";
+    this.getInput("SENSORCHOICE").appendField(
+      new Blockly.FieldDropdown(function () {
+        var defaultOptions = [
+          ["Select an option", "Select an option"],
+          ["No sensor found", "No sensor found"],
+        ];
+        if (!mv2Interface.isConnected) return defaultOptions;
+        const addons = JSON.parse(mv2Interface.addons).addons;
+        if (!addons) return defaultOptions;
+        const addonOptions = [];
+        for (const addon of addons) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
+            addonOptions.push([addon.name, addon.name]);
+          }
+        }
+        return addonOptions.length ? addonOptions : defaultOptions;
+      }),
+      "SENSORCHOICE"
+    );
+  }
+);
+
+Blockly.Extensions.register(
+  "dynamic_menu_sensor_light_extension",
+  function () {
+    const RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT = "lightsensor";
+    this.getInput("SENSORCHOICE").appendField(
+      new Blockly.FieldDropdown(function () {
+        var defaultOptions = [
+          ["Select an option", "Select an option"],
+          ["No sensor found", "No sensor found"],
+        ];
+        if (!mv2Interface.isConnected) return defaultOptions;
+        const addons = JSON.parse(mv2Interface.addons).addons;
+        if (!addons) return defaultOptions;
+        const addonOptions = [];
+        for (const addon of addons) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
+            addonOptions.push([addon.name, addon.name]);
+          }
+        }
+        return addonOptions.length ? addonOptions : defaultOptions;
+      }),
+      "SENSORCHOICE"
+    );
+  }
+);
+
+Blockly.Extensions.register(
+  "dynamic_menu_sensor_noise_extension",
+  function () {
+    const RIC_WHOAMI_TYPE_CODE_ADDON_NOISE = "noisesensor";
+    this.getInput("SENSORCHOICE").appendField(
+      new Blockly.FieldDropdown(function () {
+        var defaultOptions = [
+          ["Select an option", "Select an option"],
+          ["No sensor found", "No sensor found"],
+        ];
+        if (!mv2Interface.isConnected) return defaultOptions;
+        const addons = JSON.parse(mv2Interface.addons).addons;
+        if (!addons) return defaultOptions;
+        const addonOptions = [];
+        for (const addon of addons) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_NOISE) {
+            addonOptions.push([addon.name, addon.name]);
+          }
+        }
+        return addonOptions.length ? addonOptions : defaultOptions;
+      }),
+      "SENSORCHOICE"
+    );
+  }
+);
+
+
 
 Blockly.ScratchBlocks.VerticalExtensions.registerAll();
