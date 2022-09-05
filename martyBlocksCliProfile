@@ -14,6 +14,7 @@ buildAllAndCpToWebApp () {
     local type="${1:-all}"
     cpReplacements
     buildScratch $type
+    cpToDist
     cpToWebapp
 }
 
@@ -33,6 +34,12 @@ buildScratch () {
 cpToWebapp () {
     rm -rf $WebappHome/public/MartyBlocks/*
     cp -r $gui_original/build/* $WebappHome/public/MartyBlocks
+}
+
+cpToDist () {
+    cdhome
+    rm -rf dist/*
+    cp -r $gui_original/build/* ./dist
 }
 
 buildBlocks() {

@@ -395,7 +395,7 @@ Blockly.Extensions.register(
           ["Select an option", "Select an option"],
           ["No sensor found", "No sensor found"],
         ];
-        if (!mv2Interface.isConnected) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
@@ -421,7 +421,7 @@ Blockly.Extensions.register(
           ["Select an option", "Select an option"],
           ["No sensor found", "No sensor found"],
         ];
-        if (!mv2Interface.isConnected) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
@@ -447,7 +447,7 @@ Blockly.Extensions.register(
           ["Select an option", "Select an option"],
           ["No sensor found", "No sensor found"],
         ];
-        if (!mv2Interface.isConnected) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
@@ -473,7 +473,7 @@ Blockly.Extensions.register(
           ["Select an option", "Select an option"],
           ["No sensor found", "No sensor found"],
         ];
-        if (!mv2Interface.isConnected) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
