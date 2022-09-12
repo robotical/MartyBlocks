@@ -179,13 +179,13 @@ Blockly.FieldColourSlider.prototype.updateDom_ = function() {
 
     let hue = Math.floor(100 * this.hue_ / 360).toFixed(0);
     let hueString = Blockly.Msg.COLOUR_RED;
-    if (hue < 7 || hue > 93){ hueString = Blockly.Msg.COLOUR_RED;}
-    else if (hue < 18){ hueString = Blockly.Msg.COLOUR_YELLOW;}
-    else if (hue < 45){ hueString = Blockly.Msg.COLOUR_GREEN;}
-    else if (hue < 54){ hueString = Blockly.Msg.COLOUR_CYAN;}
-    else if (hue < 75){ hueString = Blockly.Msg.COLOUR_BLUE;}
-    else if (hue < 80){ hueString = Blockly.Msg.COLOUR_PURPLE;}
-    else { hueString = Blockly.Msg.COLOUR_PINK;}
+    if (hue < 7 || hue > 93) hueString = Blockly.Msg.COLOUR_RED;
+    else if (hue < 18) hueString = Blockly.Msg.COLOUR_YELLOW;
+    else if (hue < 45) hueString = Blockly.Msg.COLOUR_GREEN;
+    else if (hue < 54) hueString = Blockly.Msg.COLOUR_CYAN;
+    else if (hue < 75) hueString = Blockly.Msg.COLOUR_BLUE;
+    else if (hue < 80) hueString = Blockly.Msg.COLOUR_PURPLE;
+    else  hueString = Blockly.Msg.COLOUR_PINK;
     hueString += " (" + hue + ")";
 
     // Update the readouts
@@ -343,17 +343,17 @@ Blockly.FieldColourSlider.prototype.showEditor_ = function() {
   this.brightnessSlider_.setMoveToPointEnabled(true);
   this.brightnessSlider_.render(div);
 
-  if (Blockly.FieldColourSlider.activateEyedropper_) {
-    var button = document.createElement('button');
-    button.setAttribute('class', 'scratchEyedropper');
-    var image = document.createElement('img');
-    image.src = Blockly.mainWorkspace.options.pathToMedia + Blockly.FieldColourSlider.EYEDROPPER_PATH;
-    button.appendChild(image);
-    div.appendChild(button);
-    Blockly.FieldColourSlider.eyedropperEventData_ =
-        Blockly.bindEventWithChecks_(button, 'click', this,
-            this.activateEyedropperInternal_);
-  }
+  // if (Blockly.FieldColourSlider.activateEyedropper_) {
+  //   var button = document.createElement('button');
+  //   button.setAttribute('class', 'scratchEyedropper');
+  //   var image = document.createElement('img');
+  //   image.src = Blockly.mainWorkspace.options.pathToMedia + Blockly.FieldColourSlider.EYEDROPPER_PATH;
+  //   button.appendChild(image);
+  //   div.appendChild(button);
+  //   Blockly.FieldColourSlider.eyedropperEventData_ =
+  //       Blockly.bindEventWithChecks_(button, 'click', this,
+  //           this.activateEyedropperInternal_);
+  // }
 
   Blockly.DropDownDiv.setColour('#ffffff', '#dddddd');
   Blockly.DropDownDiv.setCategory(this.sourceBlock_.parentBlock_.getCategory());

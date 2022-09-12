@@ -358,6 +358,12 @@ export function MartyBlocksToolbox_disco() {
         </value>
     </block>
 
+    <block type="mv2_LEDEyesColour" >
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker_LED_eyes"/>
+        </value>
+    </block>
+
     <block type="mv2_discoChangeBlockColour" >
         <value>
             <field name="BOARDTYPE"></field>
@@ -440,6 +446,40 @@ export function MartyBlocksToolbox_sound(soundName) {
             </value>
         </block>
         <block type="mv2_stopSounds" />
+
+        <block type="mv2_changePitchEffect" >
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_setPitchEffect" >
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_clearSoundEffects" />
+
+        <block type="mv2_changeVolume" >
+            <value name="VOLUME">
+                <shadow type="math_number">
+                    <field name="NUM">-10</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_setVolume" >
+            <value name="VOLUME">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
     `
 }
 

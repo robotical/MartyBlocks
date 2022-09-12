@@ -794,6 +794,36 @@ Blockly.Blocks['mv2_discoChangeBlockPattern'] = {
   }
 };
 
+Blockly.Blocks['mv2_LEDEyesColour'] = {
+  /**
+   * DISCO MARTY BLOCK LED EYES
+   * Block to change the colour of the led eyes, 
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_CHANGELEDEYESBLOCK,
+      "category": Blockly.Categories.looks,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "COLOUR_LED_EYES"
+        }
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
 
 Blockly.Blocks['mv2_discoChangeBlockColour'] = {
   /**
@@ -2064,6 +2094,166 @@ Blockly.Blocks['mv2_stopSounds'] = {
         {
           "type": "field_vertical_separator"
         },
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_changePitchEffect'] = {
+  /**
+   * Block to change the audio effect
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_SOUND_CHANGEEFFECTBY,
+      "category": Blockly.Categories.sound,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "field_dropdown",
+          "name": "EFFECT",
+          "options": [
+            [Blockly.Msg.SOUND_EFFECTS_PITCH, 'PITCH'],
+          ]
+        },
+        {
+          "type": "input_value",
+          "name": "VALUE"
+        }
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_setPitchEffect'] = {
+  /**
+   * Block to set the audio effect
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_SOUND_SETEFFECTO,
+      "category": Blockly.Categories.sound,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "field_dropdown",
+          "name": "EFFECT",
+          "options": [
+            [Blockly.Msg.SOUND_EFFECTS_PITCH, 'PITCH'],
+          ]
+        },
+        {
+          "type": "input_value",
+          "name": "VALUE"
+        }
+      ],
+      "extensions": [ "shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_clearSoundEffects'] = {
+  /**
+   * Block to clear audio effects
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_SOUND_CLEAREFFECTS,
+      "category": Blockly.Categories.sound,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_changeVolume'] = {
+  /**
+   * Block to change the sprite's volume by a certain value
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_SOUND_CHANGEVOLUMEBY,
+      "category": Blockly.Categories.sound,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "VOLUME"
+        }
+      ],
+      "extensions": [ "shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_setVolume'] = {
+  /**
+   * Block to set the sprite's volume to a certain percent
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_SOUND_SETVOLUMETO,
+      "category": Blockly.Categories.sound,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "VOLUME"
+        }
       ],
       "extensions": ["shape_statement"]
     });
