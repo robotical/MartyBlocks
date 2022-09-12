@@ -356,12 +356,16 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
 // Blockly.Msg.MV2_CONNECTVIAIP ='%1 %2 Connect via IP: %3';
 
+
+// Marty new LED eyes blocks
+Blockly.Msg.MV2_CHANGELEDEYESBLOCK = '%1 %2 Set LED eyes to %3';
+
 // Marty V2 Disco Blocks
 Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';
 
-Blockly.Msg.MV2_DISCOCHANGEBACKCOLOUR = '%1 %2 Set back LED to %3';
-Blockly.Msg.MV2_DISCOSETBREATHEBACKCOLOUR = '%1 %2 Set back LED to %3 every %4ms';
-Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off back LED';
+Blockly.Msg.MV2_DISCOCHANGEBACKCOLOUR = '%1 %2 Set function LED to %3';
+Blockly.Msg.MV2_DISCOSETBREATHEBACKCOLOUR = '%1 %2 Set function LED to %3 every %4ms';
+Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off function LED';
 
 Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
 Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
@@ -504,6 +508,12 @@ Blockly.Msg.SOUND_SETVOLUMETO = 'set volume to %1%';
 Blockly.Msg.SOUND_VOLUME = 'volume';
 Blockly.Msg.SOUND_RECORD = 'record...';
 
+Blockly.Msg.MV2_SOUND_CHANGEEFFECTBY = '%1 %2 Change %3 effect by %4';
+Blockly.Msg.MV2_SOUND_SETEFFECTO = '%1 %2 Set %3 effect to %4';
+Blockly.Msg.MV2_SOUND_CLEAREFFECTS = '%1 %2 Clear sound effects';
+Blockly.Msg.MV2_SOUND_CHANGEVOLUMEBY = '%1 %2 Change volume by %3';
+Blockly.Msg.MV2_SOUND_SETVOLUMETO = '%1 %2 Set volume to %3%';
+
 // MARTY V2 sound blocks
 Blockly.Msg.MV2_PLAYSOUND = '%1 %2 Start sound: %3';
 Blockly.Msg.MV2_PLAYSOUNDUNTILDONE = '%1 %2 Play sound: %3 until done';
@@ -627,3 +637,11 @@ Blockly.Msg.DROPDOWN_OPTION_ZERO = '0';
 Blockly.Msg.DROPDOWN_OPTION_ONE = '1';
 Blockly.Msg.DROPDOWN_OPTION_TWO = '2';
 Blockly.Msg.DROPDOWN_OPTION_THREE = '3';
+
+Blockly.Msg.COLOUR_RED = 'Red';
+Blockly.Msg.COLOUR_YELLOW = 'Yellow';
+Blockly.Msg.COLOUR_GREEN = 'Green';
+Blockly.Msg.COLOUR_CYAN = 'Cyan';
+Blockly.Msg.COLOUR_BLUE = 'Blue';
+Blockly.Msg.COLOUR_PURPLE = 'Purple';
+Blockly.Msg.COLOUR_PINK = 'Pink';

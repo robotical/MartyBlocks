@@ -64,6 +64,10 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(
           this.discoTurnOffBackColour.bind(this, args, utils)
         ),
+      mv2_LEDEyesColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.LEDEyesColour.bind(this, args, utils)
+        ),
       mv2_discoChangeBlockPattern: (args, utils) =>
         this._martyIsConnectedWrapper(
           this.discoChangeBlockPattern.bind(this, args, utils)
@@ -179,6 +183,17 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(this.playTone.bind(this, args, utils)),
       mv2_stopSounds: (args, utils) =>
         this._martyIsConnectedWrapper(this.stopSounds.bind(this, args, utils)),
+
+      mv2_changePitchEffect: (args, utils) =>
+        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_changeeffectby.bind(this, args, utils)),
+      mv2_setPitchEffect: (args, utils) =>
+        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_seteffectto.bind(this, args, utils)),
+      mv2_clearSoundEffects: (args, utils) =>
+        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_cleareffects.bind(this, args, utils)),
+      mv2_changeVolume: (args, utils) =>
+        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_changevolumeby.bind(this, args, utils)),
+      mv2_setVolume: (args, utils) =>
+        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_setvolumeto.bind(this, args, utils)),
 
       // misc/debugging commands (including proposed/deprecated blocks)
 
@@ -372,6 +387,11 @@ class Scratch3Mv2Blocks {
     }
 
     return addressList;
+  }
+
+  LEDEyesColour(args, util) {
+    console.log(args);
+    console.log(util);
   }
 
   discoChangeBlockPattern(args, util) {
@@ -1274,7 +1294,8 @@ class Scratch3Mv2Blocks {
 
     //can be anything but make it a multiple of 576 to make encoders life easier
     const sampleBlockSize = 1152;
-    const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 32);
+    console.log("CONVERTING TO 16 BIT MP3 WITH 11025 SAMPLE RATE");
+    const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 16);
     const mp3Data = [];
     for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
       const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);
