@@ -1075,7 +1075,7 @@ class Scratch3Mv2Blocks {
         const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
           mp3SoundBuffers
         );
-        mv2Interface.streamAudio(mp3SoundData);
+        mv2Interface.streamAudio(mp3SoundData, soundPlayer.buffer.duration * 1000);
         soundPlayer.setPlaybackRate(1);
 
         return new Promise((resolve) => {
@@ -1091,7 +1091,7 @@ class Scratch3Mv2Blocks {
   }
 
   stopSounds(args, util) {
-    mv2Interface.streamAudio([0]);
+    mv2Interface.streamAudio([0], 0);
   }
 
   playTone(args, util) {
@@ -1125,7 +1125,7 @@ class Scratch3Mv2Blocks {
       const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
         mp3SoundBuffers
       );
-      mv2Interface.streamAudio(mp3SoundData);
+      mv2Interface.streamAudio(mp3SoundData, renderedBuffer.duration * 1000);
     };
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000 + 800));
   }
@@ -1197,7 +1197,7 @@ class Scratch3Mv2Blocks {
           const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
             mp3SoundBuffers
           );
-          mv2Interface.streamAudio(mp3SoundData);
+          mv2Interface.streamAudio(mp3SoundData, renderedBuffer.duration * 1000);
         };
         const audioEngine = new player.audioEngine.constructor(audioContext);
         const playerNew = new player.constructor(audioEngine, {

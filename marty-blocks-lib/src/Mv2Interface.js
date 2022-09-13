@@ -123,9 +123,9 @@ class Mv2Interface extends EventDispatcher {
     }
   }
 
-  streamAudio(audioData) {
+  streamAudio(audioData, duration) {
     console.log(`streamAudio ${audioData.length}`);
-    this.sendCommand({ command: "audioStreaming", audioData: Array.from(audioData) });
+    this.sendCommand({ command: "audioStreaming", audioData: Array.from(audioData), duration });
   }
 
   /**
