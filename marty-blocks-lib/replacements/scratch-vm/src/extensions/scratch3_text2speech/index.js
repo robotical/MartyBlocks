@@ -796,7 +796,7 @@ class Scratch3Text2SpeechBlocks {
         const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
           mp3SoundBuffers
         );
-        mv2Interface.streamAudio(mp3SoundData);
+        mv2Interface.streamAudio(mp3SoundData, soundPlayer.buffer.duration * 1000);
         soundPlayer.setPlaybackRate(playbackRate);
 
         return new Promise((resolve) => {
