@@ -770,14 +770,8 @@ Blockly.Blocks['mv2_discoChangeBlockPattern'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "BOARDTYPE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_EYES, '0'],
-            [Blockly.Msg.DROPDOWN_OPTION_ARMS, '1'],
-            [Blockly.Msg.DROPDOWN_OPTION_FEET, '2'],
-            [Blockly.Msg.DROPDOWN_OPTION_ALL, '3']
-          ]
         },
         {
           "type": "field_dropdown",
@@ -789,7 +783,7 @@ Blockly.Blocks['mv2_discoChangeBlockPattern'] = {
           ]
         }
       ],
-      "extensions": ["shape_statement"]
+      "extensions": ["shape_statement", "dynamic_menu_disco_options_extension"]
     });
   }
 };
@@ -816,11 +810,163 @@ Blockly.Blocks['mv2_LEDEyesColour'] = {
           "type": "field_vertical_separator"
         },
         {
+          "type": "input_dummy",
+          "name": "SIDE",
+        },
+        {
           "type": "input_value",
           "name": "COLOUR_LED_EYES"
         }
       ],
-      "extensions": ["shape_statement"]
+      "extensions": ["shape_statement", "dynamic_menu_LED_eyes_side_extension"]
+    });
+  }
+};
+Blockly.Blocks['mv2_LEDEyesColour_SpecificLED'] = {
+  /**
+   * DISCO MARTY BLOCK LED EYES
+   * Block to change the colour of the led eyes, 
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK,
+      "category": Blockly.Categories.looks,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_dummy",
+          "name": "SIDE",
+        },
+        {
+          "type": "input_value",
+          "name": "LED_POSITION"
+        },
+        {
+          "type": "input_value",
+          "name": "COLOUR_LED_EYES"
+        }
+      ],
+      "extensions": ["shape_statement", "dynamic_menu_LED_eyes_side_extension"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_LEDEyesColourLEDs'] = {
+  /**
+   * DISCO MARTY BLOCK LED EYES
+   * Block to change the colour of the led eyes, 
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_CHANGELEDSEYESBLOCK,
+      "category": Blockly.Categories.looks,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_dummy",
+          "name": "SIDE",
+        },
+        {
+          "type": "input_value",
+          "name": "COLOUR_LED_EYES"
+        }
+      ],
+      "extensions": ["shape_statement", "dynamic_menu_LED_eyes_side_extension"]
+    });
+  }
+};
+
+Blockly.Blocks['mv2_RGBOperator'] = {
+  /**
+   * Block for RGB operator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_RGBOPERATOR,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "NUM_R"
+        },
+        {
+          "type": "input_value",
+          "name": "NUM_G"
+        },
+        {
+          "type": "input_value",
+          "name": "NUM_B"
+        }
+      ],
+      "category": Blockly.Categories.looks,
+      "extensions": ["colours_operators", "output_number"]
+    });
+  }
+};
+Blockly.Blocks['mv2_HSLOperator'] = {
+  /**
+   * Block for HSL operator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_HSLOPERATOR,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "NUM_H"
+        },
+        {
+          "type": "input_value",
+          "name": "NUM_S"
+        },
+        {
+          "type": "input_value",
+          "name": "NUM_L"
+        }
+      ],
+      "category": Blockly.Categories.looks,
+      "extensions": ["colours_operators", "output_number"]
     });
   }
 };
@@ -848,21 +994,15 @@ Blockly.Blocks['mv2_discoChangeBlockColour'] = {
           "type": "field_vertical_separator"
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "BOARDTYPE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_EYES, '0'],
-            [Blockly.Msg.DROPDOWN_OPTION_ARMS, '1'],
-            [Blockly.Msg.DROPDOWN_OPTION_FEET, '2'],
-            [Blockly.Msg.DROPDOWN_OPTION_ALL, '3']
-          ]
         },
         {
           "type": "input_value",
           "name": "COLOR"
         }
       ],
-      "extensions": ["shape_statement"]
+      "extensions": ["shape_statement", "dynamic_menu_disco_options_extension"]
     });
   }
 };
@@ -995,21 +1135,15 @@ Blockly.Blocks['mv2_discoChangeRegionColour'] = {
           ]
         },
         {
-          "type": "field_dropdown",
+          "type": "input_dummy",
           "name": "BOARDTYPE",
-          "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_EYES, '0'],
-            [Blockly.Msg.DROPDOWN_OPTION_ARMS, '1'],
-            [Blockly.Msg.DROPDOWN_OPTION_FEET, '2'],
-            [Blockly.Msg.DROPDOWN_OPTION_ALL, '3']
-          ]
         },
         {
           "type": "input_value",
           "name": "COLOR"
         }
       ],
-      "extensions": ["shape_statement"]
+      "extensions": ["shape_statement", "dynamic_menu_disco_options_extension"]
     });
   }
 };

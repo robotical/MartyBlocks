@@ -359,9 +359,71 @@ export function MartyBlocksToolbox_disco() {
     </block>
 
     <block type="mv2_LEDEyesColour" >
-        <value name="COLOUR_LED_EYES">
-            <shadow type="colour_picker_LED_eyes"/>
+        <value>
+            <field name="SIDE"></field>
         </value>
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker"/>
+        </value>
+    </block>
+
+    <block type="mv2_LEDEyesColour_SpecificLED" >
+        <value>
+            <field name="SIDE"></field>
+        </value>
+        <value name="LED_POSITION">
+            <shadow type="math_number">
+                <field name="NUM">1</field>
+            </shadow>
+        </value>
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker"/>
+        </value>
+    </block>
+
+    <block type="mv2_LEDEyesColourLEDs" >
+        <value>
+            <field name="SIDE"></field>
+        </value>
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker_LED_eyes" />
+        </value>
+    </block>
+
+    <block type="mv2_RGBOperator">
+      <value name="NUM_R">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_G">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_B">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+    </block>
+
+    <block type="mv2_HSLOperator">
+      <value name="NUM_H">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_S">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_L">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
     </block>
 
     <block type="mv2_discoChangeBlockColour" >

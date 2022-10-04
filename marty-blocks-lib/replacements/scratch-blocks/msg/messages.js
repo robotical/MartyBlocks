@@ -358,7 +358,16 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
 
 // Marty new LED eyes blocks
-Blockly.Msg.MV2_CHANGELEDEYESBLOCK = '%1 %2 Set LED eyes to %3';
+Blockly.Msg.MV2_CHANGELEDEYESBLOCK = '%1 %2 Set %3 LEDs to %4';
+Blockly.Msg.MV2_CHANGELEDSEYESBLOCK = '%1 %2 Set %3 to %4';
+Blockly.Msg.MV2_LEDEYESLEFT = 'Left eye';
+Blockly.Msg.MV2_LEDEYESRIGHT = 'Right eye';
+Blockly.Msg.MV2_LEDEYESBOTH = 'Both eyes';
+
+Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK = '%1 %2 Set %3 LED %4 to %5';
+
+Blockly.Msg.MV2_RGBOPERATOR = '%1 %2 red %3 green %4 blue %5';
+Blockly.Msg.MV2_HSLOPERATOR = '%1 %2 hue %3 saturation %4 lightness %5';
 
 // Marty V2 Disco Blocks
 Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';

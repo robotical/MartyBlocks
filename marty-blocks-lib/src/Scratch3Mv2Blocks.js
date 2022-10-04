@@ -1,7 +1,11 @@
 const Mv2Interface = require("./Mv2Interface");
 const lamejs = require("./lame-all");
+const { default: isVersionGreater } = require("./versionChecker");
+const Cast = require("./util/cast");
 
 mv2Interface = new Mv2Interface();
+
+const LED_EYES_FW_VERSION = "2.0.1"; // greater versions than this support the LED_EYE functionality
 
 // device type IDs for Robotical Standard Add-ons
 const RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE = "VCNL4200";
@@ -68,6 +72,18 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(
           this.LEDEyesColour.bind(this, args, utils)
         ),
+      mv2_LEDEyesColourLEDs: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.LEDEyesColourLEDs.bind(this, args, utils)
+        ),
+      mv2_LEDEyesColour_SpecificLED: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.LEDEyesColour_SpecificLED.bind(this, args, utils)
+        ),
+      mv2_RGBOperator: (args, utils) =>
+        this._martyIsConnectedWrapper(this.RGBOperator.bind(this, args, utils)),
+      mv2_HSLOperator: (args, utils) =>
+        this._martyIsConnectedWrapper(this.HSLOperator.bind(this, args, utils)),
       mv2_discoChangeBlockPattern: (args, utils) =>
         this._martyIsConnectedWrapper(
           this.discoChangeBlockPattern.bind(this, args, utils)
@@ -185,15 +201,45 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(this.stopSounds.bind(this, args, utils)),
 
       mv2_changePitchEffect: (args, utils) =>
-        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_changeeffectby.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(
+          window.vm.runtime._primitives.sound_changeeffectby.bind(
+            this,
+            args,
+            utils
+          )
+        ),
       mv2_setPitchEffect: (args, utils) =>
-        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_seteffectto.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(
+          window.vm.runtime._primitives.sound_seteffectto.bind(
+            this,
+            args,
+            utils
+          )
+        ),
       mv2_clearSoundEffects: (args, utils) =>
-        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_cleareffects.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(
+          window.vm.runtime._primitives.sound_cleareffects.bind(
+            this,
+            args,
+            utils
+          )
+        ),
       mv2_changeVolume: (args, utils) =>
-        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_changevolumeby.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(
+          window.vm.runtime._primitives.sound_changevolumeby.bind(
+            this,
+            args,
+            utils
+          )
+        ),
       mv2_setVolume: (args, utils) =>
-        this._martyIsConnectedWrapper(window.vm.runtime._primitives.sound_setvolumeto.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(
+          window.vm.runtime._primitives.sound_setvolumeto.bind(
+            this,
+            args,
+            utils
+          )
+        ),
 
       // misc/debugging commands (including proposed/deprecated blocks)
 
@@ -295,7 +341,6 @@ class Scratch3Mv2Blocks {
       case 3:
         // ALL
         boardDeviceType = "all";
-        //console.log("case 3: " + boardDeviceType);
         break;
       default:
         boardDeviceType = 0x00;
@@ -389,17 +434,120 @@ class Scratch3Mv2Blocks {
     return addressList;
   }
 
+  LEDEyesColourLEDs(args, util) {
+    console.log(args, "Scratch3Mv2Blocks.js", "line: ", "438");
+    console.log(util, "Scratch3Mv2Blocks.js", "line: ", "439");
+  }
+
   LEDEyesColour(args, util) {
-    console.log(args);
-    console.log(util);
+    const colour = args.COLOUR_LED_EYES;
+    const side = args.SIDE;
+    let marty_cmd = `ledeyes/${colour}?side=${side}`;
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      marty_cmd = "notification/fw-needs-update";
+    }
+
+    mv2Interface.send_REST(marty_cmd);
+  }
+
+  LEDEyesColour_SpecificLED(args, util) {
+    const colour = Scratch3Mv2Blocks.toRgbColorList(args.COLOUR_LED_EYES);
+    const colorStr = this.colorToLEDAddonStr(colour);
+
+    const side = args.SIDE;
+    const ledPosition = args.LED_POSITION;
+    let marty_cmd = `ledeyes/${colorStr}?side=${side}&ledPosition=${ledPosition}`;
+    console.log(marty_cmd);
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      marty_cmd = "notification/fw-needs-update";
+    }
+
+    mv2Interface.send_REST(marty_cmd);
+  }
+
+  static componentToHex(c) {
+    if (typeof c == "string") {
+      try {
+        c = +c;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+  }
+
+  static rgbToHex(r, g, b) {
+    return (
+      "#" +
+      Scratch3Mv2Blocks.componentToHex(r) +
+      Scratch3Mv2Blocks.componentToHex(g) +
+      Scratch3Mv2Blocks.componentToHex(b)
+    );
+  }
+
+  static hslToHex(h, s, l) {
+    l /= 100;
+    const a = (s * Math.min(l, 1 - l)) / 100;
+    const f = (n) => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color)
+        .toString(16)
+        .padStart(2, "0"); // convert to Hex and prefix "0" if needed
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  RGBOperator(args, util) {
+    const r = args.NUM_R;
+    const g = args.NUM_G;
+    const b = args.NUM_B;
+    if (
+      !r ||
+      r > 255 ||
+      r < 0 ||
+      !g ||
+      g > 255 ||
+      g < 0 ||
+      !b ||
+      b > 255 ||
+      b < 0
+    )
+      mv2Interface.send_REST(
+        "notification/warn-message/RGB values must be between 0 and 255"
+      );
+    return Scratch3Mv2Blocks.rgbToHex(r, g, b);
+  }
+  HSLOperator(args, util) {
+    const h = args.NUM_H;
+    const s = args.NUM_S;
+    const l = args.NUM_L;
+    if (!h || h > 360 || h < 0)
+      mv2Interface.send_REST(
+        "notification/warn-message/Hue value must be between 0 and 360"
+      );
+    if (!s || s > 100 || s < 0)
+      mv2Interface.send_REST(
+        "notification/warn-message/Saturation value must be between 0 and 100"
+      );
+    if (!l || l > 100 || l < 0)
+      mv2Interface.send_REST(
+        "notification/warn-message/Lightness value must be between 0 and 100"
+      );
+    return Scratch3Mv2Blocks.hslToHex(h, s, l);
   }
 
   discoChangeBlockPattern(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    // const addons = JSON.parse(mv2Interface.addons).addons;
     //so if it's set in a forever loop give 0.2s break between each update
     const resolveTime = 200;
-    const boardChoice = args.BOARDTYPE;
-    let filterBoardType = this.getDiscoBoardType(boardChoice);
+    const filterBoardType = args.BOARDTYPE;
+    // let filterBoardType = this.getDiscoBoardType(boardChoice);
     const patternChoice = args.PATTERN;
     let patternProgram;
 
@@ -414,30 +562,14 @@ class Scratch3Mv2Blocks {
       patternProgram = "01";
     }
 
-    // select all LED addons found
-    let addressList = [];
-
-    if (filterBoardType == "all") {
-      addressList = this.getAllDiscoBoards(addons);
-    } else {
-      addressList = this.getFilteredDiscoBoards(addons, filterBoardType);
-    }
-
-    let numberOfLEDAddons = addressList.length;
-
-    for (var i = 0; i < numberOfLEDAddons; i++) {
-      let ledDeviceName = addressList.pop();
-      // console.log(`elem/${ledDeviceName}/json?cmd=raw&hexWr=${patternProgram}`);
-      mv2Interface.send_REST(
-        `elem/${ledDeviceName}/json?cmd=raw&hexWr=${patternProgram}`
-      );
-      // console.log(addressList.length);
-    }
+    mv2Interface.send_REST(
+      `elem/${filterBoardType}/json?cmd=raw&hexWr=${patternProgram}`
+    );
+    // console.log(addressList.length);
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
   discoChangeBackColour(args, util) {
-    console.log(args.COLOR, "Scratch3Mv2Blocks.js", "line: ", "421");
     const r = args.COLOR.slice(1, 3);
     const g = args.COLOR.slice(3, 5);
     const b = args.COLOR.slice(5, 7);
@@ -463,66 +595,44 @@ class Scratch3Mv2Blocks {
   }
 
   discoChangeBlockColour(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    // const addons = JSON.parse(mv2Interface.addons).addons;
     const resolveTime = 200;
-    const color = this.toRgbColorList(args.COLOR);
-    const boardChoice = args.BOARDTYPE;
+    const color = Scratch3Mv2Blocks.toRgbColorList(args.COLOR);
+    const ledDeviceName = args.BOARDTYPE;
 
     const colorStr = this.colorToLEDAddonStr(color);
-    let filterBoardType = this.getDiscoBoardType(boardChoice);
+    mv2Interface.send_REST(
+      `elem/${ledDeviceName}/json?cmd=raw&hexWr=02${colorStr}`
+    );
 
-    // select all LED addons found that match the board type
-    let addressList = [];
-
-    if (filterBoardType == "all") {
-      addressList = this.getAllDiscoBoards(addons);
-    } else {
-      addressList = this.getFilteredDiscoBoards(addons, filterBoardType);
-    }
-
-    let numberOfLEDAddons = addressList.length;
-    for (var i = 0; i < numberOfLEDAddons; i++) {
-      let ledDeviceName = addressList.pop();
-      mv2Interface.send_REST(
-        `elem/${ledDeviceName}/json?cmd=raw&hexWr=02${colorStr}`
-      );
-    }
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
   discoChangeRegionColour(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    // const addons = JSON.parse(mv2Interface.addons).addons;
     const resolveTime = 200;
-    const color = this.toRgbColorList(args.COLOR);
-    const boardChoice = args.BOARDTYPE;
+    const color = Scratch3Mv2Blocks.toRgbColorList(args.COLOR);
+    const ledDeviceName = args.BOARDTYPE;
     const regionChoice = args.REGION;
 
-    let filterBoardType = this.getDiscoBoardType(boardChoice);
     const colorStr = this.colorToLEDAddonStr(color);
     // select all LED addons found that match the board type
-    let addressList = [];
 
-    if (filterBoardType == "all") {
-      addressList = this.getAllDiscoBoards(addons);
-    } else {
-      addressList = this.getFilteredDiscoBoards(addons, filterBoardType);
-    }
-
-    let numberOfLEDAddons = addressList.length;
-
-    for (var i = 0; i < numberOfLEDAddons; i++) {
-      let ledDeviceName = addressList.pop();
-      mv2Interface.send_REST(
-        `elem/${ledDeviceName}/json?cmd=raw&hexWr=040${regionChoice}${colorStr}`
-      );
-    }
+    mv2Interface.send_REST(
+      `elem/${ledDeviceName}/json?cmd=raw&hexWr=040${regionChoice}${colorStr}`
+    );
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
   walk_fw(args, util) {
     const moveTime = 1500;
     let steps = parseInt(args.STEPS);
-    steps = Math.min(Math.max(steps, 1), 20);
+    if (steps === 0 || steps < 0 || steps > 20) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 20!"
+      );
+      return Promise.resolve();
+    }
     const stepLength = 25;
     console.log(
       `traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`
@@ -536,7 +646,12 @@ class Scratch3Mv2Blocks {
   walk_bw(args, util) {
     const moveTime = 1500;
     let steps = parseInt(args.STEPS);
-    steps = Math.min(Math.max(steps, 1), 20);
+    if (steps === 0 || steps < 0 || steps > 20) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 20!"
+      );
+      return Promise.resolve();
+    }
     const stepLength = -25;
     console.log(
       `traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`
@@ -553,7 +668,12 @@ class Scratch3Mv2Blocks {
     let stepLength = parseInt(args.STEPLEN);
     stepLength = Math.min(Math.max(stepLength, -50), 50);
     let steps = parseInt(args.STEPS);
-    steps = Math.min(Math.max(steps, 1), 20);
+    if (steps === 0 || steps < 0 || steps > 20) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 20!"
+      );
+      return Promise.resolve();
+    }
     let turn = parseInt(args.TURN);
     turn = Math.min(Math.max(turn, -25), 25);
     console.log(
@@ -568,7 +688,12 @@ class Scratch3Mv2Blocks {
   turn(args, util) {
     const moveTime = 1500;
     let steps = parseInt(args.STEPS);
-    steps = Math.min(Math.max(steps, 1), 20);
+    if (steps === 0 || steps < 0 || steps > 20) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 20!"
+      );
+      return Promise.resolve();
+    }
     let turn = 20;
     const side = args.SIDE;
     if (side === "1") {
@@ -619,7 +744,12 @@ class Scratch3Mv2Blocks {
   slide(args, util) {
     const moveTime = 1000;
     let steps = parseInt(args.STEPS);
-    steps = Math.min(Math.max(steps, 1), 20);
+    if (steps === 0 || steps < 0 || steps > 20) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 20!"
+      );
+      return Promise.resolve();
+    }
     const side = args.SIDE;
     console.log(`traj/sidestep/${steps}/?side= ${side}&moveTime=${moveTime}`);
     mv2Interface.send_REST(
@@ -1075,7 +1205,10 @@ class Scratch3Mv2Blocks {
         const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
           mp3SoundBuffers
         );
-        mv2Interface.streamAudio(mp3SoundData, soundPlayer.buffer.duration * 1000);
+        mv2Interface.streamAudio(
+          mp3SoundData,
+          soundPlayer.buffer.duration * 1000
+        );
         soundPlayer.setPlaybackRate(1);
 
         return new Promise((resolve) => {
@@ -1197,7 +1330,10 @@ class Scratch3Mv2Blocks {
           const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
             mp3SoundBuffers
           );
-          mv2Interface.streamAudio(mp3SoundData, renderedBuffer.duration * 1000);
+          mv2Interface.streamAudio(
+            mp3SoundData,
+            renderedBuffer.duration * 1000
+          );
         };
         const audioEngine = new player.audioEngine.constructor(audioContext);
         const playerNew = new player.constructor(audioEngine, {
@@ -1294,8 +1430,9 @@ class Scratch3Mv2Blocks {
 
     //can be anything but make it a multiple of 576 to make encoders life easier
     const sampleBlockSize = 1152;
-    console.log("CONVERTING TO 16 BIT MP3 WITH 11025 SAMPLE RATE");
-    const mp3encoder = new lamejs.Mp3Encoder(1, 11025, 16);
+    const bitRate = mv2Interface.mp3EncodingBitRate || 16;
+    console.log(`CONVERTING TO ${bitRate} BIT MP3 WITH 11025 SAMPLE RATE`);
+    const mp3encoder = new lamejs.Mp3Encoder(1, 11025, bitRate);
     const mp3Data = [];
     for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
       const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);

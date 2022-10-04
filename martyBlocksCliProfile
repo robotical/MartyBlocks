@@ -1,7 +1,7 @@
 export WebappHome=/Users/nikolastheodoropoulos/Documents/Robotical/marty-web-app
 export MBHome=/Users/nikolastheodoropoulos/Documents/Robotical/MartyBlocks
 
-
+export mblib=$MBHome/marty-blocks-lib/
 export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
 export blocks_original=$MBHome/scratch-blocks
 export vm_original=$MBHome/scratch-vm
@@ -10,12 +10,29 @@ alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
 export PATH=$(pyenv root)/shims:$PATH
 
+npmlinkAll() {
+    # local type="${1:-all"}
+    cd $mblib && npm link
+    cd $blocks_original && npm link && npm link marty-blocks-lib
+    cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
+    cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
+}
+
+
 buildAllAndCpToWebApp () {
     local type="${1:-all}"
     cpReplacements
     buildScratch $type
     cpToDist
     cpToWebapp
+}
+
+buildAllAndStart () {
+    local type="${1:-all}"
+    cpReplacements
+    buildScratch $type
+    cd $gui_original
+    npm start
 }
 
 cpReplacements ()
@@ -27,7 +44,7 @@ buildScratch () {
     local type="${1:-all}"
     if [ $type = all ]; then buildBlocks; buildVm; buildGui; fi
     if [ $type = blocks ]; then buildBlocks; fi
-    if [ $type = vm ]; then buildVm; fi
+    if [ $type = vm ]; then buildBlocks; buildVm; fi
     if [ $type = gui ]; then buildGui; fi
 }
 

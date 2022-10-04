@@ -38,6 +38,8 @@ goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldColourSlider');
 goog.require('Blockly.FieldColourPickerLEDEyes');
+goog.require('Blockly.FieldLEDEyeMatrix');
+goog.require('Blockly.RadialHueSlider');
 // Date picker commented out since it increases footprint by 60%.
 // Add it only if you need it.
 //goog.require('Blockly.FieldDate');

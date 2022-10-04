@@ -27,7 +27,6 @@
  */
 "use strict";
 
-
 goog.provide("Blockly.ScratchBlocks.VerticalExtensions");
 
 goog.require("Blockly.Colours");
@@ -385,31 +384,29 @@ Blockly.Extensions.register(
   }
 );
 
-Blockly.Extensions.register(
-  "dynamic_menu_sensor_IRF_extension",
-  function () {
-    const RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT = "IRFoot";
-    this.getInput("SENSORCHOICE").appendField(
-      new Blockly.FieldDropdown(function () {
-        var defaultOptions = [
-          ["Select an option", "Select an option"],
-          ["No sensor found", "No sensor found"],
-        ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
-        const addons = JSON.parse(mv2Interface.addons).addons;
-        if (!addons) return defaultOptions;
-        const addonOptions = [];
-        for (const addon of addons) {
-          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
-            addonOptions.push([addon.name, addon.name]);
-          }
+Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
+  const RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT = "IRFoot";
+  this.getInput("SENSORCHOICE").appendField(
+    new Blockly.FieldDropdown(function () {
+      var defaultOptions = [
+        ["Select an option", "Select an option"],
+        ["No sensor found", "No sensor found"],
+      ];
+      if (!mv2Interface.isConnected || !mv2Interface.addons)
+        return defaultOptions;
+      const addons = JSON.parse(mv2Interface.addons).addons;
+      if (!addons) return defaultOptions;
+      const addonOptions = [];
+      for (const addon of addons) {
+        if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
+          addonOptions.push([addon.name, addon.name]);
         }
-        return addonOptions.length ? addonOptions : defaultOptions;
-      }),
-      "SENSORCHOICE"
-    );
-  }
-);
+      }
+      return addonOptions.length ? addonOptions : defaultOptions;
+    }),
+    "SENSORCHOICE"
+  );
+});
 
 Blockly.Extensions.register(
   "dynamic_menu_sensor_colour_extension",
@@ -421,7 +418,8 @@ Blockly.Extensions.register(
           ["Select an option", "Select an option"],
           ["No sensor found", "No sensor found"],
         ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons)
+          return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
@@ -437,58 +435,117 @@ Blockly.Extensions.register(
   }
 );
 
+Blockly.Extensions.register("dynamic_menu_sensor_light_extension", function () {
+  const RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT = "lightsensor";
+  this.getInput("SENSORCHOICE").appendField(
+    new Blockly.FieldDropdown(function () {
+      var defaultOptions = [
+        ["Select an option", "Select an option"],
+        ["No sensor found", "No sensor found"],
+      ];
+      if (!mv2Interface.isConnected || !mv2Interface.addons)
+        return defaultOptions;
+      const addons = JSON.parse(mv2Interface.addons).addons;
+      if (!addons) return defaultOptions;
+      const addonOptions = [];
+      for (const addon of addons) {
+        if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
+          addonOptions.push([addon.name, addon.name]);
+        }
+      }
+      return addonOptions.length ? addonOptions : defaultOptions;
+    }),
+    "SENSORCHOICE"
+  );
+});
+
+Blockly.Extensions.register("dynamic_menu_sensor_noise_extension", function () {
+  const RIC_WHOAMI_TYPE_CODE_ADDON_NOISE = "noisesensor";
+  this.getInput("SENSORCHOICE").appendField(
+    new Blockly.FieldDropdown(function () {
+      var defaultOptions = [
+        ["Select an option", "Select an option"],
+        ["No sensor found", "No sensor found"],
+      ];
+      if (!mv2Interface.isConnected || !mv2Interface.addons)
+        return defaultOptions;
+      const addons = JSON.parse(mv2Interface.addons).addons;
+      if (!addons) return defaultOptions;
+      const addonOptions = [];
+      for (const addon of addons) {
+        if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_NOISE) {
+          addonOptions.push([addon.name, addon.name]);
+        }
+      }
+      return addonOptions.length ? addonOptions : defaultOptions;
+    }),
+    "SENSORCHOICE"
+  );
+});
 Blockly.Extensions.register(
-  "dynamic_menu_sensor_light_extension",
+  "dynamic_menu_disco_options_extension",
   function () {
-    const RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT = "lightsensor";
-    this.getInput("SENSORCHOICE").appendField(
+    const RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT = "LEDfoot";
+    const RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM = "LEDarm";
+    const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
+
+    this.getInput("BOARDTYPE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
           ["Select an option", "Select an option"],
-          ["No sensor found", "No sensor found"],
+          ["No disco found", "No disco found"],
         ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons)
+          return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
         for (const addon of addons) {
-          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
+          if (
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT ||
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM ||
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
+          ) {
             addonOptions.push([addon.name, addon.name]);
           }
         }
         return addonOptions.length ? addonOptions : defaultOptions;
       }),
-      "SENSORCHOICE"
+      "BOARDTYPE"
     );
   }
 );
-
 Blockly.Extensions.register(
-  "dynamic_menu_sensor_noise_extension",
+  "dynamic_menu_LED_eyes_side_extension",
   function () {
-    const RIC_WHOAMI_TYPE_CODE_ADDON_NOISE = "noisesensor";
-    this.getInput("SENSORCHOICE").appendField(
+    const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
+
+    this.getInput("SIDE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
           ["Select an option", "Select an option"],
-          ["No sensor found", "No sensor found"],
+          ["No LED eyes found", "No LED eyes found"],
         ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons) return defaultOptions;
+        if (!mv2Interface.isConnected || !mv2Interface.addons)
+          return defaultOptions;
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
         for (const addon of addons) {
-          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_NOISE) {
-            addonOptions.push([addon.name, addon.name]);
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE) {
+            addonOptions.push(
+              [Blockly.Msg.MV2_LEDEYESLEFT, "left"],
+              [Blockly.Msg.MV2_LEDEYESRIGHT, "right"],
+              [Blockly.Msg.MV2_LEDEYESBOTH, "both"]
+            );
+            break;
           }
         }
         return addonOptions.length ? addonOptions : defaultOptions;
       }),
-      "SENSORCHOICE"
+      "SIDE"
     );
   }
 );
-
-
 
 Blockly.ScratchBlocks.VerticalExtensions.registerAll();

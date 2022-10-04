@@ -60,6 +60,8 @@ class Mv2Interface extends EventDispatcher {
     this.servos = 0;
     this.accel = 0;
     this.commandPromise = null;
+    this.systemInfo = null;
+    this.mp3EncodingBitRate = null;
     this.onCommandReply = this.onCommandReply.bind(this);
     this.sendCommand = this.sendCommand.bind(this);
     this.saveScratchFile = this.saveScratchFile.bind(this);
@@ -67,6 +69,13 @@ class Mv2Interface extends EventDispatcher {
     this.listSavedScratchFiles = this.listSavedScratchFiles.bind(this);
     this.deleteScratchFile = this.deleteScratchFile.bind(this);
     this.setRSSI = this.setRSSI.bind(this);
+  }
+
+  getMartyFwVersion() {
+    if (this.systemInfo && this.systemInfo.SystemVersion) {
+        return this.systemInfo.SystemVersion;
+    }
+    return "";
   }
 
   setRSSI(rssi) {
