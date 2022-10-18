@@ -356,8 +356,26 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
 // Blockly.Msg.MV2_CONNECTVIAIP ='%1 %2 Connect via IP: %3';
 
+
+// Marty new LED eyes blocks
+Blockly.Msg.MV2_CHANGELEDEYESBLOCK = '%1 %2 Set %3 LEDs to %4';
+Blockly.Msg.MV2_CHANGELEDSEYESBLOCK = '%1 %2 Set %3 to %4';
+Blockly.Msg.MV2_LEDEYESLEFT = 'Left eye';
+Blockly.Msg.MV2_LEDEYESRIGHT = 'Right eye';
+Blockly.Msg.MV2_LEDEYESBOTH = 'Both eyes';
+
+Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK = '%1 %2 Set %3 LED %4 to %5';
+
+Blockly.Msg.MV2_RGBOPERATOR = '%1 %2 red %3 green %4 blue %5';
+Blockly.Msg.MV2_HSLOPERATOR = '%1 %2 hue %3 saturation %4 lightness %5';
+
 // Marty V2 Disco Blocks
 Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';
+
+Blockly.Msg.MV2_DISCOCHANGEBACKCOLOUR = '%1 %2 Set function LED to %3';
+Blockly.Msg.MV2_DISCOSETBREATHEBACKCOLOUR = '%1 %2 Set function LED to %3 every %4ms';
+Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off function LED';
+
 Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
 Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
 
@@ -499,9 +517,19 @@ Blockly.Msg.SOUND_SETVOLUMETO = 'set volume to %1%';
 Blockly.Msg.SOUND_VOLUME = 'volume';
 Blockly.Msg.SOUND_RECORD = 'record...';
 
+Blockly.Msg.MV2_SOUND_CHANGEEFFECTBY = '%1 %2 Change %3 effect by %4';
+Blockly.Msg.MV2_SOUND_SETEFFECTO = '%1 %2 Set %3 effect to %4';
+Blockly.Msg.MV2_SOUND_CLEAREFFECTS = '%1 %2 Clear sound effects';
+Blockly.Msg.MV2_SOUND_CHANGEVOLUMEBY = '%1 %2 Change volume by %3';
+Blockly.Msg.MV2_SOUND_SETVOLUMETO = '%1 %2 Set volume to %3%';
+
 // MARTY V2 sound blocks
-Blockly.Msg.MV2_PLAYSOUND = '%1 %2 Play sound: %3';
-Blockly.Msg.MV2_PLAYSOUND_STREAM = '%1 %2 Play sound: %3';
+Blockly.Msg.MV2_PLAYSOUND = '%1 %2 Start sound: %3';
+Blockly.Msg.MV2_PLAYSOUNDUNTILDONE = '%1 %2 Play sound: %3 until done';
+Blockly.Msg.MV2_PLAYNOTE = '%1 %2 Play note: %3';
+Blockly.Msg.MV2_PLAYTONE = '%1 %2 Play tone from: %3 Hz to: %4 Hz in: %5 seconds';
+Blockly.Msg.MV2_STOPSOUNDS = '%1 %2 Stop all sounds';
+
 
 // MARTY V2 block drop-down options
 Blockly.Msg.DROPDOWN_OPTION_LEFT = 'left';
@@ -533,6 +561,79 @@ Blockly.Msg.DROPDOWN_OPTION_EXCITEMENTSOUND = 'excitement';
 Blockly.Msg.DROPDOWN_OPTION_NOWAYSOUND = 'no way!';
 Blockly.Msg.DROPDOWN_OPTION_NOSOUND = 'no!';
 Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND = 'whistle';
+
+// Notes
+Blockly.Msg.DROPDOWN_OPTION_ABASSNOTE = 'A Bass';
+Blockly.Msg.DROPDOWN_OPTION_AELECBASSNOTE = 'A Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_AELECGUITARNOTE = 'A Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_AELECPIANONOTE = 'A Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_AGUITARNOTE = 'A Guitar';
+Blockly.Msg.DROPDOWN_OPTION_AMINORUKULELENOTE = 'A minor Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_APIANONOTE = 'A Piano';
+Blockly.Msg.DROPDOWN_OPTION_ASAXNOTE = 'A Sax';
+Blockly.Msg.DROPDOWN_OPTION_ATROMBONENOTE = 'A Trombone';
+Blockly.Msg.DROPDOWN_OPTION_ATRUMPETNOTE = 'A Trumpet';
+Blockly.Msg.DROPDOWN_OPTION_BBASSNOTE = 'B Bass';
+Blockly.Msg.DROPDOWN_OPTION_BELECBASSNOTE = 'B Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_BELECGUITARNOTE = 'B Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_BELECPIANONOTE = 'B Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_BGUITARNOTE = 'B Guitar';
+Blockly.Msg.DROPDOWN_OPTION_BMINORUKULELENOTE = 'B minor Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_BPIANONOTE = 'B Piano';
+Blockly.Msg.DROPDOWN_OPTION_BSAXNOTE = 'B Sax';
+Blockly.Msg.DROPDOWN_OPTION_BTROMBONENOTE = 'B Trombone';
+Blockly.Msg.DROPDOWN_OPTION_BTRUMPETNOTE = 'B Trumpet';
+Blockly.Msg.DROPDOWN_OPTION_CBASSNOTE = 'C Bass';
+Blockly.Msg.DROPDOWN_OPTION_CELECBASSNOTE = 'C Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_CELECGUITARNOTE = 'C Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_CELECPIANONOTE = 'C Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_CGUITARNOTE = 'C Guitar';
+Blockly.Msg.DROPDOWN_OPTION_CMAJORUKULELENOTE = 'C major Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_CPIANONOTE = 'C Piano';
+Blockly.Msg.DROPDOWN_OPTION_CSAXNOTE = 'C Sax';
+Blockly.Msg.DROPDOWN_OPTION_CTROMBONENOTE = 'C Trombone';
+Blockly.Msg.DROPDOWN_OPTION_CTRUMPETNOTE = 'C Trumpet';
+Blockly.Msg.DROPDOWN_OPTION_DBASSNOTE = 'D Bass';
+Blockly.Msg.DROPDOWN_OPTION_DELECBASSNOTE = 'D Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_DELECGUITARNOTE = 'D Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_DELECPIANONOTE = 'D Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_DGUITARNOTE = 'D Guitar';
+Blockly.Msg.DROPDOWN_OPTION_DMINORUKULELENOTE = 'D minor Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_DPIANONOTE = 'D Piano';
+Blockly.Msg.DROPDOWN_OPTION_DSAXNOTE = 'D Sax';
+Blockly.Msg.DROPDOWN_OPTION_DTROMBONENOTE = 'D Trombone';
+Blockly.Msg.DROPDOWN_OPTION_DTRUMPETNOTE = 'D Trumpet';
+Blockly.Msg.DROPDOWN_OPTION_EBASSNOTE = 'E Bass';
+Blockly.Msg.DROPDOWN_OPTION_EELECBASSNOTE = 'E Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_EELECGUITARNOTE = 'E Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_EELECPIANONOTE = 'E Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_EGUITARNOTE = 'E Guitar';
+Blockly.Msg.DROPDOWN_OPTION_EMINORUKULELENOTE = 'E minor Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_EPIANONOTE = 'E Piano';
+Blockly.Msg.DROPDOWN_OPTION_ESAXNOTE = 'E Sax';
+Blockly.Msg.DROPDOWN_OPTION_ETROMBONENOTE = 'E Trombone';
+Blockly.Msg.DROPDOWN_OPTION_ETRUMPETNOTE = 'E Trumpet';
+Blockly.Msg.DROPDOWN_OPTION_FBASSNOTE = 'F Bass';
+Blockly.Msg.DROPDOWN_OPTION_FELECBASSNOTE = 'F Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_FELECGUITARNOTE = 'F Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_FELECPIANONOTE = 'F Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_FGUITARNOTE = 'F Guitar';
+Blockly.Msg.DROPDOWN_OPTION_FMAJORUKULELENOTE = 'F major Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_FPIANONOTE = 'F Piano';
+Blockly.Msg.DROPDOWN_OPTION_FSAXNOTE = 'F Sax';
+Blockly.Msg.DROPDOWN_OPTION_FTROMBONENOTE = 'F Trombone';
+Blockly.Msg.DROPDOWN_OPTION_FTRUMPETNOTE = 'F Trumpet';
+Blockly.Msg.DROPDOWN_OPTION_GBASSNOTE = 'G Bass';
+Blockly.Msg.DROPDOWN_OPTION_GELECBASSNOTE = 'G Elec Bass';
+Blockly.Msg.DROPDOWN_OPTION_GELECGUITARNOTE = 'G Elec Guitar';
+Blockly.Msg.DROPDOWN_OPTION_GELECPIANONOTE = 'G Elec Piano';
+Blockly.Msg.DROPDOWN_OPTION_GGUITARNOTE = 'G Guitar';
+Blockly.Msg.DROPDOWN_OPTION_GUKULELENOTE = 'G Ukulele';
+Blockly.Msg.DROPDOWN_OPTION_GPIANONOTE = 'G Piano';
+Blockly.Msg.DROPDOWN_OPTION_GSAXNOTE = 'G Sax';
+Blockly.Msg.DROPDOWN_OPTION_GTROMBONENOTE = 'G Trombone';
+Blockly.Msg.DROPDOWN_OPTION_GTRUMPETNOTE = 'G Trumpet';
+
 Blockly.Msg.DROPDOWN_OPTION_CLEAR = 'clear';
 Blockly.Msg.DROPDOWN_OPTION_RED = 'red';
 Blockly.Msg.DROPDOWN_OPTION_GREEN = 'green';
@@ -545,3 +646,11 @@ Blockly.Msg.DROPDOWN_OPTION_ZERO = '0';
 Blockly.Msg.DROPDOWN_OPTION_ONE = '1';
 Blockly.Msg.DROPDOWN_OPTION_TWO = '2';
 Blockly.Msg.DROPDOWN_OPTION_THREE = '3';
+
+Blockly.Msg.COLOUR_RED = 'Red';
+Blockly.Msg.COLOUR_YELLOW = 'Yellow';
+Blockly.Msg.COLOUR_GREEN = 'Green';
+Blockly.Msg.COLOUR_CYAN = 'Cyan';
+Blockly.Msg.COLOUR_BLUE = 'Blue';
+Blockly.Msg.COLOUR_PURPLE = 'Purple';
+Blockly.Msg.COLOUR_PINK = 'Pink';

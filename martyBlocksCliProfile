@@ -1,0 +1,120 @@
+export WebappHome=/Users/nikolastheodoropoulos/Documents/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
+export MBHome=/Users/nikolastheodoropoulos/Documents/Robotical/MartyBlocks # <- replace this
+
+export mblib=$MBHome/marty-blocks-lib/
+export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
+export blocks_original=$MBHome/scratch-blocks
+export vm_original=$MBHome/scratch-vm
+export gui_original=$MBHome/scratch-gui
+alias cdhome='cd $MBHome'
+alias sourceMBProf='cdhome && source martyBlocksCliProfile'
+# export PATH=$(pyenv root)/shims:$PATH
+
+
+##################### Steps to set up the project #######################
+
+# Step 1a: Clone repos
+cloneScratch() {
+    git clone -b develop https://github.com/llk/scratch-blocks.git MartyBlocks/scratch-blocks
+    git clone -b develop https://github.com/llk/scratch-vm.git MartyBlocks/scratch-vm
+    git clone -b develop https://github.com/llk/scratch-gui.git MartyBlocks/scratch-gui
+}
+
+# Step 1b: Checkout appropriate commit
+checkoutScratch() {
+    cd $blocks_original && git reset --hard f9107bf5d0479d632658f2b203995f5ae6d75363
+    cd $vm_original && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
+    cd $gui_original && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
+}
+
+# Step 2: Install scratch
+installScratch() {
+    cd $blocks_original && npm install 
+    cd $vm_original && npm install 
+    cd $gui_original && npm install
+}
+
+# Step 3: Install marty blocks library
+installMBLib() {
+    cd $mblib
+    npm install
+}
+
+# Step 4: Link repositories
+npmlinkAll() {
+    # local type="${1:-all"}
+    cd $mblib && npm link
+    cd $blocks_original && npm link && npm link marty-blocks-lib
+    cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
+    cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
+}
+
+# Step 5: build all repositories and start scratch gui
+buildAllAndStart () {
+    # arguments [all, blocks, vm, gui]
+    local type="${1:-all}"
+    cpReplacements
+    buildScratch $type
+    cd $gui_original
+    npm start
+}
+
+# To make changes on the project, edit the appropriate files in the /replacements 
+# folder, and then run the buildAllAndStart function again.
+# Note: You only need to build the repositories that you made the changes on, and their parents (based on the npm linking)
+# For example, if you made a change on scratch gui, then you need to build only scratch gui because it doesn't depend on vm or blocks.
+# To do so, you can run 'buildAllAndStart gui'.
+# For more details, look at the buildAllAndStart function definition, and how the type argument is used to conditionally build the appropriate repositories.
+
+##################### Helper functions ####################
+buildAllAndCpToWebApp () {
+    local type="${1:-all}"
+    cpReplacements
+    buildScratch $type
+    cpToDist
+    cpToWebapp
+}
+
+cpReplacements ()
+{
+    cp -r $REPLACEMENTS/* $MBHome
+}
+
+buildScratch () {
+    local type="${1:-all}"
+    if [ $type = all ]; then buildBlocks; buildVm; buildGui; fi
+    if [ $type = blocks ]; then buildBlocks; fi
+    if [ $type = vm ]; then buildBlocks; buildVm; fi
+    if [ $type = gui ]; then buildGui; fi
+}
+
+cpToWebapp () {
+    rm -rf $WebappHome/public/MartyBlocks/*
+    cp -r $gui_original/build/* $WebappHome/public/MartyBlocks
+}
+
+cpToDist () {
+    cdhome
+    rm -rf dist/*
+    cp -r $gui_original/build/* ./dist
+}
+
+buildBlocks() {
+    cd $blocks_original && npm run prepublish
+}
+
+buildVm() {
+    cd $vm_original && npm run build
+}
+
+buildGui() {
+    cd $gui_original && BUILD_MODE=dist npm run build
+}
+
+publishPackage() {
+    cdhome;
+    rm -rf dist;
+    mkdir dist;
+    cp -r $gui_original/build/* dist/;
+    npm publish;
+}

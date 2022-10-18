@@ -28,13 +28,12 @@ class SaveLoad extends React.Component {
         this.getCurrentFiles();
     }
 
-    getCurrentFiles () {
-        mv2Interface.listSavedScratchFiles().then(savedScratchFiles => {
-            const fileNames = savedScratchFiles.fileNames
-                .map(encodedFileName => decodeURIComponent(encodedFileName))
-                .filter(fileName => fileName !== '__autosave');
-            this.setState({fileNames});
-        });
+    async getCurrentFiles () {
+        const savedScratchFiles = await mv2Interface.listSavedScratchFiles();
+        const fileNames = savedScratchFiles.fileNames
+            .map(encodedFileName => decodeURIComponent(encodedFileName))
+            .filter(fileName => fileName !== '__autosave');
+        this.setState({fileNames});
     }
 
     setSaveFileName (saveFileName) {
@@ -42,7 +41,7 @@ class SaveLoad extends React.Component {
         this.setState({saveFileName, isValidFileName});
     }
     
-    saveFile (fileName) {
+    async saveFile (fileName) {
         const {fileNames} = this.state;
         const safeFileName = encodeURIComponent(fileName);
         if (fileNames.includes(safeFileName)) {
@@ -51,67 +50,59 @@ class SaveLoad extends React.Component {
                 return;
             }
         }
-        this.props.saveProjectSb3().then(sb3Content => {
-            
-            blobToBase64(sb3Content).then(base64sb3 => {
-                // eslint-disable-next-line no-undef
-                try {
-                    mv2Interface.saveScratchFile(safeFileName, base64sb3).then(() => {
-                        // eslint-disable-next-line no-alert
-                        alert('Project Saved.');
-                        // TODO is this required?
-                        if (this.props.onProjectTelemetryEvent) {
-                            const metadata = collectMetadata(
-                                this.props.vm,
-                                this.props.projectTitle,
-                                this.props.locale
-                            );
-                            this.props.onProjectTelemetryEvent('projectDidSave', metadata);
-                        }
-                        const newFileNames = [fileName, ...(fileNames.filter(fn => fn !== fileName))];
-                        this.setState({fileNames: newFileNames});
-                    });
-                } catch (error) {
-                    // eslint-disable-next-line no-alert
-                    alert(`Failed to save project: ${error.message}`);
-                }
-            });
-        });
+        const sb3Content = await this.props.saveProjectSb3();
+        const base64sb3 = await blobToBase64(sb3Content);
+        // eslint-disable-next-line no-undef
+        try {
+            await mv2Interface.saveScratchFile(safeFileName, base64sb3);
+            // eslint-disable-next-line no-alert
+            alert('Project Saved.');
+            // TODO is this required?
+            if (this.props.onProjectTelemetryEvent) {
+                const metadata = collectMetadata(
+                    this.props.vm,
+                    this.props.projectTitle,
+                    this.props.locale
+                );
+                this.props.onProjectTelemetryEvent('projectDidSave', metadata);
+            }
+            const newFileNames = [fileName, ...(fileNames.filter(fn => fn !== fileName))];
+            this.setState({fileNames: newFileNames});
+        } catch (error) {
+            // eslint-disable-next-line no-alert
+            alert(`Failed to save project: ${error.message}`);
+        }
     }
 
-    loadFile (fileName) {
+    async loadFile (fileName) {
         const {vm} = this.props;
 
         if (!vm.editingTarget) {
             return null;
         }
         try {
-            mv2Interface.loadScratchFile(encodeURIComponent(fileName)).then(response => {
-                fetch(response.contents).then(blob => {
-                    blob.arrayBuffer().then(arrayBuffer => {
-                        vm.loadProject(arrayBuffer);
-                        // eslint-disable-next-line no-alert
-                        alert('Loaded Project');
-                        // this seems to be required to let the wm load the project
-                        window.setTimeout(() => this.props.onActivateBlocksTab());
-                    });
-                });
-            });
+            const response = await mv2Interface.loadScratchFile(encodeURIComponent(fileName));
+            const blob = await fetch(response.contents);
+            const arrayBuffer = await blob.arrayBuffer();
+            vm.loadProject(arrayBuffer);
+            // eslint-disable-next-line no-alert
+            alert('Loaded Project');
+            // this seems to be required to let the wm load the project
+            window.setTimeout(() => this.props.onActivateBlocksTab());
         } catch (error) {
             // eslint-disable-next-line no-alert
             alert(`Failed to load project: ${error.message}`);
         }
     }
 
-    deleteFile (fileName, getConfirmation = true) {
+    async deleteFile (fileName, getConfirmation = true) {
         const {fileNames} = this.state;
         // eslint-disable-next-line no-alert
         if (!getConfirmation || window.confirm(`Are you sure you want to delete "${fileName}"?`)) {
             try {
-                mv2Interface.deleteScratchFile(encodeURIComponent(fileName)).then(() => {
-                    const newFileNames = fileNames.filter(f => f !== fileName);
-                    this.setState({fileNames: newFileNames});
-                });
+                await mv2Interface.deleteScratchFile(encodeURIComponent(fileName));
+                const newFileNames = fileNames.filter(f => f !== fileName);
+                this.setState({fileNames: newFileNames});
             } catch (error) {
                 // eslint-disable-next-line no-alert
                 alert(`Failed to delete project: ${error.message}`);

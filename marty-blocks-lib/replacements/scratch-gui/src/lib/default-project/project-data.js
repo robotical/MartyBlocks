@@ -75,6 +75,50 @@ const projectData = translateFunction => {
                     }
                 ],
                 sounds: [
+                    {
+                        name: "Sax in the city",
+                        assetId: "sax-in-the-city",
+                        md5ext: "sax-in-the-city.wav",
+                        dataFormat: 'wav',
+                    },
+                    {
+                        name: "Confusion",
+                        assetId: "confused",
+                        md5ext: "confused.wav",
+                        dataFormat: 'wav',
+                    },
+                    {
+                        name: "Disbelief",
+                        assetId: "disbelief",
+                        dataFormat: "wav",
+                        md5ext: "disbelief.wav",
+                    },
+                    {
+                        name: "Excited",
+                        assetId: "excited",
+                        dataFormat: "wav",
+                        md5ext: "excited.wav",
+                    },
+                    {
+                        name: "No Way!",
+                        assetId: "no_way",
+                        dataFormat: "wav",
+                        md5ext: "no_way.wav",
+                    },
+                    {
+                        name: "No!",
+                        assetId: "no",
+                        dataFormat: "wav",
+                        md5ext: "no.wav",
+                    },
+                    {
+                        name: "Whistle",
+                        assetId: "whistle",
+                        dataFormat: "wav",
+                        md5ext: "whistle.wav",
+                    },
+                
+                
                 ],
                 volume: 100,
                 visible: true,

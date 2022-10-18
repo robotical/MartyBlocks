@@ -358,6 +358,74 @@ export function MartyBlocksToolbox_disco() {
         </value>
     </block>
 
+    <block type="mv2_LEDEyesColour" >
+        <value>
+            <field name="SIDE"></field>
+        </value>
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker"/>
+        </value>
+    </block>
+
+    <block type="mv2_LEDEyesColour_SpecificLED" >
+        <value>
+            <field name="SIDE"></field>
+        </value>
+        <value name="LED_POSITION">
+            <shadow type="math_number">
+                <field name="NUM">1</field>
+            </shadow>
+        </value>
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker"/>
+        </value>
+    </block>
+
+    <block type="mv2_LEDEyesColourLEDs" >
+        <value>
+            <field name="SIDE"></field>
+        </value>
+        <value name="COLOUR_LED_EYES">
+            <shadow type="colour_picker_LED_eyes" />
+        </value>
+    </block>
+
+    <block type="mv2_RGBOperator">
+      <value name="NUM_R">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_G">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_B">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+    </block>
+
+    <block type="mv2_HSLOperator">
+      <value name="NUM_H">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_S">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+      <value name="NUM_L">
+        <shadow type="math_number">
+          <field name="NUM"></field>
+        </shadow>
+      </value>
+    </block>
+
     <block type="mv2_discoChangeBlockColour" >
         <value>
             <field name="BOARDTYPE"></field>
@@ -366,6 +434,25 @@ export function MartyBlocksToolbox_disco() {
             <shadow type="colour_picker"/>
         </value>
     </block>
+
+    <block type="mv2_discoChangeBackColour" >
+        <value name="COLOR">
+            <shadow type="colour_picker"/>
+        </value>
+    </block>
+
+    <block type="mv2_discoSetBreatheBackColour" >
+        <value name="COLOR">
+            <shadow type="colour_picker"/>
+        </value>
+        <value name="MILLISECONDS">
+            <shadow type="math_number">
+                <field name="NUM">1000</field>
+            </shadow>
+        </value>
+    </block>
+    
+    <block type="mv2_discoTurnOffBackColour" />
 
     <block type="mv2_discoChangeRegionColour" >
         <value>
@@ -384,16 +471,74 @@ export function MartyBlocksToolbox_disco() {
 export function MartyBlocksToolbox_sound(soundName) {
     return `
         <!--Marty blocks-->
-
         <block type="mv2_playSound" >
-            <value name="SOUND">
-                    <field name="SOUND"></field>
-            </value>
-        </block>
-        <block type="mv2_playSound_stream" >
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
                     <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="mv2_playSoundUntilDone" >
+            <value name="SOUND_MENU">
+                <shadow type="sound_sounds_menu">
+                    <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="mv2_playNote" >
+            <value name="NOTES_MENU">
+                <field name="NOTES_MENU"></field>
+            </value>
+        </block>
+        <block type="mv2_playTone" >
+            <value name="HZ1">
+                <shadow type="math_number">
+                    <field name="NUM">200</field>
+                </shadow>
+            </value>
+            <value name="HZ2">
+                <shadow type="math_number">
+                    <field name="NUM">300</field>
+                </shadow>
+            </value>
+            <value name="SECONDS">
+                <shadow type="math_number">
+                    <field name="NUM">3</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="mv2_stopSounds" />
+
+        <block type="mv2_changePitchEffect" >
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_setPitchEffect" >
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_clearSoundEffects" />
+
+        <block type="mv2_changeVolume" >
+            <value name="VOLUME">
+                <shadow type="math_number">
+                    <field name="NUM">-10</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_setVolume" >
+            <value name="VOLUME">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
                 </shadow>
             </value>
         </block>

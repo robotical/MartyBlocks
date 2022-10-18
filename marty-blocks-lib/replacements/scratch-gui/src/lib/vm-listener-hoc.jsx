@@ -80,11 +80,6 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         handleProjectRunStart () {
             // eslint-disable-next-line no-undef
-            if (!mv2Interface.isConnected) {
-                // eslint-disable-next-line no-alert
-                alert('You are not currently connected to a Marty. Please connect.');
-            }
-            mv2Interface.handleProjectRunStart();
             this.props.onProjectRunStart();
         }
         handleProjectChanged () {

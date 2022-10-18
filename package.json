@@ -1,6 +1,6 @@
 {
   "name": "@robotical/martyblocks",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "MartyBlocks based on Scratch for Marty the Robot by Robotical",
   "main": "README.md",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robotical/MartyBlocks.git"
+    "url": "git+https://github.com/robotical/MartyBlocks-without-nested-repos.git"
   },
   "keywords": [
     "marty",
@@ -16,12 +16,12 @@
     "scratch",
     "Robotical"
   ],
-  "author": "Rob Dobson",
+  "author": "Nikos Theodoropoulos",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/robotical/MartyBlocks/issues"
+    "url": "https://github.com/robotical/MartyBlocks-without-nested-repos/issues"
   },
-  "homepage": "https://github.com/robotical/MartyBlocks#readme",
+  "homepage": "https://github.com/robotical/MartyBlocks-without-nested-repos#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

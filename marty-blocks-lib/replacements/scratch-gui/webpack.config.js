@@ -15,7 +15,7 @@ var postcssImport = require('postcss-import');
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
 const base = {
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    mode: "production",//process.env.NODE_ENV === 'production' ? 'production' : 'development',
     devtool: 'cheap-module-source-map',
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
@@ -26,6 +26,10 @@ const base = {
         library: 'GUI',
         filename: '[name].js',
         chunkFilename: 'chunks/[name].js'
+    },
+    externals: {
+        React: 'react',
+        ReactDOM: 'react-dom'
     },
     resolve: {
         symlinks: false
@@ -46,13 +50,12 @@ const base = {
                 babelrc: false,
                 plugins: [
                     '@babel/plugin-syntax-dynamic-import',
-                    '@babel/plugin-transform-async-to-generator',
                     '@babel/plugin-proposal-object-rest-spread',
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
-                presets: ['@babel/preset-env', '@babel/preset-react']
-            }
+                    presets: [['@babel/preset-env', {exclude: ['transform-regenerator']}], '@babel/preset-react']
+                }
         },
         {
             test: /\.css$/,
@@ -108,6 +111,10 @@ module.exports = [
         output: {
             path: path.resolve(__dirname, 'build'),
             filename: '[name].js'
+        },
+        externals: {
+            React: 'react',
+            ReactDOM: 'react-dom'
         },
         module: {
             rules: base.module.rules.concat([
