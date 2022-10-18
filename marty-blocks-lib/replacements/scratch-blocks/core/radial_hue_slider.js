@@ -55,7 +55,7 @@ Blockly.RadialHueSlider.prototype.initRange = function (range) {
     this.settings.range.includes("output") || circular
       ? document.createElement("output")
       : null;
-//   this.output && this.output.setAttribute("draggable", true);
+  // this.output && this.output.setAttribute("draggable", true);
   this.ticks = parseInt(range.dataset.ticks, 10);
   this.upper = this.settings.range.includes("lower")
     ? range.parentNode.querySelector(`[data-range*="upper"]`)
@@ -139,13 +139,24 @@ Blockly.RadialHueSlider.prototype.initRange = function (range) {
           break;
       }
     });
-    this.wrapper.addEventListener("pointerdown", () => {
-      return this.wrapper.addEventListener("pointermove", pointerMove);
-    });
-    this.wrapper.addEventListener("pointerup", () => {
-      return this.wrapper.removeEventListener("pointermove", pointerMove);
-    });
 
+    // this.wrapper.addEventListener("touchstart", pointerMove, false);
+    // this.wrapper.addEventListener("touchend", pointerMove, false);
+    // this.wrapper.addEventListener("touchcancel", pointerMove, false);
+    // this.wrapper.addEventListener("touchleave", pointerMove, false);
+    // this.wrapper.addEventListener("touchmove", pointerMove);
+
+
+    this.wrapper.addEventListener("pointerdown", () => {
+      return document.body.addEventListener("pointermove", pointerMove);
+    });
+    document.body.addEventListener("pointerup", () => {
+      return document.body.removeEventListener("pointermove", pointerMove);
+    });
+    // this.wrapper.addEventListener("pointerup", () => {
+      //   return document.body.removeEventListener("pointermove", pointerMove);
+      // });
+      
     // this.output.addEventListener("drag", pointerMove);
 
     this.updateCircle();
@@ -202,6 +213,17 @@ Blockly.RadialHueSlider.prototype.updateGradient = function (gradient) {
     this.wrapper.style.backgroundImage = '-ms-conic-gradient(' + gradient + ')';
     this.wrapper.style.backgroundImage = 'conic-gradient(' + gradient + ')';
 }
+
+/**
+ * @function fillCircleCenter
+ * @param {string} colour
+ * @parameter Fill the center of the circle with the current colour
+ */
+ Blockly.RadialHueSlider.prototype.fillCircleCenter = function(colour) {
+  this.wrapper.style.setProperty('--circle-bgc', colour);
+}
+
+
 /**
  * @function updateCircle
  * @param {Number} start

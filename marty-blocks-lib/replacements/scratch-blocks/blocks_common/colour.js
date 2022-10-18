@@ -72,7 +72,7 @@ Blockly.Blocks['colour_picker_LED_eyes'] = {
         {
           "type": "field_colour_picker_LED_eyes",
           "name": "COLOUR",
-          "colour": randomColour()
+          "colour": "#00cbff"
         }
       ],
       "outputShape": Blockly.OUTPUT_SHAPE_ROUND,

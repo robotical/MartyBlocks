@@ -328,7 +328,9 @@ Blockly.FieldColourPickerLEDEyes.prototype.hueSliderCallback_ = function (
     this.shouldUpdateHueSlider = false;
     this.setValue(colour, true);
     this.shouldUpdateHueSlider = true;
-    this.eyeMatrix.updateMatrix_();
+    this.hueSlider_.fillCircleCenter(colour);
+    this.eyeMatrix.updateApplyToAllBtn();
+    // this.eyeMatrix.updateMatrix_();
   }
 };
 
@@ -367,7 +369,9 @@ Blockly.FieldColourPickerLEDEyes.prototype.sliderCallbackFactory_ = function (
     }
     if (colour !== null) {
       thisField.setValue(colour, true);
-      thisField.eyeMatrix.updateMatrix_();
+      thisField.hueSlider_.fillCircleCenter(colour);
+      thisField.eyeMatrix.updateApplyToAllBtn();
+      // thisField.eyeMatrix.updateMatrix_();
     }
   };
 };
@@ -401,6 +405,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.showEditor_ = function () {
   this.eyeMatrix.matrixStage_.style.gridRow = "1/1";
 
   div.appendChild(this.eyeMatrix.matrixStage_);
+
 
   // var hueElements =
   //   this.createLabelDom_(Blockly.Msg.COLOUR_HUE_LABEL);
@@ -465,6 +470,8 @@ Blockly.FieldColourPickerLEDEyes.prototype.showEditor_ = function () {
   outerDiv.appendChild(div);
   this.hueSlider_ = new Blockly.RadialHueSlider(hueSlider, hueSlider.dataset);
   this.hueSlider_.updateCircle(this.hue_ + this.hueSlider_.settings.offset);
+  this.hueSlider_.fillCircleCenter(this.getValue());
+  this.eyeMatrix.updateApplyToAllBtn();
   // Set value updates the slider positions
   // Do this before attaching callbacks to avoid extra events from initial set
   this.setValue(this.getValue());
