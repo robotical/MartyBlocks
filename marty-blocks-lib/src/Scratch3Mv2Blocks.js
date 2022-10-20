@@ -269,10 +269,15 @@ class Scratch3Mv2Blocks {
   }
 
   _martyIsConnectedWrapper(martyBlock) {
-    if (!mv2Interface.isConnected)
-      return alert(
-        "You are not currently connected to a Marty. Please connect."
+    if (!mv2Interface.isConnected) {
+      window.vm.runtime.stopAll();
+      return mv2Interface.send_REST(
+        "notification/warn-message/You are not currently connected to a Marty. Please connect."
       );
+      // return alert(
+      //   "You are not currently connected to a Marty. Please connect."
+      // );
+    }
     return martyBlock();
   }
 
