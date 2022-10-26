@@ -386,6 +386,7 @@ Blockly.Extensions.register(
 
 Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
   const RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT = "IRFoot";
+  const RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR = "coloursensor";
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
       var defaultOptions = [
@@ -398,7 +399,10 @@ Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
       if (!addons) return defaultOptions;
       const addonOptions = [];
       for (const addon of addons) {
-        if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
+        if (
+          addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT ||
+          addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR
+        ) {
           addonOptions.push([addon.name, addon.name]);
         }
       }

@@ -3378,13 +3378,13 @@
         "rate": 44100
     },
     {
-        "name": "Sax in the city",
+        "name": "Celebrate",
         "tags": [
             "marty"
         ],
-        "assetId": "sax-in-the-city",
+        "assetId": "celebrate",
         "dataFormat": "",
-        "md5ext": "sax-in-the-city.wav",
+        "md5ext": "celebrate.wav",
         "sampleCount": 88000,
         "rate": 11000
     },

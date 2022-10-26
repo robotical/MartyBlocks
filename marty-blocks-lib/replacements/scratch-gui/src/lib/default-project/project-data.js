@@ -76,9 +76,9 @@ const projectData = translateFunction => {
                 ],
                 sounds: [
                     {
-                        name: "Sax in the city",
-                        assetId: "sax-in-the-city",
-                        md5ext: "sax-in-the-city.wav",
+                        name: "Celebrate",
+                        assetId: "celebrate",
+                        md5ext: "celebrate.wav",
                         dataFormat: 'wav',
                     },
                     {
