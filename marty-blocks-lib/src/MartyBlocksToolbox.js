@@ -469,7 +469,7 @@ export function MartyBlocksToolbox_disco() {
 }
 
 export function MartyBlocksToolbox_sound(soundName) {
-    return ""; // remove this when sound fw is ready
+    // return ""; // remove this when sound fw is ready
     return `
         <!--Marty blocks-->
         <block type="mv2_playSound" >
