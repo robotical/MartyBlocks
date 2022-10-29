@@ -1349,6 +1349,7 @@ class Scratch3Mv2Blocks {
   }
 
   _addVolumeEffect(audioContext, playerNew, volume) {
+    if (!volume) volume = 0.00001;
     const { input, output } = new VolumeEffect(
       audioContext,
       volume,
