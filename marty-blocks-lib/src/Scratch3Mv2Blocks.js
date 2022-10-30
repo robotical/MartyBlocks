@@ -1434,10 +1434,11 @@ class Scratch3Mv2Blocks {
     //can be anything but make it a multiple of 576 to make encoders life easier
     const sampleBlockSize = 1152;
     // const bitRate = mv2Interface.mp3EncodingBitRate || 16;
-    const bitRate = mv2Interface.debugBitRate || 16;
-    const sampleRate = mv2Interface.debugSampleRate || 11025;
+
+    const bitRate = mv2Interface.mp3EncodingBitRate || 16;
+    const sampleRate = mv2Interface.mp3EncodingSampleRate || 11025;
     console.log(`CONVERTING TO ${bitRate} BIT MP3 WITH ${sampleRate} SAMPLE RATE`);
-    const avgFlag = !!mv2Interface.debugAvgFlag;
+    const avgFlag = !!!mv2Interface.mp3EncodingAvgFlag;
     const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, bitRate, avgFlag);
     const mp3Data = [];
     for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {

@@ -62,7 +62,9 @@ class Mv2Interface extends EventDispatcher {
     this.commandPromise = null;
     this.systemInfo = null;
     this.mp3EncodingBitRate = null;
-    this.onCommandReply = this.onCommandReply.bind(this);
+    this.mp3EncodingSampleRate = null;
+    this.mp3EncodingAvgFlag = null;
+      this.onCommandReply = this.onCommandReply.bind(this);
     this.sendCommand = this.sendCommand.bind(this);
     this.saveScratchFile = this.saveScratchFile.bind(this);
     this.loadScratchFile = this.loadScratchFile.bind(this);
