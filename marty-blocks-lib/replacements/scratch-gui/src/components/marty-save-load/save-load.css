@@ -3,62 +3,68 @@
 @import "../../css/z-index.css";
 @import "../../css/typography.css";
 
-.button {
-    height: 2rem;
-    padding: 0.35rem;
-    outline: none;
-    background: white;
-    border-radius: 0.5rem;
-    border: 1px solid $ui-black-transparent;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: 0.2s;
-    user-select: none;
-    margin: 0px;
-}
 
-.main-content {
+.main-container {
     background-color: $ui-white;
     border: 1px solid $ui-black-transparent;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    display: grid;
+    grid-template-rows: .15fr .85fr;
+    grid-template-columns: 1fr; 
     height: 100%;
+    width: 100%;
 }
 
-.block {
-    background-color: $ui-white;
+.header {
+    background-color: #B5D0EE;
     border: 1px solid $ui-black-transparent;
     padding: calc(2 * $space);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    column-gap: 2rem;
+    align-items: center;
 }
 
-.block-100 {
-    height: 100%;
-}
-
-.even-row {
-    background-color: $ui-secondary;
-}
-
-.odd-row {
+.content {
     background-color: $ui-tertiary;
+
 }
 
-.saveList{
-    margin:4px 4px;
-    padding:4px;
-    height: 85%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align:justify;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10;
+
+
+
+.button {
+    background-color: #608DC9;
+    outline: none;
+    border-radius: 2rem;
+    border: 1px solid $ui-black-transparent;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+    margin: 0px;
+    padding: 0 2rem;
+    height: 3rem;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
 }
 
-.error {
-    color: $error-light;
+.button-selected {
+    background-color: #F18921;
+}
+
+.button-title {
+    color: $ui-white;
+    font-size: 0.85rem;
     text-align: center;
+    margin: 0;
+    align-self: end
+}
+
+.button-subtitle {
+    color: $ui-white;
+    font-size: 0.7rem;
+    text-align: center;
+    margin: 0;
+    align-self: start
+
 }
