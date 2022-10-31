@@ -1221,7 +1221,7 @@ class Scratch3Mv2Blocks {
         });
       })
       .catch((err) => {
-        log.warn(err);
+        console.log(err);
       });
   }
 
