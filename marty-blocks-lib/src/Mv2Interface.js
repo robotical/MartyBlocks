@@ -191,6 +191,15 @@ class Mv2Interface extends EventDispatcher {
   }
 
   /**
+   * Load a scratch file
+   * @param {string} fileId File to load
+   * @returns {Promise} Promise
+   */
+  loadCloudScratchFile (fileId) {
+    
+  }
+
+  /**
    * List the saved scratch files
    * @returns {Promise} Promise
    */

@@ -13,6 +13,7 @@ import { activateTab, BLOCKS_TAB_INDEX } from "../../reducers/editor-tab";
 import styles from "./save-load.css";
 import { requestNewProject } from "../../reducers/project-state";
 import LocalStorage from "./local-storage/local-storage.jsx";
+import CloudStorage from "./cloud-storage/cloud-storage.jsx";
 
 class SaveLoad extends React.Component {
   constructor(props) {
@@ -25,9 +26,9 @@ class SaveLoad extends React.Component {
 
     let contentJSX;
     if (currentTab === "local-storage") {
-        contentJSX = <LocalStorage {...this.props}/>
+        contentJSX = <LocalStorage {...this.props} />;
     } else if (currentTab === "cloud-storage") {
-        contentJSX = null;
+        contentJSX = <CloudStorage {...this.props} />;
     }
 
     return (
