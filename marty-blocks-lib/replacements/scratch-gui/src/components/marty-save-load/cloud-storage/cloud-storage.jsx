@@ -37,7 +37,7 @@ class SaveLoad extends React.Component {
   }
 
   setloadFileName(loadFileName) {
-    const isValidFileName = loadFileName.length > 0 && loadFileName.length < 30;
+    const isValidFileName = loadFileName.length > 0 && loadFileName.length < 130;
     this.setState({ loadFileName, isValidFileName });
   }
 
@@ -71,14 +71,17 @@ class SaveLoad extends React.Component {
 
     let projectId = fileName;
     if (this.validURL(fileName)) {
-        projectId
+        if (!fileName.includes("http")) fileName = "https://" + fileName;
+        const url = new URL(fileName);
+        projectId = url.searchParams.get('p') || "";
     }
-    
+
     this.setState((oldState) => {
       return { ...oldState, isLoading: true };
     });
     try {
-      const base64Project = await mv2Interface.loadCloudScratchFile(fileName);
+      const base64Project = await mv2Interface.loadCloudScratchFile(projectId);
+      if (!base64Project) throw new Error("Couldn't find project with id: " + projectId);
       const blob = await fetch(base64Project);
       const arrayBuffer = await blob.arrayBuffer();
       vm.loadProject(arrayBuffer);
