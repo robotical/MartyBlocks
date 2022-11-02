@@ -137,6 +137,12 @@ class Mv2Interface extends EventDispatcher {
     this.sendCommand({ command: "audioStreaming", audioData: Array.from(audioData), duration });
   }
 
+  isStreamStarting() {
+    // this method will get replaced when we connect to martyConnector
+    console.log("In placeholder method: isStreamStarting");
+    return false;
+  }
+
   /**
    * Save a scratch file
    * @param {string} fileName Filename to save to
