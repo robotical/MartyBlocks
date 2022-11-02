@@ -1354,7 +1354,7 @@ class Scratch3Mv2Blocks {
           await new Promise((rslv) => setTimeout(rslv, 50));
           // as long as isStreamStarting() returns true, we keep checking
           // when it's false, we know stream onset has finished and so we resolve
-          if (mv2Interface.isStreamStarting())
+          if (mv2Interface.isStreamStarting)
             return checkIfStreamingStartFinished();
           return resolve();
         }
