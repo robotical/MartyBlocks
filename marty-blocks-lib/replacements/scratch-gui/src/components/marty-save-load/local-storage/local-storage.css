@@ -3,6 +3,24 @@
 @import "../../../css/z-index.css";
 @import "../../../css/typography.css";
 
+.save-header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #B5D0EE;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.new-save-title-container {
+    height: 100%;
+    padding: 1rem;
+    background-color: #608DC9;
+    color: white;
+}
+
+
 .button {
     height: 2rem;
     padding: 0.35rem;
@@ -18,7 +36,7 @@
 }
 
 .main-content {
-    background-color: $ui-white;
+    background-color: $ui-primary;
     border: 1px solid $ui-black-transparent;
     display: flex;
     flex-direction: column;
@@ -27,28 +45,44 @@
 }
 
 .block {
-    background-color: $ui-white;
-    border: 1px solid $ui-black-transparent;
+    background-color: $ui-primary;
     padding: calc(2 * $space);
     display: flex;
     flex-direction: column;
+}
+
+.saved-files-container { 
+    background-color: $ui-primary;
+    border: 2px solid $ui-black-transparent;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    padding: 0.3rem 1rem;
+    align-items: center;
+    border-radius: 10px;
+    border: 2px solid #eee;
+    background-color: #B5D0EE;
+}
+
+.saved-files-title {
+    padding: 1rem;
+    background-color: #608DC9;
+    color: white;
 }
 
 .block-100 {
     height: 100%;
 }
 
-.even-row {
-    background-color: $ui-secondary;
-}
-
-.odd-row {
-    background-color: $ui-tertiary;
-}
-
-.saveList{
-    margin:4px 4px;
-    padding:4px;
+.save-list{
+    padding: 1rem;
     height: 85%;
     overflow-x: hidden;
     overflow-y: auto;
@@ -56,6 +90,8 @@
     display: flex;
     flex-direction: column;
     margin-top: 10;
+    background-color: $ui-white;
+    height: 100%;
 }
 
 .error {
