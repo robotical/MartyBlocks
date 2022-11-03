@@ -5,7 +5,7 @@ const Cast = require("./util/cast");
 
 mv2Interface = new Mv2Interface();
 
-const LED_EYES_FW_VERSION = "2.0.1"; // greater versions than this support the LED_EYE functionality
+const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality
 
 // device type IDs for Robotical Standard Add-ons
 const RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE = "VCNL4200";
@@ -274,9 +274,6 @@ class Scratch3Mv2Blocks {
       return mv2Interface.send_REST(
         "notification/warn-message/You are not currently connected to a Marty. Please connect."
       );
-      // return alert(
-      //   "You are not currently connected to a Marty. Please connect."
-      // );
     }
     return martyBlock();
   }
@@ -439,39 +436,90 @@ class Scratch3Mv2Blocks {
     return addressList;
   }
 
-  LEDEyesColourLEDs(args, util) {
-    console.log(args, "Scratch3Mv2Blocks.js", "line: ", "438");
-    console.log(util, "Scratch3Mv2Blocks.js", "line: ", "439");
+  LEDColourPickerApiCommandBuilder(side, colorsArray) {
+    let command = `led/${side}/color/persist?`;
+    for (let i = 0; i < colorsArray.length; i++) {
+      let color = colorsArray[i].replace("#", "");
+      if (color === "5ba591") color = "000000"; // that's our "off" colour
+      const ledIDHex = this.ledIDtoHex(this.ledIdMapping(i, true));
+      let end = "&";
+      if (i === colorsArray.length) end = "";
+      command += `${ledIDHex}=${color}${end}`;
+    }
+    return command;
   }
 
-  LEDEyesColour(args, util) {
-    const colour = args.COLOUR_LED_EYES;
+  LEDEyesColourLEDs(args, util) {
+    let coloursArray = args.COLOUR_LED_EYES;
+    if (typeof coloursArray === "string") {
+      coloursArray = new Array(12).fill(coloursArray);
+    }
     const side = args.SIDE;
-    let marty_cmd = `ledeyes/${colour}?side=${side}`;
+    let martyCmd = this.LEDColourPickerApiCommandBuilder(
+      side,
+      coloursArray
+    );
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      martyCmd = "notification/fw-needs-update";
+    }
+    console.log(martyCmd);
+    mv2Interface.send_REST(martyCmd);
+    return new Promise((resolve) => setTimeout(resolve, 200));
+  }
+
+
+  LEDEyesColour(args, util) {
+    const colour = args.COLOUR_LED_EYES.replace("#", "");
+    const side = args.BOARDTYPE;
+    let marty_cmd = `led/${side}/color/${colour}`;
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
       marty_cmd = "notification/fw-needs-update";
     }
-
+    console.log(marty_cmd);
     mv2Interface.send_REST(marty_cmd);
+    return new Promise((resolve) => setTimeout(resolve, 200));
+  }
+
+  ledIdMapping(id, isFromColorPicker) {
+    // map led position id to code id
+    // the order starting from the top id is: 6 5 4 3 2 1 0 11 10 9 8 7
+    const MAP = [6, 5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7];
+    if (isFromColorPicker) {
+      return MAP[(id + 3) % 12];
+    }
+    return MAP[id];
+  }
+
+  ledIDtoHex(ledID) {
+    if (ledID < 10)  return "0" + ledID.toString();
+    if (ledID === 10) return "0A";
+    if (ledID === 11) return "0B";
+    return null;
   }
 
   LEDEyesColour_SpecificLED(args, util) {
-    const colour = Scratch3Mv2Blocks.toRgbColorList(args.COLOUR_LED_EYES);
-    const colorStr = this.colorToLEDAddonStr(colour);
-
+    const colour = args.COLOUR_LED_EYES.replace("#", "");
+    const ledID = +args.LED_POSITION;
+    if (ledID < 0 || ledID > 11) {
+      mv2Interface.send_REST("notification/warn-message/LED id has to be between 0 and 11");
+      return new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    const ledIDHex = this.ledIDtoHex(this.ledIdMapping(ledID));
     const side = args.SIDE;
-    const ledPosition = args.LED_POSITION;
-    let marty_cmd = `ledeyes/${colorStr}?side=${side}&ledPosition=${ledPosition}`;
-    console.log(marty_cmd);
+
+    let marty_cmd = `led/${side}/setled/${ledIDHex}/${colour}`;
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
       marty_cmd = "notification/fw-needs-update";
     }
-
+    console.log(marty_cmd);
     mv2Interface.send_REST(marty_cmd);
+    return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
   static componentToHex(c) {
@@ -554,23 +602,13 @@ class Scratch3Mv2Blocks {
     const filterBoardType = args.BOARDTYPE;
     // let filterBoardType = this.getDiscoBoardType(boardChoice);
     const patternChoice = args.PATTERN;
-    let patternProgram;
-
-    if (patternChoice == "0") {
-      patternProgram = "10";
-    } else if (patternChoice == "1") {
-      patternProgram = "11";
-    } else if (patternChoice == "2") {
-      patternProgram = "01";
-    } else {
-      //default to off
-      patternProgram = "01";
+    if (patternChoice === "off") {
+      console.log(`led/${filterBoardType}/off`);
+      mv2Interface.send_REST(`led/${filterBoardType}/off`);
+      return new Promise((resolve) => setTimeout(resolve, resolveTime));
     }
-
-    mv2Interface.send_REST(
-      `elem/${filterBoardType}/json?cmd=raw&hexWr=${patternProgram}`
-    );
-    // console.log(addressList.length);
+    console.log(`led/${filterBoardType}/pattern/${patternChoice}`);
+    mv2Interface.send_REST(`led/${filterBoardType}/pattern/${patternChoice}`);
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
@@ -1224,7 +1262,7 @@ class Scratch3Mv2Blocks {
         });
       })
       .catch((err) => {
-        log.warn(err);
+        console.log(err);
       });
   }
 
@@ -1348,10 +1386,23 @@ class Scratch3Mv2Blocks {
         this._prepareNewPlayer(playerNew, effects.pitch.ratio);
         this._addVolumeEffect(audioContext, playerNew, target.volume / 100);
       }
+      return new Promise((resolve) => {
+        async function checkIfStreamingStartFinished() {
+          // 'busy wait' to not overload the app
+          await new Promise((rslv) => setTimeout(rslv, 50));
+          // as long as isStreamStarting() returns true, we keep checking
+          // when it's false, we know stream onset has finished and so we resolve
+          if (mv2Interface.isStreamStarting)
+            return checkIfStreamingStartFinished();
+          return resolve();
+        }
+        checkIfStreamingStartFinished();
+      });
     }
   }
 
   _addVolumeEffect(audioContext, playerNew, volume) {
+    if (!volume) volume = 0.00001;
     const { input, output } = new VolumeEffect(
       audioContext,
       volume,
@@ -1435,9 +1486,13 @@ class Scratch3Mv2Blocks {
 
     //can be anything but make it a multiple of 576 to make encoders life easier
     const sampleBlockSize = 1152;
+    // const bitRate = mv2Interface.mp3EncodingBitRate || 16;
+
     const bitRate = mv2Interface.mp3EncodingBitRate || 16;
-    console.log(`CONVERTING TO ${bitRate} BIT MP3 WITH 11025 SAMPLE RATE`);
-    const mp3encoder = new lamejs.Mp3Encoder(1, 11025, bitRate);
+    const sampleRate = mv2Interface.mp3EncodingSampleRate || 11025;
+    console.log(`CONVERTING TO ${bitRate} BIT MP3 WITH ${sampleRate} SAMPLE RATE`);
+    const avgFlag = !!!mv2Interface.mp3EncodingAvgFlag;
+    const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, bitRate, avgFlag);
     const mp3Data = [];
     for (var i = 0; i < rawSoundData.length; i += sampleBlockSize) {
       const sampleChunk = rawSoundData.subarray(i, i + sampleBlockSize);

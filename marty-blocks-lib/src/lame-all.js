@@ -1054,7 +1054,7 @@ function lamejs() {
             }
             /* ns-bass tweaks */
             if (Math.abs(abr_switch_map[r].nsbass) > 0) {
-                var k = (int)(abr_switch_map[r].nsbass * 4);
+                var k = (abr_switch_map[r].nsbass * 4);
                 if (k < 0)
                     k += 64;
                 gfp.exp_nspsytune = gfp.exp_nspsytune | (k << 2);
@@ -2547,7 +2547,7 @@ function lamejs() {
              */
             if (gfp.brate > 320) {
                 /* in freeformat the buffer is constant */
-                maxmp3buf = 8 * ((int) ((gfp.brate * 1000)
+                maxmp3buf = 8 * ( ((gfp.brate * 1000)
                         / (gfp.out_samplerate / 1152) / 8 + .5));
             } else {
                 /*
@@ -2562,7 +2562,7 @@ function lamejs() {
                  */
     
                 if (gfp.strict_ISO) {
-                    maxmp3buf = 8 * ((int) (320000 / (gfp.out_samplerate / 1152) / 8 + .5));
+                    maxmp3buf = 8 * ( (320000 / (gfp.out_samplerate / 1152) / 8 + .5));
                 }
             }
     
@@ -5313,7 +5313,7 @@ function lamejs() {
         /* VBR control */
         this.VBR = null;
         /**
-         * Range [0,...,1[
+         * Range [0,...,1]
          */
         this.VBR_q_frac = 0.;
         /**
@@ -5480,6 +5480,91 @@ function lamejs() {
         this.A = new_int(0 | (GainAnalysis.STEPS_per_dB * GainAnalysis.MAX_dB));
         this.B = new_int(0 | (GainAnalysis.STEPS_per_dB * GainAnalysis.MAX_dB));
     
+    }
+
+    /**
+ * encode a frame with a disired average bitrate
+ * 
+ */
+ function ABRIterationLoop(quantize) {
+
+    this.quantize = quantize;
+
+    this.iteration_loop = function(gfp, pe, ms_ener_ratio, ratio) {
+        var gfc = gfp.internal_flags;
+        var l3_xmin = new_float(L3Side.SFBMAX);
+        var xrpow = new_float(576);
+        var targ_bits = [new_int(2), new_int(2)]
+        var max_frame_bits = new_int(1);
+        var analog_silence_bits = new_int(1);
+        var l3_side = gfc.l3_side;
+
+        var mean_bits = 0;
+
+        this.quantize.calc_target_bits(gfp, pe, ms_ener_ratio, targ_bits,
+                analog_silence_bits, max_frame_bits);
+
+        /*
+        * encode granules
+        */
+        for (var gr = 0; gr < gfc.mode_gr; gr++) {
+
+            if (gfc.mode_ext == Encoder.MPG_MD_MS_LR) {
+                this.quantize.ms_convert(gfc.l3_side, gr);
+            }
+            for (var ch = 0; ch < gfc.channels_out; ch++) {
+                var adjust, masking_lower_db;
+                var cod_info = l3_side.tt[gr][ch];
+
+                if (cod_info.block_type != Encoder.SHORT_TYPE) {
+                    // NORM, START or STOP type
+                    adjust = 0;
+                    masking_lower_db = gfc.PSY.mask_adjust - adjust;
+                } else {
+                    adjust = 0;
+                    masking_lower_db = gfc.PSY.mask_adjust_short - adjust;
+                }
+                gfc.masking_lower = Math.pow(10.0,
+                        masking_lower_db * 0.1);
+
+                /*
+                * cod_info, scalefac and xrpow get initialized in
+                * init_outer_loop
+                */
+                this.quantize.init_outer_loop(gfc, cod_info);
+                if (this.quantize.init_xrpow(gfc, cod_info, xrpow)) {
+                    /*
+                    * xr contains energy we will have to encode calculate the
+                    * masking abilities find some good quantization in
+                    * outer_loop
+                    */
+                    var ath_over = this.quantize.qupvt.calc_xmin(gfp,
+                            ratio[gr][ch], cod_info, l3_xmin);
+                    if (0 == ath_over) /* analog silence */
+                        targ_bits[gr][ch] = analog_silence_bits[0];
+
+                    this.quantize.outer_loop(gfp, cod_info, l3_xmin, xrpow, ch,
+                            targ_bits[gr][ch]);
+                }
+                this.quantize.iteration_finish_one(gfc, gr, ch);
+            } /* ch */
+        } /* gr */
+
+        /*
+        * find a bitrate which can refill the resevoir to positive size.
+        */
+        for (gfc.bitrate_index = gfc.VBR_min_bitrate; gfc.bitrate_index <= gfc.VBR_max_bitrate; gfc.bitrate_index++) {
+
+            var mb = new MeanBits(mean_bits);
+            var rc = this.quantize.rv.ResvFrameBegin(gfp, mb);
+            mean_bits = mb.bits;
+            if (rc >= 0)
+                break;
+        }
+        assert (gfc.bitrate_index <= gfc.VBR_max_bitrate);
+
+        this.quantize.rv.ResvFrameEnd(gfc, mean_bits);
+        }
     }
     
     
@@ -8159,13 +8244,13 @@ function lamejs() {
             for (gr = 0; gr < gfc.mode_gr; gr++) {
                 var sum = 0;
                 for (ch = 0; ch < gfc.channels_out; ch++) {
-                    targ_bits[gr][ch] = (int)(res_factor * mean_bits);
+                    targ_bits[gr][ch] = (res_factor * mean_bits);
     
                     if (pe[gr][ch] > 700) {
-                        var add_bits = (int)((pe[gr][ch] - 700) / 1.4);
+                        var add_bits = ((pe[gr][ch] - 700) / 1.4);
     
                         var cod_info = l3_side.tt[gr][ch];
-                        targ_bits[gr][ch] = (int)(res_factor * mean_bits);
+                        targ_bits[gr][ch] = (res_factor * mean_bits);
     
                         /* short blocks use a little extra, no matter what the pe */
                         if (cod_info.block_type == Encoder.SHORT_TYPE) {
@@ -14235,6 +14320,9 @@ function lamejs() {
          *
          ********************************************************************/
         this.lame_init_params = function (gfp) {
+            function linear_int(a, b, m) {
+                return a + m * (b - a);
+            }
             var gfc = gfp.internal_flags;
     
             gfc.Class_ID = 0;
@@ -14281,7 +14369,7 @@ function lamejs() {
             if (gfp.VBR == VbrMode.vbr_off && gfp.compression_ratio > 0) {
     
                 if (gfp.out_samplerate == 0)
-                    gfp.out_samplerate = map2MP3Frequency((int)(0.97 * gfp.in_samplerate));
+                    gfp.out_samplerate = map2MP3Frequency((0.97 * gfp.in_samplerate));
                 /*
                  * round up with a margin of 3 %
                  */
@@ -15382,12 +15470,13 @@ function lamejs() {
         }
     }
     
-    function Mp3Encoder(channels, samplerate, kbps) {
-        if (arguments.length != 3) {
-            console.error('WARN: Mp3Encoder(channels, samplerate, kbps) not specified');
+    function Mp3Encoder(channels, samplerate, kbps, avg) {
+        if (arguments.length != 4) {
+            console.error('WARN: Mp3Encoder(channels, samplerate, kbps, avg) not specified');
             channels = 1;
             samplerate = 44100;
             kbps = 128;
+            avg = false;
         }
         var lame = new Lame();
         var gaud = new GetAudio();
@@ -15421,12 +15510,21 @@ function lamejs() {
         gfp.num_channels = channels;
         gfp.in_samplerate = samplerate;
         gfp.brate = kbps;
-        gfp.mode = MPEGMode.STEREO;
+        gfp.mode = MPEGMode.STEREO; // perhaps we could switch to MONO?
         gfp.quality = 3;
         gfp.bWriteVbrTag = false;
         gfp.disable_reservoir = true;
         gfp.write_id3tag_automatic = false;
     
+        if (avg) {
+            gfp.VBR = VbrMode.vbr_abr;
+            // gfp.VBR_q_frac = 0.5;
+            // gfp.VBR_q = 5; // index for [5.7, 6.5, 7.3, 8.2, 10, 11.9, 13, 14,15, 16.5];
+            gfp.VBR_min_bitrate_kbps = kbps - 4;
+            gfp.VBR_mean_bitrate_kbps = kbps;
+            gfp.VBR_max_bitrate_kbps = kbps + 4;
+        }
+
         var retcode = lame.lame_init_params(gfp);
         var maxSamples = 1152;
         var mp3buf_size = 0 | (1.25 * maxSamples + 7200);

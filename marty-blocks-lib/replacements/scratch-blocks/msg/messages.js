@@ -643,9 +643,9 @@ Blockly.Msg.DROPDOWN_OPTION_YELLOW = 'yellow';
 Blockly.Msg.DROPDOWN_OPTION_WHITE = 'white';
 Blockly.Msg.DROPDOWN_OPTION_OFF = 'off';
 Blockly.Msg.DROPDOWN_OPTION_ZERO = '0';
-Blockly.Msg.DROPDOWN_OPTION_ONE = '1';
-Blockly.Msg.DROPDOWN_OPTION_TWO = '2';
-Blockly.Msg.DROPDOWN_OPTION_THREE = '3';
+Blockly.Msg.DROPDOWN_OPTION_ONE = 'show-off';
+Blockly.Msg.DROPDOWN_OPTION_TWO = 'pinwheel';
+Blockly.Msg.DROPDOWN_OPTION_THREE = 'off';
 
 Blockly.Msg.COLOUR_RED = 'Red';
 Blockly.Msg.COLOUR_YELLOW = 'Yellow';
