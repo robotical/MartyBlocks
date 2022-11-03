@@ -1,0 +1,100 @@
+@import "../../../css/units.css";
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
+@import "../../../css/typography.css";
+
+.save-header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #B5D0EE;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.new-save-title-container {
+    height: 100%;
+    padding: 1rem;
+    background-color: #608DC9;
+    color: white;
+}
+
+
+.button {
+    height: 2rem;
+    padding: 0.35rem;
+    outline: none;
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid $ui-black-transparent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.2s;
+    user-select: none;
+    margin: 0px;
+}
+
+.main-content {
+    background-color: $ui-primary;
+    border: 1px solid $ui-black-transparent;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.block {
+    background-color: $ui-primary;
+    padding: calc(2 * $space);
+    display: flex;
+    flex-direction: column;
+}
+
+.saved-files-container { 
+    background-color: $ui-primary;
+    border: 2px solid $ui-black-transparent;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    padding: 0.3rem 1rem;
+    align-items: center;
+    border-radius: 10px;
+    border: 2px solid #eee;
+    background-color: #B5D0EE;
+}
+
+.saved-files-title {
+    padding: 1rem;
+    background-color: #608DC9;
+    color: white;
+}
+
+.block-100 {
+    height: 100%;
+}
+
+.save-list{
+    padding: 1rem;
+    height: 85%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align:justify;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10;
+    background-color: $ui-white;
+    height: 100%;
+}
+
+.error {
+    color: $error-light;
+    text-align: center;
+}
