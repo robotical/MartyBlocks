@@ -492,7 +492,6 @@ Blockly.Extensions.register(
     const RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT = "LEDfoot";
     const RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM = "LEDarm";
     const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
-
     this.getInput("BOARDTYPE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
@@ -504,14 +503,49 @@ Blockly.Extensions.register(
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
+        let armsOptionAdded = false;
+        let eyesOptionAdded = false;
+        let feetOptionAdded = false;
         for (const addon of addons) {
           if (
-            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT ||
-            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM ||
-            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT
           ) {
+            if (!feetOptionAdded) {
+              addonOptions.push([
+                Blockly.Msg.DROPDOWN_OPTION_FEET,
+                RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT
+              ]);
+              feetOptionAdded = true;
+            }
             addonOptions.push([addon.name, addon.name]);
           }
+          if (
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
+          ) {
+            if (!eyesOptionAdded) {
+              addonOptions.push([
+                Blockly.Msg.DROPDOWN_OPTION_EYES,
+                RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
+              ]);
+              eyesOptionAdded = true;
+            }
+            addonOptions.push([addon.name, addon.name]);
+          }
+          if (
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM
+          ) {
+            if (!armsOptionAdded) {
+              addonOptions.push([
+                Blockly.Msg.DROPDOWN_OPTION_ARMS,
+                RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM
+              ]);
+              armsOptionAdded = true;
+            }
+            addonOptions.push([addon.name, addon.name]);
+          }
+
+
+
         }
         return addonOptions.length ? addonOptions : defaultOptions;
       }),
@@ -523,7 +557,8 @@ Blockly.Extensions.register(
   "dynamic_menu_LED_eyes_side_extension",
   function () {
     const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
-
+    const RIC_WHOAMI_TYPE_CODE_ADDON_LEFTLEDEYE = "LeftLEDeye";
+    const RIC_WHOAMI_TYPE_CODE_ADDON_RIGHTLEDEYE = "RightLEDeye";
     this.getInput("SIDE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
@@ -535,14 +570,21 @@ Blockly.Extensions.register(
         const addons = JSON.parse(mv2Interface.addons).addons;
         if (!addons) return defaultOptions;
         const addonOptions = [];
+        let bothOptionAdded = false;
         for (const addon of addons) {
-          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE) {
-            addonOptions.push(
-              [Blockly.Msg.MV2_LEDEYESLEFT, "left"],
-              [Blockly.Msg.MV2_LEDEYESRIGHT, "right"],
-              [Blockly.Msg.MV2_LEDEYESBOTH, "both"]
-            );
-            break;
+          if (
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE ||
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEFTLEDEYE ||
+            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_RIGHTLEDEYE
+          ) {
+            if (!bothOptionAdded) {
+              addonOptions.push([
+                Blockly.Msg.MV2_LEDEYESBOTH,
+                RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
+              ]);
+              bothOptionAdded = true;
+            }
+            addonOptions.push([addon.name, addon.name]);
           }
         }
         return addonOptions.length ? addonOptions : defaultOptions;

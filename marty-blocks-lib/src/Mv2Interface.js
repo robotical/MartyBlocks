@@ -64,13 +64,15 @@ class Mv2Interface extends EventDispatcher {
     this.mp3EncodingBitRate = null;
     this.mp3EncodingSampleRate = null;
     this.mp3EncodingAvgFlag = null;
-      this.onCommandReply = this.onCommandReply.bind(this);
+    this.isStreamStarting = null;
+    this.onCommandReply = this.onCommandReply.bind(this);
     this.sendCommand = this.sendCommand.bind(this);
     this.saveScratchFile = this.saveScratchFile.bind(this);
     this.loadScratchFile = this.loadScratchFile.bind(this);
     this.listSavedScratchFiles = this.listSavedScratchFiles.bind(this);
     this.deleteScratchFile = this.deleteScratchFile.bind(this);
     this.setRSSI = this.setRSSI.bind(this);
+    this.setIsStreamStarting = this.setIsStreamStarting.bind(this);
   }
 
   getMartyFwVersion() {
@@ -137,6 +139,10 @@ class Mv2Interface extends EventDispatcher {
   streamAudio(audioData, duration) {
     console.log(`streamAudio ${audioData.length}`);
     this.sendCommand({ command: "audioStreaming", audioData: Array.from(audioData), duration });
+  }
+
+  setIsStreamStarting(isStreamStarting) {
+    this.isStreamStarting = isStreamStarting;
   }
 
   /**
