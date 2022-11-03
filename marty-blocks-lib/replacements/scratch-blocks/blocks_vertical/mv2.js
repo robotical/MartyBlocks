@@ -777,9 +777,9 @@ Blockly.Blocks['mv2_discoChangeBlockPattern'] = {
           "type": "field_dropdown",
           "name": "PATTERN",
           "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_ONE, '0'],
-            [Blockly.Msg.DROPDOWN_OPTION_TWO, '1'],
-            [Blockly.Msg.DROPDOWN_OPTION_OFF, '2']
+            [Blockly.Msg.DROPDOWN_OPTION_ONE, 'show-off'],
+            [Blockly.Msg.DROPDOWN_OPTION_TWO, 'pinwheel'],
+            [Blockly.Msg.DROPDOWN_OPTION_OFF, 'off']
           ]
         }
       ],
@@ -811,14 +811,14 @@ Blockly.Blocks['mv2_LEDEyesColour'] = {
         },
         {
           "type": "input_dummy",
-          "name": "SIDE",
+          "name": "BOARDTYPE",
         },
         {
           "type": "input_value",
           "name": "COLOUR_LED_EYES"
         }
       ],
-      "extensions": ["shape_statement", "dynamic_menu_LED_eyes_side_extension"]
+      "extensions": ["shape_statement", "dynamic_menu_disco_options_extension"]
     });
   }
 };
@@ -971,41 +971,6 @@ Blockly.Blocks['mv2_HSLOperator'] = {
   }
 };
 
-Blockly.Blocks['mv2_discoChangeBlockColour'] = {
-  /**
-   * DISCO MARTY BLOCK
-   * Block to change the colour of both arms, 
-   * both legs, both feet or all to a preset colour
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      "message0": Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR,
-      "category": Blockly.Categories.looks,
-      "colour": 164,
-      "args0": [
-        {
-          "type": "field_image",
-          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
-          "width": 40,
-          "height": 40
-        },
-        {
-          "type": "field_vertical_separator"
-        },
-        {
-          "type": "input_dummy",
-          "name": "BOARDTYPE",
-        },
-        {
-          "type": "input_value",
-          "name": "COLOR"
-        }
-      ],
-      "extensions": ["shape_statement", "dynamic_menu_disco_options_extension"]
-    });
-  }
-};
 
 Blockly.Blocks['mv2_discoChangeBackColour'] = {
   /**

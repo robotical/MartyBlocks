@@ -358,9 +358,9 @@ export function MartyBlocksToolbox_disco() {
         </value>
     </block>
 
-    <!-- <block type="mv2_LEDEyesColour" >   UNCOMMENT THIS WHEN LED EYES ARE READY
+    <block type="mv2_LEDEyesColour" >  
         <value>
-            <field name="SIDE"></field>
+            <field name="BOARDTYPE"></field>
         </value>
         <value name="COLOUR_LED_EYES">
             <shadow type="colour_picker"/>
@@ -388,7 +388,7 @@ export function MartyBlocksToolbox_disco() {
         <value name="COLOUR_LED_EYES">
             <shadow type="colour_picker_LED_eyes" />
         </value>
-    </block> -->
+    </block>
 
     <block type="mv2_RGBOperator">
       <value name="NUM_R">
@@ -426,15 +426,6 @@ export function MartyBlocksToolbox_disco() {
       </value>
     </block>
 
-    <block type="mv2_discoChangeBlockColour" >
-        <value>
-            <field name="BOARDTYPE"></field>
-        </value>
-        <value name="COLOR">
-            <shadow type="colour_picker"/>
-        </value>
-    </block>
-
     <block type="mv2_discoChangeBackColour" >
         <value name="COLOR">
             <shadow type="colour_picker"/>
@@ -469,7 +460,6 @@ export function MartyBlocksToolbox_disco() {
 }
 
 export function MartyBlocksToolbox_sound(soundName) {
-    return ""; // remove this when sound fw is ready
     return `
         <!--Marty blocks-->
         <block type="mv2_playSound" >
