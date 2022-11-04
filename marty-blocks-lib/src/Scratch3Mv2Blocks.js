@@ -468,7 +468,7 @@ class Scratch3Mv2Blocks {
     let boardtypeObj;
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
-    } catch {
+    } catch (e) {
       boardtypeObj = boardtypeStr;
     }
 
@@ -507,7 +507,7 @@ class Scratch3Mv2Blocks {
     let boardtypeObj;
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
-    } catch {
+    } catch (e) {
       boardtypeObj = boardtypeStr;
     }
     const boardtypeWhoAmI = boardtypeObj.whoAmI;
@@ -629,7 +629,7 @@ class Scratch3Mv2Blocks {
     let boardtypeObj;
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
-    } catch {
+    } catch (e) {
       boardtypeObj = boardtypeStr;
     }
     const patternChoice = args.PATTERN;
@@ -675,7 +675,7 @@ class Scratch3Mv2Blocks {
     let boardtypeObj;
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
-    } catch {
+    } catch (e) {
       boardtypeObj = boardtypeStr;
     }
     const regionChoice = args.REGION;
