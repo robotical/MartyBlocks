@@ -369,7 +369,7 @@ export function MartyBlocksToolbox_disco() {
 
     <block type="mv2_LEDEyesColour_SpecificLED" >
         <value>
-            <field name="SIDE"></field>
+            <field name="BOARDTYPE"></field>
         </value>
         <value name="LED_POSITION">
             <shadow type="math_number">

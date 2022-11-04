@@ -52,10 +52,6 @@ class Scratch3Mv2Blocks {
 
       mv2_getReady: (args, utils) =>
         this._martyIsConnectedWrapper(this.getReady.bind(this, args, utils)),
-      mv2_discoChangeBlockColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.discoChangeBlockColour.bind(this, args, utils)
-        ),
       mv2_discoChangeBackColour: (args, utils) =>
         this._martyIsConnectedWrapper(
           this.discoChangeBackColour.bind(this, args, utils)
@@ -441,10 +437,10 @@ class Scratch3Mv2Blocks {
     for (let i = 0; i < colorsArray.length; i++) {
       let color = colorsArray[i].replace("#", "");
       if (color === "5ba591") color = "000000"; // that's our "off" colour
-      const ledIDHex = this.ledIDtoHex(this.ledIdMapping(i, true));
+      const ledIdMapped = this.ledIdMapping(i, true);
       let end = "&";
       if (i === colorsArray.length) end = "";
-      command += `${ledIDHex}=${color}${end}`;
+      command += `${ledIdMapped}=${color}${end}`;
     }
     return command;
   }
@@ -455,10 +451,7 @@ class Scratch3Mv2Blocks {
       coloursArray = new Array(12).fill(coloursArray);
     }
     const side = args.SIDE;
-    let martyCmd = this.LEDColourPickerApiCommandBuilder(
-      side,
-      coloursArray
-    );
+    let martyCmd = this.LEDColourPickerApiCommandBuilder(side, coloursArray);
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
@@ -469,11 +462,17 @@ class Scratch3Mv2Blocks {
     return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
-
   LEDEyesColour(args, util) {
     const colour = args.COLOUR_LED_EYES.replace("#", "");
-    const side = args.BOARDTYPE;
-    let marty_cmd = `led/${side}/color/${colour}`;
+    const boardtypeStr = args.BOARDTYPE;
+    let boardtypeObj;
+    try {
+      boardtypeObj = JSON.parse(boardtypeStr);
+    } catch {
+      boardtypeObj = boardtypeStr;
+    }
+
+    let marty_cmd = `led/${boardtypeObj.name}/color/${colour}`;
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
@@ -495,7 +494,7 @@ class Scratch3Mv2Blocks {
   }
 
   ledIDtoHex(ledID) {
-    if (ledID < 10)  return "0" + ledID.toString();
+    if (ledID < 10) return "0" + ledID.toString();
     if (ledID === 10) return "0A";
     if (ledID === 11) return "0B";
     return null;
@@ -504,14 +503,41 @@ class Scratch3Mv2Blocks {
   LEDEyesColour_SpecificLED(args, util) {
     const colour = args.COLOUR_LED_EYES.replace("#", "");
     const ledID = +args.LED_POSITION;
-    if (ledID < 0 || ledID > 11) {
-      mv2Interface.send_REST("notification/warn-message/LED id has to be between 0 and 11");
-      return new Promise((resolve) => setTimeout(resolve, 200));
+    const boardtypeStr = args.BOARDTYPE;
+    let boardtypeObj;
+    try {
+      boardtypeObj = JSON.parse(boardtypeStr);
+    } catch {
+      boardtypeObj = boardtypeStr;
     }
-    const ledIDHex = this.ledIDtoHex(this.ledIdMapping(ledID));
-    const side = args.SIDE;
+    const boardtypeWhoAmI = boardtypeObj.whoAmI;
+    if (boardtypeWhoAmI === "LEDeye") {
+      if (ledID < 0 || ledID > 11) {
+        mv2Interface.send_REST(
+          "notification/warn-message/LED id for eyes has to be between 0 and 11"
+        );
+        return new Promise((resolve) => setTimeout(resolve, 200));
+      }
+    }
+    if (boardtypeWhoAmI === "LEDarm") {
+      if (ledID < 0 || ledID > 25) {
+        mv2Interface.send_REST(
+          "notification/warn-message/LED id for arms has to be between 0 and 25"
+        );
+        return new Promise((resolve) => setTimeout(resolve, 200));
+      }
+    }
+    if (boardtypeWhoAmI === "LEDfoot") {
+      if (ledID < 0 || ledID > 19) {
+        mv2Interface.send_REST(
+          "notification/warn-message/LED id for feet has to be between 0 and 19"
+        );
+        return new Promise((resolve) => setTimeout(resolve, 200));
+      }
+    }
 
-    let marty_cmd = `led/${side}/setled/${ledIDHex}/${colour}`;
+    const ledIdMapped = this.ledIdMapping(ledID);
+    let marty_cmd = `led/${boardtypeObj.name}/setled/${ledIdMapped}/${colour}`;
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
@@ -599,16 +625,21 @@ class Scratch3Mv2Blocks {
     // const addons = JSON.parse(mv2Interface.addons).addons;
     //so if it's set in a forever loop give 0.2s break between each update
     const resolveTime = 200;
-    const filterBoardType = args.BOARDTYPE;
-    // let filterBoardType = this.getDiscoBoardType(boardChoice);
+    const boardtypeStr = args.BOARDTYPE;
+    let boardtypeObj;
+    try {
+      boardtypeObj = JSON.parse(boardtypeStr);
+    } catch {
+      boardtypeObj = boardtypeStr;
+    }
     const patternChoice = args.PATTERN;
     if (patternChoice === "off") {
-      console.log(`led/${filterBoardType}/off`);
-      mv2Interface.send_REST(`led/${filterBoardType}/off`);
+      console.log(`led/${boardtypeObj.name}/off`);
+      mv2Interface.send_REST(`led/${boardtypeObj.name}/off`);
       return new Promise((resolve) => setTimeout(resolve, resolveTime));
     }
-    console.log(`led/${filterBoardType}/pattern/${patternChoice}`);
-    mv2Interface.send_REST(`led/${filterBoardType}/pattern/${patternChoice}`);
+    console.log(`led/${boardtypeObj.name}/pattern/${patternChoice}`);
+    mv2Interface.send_REST(`led/${boardtypeObj.name}/pattern/${patternChoice}`);
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
@@ -637,32 +668,20 @@ class Scratch3Mv2Blocks {
     );
   }
 
-  discoChangeBlockColour(args, util) {
-    // const addons = JSON.parse(mv2Interface.addons).addons;
-    const resolveTime = 200;
-    const color = Scratch3Mv2Blocks.toRgbColorList(args.COLOR);
-    const ledDeviceName = args.BOARDTYPE;
-
-    const colorStr = this.colorToLEDAddonStr(color);
-    mv2Interface.send_REST(
-      `elem/${ledDeviceName}/json?cmd=raw&hexWr=02${colorStr}`
-    );
-
-    return new Promise((resolve) => setTimeout(resolve, resolveTime));
-  }
-
   discoChangeRegionColour(args, util) {
-    // const addons = JSON.parse(mv2Interface.addons).addons;
     const resolveTime = 200;
-    const color = Scratch3Mv2Blocks.toRgbColorList(args.COLOR);
-    const ledDeviceName = args.BOARDTYPE;
+    const color = args.COLOR.replace("#", "");
+    const boardtypeStr = args.BOARDTYPE;
+    let boardtypeObj;
+    try {
+      boardtypeObj = JSON.parse(boardtypeStr);
+    } catch {
+      boardtypeObj = boardtypeStr;
+    }
     const regionChoice = args.REGION;
 
-    const colorStr = this.colorToLEDAddonStr(color);
-    // select all LED addons found that match the board type
-
     mv2Interface.send_REST(
-      `elem/${ledDeviceName}/json?cmd=raw&hexWr=040${regionChoice}${colorStr}`
+      `led/${boardtypeObj.name}/region/${regionChoice}/${color}`
     );
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
@@ -1490,7 +1509,9 @@ class Scratch3Mv2Blocks {
 
     const bitRate = mv2Interface.mp3EncodingBitRate || 16;
     const sampleRate = mv2Interface.mp3EncodingSampleRate || 11025;
-    console.log(`CONVERTING TO ${bitRate} BIT MP3 WITH ${sampleRate} SAMPLE RATE`);
+    console.log(
+      `CONVERTING TO ${bitRate} BIT MP3 WITH ${sampleRate} SAMPLE RATE`
+    );
     const avgFlag = !!!mv2Interface.mp3EncodingAvgFlag;
     const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, bitRate, avgFlag);
     const mp3Data = [];

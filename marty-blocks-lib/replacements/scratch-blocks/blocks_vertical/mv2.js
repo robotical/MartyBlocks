@@ -777,8 +777,8 @@ Blockly.Blocks['mv2_discoChangeBlockPattern'] = {
           "type": "field_dropdown",
           "name": "PATTERN",
           "options": [
-            [Blockly.Msg.DROPDOWN_OPTION_ONE, 'show-off'],
-            [Blockly.Msg.DROPDOWN_OPTION_TWO, 'pinwheel'],
+            [Blockly.Msg.MV2_PATTERN_OPTION_SHOWOFF, 'show-off'],
+            [Blockly.Msg.MV2_PATTERN_OPTION_PINWHEEL, 'pinwheel'],
             [Blockly.Msg.DROPDOWN_OPTION_OFF, 'off']
           ]
         }
@@ -845,7 +845,7 @@ Blockly.Blocks['mv2_LEDEyesColour_SpecificLED'] = {
         },
         {
           "type": "input_dummy",
-          "name": "SIDE",
+          "name": "BOARDTYPE",
         },
         {
           "type": "input_value",
@@ -856,7 +856,7 @@ Blockly.Blocks['mv2_LEDEyesColour_SpecificLED'] = {
           "name": "COLOUR_LED_EYES"
         }
       ],
-      "extensions": ["shape_statement", "dynamic_menu_LED_eyes_side_extension"]
+      "extensions": ["shape_statement", "dynamic_menu_disco_options_extension"]
     });
   }
 };

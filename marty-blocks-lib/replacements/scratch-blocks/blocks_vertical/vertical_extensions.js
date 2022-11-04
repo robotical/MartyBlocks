@@ -507,45 +507,63 @@ Blockly.Extensions.register(
         let eyesOptionAdded = false;
         let feetOptionAdded = false;
         for (const addon of addons) {
-          if (
-            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT
-          ) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT) {
             if (!feetOptionAdded) {
               addonOptions.push([
                 Blockly.Msg.DROPDOWN_OPTION_FEET,
-                RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT
+                JSON.stringify({
+                  whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT,
+                  name: RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT,
+                }),
               ]);
               feetOptionAdded = true;
             }
-            addonOptions.push([addon.name, addon.name]);
+            addonOptions.push([
+              addon.name,
+              JSON.stringify({
+                name: addon.name,
+                whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT,
+              }),
+            ]);
           }
-          if (
-            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
-          ) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE) {
             if (!eyesOptionAdded) {
               addonOptions.push([
                 Blockly.Msg.DROPDOWN_OPTION_EYES,
-                RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE
+                JSON.stringify({
+                  whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
+                  name: RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
+                }),
               ]);
               eyesOptionAdded = true;
             }
-            addonOptions.push([addon.name, addon.name]);
+            addonOptions.push([
+              addon.name,
+              JSON.stringify({
+                name: addon.name,
+                whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
+              }),
+            ]);
           }
-          if (
-            addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM
-          ) {
+          if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM) {
             if (!armsOptionAdded) {
               addonOptions.push([
                 Blockly.Msg.DROPDOWN_OPTION_ARMS,
-                RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM
+                JSON.stringify({
+                  whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM,
+                  name: RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM,
+                }),
               ]);
               armsOptionAdded = true;
             }
-            addonOptions.push([addon.name, addon.name]);
+            addonOptions.push([
+              addon.name,
+              JSON.stringify({
+                name: addon.name,
+                whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM,
+              }),
+            ]);
           }
-
-
-
         }
         return addonOptions.length ? addonOptions : defaultOptions;
       }),
