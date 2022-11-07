@@ -2,6 +2,7 @@ const Mv2Interface = require("./Mv2Interface");
 const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
 const Cast = require("./util/cast");
+const Color = require('./util/color');
 
 mv2Interface = new Mv2Interface();
 
@@ -548,6 +549,15 @@ class Scratch3Mv2Blocks {
     return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
+  static hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
   static componentToHex(c) {
     if (typeof c == "string") {
       try {
@@ -618,7 +628,8 @@ class Scratch3Mv2Blocks {
       mv2Interface.send_REST(
         "notification/warn-message/Lightness value must be between 0 and 100"
       );
-    return Scratch3Mv2Blocks.hslToHex(h, s, l);
+    const rgbColour =  Color.hsvToRgb({h: h, s: s / 100, v: l / 100})
+    return Scratch3Mv2Blocks.rgbToHex(rgbColour.r, rgbColour.g, rgbColour.b);
   }
 
   discoChangeBlockPattern(args, util) {
@@ -644,21 +655,19 @@ class Scratch3Mv2Blocks {
   }
 
   discoChangeBackColour(args, util) {
-    const r = args.COLOR.slice(1, 3);
-    const g = args.COLOR.slice(3, 5);
-    const b = args.COLOR.slice(5, 7);
+    const colour = args.COLOR.replace("#", "");
+    const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
     mv2Interface.send_REST(
-      `indicator/set?pixIdx=1;blinkType=on;r=${r};g=${g};b=${b};rateMs=1000`
+      `indicator/set?pixIdx=1;blinkType=on;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=1000`
     );
   }
 
   discoSetBreatheBackColour(args, util) {
     const ms = +args.MILLISECONDS || 100;
-    const r = args.COLOR.slice(1, 3);
-    const g = args.COLOR.slice(3, 5);
-    const b = args.COLOR.slice(5, 7);
+    const colour = args.COLOR.replace("#", "");
+    const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
     mv2Interface.send_REST(
-      `indicator/set?pixIdx=1;blinkType=breathe;r=${r};g=${g};b=${b};rateMs=${ms}`
+      `indicator/set?pixIdx=1;blinkType=breathe;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=${ms}`
     );
   }
 
@@ -670,7 +679,7 @@ class Scratch3Mv2Blocks {
 
   discoChangeRegionColour(args, util) {
     const resolveTime = 200;
-    const color = args.COLOR.replace("#", "");
+    const colour = args.COLOR.replace("#", "");
     const boardtypeStr = args.BOARDTYPE;
     let boardtypeObj;
     try {
@@ -681,7 +690,7 @@ class Scratch3Mv2Blocks {
     const regionChoice = args.REGION;
 
     mv2Interface.send_REST(
-      `led/${boardtypeObj.name}/region/${regionChoice}/${color}`
+      `led/${boardtypeObj.name}/region/${regionChoice}/${colour}`
     );
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
