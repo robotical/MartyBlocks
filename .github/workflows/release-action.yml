@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: feature/adding-sound-blocks
+          ref: preparing-for-release-led-api
           path: .
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
