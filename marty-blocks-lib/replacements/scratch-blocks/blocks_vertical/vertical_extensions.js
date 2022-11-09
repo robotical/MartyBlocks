@@ -510,7 +510,7 @@ Blockly.Extensions.register(
           if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT) {
             if (!feetOptionAdded) {
               addonOptions.push([
-                Blockly.Msg.DROPDOWN_OPTION_FEET,
+                Blockly.Msg.DROPDOWN_OPTION_BOTH_FEET,
                 JSON.stringify({
                   whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT,
                   name: RIC_WHOAMI_TYPE_CODE_ADDON_LEDFOOT,
@@ -529,7 +529,7 @@ Blockly.Extensions.register(
           if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE) {
             if (!eyesOptionAdded) {
               addonOptions.push([
-                Blockly.Msg.DROPDOWN_OPTION_EYES,
+                Blockly.Msg.DROPDOWN_OPTION_BOTH_EYES,
                 JSON.stringify({
                   whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
                   name: RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
@@ -548,7 +548,7 @@ Blockly.Extensions.register(
           if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM) {
             if (!armsOptionAdded) {
               addonOptions.push([
-                Blockly.Msg.DROPDOWN_OPTION_ARMS,
+                Blockly.Msg.DROPDOWN_OPTION_BOTH_ARMS,
                 JSON.stringify({
                   whoAmI: RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM,
                   name: RIC_WHOAMI_TYPE_CODE_ADDON_LEDARM,

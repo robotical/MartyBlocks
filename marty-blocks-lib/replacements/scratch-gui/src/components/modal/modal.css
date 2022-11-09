@@ -126,7 +126,7 @@ $sides: 20rem;
     flex-basis: $sides;
     justify-content: flex-end;
     z-index: 1;
-    padding-left: 3rem;
+    padding-left: 5rem;
 }
 
 .full-screen .header-item-close {
