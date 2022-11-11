@@ -53,7 +53,7 @@ const projectData = translateFunction => {
                 ],
                 sounds: [
                 ],
-                volume: 100
+                volume: 70
             },
             {
                 isStage: false,
@@ -120,7 +120,7 @@ const projectData = translateFunction => {
                 
                 
                 ],
-                volume: 100,
+                volume: 70,
                 visible: true,
                 x: -100,
                 y: 0,

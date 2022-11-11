@@ -62,6 +62,9 @@ class Mv2Interface extends EventDispatcher {
     this.commandPromise = null;
     this.systemInfo = null;
     this.mp3EncodingBitRate = null;
+    this.mp3EncodingSampleRate = null;
+    this.mp3EncodingAvgFlag = null;
+    this.isStreamStarting = null;
     this.onCommandReply = this.onCommandReply.bind(this);
     this.sendCommand = this.sendCommand.bind(this);
     this.saveScratchFile = this.saveScratchFile.bind(this);
@@ -69,6 +72,7 @@ class Mv2Interface extends EventDispatcher {
     this.listSavedScratchFiles = this.listSavedScratchFiles.bind(this);
     this.deleteScratchFile = this.deleteScratchFile.bind(this);
     this.setRSSI = this.setRSSI.bind(this);
+    this.setIsStreamStarting = this.setIsStreamStarting.bind(this);
   }
 
   getMartyFwVersion() {
@@ -137,6 +141,10 @@ class Mv2Interface extends EventDispatcher {
     this.sendCommand({ command: "audioStreaming", audioData: Array.from(audioData), duration });
   }
 
+  setIsStreamStarting(isStreamStarting) {
+    this.isStreamStarting = isStreamStarting;
+  }
+
   /**
    * Save a scratch file
    * @param {string} fileName Filename to save to
@@ -154,6 +162,27 @@ class Mv2Interface extends EventDispatcher {
     // not running in react native, fallback to web storage
     window.localStorage.setItem(`scratch_${fileName}`, contents);
     return Promise.resolve();
+  }
+
+  /**
+   * Save a scratch file on the cloud
+   * @param {string} projectBase64 Base64 encoded project data
+   * @returns {string} id of the saved project
+   */
+  async saveCloudScratchFile(projectBase64) {
+    const dbUrl =
+    "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects.json";
+    const response = await fetch(dbUrl, {
+      method: "POST",
+      headers: {
+        Application: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({data: projectBase64}),
+    });
+    const projectId = await response.json();
+     if (projectId && projectId.name) return projectId.name;
+     return null;
   }
 
   /**
@@ -188,6 +217,26 @@ class Mv2Interface extends EventDispatcher {
     // not running in react native, fallback to web storage
     const contents = window.localStorage.getItem(`scratch_${fileName}`);
     return Promise.resolve({ contents });
+  }
+
+  /**
+   * Load a scratch file
+   * @param {string} fileId File to load
+   * @returns {string} projectBase64String
+   */
+  async loadCloudScratchFile (fileId) {
+    try {
+      const dbUrl =
+      "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
+      const res = await fetch(dbUrl + fileId + ".json");
+      const projectBase64String = await res.json();
+      if (!projectBase64String || !projectBase64String.data) {
+        throw new Error("Invalid project id");
+      }
+      return projectBase64String.data;
+    } catch(e) {
+      console.log("Couldn't load cloud project:", e);
+    }
   }
 
   /**

@@ -118,6 +118,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.getValue = function () {
  * @param {string} colour The new colour in '#rrggbb' format.
  */
 Blockly.FieldColourPickerLEDEyes.prototype.setValue = function (colour) {
+  colour = colour || this.colour_;
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     const ledValues = this.eyeMatrix.getLEDValues();
     Blockly.Events.fire(
@@ -129,8 +130,6 @@ Blockly.FieldColourPickerLEDEyes.prototype.setValue = function (colour) {
         ledValues
       )
     );
-    // Blockly.Events.fire(new Blockly.Events.BlockChange(
-    //     this.sourceBlock_, 'field', "LED_MATRIX", this.colour_, ledValues));
   }
   this.colour_ = colour;
   if (this.sourceBlock_) {
@@ -403,6 +402,8 @@ Blockly.FieldColourPickerLEDEyes.prototype.showEditor_ = function () {
   this.eyeMatrix.showEditor_();
   this.eyeMatrix.matrixStage_.style.gridColumn = "1/1";
   this.eyeMatrix.matrixStage_.style.gridRow = "1/1";
+
+  this.eyeMatrix.setColourPickerValue = this.setValue.bind(this);
 
   div.appendChild(this.eyeMatrix.matrixStage_);
 

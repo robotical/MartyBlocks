@@ -1,0 +1,173 @@
+@import "../../../css/units.css";
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
+@import "../../../css/typography.css";
+
+
+.main-content {
+    background-color: $ui-primary;
+    border: 1px solid $ui-black-transparent;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.block {
+    background-color: $ui-primary;
+    padding: calc(2 * $space);
+    display: flex;
+    flex-direction: column;
+}
+
+.load-project-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #B5D0EE;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.load-project-title {
+    height: 100%;
+    padding: 1rem;
+    background-color: #608DC9;
+    color: white;
+}
+
+.tips-container { 
+    background-color: $ui-primary;
+    border: 2px solid $ui-black-transparent;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tips-title {
+    padding: 1rem;
+    background-color: #608DC9;
+    color: white;
+}
+
+.block-100 {
+    height: 100%;
+}
+
+.tips-list {
+    padding: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align:justify;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10;
+    background-color: $ui-white;
+    margin: 0;
+    row-gap: 1rem;
+    margin-right: .5rem;
+}
+
+.tips-list li {
+    padding-left: 1.5rem;
+    margin-left: 1rem;
+}
+
+.button {
+    height: 2rem;
+    padding: 0.35rem;
+    outline: none;
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid $ui-black-transparent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.2s;
+    user-select: none;
+    margin: 0px;
+}
+
+
+
+/* Loading spinner */
+.lds-spinner {
+    color: official;
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 50%;
+  }
+.lds-spinner div {
+    transform-origin: 40px 40px;
+    animation: lds-spinner 1.2s linear infinite;
+  }
+.lds-spinner div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 37px;
+    width: 6px;
+    height: 18px;
+    border-radius: 20%;
+    background: #608DC9;
+  }
+.lds-spinner div:nth-child(1) {
+    transform: rotate(0deg);
+    animation-delay: -1.1s;
+  }
+.lds-spinner div:nth-child(2) {
+    transform: rotate(30deg);
+    animation-delay: -1s;
+  }
+.lds-spinner div:nth-child(3) {
+    transform: rotate(60deg);
+    animation-delay: -0.9s;
+  }
+.lds-spinner div:nth-child(4) {
+    transform: rotate(90deg);
+    animation-delay: -0.8s;
+  }
+.lds-spinner div:nth-child(5) {
+    transform: rotate(120deg);
+    animation-delay: -0.7s;
+  }
+.lds-spinner div:nth-child(6) {
+    transform: rotate(150deg);
+    animation-delay: -0.6s;
+  }
+.lds-spinner div:nth-child(7) {
+    transform: rotate(180deg);
+    animation-delay: -0.5s;
+  }
+.lds-spinner div:nth-child(8) {
+    transform: rotate(210deg);
+    animation-delay: -0.4s;
+  }
+.lds-spinner div:nth-child(9) {
+    transform: rotate(240deg);
+    animation-delay: -0.3s;
+  }
+.lds-spinner div:nth-child(10) {
+    transform: rotate(270deg);
+    animation-delay: -0.2s;
+  }
+.lds-spinner div:nth-child(11) {
+    transform: rotate(300deg);
+    animation-delay: -0.1s;
+  }
+.lds-spinner div:nth-child(12) {
+    transform: rotate(330deg);
+    animation-delay: 0s;
+  }
+@keyframes lds-spinner {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }

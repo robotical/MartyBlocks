@@ -52,6 +52,13 @@ Blockly.FieldLEDEyeMatrix = function (matrix) {
   this.ledButtons_ = [];
 
   /**
+   * Function that's gonna be set later from the colour picker instance
+   * It will set the value of the colour picker when a node is toggled 
+   * or when the clearAll/fillAll buttons are pressed
+   */
+  this.setColourPickerValue = null;
+
+  /**
    * Colour representing a cleared node
    */
   this.clearColour = "#5ba591";
@@ -571,6 +578,7 @@ Blockly.FieldLEDEyeMatrix.prototype.clearMatrix_ = function () {
       this.fillMatrixNode_(this.ledThumbNodes_, i, this.clearColour);
     }
   }
+  this.setColourPickerValue && this.setColourPickerValue();
 };
 
 /**
@@ -591,6 +599,7 @@ Blockly.FieldLEDEyeMatrix.prototype.fillMatrix_ = function () {
       this.fillMatrixNode_(this.ledThumbNodes_, i, this.sourceBlock_.colour_);
     }
   }
+  this.setColourPickerValue && this.setColourPickerValue();
 };
 
 /**
@@ -676,6 +685,7 @@ Blockly.FieldLEDEyeMatrix.prototype.toggleLEDNode_ = function (led) {
     led,
     this.matrix_.charAt(led) === "1"
   );
+  this.setColourPickerValue && this.setColourPickerValue();
 };
 
 /**

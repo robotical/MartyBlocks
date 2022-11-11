@@ -379,6 +379,10 @@ Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off function LED';
 Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
 Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
 
+Blockly.Msg.MV2_PATTERN_OPTION_PINWHEEL = 'pinwheel';
+Blockly.Msg.MV2_PATTERN_OPTION_SHOWOFF = 'show-off';
+
+
 // MARTY V2 Motion Blocks
 Blockly.Msg.MV2_GETREADY = '%1 %2 Get ready!';
 Blockly.Msg.MV2_WALK_FW = '%1 %2 Walk %3 steps forwards';
@@ -554,6 +558,9 @@ Blockly.Msg.DROPDOWN_OPTION_RIGHTARM = 'right arm';
 Blockly.Msg.DROPDOWN_OPTION_EYES = 'eyes';
 Blockly.Msg.DROPDOWN_OPTION_ARMS = 'arms';
 Blockly.Msg.DROPDOWN_OPTION_FEET = 'feet';
+Blockly.Msg.DROPDOWN_OPTION_BOTH_EYES = 'Both eyes';
+Blockly.Msg.DROPDOWN_OPTION_BOTH_ARMS = 'Both arms';
+Blockly.Msg.DROPDOWN_OPTION_BOTH_FEET = 'Both feet';
 Blockly.Msg.DROPDOWN_OPTION_ALL = 'all';
 Blockly.Msg.DROPDOWN_OPTION_CONFUSIONSOUND = 'confusion';
 Blockly.Msg.DROPDOWN_OPTION_DISBELIEFSOUND = 'disbelief';
@@ -645,7 +652,7 @@ Blockly.Msg.DROPDOWN_OPTION_OFF = 'off';
 Blockly.Msg.DROPDOWN_OPTION_ZERO = '0';
 Blockly.Msg.DROPDOWN_OPTION_ONE = '1';
 Blockly.Msg.DROPDOWN_OPTION_TWO = '2';
-Blockly.Msg.DROPDOWN_OPTION_THREE = '3';
+Blockly.Msg.DROPDOWN_OPTION_THREE = 'off';
 
 Blockly.Msg.COLOUR_RED = 'Red';
 Blockly.Msg.COLOUR_YELLOW = 'Yellow';
