@@ -1079,7 +1079,7 @@ class Scratch3Mv2Blocks {
         for (const addonValKey in addon.vals) {
           const addonVal = addon.vals[addonValKey];
           if (addonValKey.includes("Air")) {
-            return addonVal;
+            return !addonVal;
           }
         }
       }
