@@ -2,7 +2,7 @@ const Mv2Interface = require("./Mv2Interface");
 const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
 const Cast = require("./util/cast");
-const Color = require('./util/color');
+const Color = require("./util/color");
 
 mv2Interface = new Mv2Interface();
 
@@ -138,48 +138,37 @@ class Scratch3Mv2Blocks {
 
       // sensors
 
-      ServoPosition: (args, utils) =>
-        this._martyIsConnectedWrapper(this.position.bind(this, args, utils)),
-      ServoCurrent: (args, utils) =>
-        this._martyIsConnectedWrapper(this.current.bind(this, args, utils)),
+      ServoPosition: (args, utils) => this.position(args, utils),
+      ServoCurrent: (args, utils) => this.current(args, utils),
       XAxisMovement: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.accelerometerX.bind(this, args, utils)
-        ),
+        this.accelerometerX(args, utils),
+
       YAxisMovement: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.accelerometerY.bind(this, args, utils)
-        ),
+        this.accelerometerY(args, utils),
+
       ZAxisMovement: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.accelerometerZ.bind(this, args, utils)
-        ),
+        this.accelerometerZ(args, utils),
+
       ObstacleProximity: (args, utils) =>
-        this._martyIsConnectedWrapper(this.proximity.bind(this, args, utils)),
+        this.proximity(args, utils),
       BatteryPercentage: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.batteryLevel.bind(this, args, utils)
-        ),
+        this.batteryLevel(args, utils),
+
       mv2_obstaclesense: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.obstacleSense.bind(this, args, utils)
-        ),
+        this.obstacleSense(args, utils),
+
       mv2_groundsense: (args, utils) =>
-        this._martyIsConnectedWrapper(this.groundSense.bind(this, args, utils)),
+        this.groundSense(args, utils),
       mv2_coloursense: (args, utils) =>
-        this._martyIsConnectedWrapper(this.colourSense.bind(this, args, utils)),
+        this.colourSense(args, utils),
       mv2_coloursenseraw: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.colourSenseRaw.bind(this, args, utils)
-        ),
+        this.colourSenseRaw(args, utils),
+
       mv2_distancesense: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.distanceSense.bind(this, args, utils)
-        ),
-      mv2_lightsense: (args, utils) =>
-        this._martyIsConnectedWrapper(this.lightSense.bind(this, args, utils)),
-      mv2_noisesense: (args, utils) =>
-        this._martyIsConnectedWrapper(this.noiseSense.bind(this, args, utils)),
+        this.distanceSense(args, utils),
+
+      mv2_lightsense: (args, utils) => this.lightSense(args, utils),
+      mv2_noisesense: (args, utils) => this.noiseSense(args, utils),
 
       // sound commands
 
@@ -551,11 +540,13 @@ class Scratch3Mv2Blocks {
 
   static hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
   }
 
   static componentToHex(c) {
@@ -628,7 +619,7 @@ class Scratch3Mv2Blocks {
       mv2Interface.send_REST(
         "notification/warn-message/Lightness value must be between 0 and 100"
       );
-    const rgbColour =  Color.hsvToRgb({h: h, s: s / 100, v: l / 100})
+    const rgbColour = Color.hsvToRgb({ h: h, s: s / 100, v: l / 100 });
     return Scratch3Mv2Blocks.rgbToHex(rgbColour.r, rgbColour.g, rgbColour.b);
   }
 
