@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: preparing-for-release-led-api
+          ref: master
           path: .
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
