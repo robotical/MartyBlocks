@@ -496,7 +496,7 @@ Blockly.Extensions.register(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
           ["Select an option", "Select an option"],
-          ["No disco found", "No disco found"],
+          ["No LED addons found", "No LED addons found"],
         ];
         if (!mv2Interface.isConnected || !mv2Interface.addons)
           return defaultOptions;
