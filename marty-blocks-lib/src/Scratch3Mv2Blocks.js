@@ -140,32 +140,22 @@ class Scratch3Mv2Blocks {
 
       ServoPosition: (args, utils) => this.position(args, utils),
       ServoCurrent: (args, utils) => this.current(args, utils),
-      XAxisMovement: (args, utils) =>
-        this.accelerometerX(args, utils),
+      XAxisMovement: (args, utils) => this.accelerometerX(args, utils),
 
-      YAxisMovement: (args, utils) =>
-        this.accelerometerY(args, utils),
+      YAxisMovement: (args, utils) => this.accelerometerY(args, utils),
 
-      ZAxisMovement: (args, utils) =>
-        this.accelerometerZ(args, utils),
+      ZAxisMovement: (args, utils) => this.accelerometerZ(args, utils),
 
-      ObstacleProximity: (args, utils) =>
-        this.proximity(args, utils),
-      BatteryPercentage: (args, utils) =>
-        this.batteryLevel(args, utils),
+      ObstacleProximity: (args, utils) => this.proximity(args, utils),
+      BatteryPercentage: (args, utils) => this.batteryLevel(args, utils),
 
-      mv2_obstaclesense: (args, utils) =>
-        this.obstacleSense(args, utils),
+      mv2_obstaclesense: (args, utils) => this.obstacleSense(args, utils),
 
-      mv2_groundsense: (args, utils) =>
-        this.groundSense(args, utils),
-      mv2_coloursense: (args, utils) =>
-        this.colourSense(args, utils),
-      mv2_coloursenseraw: (args, utils) =>
-        this.colourSenseRaw(args, utils),
+      mv2_groundsense: (args, utils) => this.groundSense(args, utils),
+      mv2_coloursense: (args, utils) => this.colourSense(args, utils),
+      mv2_coloursenseraw: (args, utils) => this.colourSenseRaw(args, utils),
 
-      mv2_distancesense: (args, utils) =>
-        this.distanceSense(args, utils),
+      mv2_distancesense: (args, utils) => this.distanceSense(args, utils),
 
       mv2_lightsense: (args, utils) => this.lightSense(args, utils),
       mv2_noisesense: (args, utils) => this.noiseSense(args, utils),
@@ -1245,6 +1235,11 @@ class Scratch3Mv2Blocks {
   // }
 
   playNote(args, util) {
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      return mv2Interface.send_REST("notification/fw-needs-update");
+    }
     const soundItem = JSON.parse(args.NOTES_MENU);
     const md5ext = soundItem.md5ext;
     const idParts = md5ext.split(".");
@@ -1286,10 +1281,20 @@ class Scratch3Mv2Blocks {
   }
 
   stopSounds(args, util) {
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      return mv2Interface.send_REST("notification/fw-needs-update");
+    }
     mv2Interface.streamAudio([0], 0);
   }
 
   playTone(args, util) {
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      return mv2Interface.send_REST("notification/fw-needs-update");
+    }
     const hz1 = args["HZ1"];
     const hz2 = args["HZ2"];
     const seconds = args["SECONDS"];
@@ -1326,6 +1331,11 @@ class Scratch3Mv2Blocks {
   }
 
   playSoundUntilDone(args, util) {
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      return mv2Interface.send_REST("notification/fw-needs-update");
+    }
     // get the duration of the sound
     // add a constant representing the time it'll get
     // marty to start streaming
@@ -1353,6 +1363,11 @@ class Scratch3Mv2Blocks {
   }
 
   playSound(args, util) {
+    if (
+      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+    ) {
+      return mv2Interface.send_REST("notification/fw-needs-update");
+    }
     const index = this._getSoundIndex(args.SOUND_MENU, util);
     if (index >= 0) {
       const { target } = util;
