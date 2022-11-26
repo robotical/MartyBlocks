@@ -14,6 +14,7 @@ import styles from "./save-load.css";
 import { requestNewProject } from "../../reducers/project-state";
 import LocalStorage from "./local-storage/local-storage.jsx";
 import CloudStorage from "./cloud-storage/cloud-storage.jsx";
+import PortableFileStorage from "./portable-file-storage/portable-file-storage.jsx";
 
 class SaveLoad extends React.Component {
   constructor(props) {
@@ -29,6 +30,8 @@ class SaveLoad extends React.Component {
         contentJSX = <LocalStorage {...this.props} />;
     } else if (currentTab === "cloud-storage") {
         contentJSX = <CloudStorage {...this.props} />;
+    } else if (currentTab === "portable-file-storage") {
+        contentJSX = <PortableFileStorage {...this.props} />;
     }
 
     return (
@@ -56,6 +59,19 @@ class SaveLoad extends React.Component {
             <p className={styles.buttonTitle}>In the Cloud</p>
             <p className={styles.buttonSubtitle}>Cloud Storage</p>
           </div>
+
+          <div
+            className={
+              this.state.currentTab === "portable-file-storage"
+                ? [styles.button, styles.buttonSelected].join(" ")
+                : styles.button
+            }
+            onClick={() => this.setState({ currentTab: "portable-file-storage" })}
+          >
+            <p className={styles.buttonTitle}>Portable</p>
+            <p className={styles.buttonSubtitle}>File Storage</p>
+          </div>
+
         </div>
         <div className={styles.content}>
             {contentJSX}

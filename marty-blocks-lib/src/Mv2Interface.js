@@ -77,7 +77,7 @@ class Mv2Interface extends EventDispatcher {
 
   getMartyFwVersion() {
     if (this.systemInfo && this.systemInfo.SystemVersion) {
-        return this.systemInfo.SystemVersion;
+      return this.systemInfo.SystemVersion;
     }
     return "";
   }
@@ -138,11 +138,62 @@ class Mv2Interface extends EventDispatcher {
 
   streamAudio(audioData, duration) {
     console.log(`streamAudio ${audioData.length}`);
-    this.sendCommand({ command: "audioStreaming", audioData: Array.from(audioData), duration });
+    this.sendCommand({
+      command: "audioStreaming",
+      audioData: Array.from(audioData),
+      duration,
+    });
   }
 
   setIsStreamStarting(isStreamStarting) {
     this.isStreamStarting = isStreamStarting;
+  }
+
+  /**
+   * Save a scratch file on the device
+   * @param {string} fileName Filename to save to
+   * @param {string} contents Base64 encoded project data
+   * @returns {Promise} Promise
+   */
+  saveScratchFileOnDevice(fileName, contents) {
+    if (window.ReactNativeWebView) {
+      return this.sendCommand({
+        command: "saveFileOnDevice",
+        fileName,
+        contents,
+      });
+    }
+    // not running in react native, save on pc
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = contents;
+    // the filename you want
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    return Promise.resolve();
+  }
+
+  /**
+   * Load a scratch file from the device
+   * @param {string} fileName File to load
+   * @returns {Promise} Promise
+   */
+  async loadScratchFileFromDevice(fileName) {
+    if (window.ReactNativeWebView) {
+      // extract filename
+      const pathArr = fileName.split("\\");
+      const justFileName = pathArr[pathArr.length - 1];
+      return this.sendCommand({
+        command: "loadFileFromDevice",
+        fileName: justFileName,
+      });
+    }
+    // not running in react native,
+    // send back name to fecth from pc
+    return Promise.resolve({ contents: "not-react-native" });
   }
 
   /**
@@ -171,18 +222,18 @@ class Mv2Interface extends EventDispatcher {
    */
   async saveCloudScratchFile(projectBase64) {
     const dbUrl =
-    "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects.json";
+      "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects.json";
     const response = await fetch(dbUrl, {
       method: "POST",
       headers: {
         Application: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({data: projectBase64}),
+      body: JSON.stringify({ data: projectBase64 }),
     });
     const projectId = await response.json();
-     if (projectId && projectId.name) return projectId.name;
-     return null;
+    if (projectId && projectId.name) return projectId.name;
+    return null;
   }
 
   /**
@@ -224,17 +275,17 @@ class Mv2Interface extends EventDispatcher {
    * @param {string} fileId File to load
    * @returns {string} projectBase64String
    */
-  async loadCloudScratchFile (fileId) {
+  async loadCloudScratchFile(fileId) {
     try {
       const dbUrl =
-      "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
+        "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
       const res = await fetch(dbUrl + fileId + ".json");
       const projectBase64String = await res.json();
       if (!projectBase64String || !projectBase64String.data) {
         throw new Error("Invalid project id");
       }
       return projectBase64String.data;
-    } catch(e) {
+    } catch (e) {
       console.log("Couldn't load cloud project:", e);
     }
   }
