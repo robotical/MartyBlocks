@@ -172,7 +172,6 @@ class Mv2Interface extends EventDispatcher {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
     return Promise.resolve();
   }
 
