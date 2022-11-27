@@ -176,26 +176,6 @@ class Mv2Interface extends EventDispatcher {
   }
 
   /**
-   * Load a scratch file from the device
-   * @param {string} fileName File to load
-   * @returns {Promise} Promise
-   */
-  async loadScratchFileFromDevice(fileName) {
-    if (window.ReactNativeWebView) {
-      // extract filename
-      const pathArr = fileName.split("\\");
-      const justFileName = pathArr[pathArr.length - 1];
-      return this.sendCommand({
-        command: "loadFileFromDevice",
-        fileName: justFileName,
-      });
-    }
-    // not running in react native,
-    // send back name to fecth from pc
-    return Promise.resolve({ contents: "not-react-native" });
-  }
-
-  /**
    * Save a scratch file
    * @param {string} fileName Filename to save to
    * @param {string} contents Base64 encoded project data

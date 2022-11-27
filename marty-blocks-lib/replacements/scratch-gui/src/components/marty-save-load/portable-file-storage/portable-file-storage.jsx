@@ -71,15 +71,14 @@ class SaveLoad extends React.Component {
       const file = e.target.files[0];
       if (!fileName)
         throw new Error("Couldn't find project with id: " + fileName);
-      const response = await mv2Interface.loadScratchFileFromDevice(fileName);
+      const isReactNative = !!window.ReactNativeWebView;
       let arrayBuffer;
-      if (response.contents === "not-react-native") {
-        // we are not running on react native
-        // read the file normally
-        arrayBuffer = await file.arrayBuffer();
-      } else {
-        const blob = await fetch(response.contents);
+      if (isReactNative) {
+        const base64 = await file.text();
+        const blob = await fetch(base64);
         arrayBuffer = await blob.arrayBuffer();
+      } else {
+        arrayBuffer = await file.arrayBuffer();
       }
       vm.loadProject(arrayBuffer);
       // eslint-disable-next-line no-alert
