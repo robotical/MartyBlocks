@@ -1,5 +1,5 @@
 export function MartyBlocksToolbox_motion() {
-    return `
+  return `
     <!-- MARTY MOTION BLOCKS -->
 
     <block type="mv2_getReady" />
@@ -344,11 +344,11 @@ export function MartyBlocksToolbox_motion() {
             </shadow>
         </value>
     </block>-->
-    `
+    `;
 }
 
 export function MartyBlocksToolbox_disco() {
-    return `
+  return `
     <block type="mv2_discoChangeBlockPattern" >
         <value>
             <field name="BOARDTYPE"></field>
@@ -456,12 +456,13 @@ export function MartyBlocksToolbox_disco() {
             <field name="REGION"></field>
         </value>
     </block>
-    `
+    `;
 }
 
 export function MartyBlocksToolbox_sound(soundName) {
-    return `
+  return `
         <!--Marty blocks-->
+        <!-- Removed for now. Decision log here: 
         <block type="mv2_playSound" >
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
@@ -469,6 +470,7 @@ export function MartyBlocksToolbox_sound(soundName) {
                 </shadow>
             </value>
         </block>
+        -->
         <block type="mv2_playSoundUntilDone" >
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
@@ -533,11 +535,11 @@ export function MartyBlocksToolbox_sound(soundName) {
                 </shadow>
             </value>
         </block>
-    `
+    `;
 }
 
 export function MartyBlocksToolbox_sensing() {
-    return `
+  return `
     <block type="XAxisMovement" />
 
     <block type="YAxisMovement" />
@@ -587,5 +589,5 @@ export function MartyBlocksToolbox_sensing() {
             </shadow>
         </value>
     </block>-->
-    `
+    `;
 }
