@@ -462,7 +462,7 @@ export function MartyBlocksToolbox_disco() {
 export function MartyBlocksToolbox_sound(soundName) {
   return `
         <!--Marty blocks-->
-        <!-- Removed for now. Decision log here: 
+        <!-- Removed for now. Decision log here: https://robotical.atlassian.net/wiki/spaces/M2/pages/3155722249/Removal+of+Play+Sound+block+from+Marty+Blocks
         <block type="mv2_playSound" >
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
