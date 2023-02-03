@@ -1034,18 +1034,43 @@ class Scratch3Mv2Blocks {
     return mv2Interface.battRemainCapacityPercent;
   }
 
+  getObstacle(addon) {
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes("Touch")) {
+        return addonVal;
+      }
+    }
+    return false;
+  }
+
   obstacleSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
     const sensorChoice = args.SENSORCHOICE;
 
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        for (const addonValKey in addon.vals) {
-          const addonVal = addon.vals[addonValKey];
-          if (addonValKey.includes("Touch")) {
-            return addonVal;
-          }
-        }
+        return this.getObstacle(addon);
+      }
+    }
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
+        return this.getObstacle(addon);
+      }
+    }
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
+        return this.getObstacle(addon);
+      }
+    }
+    return false;
+  }
+
+  getGround(addon) {
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes("Air")) {
+        return !addonVal;
       }
     }
     return false;
@@ -1057,14 +1082,20 @@ class Scratch3Mv2Blocks {
 
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        for (const addonValKey in addon.vals) {
-          const addonVal = addon.vals[addonValKey];
-          if (addonValKey.includes("Air")) {
-            return !addonVal;
-          }
-        }
+        return this.getGround(addon);
       }
     }
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
+        return this.getGround(addon);
+      }
+    }
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
+        return this.getGround(addon);
+      }
+    }
+    
     return false;
   }
 
@@ -1084,92 +1115,114 @@ class Scratch3Mv2Blocks {
     return [hue, chroma];
   }
 
-  colourSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
-    for (const addon of addons) {
-      if (addon.name === args.SENSORCHOICE) {
-        let red, green, blue, clear, isOnAir;
-        for (const addonValKey in addon.vals) {
-          const addonVal = addon.vals[addonValKey];
-          if (addonValKey.includes("Red")) red = addonVal;
-          if (addonValKey.includes("Green")) green = addonVal;
-          if (addonValKey.includes("Blue")) blue = addonVal;
-          if (addonValKey.includes("Clear")) clear = addonVal;
-          if (addonValKey.includes("Air")) isOnAir = addonVal;
-        }
-        if (isOnAir) return "air";
-        else {
-          const colours = [
-            {
-              hue: [0, 10],
-              chroma: [75, 200],
-              clear: [40, 150],
-              name: "red",
-            },
-            {
-              hue: [20, 50],
-              chroma: [100, 300],
-              clear: [100, 255],
-              name: "yellow",
-            },
-            {
-              hue: [100, 160],
-              chroma: [10, 100],
-              clear: [40, 150],
-              name: "green",
-            },
-            {
-              hue: [190, 220],
-              chroma: [95, 230],
-              clear: [90, 255],
-              name: "blue",
-            },
-            {
-              hue: [240, 320],
-              chroma: [10, 70],
-              clear: [40, 150],
-              name: "purple",
-            },
-            {
-              hue: [345, 361],
-              chroma: [75, 200],
-              clear: [40, 150],
-              name: "red",
-            },
-          ];
+  getColour(addon) {
+    // helper function to get the colour of a colour sensor
+    let red, green, blue, clear, isOnAir;
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes("Red")) red = addonVal;
+      if (addonValKey.includes("Green")) green = addonVal;
+      if (addonValKey.includes("Blue")) blue = addonVal;
+      if (addonValKey.includes("Clear")) clear = addonVal;
+      if (addonValKey.includes("Air")) isOnAir = addonVal;
+    }
+    if (isOnAir) return "air";
+    else {
+      const colours = [
+        { hue: [0, 10], chroma: [75, 200], clear: [40, 150], name: "red" },
+        {
+          hue: [20, 50],
+          chroma: [100, 300],
+          clear: [100, 255],
+          name: "yellow",
+        },
+        {
+          hue: [100, 160],
+          chroma: [10, 100],
+          clear: [40, 150],
+          name: "green",
+        },
+        {
+          hue: [190, 220],
+          chroma: [95, 230],
+          clear: [90, 255],
+          name: "blue",
+        },
+        {
+          hue: [240, 320],
+          chroma: [10, 70],
+          clear: [40, 150],
+          name: "purple",
+        },
+        {
+          hue: [345, 361],
+          chroma: [75, 200],
+          clear: [40, 150],
+          name: "red",
+        },
+      ];
 
-          const [hue, chroma] = this.getHueChroma(red, green, blue);
-          for (let colour of colours) {
-            if (
-              colour.hue[0] <= hue &&
-              hue <= colour.hue[1] &&
-              colour.chroma[0] <= chroma &&
-              chroma <= colour.chroma[1] &&
-              colour.clear[0] <= clear &&
-              clear <= colour.clear[1]
-            ) {
-              return colour.name;
-            }
-          }
-
-          return "unclear";
+      const [hue, chroma] = this.getHueChroma(red, green, blue);
+      for (let colour of colours) {
+        if (
+          colour.hue[0] <= hue &&
+          hue <= colour.hue[1] &&
+          colour.chroma[0] <= chroma &&
+          chroma <= colour.chroma[1] &&
+          colour.clear[0] <= clear &&
+          clear <= colour.clear[1]
+        ) {
+          return colour.name;
         }
       }
+
+      return "unclear";
     }
+  }
+
+  colourSense(args, util) {
+    const addons = JSON.parse(mv2Interface.addons).addons;
+
+    // If the user has specified a sensor, use that
+    for (const addon of addons) {
+      if (addon.name === args.SENSORCHOICE) {
+        return this.getColour(addon);
+      }
+    }
+    // Otherwise, use the first colour sensor
+    // this fixes the issue where: when the user saves a project with an addon name
+    // and then changes the name of the addon/someone else loads the project with a different addon name
+    // the project will still work (if they have an addon with the same whoAmI connected)
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
+        return this.getColour(addon);
+      }
+    }  
+    return null;
+  }
+
+  getColourRaw(addon) {
+    // helper function to get the RAW colour of a colour sensor
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes(args.SENSORCHANNEL)) {
+        return addonVal;
+      }
+    }
+    return null;
   }
 
   colourSenseRaw(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
     const sensorChoice = args.SENSORCHOICE;
-
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        for (const addonValKey in addon.vals) {
-          const addonVal = addon.vals[addonValKey];
-          if (addonValKey.includes(args.SENSORCHANNEL)) {
-            return addonVal;
-          }
-        }
+        return this.getColourRaw(addon);
+      }
+    }
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
+        return this.getColourRaw(addon);
       }
     }
     return null;
@@ -1192,18 +1245,40 @@ class Scratch3Mv2Blocks {
     return false;
   }
 
+  getLight(addon) {
+    // helper function to get the light of a light sensor
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes(args.SENSORCHANNEL)) {
+        return addonVal;
+      }
+    }
+    return null;
+  }
+
   lightSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
     const sensorChoice = args.SENSORCHOICE;
 
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        for (const addonValKey in addon.vals) {
-          const addonVal = addon.vals[addonValKey];
-          if (addonValKey.includes(args.SENSORCHANNEL)) {
-            return addonVal;
-          }
-        }
+        return this.getLight(addon);
+      }
+    }
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
+        return this.getLight(addon);
+      }
+    }
+    return null;
+  }
+
+  getNoise(addon) {
+    // helper function to get the noise of a noise sensor
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes("HighestSinceLastReading")) {
+        return addonVal;
       }
     }
     return null;
@@ -1213,12 +1288,12 @@ class Scratch3Mv2Blocks {
     const addons = JSON.parse(mv2Interface.addons).addons;
     for (let addon of addons) {
       if (addon.name === args.SENSORCHOICE) {
-        for (const addonValKey in addon.vals) {
-          const addonVal = addon.vals[addonValKey];
-          if (addonValKey.includes("HighestSinceLastReading")) {
-            return addonVal;
-          }
-        }
+        return this.getNoise(addon);
+      }
+    }
+    for (let addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_NOISE) {
+        return this.getNoise(addon);
       }
     }
     return null;
@@ -1351,7 +1426,10 @@ class Scratch3Mv2Blocks {
         effects.addSoundPlayer(player);
         effects.setEffectsFromTarget(target);
         player.connect(effects);
-        const sampleCount = this._addPitchEffect(effects.pitch.ratio, player);
+        const sampleCount = Scratch3Mv2Blocks._addPitchEffect(
+          effects.pitch.ratio,
+          player
+        );
         const STREAM_TIME = 800;
         const soundDuration = sampleCount / player.buffer.sampleRate;
         this.playSound(args, util);
@@ -1380,7 +1458,10 @@ class Scratch3Mv2Blocks {
         effects.addSoundPlayer(player);
         effects.setEffectsFromTarget(target);
         player.connect(effects);
-        const sampleCount = this._addPitchEffect(effects.pitch.ratio, player);
+        const sampleCount = Scratch3Mv2Blocks._addPitchEffect(
+          effects.pitch.ratio,
+          player
+        );
         let audioContext;
         if (window.OfflineAudioContext) {
           audioContext = new window.OfflineAudioContext(
@@ -1417,8 +1498,12 @@ class Scratch3Mv2Blocks {
           id: player.id,
           buffer: player.buffer,
         });
-        this._prepareNewPlayer(playerNew, effects.pitch.ratio);
-        this._addVolumeEffect(audioContext, playerNew, target.volume / 100);
+        Scratch3Mv2Blocks._prepareNewPlayer(playerNew, effects.pitch.ratio);
+        Scratch3Mv2Blocks._addVolumeEffect(
+          audioContext,
+          playerNew,
+          target.volume / 100
+        );
       }
       return new Promise((resolve) => {
         async function checkIfStreamingStartFinished() {
@@ -1435,7 +1520,7 @@ class Scratch3Mv2Blocks {
     }
   }
 
-  _addVolumeEffect(audioContext, playerNew, volume) {
+  static _addVolumeEffect(audioContext, playerNew, volume) {
     if (!volume) volume = 0.00001;
     const { input, output } = new VolumeEffect(
       audioContext,
@@ -1453,7 +1538,7 @@ class Scratch3Mv2Blocks {
     }
   }
 
-  _prepareNewPlayer(playerNew, playbackRate) {
+  static _prepareNewPlayer(playerNew, playbackRate) {
     playerNew.target = null;
     playerNew.playbackRate = playbackRate;
     playerNew.initialized = true;
@@ -1462,7 +1547,7 @@ class Scratch3Mv2Blocks {
     playerNew.isPlaying = true;
   }
 
-  _addPitchEffect(pitchRatio, player) {
+  static _addPitchEffect(pitchRatio, player) {
     const playbackRate = pitchRatio;
     const affectedSampleCount = Math.floor(
       player.buffer.duration * player.buffer.sampleRate
@@ -1490,7 +1575,7 @@ class Scratch3Mv2Blocks {
     return mp3SoundData;
   }
 
-  _testMp3SoundLocally(mp3SoundData) {
+  static _testMp3SoundLocally(mp3SoundData) {
     // Test code to play locally
     var blob = new Blob(mp3SoundData, { type: "audio/mp3" });
     var url = window.URL.createObjectURL(blob);
@@ -1741,6 +1826,19 @@ class Scratch3Mv2Blocks {
   static toRgbColorList(value) {
     const color = Cast.toRgbColorObject(value);
     return [color.r, color.g, color.b];
+  }
+
+  static increaseVolume(audioBuffer, gain) {
+    let channels = audioBuffer.numberOfChannels;
+    let samples = audioBuffer.length;
+
+    for (let c = 0; c < channels; c++) {
+      let channelData = audioBuffer.getChannelData(c);
+
+      for (let s = 0; s < samples; s++) {
+        channelData[s] *= gain;
+      }
+    }
   }
 }
 

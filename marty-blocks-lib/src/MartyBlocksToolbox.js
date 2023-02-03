@@ -462,15 +462,8 @@ export function MartyBlocksToolbox_disco() {
 export function MartyBlocksToolbox_sound(soundName) {
   return `
         <!--Marty blocks-->
-        <!-- Removed for now. Decision log here: https://robotical.atlassian.net/wiki/spaces/M2/pages/3155722249/Removal+of+Play+Sound+block+from+Marty+Blocks
-        <block type="mv2_playSound" >
-            <value name="SOUND_MENU">
-                <shadow type="sound_sounds_menu">
-                    <field name="SOUND_MENU">${soundName}</field>
-                </shadow>
-            </value>
-        </block>
-        -->
+
+
         <block type="mv2_playSoundUntilDone" >
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
@@ -478,6 +471,7 @@ export function MartyBlocksToolbox_sound(soundName) {
                 </shadow>
             </value>
         </block>
+
         <block type="mv2_playNote" >
             <value name="NOTES_MENU">
                 <field name="NOTES_MENU"></field>
@@ -502,6 +496,14 @@ export function MartyBlocksToolbox_sound(soundName) {
         </block>
         <block type="mv2_stopSounds" />
 
+        <block type="mv2_playSound" >
+            <value name="SOUND_MENU">
+                <shadow type="sound_sounds_menu">
+                    <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
+        
         <block type="mv2_changePitchEffect" >
             <value name="VALUE">
                 <shadow type="math_number">

@@ -5464,7 +5464,7 @@ Blockly.ScratchMsgs.locales["en"] =
     "MV2_LEAN": "%1 %2 Lean %3 for %4s",
     "MV2_LIFTFOOT": "%1 %2 Lift %3 foot",
     "MV2_MOVEJOINT": "%1 %2 Move %3 to %4° in %5s",
-    "MV2_PLAYSOUND": "%1 %2 Play sound: %3",
+    "MV2_PLAYSOUND": "%1 %2 Start sound: %3",
     "MV2_POSITION": "%1 %2 Position of %3 joint (in ° from 'zero')",
     "MV2_SLIDE": "%1 %2 Slide %3 times to the %4",
     "MV2_STANDSTRAIGHT": "%1 %2 Stand straight in %3s",

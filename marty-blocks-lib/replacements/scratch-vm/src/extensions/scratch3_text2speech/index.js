@@ -789,15 +789,12 @@ class Scratch3Text2SpeechBlocks {
         return this.runtime.audioEngine.decodeSoundPlayer(sound);
       })
       .then((soundPlayer) => {
-
-        // Increase the volume ( this doesn't work on marty)
-        const engine = this.runtime.audioEngine;
-        const chain = engine.createEffectChain();
-        chain.set("volume", 800);
-        soundPlayer.connect(chain);
-        //
+        const { target } = util;
 
         this._soundPlayers.set(soundPlayer.id, soundPlayer);
+        soundPlayer.setPlaybackRate(playbackRate);
+        Scratch3Mv2Blocks.increaseVolume(soundPlayer.buffer, target.volume / 30);
+
         const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
           soundPlayer.buffer
         );
@@ -805,7 +802,6 @@ class Scratch3Text2SpeechBlocks {
           mp3SoundBuffers
         );
         mv2Interface.streamAudio(mp3SoundData, soundPlayer.buffer.duration * 1000);
-        soundPlayer.setPlaybackRate(playbackRate);
 
         return new Promise((resolve) => {
           const timeout = setTimeout(() => {
@@ -881,6 +877,7 @@ class Scratch3Text2SpeechBlocks {
         return this.runtime.audioEngine.decodeSoundPlayer(sound);
       })
       .then((soundPlayer) => {
+
         this._soundPlayers.set(soundPlayer.id, soundPlayer);
         soundPlayer.setPlaybackRate(playbackRate);
 
