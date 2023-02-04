@@ -19,6 +19,10 @@ jobs:
           ref: master
           path: .
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7.18' 
+
       - name: Clone repos
         run: |
           git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
