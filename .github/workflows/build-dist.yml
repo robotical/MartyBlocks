@@ -1,13 +1,12 @@
 name: BuildMartyBlocks
 on: [workflow_dispatch]
 
-env:
-  MBHome: /home/runner/work/MartyBlocks
 
 jobs:
   setup_project:
     runs-on: ubuntu-latest
     env:
+      MBHome: /home/runner/work/MartyBlocks
       mblib: /home/runner/work/MartyBlocks/marty-blocks-lib/
       REPLACEMENTS: /home/runner/work/MartyBlocks/marty-blocks-lib/replacements
       blocks_original: /home/runner/work/MartyBlocks/scratch-blocks
