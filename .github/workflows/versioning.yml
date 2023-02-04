@@ -1,9 +1,6 @@
 name: 'Versioning'
 
-on:
-  push:
-    branches:
-      - 'master'
+on: workflow_dispatch
 
 jobs:
   bump-version:
