@@ -70,6 +70,16 @@ jobs:
         run: |
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
+      - name: Build Blocks
+        run: |
+          cd ${{ env.blocks_original }}
+          npm run prepublish
+
+      - name: Build VM
+        run: |
+          cd ${{ env.vm_original }}
+          npm run build
+          
       - name: Build Scratch
         run: |
           cd ${{ env.gui_original }}
