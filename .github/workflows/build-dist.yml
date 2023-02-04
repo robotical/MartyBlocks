@@ -59,7 +59,6 @@ jobs:
 
       - name: Restore scratch-blocks dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit != 'true'
-        run: echo "Cache miss"
         env:
           cache-paths: |
             node_modules/
@@ -68,7 +67,6 @@ jobs:
 
       - name: Save scratch-blocks dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit == 'true'
-        run: echo "Cache hit"
         env:
           cache-paths: |
             node_modules/
@@ -86,7 +84,6 @@ jobs:
 
       - name: Restore scratch_vm dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit != 'true'
-        run: echo "Cache miss"
         env:
           cache-paths: |
             node_modules/
@@ -95,7 +92,6 @@ jobs:
 
       - name: Save scratch_vm dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit == 'true'
-        run: echo "Cache hit"
         env:
           cache-paths: |
             node_modules/
@@ -113,7 +109,6 @@ jobs:
 
       - name: Restore scratch-gui dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit != 'true'
-        run: echo "Cache miss"
         env:
           cache-paths: |
             node_modules/
@@ -122,7 +117,6 @@ jobs:
 
       - name: Save scratch-gui dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit == 'true'
-        run: echo "Cache hit"
         env:
           cache-paths: |
             node_modules/
@@ -141,7 +135,6 @@ jobs:
 
       - name: Restore marty-lib dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit != 'true'
-        run: echo "Cache miss"
         env:
           cache-paths: |
             node_modules/
@@ -150,7 +143,6 @@ jobs:
 
       - name: Save marty-lib dependencies cache
         if: steps.npm_install_blocks.outputs.cache-hit == 'true'
-        run: echo "Cache hit"
         env:
           cache-paths: |
             node_modules/
