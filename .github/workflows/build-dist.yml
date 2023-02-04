@@ -23,6 +23,11 @@ jobs:
         with:
           python-version: '2.7' 
 
+      - name: detele me
+        run: |
+          ls -l
+          pwd
+          
       - name: Clone repos
         run: |
           git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
