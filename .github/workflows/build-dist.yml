@@ -1,24 +1,23 @@
 name: BuildMartyBlocks
 on: [workflow_dispatch]
 
-env:
-  MBHome: /home/runner/work/MartyBlocks
-  mblib: ${{ env.MBHome }}/marty-blocks-lib/
-  REPLACEMENTS: ${{ env.MBHome }}/marty-blocks-lib/replacements
-  blocks_original: ${{ env.MBHome }}/scratch-blocks
-  vm_original: ${{ env.MBHome }}/scratch-vm
-  gui_original: ${{ env.MBHome }}/scratch-gui
 
 jobs:
   setup_project:
     runs-on: ubuntu-latest
-    
+    env:
+      MBHome: /home/runner/work/MartyBlocks
+      mblib: ${{ env.MBHome }}/marty-blocks-lib/
+      REPLACEMENTS: ${{ env.MBHome }}/marty-blocks-lib/replacements
+      blocks_original: ${{ env.MBHome }}/scratch-blocks
+      vm_original: ${{ env.MBHome }}/scratch-vm
+      gui_original: ${{ env.MBHome }}/scratch-gui
     steps:
       - uses: actions/checkout@v2
         with:
           ref: master
           path: .
-          
+
       - name: Clone repos
         run: |
           git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
@@ -58,7 +57,7 @@ jobs:
           cd ${{ env.gui_original }}
           BUILD_MODE=dist npm run build
 
-      - name: delete me 
+      - name: delete me
         run: |
           cd ${{ env.gui_original }}
           ls -l
@@ -76,8 +75,8 @@ jobs:
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
