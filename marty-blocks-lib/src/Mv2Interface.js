@@ -202,14 +202,21 @@ class Mv2Interface extends EventDispatcher {
   async saveCloudScratchFile(projectBase64) {
     const dbUrl =
       "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects.json";
-    const response = await fetch(dbUrl, {
-      method: "POST",
-      headers: {
-        Application: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data: projectBase64 }),
-    });
+    let response;
+    try {
+      response = await fetch(dbUrl, {
+        method: "POST",
+        headers: {
+          Application: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: projectBase64 }),
+      });
+    } catch(e){
+      return mv2Interface.send_REST(
+        "notification/warn-message/To save a file in the cloud internet access is needed."
+      );
+    }
     const projectId = await response.json();
     if (projectId && projectId.name) return projectId.name;
     return null;
@@ -258,7 +265,14 @@ class Mv2Interface extends EventDispatcher {
     try {
       const dbUrl =
         "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
-      const res = await fetch(dbUrl + fileId + ".json");
+        let res;
+        try {
+          res = await fetch(dbUrl + fileId + ".json");
+        } catch(e) {
+          return mv2Interface.send_REST(
+            "notification/warn-message/To load a saved file in the cloud internet access is needed."
+          );
+        }
       const projectBase64String = await res.json();
       if (!projectBase64String || !projectBase64String.data) {
         throw new Error("Invalid project id");

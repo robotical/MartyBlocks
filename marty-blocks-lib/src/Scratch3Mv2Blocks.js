@@ -3,6 +3,7 @@ const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
 const Cast = require("./util/cast");
 const Color = require("./util/color");
+const meSpeak = require("./util/mespeak");
 
 mv2Interface = new Mv2Interface();
 
@@ -1095,7 +1096,7 @@ class Scratch3Mv2Blocks {
         return this.getGround(addon);
       }
     }
-    
+
     return false;
   }
 
@@ -1197,7 +1198,7 @@ class Scratch3Mv2Blocks {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
         return this.getColour(addon);
       }
-    }  
+    }
     return null;
   }
 
@@ -1838,6 +1839,73 @@ class Scratch3Mv2Blocks {
       for (let s = 0; s < samples; s++) {
         channelData[s] *= gain;
       }
+    }
+  }
+
+  static async speech2TextLocally(voice, words, target, isMarty) {
+    // voice: "ALTO f" | "KITTEN f" | "SQUEAK f" | "TENOR m" | "GIANT m"
+    let variant;
+    if (voice === "ALTO") {
+      variant = "whisperf";
+    } else if (voice === "KITTEN") {
+      variant = "f5";
+    } else if (voice === "SQUEAK") {
+      variant = "f2";
+    } else if (voice === "TENOR") {
+      variant = "m1";
+    } else if (voice === "GIANT") {
+      variant = "m7";
+    } else {
+      variant = "f1";
+    }
+
+    meSpeak.loadVoice(require("./util/mespeak/voices/en/en-us.json"));
+    if (!meSpeak.isConfigLoaded()) {
+      meSpeak.loadConfig(require("./util/mespeak/src/mespeak_config.json"));
+    }
+    if (isMarty) {
+      const uint8Array = meSpeak.speak(words, {
+        rawdata: "buffer",
+        variant: variant,
+        wordgap: 7,
+      });
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      const audioBuffer = await audioContext.decodeAudioData(uint8Array.buffer);
+
+      Scratch3Mv2Blocks.increaseVolume(audioBuffer, target.volume / 30);
+      console.log("here");
+
+      const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(audioBuffer);
+      const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
+        mp3SoundBuffers
+      );
+      mv2Interface.streamAudio(mp3SoundData, audioBuffer.duration * 1000);
+      return new Promise((resolve) => {
+        const timeout = setTimeout(() => {
+          clearTimeout(timeout);
+          resolve();
+        }, audioBuffer.duration * 1000 + 800);
+      });
+    } else {
+      let isFinished;
+      meSpeak.speak(words, {
+        variant: variant,
+        wordgap: 7,
+        callback: function () {
+          isFinished = true;
+        },
+      });
+      return new Promise((resolve) => {
+        // iteratively check if the speech is finished
+        const interval = setInterval(() => {
+          if (isFinished) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      });
     }
   }
 }

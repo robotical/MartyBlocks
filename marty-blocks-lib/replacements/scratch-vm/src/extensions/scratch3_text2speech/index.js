@@ -735,6 +735,7 @@ class Scratch3Text2SpeechBlocks {
    * @return {Promise} A promise that resolves after playing the sound
    */
   marty_speakAndWait(args, util) {
+
     // Cast input to string
     let words = Cast.toString(args.WORDS);
     let locale = this._getSpeechSynthLocale();
@@ -789,11 +790,11 @@ class Scratch3Text2SpeechBlocks {
         return this.runtime.audioEngine.decodeSoundPlayer(sound);
       })
       .then((soundPlayer) => {
-        const { target } = util;
 
         this._soundPlayers.set(soundPlayer.id, soundPlayer);
         soundPlayer.setPlaybackRate(playbackRate);
-        Scratch3Mv2Blocks.increaseVolume(soundPlayer.buffer, target.volume / 30);
+    
+        Scratch3Mv2Blocks.increaseVolume(soundPlayer.buffer, util.target.volume / 30);
 
         const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
           soundPlayer.buffer
@@ -811,8 +812,15 @@ class Scratch3Text2SpeechBlocks {
           }, soundPlayer.buffer.duration * 1000 + 800);
         });
       })
-      .catch((err) => {
+      .catch(async (err) => {
         log.warn(err);
+        // probably we are offline, so we can't use the speech service
+        // instead we will use the meSpeak library
+        try {
+          return Scratch3Mv2Blocks.speech2TextLocally(state.voiceId, words, util.target, true);
+        } catch (error) {
+          log.warn(error);
+        }
       });
   }
 
@@ -822,7 +830,7 @@ class Scratch3Text2SpeechBlocks {
    * @param {object} util Utility object provided by the runtime.
    * @return {Promise} A promise that resolves after playing the sound
    */
-  speakAndWait(args, util) {
+  async speakAndWait(args, util) {
     // Cast input to string
     let words = Cast.toString(args.WORDS);
     let locale = this._getSpeechSynthLocale();
@@ -897,6 +905,13 @@ class Scratch3Text2SpeechBlocks {
       })
       .catch((err) => {
         log.warn(err);
+        // probably we are offline, so we can't use the speech service
+        // instead we will use the meSpeak library
+        try {
+          return Scratch3Mv2Blocks.speech2TextLocally(state.voiceId, words, util.target);
+        } catch (error) {
+          log.warn(error);
+        }
       });
   }
 }
