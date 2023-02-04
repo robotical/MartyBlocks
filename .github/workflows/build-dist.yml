@@ -6,12 +6,12 @@ jobs:
   setup_project:
     runs-on: ubuntu-latest
     env:
-      MBHome: .
-      mblib: ./marty-blocks-lib/
-      REPLACEMENTS: ./marty-blocks-lib/replacements
-      blocks_original: ./scratch-blocks
-      vm_original: ./scratch-vm
-      gui_original: ./scratch-gui
+      MBHome: /
+      mblib: /marty-blocks-lib/
+      REPLACEMENTS: /marty-blocks-lib/replacements
+      blocks_original: /scratch-blocks
+      vm_original: /scratch-vm
+      gui_original: /scratch-gui
 
     steps:
       - uses: actions/checkout@v2
