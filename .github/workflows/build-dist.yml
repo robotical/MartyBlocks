@@ -58,6 +58,18 @@ jobs:
           cd ${{ env.vm_original }} && npm link && npm link marty-blocks-lib scratch-blocks
           cd ${{ env.gui_original }} && npm link marty-blocks-lib scratch-blocks scratch-vm
 
+      - name: check if linking worked
+        run: |
+          cd ${{ env.blocks_original }}
+          npm ls marty-blocks-lib
+          cd ${{ env.vm_original }}
+          npm ls marty-blocks-lib
+          npm ls scratch-blocks
+          cd ${{ env.gui_original }}
+          npm ls marty-blocks-lib
+          npm ls scratch-blocks
+          npm ls scratch-vm
+          
       - name: Copy replacements
         run: |
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
