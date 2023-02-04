@@ -6,12 +6,12 @@ jobs:
   setup_project:
     runs-on: ubuntu-latest
     env:
-      MBHome: /home/runner/work/MartyBlocks
-      mblib: /home/runner/work/MartyBlocks/marty-blocks-lib/
-      REPLACEMENTS: /home/runner/work/MartyBlocks/marty-blocks-lib/replacements
-      blocks_original: /home/runner/work/MartyBlocks/scratch-blocks
-      vm_original: /home/runner/work/MartyBlocks/scratch-vm
-      gui_original: /home/runner/work/MartyBlocks/scratch-gui
+      MBHome: .
+      mblib: ./marty-blocks-lib/
+      REPLACEMENTS: ./marty-blocks-lib/replacements
+      blocks_original: ./scratch-blocks
+      vm_original: ./scratch-vm
+      gui_original: ./scratch-gui
 
     steps:
       - uses: actions/checkout@v2
@@ -23,11 +23,20 @@ jobs:
         with:
           python-version: '2.7.18' 
 
-      - name: Clone repos
+      - name: Clone repos with cache
+        id: clone_repos
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ env.blocks_original }}
+            ${{ env.vm_original }}
+            ${{ env.gui_original }}
+          key: "${{ env.blocks_original }}-${{ env.vm_original }}-${{ env.gui_original }}-v1"
         run: |
           git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
           git clone -b develop https://github.com/llk/scratch-vm.git ${{ env.vm_original }}
           git clone -b develop https://github.com/llk/scratch-gui.git ${{ env.gui_original }}
+
 
       - name: Checkout appropriate commit
         run: |
@@ -35,16 +44,118 @@ jobs:
           cd ${{ env.vm_original }} && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
           cd ${{ env.gui_original }} && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
 
-      - name: Install scratch
+      # - name: Install scratch
+      #   run: |
+      #     cd ${{ env.blocks_original }} && npm install 
+      #     cd ${{ env.vm_original }} && npm install 
+      #     cd ${{ env.gui_original }} && npm install
+      - name: Install scratch-blocks dependencies
         run: |
-          cd ${{ env.blocks_original }} && npm install 
-          cd ${{ env.vm_original }} && npm install 
-          cd ${{ env.gui_original }} && npm install
+          cd ${{ env.blocks_original }} && npm install
+        env:
+          cache-paths: |
+            node_modules/
+        id: npm_install_blocks
 
-      - name: Install marty blocks library
+      - name: Restore scratch-blocks dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit != 'true'
+        run: echo "Cache miss"
+        env:
+          cache-paths: |
+            node_modules/
+        id: restore_cache_blocks
+        uses: actions/cache@v2
+
+      - name: Save scratch-blocks dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit == 'true'
+        run: echo "Cache hit"
+        env:
+          cache-paths: |
+            node_modules/
+        id: save_cache_blocks
+        uses: actions/cache@v2
+
+
+      - name: Install scratch_vm dependencies
         run: |
-          cd ${{ env.mblib }}
-          npm install
+          cd ${{ env.vm_original }} && npm install
+        env:
+          cache-paths: |
+            node_modules/
+        id: npm_install_blocks
+
+      - name: Restore scratch_vm dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit != 'true'
+        run: echo "Cache miss"
+        env:
+          cache-paths: |
+            node_modules/
+        id: restore_cache_blocks
+        uses: actions/cache@v2
+
+      - name: Save scratch_vm dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit == 'true'
+        run: echo "Cache hit"
+        env:
+          cache-paths: |
+            node_modules/
+        id: save_cache_blocks
+        uses: actions/cache@v2
+
+
+      - name: Install scratch-gui dependencies
+        run: |
+          cd ${{ env.gui_original }} && npm install
+        env:
+          cache-paths: |
+            node_modules/
+        id: npm_install_blocks
+
+      - name: Restore scratch-gui dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit != 'true'
+        run: echo "Cache miss"
+        env:
+          cache-paths: |
+            node_modules/
+        id: restore_cache_blocks
+        uses: actions/cache@v2
+
+      - name: Save scratch-gui dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit == 'true'
+        run: echo "Cache hit"
+        env:
+          cache-paths: |
+            node_modules/
+        id: save_cache_blocks
+        uses: actions/cache@v2
+
+
+
+      - name: Install marty-lib dependencies
+        run: |
+          cd ${{ env.mblib }} && npm install
+        env:
+          cache-paths: |
+            node_modules/
+        id: npm_install_blocks
+
+      - name: Restore marty-lib dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit != 'true'
+        run: echo "Cache miss"
+        env:
+          cache-paths: |
+            node_modules/
+        id: restore_cache_blocks
+        uses: actions/cache@v2
+
+      - name: Save marty-lib dependencies cache
+        if: steps.npm_install_blocks.outputs.cache-hit == 'true'
+        run: echo "Cache hit"
+        env:
+          cache-paths: |
+            node_modules/
+        id: save_cache_blocks
+        uses: actions/cache@v2
 
       - name: Link repositories
         run: |
