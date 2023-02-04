@@ -1,28 +1,68 @@
 name: BuildMartyBlocks
 on: [workflow_dispatch]
+
+env:
+  MBHome: /home/runner/work/MartyBlocks
+  mblib: ${{ env.MBHome }}/marty-blocks-lib/
+  REPLACEMENTS: ${{ env.MBHome }}/marty-blocks-lib/replacements
+  blocks_original: ${{ env.MBHome }}/scratch-blocks
+  vm_original: ${{ env.MBHome }}/scratch-vm
+  gui_original: ${{ env.MBHome }}/scratch-gui
+
 jobs:
-  build_martyblocks_job:
+  setup_project:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      # - name: Set up Docker Buildx
-      #   id: buildx
-      #   uses: docker/setup-buildx-action@v1
-      - name: Build MartyBlocks using Docker Image
-        uses: docker/build-push-action@v2
-        id: build-martyblocks
+    - name: Clone repos
+      run: |
+        git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
+        git clone -b develop https://github.com/llk/scratch-vm.git ${{ env.vm_original }}
+        git clone -b develop https://github.com/llk/scratch-gui.git ${{ env.gui_original }}
+
+    - name: Checkout appropriate commit
+      run: |
+        cd ${{ env.blocks_original }} && git reset --hard f9107bf5d0479d632658f2b203995f5ae6d75363
+        cd ${{ env.vm_original }} && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
+        cd ${{ env.gui_original }} && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
+
+    - name: Install scratch
+      run: |
+        cd ${{ env.blocks_original }} && npm install 
+        cd ${{ env.vm_original }} && npm install 
+        cd ${{ env.gui_original }} && npm install
+
+    - name: Install marty blocks library
+      run: |
+        cd ${{ env.mblib }}
+        npm install
+
+    - name: Link repositories
+      run: |
+        cd ${{ env.mblib }} && npm link
+        cd ${{ env.blocks_original }} && npm link && npm link marty-blocks-lib
+        cd ${{ env.vm_original }} && npm link && npm link marty-blocks-lib scratch-blocks
+        cd ${{ env.gui_original }} && npm link marty-blocks-lib scratch-blocks scratch-vm
+
+    - name: Copy replacements
+      run: |
+        cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
+
+    - name: Build Scratch
+      run: |
+        cd ${{ env.gui_original }}
+        BUILD_MODE=dist npm run build
+
+    - name: delete me 
+      run: |
+        cd ${{ env.gui_original }}
+        ls -l
+        
+    # Setup .npmrc file to publish to npm
+    - uses: actions/setup-node@v2
         with:
-          tags: user/app:latest
-          push: false
-          load: true
-          # builder: ${{ steps.buildx.outputs.name }}
-      # - uses: shrink/actions-docker-extract@v1
-      #   id: extract
-      #   with:
-      #     image: martyblocks-image
-      #     path: /MartyBlocks/scratch-gui/build.
-      # - name: Upload Dist
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     path: ${{ steps.extract.outputs.destination }}
-      #     name: dist
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+    - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
