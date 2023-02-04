@@ -8,11 +8,11 @@ jobs:
   setup_project:
     runs-on: ubuntu-latest
     env:
-      mblib: ${{ env.MBHome }}/marty-blocks-lib/
-      REPLACEMENTS: ${{ env.MBHome }}/marty-blocks-lib/replacements
-      blocks_original: ${{ env.MBHome }}/scratch-blocks
-      vm_original: ${{ env.MBHome }}/scratch-vm
-      gui_original: ${{ env.MBHome }}/scratch-gui
+      mblib: /home/runner/work/MartyBlocks/marty-blocks-lib/
+      REPLACEMENTS: /home/runner/work/MartyBlocks/marty-blocks-lib/replacements
+      blocks_original: /home/runner/work/MartyBlocks/scratch-blocks
+      vm_original: /home/runner/work/MartyBlocks/scratch-vm
+      gui_original: /home/runner/work/MartyBlocks/scratch-gui
 
     steps:
       - uses: actions/checkout@v2
