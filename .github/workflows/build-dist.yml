@@ -1,17 +1,18 @@
 name: BuildMartyBlocks
 on: [workflow_dispatch]
 
+env:
+  MBHome: /home/runner/work/MartyBlocks
+  mblib: ${{ env.MBHome }}/marty-blocks-lib/
+  REPLACEMENTS: ${{ env.MBHome }}/marty-blocks-lib/replacements
+  blocks_original: ${{ env.MBHome }}/scratch-blocks
+  vm_original: ${{ env.MBHome }}/scratch-vm
+  gui_original: ${{ env.MBHome }}/scratch-gui
 
 jobs:
   setup_project:
     runs-on: ubuntu-latest
-    env:
-      MBHome: /home/runner/work/MartyBlocks
-      mblib: ${{ env.MBHome }}/marty-blocks-lib/
-      REPLACEMENTS: ${{ env.MBHome }}/marty-blocks-lib/replacements
-      blocks_original: ${{ env.MBHome }}/scratch-blocks
-      vm_original: ${{ env.MBHome }}/scratch-vm
-      gui_original: ${{ env.MBHome }}/scratch-gui
+    
     steps:
       - uses: actions/checkout@v2
         with:
