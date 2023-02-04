@@ -15,10 +15,10 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-          with:
-            ref: master
-            path: .
-            
+        with:
+          ref: master
+          path: .
+          
       - name: Clone repos
         run: |
           git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
