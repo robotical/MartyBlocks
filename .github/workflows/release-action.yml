@@ -1,20 +1,106 @@
-name: Publish Package to npmjs
+name: Build and publish to npm
+
 on:
   release:
-    types: [published, created]
+    types: [created]
+
 jobs:
-  build:
+  build_and_release:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max-old-space-size=5120"
+      MBHome: /home/runner/work/MartyBlocks/MartyBlocks
+      mblib: /home/runner/work/MartyBlocks/MartyBlocks/marty-blocks-lib/
+      REPLACEMENTS: /home/runner/work/MartyBlocks/MartyBlocks/marty-blocks-lib/replacements
+      blocks_original: /home/runner/work/MartyBlocks/MartyBlocks/scratch-blocks
+      vm_original: /home/runner/work/MartyBlocks/MartyBlocks/scratch-vm
+      gui_original: /home/runner/work/MartyBlocks/MartyBlocks/scratch-gui
+
     steps:
+
       - uses: actions/checkout@v2
         with:
           ref: master
           path: .
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7' 
+
+      - name: see memory allocation
+        run: node -e 'console.log(`node heap limit = ${require("v8").getHeapStatistics().heap_size_limit / (1024 * 1024)} Mb`)'
+
+      - name: Clone repos
+        run: |
+          git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
+          git clone -b develop https://github.com/llk/scratch-vm.git ${{ env.vm_original }}
+          git clone -b develop https://github.com/llk/scratch-gui.git ${{ env.gui_original }}
+
+      - name: Checkout appropriate commit
+        run: |
+          cd ${{ env.blocks_original }} && git reset --hard f9107bf5d0479d632658f2b203995f5ae6d75363
+          cd ${{ env.vm_original }} && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
+          cd ${{ env.gui_original }} && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
+
+      - name: Install scratch
+        run: |
+          cd ${{ env.blocks_original }} && npm install 
+          cd ${{ env.vm_original }} && npm install 
+          cd ${{ env.gui_original }} && npm install
+
+      - name: Install marty blocks library
+        run: |
+          cd ${{ env.mblib }}
+          npm install
+
+      - name: Link repositories
+        run: |
+          cd ${{ env.mblib }} && npm link
+          cd ${{ env.blocks_original }} && npm link && npm link marty-blocks-lib
+          cd ${{ env.vm_original }} && npm link && npm link marty-blocks-lib scratch-blocks
+          cd ${{ env.gui_original }} && npm link marty-blocks-lib scratch-blocks scratch-vm
+
+      - name: check if scracth-blocks linking worked
+        run: |
+          cd ${{ env.blocks_original }}
+          npm list || true
+      - name: check if scratch-vm linking worked
+        run: |
+          cd ${{ env.vm_original }}
+          npm list || true
+      - name: check if gui linking worked
+        run: |
+          cd ${{ env.gui_original }}
+          npm list || true
+
+      - name: Copy replacements
+        run: |
+          cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
+
+      - name: Build Blocks
+        run: |
+          cd ${{ env.blocks_original }}
+          npm run prepublish
+
+      - name: Build VM
+        run: |
+          cd ${{ env.vm_original }}
+          npm run build
+          
+      - name: Build Scratch
+        run: |
+          cd ${{ env.gui_original }}
+          BUILD_MODE=dist npm run build
+
+      - name: Copy dist files
+        run: |
+          cp -r ${{ env.gui_original }}/dist ${{ env.MBHome }}
+
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

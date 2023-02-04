@@ -6,6 +6,7 @@ export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
 export blocks_original=$MBHome/scratch-blocks
 export vm_original=$MBHome/scratch-vm
 export gui_original=$MBHome/scratch-gui
+export NODE_OPTIONS="--max-old-space-size=5120"
 alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
 export PATH=$(pyenv root)/shims:$PATH
