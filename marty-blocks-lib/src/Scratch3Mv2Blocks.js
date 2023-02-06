@@ -1133,24 +1133,24 @@ class Scratch3Mv2Blocks {
         { hue: [0, 10], chroma: [75, 200], clear: [40, 150], name: "red" },
         {
           hue: [20, 50],
-          chroma: [100, 300],
+          chroma: [75, 300],
           clear: [100, 255],
           name: "yellow",
         },
         {
-          hue: [100, 160],
+          hue: [85, 160],
           chroma: [10, 100],
           clear: [40, 150],
           name: "green",
         },
         {
           hue: [190, 220],
-          chroma: [95, 230],
-          clear: [90, 255],
+          chroma: [70, 230],
+          clear: [70, 255],
           name: "blue",
         },
         {
-          hue: [240, 320],
+          hue: [210, 320],
           chroma: [10, 70],
           clear: [40, 150],
           name: "purple",
@@ -1362,7 +1362,7 @@ class Scratch3Mv2Blocks {
     ) {
       return mv2Interface.send_REST("notification/fw-needs-update");
     }
-    mv2Interface.streamAudio([0], 0);
+    mv2Interface.streamAudio([0], 0, true);
   }
 
   playTone(args, util) {
@@ -1491,7 +1491,8 @@ class Scratch3Mv2Blocks {
           );
           mv2Interface.streamAudio(
             mp3SoundData,
-            renderedBuffer.duration * 1000
+            renderedBuffer.duration * 1000,
+            false
           );
         };
         const audioEngine = new player.audioEngine.constructor(audioContext);
