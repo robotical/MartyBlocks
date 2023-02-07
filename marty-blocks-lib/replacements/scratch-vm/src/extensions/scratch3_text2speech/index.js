@@ -816,6 +816,9 @@ class Scratch3Text2SpeechBlocks {
         log.warn(err);
         // probably we are offline, so we can't use the speech service
         // instead we will use the meSpeak library
+        return mv2Interface.send_REST(
+        "notification/warn-message/Text to speech extension requires internet connection."
+      );
         try {
           return Scratch3Mv2Blocks.speech2TextLocally(state.voiceId, words, util.target, true);
         } catch (error) {
@@ -907,6 +910,9 @@ class Scratch3Text2SpeechBlocks {
         log.warn(err);
         // probably we are offline, so we can't use the speech service
         // instead we will use the meSpeak library
+        return mv2Interface.send_REST(
+        "notification/warn-message/Text to speech extension requires internet"
+      );
         try {
           return Scratch3Mv2Blocks.speech2TextLocally(state.voiceId, words, util.target);
         } catch (error) {

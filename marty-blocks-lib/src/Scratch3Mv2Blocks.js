@@ -1152,7 +1152,7 @@ class Scratch3Mv2Blocks {
         {
           hue: [210, 320],
           chroma: [10, 70],
-          clear: [40, 150],
+          clear: [30, 150],
           name: "purple",
         },
         {
