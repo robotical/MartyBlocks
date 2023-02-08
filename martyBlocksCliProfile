@@ -1,3 +1,4 @@
+export PhoneAppHome=/Users/nikolastheodoropoulos/Documents/Robotical/phone-app/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
 export WebappHome=/Users/nikolastheodoropoulos/Documents/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
 export MBHome=/Users/nikolastheodoropoulos/Documents/Robotical/MartyBlocks # <- replace this
 
@@ -92,6 +93,13 @@ buildScratch () {
 cpToWebapp () {
     rm -rf $WebappHome/public/MartyBlocks/*
     cp -r $gui_original/build/* $WebappHome/public/MartyBlocks
+}
+
+cpToPhoneApp () {
+    rm -rf $PhoneAppHome/assets/www/scratch-build/*
+    rm -rf $PhoneAppHome/node_modules/@robotical/martyblocks/dist/*
+    cp -r $gui_original/build/* $PhoneAppHome/assets/www/scratch-build/
+    cp -r $gui_original/build/* $PhoneAppHome/node_modules/@robotical/martyblocks/dist
 }
 
 cpToDist () {
