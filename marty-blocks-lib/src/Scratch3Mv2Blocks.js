@@ -1218,12 +1218,12 @@ class Scratch3Mv2Blocks {
     const sensorChoice = args.SENSORCHOICE;
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        return this.getColourRaw(addon);
+        return this.getColourRaw(addon, args);
       }
     }
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
-        return this.getColourRaw(addon);
+        return this.getColourRaw(addon, args);
       }
     }
     return null;
@@ -1246,7 +1246,7 @@ class Scratch3Mv2Blocks {
     return false;
   }
 
-  getLight(addon) {
+  getLight(addon, args) {
     // helper function to get the light of a light sensor
     for (const addonValKey in addon.vals) {
       const addonVal = addon.vals[addonValKey];
@@ -1263,12 +1263,12 @@ class Scratch3Mv2Blocks {
 
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        return this.getLight(addon);
+        return this.getLight(addon, args);
       }
     }
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
-        return this.getLight(addon);
+        return this.getLight(addon, args);
       }
     }
     return null;
