@@ -27,6 +27,11 @@ jobs:
         with:
           python-version: '2.7' 
 
+      - name: Use Node.js 16.15.0
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.15.0
+
       - name: see memory allocation
         run: node -e 'console.log(`node heap limit = ${require("v8").getHeapStatistics().heap_size_limit / (1024 * 1024)} Mb`)'
 
