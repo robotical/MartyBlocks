@@ -1202,7 +1202,7 @@ class Scratch3Mv2Blocks {
     return null;
   }
 
-  getColourRaw(addon) {
+  getColourRaw(addon, args) {
     // helper function to get the RAW colour of a colour sensor
     for (const addonValKey in addon.vals) {
       const addonVal = addon.vals[addonValKey];
