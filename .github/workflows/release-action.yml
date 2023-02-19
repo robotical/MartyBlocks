@@ -1,8 +1,10 @@
 name: Build and publish to npm
 
-on:
-  release:
-    types: [created]
+# on:
+#   release:
+#     types: [created]
+on: workflow_dispatch
+
 
 jobs:
   build_and_release:
