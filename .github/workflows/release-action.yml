@@ -51,46 +51,76 @@ jobs:
           git clone -b develop https://github.com/llk/scratch-vm.git ${{ env.vm_original }}
           git clone -b develop https://github.com/llk/scratch-gui.git ${{ env.gui_original }}
 
+      - name: Checkout appropriate commit
+        run: |
           cd ${{ env.blocks_original }} && git reset --hard f9107bf5d0479d632658f2b203995f5ae6d75363
           cd ${{ env.vm_original }} && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
           cd ${{ env.gui_original }} && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
 
+      - name: Install scratch
+        run: |
           cd ${{ env.blocks_original }} && npm install 
           cd ${{ env.vm_original }} && npm install 
           cd ${{ env.gui_original }} && npm install
 
+      - name: Install marty blocks library
+        run: |
           cd ${{ env.mblib }}
           npm install
 
+      - name: setting production environments
+        run: |
           cd ${{ env.mblib }}
           npx node set-production.js
 
+      - name: Link repositories
+        run: |
           cd ${{ env.mblib }} && npm link
           cd ${{ env.blocks_original }} && npm link && npm link marty-blocks-lib
           cd ${{ env.vm_original }} && npm link && npm link marty-blocks-lib scratch-blocks
           cd ${{ env.gui_original }} && npm link marty-blocks-lib scratch-blocks scratch-vm
 
+      - name: check if scracth-blocks linking worked
+        run: |
           cd ${{ env.blocks_original }}
           npm list || true
 
+      - name: check if scratch-vm linking worked
+        run: |
           cd ${{ env.vm_original }}
           npm list || true
 
+      - name: check if gui linking worked
+        run: |
           cd ${{ env.gui_original }}
           npm list || true
 
+      - name: Copy replacements
+        run: |
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
-
+      - name: Build Blocks
+        run: |
           cd ${{ env.blocks_original }}
           npm run prepublish
 
+      - name: Build VM
+        run: |
           cd ${{ env.vm_original }}
           npm run build
           
+      - name: Build Scratch
+        run: |
           cd ${{ env.gui_original }}
           BUILD_MODE=dist npm run build
 
+      - name: print gui components
+        run: |
+          cd ${{ env.gui_original }}
+          ls -l ${{ env.gui_original }}/src/components
+
+      - name: Copy dist files
+        run: |
           mkdir -p ${{ env.MBHome }}/dist
           cp -r ${{ env.gui_original }}/build/* ${{ env.MBHome }}/dist
 
