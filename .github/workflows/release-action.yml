@@ -94,9 +94,9 @@ jobs:
           cd ${{ env.gui_original }}
           npm list || true
 
-      - name: Copy replacements
-        run: |
-          cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
+      # - name: Copy replacements
+      #   run: |
+      #     cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
       - name: Build Blocks
         run: |
