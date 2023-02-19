@@ -8,7 +8,7 @@ on: workflow_dispatch
 
 jobs:
   build_and_release:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       NODE_OPTIONS: "--max-old-space-size=5120" # locally export NODE_OPTIONS=--max-old-space-size=5120
       MBHome: /home/runner/work/MartyBlocks/MartyBlocks
@@ -92,19 +92,16 @@ jobs:
       - name: Build Blocks
         run: |
           cd ${{ env.blocks_original }}
-          export LC_ALL=en_US.UTF-8
           npm run prepublish
 
       - name: Build VM
         run: |
           cd ${{ env.vm_original }}
-          export LC_ALL=en_US.UTF-8
           npm run build
           
       - name: Build Scratch
         run: |
           cd ${{ env.gui_original }}
-          export LC_ALL=en_US.UTF-8
           BUILD_MODE=dist npm run build
 
       - name: Copy dist files
