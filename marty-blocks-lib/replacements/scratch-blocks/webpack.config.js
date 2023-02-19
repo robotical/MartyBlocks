@@ -8,7 +8,7 @@ var path = require('path');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = [{
-  mode: 'production',
+  mode: 'development',
   entry: {
     horizontal: './shim/horizontal.js',
     vertical: './shim/vertical.js'

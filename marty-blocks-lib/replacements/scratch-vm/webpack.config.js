@@ -4,7 +4,7 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const base = {
-    mode: 'production',
+    mode: 'development',
     devServer: {
         contentBase: false,
         host: '0.0.0.0',
