@@ -102,7 +102,7 @@ jobs:
       - name: confirm that we replaced parser
         run: |
           ./printlines.sh marty-blocks-lib/replacements/scratch-vm/node_modules/scratch-parser/lib/sb3_definitions.json 76 90
-          ./printlines.sh scratch-vm/node_modules/scratch-parser/lib/sb3_definitions.json 76 90
+          ./printlines.sh scratch-vm/node_modules/scratch-parser/lib/sb3_definitions.json 52 90
       # - name: Build Blocks
       #   run: |
       #     cd ${{ env.blocks_original }}
