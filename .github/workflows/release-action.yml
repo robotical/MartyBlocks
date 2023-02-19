@@ -11,12 +11,12 @@ jobs:
     runs-on: macos-latest
     env:
       NODE_OPTIONS: "--max-old-space-size=5120" # locally export NODE_OPTIONS=--max-old-space-size=5120
-      MBHome: MartyBlocks/MartyBlocks
-      mblib: MartyBlocks/MartyBlocks/marty-blocks-lib/
-      REPLACEMENTS: MartyBlocks/MartyBlocks/marty-blocks-lib/replacements
-      blocks_original: MartyBlocks/MartyBlocks/scratch-blocks
-      vm_original: MartyBlocks/MartyBlocks/scratch-vm
-      gui_original: MartyBlocks/MartyBlocks/scratch-gui
+      MBHome: MartyBlocks
+      mblib: MartyBlocks/marty-blocks-lib/
+      REPLACEMENTS: MartyBlocks/marty-blocks-lib/replacements
+      blocks_original: MartyBlocks/scratch-blocks
+      vm_original: MartyBlocks/scratch-vm
+      gui_original: MartyBlocks/scratch-gui
 
     steps:
 
@@ -37,6 +37,11 @@ jobs:
       - name: see memory allocation
         run: node -e 'console.log(`node heap limit = ${require("v8").getHeapStatistics().heap_size_limit / (1024 * 1024)} Mb`)'
 
+      - name: see directory
+        run: |
+          pwd
+          ls -la
+          
       - name: Clone repos
         run: |
           git clone -b develop https://github.com/llk/scratch-blocks.git ${{ env.blocks_original }}
