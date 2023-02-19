@@ -1,6 +1,6 @@
 {
   "name": "@robotical/martyblocks",
-  "version": "1.4.52",
+  "version": "1.4.53",
   "description": "MartyBlocks based on Scratch for Marty the Robot by Robotical",
   "main": "README.md",
   "scripts": {
@@ -24,6 +24,6 @@
   "homepage": "https://github.com/robotical/MartyBlocks-without-nested-repos#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public" 
+    "access": "public"
   }
 }
