@@ -11,12 +11,12 @@ jobs:
     runs-on: macos-latest
     env:
       NODE_OPTIONS: "--max-old-space-size=5120" # locally export NODE_OPTIONS=--max-old-space-size=5120
-      MBHome: /home/runner/work/MartyBlocks/MartyBlocks
-      mblib: /home/runner/work/MartyBlocks/MartyBlocks/marty-blocks-lib/
-      REPLACEMENTS: /home/runner/work/MartyBlocks/MartyBlocks/marty-blocks-lib/replacements
-      blocks_original: /home/runner/work/MartyBlocks/MartyBlocks/scratch-blocks
-      vm_original: /home/runner/work/MartyBlocks/MartyBlocks/scratch-vm
-      gui_original: /home/runner/work/MartyBlocks/MartyBlocks/scratch-gui
+      MBHome: MartyBlocks/MartyBlocks
+      mblib: MartyBlocks/MartyBlocks/marty-blocks-lib/
+      REPLACEMENTS: MartyBlocks/MartyBlocks/marty-blocks-lib/replacements
+      blocks_original: MartyBlocks/MartyBlocks/scratch-blocks
+      vm_original: MartyBlocks/MartyBlocks/scratch-vm
+      gui_original: MartyBlocks/MartyBlocks/scratch-gui
 
     steps:
 
