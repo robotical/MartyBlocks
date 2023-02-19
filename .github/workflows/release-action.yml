@@ -97,7 +97,7 @@ jobs:
 
       - name: Copy replacements
         run: |
-          cp -r ${{ env.REPLACEMENTS }} ${{ env.MBHome }}
+          cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
       - name: Build Blocks
         run: |
