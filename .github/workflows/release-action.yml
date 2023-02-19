@@ -65,7 +65,7 @@ jobs:
       - name: setting production environments
         run: |
           cd ${{ env.mblib }}
-          npx node set-development.js
+          npx node set-production.js
 
       - name: Link repositories
         run: |
