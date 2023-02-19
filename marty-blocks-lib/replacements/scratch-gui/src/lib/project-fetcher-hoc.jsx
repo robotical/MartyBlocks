@@ -117,6 +117,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
       }
       // eslint-disable-next-line no-console
       console.log("Falling back to default project");
+      console.log("HERE");
       const projectAsset = await storage.load(
         storage.AssetType.Project,
         projectId,
