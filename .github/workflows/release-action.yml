@@ -35,7 +35,10 @@ jobs:
           node-version: 16.15.0
 
       - name: set encoding
-        run: export LC_ALL=en_US.UTF-8
+        - name: Set locale
+          run: |
+            sudo update-locale LANG=en_US.UTF-8
+            sudo update-locale LC_ALL=en_US.UTF-8
 
       - name: check encoding
         run: locale
