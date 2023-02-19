@@ -47,9 +47,9 @@ jobs:
 
       - name: Clone repos
         run: |
-          git clone https://github.com/llk/scratch-blocks.git --branch develop --single-branch --depth 1 ${{ env.blocks_original }}
-          git clone https://github.com/llk/scratch-vm.git --branch develop --single-branch --depth 1 ${{ env.vm_original }}
-          git clone https://github.com/llk/scratch-gui.git --branch develop --single-branch --depth 1 ${{ env.gui_original }}
+          git clone https://github.com/llk/scratch-blocks.git --no-checkout ${{ env.blocks_original }}
+          git clone https://github.com/llk/scratch-vm.git --no-checkout ${{ env.vm_original }}
+          git clone https://github.com/llk/scratch-gui.git --no-checkout ${{ env.gui_original }}
 
       - name: Checkout appropriate commit
         run: |
