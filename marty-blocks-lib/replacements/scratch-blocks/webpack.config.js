@@ -26,7 +26,7 @@ module.exports = [{
     hints: false
   }
 }, {
-  mode: 'production',
+  mode: 'development',
   entry: {
     horizontal: './shim/horizontal.js',
     vertical: './shim/vertical.js'
@@ -49,7 +49,7 @@ module.exports = [{
   plugins: []
 },
 {
-  mode: 'production',
+  mode: 'development',
   entry: './shim/gh-pages.js',
   output: {
     filename: '[name].js',
