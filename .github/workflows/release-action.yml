@@ -99,8 +99,8 @@ jobs:
         run: |
           cp -r ${{ env.REPLACEMENTS }}/scratch-vm ${{ env.MBHome }}
           cp -r ${{ env.REPLACEMENTS }}/scratch-blocks ${{ env.MBHome }}
-          cp -r ${{ env.REPLACEMENTS }}/scratch-gui/src/components ${{ env.MBHome }}/scratch-gui/src
-          cp -r ${{ env.REPLACEMENTS }}/scratch-gui/src/containers ${{ env.MBHome }}/scratch-gui/src
+          cp -r ${{ env.REPLACEMENTS }}/scratch-gui/src ${{ env.MBHome }}/scratch-gui
+
 
       - name: Build Blocks
         run: |
