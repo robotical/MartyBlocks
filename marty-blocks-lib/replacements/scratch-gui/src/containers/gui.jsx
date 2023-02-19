@@ -59,7 +59,7 @@ class GUI extends React.Component {
     }
     render () {
         if (this.props.isError) {
-            throw new Error(
+            console.log(
                 `Error in Scratch GUI [location=${window.location}]: ${this.props.error}`);
         }
         const {
