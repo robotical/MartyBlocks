@@ -30,20 +30,20 @@ jobs:
           ref: master
           path: .
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '2.7.18' 
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '2.7.18' 
 
-      - name: Use Node.js 16.15.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.15.0
+      # - name: Use Node.js 16.15.0
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 16.15.0
 
-      - name: see node version
-        run: node -v
+      # - name: see node version
+      #   run: node -v
 
-      - name: see memory allocation
-        run: node -e 'console.log(`node heap limit = ${require("v8").getHeapStatistics().heap_size_limit / (1024 * 1024)} Mb`)'
+      # - name: see memory allocation
+      #   run: node -e 'console.log(`node heap limit = ${require("v8").getHeapStatistics().heap_size_limit / (1024 * 1024)} Mb`)'
 
       # - name: Clone repos
       #   run: |
@@ -113,16 +113,16 @@ jobs:
       #     cd ${{ env.gui_original }}
       #     BUILD_MODE=dist npm run build
 
-      - name: Copy dist files
-        run: |
-          mkdir -p ${{ env.MBHome }}/dist
+      # - name: Copy dist files
+      #   run: |
+      #     mkdir -p ${{ env.MBHome }}/dist
       #     cp -r ${{ env.gui_original }}/build/* ${{ env.MBHome }}/dist
 
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.15.0
-          registry-url: "https://registry.npmjs.org"
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 16.15.0
+      #     registry-url: "https://registry.npmjs.org"
+      # - run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
