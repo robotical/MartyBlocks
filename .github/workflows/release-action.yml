@@ -118,7 +118,6 @@ jobs:
           mkdir -p ${{ env.MBHome }}/dist
           cp -r ${{ env.gui_original }}/build/* ${{ env.MBHome }}/dist
 
-      Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v3
         with:
           node-version: 16.15.0
