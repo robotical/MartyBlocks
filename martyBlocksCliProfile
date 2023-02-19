@@ -55,8 +55,9 @@ npmlinkAll() {
 buildAllAndStart () {
     # arguments [all, blocks, vm, gui]
     local type="${1:-all}"
+    setDevelopment
     cpReplacements
-    buildScratch $type
+    buildScratchStart $type
     cd $gui_original
     npm start
 }
@@ -71,10 +72,21 @@ buildAllAndStart () {
 ##################### Helper functions ####################
 buildAllAndCpToWebApp () {
     local type="${1:-all}"
+    setDevelopment
     cpReplacements
     buildScratch $type
     cpToDist
     cpToWebapp
+}
+
+setProduction () {
+    cd $mblib
+    npx node ./set-production.js
+}
+
+setDevelopment () {
+    cd $mblib
+    npx node ./set-development.js
 }
 
 cpReplacements ()
@@ -88,6 +100,14 @@ buildScratch () {
     if [ $type = blocks ]; then buildBlocks; fi
     if [ $type = vm ]; then buildBlocks; buildVm; fi
     if [ $type = gui ]; then buildGui; fi
+}
+
+buildScratchStart () {
+    local type="${1:-all}"
+    if [ $type = all ]; then buildBlocks; buildVm; buildGui; fi
+    if [ $type = blocks ]; then buildBlocks; fi
+    if [ $type = vm ]; then buildBlocks; buildVm; fi
+    if [ $type = gui ]; then buildGuiStart; fi
 }
 
 cpToWebapp () {
@@ -118,6 +138,10 @@ buildVm() {
 
 buildGui() {
     cd $gui_original && BUILD_MODE=dist npm run build
+}
+
+buildGuiStart() {
+    cd $gui_original && npm run build
 }
 
 publishPackage() {
