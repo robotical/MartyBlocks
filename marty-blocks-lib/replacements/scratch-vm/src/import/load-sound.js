@@ -22,7 +22,6 @@ const loadSoundFromAsset = function (sound, soundAsset, runtime, soundBank) {
         sound,
         {data: soundAsset.data}
     )).then(soundPlayer => {
-        console.log("HERE")
         sound.soundId = soundPlayer.id;
         // Set the sound sample rate and sample count based on the
         // the audio buffer from the audio engine since the sound
