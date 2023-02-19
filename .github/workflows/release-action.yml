@@ -99,35 +99,39 @@ jobs:
         run: |
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
-      - name: Build Blocks
+      - name: confirm that we replaced parser
         run: |
-          cd ${{ env.blocks_original }}
-          npm run prepublish
+          ./printlines.sh marty-blocks-lib/replacements/scratch-vm/node_modules/scratch-parser/lib/sb3_definitions.json 76 90
+          ./printlines.sh scratch-vm/node_modules/scratch-parser/lib/sb3_definitions.json 76 90
+      # - name: Build Blocks
+      #   run: |
+      #     cd ${{ env.blocks_original }}
+      #     npm run prepublish
 
-      - name: Build VM
-        run: |
-          cd ${{ env.vm_original }}
-          npm run build
+      # - name: Build VM
+      #   run: |
+      #     cd ${{ env.vm_original }}
+      #     npm run build
           
-      - name: Build Scratch
-        run: |
-          cd ${{ env.gui_original }}
-          BUILD_MODE=dist npm run build
+      # - name: Build Scratch
+      #   run: |
+      #     cd ${{ env.gui_original }}
+      #     BUILD_MODE=dist npm run build
 
-      - name: print gui components
-        run: |
-          cd ${{ env.gui_original }}
-          ls -l ${{ env.gui_original }}/src/components
+      # - name: print gui components
+      #   run: |
+      #     cd ${{ env.gui_original }}
+      #     ls -l ${{ env.gui_original }}/src/components
 
-      - name: Copy dist files
-        run: |
-          mkdir -p ${{ env.MBHome }}/dist
-          cp -r ${{ env.gui_original }}/build/* ${{ env.MBHome }}/dist
+      # - name: Copy dist files
+      #   run: |
+      #     mkdir -p ${{ env.MBHome }}/dist
+      #     cp -r ${{ env.gui_original }}/build/* ${{ env.MBHome }}/dist
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.15.0
-          registry-url: "https://registry.npmjs.org"
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 16.15.0
+      #     registry-url: "https://registry.npmjs.org"
+      # - run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
