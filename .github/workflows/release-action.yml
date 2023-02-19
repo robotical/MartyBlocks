@@ -98,6 +98,7 @@ jobs:
       - name: Copy replacements
         run: |
           cp -r ${{ env.REPLACEMENTS }}/scratch-vm ${{ env.MBHome }}
+          cp -r ${{ env.REPLACEMENTS }}/scratch-blocks ${{ env.MBHome }}
 
       - name: Build Blocks
         run: |
