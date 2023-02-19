@@ -387,7 +387,7 @@ Blockly.Msg.MV2_PATTERN_OPTION_SHOWOFF = 'show-off';
 Blockly.Msg.MV2_GETREADY = '%1 %2 Get ready!';
 Blockly.Msg.MV2_WALK_FW = '%1 %2 Walk %3 steps forwards';
 Blockly.Msg.MV2_WALK_BW = '%1 %2 Walk %3 steps backwards';
-Blockly.Msg.MV2_WALK = '%1 %2 Walk %3 steps with step length %4mm and step time %5s, and turn %6°';
+Blockly.Msg.MV2_WALK = '%1 %2 Walk %3 steps with step length %4mm and step time %5s, and turn %6deg';
 Blockly.Msg.MV2_TURN = '%1 %2 Turn %3 steps %4';
 Blockly.Msg.MV2_WIGGLE = '%1 %2 Wiggle';
 Blockly.Msg.MV2_CIRCLE = '%1 %2 Circle dance %3 for %4s';
@@ -398,7 +398,7 @@ Blockly.Msg.MV2_EYES = '%1 %2 Eyes: %3';
 Blockly.Msg.MV2_MOVELEG = '%1 %2 Move %3 leg %4';
 Blockly.Msg.MV2_LIFTFOOT = '%1 %2 Lift %3 foot';
 Blockly.Msg.MV2_LOWERFOOT = '%1 %2 Lower %3 foot';
-Blockly.Msg.MV2_MOVEJOINT = '%1 %2 Move %3 to %4° in %5s';
+Blockly.Msg.MV2_MOVEJOINT = '%1 %2 Move %3 to %4deg in %5s';
 Blockly.Msg.MV2_WAVE = '%1 %2 Wave %3 arm';
 Blockly.Msg.MV2_DANCE = '%1 %2 Dance!';
 Blockly.Msg.MV2_STANDSTRAIGHT = '%1 %2 Stand straight in %3s';
@@ -494,7 +494,7 @@ Blockly.Msg.SENSING_USERID = 'user id';
 // MARTY V2 sensing blocks
 
 Blockly.Msg.MV2_BATTERYLEVEL = '%1 %2 Remaining battery (%)';
-Blockly.Msg.MV2_POSITION = '%1 %2 Position of %3 joint (in ° from \'zero\')';
+Blockly.Msg.MV2_POSITION = '%1 %2 Position of %3 joint (in deg from \'zero\')';
 Blockly.Msg.MV2_CURRENT = '%1 %2 Current at %3 joint (in mA)';
 Blockly.Msg.MV2_ACCELEROMETERX = '%1 %2 Accelerometer X';
 Blockly.Msg.MV2_ACCELEROMETERY = '%1 %2 Accelerometer Y';

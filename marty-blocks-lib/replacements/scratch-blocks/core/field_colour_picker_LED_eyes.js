@@ -147,7 +147,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.setValue = function (colour) {
 
 /**
  * Create the hue, saturation or value CSS gradient for the slide backgrounds.
- * @param {string} channel – Either "hue", "saturation" or "value".
+ * @param {string} channel - Either "hue", "saturation" or "value".
  * @return {string} Array colour hex colour stops for the given channel
  * @private
  */
@@ -178,7 +178,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.createColourStops_ = function (
 /**
  * Set the gradient CSS properties for the given node and channel
  * @param {Node} node - The DOM node the gradient will be set on.
- * @param {string} channel – Either "hue", "saturation" or "value".
+ * @param {string} channel - Either "hue", "saturation" or "value".
  * @private
  */
 Blockly.FieldColourPickerLEDEyes.prototype.setGradient_ = function (
