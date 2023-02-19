@@ -1,0 +1,11 @@
+[submodule "scratch-blocks"]
+    path = scratch-blocks
+    url = ./scratch-blocks
+
+[submodule "scratch-gui"]
+    path = scratch-gui
+    url = ./scratch-gui
+
+[submodule "scratch-vm"]
+    path = scratch-vm
+    url = ./scratch-vm
