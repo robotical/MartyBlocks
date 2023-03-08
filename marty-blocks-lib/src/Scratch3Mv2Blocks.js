@@ -1492,7 +1492,7 @@ class Scratch3Mv2Blocks {
           mv2Interface.streamAudio(
             mp3SoundData,
             renderedBuffer.duration * 1000,
-            false
+            true
           );
         };
         const audioEngine = new player.audioEngine.constructor(audioContext);
