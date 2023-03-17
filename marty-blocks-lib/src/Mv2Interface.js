@@ -142,7 +142,7 @@ class Mv2Interface extends EventDispatcher {
       command: "audioStreaming",
       audioData: Array.from(audioData),
       duration,
-      clearExisting
+      clearExisting,
     });
   }
 
@@ -196,24 +196,49 @@ class Mv2Interface extends EventDispatcher {
   }
 
   /**
+   * Remove a scratch file from the cloud
+   * @param {string} fileName Filename of the project to remove
+   */
+  async deleteCloudScratchFile(fileName) {
+    const dbUrl = `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/${fileName}.json`;
+    try {
+      await fetch(dbUrl, {
+        method: "DELETE",
+      });
+      this.sendFeedbackToServer({ success: true, fileName: fileName });
+    } catch (err) {
+      this.sendFeedbackToServer({ success: false, error: err });
+      console.log(`Error deleting file: ${err}`);
+    }
+  }
+
+  /**
    * Save a scratch file on the cloud
    * @param {string} projectBase64 Base64 encoded project data
    * @returns {string} id of the saved project
    */
-  async saveCloudScratchFile(projectBase64) {
-    const dbUrl =
+  async saveCloudScratchFile(projectBase64, fileName) {
+    // fileName is only for testing purposes -- it is not used in the actual save
+    // in reality, file names are created automatically by firebase to avoid collisions
+    // however, we need to be able to test the save/load functionality, so we pass in a file name
+    let dbUrl =
       "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects.json";
+    if (fileName) {
+      dbUrl = `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/${fileName}.json`;
+    }
     let response;
     try {
       response = await fetch(dbUrl, {
-        method: "POST",
+        method: fileName ? "PATCH" : "POST",
         headers: {
           Application: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ data: projectBase64 }),
       });
-    } catch(e){
+      this.sendFeedbackToServer({ success: true, fileName: fileName });
+    } catch (e) {
+      this.sendFeedbackToServer({ success: false, error: e });
       return mv2Interface.send_REST(
         "notification/warn-message/To save a file in the cloud internet access is needed."
       );
@@ -266,14 +291,16 @@ class Mv2Interface extends EventDispatcher {
     try {
       const dbUrl =
         "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
-        let res;
-        try {
-          res = await fetch(dbUrl + fileId + ".json");
-        } catch(e) {
-          return mv2Interface.send_REST(
-            "notification/warn-message/To load a saved file in the cloud internet access is needed."
-          );
-        }
+      let res;
+      try {
+        res = await fetch(dbUrl + fileId + ".json");
+        this.sendFeedbackToServer({ success: true, fileName: fileId });
+      } catch (e) {
+        this.sendFeedbackToServer({ success: false, error: e });
+        return mv2Interface.send_REST(
+          "notification/warn-message/To load a saved file in the cloud internet access is needed."
+        );
+      }
       const projectBase64String = await res.json();
       if (!projectBase64String || !projectBase64String.data) {
         throw new Error("Invalid project id");
@@ -317,6 +344,21 @@ class Mv2Interface extends EventDispatcher {
     });
     window.ReactNativeWebView.postMessage(JSON.stringify(payload));
     return promise;
+  }
+
+  /**
+   * Sends feedback to the server after a command has been executed from martyblocks
+   * Usefull for debugging and testing through MST
+   * @param {string} feedback Stringified JSON object with feedback
+   * @returns {void}
+   */
+  sendFeedbackToServer(feedback) {
+    if (window.ReactNativeWebView) {
+      return this.sendCommand({
+        command: "feedback",
+        feedback,
+      });
+    }
   }
 
   /**
