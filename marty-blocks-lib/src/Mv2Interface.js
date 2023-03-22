@@ -287,10 +287,10 @@ class Mv2Interface extends EventDispatcher {
    * @param {string} fileId File to load
    * @returns {string} projectBase64String
    */
-  async loadCloudScratchFile(fileId) {
+  async loadCloudScratchFile(fileId, projectFolder = "projects") {
     try {
       const dbUrl =
-        "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
+        `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/${projectFolder}/`;
       let res;
       try {
         res = await fetch(dbUrl + fileId + ".json");
@@ -308,6 +308,46 @@ class Mv2Interface extends EventDispatcher {
       return projectBase64String.data;
     } catch (e) {
       console.log("Couldn't load cloud project:", e);
+    }
+  }
+
+  /**
+   * Load demo projects from the cloud
+   * @returns {Array<string>} projectBase64String array
+   */
+  async loadCloudDemoNames() {
+    try {
+      const dbUrl =
+        "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/demo-projects.json?shallow=true";
+      let res;
+      try {
+        res = await fetch(dbUrl);
+      } catch (e) {
+        this.sendFeedbackToServer({ success: false, error: e });
+        return mv2Interface.send_REST(
+          "notification/warn-message/To load demo projects in the cloud internet access is needed."
+        );
+      }
+      let demoProjectFileNames = await res.json();
+      demoProjectFileNames = Object.keys(demoProjectFileNames);
+      if (!demoProjectFileNames || !demoProjectFileNames.length) {
+        this.sendFeedbackToServer({
+          success: false,
+          error: "No demo projects found",
+        });
+        throw new Error("No demo projects found");
+      }
+      this.sendFeedbackToServer({
+        success: true,
+        demosLength: demoProjectFileNames.length,
+      });
+      return demoProjectFileNames;
+    } catch (e) {
+      console.log("Couldn't load cloud demo projects:", e);
+      this.sendFeedbackToServer({
+        success: false,
+        error: "Couldn't load cloud demo projects: " + e,
+      });
     }
   }
 

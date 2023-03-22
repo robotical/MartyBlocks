@@ -15,6 +15,7 @@ import { requestNewProject } from "../../reducers/project-state";
 import LocalStorage from "./local-storage/local-storage.jsx";
 import CloudStorage from "./cloud-storage/cloud-storage.jsx";
 import PortableFileStorage from "./portable-file-storage/portable-file-storage.jsx";
+import DemoProjects from "./demo-projects/demo-projects.jsx";
 
 class SaveLoad extends React.Component {
   constructor(props) {
@@ -27,11 +28,13 @@ class SaveLoad extends React.Component {
 
     let contentJSX;
     if (currentTab === "local-storage") {
-        contentJSX = <LocalStorage {...this.props} />;
+      contentJSX = <LocalStorage {...this.props} />;
     } else if (currentTab === "cloud-storage") {
-        contentJSX = <CloudStorage {...this.props} />;
+      contentJSX = <CloudStorage {...this.props} />;
     } else if (currentTab === "portable-file-storage") {
-        contentJSX = <PortableFileStorage {...this.props} />;
+      contentJSX = <PortableFileStorage {...this.props} />;
+    } else if (currentTab === "demo-projects") {
+      contentJSX = <DemoProjects {...this.props} />;
     }
 
     return (
@@ -66,16 +69,26 @@ class SaveLoad extends React.Component {
                 ? [styles.button, styles.buttonSelected].join(" ")
                 : styles.button
             }
-            onClick={() => this.setState({ currentTab: "portable-file-storage" })}
+            onClick={() =>
+              this.setState({ currentTab: "portable-file-storage" })
+            }
           >
             <p className={styles.buttonTitle}>Portable</p>
             <p className={styles.buttonSubtitle}>File Storage</p>
           </div>
-
+          <div
+            className={
+              this.state.currentTab === "demo-projects"
+                ? [styles.button, styles.buttonSelected].join(" ")
+                : styles.button
+            }
+            onClick={() => this.setState({ currentTab: "demo-projects" })}
+          >
+            <p className={styles.buttonTitle}>Demo Projects</p>
+            <p className={styles.buttonSubtitle}>Load demo projects</p>
+          </div>
         </div>
-        <div className={styles.content}>
-            {contentJSX}
-        </div>
+        <div className={styles.content}>{contentJSX}</div>
       </div>
     );
   }
