@@ -90,7 +90,7 @@ const loadSound = function (sound, runtime, soundBank) {
     const md5 = idParts[0];
     const ext = idParts[1].toLowerCase();
     sound.dataFormat = ext;
-    console.log("here")
+
     return (
         (sound.asset && Promise.resolve(sound.asset)) ||
         runtime.storage.load(runtime.storage.AssetType.Sound, md5, ext)

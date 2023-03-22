@@ -773,12 +773,32 @@ const deserializeFields = function (fields) {
     for (const fieldName in fields) {
         if (!hasOwnProperty.call(fields, fieldName)) continue;
         const fieldDescArr = fields[fieldName];
-        // If this block has already been deserialized (it's not an array) skip it
-        if (!Array.isArray(fieldDescArr)) continue;
-        obj[fieldName] = {
-            name: fieldName,
-            value: fieldDescArr[0]
-        };
+
+        // check if the value can be parsed and if so if it is an object and has a property called whoAmI
+        // if so, we will set the value to be "Please select an add-on"
+        // this is happening because when we serialize the block, we are serializing the value of the field
+        // which, for the addons is an object with the name and whoAmI of the addon
+        // to properly display the block in the toolbox, we need to set the value to be "Please select an add-on"
+        // so the user knows that they need to select an addon
+
+        let parsedValue = fieldDescArr[0];
+        try {
+            parsedValue = JSON.parse(parsedValue);
+        } catch (e) {
+            // do nothing
+        }
+        if (typeof parsedValue === 'object' && parsedValue.whoAmI) {
+            obj[fieldName] = {
+                name: fieldName,
+                value: "Please select an add-on"
+            };
+        } else {
+            obj[fieldName] = {
+                name: fieldName,
+                value: fieldDescArr[0]
+            };
+        }
+
         if (fieldDescArr.length > 1) {
             obj[fieldName].id = fieldDescArr[1];
         }
