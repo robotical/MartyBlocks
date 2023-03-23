@@ -13,7 +13,7 @@ window.addEventListener("error", function (event) {
   const errorString = JSON.stringify(errorObj);
   console.log("Stringified error:", errorString);
   try {
-    mv2Interface.sendFeedbackToServer("Stringified error:" + errorString);
+    mv2Interface.sendFeedbackToServer(errorString);
   } catch (e) {
     console.log("error sending feedback", e);
   }
@@ -23,16 +23,19 @@ window.addEventListener("unhandledrejection", function (event) {
   var error = event.reason;
   let msg;
   if (error && error instanceof Error) {
-    var errorObj = {
+    const errorObj = {
       message: error.message,
       name: error.name,
       stack: error.stack,
     };
     var errorString = JSON.stringify(errorObj);
-    msg = "Stringified error:" + errorString;
+    msg = errorString;
     console.log(msg);
   } else {
-    msg = "Error object is not available or not an instance of Error.";
+    const errorObj = {
+      message: "Error object is not available or not an instance of Error.",
+    };
+    msg = JSON.stringify(errorObj);
     console.log(msg);
   }
   try {
@@ -41,6 +44,7 @@ window.addEventListener("unhandledrejection", function (event) {
     console.log("error sending feedback", e);
   }
 });
+
 
 class MSTTesting {
   constructor() {
