@@ -13,7 +13,7 @@ window.addEventListener("error", function (event) {
   const errorString = JSON.stringify(errorObj);
   console.log("Stringified error:", errorString);
   try {
-    mv2Interface.sendFeedbackToServer(errorString);
+    mv2Interface.sendFeedbackToServer(errorString, true);
   } catch (e) {
     console.log("error sending feedback", e);
   }
@@ -39,7 +39,7 @@ window.addEventListener("unhandledrejection", function (event) {
     console.log(msg);
   }
   try {
-    mv2Interface.sendFeedbackToServer(msg);
+    mv2Interface.sendFeedbackToServer(msg, true);
   } catch (e) {
     console.log("error sending feedback", e);
   }

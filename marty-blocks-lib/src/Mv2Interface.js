@@ -390,13 +390,15 @@ class Mv2Interface extends EventDispatcher {
    * Sends feedback to the server after a command has been executed from martyblocks
    * Usefull for debugging and testing through MST
    * @param {string} feedback Stringified JSON object with feedback
+   * @param {boolean} isError Whether the feedback is an error or not (if it's an error it'll be stored to db)
    * @returns {void}
    */
-  sendFeedbackToServer(feedback) {
+  sendFeedbackToServer(feedback, isError = false) {
     if (window.ReactNativeWebView) {
       return this.sendCommand({
         command: "feedback",
         feedback,
+        isError,
       });
     }
   }
