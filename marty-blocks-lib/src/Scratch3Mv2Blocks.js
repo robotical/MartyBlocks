@@ -141,27 +141,36 @@ class Scratch3Mv2Blocks {
 
       // sensors
 
-      ServoPosition: (args, utils) => this.position(args, utils),
-      ServoCurrent: (args, utils) => this.current(args, utils),
-      XAxisMovement: (args, utils) => this.accelerometerX(args, utils),
-
-      YAxisMovement: (args, utils) => this.accelerometerY(args, utils),
-
-      ZAxisMovement: (args, utils) => this.accelerometerZ(args, utils),
-
-      ObstacleProximity: (args, utils) => this.proximity(args, utils),
-      BatteryPercentage: (args, utils) => this.batteryLevel(args, utils),
-
-      mv2_obstaclesense: (args, utils) => this.obstacleSense(args, utils),
-
-      mv2_groundsense: (args, utils) => this.groundSense(args, utils),
-      mv2_coloursense: (args, utils) => this.colourSense(args, utils),
-      mv2_coloursenseraw: (args, utils) => this.colourSenseRaw(args, utils),
-
-      mv2_distancesense: (args, utils) => this.distanceSense(args, utils),
-
-      mv2_lightsense: (args, utils) => this.lightSense(args, utils),
-      mv2_noisesense: (args, utils) => this.noiseSense(args, utils),
+      ServoPosition: (args, utils) =>
+        this.errorHandler(this.position.bind(this, args, utils)),
+      ServoCurrent: (args, utils) =>
+        this.errorHandler(this.current.bind(this, args, utils)),
+      XAxisMovement: (args, utils) =>
+        this.errorHandler(this.accelerometerX.bind(this, args, utils)),
+      YAxisMovement: (args, utils) =>
+        this.errorHandler(this.accelerometerY.bind(this, args, utils)),
+      ZAxisMovement: (args, utils) =>
+        this.errorHandler(this.accelerometerZ.bind(this, args, utils)),
+      ObstacleProximity: (args, utils) =>
+        this.errorHandler(this.proximity.bind(this, args, utils)),
+      BatteryPercentage: (args, utils) =>
+        this.errorHandler(this.batteryLevel.bind(this, args, utils)),
+      mv2_obstaclesense: (args, utils) =>
+        this.errorHandler(this.obstacleSense.bind(this, args, utils)),
+      mv2_groundsense: (args, utils) =>
+        this.errorHandler(this.groundSense.bind(this, args, utils)),
+      mv2_coloursense: (args, utils) =>
+        this.errorHandler(this.colourSense.bind(this, args, utils)),
+      mv2_coloursense_hex: (args, utils) =>
+        this.errorHandler(this.colourSenseHEX.bind(this, args, utils)),
+      mv2_coloursenseraw: (args, utils) =>
+        this.errorHandler(this.colourSenseRaw.bind(this, args, utils)),
+      mv2_distancesense: (args, utils) =>
+        this.errorHandler(this.distanceSense.bind(this, args, utils)),
+      mv2_lightsense: (args, utils) =>
+        this.errorHandler(this.lightSense.bind(this, args, utils)),
+      mv2_noisesense: (args, utils) =>
+        this.errorHandler(this.noiseSense.bind(this, args, utils)),
 
       // sound commands
 
@@ -247,6 +256,25 @@ class Scratch3Mv2Blocks {
     };
   }
 
+  errorHandler(func) {
+    try {
+      return func();
+    } catch (e) {
+      console.log(e);
+      try {
+        const errorObj = {
+          message: e.message,
+          name: e.name,
+          stack: e.stack,
+        };
+        const msg = JSON.stringify(errorObj);
+        mv2Interface.sendFeedbackToServer(msg);
+      } catch (err) {
+        console.log("error sending feedback", e);
+      }
+    }
+  }
+
   _martyIsConnectedWrapper(martyBlock) {
     if (!mv2Interface.isConnected) {
       window.vm.runtime.stopAll();
@@ -254,7 +282,7 @@ class Scratch3Mv2Blocks {
         "notification/warn-message/You are not currently connected to a Marty. Please connect."
       );
     }
-    return martyBlock();
+    return this.errorHandler(martyBlock);
   }
 
   // DISCO Utils
@@ -446,7 +474,8 @@ class Scratch3Mv2Blocks {
   }
 
   LEDEyesColour(args, util) {
-    const colour = args.COLOUR_LED_EYES.replace("#", "");
+    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    colour = colour.replace("#", "");
     const boardtypeStr = args.BOARDTYPE;
     let boardtypeObj;
     try {
@@ -484,7 +513,8 @@ class Scratch3Mv2Blocks {
   }
 
   LEDEyesColour_SpecificLED(args, util) {
-    const colour = args.COLOUR_LED_EYES.replace("#", "");
+    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    colour = colour.replace("#", "");
     const ledID = +args.LED_POSITION;
     const boardtypeStr = args.BOARDTYPE;
     let boardtypeObj;
@@ -639,7 +669,8 @@ class Scratch3Mv2Blocks {
   }
 
   discoChangeBackColour(args, util) {
-    const colour = args.COLOR.replace("#", "");
+    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    colour = colour.replace("#", "");
     const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
     mv2Interface.send_REST(
       `indicator/set?pixIdx=1;blinkType=on;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=1000`
@@ -648,7 +679,8 @@ class Scratch3Mv2Blocks {
 
   discoSetBreatheBackColour(args, util) {
     const ms = +args.MILLISECONDS || 100;
-    const colour = args.COLOR.replace("#", "");
+    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    colour = colour.replace("#", "");
     const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
     mv2Interface.send_REST(
       `indicator/set?pixIdx=1;blinkType=breathe;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=${ms}`
@@ -663,7 +695,8 @@ class Scratch3Mv2Blocks {
 
   discoChangeRegionColour(args, util) {
     const resolveTime = 200;
-    const colour = args.COLOR.replace("#", "");
+    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    colour = colour.replace("#", "");
     const boardtypeStr = args.BOARDTYPE;
     let boardtypeObj;
     try {
@@ -1183,9 +1216,29 @@ class Scratch3Mv2Blocks {
     }
   }
 
+  colourToHex(colour) {
+    // we need to convert the string colour to a hex colour
+    // to cover the case where the user is using the result
+    // of the colour sensor block as a colour input.
+    // The colour input only accepts hex colours.
+    // If the colour is not one of the colours we have defined,
+    // that means the user is using a color picker or some other
+    // hex colour, so we can just return the colour.
+    const colourMap = {
+      red: "#ff0000",
+      yellow: "#ffff00",
+      green: "#00ff00",
+      blue: "#0000ff",
+      purple: "#ff00ff",
+      unclear: "#000000",
+      air: "#000000",
+    };
+    if (colour in colourMap) return colourMap[colour];
+    else return colour;
+  }
+
   colourSense(args, util) {
     const addons = JSON.parse(mv2Interface.addons).addons;
-
     // If the user has specified a sensor, use that
     for (const addon of addons) {
       if (addon.name === args.SENSORCHOICE) {
@@ -1199,6 +1252,38 @@ class Scratch3Mv2Blocks {
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
         return this.getColour(addon);
+      }
+    }
+    return null;
+  }
+
+  getHEXColourFromAddon(addon) {
+    // helper function to get the colour of a colour sensor
+    let red, green, blue;
+    for (const addonValKey in addon.vals) {
+      const addonVal = addon.vals[addonValKey];
+      if (addonValKey.includes("Red")) red = Math.round(addonVal);
+      if (addonValKey.includes("Green")) green = Math.round(addonVal);
+      if (addonValKey.includes("Blue")) blue = Math.round(addonVal);
+    }
+    return Scratch3Mv2Blocks.rgbToHex(red, green, blue);
+  }
+
+  colourSenseHEX(args, util) {
+    const addons = JSON.parse(mv2Interface.addons).addons;
+    // If the user has specified a sensor, use that
+    for (const addon of addons) {
+      if (addon.name === args.SENSORCHOICE) {
+        return this.getHEXColourFromAddon(addon);
+      }
+    }
+    // Otherwise, use the first colour sensor
+    // this fixes the issue where: when the user saves a project with an addon name
+    // and then changes the name of the addon/someone else loads the project with a different addon name
+    // the project will still work (if they have an addon with the same whoAmI connected)
+    for (const addon of addons) {
+      if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
+        return this.getHEXColourFromAddon(addon);
       }
     }
     return null;

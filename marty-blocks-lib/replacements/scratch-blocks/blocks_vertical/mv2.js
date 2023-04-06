@@ -2629,6 +2629,38 @@ Blockly.Blocks['mv2_coloursense'] = {
   }
 };
 
+Blockly.Blocks['mv2_coloursense_hex'] = {
+  /**
+   * Block to report on colour detection from a colour sensing foot
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_COLOUR_HEX,
+      "category": Blockly.Categories.sensing,
+      "colour": 164,
+      "type": "dynamic_dropdown",
+      "checkboxInFlyout": true,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_dummy",
+          "name": "SENSORCHOICE",
+        },
+      ],
+      "extensions": ["output_string", "dynamic_menu_sensor_colour_extension"]
+    });
+  }
+};
+
 Blockly.Blocks['mv2_coloursenseraw'] = {
   /**
    * Block to report a specific numeric reading from a colour sensor channel

@@ -567,6 +567,8 @@ export function MartyBlocksToolbox_sensing() {
     <block type="mv2_groundsense" />
 
     <block type="mv2_coloursense" />
+    
+    <block type="mv2_coloursense_hex" />
 
     <block type="mv2_coloursenseraw" />
 

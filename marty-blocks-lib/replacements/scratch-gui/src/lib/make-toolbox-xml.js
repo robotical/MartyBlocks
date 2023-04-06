@@ -473,6 +473,8 @@ const sensing = function (isInitialSetup, isStage) {
 
             <block type="mv2_coloursense" />
 
+            <block type="mv2_coloursense_hex" />
+
             <block type="mv2_coloursenseraw" />
 
             <block type="mv2_distancesense" />
