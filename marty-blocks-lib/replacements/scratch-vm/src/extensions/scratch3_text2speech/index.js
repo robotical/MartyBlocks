@@ -427,7 +427,7 @@ class Scratch3Text2SpeechBlocks {
       id: "text2speech",
       name: formatMessage({
         id: "text2speech.categoryName",
-        default: "Text to Speech",
+        default: "Speak",
         description: "Name of the Text to Speech extension.",
       }),
       blockIconURI: blockIconURI,
@@ -436,7 +436,8 @@ class Scratch3Text2SpeechBlocks {
         {
           opcode: "marty_speakAndWait",
           blockIconURI: martyBlockIconURI,
-          colour: 164,
+          colour: "#5ba591",
+          colourSecondary: "#498474",
           text: formatMessage({
             id: "text2speech.marty_speakAndWaitBlock",
             default: "Marty speak [WORDS]",
@@ -486,7 +487,7 @@ class Scratch3Text2SpeechBlocks {
           opcode: "setLanguage",
           text: formatMessage({
             id: "text2speech.setLanguageBlock",
-            default: "set language to [LANGUAGE]",
+            default: "set accent to [LANGUAGE]",
             description: "Set the language for speech synthesis.",
           }),
           blockType: BlockType.COMMAND,

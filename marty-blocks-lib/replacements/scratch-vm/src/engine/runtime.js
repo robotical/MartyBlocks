@@ -1076,9 +1076,9 @@ class Runtime extends EventEmitter {
             type: extendedOpcode,
             inputsInline: true,
             category: categoryInfo.name,
-            colour: categoryInfo.color1,
-            colourSecondary: categoryInfo.color2,
-            colourTertiary: categoryInfo.color3
+            colour: blockInfo.colour || categoryInfo.color1,
+            colourSecondary: blockInfo.colourSecondary || categoryInfo.color2,
+            colourTertiary: blockInfo.colourTertiary || categoryInfo.color3
         };
         const context = {
             // TODO: store this somewhere so that we can map args appropriately after translation.

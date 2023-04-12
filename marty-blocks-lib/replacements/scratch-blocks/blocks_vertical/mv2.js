@@ -904,6 +904,7 @@ Blockly.Blocks['mv2_RGBOperator'] = {
   init: function() {
     this.jsonInit({
       "message0": Blockly.Msg.MV2_RGBOPERATOR,
+      "category": Blockly.Categories.looks,
       "colour": 164,
       "args0": [
         {
@@ -928,8 +929,7 @@ Blockly.Blocks['mv2_RGBOperator'] = {
           "name": "NUM_B"
         }
       ],
-      "category": Blockly.Categories.looks,
-      "extensions": ["colours_operators", "output_number"]
+      "extensions": [ "output_number"]
     });
   }
 };
@@ -966,7 +966,7 @@ Blockly.Blocks['mv2_HSLOperator'] = {
         }
       ],
       "category": Blockly.Categories.looks,
-      "extensions": ["colours_operators", "output_number"]
+      "extensions": ["output_number"]
     });
   }
 };
