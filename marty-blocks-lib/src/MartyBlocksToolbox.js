@@ -393,17 +393,17 @@ export function MartyBlocksToolbox_disco() {
     <block type="mv2_RGBOperator">
       <value name="NUM_R">
         <shadow type="math_number">
-          <field name="NUM"></field>
+          <field name="NUM">255</field>
         </shadow>
       </value>
       <value name="NUM_G">
         <shadow type="math_number">
-          <field name="NUM"></field>
+          <field name="NUM">255</field>
         </shadow>
       </value>
       <value name="NUM_B">
         <shadow type="math_number">
-          <field name="NUM"></field>
+          <field name="NUM">255</field>
         </shadow>
       </value>
     </block>
@@ -411,17 +411,17 @@ export function MartyBlocksToolbox_disco() {
     <block type="mv2_HSLOperator">
       <value name="NUM_H">
         <shadow type="math_number">
-          <field name="NUM"></field>
+          <field name="NUM">360</field>
         </shadow>
       </value>
       <value name="NUM_S">
         <shadow type="math_number">
-          <field name="NUM"></field>
+          <field name="NUM">100</field>
         </shadow>
       </value>
       <value name="NUM_L">
         <shadow type="math_number">
-          <field name="NUM"></field>
+          <field name="NUM">100</field>
         </shadow>
       </value>
     </block>

@@ -669,7 +669,7 @@ class Scratch3Mv2Blocks {
   }
 
   discoChangeBackColour(args, util) {
-    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    let colour = this.colourToHex(args.COLOR);
     colour = colour.replace("#", "");
     const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
     mv2Interface.send_REST(
@@ -679,7 +679,7 @@ class Scratch3Mv2Blocks {
 
   discoSetBreatheBackColour(args, util) {
     const ms = +args.MILLISECONDS || 100;
-    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    let colour = this.colourToHex(args.COLOR);
     colour = colour.replace("#", "");
     const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
     mv2Interface.send_REST(
@@ -695,7 +695,7 @@ class Scratch3Mv2Blocks {
 
   discoChangeRegionColour(args, util) {
     const resolveTime = 200;
-    let colour = this.colourToHex(args.COLOUR_LED_EYES);
+    let colour = this.colourToHex(args.COLOR);
     colour = colour.replace("#", "");
     const boardtypeStr = args.BOARDTYPE;
     let boardtypeObj;
