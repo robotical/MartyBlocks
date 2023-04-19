@@ -289,8 +289,7 @@ class Mv2Interface extends EventDispatcher {
    */
   async loadCloudScratchFile(fileId, projectFolder = "projects") {
     try {
-      const dbUrl =
-        `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/${projectFolder}/`;
+      const dbUrl = `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/${projectFolder}/`;
       let res;
       try {
         res = await fetch(dbUrl + fileId + ".json");
@@ -419,6 +418,13 @@ class Mv2Interface extends EventDispatcher {
       // eslint-disable-next-line no-console
       console.warn("Unhandled command reply");
     }
+  }
+
+  /**
+   * Toggle sensors dashboard
+   */
+  toggleSensorsDashboard() {
+    this.send_REST("toggle-sensors-dashboard");
   }
 
   set_demo_sensor(sensorval) {

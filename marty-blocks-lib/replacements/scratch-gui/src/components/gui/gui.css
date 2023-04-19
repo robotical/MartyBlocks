@@ -305,6 +305,8 @@ $fade-out-distance: 15px;
 .watermark {
     position: absolute;
     top: 1.25rem;
+    display: flex;
+    flex-direction: column;
     /*pointer-events: none;*/
 }
 

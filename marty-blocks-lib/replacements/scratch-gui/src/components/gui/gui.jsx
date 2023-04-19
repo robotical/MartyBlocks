@@ -48,11 +48,13 @@ import codeIcon from "./icon--code.svg";
 import costumesIcon from "./icon--costumes.svg";
 import soundsIcon from "./icon--sounds.svg";
 import saveIcon from "./icon--save.svg";
+
 import Controls from "../../containers/controls.jsx";
 import StageHeader from "../../containers/editor-stagesize-header.jsx";
 import MonitorList from "../../containers/monitor-list.jsx";
 
 import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
+import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 
 const messages = defineMessages({
   addExtension: {
@@ -344,6 +346,7 @@ const GUIComponent = (props) => {
                       </Box>
                       <Box className={styles.watermark}>
                         <Watermark />
+                        <SensorsDashboardBtn />
                       </Box>
                     </TabPanel>
                     <TabPanel className={tabClassNames.tabPanel}>
