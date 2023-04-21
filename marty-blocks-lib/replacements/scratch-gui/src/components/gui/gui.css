@@ -40,6 +40,14 @@
         https://github.com/LLK/scratch-gui/issues/318
     */
     overflow-y: hidden;
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.flex-wrapper::-webkit-scrollbar {
+    display: none;
 }
 
 .editor-wrapper {
