@@ -306,6 +306,7 @@ const GUIComponent = (props) => {
                         canChangeLanguage={canChangeLanguage}
                       />
                       <MartyConnectBtn />
+                      <SensorsDashboardBtn />
                       <Box className={styles.controlsWrapper}>
                         <Controls vm={vm} />
                         <StageHeader stageSize={stageSize} vm={vm} />
@@ -346,7 +347,6 @@ const GUIComponent = (props) => {
                       </Box>
                       <Box className={styles.watermark}>
                         <Watermark />
-                        <SensorsDashboardBtn />
                       </Box>
                     </TabPanel>
                     <TabPanel className={tabClassNames.tabPanel}>
