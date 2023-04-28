@@ -289,8 +289,7 @@ class Mv2Interface extends EventDispatcher {
    */
   async loadCloudScratchFile(fileId, projectFolder = "projects") {
     try {
-      const dbUrl =
-        `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/${projectFolder}/`;
+      const dbUrl = `https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/${projectFolder}/`;
       let res;
       try {
         res = await fetch(dbUrl + fileId + ".json");
@@ -418,6 +417,19 @@ class Mv2Interface extends EventDispatcher {
     } else {
       // eslint-disable-next-line no-console
       console.warn("Unhandled command reply");
+    }
+  }
+
+  /**
+   * Toggle sensors dashboard
+   * @returns {void}
+   * Currently available only in the desktop version of MartyBlocks
+   */
+  toggleSensorsDashboard() {
+    try {
+      window.ReactNativeWebView.postMessage("notification/warn-message/This feature is currently available only in the desktop version of MartyBlocks.");
+    } catch (err) {
+      this.send_REST("toggle-sensors-dashboard");
     }
   }
 
