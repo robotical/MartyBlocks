@@ -175,12 +175,10 @@ class Scratch3Mv2Blocks {
       // sound commands
 
       // mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
-      mv2_playSound: (args, utils) =>
-        this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
-      mv2_playSoundUntilDone: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.playSoundUntilDone.bind(this, args, utils)
-        ),
+      mv2_playSound: this.playSound,
+
+      mv2_playSoundUntilDone: this.playSoundUntilDone,
+
       mv2_playNote: (args, utils) =>
         this._martyIsConnectedWrapper(this.playNote.bind(this, args, utils)),
       mv2_playTone: (args, utils) =>
@@ -1494,6 +1492,10 @@ class Scratch3Mv2Blocks {
   }
 
   playSoundUntilDone(args, util) {
+    // if marty is not connected, play sound from device
+    if (!mv2Interface.isConnected) {
+      return window.vm.runtime._primitives.sound_playuntildone(args, util);
+    }
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
@@ -1529,6 +1531,10 @@ class Scratch3Mv2Blocks {
   }
 
   playSound(args, util) {
+    // if marty is not connected, play sound from device
+    if (!mv2Interface.isConnected) {
+      return window.vm.runtime._primitives.sound_play(args, util);
+    }
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
     ) {
