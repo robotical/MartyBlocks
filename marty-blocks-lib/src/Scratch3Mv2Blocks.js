@@ -396,7 +396,7 @@ class Scratch3Mv2Blocks {
 
   // return name of first addon found with a specific whoAmI value
   addonNameByWhoAmI(whoAmI) {
-    const addons = JSON.parse(mv2.addons).addons;
+    const addons = JSON.parse(mv2Interface.addons).addons;
     for (let addon of addons) {
       if (addon.whoAmI == whoAmI) {
         return addon.name;
