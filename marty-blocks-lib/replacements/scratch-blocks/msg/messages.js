@@ -393,6 +393,7 @@ Blockly.Msg.MV2_WIGGLE = '%1 %2 Wiggle';
 Blockly.Msg.MV2_CIRCLE = '%1 %2 Circle dance %3 for %4s';
 Blockly.Msg.MV2_KICK = '%1 %2 Kick %3 leg';
 Blockly.Msg.MV2_SLIDE = '%1 %2 Slide %3 times to the %4';
+Blockly.Msg.MV2_SLIDE_MS_LENGTH = '%1 %2 Slide %3 times to the %4 in %5s, length %6';
 Blockly.Msg.MV2_LEAN = '%1 %2 Lean %3 for %4s';
 Blockly.Msg.MV2_EYES = '%1 %2 Eyes: %3';
 Blockly.Msg.MV2_MOVELEG = '%1 %2 Move %3 leg %4';

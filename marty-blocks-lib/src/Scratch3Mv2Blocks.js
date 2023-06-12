@@ -110,6 +110,8 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(this.lean.bind(this, args, utils)),
       mv2_slide: (args, utils) =>
         this._martyIsConnectedWrapper(this.slide.bind(this, args, utils)),
+      mv2_slideMsLength: (args, utils) =>
+        this._martyIsConnectedWrapper(this.slideMsLength.bind(this, args, utils)),
       mv2_eyes: (args, utils) =>
         this._martyIsConnectedWrapper(this.eyes.bind(this, args, utils)),
       mv2_moveLeg: (args, utils) =>
@@ -841,6 +843,39 @@ class Scratch3Mv2Blocks {
     mv2Interface.send_REST(
       `traj/sidestep/${steps}/?side=${side}&moveTime=${moveTime}`
     );
+    return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
+  }
+
+  slideMsLength(args, util) {
+    const steps = parseInt(args.STEPS);
+    const moveTimeInS = parseFloat(args.MOVETIME);
+    const moveTime = moveTimeInS * 1000;
+    const stepLength = parseInt(args.STEPLEN);
+    
+    if (moveTimeInS < 0.1 || moveTimeInS > 10) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive number between 0.1 and 10!"
+      );
+      return Promise.resolve();
+    }
+
+    if (stepLength < 1 || stepLength > 100) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 100!"
+      );
+      return Promise.resolve();
+    }
+
+    if (steps === 0 || steps < 0 || steps > 20) {
+      mv2Interface.send_REST(
+        "notification/warn-message/Input must be a positive integer between 1 and 20!"
+      );
+      return Promise.resolve();
+    }
+    const side = args.SIDE;
+    const cmd = `traj/sidestep/${steps}/?side=${side}&moveTime=${moveTime}&stepLength=${stepLength}`;
+    console.log(cmd);
+    mv2Interface.send_REST(cmd);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 

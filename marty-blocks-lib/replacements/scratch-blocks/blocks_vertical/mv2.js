@@ -316,6 +316,52 @@ Blockly.Blocks['mv2_slide'] = {
   }
 };
 
+Blockly.Blocks['mv2_slideMsLength'] = {
+  /**
+   * Block to make Marty slide with a specific length of time and step length
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MV2_SLIDE_MS_LENGTH,
+      "category": Blockly.Categories.motion,
+      "colour": 164,
+      "args0": [
+        {
+          "type": "field_image",
+          "src": Blockly.mainWorkspace.options.pathToMedia + "extensions/marty-small.svg",
+          "width": 40,
+          "height": 40
+        },
+        {
+          "type": "field_vertical_separator"
+        },
+        {
+          "type": "input_value",
+          "name": "STEPS"
+        },
+        {
+          "type": "field_dropdown",
+          "name": "SIDE",
+          "options": [
+            [Blockly.Msg.DROPDOWN_OPTION_LEFT, '0'],
+            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, '1']
+          ]
+        },
+        {
+          "type": "input_value",
+          "name": "MOVETIME"
+        },
+        {
+          "type": "input_value",
+          "name": "STEPLEN"
+        },
+      ],
+      "extensions": ["shape_statement"]
+    });
+  }
+};
+
 Blockly.Blocks['mv2_lean'] = {
   /**
    * Block to make Marty lean

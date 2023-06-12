@@ -94,6 +94,27 @@ export function MartyBlocksToolbox_motion() {
         </value>
     </block>
 
+    <block type="mv2_slideMsLength" >
+        <value name="SIDE">
+                <field>left</field>
+        </value>
+        <value name="STEPS">
+            <shadow type="math_number">
+                <field name="NUM">1</field>
+            </shadow>
+        </value>
+        <value name="MOVETIME">
+            <shadow type="math_number">
+                <field name="NUM">1.5</field>
+            </shadow>
+        </value>
+        <value name="STEPLEN">
+            <shadow type="math_number">
+                <field name="NUM">50</field>
+            </shadow>
+        </value>
+    </block>
+
     <block type="mv2_standStraight" >
         <value name="MOVETIME">
             <shadow type="math_number">

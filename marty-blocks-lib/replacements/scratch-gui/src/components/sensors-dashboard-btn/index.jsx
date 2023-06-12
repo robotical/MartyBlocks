@@ -8,10 +8,7 @@ const SensorsDashboardBtn = () => {
     mv2Interface.toggleSensorsDashboard();
   };
 
-  if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-    return null;
-  }
-
+ 
   return (
     <img
       className={styles.icon}
