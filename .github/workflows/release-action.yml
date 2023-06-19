@@ -34,10 +34,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install python2.7
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '2.7' 
-
+      - name: Link python to python2.7
+        run: |
+          sudo ln -sf /usr/bin/python2.7 /usr/bin/python
+          
       - name: Use Node.js 16.15.0
         uses: actions/setup-node@v3
         with:
