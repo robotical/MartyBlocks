@@ -34,12 +34,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install python2.7
 
-      - name: Check python version
-        run: python2.7 --version
-
-#       - uses: actions/setup-python@v4
-#         with:
-#           python-version: '2.7.18' 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7' 
 
       - name: Use Node.js 16.15.0
         uses: actions/setup-node@v3
