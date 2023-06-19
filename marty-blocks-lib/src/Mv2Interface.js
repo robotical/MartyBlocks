@@ -426,11 +426,11 @@ class Mv2Interface extends EventDispatcher {
    * Currently available only in the desktop version of MartyBlocks
    */
   toggleSensorsDashboard() {
-    try {
-      window.ReactNativeWebView.postMessage("notification/warn-message/This feature is currently available only in the desktop version of MartyBlocks.");
-    } catch (err) {
+    // try {
+    //   window.ReactNativeWebView.postMessage("notification/warn-message/This feature is currently available only in the desktop version of MartyBlocks.");
+    // } catch (err) {
       this.send_REST("toggle-sensors-dashboard");
-    }
+    // }
   }
 
   set_demo_sensor(sensorval) {
