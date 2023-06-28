@@ -111,7 +111,9 @@ class Scratch3Mv2Blocks {
       mv2_slide: (args, utils) =>
         this._martyIsConnectedWrapper(this.slide.bind(this, args, utils)),
       mv2_slideMsLength: (args, utils) =>
-        this._martyIsConnectedWrapper(this.slideMsLength.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(
+          this.slideMsLength.bind(this, args, utils)
+        ),
       mv2_eyes: (args, utils) =>
         this._martyIsConnectedWrapper(this.eyes.bind(this, args, utils)),
       mv2_moveLeg: (args, utils) =>
@@ -851,7 +853,7 @@ class Scratch3Mv2Blocks {
     const moveTimeInS = parseFloat(args.MOVETIME);
     const moveTime = moveTimeInS * 1000;
     const stepLength = parseInt(args.STEPLEN);
-    
+
     if (moveTimeInS < 0.1 || moveTimeInS > 10) {
       mv2Interface.send_REST(
         "notification/warn-message/Input must be a positive number between 0.1 and 10!"
@@ -975,7 +977,10 @@ class Scratch3Mv2Blocks {
     // angle in degrees, time in ms
     if (!name) {
       name = this.addonNameByWhoAmI(RIC_WHOAMI_TYPE_CODE_ADDON_GRIPSERVO);
-      if (!name) return false;
+      if (!name)
+        return mv2Interface.send_REST(
+          "notification/warn-message/Gripper arm not found! Please attach a gripper arm to use this block."
+        );
     }
     const numKeypoints = keypoints.length;
     if (!numKeypoints) return false;
