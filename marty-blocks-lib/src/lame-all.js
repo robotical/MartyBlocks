@@ -15510,7 +15510,7 @@ function lamejs() {
         gfp.num_channels = channels;
         gfp.in_samplerate = samplerate;
         gfp.brate = kbps;
-        gfp.mode = MPEGMode.STEREO; // perhaps we could switch to MONO?
+        gfp.mode = MPEGMode.MONO; // perhaps we could switch to MONO?
         gfp.quality = 3;
         gfp.bWriteVbrTag = false;
         gfp.disable_reservoir = true;

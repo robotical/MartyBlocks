@@ -1724,7 +1724,8 @@ class Scratch3Mv2Blocks {
   }
 
   static convertSoundToMP3(audioBuffer) {
-    const sampleRatio = audioBuffer.sampleRate / 11025;
+    const sampleRate = mv2Interface.mp3EncodingSampleRate || 44100;
+    const sampleRatio = audioBuffer.sampleRate / sampleRate;
     const finalLen = Math.floor(audioBuffer.length / sampleRatio);
     const rawSoundData = new Int16Array(finalLen);
     const inSoundData = audioBuffer.getChannelData(0);
@@ -1737,10 +1738,9 @@ class Scratch3Mv2Blocks {
     const sampleBlockSize = 1152;
     // const bitRate = mv2Interface.mp3EncodingBitRate || 16;
 
-    const bitRate = mv2Interface.mp3EncodingBitRate || 16;
-    const sampleRate = mv2Interface.mp3EncodingSampleRate || 11025;
+    const bitRate = mv2Interface.mp3EncodingBitRate || 64;
     console.log(
-      `CONVERTING TO ${bitRate} BIT MP3 WITH ${sampleRate} SAMPLE RATE`
+      `CONVERTING TO ${bitRate} kbps MP3 WITH ${sampleRate} SAMPLE RATE`
     );
     const avgFlag = !!!mv2Interface.mp3EncodingAvgFlag;
     const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, bitRate, avgFlag);
