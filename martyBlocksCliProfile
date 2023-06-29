@@ -1,6 +1,6 @@
-export PhoneAppHome=/Users/nikolastheodoropoulos/Documents/Robotical/phone-app/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
-export WebappHome=/Users/nikolastheodoropoulos/Documents/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
-export MBHome=/Users/nikolastheodoropoulos/Documents/Robotical/MartyBlocks # <- replace this
+export PhoneAppHome=/Users/ntheodoropoulos/Robotical/phone-app/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
+export WebappHome=/Users/ntheodoropoulos/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
+export MBHome=/Users/ntheodoropoulos/Robotical/MartyBlocks # <- replace this
 
 export mblib=$MBHome/marty-blocks-lib/
 export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
@@ -12,6 +12,8 @@ alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
 export PATH=$(pyenv root)/shims:$PATH
 
+## install python 2 and add it to path
+## install Java Runtime Environment (JRE)
 
 ##################### Steps to set up the project #######################
 
@@ -129,7 +131,7 @@ cpToDist () {
 }
 
 buildBlocks() {
-    cd $blocks_original && npm run prepublish
+    cd $blocks_original && ln -s $(npm root)/google-closure-library ../closure-library; npm run prepublish
 }
 
 buildVm() {

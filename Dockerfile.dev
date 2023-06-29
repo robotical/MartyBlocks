@@ -1,0 +1,56 @@
+# Using Ubuntu as base image
+FROM ubuntu:latest
+
+# Installing python, openjdk, git, curl, and other necessary packages
+RUN apt-get update && \
+    apt-get install -y python2.7 openjdk-11-jre-headless git curl xz-utils
+
+# Installing Node.js v16.20.0
+RUN curl -fsSL https://nodejs.org/dist/v16.20.0/node-v16.20.0-linux-x64.tar.xz | tar -xJv -C /usr/local --strip-components=1
+
+# Set the environment variables
+ENV MBHome /Robotical/MartyBlocks
+ENV mblib $MBHome/marty-blocks-lib
+ENV REPLACEMENTS $MBHome/marty-blocks-lib/replacements
+ENV blocks_original $MBHome/scratch-blocks
+ENV vm_original $MBHome/scratch-vm
+ENV gui_original $MBHome/scratch-gui
+ENV NODE_OPTIONS "--max-old-space-size=5120"
+ENV PATH="/root/.pyenv/shims:${PATH}"
+
+# Set the workdir
+WORKDIR $MBHome
+
+# Clone repos
+RUN git clone -b develop https://github.com/llk/scratch-blocks.git scratch-blocks
+RUN git clone -b develop https://github.com/llk/scratch-vm.git scratch-vm
+RUN git clone -b develop https://github.com/llk/scratch-gui.git scratch-gui
+
+# Checkout appropriate commit
+RUN cd $blocks_original && git reset --hard f9107bf5d0479d632658f2b203995f5ae6d75363
+RUN cd $vm_original && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
+RUN cd $gui_original && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
+
+# Install scratch
+RUN cd $blocks_original && npm install 
+RUN cd $vm_original && npm install 
+RUN cd $gui_original && npm install
+
+# Install marty blocks library
+RUN cd $mblib && npm install
+
+# Link repositories
+RUN cd $mblib && npm link
+RUN cd $blocks_original && npm link && npm link marty-blocks-lib
+RUN cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
+RUN cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
+
+# Build repositories and start scratch gui
+RUN cd $mblib && npx node ./set-development.js
+RUN cp -r $REPLACEMENTS/* $MBHome
+RUN cd $blocks_original && ln -s $(npm root)/google-closure-library ../closure-library; npm run prepublish
+RUN cd $vm_original && npm run build
+RUN cd $gui_original && BUILD_MODE=dist npm run build
+RUN cd $gui_original && npm start
+
+CMD ["bash"]

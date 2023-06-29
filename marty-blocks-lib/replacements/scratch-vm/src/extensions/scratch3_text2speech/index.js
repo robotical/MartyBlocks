@@ -51,37 +51,17 @@ const SPEECH_VOLUME = 250;
 /**
  * An id for one of the voices.
  */
-const ALTO_ID = "ALTO";
+const MALE_ID = "MALE";
 
 /**
  * An id for one of the voices.
  */
-const TENOR_ID = "TENOR";
-
-/**
- * An id for one of the voices.
- */
-const SQUEAK_ID = "SQUEAK";
-
-/**
- * An id for one of the voices.
- */
-const GIANT_ID = "GIANT";
+const FEMALE_ID = "FEMALE";
 
 /**
  * An id for one of the voices.
  */
 const KITTEN_ID = "KITTEN";
-
-/**
- * Playback rate for the tenor voice, for cases where we have only a female gender voice.
- */
-const FEMALE_TENOR_RATE = 0.89; // -2 semitones
-
-/**
- * Playback rate for the giant voice, for cases where we have only a female gender voice.
- */
-const FEMALE_GIANT_RATE = 0.79; // -4 semitones
 
 /**
  * Language ids. The value for each language id is a valid Scratch locale.
@@ -150,41 +130,23 @@ class Scratch3Text2SpeechBlocks {
    */
   get VOICE_INFO() {
     return {
-      [ALTO_ID]: {
+      [MALE_ID]: {
         name: formatMessage({
-          id: "text2speech.alto",
-          default: "alto",
-          description: "Name for a voice with ambiguous gender.",
-        }),
-        gender: "female",
-        playbackRate: 1,
-      },
-      [TENOR_ID]: {
-        name: formatMessage({
-          id: "text2speech.tenor",
-          default: "tenor",
-          description: "Name for a voice with ambiguous gender.",
+          id: "text2speech.male",
+          default: "Tenor",
+          description: "Name for a male voice.",
         }),
         gender: "male",
         playbackRate: 1,
       },
-      [SQUEAK_ID]: {
+      [FEMALE_ID]: {
         name: formatMessage({
-          id: "text2speech.squeak",
-          default: "squeak",
-          description: "Name for a funny voice with a high pitch.",
+          id: "text2speech.female",
+          default: "Alto",
+          description: "Name for a female voice.",
         }),
         gender: "female",
-        playbackRate: 1.19, // +3 semitones
-      },
-      [GIANT_ID]: {
-        name: formatMessage({
-          id: "text2speech.giant",
-          default: "giant",
-          description: "Name for a funny voice with a low pitch.",
-        }),
-        gender: "male",
-        playbackRate: 0.84, // -3 semitones
+        playbackRate: 1,
       },
       [KITTEN_ID]: {
         name: formatMessage({
@@ -361,7 +323,7 @@ class Scratch3Text2SpeechBlocks {
    */
   static get DEFAULT_TEXT2SPEECH_STATE() {
     return {
-      voiceId: ALTO_ID,
+      voiceId: FEMALE_ID,
     };
   }
 
@@ -415,6 +377,7 @@ class Scratch3Text2SpeechBlocks {
     // Only localize the default input to the "speak" block if we are in a
     // supported language.
     let defaultTextToSpeak = "hello";
+    let defaultSpeed = 1;
     if (this.isSupportedLanguage(this.getEditorLanguage())) {
       defaultTextToSpeak = formatMessage({
         id: "text2speech.defaultTextToSpeak",
@@ -468,6 +431,22 @@ class Scratch3Text2SpeechBlocks {
           },
         },
         {
+          opcode: "setVoiceSpeed",
+          text: formatMessage({
+            id: "text2speech.setVoiceSpeedBlock",
+            default: "set voice speed to [SPEED]",
+            description: "Set the voice speed for speech synthesis.",
+          }),
+          blockType: BlockType.COMMAND,
+          arguments: {
+            SPEED: {
+              type: ArgumentType.NUMBER,
+              menu: "speeds",
+              defaultValue: defaultSpeed,
+            },
+          },
+        },
+        {
           opcode: "setVoice",
           text: formatMessage({
             id: "text2speech.setVoiceBlock",
@@ -479,7 +458,7 @@ class Scratch3Text2SpeechBlocks {
             VOICE: {
               type: ArgumentType.STRING,
               menu: "voices",
-              defaultValue: ALTO_ID,
+              defaultValue: FEMALE_ID,
             },
           },
         },
@@ -509,6 +488,10 @@ class Scratch3Text2SpeechBlocks {
           acceptReporters: true,
           items: this.getLanguageMenu(),
         },
+        speeds: {
+          acceptReporters: true,
+          items: this.getSpeedMenu(),
+        }
       },
     };
   }
@@ -638,6 +621,10 @@ class Scratch3Text2SpeechBlocks {
     }));
   }
 
+  getSpeedMenu() {
+    return [{ text: "normal", value: 1 }, { text: "fast", value: 1.4 }, { text: "slow", value: 0.7 }];
+  }
+
   /**
    * Get the localized menu of languages for the "set language" block.
    * For each language:
@@ -730,13 +717,32 @@ class Scratch3Text2SpeechBlocks {
   }
 
   /**
+   * Set the speed of the voice.
+   * @param  {object} args Block arguments
+   * @param {object} util Utility object provided by the runtime.
+   */
+  setVoiceSpeed(args, util) {
+    const state = this._getState(util.target);
+
+    let speed = args.SPEED;
+
+    // Only set the voice if the arg is a valid speed in the range of 0.001 = 2
+    if (speed >= 0.1 && speed <= 2) {
+      state.voiceSpeed = speed;
+    } else {
+      mv2Interface.send_REST(
+        "notification/warn-message/Speed must be between 0.1 and 2"
+      );
+    }
+  }
+
+  /**
    * Convert the provided text into a sound file and then play the file.
    * @param  {object} args Block arguments
    * @param {object} util Utility object provided by the runtime.
    * @return {Promise} A promise that resolves after playing the sound
    */
   marty_speakAndWait(args, util) {
-
     // Cast input to string
     let words = Cast.toString(args.WORDS);
     let locale = this._getSpeechSynthLocale();
@@ -751,12 +757,6 @@ class Scratch3Text2SpeechBlocks {
     // and set special playback rates for the tenor and giant voices.
     if (this.LANGUAGE_INFO[this.getCurrentLanguage()].singleGender) {
       gender = "female";
-      if (state.voiceId === TENOR_ID) {
-        playbackRate = FEMALE_TENOR_RATE;
-      }
-      if (state.voiceId === GIANT_ID) {
-        playbackRate = FEMALE_GIANT_RATE;
-      }
     }
 
     if (state.voiceId === KITTEN_ID) {
@@ -791,40 +791,60 @@ class Scratch3Text2SpeechBlocks {
         return this.runtime.audioEngine.decodeSoundPlayer(sound);
       })
       .then((soundPlayer) => {
-
-        this._soundPlayers.set(soundPlayer.id, soundPlayer);
-        soundPlayer.setPlaybackRate(playbackRate);
-    
-        Scratch3Mv2Blocks.increaseVolume(soundPlayer.buffer, util.target.volume / 30);
-
-        const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
-          soundPlayer.buffer
+        // Play the sound
+        const audioEffect = new AudioEffects(
+          soundPlayer.buffer,
+          state.voiceSpeed,
+          0,
+          soundPlayer.buffer.duration
         );
-        const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
-          mp3SoundBuffers
-        );
-        mv2Interface.streamAudio(mp3SoundData, soundPlayer.buffer.duration * 1000);
 
-        return new Promise((resolve) => {
-          const timeout = setTimeout(() => {
-            this._soundPlayers.delete(soundPlayer.id);
-            clearTimeout(timeout);
-            resolve();
-          }, soundPlayer.buffer.duration * 1000 + 800);
+        return new Promise((resolve, reject) => {
+          audioEffect.process((renderedBuffer) => {
+            soundPlayer.buffer = renderedBuffer;
+            this._soundPlayers.set(soundPlayer.id, soundPlayer);
+            soundPlayer.setPlaybackRate(playbackRate);
+
+            Scratch3Mv2Blocks.increaseVolume(
+              soundPlayer.buffer,
+              util.target.volume / 30
+            );
+
+            const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
+              soundPlayer.buffer
+            );
+            const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
+              mp3SoundBuffers
+            );
+            mv2Interface.streamAudio(
+              mp3SoundData,
+              soundPlayer.buffer.duration * 1000
+            );
+
+            const timeout = setTimeout(() => {
+              this._soundPlayers.delete(soundPlayer.id);
+              clearTimeout(timeout);
+              resolve();
+            }, soundPlayer.buffer.duration * 1000 + 800);
+          });
+        }).catch(async (err) => {
+          log.warn(err);
+          // probably we are offline, so we can't use the speech service
+          // instead we will use the meSpeak library
+          return mv2Interface.send_REST(
+            "notification/warn-message/Text to speech extension requires internet connection."
+          );
+          try {
+            return Scratch3Mv2Blocks.speech2TextLocally(
+              state.voiceId,
+              words,
+              util.target,
+              true
+            );
+          } catch (error) {
+            log.warn(error);
+          }
         });
-      })
-      .catch(async (err) => {
-        log.warn(err);
-        // probably we are offline, so we can't use the speech service
-        // instead we will use the meSpeak library
-        return mv2Interface.send_REST(
-        "notification/warn-message/Text to speech extension requires internet connection."
-      );
-        try {
-          return Scratch3Mv2Blocks.speech2TextLocally(state.voiceId, words, util.target, true);
-        } catch (error) {
-          log.warn(error);
-        }
       });
   }
 
@@ -849,12 +869,6 @@ class Scratch3Text2SpeechBlocks {
     // and set special playback rates for the tenor and giant voices.
     if (this.LANGUAGE_INFO[this.getCurrentLanguage()].singleGender) {
       gender = "female";
-      if (state.voiceId === TENOR_ID) {
-        playbackRate = FEMALE_TENOR_RATE;
-      }
-      if (state.voiceId === GIANT_ID) {
-        playbackRate = FEMALE_GIANT_RATE;
-      }
     }
 
     if (state.voiceId === KITTEN_ID) {
@@ -880,7 +894,6 @@ class Scratch3Text2SpeechBlocks {
         return res.arrayBuffer();
       })
       .then((buffer) => {
-        // Play the sound
         const sound = {
           data: {
             buffer,
@@ -889,21 +902,33 @@ class Scratch3Text2SpeechBlocks {
         return this.runtime.audioEngine.decodeSoundPlayer(sound);
       })
       .then((soundPlayer) => {
+        // Play the sound
+        const audioEffect = new AudioEffects(
+          soundPlayer.buffer,
+          state.voiceSpeed,
+          0,
+          soundPlayer.buffer.duration
+        );
 
-        this._soundPlayers.set(soundPlayer.id, soundPlayer);
-        soundPlayer.setPlaybackRate(playbackRate);
+        return new Promise((resolve, reject) => {
+          audioEffect.process((renderedBuffer) => {
+            soundPlayer.buffer = renderedBuffer;
+            this._soundPlayers.set(soundPlayer.id, soundPlayer);
 
-        // Increase the volume
-        const engine = this.runtime.audioEngine;
-        const chain = engine.createEffectChain();
-        chain.set("volume", SPEECH_VOLUME);
-        soundPlayer.connect(chain);
+            soundPlayer.setPlaybackRate(playbackRate);
 
-        soundPlayer.play();
-        return new Promise((resolve) => {
-          soundPlayer.on("stop", () => {
-            this._soundPlayers.delete(soundPlayer.id);
-            resolve();
+            // Increase the volume
+            const engine = this.runtime.audioEngine;
+            const chain = engine.createEffectChain();
+            chain.set("volume", SPEECH_VOLUME);
+            soundPlayer.connect(chain);
+
+            soundPlayer.play();
+
+            soundPlayer.on("stop", () => {
+              this._soundPlayers.delete(soundPlayer.id);
+              resolve();
+            });
           });
         });
       })
@@ -912,14 +937,135 @@ class Scratch3Text2SpeechBlocks {
         // probably we are offline, so we can't use the speech service
         // instead we will use the meSpeak library
         return mv2Interface.send_REST(
-        "notification/warn-message/Text to speech extension requires internet"
-      );
+          "notification/warn-message/Text to speech extension requires internet"
+        );
         try {
-          return Scratch3Mv2Blocks.speech2TextLocally(state.voiceId, words, util.target);
+          return Scratch3Mv2Blocks.speech2TextLocally(
+            state.voiceId,
+            words,
+            util.target
+          );
         } catch (error) {
           log.warn(error);
         }
       });
   }
 }
+
+const effectTypes = {
+  FASTER: "faster",
+  SLOWER: "slower",
+};
+
+class AudioEffects {
+  static get effectTypes() {
+    return effectTypes;
+  }
+  constructor(buffer, speed, trimStart, trimEnd) {
+    this.trimStartSeconds = (trimStart * buffer.length) / buffer.sampleRate;
+    this.trimEndSeconds = (trimEnd * buffer.length) / buffer.sampleRate;
+    this.adjustedTrimStartSeconds = this.trimStartSeconds;
+    this.adjustedTrimEndSeconds = this.trimEndSeconds;
+
+    // Some effects will modify the playback rate and/or number of samples.
+    // Need to precompute those values to create the offline audio context.
+    const pitchRatio = Math.pow(2, 4 / 12); // A major third
+    let sampleCount = buffer.length;
+    const affectedSampleCount = Math.floor(
+      (this.trimEndSeconds - this.trimStartSeconds) * buffer.sampleRate
+    );
+    let adjustedAffectedSampleCount = affectedSampleCount;
+    const unaffectedSampleCount = sampleCount - affectedSampleCount;
+
+    this.playbackRate = speed;
+    adjustedAffectedSampleCount = Math.floor(
+      affectedSampleCount / this.playbackRate
+    );
+    sampleCount = unaffectedSampleCount + adjustedAffectedSampleCount;
+
+    const durationSeconds = sampleCount / buffer.sampleRate;
+    this.adjustedTrimEndSeconds =
+      this.trimStartSeconds + adjustedAffectedSampleCount / buffer.sampleRate;
+    this.adjustedTrimStart = this.adjustedTrimStartSeconds / durationSeconds;
+    this.adjustedTrimEnd = this.adjustedTrimEndSeconds / durationSeconds;
+
+    if (window.OfflineAudioContext) {
+      this.audioContext = new window.OfflineAudioContext(
+        1,
+        sampleCount,
+        buffer.sampleRate
+      );
+    } else {
+      // Need to use webkitOfflineAudioContext, which doesn't support all sample rates.
+      // Resample by adjusting sample count to make room and set offline context to desired sample rate.
+      const sampleScale = 44100 / buffer.sampleRate;
+      this.audioContext = new window.webkitOfflineAudioContext(
+        1,
+        sampleScale * sampleCount,
+        44100
+      );
+    }
+
+    // For the reverse effect we need to manually reverse the data into a new audio buffer
+    // to prevent overwriting the original, so that the undo stack works correctly.
+    // Doing buffer.reverse() would mutate the original data.
+    if (name === effectTypes.REVERSE) {
+      const originalBufferData = buffer.getChannelData(0);
+      const newBuffer = this.audioContext.createBuffer(
+        1,
+        buffer.length,
+        buffer.sampleRate
+      );
+      const newBufferData = newBuffer.getChannelData(0);
+      const bufferLength = buffer.length;
+
+      const startSamples = Math.floor(
+        this.trimStartSeconds * buffer.sampleRate
+      );
+      const endSamples = Math.floor(this.trimEndSeconds * buffer.sampleRate);
+      let counter = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        if (i >= startSamples && i < endSamples) {
+          newBufferData[i] = originalBufferData[endSamples - counter - 1];
+          counter++;
+        } else {
+          newBufferData[i] = originalBufferData[i];
+        }
+      }
+      this.buffer = newBuffer;
+    } else {
+      // All other effects use the original buffer because it is not modified.
+      this.buffer = buffer;
+    }
+
+    this.source = this.audioContext.createBufferSource();
+    this.source.buffer = this.buffer;
+    this.name = name;
+  }
+  process(done) {
+    // Some effects need to use more nodes and must expose an input and output
+    let input;
+    let output;
+    this.source.playbackRate.setValueAtTime(
+      this.playbackRate,
+      this.adjustedTrimStartSeconds
+    );
+    this.source.playbackRate.setValueAtTime(1.0, this.adjustedTrimEndSeconds);
+    if (input && output) {
+      this.source.connect(input);
+      output.connect(this.audioContext.destination);
+    } else {
+      // No effects nodes are needed, wire directly to the output
+      this.source.connect(this.audioContext.destination);
+    }
+
+    this.source.start();
+
+    this.audioContext.startRendering();
+    this.audioContext.oncomplete = ({ renderedBuffer }) => {
+      done(renderedBuffer, this.adjustedTrimStart, this.adjustedTrimEnd);
+    };
+  }
+}
+
 module.exports = Scratch3Text2SpeechBlocks;

@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  myservice:
+    image: ubuntu:latest
+    platform: linux/x86_64
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8601:8601"
+    volumes:
+      - .:/app
+    command: bash
