@@ -324,6 +324,7 @@ class Scratch3Text2SpeechBlocks {
   static get DEFAULT_TEXT2SPEECH_STATE() {
     return {
       voiceId: FEMALE_ID,
+      voiceSpeed: 1
     };
   }
 
