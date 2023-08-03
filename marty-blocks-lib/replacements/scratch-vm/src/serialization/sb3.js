@@ -790,7 +790,7 @@ const deserializeFields = function (fields) {
         if (typeof parsedValue === 'object' && parsedValue.whoAmI) {
             obj[fieldName] = {
                 name: fieldName,
-                value: "Please select an add-on"
+                value: parsedValue.whoAmI
             };
         } else {
             obj[fieldName] = {

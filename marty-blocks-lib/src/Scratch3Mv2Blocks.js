@@ -464,6 +464,7 @@ class Scratch3Mv2Blocks {
       coloursArray = new Array(12).fill(coloursArray);
     }
     const side = args.SIDE;
+    this.addonNotConnectedAlert(side);
     let martyCmd = this.LEDColourPickerApiCommandBuilder(side, coloursArray);
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
@@ -483,9 +484,9 @@ class Scratch3Mv2Blocks {
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
     } catch (e) {
-      boardtypeObj = boardtypeStr;
+      boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
-
+    this.addonNotConnectedAlert(boardtypeObj.name);
     let marty_cmd = `led/${boardtypeObj.name}/color/${colour}`;
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
@@ -523,7 +524,7 @@ class Scratch3Mv2Blocks {
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
     } catch (e) {
-      boardtypeObj = boardtypeStr;
+      boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
     const boardtypeWhoAmI = boardtypeObj.whoAmI;
     if (boardtypeWhoAmI === "LEDeye") {
@@ -531,6 +532,7 @@ class Scratch3Mv2Blocks {
         mv2Interface.send_REST(
           "notification/warn-message/LED id for eyes has to be between 0 and 11"
         );
+        this.addonNotConnectedAlert(boardtypeObj.whoAmI);
         return new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
@@ -539,6 +541,7 @@ class Scratch3Mv2Blocks {
         mv2Interface.send_REST(
           "notification/warn-message/LED id for arms has to be between 0 and 25"
         );
+        this.addonNotConnectedAlert(boardtypeObj.whoAmI);
         return new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
@@ -547,11 +550,13 @@ class Scratch3Mv2Blocks {
         mv2Interface.send_REST(
           "notification/warn-message/LED id for feet has to be between 0 and 19"
         );
+        this.addonNotConnectedAlert(boardtypeObj.whoAmI);
         return new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
 
     const ledIdMapped = this.ledIdMapping(ledID);
+    this.addonNotConnectedAlert(boardtypeObj.name);
     let marty_cmd = `led/${boardtypeObj.name}/setled/${ledIdMapped}/${colour}`;
     if (
       !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
@@ -561,6 +566,16 @@ class Scratch3Mv2Blocks {
     console.log(marty_cmd);
     mv2Interface.send_REST(marty_cmd);
     return new Promise((resolve) => setTimeout(resolve, 200));
+  }
+
+  addonNotConnectedAlert(addonTitle) {
+    const isAddonConnected = mv2Interface.isAddonConnected(addonTitle);
+    if (!isAddonConnected) {
+      mv2Interface.send_REST(
+        `notification/warn-message/Oh no! Marty seems to have misplaced the ${addonTitle} add-on. Could you pick a different one from the dropdown?`
+      );
+    }
+    return isAddonConnected;
   }
 
   static hexToRgb(hex) {
@@ -657,9 +672,10 @@ class Scratch3Mv2Blocks {
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
     } catch (e) {
-      boardtypeObj = boardtypeStr;
+      boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
     const patternChoice = args.PATTERN;
+    this.addonNotConnectedAlert(boardtypeObj.name);
     if (patternChoice === "off") {
       console.log(`led/${boardtypeObj.name}/off`);
       mv2Interface.send_REST(`led/${boardtypeObj.name}/off`);
@@ -704,9 +720,10 @@ class Scratch3Mv2Blocks {
     try {
       boardtypeObj = JSON.parse(boardtypeStr);
     } catch (e) {
-      boardtypeObj = boardtypeStr;
+      boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
     const regionChoice = args.REGION;
+    this.addonNotConnectedAlert(boardtypeObj.name);
 
     mv2Interface.send_REST(
       `led/${boardtypeObj.name}/region/${regionChoice}/${colour}`

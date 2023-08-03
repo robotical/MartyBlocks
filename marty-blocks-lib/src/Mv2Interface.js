@@ -136,6 +136,21 @@ class Mv2Interface extends EventDispatcher {
     }
   }
 
+  isAddonConnected(addonTitle) {
+    let addons = [];
+    try {
+      addons = JSON.parse(this.addons).addons;
+    } catch (err) {
+      console.log(`Error parsing addons: ${err}`);
+    }
+    if (addons) {
+      return addons.some(
+        (addon) => addon.whoAmI === addonTitle || addon.name === addonTitle
+      );
+    }
+    return false;
+  }
+
   streamAudio(audioData, duration, clearExisting) {
     console.log(`streamAudio ${audioData.length}`);
     this.sendCommand({
@@ -429,7 +444,7 @@ class Mv2Interface extends EventDispatcher {
     // try {
     //   window.ReactNativeWebView.postMessage("notification/warn-message/This feature is currently available only in the desktop version of MartyBlocks.");
     // } catch (err) {
-      this.send_REST("toggle-sensors-dashboard");
+    this.send_REST("toggle-sensors-dashboard");
     // }
   }
 
