@@ -19,6 +19,9 @@ import translateInsetIconURL from './translate/translate-small.png';
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 
+import tm2scratchIconURL from './tm2scratch/tm2scratch.png';
+import tm2scratchInsetIconURL from './tm2scratch/tm2scratch-small.png';
+
 import microbitIconURL from './microbit/microbit.png';
 import microbitInsetIconURL from './microbit/microbit-small.svg';
 import microbitConnectionIconURL from './microbit/microbit-illustration.svg';
@@ -162,6 +165,36 @@ export default [
                 defaultMessage="Make anything into a key."
                 description="Description for the 'Makey Makey' extension"
                 id="gui.extension.makeymakey.description"
+            />
+        ),
+        featured: true
+    },
+    {
+        name: 'Teachable Machine Image & Sound',
+        extensionId: 'tm2scratch',
+        collaborator: 'champierre',
+        iconURL: tm2scratchIconURL,
+        insetIconURL: tm2scratchInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Use Teachable Machine to recognize images and sounds."
+                description="Description for the 'Teachable Machine' extension"
+                id="gui.extension.tm2scratch.description"
+            />
+        ),
+        featured: true
+    },
+    {
+        name: 'Teachable Machine Pose',
+        extensionId: 'tmpose2scratch',
+        collaborator: 'champierre',
+        iconURL: tm2scratchIconURL,
+        insetIconURL: tm2scratchInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Use Teachable Machine to recognize poses."
+                description="Description for the 'Teachable Machine' extension"
+                id="gui.extension.tmpose2scratch.description"
             />
         ),
         featured: true
