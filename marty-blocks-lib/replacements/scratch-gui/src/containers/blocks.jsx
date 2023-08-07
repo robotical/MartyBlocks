@@ -140,6 +140,7 @@ class Blocks extends React.Component {
         // Load the desired extension by default
         this.props.vm.extensionManager.loadExtensionIdSync('text2speech');
         this.props.vm.extensionManager.loadExtensionIdSync('translate');
+        this.props.vm.extensionManager.loadExtensionIdSync('tm2scratch');
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (

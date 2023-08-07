@@ -184,21 +184,21 @@ export default [
         ),
         featured: true
     },
-    {
-        name: 'Teachable Machine Pose',
-        extensionId: 'tmpose2scratch',
-        collaborator: 'champierre',
-        iconURL: tm2scratchIconURL,
-        insetIconURL: tm2scratchInsetIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="Use Teachable Machine to recognize poses."
-                description="Description for the 'Teachable Machine' extension"
-                id="gui.extension.tmpose2scratch.description"
-            />
-        ),
-        featured: true
-    },
+    // {
+    //     name: 'Teachable Machine Pose',
+    //     extensionId: 'tmpose2scratch',
+    //     collaborator: 'champierre',
+    //     iconURL: tm2scratchIconURL,
+    //     insetIconURL: tm2scratchInsetIconURL,
+    //     description: (
+    //         <FormattedMessage
+    //             defaultMessage="Use Teachable Machine to recognize poses."
+    //             description="Description for the 'Teachable Machine' extension"
+    //             id="gui.extension.tmpose2scratch.description"
+    //         />
+    //     ),
+    //     featured: true
+    // },
     {
         name: 'micro:bit',
         extensionId: 'microbit',

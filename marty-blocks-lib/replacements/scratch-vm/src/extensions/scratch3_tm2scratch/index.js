@@ -261,7 +261,7 @@ class Scratch3TM2ScratchBlocks {
 
         return {
             id: 'tm2scratch',
-            name: 'TM Image & Sound',
+            name: 'TM',
             blockIconURI: blockIconURI,
             blocks: [
                 {
