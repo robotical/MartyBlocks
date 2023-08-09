@@ -981,6 +981,10 @@ class Scratch3Text2SpeechBlocks {
    * @return {Promise} A promise that resolves after playing the sound
    */
   marty_speakAndWait(args, util) {
+    return this.speakHelper(args, util, true);
+  }
+
+  speakHelper(args, util, isMartyBlock) {
     return new Promise((resolve, reject) => {
       // Cast input to string
       let words = Cast.toString(args.WORDS);
@@ -1110,12 +1114,15 @@ class Scratch3Text2SpeechBlocks {
               const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
                 mp3SoundBuffers
               );
-
-              if (mv2Interface.isConnected) {
-                mv2Interface.streamAudio(
-                  mp3SoundData,
-                  maxDuration * 1000
-                );
+              if (isMartyBlock) {
+                if (mv2Interface.isConnected) {
+                  mv2Interface.streamAudio(mp3SoundData, maxDuration * 1000);
+                } else {
+                  window.vm.runtime.stopAll();
+                  return mv2Interface.send_REST(
+                    "notification/warn-message/You are not currently connected to a Marty. Please connect."
+                  );
+                }
               } else {
                 // play locally
                 const base64Audio = this.arrayBufferToBase64(mp3SoundData);
@@ -1168,100 +1175,7 @@ class Scratch3Text2SpeechBlocks {
    * @return {Promise} A promise that resolves after playing the sound
    */
   async speakAndWait(args, util) {
-    // Cast input to string
-    let words = Cast.toString(args.WORDS);
-    let locale = this._getSpeechSynthLocale();
-
-    const state = this._getState(util.target);
-
-    let gender = this.VOICE_INFO[state.voiceId].gender;
-    let playbackRate = this.VOICE_INFO[state.voiceId].playbackRate;
-
-    // Special case for voices where the synthesis service only provides a
-    // single gender voice. In that case, always request the female voice,
-    // and set special playback rates for the tenor and giant voices.
-    if (this.LANGUAGE_INFO[this.getCurrentLanguage()].singleGender) {
-      gender = "female";
-    }
-
-    if (state.voiceId === KITTEN_ID) {
-      words = words.replace(/\S+/g, "meow");
-      locale = this.LANGUAGE_INFO[this.DEFAULT_LANGUAGE].speechSynthLocale;
-    }
-
-    // Build up URL
-    let path = `${SERVER_HOST}/synth`;
-    path += `?locale=${locale}`;
-    path += `&gender=${gender}`;
-    path += `&text=${encodeURIComponent(words.substring(0, 128))}`;
-
-    // Perform HTTP request to get audio file
-    return fetchWithTimeout(path, {}, SERVER_TIMEOUT)
-      .then((res) => {
-        if (res.status !== 200) {
-          throw new Error(
-            `HTTP ${res.status} error reaching translation service`
-          );
-        }
-
-        return res.arrayBuffer();
-      })
-      .then((buffer) => {
-        const sound = {
-          data: {
-            buffer,
-          },
-        };
-        return this.runtime.audioEngine.decodeSoundPlayer(sound);
-      })
-      .then((soundPlayer) => {
-        // Play the sound
-        const audioEffect = new AudioEffects(
-          soundPlayer.buffer,
-          state.voiceSpeed,
-          0,
-          soundPlayer.buffer.duration
-        );
-
-        return new Promise((resolve, reject) => {
-          audioEffect.process((renderedBuffer) => {
-            soundPlayer.buffer = renderedBuffer;
-            this._soundPlayers.set(soundPlayer.id, soundPlayer);
-
-            soundPlayer.setPlaybackRate(playbackRate);
-
-            // Increase the volume
-            const engine = this.runtime.audioEngine;
-            const chain = engine.createEffectChain();
-            chain.set("volume", SPEECH_VOLUME);
-            soundPlayer.connect(chain);
-
-            soundPlayer.play();
-
-            soundPlayer.on("stop", () => {
-              this._soundPlayers.delete(soundPlayer.id);
-              resolve();
-            });
-          });
-        });
-      })
-      .catch((err) => {
-        log.warn(err);
-        // probably we are offline, so we can't use the speech service
-        // instead we will use the meSpeak library
-        return mv2Interface.send_REST(
-          "notification/warn-message/Text to speech extension requires internet"
-        );
-        try {
-          return Scratch3Mv2Blocks.speech2TextLocally(
-            state.voiceId,
-            words,
-            util.target
-          );
-        } catch (error) {
-          log.warn(error);
-        }
-      });
+    return this.speakHelper(args, util, false);
   }
 }
 
