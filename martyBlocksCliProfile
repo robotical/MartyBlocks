@@ -34,7 +34,7 @@ checkoutScratch() {
 # Step 2: Install scratch
 installScratch() {
     cd $blocks_original && npm install 
-    cd $vm_original && npm install 
+    cd $vm_original && npm install && npm install soundtouchjs@0.1.30
     cd $gui_original && npm install
 }
 
