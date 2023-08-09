@@ -9,6 +9,10 @@ const Clone = require("../../util/clone");
 const log = require("../../util/log");
 const fetchWithTimeout = require("../../util/fetch-with-timeout");
 const Scratch3Mv2Blocks = require("marty-blocks-lib/src/Scratch3Mv2Blocks");
+// import { PitchShifter } from 'soundtouchjs';
+const SimpleFilter = require("soundtouchjs").SimpleFilter;
+const PitchShifter = require("soundtouchjs").PitchShifter;
+const SoundTouch = require("soundtouchjs").SoundTouch;
 
 /**
  * Icon svg to be displayed in the blocks category menu, encoded as a data URI.
@@ -49,19 +53,32 @@ const SERVER_TIMEOUT = 10000; // 10 seconds
 const SPEECH_VOLUME = 250;
 
 /**
- * An id for one of the voices.
+ * Voice ID's.
  */
 const MALE_ID = "MALE";
-
-/**
- * An id for one of the voices.
- */
 const FEMALE_ID = "FEMALE";
-
-/**
- * An id for one of the voices.
- */
 const KITTEN_ID = "KITTEN";
+const GIANT_ID = "GIANT";
+const TENOR_ID = "TENOR";
+const ALIEN_ID = "ALIEN";
+const THUNDER_ID = "THUNDER";
+const STONE_ID = "STONE";
+const RUMBLE_ID = "RUMBLE";
+const ECHO_ID = "ECHO";
+const DRIFT_ID = "DRIFT";
+const BREEZE_ID = "BREEZE";
+const WAVE_ID = "WAVE";
+const BLAZE_ID = "BLAZE";
+const BOLT_ID = "BOLT";
+const STARLIGHT_ID = "STARLIGHT";
+const MIST_ID = "MIST";
+const WHIRLWIND_ID = "WHIRLWIND";
+const DAWN_ID = "DAWN";
+const CRYSTAL_ID = "CRYSTAL";
+const LULLABY_ID = "LULLABY";
+const AURORA_ID = "AURORA";
+const RADIANCE_ID = "RADIANCE";
+const FLASH_ID = "FLASH";
 
 /**
  * Language ids. The value for each language id is a valid Scratch locale.
@@ -138,6 +155,7 @@ class Scratch3Text2SpeechBlocks {
         }),
         gender: "male",
         playbackRate: 1,
+        pitch: 1,
       },
       [FEMALE_ID]: {
         name: formatMessage({
@@ -147,6 +165,7 @@ class Scratch3Text2SpeechBlocks {
         }),
         gender: "female",
         playbackRate: 1,
+        pitch: 1,
       },
       [KITTEN_ID]: {
         name: formatMessage({
@@ -156,6 +175,220 @@ class Scratch3Text2SpeechBlocks {
         }),
         gender: "female",
         playbackRate: 1.41, // +6 semitones
+        pitch: 1.5,
+      },
+      [GIANT_ID]: {
+        name: formatMessage({
+          id: "text2speech.giant",
+          default: "giant",
+          description: "A giant.",
+        }),
+        gender: "male",
+        playbackRate: 0.79, // -6 semitones
+        pitch: 0.5,
+      },
+      [TENOR_ID]: {
+        name: formatMessage({
+          id: "text2speech.tenor",
+          default: "tenor",
+          description: "A tenor.",
+        }),
+        gender: "female",
+        playbackRate: 1.41, // +6 semitones
+        pitch: 0.5,
+      },
+      [ALIEN_ID]: {
+        name: formatMessage({
+          id: "text2speech.alien",
+          default: "alien",
+          description: "An alien.",
+        }),
+        gender: "female",
+        playbackRate: 0.79, // -6 semitones
+        pitch: 1.5,
+      },
+
+      [THUNDER_ID]: {
+        name: formatMessage({
+          id: "text2speech.thunder",
+          default: "Thunder",
+          description: "Male voice with low pitch and playback rate.",
+        }),
+        gender: "male",
+        playbackRate: 0.7,
+        pitch: 0.7,
+      },
+      [STONE_ID]: {
+        name: formatMessage({
+          id: "text2speech.stone",
+          default: "Stone",
+          description: "Male voice with low pitch.",
+        }),
+        gender: "male",
+        playbackRate: 1,
+        pitch: 0.7,
+      },
+      [RUMBLE_ID]: {
+        name: formatMessage({
+          id: "text2speech.rumble",
+          default: "Rumble",
+          description: "Male voice with high playback rate and low pitch.",
+        }),
+        gender: "male",
+        playbackRate: 1.3,
+        pitch: 0.7,
+      },
+      [ECHO_ID]: {
+        name: formatMessage({
+          id: "text2speech.echo",
+          default: "Echo",
+          description: "Male voice with standard pitch and low playback rate.",
+        }),
+        gender: "male",
+        playbackRate: 0.7,
+        pitch: 1,
+      },
+      [DRIFT_ID]: {
+        name: formatMessage({
+          id: "text2speech.drift",
+          default: "Drift",
+          description: "Standard male voice.",
+        }),
+        gender: "male",
+        playbackRate: 1,
+        pitch: 1,
+      },
+      [BREEZE_ID]: {
+        name: formatMessage({
+          id: "text2speech.breeze",
+          default: "Breeze",
+          description: "Male voice with standard pitch and high playback rate.",
+        }),
+        gender: "male",
+        playbackRate: 1.3,
+        pitch: 1,
+      },
+      [WAVE_ID]: {
+        name: formatMessage({
+          id: "text2speech.wave",
+          default: "Wave",
+          description: "Male voice with high pitch and low playback rate.",
+        }),
+        gender: "male",
+        playbackRate: 0.7,
+        pitch: 1.3,
+      },
+      [BLAZE_ID]: {
+        name: formatMessage({
+          id: "text2speech.blaze",
+          default: "Blaze",
+          description: "High-pitched male voice.",
+        }),
+        gender: "male",
+        playbackRate: 1,
+        pitch: 1.3,
+      },
+      [BOLT_ID]: {
+        name: formatMessage({
+          id: "text2speech.bolt",
+          default: "Bolt",
+          description: "Male voice with high pitch and playback rate.",
+        }),
+        gender: "male",
+        playbackRate: 1.3,
+        pitch: 1.3,
+      },
+      [STARLIGHT_ID]: {
+        name: formatMessage({
+          id: "text2speech.starlight",
+          default: "Starlight",
+          description: "Female voice with low pitch and playback rate.",
+        }),
+        gender: "female",
+        playbackRate: 0.7,
+        pitch: 0.7,
+      },
+      [MIST_ID]: {
+        name: formatMessage({
+          id: "text2speech.mist",
+          default: "Mist",
+          description: "Female voice with low pitch.",
+        }),
+        gender: "female",
+        playbackRate: 1,
+        pitch: 0.7,
+      },
+      [WHIRLWIND_ID]: {
+        name: formatMessage({
+          id: "text2speech.whirlwind",
+          default: "Whirlwind",
+          description: "Female voice with high playback rate and low pitch.",
+        }),
+        gender: "female",
+        playbackRate: 1.3,
+        pitch: 0.7,
+      },
+      [DAWN_ID]: {
+        name: formatMessage({
+          id: "text2speech.dawn",
+          default: "Dawn",
+          description:
+            "Female voice with standard pitch and low playback rate.",
+        }),
+        gender: "female",
+        playbackRate: 0.7,
+        pitch: 1,
+      },
+      [CRYSTAL_ID]: {
+        name: formatMessage({
+          id: "text2speech.crystal",
+          default: "Crystal",
+          description: "Standard female voice.",
+        }),
+        gender: "female",
+        playbackRate: 1,
+        pitch: 1,
+      },
+      [LULLABY_ID]: {
+        name: formatMessage({
+          id: "text2speech.lullaby",
+          default: "Lullaby",
+          description:
+            "Female voice with standard pitch and high playback rate.",
+        }),
+        gender: "female",
+        playbackRate: 1.3,
+        pitch: 1,
+      },
+      [AURORA_ID]: {
+        name: formatMessage({
+          id: "text2speech.aurora",
+          default: "Aurora",
+          description: "Female voice with high pitch and low playback rate.",
+        }),
+        gender: "female",
+        playbackRate: 0.7,
+        pitch: 1.3,
+      },
+      [RADIANCE_ID]: {
+        name: formatMessage({
+          id: "text2speech.radiance",
+          default: "Radiance",
+          description: "High-pitched female voice.",
+        }),
+        gender: "female",
+        playbackRate: 1,
+        pitch: 1.3,
+      },
+      [FLASH_ID]: {
+        name: formatMessage({
+          id: "text2speech.flash",
+          default: "Flash",
+          description: "Female voice with high pitch and playback rate.",
+        }),
+        gender: "female",
+        playbackRate: 1.3,
+        pitch: 1.3,
       },
     };
   }
@@ -324,7 +557,7 @@ class Scratch3Text2SpeechBlocks {
   static get DEFAULT_TEXT2SPEECH_STATE() {
     return {
       voiceId: FEMALE_ID,
-      voiceSpeed: 1
+      voiceSpeed: 1,
     };
   }
 
@@ -492,7 +725,7 @@ class Scratch3Text2SpeechBlocks {
         speeds: {
           acceptReporters: true,
           items: this.getSpeedMenu(),
-        }
+        },
       },
     };
   }
@@ -623,7 +856,11 @@ class Scratch3Text2SpeechBlocks {
   }
 
   getSpeedMenu() {
-    return [{ text: "normal", value: 1 }, { text: "fast", value: 1.4 }, { text: "slow", value: 0.7 }];
+    return [
+      { text: "normal", value: 1 },
+      { text: "fast", value: 1.4 },
+      { text: "slow", value: 0.7 },
+    ];
   }
 
   /**
@@ -744,109 +981,184 @@ class Scratch3Text2SpeechBlocks {
    * @return {Promise} A promise that resolves after playing the sound
    */
   marty_speakAndWait(args, util) {
-    // Cast input to string
-    let words = Cast.toString(args.WORDS);
-    let locale = this._getSpeechSynthLocale();
+    return new Promise((resolve, reject) => {
+      // Cast input to string
+      let words = Cast.toString(args.WORDS);
+      let locale = this._getSpeechSynthLocale();
 
-    const state = this._getState(util.target);
+      const state = this._getState(util.target);
 
-    let gender = this.VOICE_INFO[state.voiceId].gender;
-    let playbackRate = this.VOICE_INFO[state.voiceId].playbackRate;
+      let gender = this.VOICE_INFO[state.voiceId].gender;
+      const playbackRate =
+        this.VOICE_INFO[state.voiceId].playbackRate * state.voiceSpeed;
+      const pitch = this.VOICE_INFO[state.voiceId].pitch;
 
-    // Special case for voices where the synthesis service only provides a
-    // single gender voice. In that case, always request the female voice,
-    // and set special playback rates for the tenor and giant voices.
-    if (this.LANGUAGE_INFO[this.getCurrentLanguage()].singleGender) {
-      gender = "female";
-    }
+      // Special case for voices where the synthesis service only provides a
+      // single gender voice. In that case, always request the female voice,
+      // and set special playback rates for the tenor and giant voices.
+      if (this.LANGUAGE_INFO[this.getCurrentLanguage()].singleGender) {
+        gender = "female";
+      }
 
-    if (state.voiceId === KITTEN_ID) {
-      words = words.replace(/\S+/g, "meow");
-      locale = this.LANGUAGE_INFO[this.DEFAULT_LANGUAGE].speechSynthLocale;
-    }
+      if (state.voiceId === KITTEN_ID) {
+        words = words.replace(/\S+/g, "meow");
+        locale = this.LANGUAGE_INFO[this.DEFAULT_LANGUAGE].speechSynthLocale;
+      }
 
-    // Build up URL
-    let path = `${SERVER_HOST}/synth`;
-    path += `?locale=${locale}`;
-    path += `&gender=${gender}`;
-    path += `&text=${encodeURIComponent(words.substring(0, 128))}`;
+      // Build up URL
+      let path = `${SERVER_HOST}/synth`;
+      path += `?locale=${locale}`;
+      path += `&gender=${gender}`;
+      path += `&text=${encodeURIComponent(words.substring(0, 128))}`;
 
-    // Perform HTTP request to get audio file
-    return fetchWithTimeout(path, {}, SERVER_TIMEOUT)
-      .then((res) => {
-        if (res.status !== 200) {
-          throw new Error(
-            `HTTP ${res.status} error reaching translation service`
-          );
-        }
-
-        return res.arrayBuffer();
-      })
-      .then((buffer) => {
-        // Play the sound
-        const sound = {
-          data: {
-            buffer,
-          },
-        };
-        return this.runtime.audioEngine.decodeSoundPlayer(sound);
-      })
-      .then((soundPlayer) => {
-        // Play the sound
-        const audioEffect = new AudioEffects(
-          soundPlayer.buffer,
-          state.voiceSpeed,
-          0,
-          soundPlayer.buffer.duration
-        );
-
-        return new Promise((resolve, reject) => {
-          audioEffect.process((renderedBuffer) => {
-            soundPlayer.buffer = renderedBuffer;
-            this._soundPlayers.set(soundPlayer.id, soundPlayer);
-            soundPlayer.setPlaybackRate(playbackRate);
-
-            Scratch3Mv2Blocks.increaseVolume(
-              soundPlayer.buffer,
-              util.target.volume / 30
+      // Perform HTTP request to get audio file
+      return fetchWithTimeout(path, {}, SERVER_TIMEOUT)
+        .then((res) => {
+          if (res.status !== 200) {
+            throw new Error(
+              `HTTP ${res.status} error reaching translation service`
             );
-
-            const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
-              soundPlayer.buffer
-            );
-            const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
-              mp3SoundBuffers
-            );
-            mv2Interface.streamAudio(
-              mp3SoundData,
-              soundPlayer.buffer.duration * 1000
-            );
-
-            const timeout = setTimeout(() => {
-              this._soundPlayers.delete(soundPlayer.id);
-              clearTimeout(timeout);
-              resolve();
-            }, soundPlayer.buffer.duration * 1000 + 800);
-          });
-        }).catch(async (err) => {
-          log.warn(err);
-          // probably we are offline, so we can't use the speech service
-          // instead we will use the meSpeak library
-          return mv2Interface.send_REST(
-            "notification/warn-message/Text to speech extension requires internet connection."
-          );
-          try {
-            return Scratch3Mv2Blocks.speech2TextLocally(
-              state.voiceId,
-              words,
-              util.target,
-              true
-            );
-          } catch (error) {
-            log.warn(error);
           }
+
+          return res.arrayBuffer();
+        })
+        .then((buffer) => {
+          // Play the sound
+
+          const audioContext = new AudioContext();
+          return audioContext.decodeAudioData(buffer);
+        })
+        .then((decodedBuffer) => {
+          const audioContext = new AudioContext();
+
+          // Extend the buffer by 1 seconds to avoid truncation
+          const sampleRate = decodedBuffer.sampleRate;
+          const additionalTime = 1; // seconds
+          const additionalSamples = additionalTime * sampleRate;
+
+          // Create a new buffer with space for the original audio + extra seconds
+          const extendedBuffer = audioContext.createBuffer(
+            decodedBuffer.numberOfChannels,
+            decodedBuffer.length + additionalSamples,
+            sampleRate
+          );
+
+          // Copy the original audio data to the new buffer
+          for (
+            let channel = 0;
+            channel < decodedBuffer.numberOfChannels;
+            channel++
+          ) {
+            const oldData = decodedBuffer.getChannelData(channel);
+            const newData = extendedBuffer.getChannelData(channel);
+
+            // Copy data from old buffer to new buffer
+            for (let i = 0; i < oldData.length; i++) {
+              newData[i] = oldData[i];
+            }
+
+            // The rest of the new buffer will remain silent (values are 0 by default)
+          }
+
+          const processedDuration = extendedBuffer.duration / playbackRate; // Adjusted duration based on tempo change
+          const maxDuration = Math.max(
+            extendedBuffer.duration,
+            processedDuration
+          ); // Maximum of original and processed durations
+          const sampleLength = maxDuration * extendedBuffer.sampleRate; // Sample length based on max duration
+
+          const offlineContext = new OfflineAudioContext(
+            1,
+            sampleLength,
+            44100
+          );
+          const gainNode = offlineContext.createGain();
+          gainNode.gain.value = window.volume || (util.target.volume / 100) * 2;
+          console.log("window.volume", window.volume);
+          const source = offlineContext.createBufferSource();
+          source.buffer = extendedBuffer;
+
+          const pitchShifter = new PitchShifter(
+            offlineContext,
+            extendedBuffer,
+            4096
+          );
+          pitchShifter.tempo = playbackRate;
+          pitchShifter.pitch = pitch;
+
+          // order matters here
+          source.connect(pitchShifter.node);
+          pitchShifter.connect(gainNode);
+          gainNode.connect(offlineContext.destination);
+
+          source.start();
+
+          offlineContext
+            .startRendering()
+            .then((renderedBuffer) => {
+              // The renderedBuffer contains the pitch-shifted audio data.
+              // Can be converted to MP3 or any desired format for streaming.
+
+              // Scratch3Mv2Blocks.increaseVolume(
+              //   renderedBuffer,
+              //   util.target.volume / 30
+              // );
+
+              const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(
+                renderedBuffer
+              );
+              const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
+                mp3SoundBuffers
+              );
+
+              if (mv2Interface.isConnected) {
+                mv2Interface.streamAudio(
+                  mp3SoundData,
+                  maxDuration * 1000
+                );
+              } else {
+                // play locally
+                const base64Audio = this.arrayBufferToBase64(mp3SoundData);
+                const dataURL = "data:audio/mp3;base64," + base64Audio;
+                const audio = new Audio(dataURL);
+                audio.play();
+              }
+
+              const timeout = setTimeout(() => {
+                clearTimeout(timeout);
+                resolve();
+              }, maxDuration * 1000 + 800);
+            })
+            .catch(async (err) => {
+              log.warn(err);
+              // probably we are offline, so we can't use the speech service
+              // instead we will use the meSpeak library
+              return mv2Interface.send_REST(
+                "notification/warn-message/Text to speech extension requires internet connection."
+              );
+              try {
+                return Scratch3Mv2Blocks.speech2TextLocally(
+                  state.voiceId,
+                  words,
+                  util.target,
+                  true
+                );
+              } catch (error) {
+                log.warn(error);
+              }
+            });
         });
-      });
+    });
+  }
+
+  arrayBufferToBase64(buffer) {
+    let binary = "";
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
   }
 
   /**
