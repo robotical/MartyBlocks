@@ -2,6 +2,11 @@
 @import "../../css/colors.css";
 @import "../../css/z-index.css";
 
+
+body {
+    overflow: hidden !important;
+}
+
 .page-wrapper {
     height: 100%;
 }
