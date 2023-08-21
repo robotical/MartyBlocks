@@ -981,7 +981,7 @@ class Scratch3Text2SpeechBlocks {
    * @return {Promise} A promise that resolves after playing the sound
    */
   marty_speakAndWait(args, util) {
-    return this.speakHelper(args, util, true);
+    return this.speakHelper(args, util, false);
   }
 
   speakHelper(args, util, isMartyBlock) {

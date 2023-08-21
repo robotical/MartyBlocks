@@ -80,7 +80,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         const projectIdInDB = urlParams.get('p');
         const dbUrl =
           "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
-        const res = await fetch(dbUrl + projectIdInDB + ".json");
+        const res = await fetch(dbUrl + "-NcOI5k5lcL28w9t7KCn" + ".json");
         const projectBase64String = await res.json();
         if (!projectBase64String || !projectBase64String.data) {
             throw new Error("Invalid project id");

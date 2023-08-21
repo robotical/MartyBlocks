@@ -140,6 +140,15 @@ class Blocks extends React.Component {
         // Load the desired extension by default
         this.props.vm.extensionManager.loadExtensionIdSync('text2speech');
         this.props.vm.extensionManager.loadExtensionIdSync('translate');
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 2000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 3000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 4000);
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (
