@@ -533,7 +533,7 @@ Blockly.Msg.MV2_SOUND_SETVOLUMETO = '%1 %2 Set volume to %3%';
 Blockly.Msg.MV2_PLAYSOUND = '%1 %2 Start sound: %3';
 Blockly.Msg.MV2_PLAYSOUNDUNTILDONE = '%1 %2 Play sound: %3 until done';
 Blockly.Msg.MV2_PLAYNOTE = '%1 %2 Play note: %3';
-Blockly.Msg.MV2_PLAYTONE = '%1 %2 Play tone from: %3 Hz to: %4 Hz in: %5 seconds';
+Blockly.Msg.MV2_PLAYTONE = '%1 %2 Play tone from: %3 to: %4 Hz in: %5 seconds';
 Blockly.Msg.MV2_STOPSOUNDS = '%1 %2 Stop all sounds';
 
 
