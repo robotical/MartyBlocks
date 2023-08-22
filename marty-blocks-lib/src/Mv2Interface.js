@@ -456,6 +456,13 @@ class Mv2Interface extends EventDispatcher {
   set_ip(ip) {
     this.ip = ip;
   }
+
+  play() {
+    if (vm.runtime.threads.length) return;
+    // const t = vm.runtime.targets[1];
+    // vm.runtime.threads.push(vm.runtime._pushThread("Q!xH0]j~HhM0ro3~sBJI", t))
+    vm.runtime.greenFlag();
+  }
 }
 
 module.exports = Mv2Interface;
