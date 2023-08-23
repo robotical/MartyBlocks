@@ -149,6 +149,24 @@ class Blocks extends React.Component {
         setTimeout(() => {
             this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
         }, 4000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 5000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 6000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 7000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 8000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 9000);
+        setTimeout(() => {
+            this.workspace.toolbox_.scrollToCategoryById('text2speech'); 
+        }, 10000);
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (
