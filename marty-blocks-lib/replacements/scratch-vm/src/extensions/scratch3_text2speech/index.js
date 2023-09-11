@@ -177,26 +177,26 @@ class Scratch3Text2SpeechBlocks {
         playbackRate: 1.41, // +6 semitones
         pitch: 1.5,
       },
-      [GIANT_ID]: {
-        name: formatMessage({
-          id: "text2speech.giant",
-          default: "giant",
-          description: "A giant.",
-        }),
-        gender: "male",
-        playbackRate: 0.79, // -6 semitones
-        pitch: 0.5,
-      },
-      [TENOR_ID]: {
-        name: formatMessage({
-          id: "text2speech.tenor",
-          default: "tenor",
-          description: "A tenor.",
-        }),
-        gender: "female",
-        playbackRate: 1.41, // +6 semitones
-        pitch: 0.5,
-      },
+      // [GIANT_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.giant",
+      //     default: "giant",
+      //     description: "A giant.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 0.79, // -6 semitones
+      //   pitch: 0.5,
+      // },
+      // [TENOR_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.tenor",
+      //     default: "tenor",
+      //     description: "A tenor.",
+      //   }),
+      //   gender: "female",
+      //   playbackRate: 1.41, // +6 semitones
+      //   pitch: 0.5,
+      // },
       [ALIEN_ID]: {
         name: formatMessage({
           id: "text2speech.alien",
@@ -208,86 +208,86 @@ class Scratch3Text2SpeechBlocks {
         pitch: 1.5,
       },
 
-      [THUNDER_ID]: {
+      [GIANT_ID]: {
         name: formatMessage({
-          id: "text2speech.thunder",
-          default: "Thunder",
+          id: "text2speech.giant",
+          default: "Giant",
           description: "Male voice with low pitch and playback rate.",
         }),
         gender: "male",
         playbackRate: 0.7,
         pitch: 0.7,
       },
-      [STONE_ID]: {
-        name: formatMessage({
-          id: "text2speech.stone",
-          default: "Stone",
-          description: "Male voice with low pitch.",
-        }),
-        gender: "male",
-        playbackRate: 1,
-        pitch: 0.7,
-      },
-      [RUMBLE_ID]: {
-        name: formatMessage({
-          id: "text2speech.rumble",
-          default: "Rumble",
-          description: "Male voice with high playback rate and low pitch.",
-        }),
-        gender: "male",
-        playbackRate: 1.3,
-        pitch: 0.7,
-      },
-      [ECHO_ID]: {
-        name: formatMessage({
-          id: "text2speech.echo",
-          default: "Echo",
-          description: "Male voice with standard pitch and low playback rate.",
-        }),
-        gender: "male",
-        playbackRate: 0.7,
-        pitch: 1,
-      },
-      [DRIFT_ID]: {
-        name: formatMessage({
-          id: "text2speech.drift",
-          default: "Drift",
-          description: "Standard male voice.",
-        }),
-        gender: "male",
-        playbackRate: 1,
-        pitch: 1,
-      },
-      [BREEZE_ID]: {
-        name: formatMessage({
-          id: "text2speech.breeze",
-          default: "Breeze",
-          description: "Male voice with standard pitch and high playback rate.",
-        }),
-        gender: "male",
-        playbackRate: 1.3,
-        pitch: 1,
-      },
-      [WAVE_ID]: {
-        name: formatMessage({
-          id: "text2speech.wave",
-          default: "Wave",
-          description: "Male voice with high pitch and low playback rate.",
-        }),
-        gender: "male",
-        playbackRate: 0.7,
-        pitch: 1.3,
-      },
-      [BLAZE_ID]: {
-        name: formatMessage({
-          id: "text2speech.blaze",
-          default: "Blaze",
-          description: "High-pitched male voice.",
-        }),
-        gender: "male",
-        playbackRate: 1,
-        pitch: 1.3,
-      },
+      // [STONE_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.stone",
+      //     default: "Stone",
+      //     description: "Male voice with low pitch.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 1,
+      //   pitch: 0.7,
+      // },
+      // [RUMBLE_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.rumble",
+      //     default: "Rumble",
+      //     description: "Male voice with high playback rate and low pitch.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 1.3,
+      //   pitch: 0.7,
+      // },
+      // [ECHO_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.echo",
+      //     default: "Echo",
+      //     description: "Male voice with standard pitch and low playback rate.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 0.7,
+      //   pitch: 1,
+      // },
+      // [DRIFT_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.drift",
+      //     default: "Drift",
+      //     description: "Standard male voice.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 1,
+      //   pitch: 1,
+      // },
+      // [BREEZE_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.breeze",
+      //     default: "Breeze",
+      //     description: "Male voice with standard pitch and high playback rate.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 1.3,
+      //   pitch: 1,
+      // },
+      // [WAVE_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.wave",
+      //     default: "Wave",
+      //     description: "Male voice with high pitch and low playback rate.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 0.7,
+      //   pitch: 1.3,
+      // },
+      // [BLAZE_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.blaze",
+      //     default: "Blaze",
+      //     description: "High-pitched male voice.",
+      //   }),
+      //   gender: "male",
+      //   playbackRate: 1,
+      //   pitch: 1.3,
+      // },
       [BOLT_ID]: {
         name: formatMessage({
           id: "text2speech.bolt",
@@ -308,16 +308,16 @@ class Scratch3Text2SpeechBlocks {
         playbackRate: 0.7,
         pitch: 0.7,
       },
-      [MIST_ID]: {
-        name: formatMessage({
-          id: "text2speech.mist",
-          default: "Mist",
-          description: "Female voice with low pitch.",
-        }),
-        gender: "female",
-        playbackRate: 1,
-        pitch: 0.7,
-      },
+      // [MIST_ID]: {
+      //   name: formatMessage({
+      //     id: "text2speech.mist",
+      //     default: "Mist",
+      //     description: "Female voice with low pitch.",
+      //   }),
+      //   gender: "female",
+      //   playbackRate: 1,
+      //   pitch: 0.7,
+      // },
       [WHIRLWIND_ID]: {
         name: formatMessage({
           id: "text2speech.whirlwind",
@@ -328,68 +328,68 @@ class Scratch3Text2SpeechBlocks {
         playbackRate: 1.3,
         pitch: 0.7,
       },
-      [DAWN_ID]: {
-        name: formatMessage({
-          id: "text2speech.dawn",
-          default: "Dawn",
-          description:
-            "Female voice with standard pitch and low playback rate.",
-        }),
-        gender: "female",
-        playbackRate: 0.7,
-        pitch: 1,
-      },
-      [CRYSTAL_ID]: {
-        name: formatMessage({
-          id: "text2speech.crystal",
-          default: "Crystal",
-          description: "Standard female voice.",
-        }),
-        gender: "female",
-        playbackRate: 1,
-        pitch: 1,
-      },
-      [LULLABY_ID]: {
-        name: formatMessage({
-          id: "text2speech.lullaby",
-          default: "Lullaby",
-          description:
-            "Female voice with standard pitch and high playback rate.",
-        }),
-        gender: "female",
-        playbackRate: 1.3,
-        pitch: 1,
-      },
-      [AURORA_ID]: {
-        name: formatMessage({
-          id: "text2speech.aurora",
-          default: "Aurora",
-          description: "Female voice with high pitch and low playback rate.",
-        }),
-        gender: "female",
-        playbackRate: 0.7,
-        pitch: 1.3,
-      },
-      [RADIANCE_ID]: {
-        name: formatMessage({
-          id: "text2speech.radiance",
-          default: "Radiance",
-          description: "High-pitched female voice.",
-        }),
-        gender: "female",
-        playbackRate: 1,
-        pitch: 1.3,
-      },
-      [FLASH_ID]: {
-        name: formatMessage({
-          id: "text2speech.flash",
-          default: "Flash",
-          description: "Female voice with high pitch and playback rate.",
-        }),
-        gender: "female",
-        playbackRate: 1.3,
-        pitch: 1.3,
-      },
+    //   [DAWN_ID]: {
+    //     name: formatMessage({
+    //       id: "text2speech.dawn",
+    //       default: "Dawn",
+    //       description:
+    //         "Female voice with standard pitch and low playback rate.",
+    //     }),
+    //     gender: "female",
+    //     playbackRate: 0.7,
+    //     pitch: 1,
+    //   },
+    //   [CRYSTAL_ID]: {
+    //     name: formatMessage({
+    //       id: "text2speech.crystal",
+    //       default: "Crystal",
+    //       description: "Standard female voice.",
+    //     }),
+    //     gender: "female",
+    //     playbackRate: 1,
+    //     pitch: 1,
+    //   },
+    //   [LULLABY_ID]: {
+    //     name: formatMessage({
+    //       id: "text2speech.lullaby",
+    //       default: "Lullaby",
+    //       description:
+    //         "Female voice with standard pitch and high playback rate.",
+    //     }),
+    //     gender: "female",
+    //     playbackRate: 1.3,
+    //     pitch: 1,
+    //   },
+    //   [AURORA_ID]: {
+    //     name: formatMessage({
+    //       id: "text2speech.aurora",
+    //       default: "Aurora",
+    //       description: "Female voice with high pitch and low playback rate.",
+    //     }),
+    //     gender: "female",
+    //     playbackRate: 0.7,
+    //     pitch: 1.3,
+    //   },
+    //   [RADIANCE_ID]: {
+    //     name: formatMessage({
+    //       id: "text2speech.radiance",
+    //       default: "Radiance",
+    //       description: "High-pitched female voice.",
+    //     }),
+    //     gender: "female",
+    //     playbackRate: 1,
+    //     pitch: 1.3,
+    //   },
+    //   [FLASH_ID]: {
+    //     name: formatMessage({
+    //       id: "text2speech.flash",
+    //       default: "Flash",
+    //       description: "Female voice with high pitch and playback rate.",
+    //     }),
+    //     gender: "female",
+    //     playbackRate: 1.3,
+    //     pitch: 1.3,
+    //   },
     };
   }
 
