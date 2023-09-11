@@ -291,6 +291,7 @@ Blockly.Msg.CATEGORY_VARIABLES = 'Variables';
 Blockly.Msg.CATEGORY_MYBLOCKS = 'My Blocks';
 
 // Context menus
+Blockly.Msg.PYTHON_TRANSPILE = 'Transpile to Python';
 Blockly.Msg.DUPLICATE = 'Duplicate';
 Blockly.Msg.DELETE = 'Delete';
 Blockly.Msg.ADD_COMMENT = 'Add Comment';
