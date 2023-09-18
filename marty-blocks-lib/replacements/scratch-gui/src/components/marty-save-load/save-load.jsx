@@ -116,6 +116,6 @@ const mapDispatchToProps = (dispatch) => ({
   onConfirmNewProject: () => dispatch(requestNewProject(false)),
 });
 
-export default errorBoundaryHOC("Save / Load")(
+export default errorBoundaryHOC("Save/Load")(
   injectIntl(connect(mapStateToProps, mapDispatchToProps)(SaveLoad))
 );
