@@ -7028,7 +7028,7 @@ Blockly.ScratchMsgs.locales["fr"] =
     "MV2_CIRCLE": "%1 %2 danse circulaire à %3 en %4 s",
     "MV2_KICK": "%1 %2 coup de pied jambe %3",
     "MV2_SLIDE": "%1 %2 glisser %3 fois vers la %4",
-    "MV2_SLIDE_MS_LENGTH": "%1 %2 glisser %3 fois de longueur %4 en %5 s",
+    "MV2_SLIDE_MS_LENGTH": "%1 %2 glisser %3 fois de longueur %4 en %5 s, longueur %6",
     "MV2_LEAN": "%1 %2 se pencher %3 pendant %4 s",
     "MV2_EYES": "%1 %2 expression des yeux: %3",
     "MV2_LIFTFOOT": "%1 %2 lever la jambe %3",
