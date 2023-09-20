@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 
 import CameraFeed from '../marty-camera-feed/marty-camera-feed.jsx';
 import Label from '../forms/label.jsx';
@@ -15,6 +15,8 @@ import styles from './marty-machine-model-editor.css';
 import playIcon from './icon--play.svg';
 import stopIcon from './icon--stop.svg';
 import deleteIcon from './icon--delete.svg';
+import MartyMachineModelPredictions from './predictions/predictions.jsx';
+import TfVisChart from './TfVisChart/TfVisChart.jsx';
 
 const BufferedInput = BufferedInputHOC(Input);
 
@@ -57,19 +59,27 @@ const messages = defineMessages({
 });
 
 const MartyMachineModelEditor = props => {
-    let feed = <CameraFeed setRef={props.setDeviceStreamRef} />;
+    let feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     if (props.modelType === 'image-device') {
-        feed = <CameraFeed setRef={props.setDeviceStreamRef} />;
+        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     } else if (props.modelType === 'image-marty') {
-        feed = <CameraFeed setRef={props.setDeviceStreamRef} />;
+        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     } else if (props.modelType === 'audio') {
-        feed = <CameraFeed setRef={props.setDeviceStreamRef} />;
+        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     }
 
-    const canBeTrained = props.modelClasses.length > 0 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning;
+    const canBeTrained = props.modelClasses.length > 1 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning;
     const canBeRun = !props.isRecording && !props.isTraining && !props.isRunning && props.isTrained;
     const canBeRecorded = !props.isRecording && !props.isTraining && !props.isRunning;
     const canBeSaved = props.isTrained;
+
+    let trainingOrRunningJSX = null;
+    if (props.isTraining || props.isTrained) {
+        trainingOrRunningJSX = <TfVisChart id="lossChart" title="Loss" xLabel="epoch" yLabel="loss" width={299} height={183} model={props.model} />;
+    }
+    if (props.isRunning) {
+        trainingOrRunningJSX = <MartyMachineModelPredictions model={props.model} />;
+    }
 
     return <div
         className={styles.editorContainer}
@@ -90,8 +100,9 @@ const MartyMachineModelEditor = props => {
         </div>
         <div className={styles.row}>
             <div className={styles.feedContainer}>
-                {feed}
+                {feedJSX}
             </div>
+            {trainingOrRunningJSX}
         </div>
         <div className={classNames(styles.row, styles.rowReverse)}>
             <div className={styles.inputGroup}>
@@ -169,7 +180,7 @@ const MartyMachineModelEditor = props => {
                 </button>}
             </div>
             <div className={styles.inputGroup}>
-               <button
+                <button
                     className={classNames(styles.roundButton, styles.trainButton, canBeSaved ? '' : styles.buttonDisabled)}
                     title={props.intl.formatMessage(messages.save)}
                     onClick={props.onSaveModel}
@@ -208,7 +219,7 @@ const MartyMachineModelEditor = props => {
                                                         onClick={() => props.onRemoveSample(classIndex, sampleIndex)}
                                                     />
                                                 </div>
-                                                <img className={styles.modelSample} src={sample} />
+                                                <img className={styles.modelSample} src={"data:image/png;base64," + sample.jpegBase64} alt="sample" />
                                             </div>
                                         </div>
                                     })}
@@ -245,6 +256,7 @@ MartyMachineModelEditor.propTypes = {
     isRunning: PropTypes.bool.isRequired,
     isTrained: PropTypes.bool.isRequired,
     onSaveModel: PropTypes.func.isRequired,
+    model: PropTypes.object.isRequired,
 };
 
 export default injectIntl(MartyMachineModelEditor);

@@ -6,10 +6,6 @@ import VM from 'scratch-vm';
 import { connect } from 'react-redux';
 import MartyMachineModelEditorComponent from '../components/marty-machine-model-editor/marty-machine-model-editor.jsx';
 
-const MODEL_CLASSES = [
-    { name: 'Class 1', samples: [] },
-];
-
 class MartyMachineModelEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -43,6 +39,7 @@ class MartyMachineModelEditor extends React.Component {
         this.isTraining = false;
         this.isRunning = false;
         this.isTrained = false;
+        this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
     }
     componentDidMount() {
         const asyncFunc = async () => {
@@ -95,26 +92,27 @@ class MartyMachineModelEditor extends React.Component {
 
     onStartRecordingSamples = () => {
         // select class 
-        let selectedClass = MODEL_CLASSES.find(c => c.name === this.state.className);
-        if (!selectedClass) {
-            MODEL_CLASSES.push({ name: this.state.className, samples: [] });
+        let selectedClassIdx = this.trainingDataReducer.state.classes.findIndex(c => c.name === this.state.className);
+        if (selectedClassIdx === -1) {
+            this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: this.state.className } });
+            selectedClassIdx = this.trainingDataReducer.state.classes.length - 1;
+            // MODEL_CLASSES.push({ name: this.state.className, samples: [] });
         }
-        selectedClass = MODEL_CLASSES.find(c => c.name === this.state.className);
+        // selectedClass = MODEL_CLASSES.find(c => c.name === this.state.className);
         this.isRecording = true;
         if (this.state.modelType === 'image-device') {
-            const RECORD_TIME = 2000; // 2000ms = 2 seconds
-            const INTERVAL_TIME = 100; // 100ms = 0.1 second between captures
+            const RECORD_TIME = 2000;
+            const INTERVAL_TIME = 100;
             const videoElement = this.deviceStreamRef;
             const canvas = this.canvasRef;
             const ctx = canvas.getContext('2d');
-            let capturedImages = [];
 
             const captureInterval = setInterval(() => {
                 if (!this.isRecording) return;
                 ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                const imageSrc = canvas.toDataURL('image/png');
-                capturedImages.push(imageSrc);
-                selectedClass.samples.push(imageSrc);
+                let imageSrc = canvas.toDataURL('image/png');
+                imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
+                this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_IMAGE, payload: { id: selectedClassIdx, image: martyMachine.newImage(imageSrc) } });
                 this.setState({});
             }, INTERVAL_TIME);
 
@@ -128,18 +126,24 @@ class MartyMachineModelEditor extends React.Component {
     }
     onStopRecordingSamples = () => {
         this.isRecording = false;
+        this.model.stopTraining();
         this.setState({});
     }
     onRemoveClass = (classIndex) => {
-        MODEL_CLASSES.splice(classIndex, 1);
+        this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_REMOVE_CLASS, payload: { id: classIndex } });
         this.setState({});
     }
     onRemoveSample = (classIndex, sampleIndex) => {
-        MODEL_CLASSES[classIndex].samples.splice(sampleIndex, 1);
+        this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_REMOVE_IMAGE, payload: { id: classIndex, imageIdx: sampleIndex } });
         this.setState({});
     }
     onTrainModel = () => {
         this.isTraining = true;
+        this.props.model.trainModel(this.trainingDataReducer.state).then(res => {
+            this.isTrained = res;
+            this.isTraining = false;
+            this.setState({});
+        });
         this.setState({});
     }
     onStopTraining = () => {
@@ -148,24 +152,41 @@ class MartyMachineModelEditor extends React.Component {
     }
     onRunModel = () => {
         this.isRunning = true;
+        if (this.state.modelType === 'image-device') {
+            const INTERVAL_TIME = 200;
+            const videoElement = this.deviceStreamRef;
+            const canvas = this.canvasRef;
+            const ctx = canvas.getContext('2d');
+
+            const captureInterval = setInterval(async () => {
+                if (!this.isRunning) {
+                    clearInterval(captureInterval);
+                    return;
+                }
+                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                let imageSrc = canvas.toDataURL('image/png');
+                imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
+                await this.props.model.runModel(martyMachine.newImage(imageSrc));
+                this.setState({});
+            }, INTERVAL_TIME);
+        }
         this.setState({});
     }
+
     onStopRunningModel = () => {
         this.isRunning = false;
         this.setState({});
     }
     onSaveModel = () => {
-        const model = {
-            modelType: this.state.modelType,
-            modelClasses: MODEL_CLASSES
-        };
-        const modelJson = JSON.stringify(model);
-        const blob = new Blob([modelJson], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = `${this.props.name}.json`;
+        // const model = {
+        //     modelType: this.state.modelType,
+        // };
+        // const modelJson = JSON.stringify(model);
+        // const blob = new Blob([modelJson], { type: 'application/json' });
+        // const url = URL.createObjectURL(blob);
+        // const link = document.createElement('a');
+        // link.download = `${this.props.name}.json`;
     }
-
 
     render() {
         return (
@@ -177,7 +198,7 @@ class MartyMachineModelEditor extends React.Component {
                     onContainerClick={this.handleContainerClick}
                     modelType={this.state.modelType}
                     setDeviceStreamRef={this.setDeviceStreamRef}
-                    modelClasses={MODEL_CLASSES}
+                    modelClasses={this.trainingDataReducer.state.classes}
                     className={this.state.className}
                     onClassNameChange={this.onClassNameChange}
                     onStartRecordingSamples={this.onStartRecordingSamples}
@@ -193,6 +214,7 @@ class MartyMachineModelEditor extends React.Component {
                     isRunning={this.isRunning}
                     isTrained={this.isTrained}
                     onSaveModel={this.onSaveModel}
+                    model={this.props.model}
                 />
                 <canvas ref={this.setCanvasRef} width={1280} height={720} style={{ display: 'none' }} />
             </>
@@ -208,6 +230,7 @@ MartyMachineModelEditor.propTypes = {
     soundId: PropTypes.string,
     modelIndex: PropTypes.number,
     vm: PropTypes.instanceOf(VM).isRequired,
+    model: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, { modelIndex }) => {

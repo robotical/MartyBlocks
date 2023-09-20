@@ -1,4 +1,5 @@
 const Mv2Interface = require("./Mv2Interface");
+const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");
 const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
@@ -8,6 +9,7 @@ const meSpeak = require("./util/mespeak");
 
 mv2Interface = new Mv2Interface();
 mstTesting = new MSTTesting(mv2Interface);
+martyMachine = new MartyMachine(); 
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality
 

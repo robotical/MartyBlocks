@@ -53,6 +53,11 @@ npmlinkAll() {
     cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
 }
 
+# Step 4.1: Copy web worker of marty machine into scratch gui static
+cpWebWorker() {
+    cp $mblib/node_modules/@robotical/marty-machine-lib/dist/assets/MLModelWorker.js $gui_original/static
+}
+
 # Step 5: build all repositories and start scratch gui
 buildAllAndStart () {
     # arguments [all, blocks, vm, gui]

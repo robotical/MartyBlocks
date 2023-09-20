@@ -45,6 +45,7 @@ class MartyMachineTab extends React.Component {
             selectedModelIndex: 0,
             display_content: "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
         };
+        this.model = martyMachine.getNewModelInstance();
     }
 
     componentDidMount() {
@@ -147,6 +148,7 @@ class MartyMachineTab extends React.Component {
 
     onNewModelClick = (modelType) => {
         this.setState({ display_content: modelType });
+        this.model = martyMachine.getNewModelInstance(modelType);
     };
 
     render() {
@@ -196,13 +198,13 @@ class MartyMachineTab extends React.Component {
             },
         });
 
-        let contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} />;
+        let contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
         if (this.state.display_content === "image-device") {
-            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} />;
+            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
         } else if (this.state.display_content === "image-marty") {
-            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} />;
+            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
         } else if (this.state.display_content === "audio") {
-            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} />;
+            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
         } else if (this.state.display_content === "saved-model") {
             contentJSX = <div>Saved model</div>
         }
