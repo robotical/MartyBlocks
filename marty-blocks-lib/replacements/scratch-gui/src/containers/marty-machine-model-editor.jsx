@@ -39,6 +39,7 @@ class MartyMachineModelEditor extends React.Component {
         this.isTraining = false;
         this.isRunning = false;
         this.isTrained = false;
+        this.isSaving = false;
         this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
     }
     componentDidMount() {
@@ -178,14 +179,36 @@ class MartyMachineModelEditor extends React.Component {
         this.setState({});
     }
     onSaveModel = () => {
-        // const model = {
-        //     modelType: this.state.modelType,
-        // };
-        // const modelJson = JSON.stringify(model);
-        // const blob = new Blob([modelJson], { type: 'application/json' });
-        // const url = URL.createObjectURL(blob);
-        // const link = document.createElement('a');
-        // link.download = `${this.props.name}.json`;
+        this.isSaving = true;
+        this.props.model.setSaveModelCallback = (model) => {
+            const modelJSON = JSON.parse(model.modelJSON);
+            const modelWeights = model.modelWeights;
+            modelJSON.format = '';
+            modelJSON.dataFormat = 'bin';
+
+            // Create an asset from the model JSON
+            const storage = vm.runtime.storage;
+            modelJSON.asset = storage.createAsset(
+                "marty-model",
+                "binary",
+                modelWeights,
+                null,
+                true // generate md5
+            );
+            modelJSON.assetId = modelJSON.asset.assetId;
+
+            // update vmModel object with md5 property
+            modelJSON.md5 = `${modelJSON.assetId}.${modelJSON.dataFormat}`;
+            // The VM will update the Model name to a fresh name
+            modelJSON.name = this.props.name;
+            this.isSaving = false;
+            this.setState({});
+            vm.addModel(modelJSON).then(() => {
+                if (callback) callback();
+            });
+        }
+        this.props.model.saveModel();
+        this.setState({});
     }
 
     render() {
@@ -214,6 +237,7 @@ class MartyMachineModelEditor extends React.Component {
                     isRunning={this.isRunning}
                     isTrained={this.isTrained}
                     onSaveModel={this.onSaveModel}
+                    isSaving={this.isSaving}
                     model={this.props.model}
                 />
                 <canvas ref={this.setCanvasRef} width={1280} height={720} style={{ display: 'none' }} />

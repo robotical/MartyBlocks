@@ -180,14 +180,15 @@ const MartyMachineModelEditor = props => {
                 </button>}
             </div>
             <div className={styles.inputGroup}>
-                <button
-                    className={classNames(styles.roundButton, styles.trainButton, canBeSaved ? '' : styles.buttonDisabled)}
-                    title={props.intl.formatMessage(messages.save)}
-                    onClick={props.onSaveModel}
-                    disabled={!canBeSaved}
-                >
-                    Save
-                </button>
+                {props.isSaving ? <div className={styles.saving}>Saving...</div> :
+                    <button
+                        className={classNames(styles.roundButton, styles.trainButton, canBeSaved ? '' : styles.buttonDisabled)}
+                        title={props.intl.formatMessage(messages.save)}
+                        onClick={props.onSaveModel}
+                        disabled={!canBeSaved}
+                    >
+                        Save
+                    </button>}
             </div>
         </div>
 
@@ -256,6 +257,7 @@ MartyMachineModelEditor.propTypes = {
     isRunning: PropTypes.bool.isRequired,
     isTrained: PropTypes.bool.isRequired,
     onSaveModel: PropTypes.func.isRequired,
+    isSaving: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
 };
 
