@@ -68,9 +68,9 @@ const MartyMachineModelEditor = props => {
         feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     }
 
-    const canBeTrained = props.modelClasses.length > 1 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning;
+    const canBeTrained = (props.modelClasses.length > 1 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning) && !props.isModelLoaded;
     const canBeRun = !props.isRecording && !props.isTraining && !props.isRunning && props.isTrained;
-    const canBeRecorded = !props.isRecording && !props.isTraining && !props.isRunning;
+    const canBeRecorded = (!props.isRecording && !props.isTraining && !props.isRunning) && !props.isModelLoaded;
     const canBeSaved = props.isTrained;
 
     let trainingOrRunningJSX = null;
@@ -94,6 +94,7 @@ const MartyMachineModelEditor = props => {
                         type="text"
                         value={props.name}
                         onSubmit={props.onChangeName}
+                        disabled={props.isModelLoaded}
                     />
                 </Label>
             </div>
@@ -105,7 +106,7 @@ const MartyMachineModelEditor = props => {
             {trainingOrRunningJSX}
         </div>
         <div className={classNames(styles.row, styles.rowReverse)}>
-            <div className={styles.inputGroup}>
+            {!props.isModelLoaded && <div className={styles.inputGroup}>
                 <Label text={props.intl.formatMessage(messages.className)}>
                     <BufferedInput
                         tabIndex="1"
@@ -114,7 +115,7 @@ const MartyMachineModelEditor = props => {
                         onSubmit={props.onClassNameChange}
                     />
                 </Label>
-            </div>
+            </div>}
             <div className={styles.inputGroup}>
                 {props.isRecording ? (
                     <button
@@ -191,8 +192,7 @@ const MartyMachineModelEditor = props => {
                     </button>}
             </div>
         </div>
-
-        <div className={styles.modelClassesOuterContainer}>
+        {!props.isModelLoaded ? <div className={styles.modelClassesOuterContainer}>
             <div className={styles.row}>
                 <div className={styles.classesContainer}>
                     {props.modelClasses.map((modelClass, classIndex) => {
@@ -230,7 +230,24 @@ const MartyMachineModelEditor = props => {
                     })}
                 </div>
             </div>
-        </div>
+        </div> : // if model is loaded
+            <div className={styles.modelClassesOuterContainer}>
+                <div className={styles.row}>
+                    <div className={styles.classesContainer}>
+                        {props.model.trainingData.classes.map((modelClass, classIndex) => {
+                            return <div key={classIndex} className={styles.classContainer}>
+                                <div className={styles.classLabel}>{modelClass.name}</div>
+                                <div className={styles.modelSamplesContainer}>
+                                    <div className={styles.rowCustom}>
+                                        <p className={styles.samplesLengthTitle}>{modelClass.samples.length} samples</p>
+                                    </div>
+                                </div>
+                            </div>
+                        })}
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 };
 
@@ -259,6 +276,7 @@ MartyMachineModelEditor.propTypes = {
     onSaveModel: PropTypes.func.isRequired,
     isSaving: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
+    isModelLoaded: PropTypes.bool.isRequired
 };
 
 export default injectIntl(MartyMachineModelEditor);

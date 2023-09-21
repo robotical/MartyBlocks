@@ -30,6 +30,7 @@ class MartyMachineModelEditor extends React.Component {
             modelType: 'image-device',
             deviceStream: null,
             className: 'Class 1',
+            modelName: vm.editingTarget.sprite.models[this.props.modelIndex < vm.editingTarget.sprite.models.length ? this.props.modelIndex : vm.editingTarget.sprite.models.length - 1] || 'Model 1'
         };
 
         this.ref = null;
@@ -70,7 +71,7 @@ class MartyMachineModelEditor extends React.Component {
         }
     }
     handleChangeName(name) {
-        this.props.vm.renameSound(this.props.modelIndex, name);
+        this.setState({ modelName: name });
     }
     setRef(element) {
         this.ref = element;
@@ -127,7 +128,6 @@ class MartyMachineModelEditor extends React.Component {
     }
     onStopRecordingSamples = () => {
         this.isRecording = false;
-        this.model.stopTraining();
         this.setState({});
     }
     onRemoveClass = (classIndex) => {
@@ -149,6 +149,7 @@ class MartyMachineModelEditor extends React.Component {
     }
     onStopTraining = () => {
         this.isTraining = false;
+        this.props.model.stopTraining();
         this.setState({});
     }
     onRunModel = () => {
@@ -181,30 +182,45 @@ class MartyMachineModelEditor extends React.Component {
     onSaveModel = () => {
         this.isSaving = true;
         this.props.model.setSaveModelCallback = (model) => {
-            const modelJSON = JSON.parse(model.modelJSON);
-            const modelWeights = model.modelWeights;
-            modelJSON.format = '';
-            modelJSON.dataFormat = 'bin';
+            const storage = vm.runtime.storage;
+            const modelJSON = model.modelJSON;
+            // first we need to flatten the weights
+
+            const weightBuffers = model.weights.weightBuffers;
+            const weightInfo = model.weights.weightInfo;
+
+            const vmModel = {
+                format: '',
+                dataFormat: storage.DataFormat.BIN,
+                modelType: this.state.modelType,
+            };
 
             // Create an asset from the model JSON
-            const storage = vm.runtime.storage;
-            modelJSON.asset = storage.createAsset(
-                "marty-model",
-                "binary",
-                modelWeights,
+            vmModel.asset = storage.createAsset(
+                storage.AssetType.MLModelWeights,
+                storage.DataFormat.BIN,
+                weightBuffers,
                 null,
                 true // generate md5
             );
-            modelJSON.assetId = modelJSON.asset.assetId;
+            // removing samples from training data before saving
+            const trainingData = this.props.model.trainingData;
+            trainingData.classes.forEach(cls => {
+                cls.samples = cls.samples.map(_ => undefined);
+            });
+            vmModel.dependencies = [modelJSON, weightInfo, this.props.model.trainingData];
+            vmModel.assetId = vmModel.asset.assetId;
 
             // update vmModel object with md5 property
-            modelJSON.md5 = `${modelJSON.assetId}.${modelJSON.dataFormat}`;
+            vmModel.md5 = `${vmModel.assetId}.${vmModel.dataFormat}`;
             // The VM will update the Model name to a fresh name
-            modelJSON.name = this.props.name;
+            vmModel.name = this.state.modelName;
             this.isSaving = false;
             this.setState({});
-            vm.addModel(modelJSON).then(() => {
-                if (callback) callback();
+            vm.addModel(vmModel).then(() => {
+                // if (callback) callback();
+                console.log('Model saved');
+                this.props.onNewModel();
             });
         }
         this.props.model.saveModel();
@@ -215,7 +231,7 @@ class MartyMachineModelEditor extends React.Component {
         return (
             <>
                 <MartyMachineModelEditorComponent
-                    name={this.props.name}
+                    name={this.state.modelName}
                     setRef={this.setRef}
                     onChangeName={this.handleChangeName}
                     onContainerClick={this.handleContainerClick}
@@ -235,10 +251,11 @@ class MartyMachineModelEditor extends React.Component {
                     onRun={this.onRunModel}
                     onStopRunning={this.onStopRunningModel}
                     isRunning={this.isRunning}
-                    isTrained={this.isTrained}
+                    isTrained={this.isTrained || this.props.isModelLoaded}
                     onSaveModel={this.onSaveModel}
                     isSaving={this.isSaving}
                     model={this.props.model}
+                    isModelLoaded={this.props.isModelLoaded}
                 />
                 <canvas ref={this.setCanvasRef} width={1280} height={720} style={{ display: 'none' }} />
             </>
@@ -247,24 +264,17 @@ class MartyMachineModelEditor extends React.Component {
 }
 
 MartyMachineModelEditor.propTypes = {
-    isFullScreen: PropTypes.bool,
-    name: PropTypes.string.isRequired,
     sampleRate: PropTypes.number,
     samples: PropTypes.instanceOf(Float32Array),
-    soundId: PropTypes.string,
     modelIndex: PropTypes.number,
     vm: PropTypes.instanceOf(VM).isRequired,
-    model: PropTypes.object.isRequired
+    model: PropTypes.object.isRequired,
+    onNewModel: PropTypes.func.isRequired,
+    isModelLoaded: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = (state, { modelIndex }) => {
-    const sprite = state.scratchGui.vm.editingTarget.sprite;
-    const index = modelIndex < sprite.sounds.length ? modelIndex : sprite.sounds.length - 1;
-    const sound = state.scratchGui.vm.editingTarget.sprite.sounds[index];
+const mapStateToProps = (state) => {
     return {
-        soundId: sound.soundId,
-        isFullScreen: state.scratchGui.mode.isFullScreen,
-        name: sound.name,
         vm: state.scratchGui.vm
     };
 };

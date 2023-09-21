@@ -6,7 +6,9 @@ import VM from "scratch-vm";
 
 import AssetPanel from "../components/asset-panel/asset-panel.jsx";
 import audioIcon from "../components/asset-panel/icon--audio.svg";
+import audioIconBlack from "../components/asset-panel/icon--audio-black.svg";
 import imageIcon from "../components/asset-panel/icon--image.svg";
+import imageIconBlack from "../components/asset-panel/icon--image-black.svg";
 import robotIcon from "../components/asset-panel/icon--robot.svg";
 import fileUploadIcon from "../components/action-menu/icon--file-upload.svg";
 
@@ -41,21 +43,24 @@ class MartyMachineTab extends React.Component {
             "handleDrop",
             "setFileInput",
         ]);
-        this.state = { 
+
+        console.debug("MartyMachineTab stored model:", props.vm.editingTarget.sprite.models[0]);
+        console.debug("MartyMachineTab modelType:", props.vm.editingTarget.sprite.models[0]?.modelType);
+        this.state = {
             selectedModelIndex: 0,
-            display_content: "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
+            modelType: props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
+            isModelLoaded: !!props.vm.editingTarget.sprite.models[0] 
         };
-        this.model = martyMachine.getNewModelInstance();
+        this.model = props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance();
     }
 
     componentDidMount() {
         const sprite = vm.editingTarget.sprite;
-        const areThereSavedModels = sprite.martyMachineModels && sprite.martyMachineModels.length > 0;
+        const areThereSavedModels = sprite.models && sprite.models.length > 0;
         if (areThereSavedModels) {
-            this.setState({ display_content: "saved-model" });
+            this.setState({ modelType: sprite.models[0].modelType });
         }
     }
-
 
     componentWillReceiveProps(nextProps) {
         const { editingTarget, sprites, stage } = nextProps;
@@ -64,16 +69,16 @@ class MartyMachineTab extends React.Component {
             editingTarget && sprites[editingTarget]
                 ? sprites[editingTarget]
                 : stage;
-        if (!target || !target.sounds) {
+        if (!target || !target.models) {
             return;
         }
 
-        // If switching editing targets, reset the sound index
+        // If switching editing targets, reset the model index
         if (this.props.editingTarget !== editingTarget) {
             this.setState({ selectedModelIndex: 0 });
-        } else if (this.state.selectedModelIndex > target.sounds.length - 1) {
+        } else if (this.state.selectedModelIndex > target.models.length - 1) {
             this.setState({
-                selectedModelIndex: Math.max(target.sounds.length - 1, 0),
+                selectedModelIndex: Math.max(target.models.length - 1, 0),
             });
         }
     }
@@ -83,15 +88,15 @@ class MartyMachineTab extends React.Component {
     }
 
     handleDeleteModel(modelIndex) {
-        const restoreFun = this.props.vm.deleteAudio(modelIndex);
+        const restoreFun = this.props.vm.deleteModel(modelIndex);
         if (modelIndex >= this.state.selectedModelIndex) {
             this.setState({ selectedModelIndex: Math.max(0, modelIndex - 1) });
         }
-        this.props.dispatchUpdateRestore({ restoreFun, deletedItem: "Audio" });
+        this.props.dispatchUpdateRestore({ restoreFun, deletedItem: "Model" });
     }
 
     handleExportModel(modelIndex) {
-        const item = this.props.vm.editingTarget.sprite.martyMachineModels[modelIndex];
+        const item = this.props.vm.editingTarget.sprite.models[modelIndex];
         const blob = new Blob([item.asset.data], {
             type: item.asset.assetType.contentType,
         });
@@ -109,23 +114,30 @@ class MartyMachineTab extends React.Component {
             return null;
         }
         const sprite = this.props.vm.editingTarget.sprite;
-        const sounds = sprite.martyMachineModels ? sprite.martyMachineModels : [];
-        this.setState({ selectedModelIndex: Math.max(sounds.length - 1, 0) });
+        const models = sprite.models ? sprite.models : [];
+        const selectedModelIndex = Math.max(models.length - 1, 0);
+        const model = models[selectedModelIndex];
+        this.model = model.MLModel;
+        this.setState({ 
+            selectedModelIndex, 
+            isModelLoaded: true, 
+            modelType: model.modelType
+        });
     }
 
     handleDrop(dropInfo) {
-        if (dropInfo.dragType === DragConstants.SOUND) {
+        if (dropInfo.dragType === DragConstants.MODEL) {
             const sprite = this.props.vm.editingTarget.sprite;
-            const activeAudio = sprite.martyMachineModels[this.state.selectedModelIndex];
+            const activeModel = sprite.models[this.state.selectedModelIndex];
 
-            this.props.vm.reorderAudio(
+            this.props.vm.reorderModel(
                 this.props.vm.editingTarget.id,
                 dropInfo.index,
                 dropInfo.newIndex
             );
 
             this.setState({
-                selectedModelIndex: sprite.martyMachineModels.indexOf(activeAudio),
+                selectedModelIndex: sprite.models.indexOf(activeModel),
             });
         } else if (dropInfo.dragType === DragConstants.BACKPACK_COSTUME) {
             this.props.onActivateCostumesTab();
@@ -134,7 +146,7 @@ class MartyMachineTab extends React.Component {
             });
         } else if (dropInfo.dragType === DragConstants.BACKPACK_SOUND) {
             this.props.vm
-                .addAudio({
+                .addModel({
                     md5: dropInfo.payload.body,
                     name: dropInfo.payload.name,
                 })
@@ -147,7 +159,7 @@ class MartyMachineTab extends React.Component {
     }
 
     onNewModelClick = (modelType) => {
-        this.setState({ display_content: modelType });
+        this.setState({ modelType: modelType });
         this.model = martyMachine.getNewModelInstance(modelType);
     };
 
@@ -165,13 +177,16 @@ class MartyMachineTab extends React.Component {
 
         const sprite = vm.editingTarget.sprite;
 
-        const models = sprite.martyMachineModels
-            ? sprite.martyMachineModels.map((model) => ({
-                url: isRtl ? imageIcon : audioIcon,
-                name: model.name,
-                details: "(model.sampleCount / model.rate).toFixed(2)",
-                dragPayload: model,
-            }))
+        const models = sprite.models
+            ? sprite.models.map((model) => {
+                // console.log("model", model);
+                return ({
+                    url: model.modelType === 'audio' ? audioIconBlack : imageIconBlack,
+                    name: model.name,
+                    details: model.modelType,
+                    dragPayload: model,
+                })
+            })
             : [];
 
         const messages = defineMessages({
@@ -198,17 +213,20 @@ class MartyMachineTab extends React.Component {
             },
         });
 
-        let contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
-        if (this.state.display_content === "image-device") {
-            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
-        } else if (this.state.display_content === "image-marty") {
-            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
-        } else if (this.state.display_content === "audio") {
-            contentJSX = <MartyMachineModelEditor modelIndex={this.state.selectedModelIndex} model={this.model} />;
-        } else if (this.state.display_content === "saved-model") {
-            contentJSX = <div>Saved model</div>
-        }
-
+        let contentJSX = null;
+        if (this.state.modelType === "image-device") {
+            contentJSX = <MartyMachineModelEditor
+                modelIndex={this.state.selectedModelIndex}
+                model={this.model}
+                onNewModel={this.handleNewModel}
+                modelType={this.state.modelType}
+                isModelLoaded={this.state.isModelLoaded}
+            />;
+        } else if (this.state.modelType === "image-marty") {
+            contentJSX = null;
+        } else if (this.state.modelType === "audio") {
+            contentJSX = null;
+        } 
 
         return (
             <AssetPanel
@@ -216,12 +234,12 @@ class MartyMachineTab extends React.Component {
                     {
                         title: intl.formatMessage(messages.newImageModelMarty),
                         img: robotIcon,
-                        onClick: () => {},
+                        onClick: () => { },
                     },
                     {
                         title: intl.formatMessage(messages.newImageModelMarty),
                         img: robotIcon,
-                        onClick: () => {},
+                        onClick: () => { },
                     },
                     {
                         title: intl.formatMessage(messages.newImageModelDevice),
@@ -231,15 +249,15 @@ class MartyMachineTab extends React.Component {
                     {
                         title: intl.formatMessage(messages.newAudioModel),
                         img: audioIcon,
-                        onClick: () => {},
+                        onClick: () => { },
                     },
                     {
                         title: intl.formatMessage(messages.loadTMModel),
                         img: fileUploadIcon,
-                        onClick: () => {},
+                        onClick: () => { },
                     },
                 ]}
-                dragType={DragConstants.SOUND}
+                dragType={DragConstants.MODEL}
                 isRtl={isRtl}
                 items={models}
                 selectedItemIndex={this.state.selectedModelIndex}

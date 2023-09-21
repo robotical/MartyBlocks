@@ -23,7 +23,7 @@ const newBlockIds = require('./util/new-block-ids');
 const {loadCostume} = require('./import/load-costume.js');
 const {loadSound} = require('./import/load-sound.js');
 const {loadModel} = require('./import/load-model.js');
-const {serializeSounds, serializeCostumes} = require('./serialization/serialize-assets');
+const {serializeSounds, serializeCostumes, serializeModels} = require('./serialization/serialize-assets');
 require('canvas-toBlob');
 
 const RESERVED_NAMES = ['_mouse_', '_stage_', '_edge_', '_myself_', '_random_'];
@@ -388,6 +388,7 @@ class VirtualMachine extends EventEmitter {
      */
     saveProjectSb3 () {
         const soundDescs = serializeSounds(this.runtime);
+        const modelDescs = serializeModels(this.runtime);
         const costumeDescs = serializeCostumes(this.runtime);
         const projectJson = this.toJSON();
 
@@ -397,7 +398,7 @@ class VirtualMachine extends EventEmitter {
 
         // Put everything in a zip file
         zip.file('project.json', projectJson);
-        this._addFileDescsToZip(soundDescs.concat(costumeDescs), zip);
+        this._addFileDescsToZip(soundDescs.concat(costumeDescs).concat(modelDescs), zip);
 
         return zip.generateAsync({
             type: 'blob',
@@ -441,12 +442,13 @@ class VirtualMachine extends EventEmitter {
      */
     exportSprite (targetId, optZipType) {
         const soundDescs = serializeSounds(this.runtime, targetId);
+        const modelDescs = serializeModels(this.runtime, targetId);
         const costumeDescs = serializeCostumes(this.runtime, targetId);
         const spriteJson = this.toJSON(targetId);
 
         const zip = new JSZip();
         zip.file('sprite.json', spriteJson);
-        this._addFileDescsToZip(soundDescs.concat(costumeDescs), zip);
+        this._addFileDescsToZip(soundDescs.concat(costumeDescs).concat(modelDescs), zip);
 
         return zip.generateAsync({
             type: typeof optZipType === 'string' ? optZipType : 'blob',
@@ -761,11 +763,8 @@ class VirtualMachine extends EventEmitter {
         const target = optTargetId ? this.runtime.getTargetById(optTargetId) :
             this.editingTarget;
         if (target) {
-            return loadModel(modelObject, this.runtime).then(() => {
-                target.addModel(modelObject);
-                target.setModel(
-                    target.getModels().length - 1
-                );
+            return loadModel(modelObject, this.runtime).then((model) => {
+                target.addModel(model);
                 this.runtime.emitProjectChanged();
             });
         }

@@ -15,7 +15,6 @@ class TfVisChart extends React.Component {
     }
 
     setChartRef(ref) {
-        console.log('setChartRef');
         this.chartRef = ref;
     }
 

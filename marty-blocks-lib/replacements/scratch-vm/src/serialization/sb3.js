@@ -19,7 +19,8 @@ const VariableUtil = require('../util/variable-util');
 
 const {loadCostume} = require('../import/load-costume.js');
 const {loadSound} = require('../import/load-sound.js');
-const {deserializeCostume, deserializeSound} = require('./deserialize-assets.js');
+const {deserializeCostume, deserializeSound, deserializeModel} = require('./deserialize-assets.js');
+const { loadModel } = require('../import/load-model');
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -380,6 +381,24 @@ const serializeSound = function (sound) {
 };
 
 /**
+ * Serialize the given model.
+ * @param {object} model The model to be serialized.
+ * @return {object} A serialized representation of the model.
+ */
+const serializeModel = function (model) {
+    const obj = Object.create(null);
+    obj.assetId = model.assetId;
+    obj.name = model.name;
+    obj.dataFormat = model.dataFormat.toLowerCase();
+    obj.format = model.format;
+    obj.md5ext = model.md5;
+    obj.modelType = model.modelType;
+    obj.dependencies = model.dependencies;
+    return obj;
+}
+
+
+/**
  * Serialize the given variables object.
  * @param {object} variables The variables to be serialized.
  * @return {object} A serialized representation of the variables. They get
@@ -460,6 +479,7 @@ const serializeTarget = function (target, extensions) {
     obj.currentCostume = target.currentCostume;
     obj.costumes = target.costumes.map(serializeCostume);
     obj.sounds = target.sounds.map(serializeSound);
+    obj.models = target.models.map(serializeModel);
     if (target.hasOwnProperty('volume')) obj.volume = target.volume;
     if (target.hasOwnProperty('layerOrder')) obj.layerOrder = target.layerOrder;
     if (target.hasOwnProperty('targetType')) obj.targetType = target.targetType;
@@ -927,6 +947,19 @@ const parseScratchAssets = function (object, runtime, zip) {
         // process has been completed.
     });
 
+    assets.modelPromises = (object.models || []).map(modelSource => {
+        const model = {
+            assetId: modelSource.assetId,
+            format: modelSource.format,
+            name: modelSource.name,
+            dataFormat: modelSource.dataFormat,
+            md5: modelSource.md5ext,
+            data: null,
+            dependencies: modelSource.dependencies
+        };
+        return deserializeModel(model, runtime, zip)
+            .then(() => loadModel(model, runtime));
+    });
     return assets;
 };
 
