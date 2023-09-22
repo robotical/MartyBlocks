@@ -30,7 +30,7 @@ class MartyMachineModelEditor extends React.Component {
             modelType: 'image-device',
             deviceStream: null,
             className: 'Class 1',
-            modelName: vm.editingTarget.sprite.models[this.props.modelIndex < vm.editingTarget.sprite.models.length ? this.props.modelIndex : vm.editingTarget.sprite.models.length - 1] || 'Model 1'
+            modelName: vm.editingTarget.sprite.models[this.props.modelIndex < vm.editingTarget.sprite.models.length ? this.props.modelIndex : vm.editingTarget.sprite.models.length - 1]?.name || 'Model 1'
         };
 
         this.ref = null;
@@ -50,8 +50,8 @@ class MartyMachineModelEditor extends React.Component {
                 const constraints = {
                     video: {
                         facingMode: 'user',
-                        width: { min: 265, ideal: 1280 },
-                        height: { min: 200, ideal: 720 }
+                        width: 160,
+                        height: 120,
                     }
                 };
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -62,7 +62,19 @@ class MartyMachineModelEditor extends React.Component {
         asyncFunc();
     }
     componentWillReceiveProps(newProps) {
-        if (newProps.soundId !== this.props.soundId) { // A different sound has been selected
+        if (newProps.model !== this.props.model) { // A different model was selected
+            // restore state
+            this.setState({
+                modelType: newProps.model.modelType,
+                className: 'Class 1',
+                modelName: newProps.model.name || 'Model 1'
+            });
+            this.isRecording = false;
+            this.isTraining = false;
+            this.isRunning = false;
+            this.isTrained = false;
+            this.isSaving = false;
+            this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
         }
     }
     componentWillUnmount() {
@@ -168,7 +180,7 @@ class MartyMachineModelEditor extends React.Component {
                 ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
                 let imageSrc = canvas.toDataURL('image/png');
                 imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-                await this.props.model.runModel(martyMachine.newImage(imageSrc));
+                this.props.model.runModel(martyMachine.newImage(imageSrc));
                 this.setState({});
             }, INTERVAL_TIME);
         }
@@ -257,7 +269,7 @@ class MartyMachineModelEditor extends React.Component {
                     model={this.props.model}
                     isModelLoaded={this.props.isModelLoaded}
                 />
-                <canvas ref={this.setCanvasRef} width={1280} height={720} style={{ display: 'none' }} />
+                <canvas ref={this.setCanvasRef} width={160} height={120} style={{ display: 'none' }} />
             </>
         );
     }

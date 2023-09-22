@@ -23,7 +23,7 @@ const serializeAssets = function (runtime, assetType, optTargetId) {
                 // Serialize asset if it exists, otherwise skip
                 assetDescs.push({
                     fileName: `${asset.assetId}.${asset.dataFormat}`,
-                    fileContent: asset.data,
+                    fileContent: assetType === "models" ? serializeWeights(asset.data) : asset.data,
                 });
             }
         }
@@ -63,52 +63,24 @@ const serializeCostumes = function (runtime, optTargetId) {
  * @returns {Array<object>} An array of file descriptors for each model
  */
 const serializeModels = function (runtime, optTargetId) {
-    // we first need to flatten the weights
-    const targets = optTargetId
-        ? [runtime.getTargetById(optTargetId)]
-        : runtime.targets;
-    for (let i = 0; i < targets.length; i++) {
-        const currTarget = targets[i];
-        const currAssets = currTarget.sprite.models;
-        for (let j = 0; j < currAssets.length; j++) {
-            const currAsset = currAssets[j];
-            const asset = currAsset.broken ? currAsset.broken.asset : currAsset.asset;
-            if (asset) {
-                // Calculate the total length for the new buffer
-                const totalLength = asset.data.reduce((acc, w) => acc + w.length, 0);
-
-                // Create the new buffer
-                const concatWeights = new Float32Array(totalLength);
-
-                // Fill the new buffer with data from the old buffers
-                let offset = 0;
-                for (const w of asset.data) {
-                    concatWeights.set(w, offset);
-                    offset += w.length;
-                }
-                asset.data = concatWeights.buffer;
-            }
-        }
-    }
     return serializeAssets(runtime, "models", optTargetId);
 };
 
-// // first we need to flatten the weights
-// const flattenWeights = model.weights.weightBuffers.map(w => w.buffer);
+const serializeWeights = function (weights) {
+    // Calculate the total length for the new buffer
+    const totalLength = weights.reduce((acc, w) => acc + w.length, 0);
 
-// // Calculate the total length for the new buffer
-// const totalLength = flattenWeights.reduce((acc, w) => acc + w.length, 0);
+    // Create the new buffer
+    const concatWeights = new Float32Array(totalLength);
 
-// // Create the new buffer
-// const concatWeights = new Float32Array(totalLength);
-
-// // Fill the new buffer with data from the old buffers
-// let offset = 0;
-// for (const w of flattenWeights) {
-//     concatWeights.set(w, offset);
-//     offset += w.length;
-// }
-
+    // Fill the new buffer with data from the old buffers
+    let offset = 0;
+    for (const w of weights) {
+        concatWeights.set(w, offset);
+        offset += w.length;
+    }
+    return concatWeights.buffer;
+}
 module.exports = {
     serializeSounds,
     serializeCostumes,

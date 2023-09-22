@@ -955,7 +955,8 @@ const parseScratchAssets = function (object, runtime, zip) {
             dataFormat: modelSource.dataFormat,
             md5: modelSource.md5ext,
             data: null,
-            dependencies: modelSource.dependencies
+            dependencies: modelSource.dependencies,
+            modelType: modelSource.modelType
         };
         return deserializeModel(model, runtime, zip)
             .then(() => loadModel(model, runtime));
@@ -1008,6 +1009,8 @@ const parseScratchObject = function (object, runtime, extensions, zip, assets) {
     const {costumePromises} = assets;
     // Sounds from JSON
     const {soundBank, soundPromises} = assets;
+    // Models from JSON
+    const {modelPromises} = assets;
     // Create the first clone, and load its run-state from JSON.
     const target = sprite.createClone(object.isStage ? StageLayering.BACKGROUND_LAYER : StageLayering.SPRITE_LAYER);
     // Load target properties from JSON.
@@ -1134,6 +1137,9 @@ const parseScratchObject = function (object, runtime, extensions, zip, assets) {
         sprite.sounds = sounds;
         // Make sure if soundBank is undefined, sprite.soundBank is then null.
         sprite.soundBank = soundBank || null;
+    });
+    Promise.all(modelPromises).then(models => {
+        sprite.models = models;
     });
     return Promise.all(costumePromises.concat(soundPromises)).then(() => target);
 };

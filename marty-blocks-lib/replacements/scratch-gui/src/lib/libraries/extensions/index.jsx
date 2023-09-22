@@ -200,6 +200,21 @@ export default [
     //     featured: true
     // },
     {
+        name: 'Marty Machine',
+        extensionId: 'martymachine',
+        collaborator: 'robotical',
+        iconURL: tm2scratchIconURL,
+        insetIconURL: tm2scratchInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Use Marty Machine to build AI models into MartyBlocks"
+                description="Description for the 'Marty Machine' extension"
+                id="gui.extension.martymachine.description"
+            />
+        ),
+        featured: true
+    },
+    {
         name: 'micro:bit',
         extensionId: 'microbit',
         collaborator: 'micro:bit',

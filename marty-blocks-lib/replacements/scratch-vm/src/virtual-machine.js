@@ -877,6 +877,25 @@ class VirtualMachine extends EventEmitter {
     }
 
     /**
+     * Delete a model from the current editing target.
+     * @param {int} modelIndex - the index of the model to be removed.
+     * @return {?Function} A function to restore the model that was deleted,
+     */
+    deleteModel (modelIndex) {
+        const target = this.editingTarget;
+        const deletedModel = this.editingTarget.deleteModel(modelIndex);
+        if (deletedModel) {
+            this.runtime.emitProjectChanged();
+            const restoreFun = () => {
+                target.addModel(deletedModel);
+                this.emitTargetsUpdate();
+            };
+            return restoreFun;
+        }
+        return null;
+    }
+
+    /**
      * Get a string representation of the image from storage.
      * @param {int} costumeIndex - the index of the costume to be got.
      * @return {string} the costume's SVG string if it's SVG,

@@ -122,7 +122,6 @@ const deserializeModel = function (model, runtime, zip, assetFileName) {
                 weight.set(longArrayFloat32.slice(offset, offset + length));
                 offset += length;
             }
-
             return storage.createAsset(
                 storage.AssetType.MLModelWeights,
                 storage.DataFormat.BIN,

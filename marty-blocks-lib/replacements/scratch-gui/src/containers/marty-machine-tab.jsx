@@ -92,6 +92,11 @@ class MartyMachineTab extends React.Component {
         if (modelIndex >= this.state.selectedModelIndex) {
             this.setState({ selectedModelIndex: Math.max(0, modelIndex - 1) });
         }
+        // if there are no other models, create a new one
+        if (this.props.vm.editingTarget.sprite.models.length === 0) {
+            this.onNewModelClick("image-device");
+            this.setState({ isModelLoaded: false });
+        }
         this.props.dispatchUpdateRestore({ restoreFun, deletedItem: "Model" });
     }
 

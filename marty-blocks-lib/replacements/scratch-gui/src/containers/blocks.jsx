@@ -138,6 +138,7 @@ class Blocks extends React.Component {
         }
 
         // Load the desired extension by default
+        this.props.vm.extensionManager.loadExtensionIdSync('martymachine');
         this.props.vm.extensionManager.loadExtensionIdSync('text2speech');
         this.props.vm.extensionManager.loadExtensionIdSync('translate');
     }
