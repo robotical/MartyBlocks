@@ -28,7 +28,7 @@ class MartyMachineModelPredictions extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.model.setPredictionCallback = null;
+        this.props.model.setPredictionCallback = undefined;
     }
 
     render() {

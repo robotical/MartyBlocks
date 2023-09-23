@@ -65,9 +65,9 @@ class MartyMachineModelEditor extends React.Component {
         if (newProps.model !== this.props.model) { // A different model was selected
             // restore state
             this.setState({
-                modelType: newProps.model.modelType,
+                modelType: newProps.modelType,
                 className: 'Class 1',
-                modelName: newProps.model.name || 'Model 1'
+                modelName: newProps.modelName
             });
             this.isRecording = false;
             this.isTraining = false;
@@ -75,6 +75,7 @@ class MartyMachineModelEditor extends React.Component {
             this.isTrained = false;
             this.isSaving = false;
             this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
+            console.log('New model selected', this);
         }
     }
     componentWillUnmount() {

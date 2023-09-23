@@ -49,7 +49,8 @@ class MartyMachineTab extends React.Component {
         this.state = {
             selectedModelIndex: 0,
             modelType: props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
-            isModelLoaded: !!props.vm.editingTarget.sprite.models[0] 
+            isModelLoaded: !!props.vm.editingTarget.sprite.models[0],
+            modelName: props.vm.editingTarget.sprite.models[0]?.name || "New Model",
         };
         this.model = props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance();
     }
@@ -84,7 +85,13 @@ class MartyMachineTab extends React.Component {
     }
 
     handleSelectModel(modelIndex) {
-        this.setState({ selectedModelIndex: modelIndex });
+        this.setState({
+            selectedModelIndex: modelIndex,
+            isModelLoaded: true,
+            modelType: this.props.vm.editingTarget.sprite.models[modelIndex].modelType,
+            modelName: this.props.vm.editingTarget.sprite.models[modelIndex].name
+        });
+        this.model = this.props.vm.editingTarget.sprite.models[modelIndex].MLModel;
     }
 
     handleDeleteModel(modelIndex) {
@@ -123,10 +130,11 @@ class MartyMachineTab extends React.Component {
         const selectedModelIndex = Math.max(models.length - 1, 0);
         const model = models[selectedModelIndex];
         this.model = model.MLModel;
-        this.setState({ 
-            selectedModelIndex, 
-            isModelLoaded: true, 
-            modelType: model.modelType
+        this.setState({
+            selectedModelIndex,
+            isModelLoaded: true,
+            modelType: model.modelType,
+            modelName: model.name,
         });
     }
 
@@ -164,7 +172,7 @@ class MartyMachineTab extends React.Component {
     }
 
     onNewModelClick = (modelType) => {
-        this.setState({ modelType: modelType });
+        this.setState({ modelType: modelType, isModelLoaded: false });
         this.model = martyMachine.getNewModelInstance(modelType);
     };
 
@@ -225,21 +233,22 @@ class MartyMachineTab extends React.Component {
                 model={this.model}
                 onNewModel={this.handleNewModel}
                 modelType={this.state.modelType}
+                modelName={this.state.modelName}
                 isModelLoaded={this.state.isModelLoaded}
             />;
         } else if (this.state.modelType === "image-marty") {
             contentJSX = null;
         } else if (this.state.modelType === "audio") {
             contentJSX = null;
-        } 
+        }
 
         return (
             <AssetPanel
                 buttons={[
                     {
-                        title: intl.formatMessage(messages.newImageModelMarty),
-                        img: robotIcon,
-                        onClick: () => { },
+                        title: intl.formatMessage(messages.newImageModelDevice),
+                        img: imageIcon,
+                        onClick: () => this.onNewModelClick("image-marty"),
                     },
                     {
                         title: intl.formatMessage(messages.newImageModelMarty),

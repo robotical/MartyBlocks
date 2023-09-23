@@ -673,6 +673,22 @@ class RenderedTarget extends Target {
     }
 
     /**
+     * Reorder model list by moving model at modelIndex to newIndex.
+     * @param {!number} modelIndex Index of the model to move.
+     * @param {!number} newIndex New index for that model.
+     */
+    reorderModel(modelIndex, newIndex) {
+        newIndex = MathUtil.clamp(newIndex, 0, this.sprite.models.length - 1);
+        modelIndex = MathUtil.clamp(modelIndex, 0, this.sprite.models.length - 1);
+
+        if (newIndex === modelIndex) return;
+
+        const model = this.sprite.models[modelIndex];
+        this.deleteModel(modelIndex);
+        this.addModel(model, newIndex);
+    }
+
+    /**
      * Get full sound list
      * @return {object[]} list of sounds
      */

@@ -71,10 +71,10 @@ const MartyMachineModelEditor = props => {
     const canBeTrained = (props.modelClasses.length > 1 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning) && !props.isModelLoaded;
     const canBeRun = !props.isRecording && !props.isTraining && !props.isRunning && props.isTrained;
     const canBeRecorded = (!props.isRecording && !props.isTraining && !props.isRunning) && !props.isModelLoaded;
-    const canBeSaved = props.isTrained;
+    const canBeSaved = props.isTrained && !props.isModelLoaded;
 
     let trainingOrRunningJSX = null;
-    if (props.isTraining || props.isTrained) {
+    if ((props.isTraining || props.isTrained) && !props.isModelLoaded) {
         trainingOrRunningJSX = <TfVisChart id="lossChart" title="Loss" xLabel="epoch" yLabel="loss" width={299} height={183} model={props.model} />;
     }
     if (props.isRunning) {

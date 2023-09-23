@@ -1512,6 +1512,25 @@ class VirtualMachine extends EventEmitter {
     }
 
     /**
+     * Reorder the models of a target if it exists. Return whether it occured.
+     * @param {!string} targetId ID of the target which owns the models.
+     * @param {!number} modelIndex index of the model to move.
+     * @param {!number} newIndex index that the model should be moved to.
+     * @returns {boolean} Whether a model was reordered.
+     */
+    reorderModel (targetId, modelIndex, newIndex) {
+        const target = this.runtime.getTargetById(targetId);
+        if (target) {
+            const reorderSuccessful = target.reorderModel(modelIndex, newIndex);
+            if (reorderSuccessful) {
+                this.runtime.emitProjectChanged();
+            }
+            return reorderSuccessful;
+        }
+        return false;
+    }
+    
+    /**
      * Put a target into a "drag" state, during which its X/Y positions will be unaffected
      * by blocks.
      * @param {string} targetId The id for the target to put into a drag state
