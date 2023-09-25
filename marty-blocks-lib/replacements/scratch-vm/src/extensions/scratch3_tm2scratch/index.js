@@ -579,6 +579,7 @@ class Scratch3TM2ScratchBlocks {
      * @return {Promise} - A Promise that resolves after loaded.
      */
     loadImageClassificationModelFromURL (url) {
+        url = url.trim();
         return new Promise(resolve => {
             const modelId = path.basename(url);
             const storageUrl = `https://storage.googleapis.com/tm-model/${modelId}/`;
@@ -618,6 +619,7 @@ class Scratch3TM2ScratchBlocks {
      * @return {Promise} - A Promise that resolves after loaded.
      */
     loadSoundClassificationModelFromURL (url) {
+        url = url.trim();
         return new Promise(resolve => {
             fetch(`${url}metadata.json`)
                 .then(res => res.json())
