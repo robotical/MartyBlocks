@@ -1,4 +1,4 @@
-export PhoneAppHome=/Users/ntheodoropoulos/Robotical/phone-app/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
+export PhoneAppHome=/Users/ntheodoropoulos/Robotical/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
 export WebappHome=/Users/ntheodoropoulos/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
 export MBHome=/Users/ntheodoropoulos/Robotical/MartyBlocks # <- replace this
 

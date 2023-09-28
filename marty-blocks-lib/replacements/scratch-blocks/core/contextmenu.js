@@ -292,11 +292,12 @@ Blockly.ContextMenu.blockTranspileToPythonOption = function(block, event) {
       // console.log("rootBlockId", rootBlockId);
 
       // get a list of all childrens' ids 
-      const childrenIds = rootBlock.getDescendants(false, true).map(block => block.id);
+      const childrenIds = rootBlock.getDescendants(true).map(block => block.id);
       // console.log("childrenIds", childrenIds);
 
       // convert the whole project to JSON
       const projectJson = JSON.parse(vm.toJSON());
+      // console.log("projectJson",  JSON.parse(vm.toJSON()));
 
       // keep only the target this block and its children belong to
       const target = projectJson.targets.find(target => Object.keys(target.blocks).includes(rootBlockId));
