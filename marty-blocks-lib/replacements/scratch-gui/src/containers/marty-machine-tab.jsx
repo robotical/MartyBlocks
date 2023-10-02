@@ -248,7 +248,7 @@ class MartyMachineTab extends React.Component {
                     {
                         title: intl.formatMessage(messages.newImageModelDevice),
                         img: imageIcon,
-                        onClick: () => this.onNewModelClick("image-marty"),
+                        onClick: () => this.onNewModelClick("image-device"),
                     },
                     {
                         title: intl.formatMessage(messages.newImageModelMarty),

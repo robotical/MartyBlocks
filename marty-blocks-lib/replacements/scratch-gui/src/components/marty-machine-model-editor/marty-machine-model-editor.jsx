@@ -29,7 +29,7 @@ const messages = defineMessages({
     className: {
         id: 'gui.martyMachineModelEditor.className',
         description: 'Label for the name of the class',
-        defaultMessage: 'New Class'
+        defaultMessage: 'Collect Data for:'
     },
     record: {
         id: 'gui.MartyMachineModelEditor.record',
