@@ -47,7 +47,7 @@ installMBLib() {
 # Step 4: Link repositories
 npmlinkAll() {
     # local type="${1:-all"}
-    cd $mblib && npm link ../../scratch-to-python-transpiler && npm link
+    cd $mblib && npm link
     cd $blocks_original && npm link && npm link marty-blocks-lib
     cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
     cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm

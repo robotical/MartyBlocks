@@ -5,7 +5,7 @@ const { default: isVersionGreater } = require("./versionChecker");
 const Cast = require("./util/cast");
 const Color = require("./util/color");
 const meSpeak = require("./util/mespeak");
-const { Project } = require("scratch-to-python-transpiler");
+const { Project } = require("@robotical/scratch-to-python-transpiler");
 
 
 mv2Interface = new Mv2Interface();
