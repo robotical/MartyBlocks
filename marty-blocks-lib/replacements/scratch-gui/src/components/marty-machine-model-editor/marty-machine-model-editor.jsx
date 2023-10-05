@@ -34,7 +34,7 @@ const messages = defineMessages({
     record: {
         id: 'gui.MartyMachineModelEditor.record',
         description: 'Title of the button to start recording samples',
-        defaultMessage: 'Record'
+        defaultMessage: 'Record Data'
     },
     stop: {
         id: 'gui.MartyMachineModelEditor.stop',
@@ -58,6 +58,9 @@ const messages = defineMessages({
     },
 });
 
+const PLOT_WIDTH = 299;
+const PLOT_HEIGHT = 183;
+
 const MartyMachineModelEditor = props => {
     let feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     if (props.modelType === 'image-device') {
@@ -75,7 +78,7 @@ const MartyMachineModelEditor = props => {
 
     let trainingOrRunningJSX = null;
     if ((props.isTraining || props.isTrained) && !props.isModelLoaded) {
-        trainingOrRunningJSX = <TfVisChart id="lossChart" title="Loss" xLabel="epoch" yLabel="loss" width={299} height={183} model={props.model} />;
+        trainingOrRunningJSX = <TfVisChart id="lossChart" title="Loss" xLabel="epoch" yLabel="loss" width={PLOT_WIDTH} height={PLOT_HEIGHT} model={props.model} />;
     }
     if (props.isRunning) {
         trainingOrRunningJSX = <MartyMachineModelPredictions model={props.model} />;
@@ -103,7 +106,9 @@ const MartyMachineModelEditor = props => {
             <div className={styles.feedContainer}>
                 {feedJSX}
             </div>
-            {trainingOrRunningJSX}
+            <div className={styles.trainingRunningContainer} style={{ width: PLOT_WIDTH, height: PLOT_HEIGHT }}>
+                {trainingOrRunningJSX}
+            </div>
         </div>
         <div className={classNames(styles.row, styles.rowReverse)}>
             {!props.isModelLoaded && <div className={styles.inputGroup}>

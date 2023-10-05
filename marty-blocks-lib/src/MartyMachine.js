@@ -23,15 +23,37 @@ class MartyMachine {
   
       model.setLoadModelCallback = () => {
         console.log("model loaded");
-        resolve(model); // Resolve the promise when the model is loaded
+        resolve(model); 
+        model.setLoadModelCallback = undefined;
       };
 
       const timeout = setTimeout(() => {
         reject("Model took too long to load");
+        model.setLoadModelCallback = undefined;
         clearTimeout(timeout);
       }, 10000);
   
       model.loadModel(modelJSON, weightBuffers, weightInfo);
+    });
+  }
+
+  async trainModel(model, trainingData) {
+    const TRAIN_CB_ID = "training-marty-machine";
+    return new Promise((resolve, reject) => {
+      console.log("training model")
+      model.addStatusCallback(TRAIN_CB_ID, () => {
+        console.log("model trained");
+        resolve(true); 
+        model.removeStatusCallback(TRAIN_CB_ID);
+      });
+
+      const timeout = setTimeout(() => {
+        reject(false);
+        clearTimeout(timeout);
+        model.removeStatusCallback(TRAIN_CB_ID);
+      }, 200000);
+  
+      model.trainModel(trainingData);
     });
   }
 

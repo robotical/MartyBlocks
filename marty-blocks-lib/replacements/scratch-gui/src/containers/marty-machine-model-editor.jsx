@@ -153,7 +153,7 @@ class MartyMachineModelEditor extends React.Component {
     }
     onTrainModel = () => {
         this.isTraining = true;
-        this.props.model.trainModel(this.trainingDataReducer.state).then(res => {
+        martyMachine.trainModel(this.props.model, this.trainingDataReducer.state).then(res => {
             this.isTrained = res;
             this.isTraining = false;
             this.setState({});

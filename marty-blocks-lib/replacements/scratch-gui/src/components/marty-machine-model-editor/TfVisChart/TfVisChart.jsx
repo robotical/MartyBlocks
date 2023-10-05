@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
+import Spinner from '../../spinner/spinner.jsx';
+import spinnerStyles from '../../spinner/spinner.css';
+import styles from "./TfVisChart.css";
 
 class TfVisChart extends React.Component {
     constructor(props) {
@@ -19,15 +22,19 @@ class TfVisChart extends React.Component {
     }
 
     componentDidMount() {
-        this.props.model.setStatusCallback = (status) => {
+        this.props.model.addStatusCallback("TfVisChart", (status) => {
             this.setState({ data: status });
-        };
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.model.removeStatusCallback("TfVisChart");
     }
 
     componentDidUpdate() {
         if (this.chartRef !== null &&
             this.state.data &&
-             this.state.data.lossValues.length > 0) {
+            this.state.data.lossValues.length > 0) {
             martyMachine.tfvis.render.linechart(
                 this.chartRef,
                 { values: this.state.data.lossValues, series: ['train'] },
@@ -42,7 +49,15 @@ class TfVisChart extends React.Component {
     }
 
     render() {
-        return this.state.data ? <div id={this.props.id} ref={this.setChartRef}></div> : <div>Loss Plot loading...</div>;
+        return (
+            this.state.data ?
+                <div className={styles.container} id={this.props.id} ref={this.setChartRef}></div> :
+                <div className={`${styles.container} ${styles.modern_sharp}`}>
+                    <Spinner level='warn' large className={spinnerStyles.primary}/>
+                    <div className={styles.loading_title}>Loading Loss Plot</div>
+                    <div className={styles.loading_subtitle}>This might take a while, please wait...</div>
+                </div>
+        );
     }
 }
 
