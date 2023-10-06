@@ -20,16 +20,9 @@ import downloadBlob from "../lib/download-blob";
 
 import { connect } from "react-redux";
 
-import {
-    closeAudioLibrary,
-    openAudioLibrary,
-    openAudioRecorder,
-} from "../reducers/modals";
-
-import { activateTab, COSTUMES_TAB_INDEX } from "../reducers/editor-tab";
-
 import { setRestore } from "../reducers/restore-deletion";
-import { showStandardAlert, closeAlertWithId } from "../reducers/alerts";
+import Modal from "./modal.jsx";
+import WrappedTeachableMachineUrlModal from "../components/teachable-machine-url-modal/teachable-machine-url-modal.jsx";
 
 class MartyMachineTab extends React.Component {
     constructor(props) {
@@ -42,10 +35,12 @@ class MartyMachineTab extends React.Component {
             "handleNewModel",
             "handleDrop",
             "setFileInput",
+            "onNewModelClick",
+            "onTMModelLoaded",
         ]);
 
-        console.debug("MartyMachineTab stored model:", props.vm.editingTarget.sprite.models[0]);
-        console.debug("MartyMachineTab modelType:", props.vm.editingTarget.sprite.models[0]?.modelType);
+        // console.debug("MartyMachineTab stored model:", props.vm.editingTarget.sprite.models[0]);
+        // console.debug("MartyMachineTab modelType:", props.vm.editingTarget.sprite.models[0]?.modelType);
         this.state = {
             selectedModelIndex: 0,
             modelType: props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
@@ -135,9 +130,40 @@ class MartyMachineTab extends React.Component {
             isModelLoaded: true,
             modelType: model.modelType,
             modelName: model.name,
+            loadTMModelModalVisible: false,
         });
     }
 
+    onTMModelLoaded = (modelJSON, weightBuffers, weightInfo, trainingData, modelName, modelType) => {
+        const storage = vm.runtime.storage;
+
+        const vmModel = {
+            format: '',
+            dataFormat: storage.DataFormat.BIN,
+            modelType: modelType
+        };
+
+        // Create an asset from the model JSON
+        vmModel.asset = storage.createAsset(
+            storage.AssetType.MLModelWeights,
+            storage.DataFormat.BIN,
+            weightBuffers,
+            null,
+            true // generate md5
+        );
+
+        vmModel.dependencies = [modelJSON, weightInfo, trainingData];
+        vmModel.assetId = vmModel.asset.assetId;
+
+        // update vmModel object with md5 property
+        vmModel.md5 = `${vmModel.assetId}.${vmModel.dataFormat}`;
+        // The VM will update the Model name to a fresh name
+        vmModel.name = modelName;
+        vm.addModel(vmModel).then(() => {
+            console.log('Model saved');
+            this.handleNewModel();
+        });
+    }
     handleDrop(dropInfo) {
         if (dropInfo.dragType === DragConstants.MODEL) {
             const sprite = this.props.vm.editingTarget.sprite;
@@ -152,18 +178,6 @@ class MartyMachineTab extends React.Component {
             this.setState({
                 selectedModelIndex: sprite.models.indexOf(activeModel),
             });
-        } else if (dropInfo.dragType === DragConstants.BACKPACK_COSTUME) {
-            this.props.onActivateCostumesTab();
-            this.props.vm.addCostume(dropInfo.payload.body, {
-                name: dropInfo.payload.name,
-            });
-        } else if (dropInfo.dragType === DragConstants.BACKPACK_SOUND) {
-            this.props.vm
-                .addModel({
-                    md5: dropInfo.payload.body,
-                    name: dropInfo.payload.name,
-                })
-                .then(this.handleNewModel);
         }
     }
 
@@ -243,46 +257,56 @@ class MartyMachineTab extends React.Component {
         }
 
         return (
-            <AssetPanel
-                buttons={[
-                    {
-                        title: intl.formatMessage(messages.newImageModelDevice),
-                        img: imageIcon,
-                        onClick: () => this.onNewModelClick("image-device"),
-                    },
-                    {
-                        title: intl.formatMessage(messages.newImageModelMarty),
-                        img: robotIcon,
-                        onClick: () => { },
-                    },
-                    {
-                        title: intl.formatMessage(messages.newImageModelDevice),
-                        img: imageIcon,
-                        onClick: () => this.onNewModelClick("image-device"),
-                    },
-                    {
-                        title: intl.formatMessage(messages.newAudioModel),
-                        img: audioIcon,
-                        onClick: () => { },
-                    },
-                    {
-                        title: intl.formatMessage(messages.loadTMModel),
-                        img: fileUploadIcon,
-                        onClick: () => { },
-                    },
-                ]}
-                dragType={DragConstants.MODEL}
-                isRtl={isRtl}
-                items={models}
-                selectedItemIndex={this.state.selectedModelIndex}
-                onDeleteClick={this.handleDeleteModel}
-                onDrop={this.handleDrop}
-                onDuplicateClick={this.handleDuplicateModel}
-                onExportClick={this.handleExportModel}
-                onItemClick={this.handleSelectModel}
-            >
-                {contentJSX}
-            </AssetPanel>
+            <>
+                {this.state.loadTMModelModalVisible &&
+                    <Modal>
+                        <WrappedTeachableMachineUrlModal
+                            onModelLoaded={this.onTMModelLoaded}
+                            onBack={() => this.setState({ loadTMModelModalVisible: false })}
+                        />
+                    </Modal>
+                }
+                <AssetPanel
+                    buttons={[
+                        {
+                            title: intl.formatMessage(messages.newImageModelDevice),
+                            img: imageIcon,
+                            onClick: () => this.onNewModelClick("image-device"),
+                        },
+                        {
+                            title: intl.formatMessage(messages.newImageModelMarty),
+                            img: robotIcon,
+                            onClick: () => { },
+                        },
+                        {
+                            title: intl.formatMessage(messages.newImageModelDevice),
+                            img: imageIcon,
+                            onClick: () => this.onNewModelClick("image-device"),
+                        },
+                        {
+                            title: intl.formatMessage(messages.newAudioModel),
+                            img: audioIcon,
+                            onClick: () => { },
+                        },
+                        {
+                            title: intl.formatMessage(messages.loadTMModel),
+                            img: fileUploadIcon,
+                            onClick: () => this.setState({ loadTMModelModalVisible: true }),
+                        },
+                    ]}
+                    dragType={DragConstants.MODEL}
+                    isRtl={isRtl}
+                    items={models}
+                    selectedItemIndex={this.state.selectedModelIndex}
+                    onDeleteClick={this.handleDeleteModel}
+                    onDrop={this.handleDrop}
+                    onDuplicateClick={this.handleDuplicateModel}
+                    onExportClick={this.handleExportModel}
+                    onItemClick={this.handleSelectModel}
+                >
+                    {contentJSX}
+                </AssetPanel>
+            </>
         );
     }
 }
@@ -292,12 +316,6 @@ MartyMachineTab.propTypes = {
     editingTarget: PropTypes.string,
     intl: intlShape,
     isRtl: PropTypes.bool,
-    onActivateCostumesTab: PropTypes.func.isRequired,
-    onCloseImporting: PropTypes.func.isRequired,
-    onNewAudioFromLibraryClick: PropTypes.func.isRequired,
-    onNewAudioFromRecordingClick: PropTypes.func.isRequired,
-    onRequestCloseAudioLibrary: PropTypes.func.isRequired,
-    onShowImporting: PropTypes.func.isRequired,
     soundLibraryVisible: PropTypes.bool,
     soundRecorderVisible: PropTypes.bool,
     sprites: PropTypes.shape({
@@ -329,22 +347,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
-    onNewAudioFromLibraryClick: (e) => {
-        e.preventDefault();
-        dispatch(openAudioLibrary());
-    },
-    onNewAudioFromRecordingClick: () => {
-        dispatch(openAudioRecorder());
-    },
-    onRequestCloseAudioLibrary: () => {
-        dispatch(closeAudioLibrary());
-    },
     dispatchUpdateRestore: (restoreState) => {
         dispatch(setRestore(restoreState));
     },
-    onCloseImporting: () => dispatch(closeAlertWithId("importingAsset")),
-    onShowImporting: () => dispatch(showStandardAlert("importingAsset")),
 });
 
 export default errorBoundaryHOC("Marty Machine Tab")(
