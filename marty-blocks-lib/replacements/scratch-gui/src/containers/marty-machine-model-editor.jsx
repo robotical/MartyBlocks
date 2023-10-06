@@ -117,25 +117,43 @@ class MartyMachineModelEditor extends React.Component {
         this.isRecording = true;
         if (this.state.modelType === 'image-device') {
             const RECORD_TIME = 2000;
-            const INTERVAL_TIME = 100;
+            const INTERVAL_TIME = 30;
             const videoElement = this.deviceStreamRef;
             const canvas = this.canvasRef;
             const ctx = canvas.getContext('2d');
 
-            const captureInterval = setInterval(() => {
-                if (!this.isRecording) return;
-                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                let imageSrc = canvas.toDataURL('image/png');
-                imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-                this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_IMAGE, payload: { id: selectedClassIdx, image: martyMachine.newImage(imageSrc) } });
-                this.setState({});
-            }, INTERVAL_TIME);
+            let lastCaptureTime = 0;
 
-            const cleanUpTimeout = setTimeout(() => {
-                clearInterval(captureInterval);
-                clearTimeout(cleanUpTimeout);
+            // Flag to check if recording should continue
+            this.isRecording = true;
+
+            const recordFrame = (timestamp) => {
+                if (!this.isRecording) return;
+
+                if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
+                    if (!this.isRecording) return;
+                    ctx.drawImage(videoElement, 0, 0, martyMachine.image_size, martyMachine.image_size);
+                    let imageSrc = canvas.toDataURL('image/png');
+                    imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
+                    this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_IMAGE, payload: { id: selectedClassIdx, image: martyMachine.newImage(imageSrc), canvas  } });
+                    this.setState({});
+
+                    // Update the last capture time
+                    lastCaptureTime = timestamp;
+                }
+
+                // Continue the loop
+                requestAnimationFrame(recordFrame);
+            };
+
+            // Start the loop
+            requestAnimationFrame(recordFrame);
+
+            // Set a timeout to stop the loop after RECORD_TIME has passed
+            const stopLoopTimeout = setTimeout(() => {
                 this.isRecording = false;
                 this.setState({});
+                clearTimeout(stopLoopTimeout);
             }, RECORD_TIME);
         }
     }
@@ -168,22 +186,37 @@ class MartyMachineModelEditor extends React.Component {
     onRunModel = () => {
         this.isRunning = true;
         if (this.state.modelType === 'image-device') {
-            const INTERVAL_TIME = 200;
+            const INTERVAL_TIME = 30;
             const videoElement = this.deviceStreamRef;
             const canvas = this.canvasRef;
             const ctx = canvas.getContext('2d');
+            let lastCaptureTime = 0;
 
-            const captureInterval = setInterval(async () => {
-                if (!this.isRunning) {
-                    clearInterval(captureInterval);
-                    return;
+            // Flag to check if recording should continue
+            this.isRecording = true;
+
+            const recordFrame = (timestamp) => {
+
+                if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
+                    if (!this.isRunning) {
+                        return;
+                    }
+                    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    // let imageSrc = canvas.toDataURL('image/png');
+                    // imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
+                    this.props.model.runModel(canvas);
+                    this.setState({});
+
+                    // Update the last capture time
+                    lastCaptureTime = timestamp;
                 }
-                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                let imageSrc = canvas.toDataURL('image/png');
-                imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-                this.props.model.runModel(martyMachine.newImage(imageSrc));
-                this.setState({});
-            }, INTERVAL_TIME);
+
+                // Continue the loop
+                requestAnimationFrame(recordFrame);
+            };
+
+            // Start the loop
+            requestAnimationFrame(recordFrame);
         }
         this.setState({});
     }
@@ -270,7 +303,7 @@ class MartyMachineModelEditor extends React.Component {
                     model={this.props.model}
                     isModelLoaded={this.props.isModelLoaded}
                 />
-                <canvas ref={this.setCanvasRef} width={160} height={120} style={{ display: 'none' }} />
+                <canvas ref={this.setCanvasRef} width={martyMachine.image_size} height={martyMachine.image_size} style={{ display: 'none' }} />
             </>
         );
     }

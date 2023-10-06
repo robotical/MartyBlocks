@@ -225,7 +225,7 @@ const MartyMachineModelEditor = props => {
                                                         onClick={() => props.onRemoveSample(classIndex, sampleIndex)}
                                                     />
                                                 </div>
-                                                <img className={styles.modelSample} src={"data:image/png;base64," + sample.jpegBase64} alt="sample" />
+                                                <img className={styles.modelSample} src={"data:image/png;base64," + sample.image.jpegBase64} alt="sample" />
                                             </div>
                                         </div>
                                     })}

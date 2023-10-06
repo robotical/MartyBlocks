@@ -3,13 +3,15 @@ const {
   trainingDataReducer,
   TrainingDataHelper,
   TrainingDataActionTypes,
-  tfvis
+  tfvis,
+  IMAGE_SIZE
 } = require("@robotical/marty-machine-lib/dist/marty-machine-lib.umd");
 
 class MartyMachine {
   constructor() {
     this.trainingDataActionTypes = TrainingDataActionTypes;
     this.tfvis = tfvis;
+    this.image_size = IMAGE_SIZE;
   }
 
   getNewModelInstance() {
