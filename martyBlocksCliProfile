@@ -153,3 +153,9 @@ publishPackage() {
     cp -r $gui_original/build/* dist/;
     npm publish;
 }
+
+restoreScratch() {
+    cd $blocks_original && git restore . && git clean -fd
+    cd $vm_original && git restore . && git clean -fd
+    cd $gui_original && git restore . && git clean -fd
+}
