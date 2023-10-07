@@ -456,6 +456,7 @@ class Mv2Interface extends EventDispatcher {
   set_ip(ip) {
     this.ip = ip;
   }
+
 }
 
 module.exports = Mv2Interface;

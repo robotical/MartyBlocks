@@ -55,6 +55,7 @@ import MonitorList from "../../containers/monitor-list.jsx";
 
 import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
+import MartyPythonButton from "../marty-python-btn/index.jsx";
 
 const messages = defineMessages({
   addExtension: {
@@ -307,6 +308,7 @@ const GUIComponent = (props) => {
                       />
                       <MartyConnectBtn />
                       <SensorsDashboardBtn />
+                      <MartyPythonButton />
                       <Box className={styles.controlsWrapper}>
                         <Controls vm={vm} />
                         <StageHeader stageSize={stageSize} vm={vm} />

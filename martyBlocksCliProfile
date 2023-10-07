@@ -1,4 +1,4 @@
-export PhoneAppHome=/Users/ntheodoropoulos/Robotical/phone-app/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
+export PhoneAppHome=/Users/ntheodoropoulos/Robotical/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
 export WebappHome=/Users/ntheodoropoulos/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
 export MBHome=/Users/ntheodoropoulos/Robotical/MartyBlocks # <- replace this
 
@@ -35,7 +35,7 @@ checkoutScratch() {
 installScratch() {
     cd $blocks_original && npm install 
     cd $vm_original && npm install && npm install soundtouchjs@0.1.30
-    cd $gui_original && npm install
+    cd $gui_original && npm install && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
 }
 
 # Step 3: Install marty blocks library
