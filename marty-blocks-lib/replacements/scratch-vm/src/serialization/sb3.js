@@ -394,6 +394,7 @@ const serializeModel = function (model) {
     obj.md5ext = model.md5;
     obj.modelType = model.modelType;
     obj.dependencies = model.dependencies;
+    obj.tmModelUrl = model.tmModelUrl;
     return obj;
 }
 
@@ -956,10 +957,15 @@ const parseScratchAssets = function (object, runtime, zip) {
             md5: modelSource.md5ext,
             data: null,
             dependencies: modelSource.dependencies,
-            modelType: modelSource.modelType
+            modelType: modelSource.modelType,
+            tmModelUrl: modelSource.tmModelUrl
         };
-        return deserializeModel(model, runtime, zip)
-            .then(() => loadModel(model, runtime));
+        if (modelSource.tmModelUrl) {
+            return loadModel(model, runtime);
+        } else {
+            return deserializeModel(model, runtime, zip)
+                .then(() => loadModel(model, runtime));
+        }
     });
     return assets;
 };

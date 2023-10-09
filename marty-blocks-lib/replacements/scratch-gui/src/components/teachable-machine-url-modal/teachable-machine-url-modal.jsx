@@ -41,31 +41,17 @@ class TeachableMachineUrlModal extends React.Component {
             const modelId = url.match(/\/models\/([^/]+)\/?$/)[1];
             const storageUrl = `https://storage.googleapis.com/tm-model/${modelId}/`;
             const timestamp = new Date().getTime();
-            const res = await fetch(`${storageUrl}metadata.json?${timestamp}`);
-            const metadata = await res.json();
+            const modelMetadataRes = await fetch(`${storageUrl}metadata.json?${timestamp}`);
+            const metadata = await modelMetadataRes.json();
             console.log("metadata", metadata);
-            const modelJSON = await (await fetch(`${storageUrl}model.json?${timestamp}`)).json();
-            console.log("modelJSON", modelJSON)
-            const modelWeightsPaths = [];
-            for (const weightManifest of modelJSON.weightsManifest) {
-                for (const path of weightManifest.paths) {
-                    modelWeightsPaths.push(`${storageUrl}${path}?${timestamp}`);
-                }
-            }
-            const modelWeights = await Promise.all(modelWeightsPaths.map(async (path) => {
-                const res = await fetch(path);
-                return await res.arrayBuffer();
-            }));
-            console.log("modelWeights", modelWeights);
-            const mmModel = tm2mm(modelJSON, modelWeights, metadata);
-            const MLModel = await martyMachine.loadModel(mmModel.modelJSON, mmModel.weightBuffers, mmModel.weightInfo)
-            MLModel.setTrainingData(mmModel.trainingData);
+            const trainingData = getTrainingDataFromMeta(metadata);
+            const tmModelUrl = `${storageUrl}model.json`;
+            const MLModel = await martyMachine.loadTmModel(tmModelUrl);
+            MLModel.setTrainingData(trainingData);
             console.debug('Loaded Teachable Machine model', MLModel);
             this.props.onModelLoaded(
-                mmModel.modelJSON,
-                mmModel.weightBuffers,
-                mmModel.weightInfo,
-                mmModel.trainingData,
+                tmModelUrl,
+                trainingData,
                 "tmModel",
                 'image-device'
             );
@@ -141,92 +127,15 @@ WrappedTeachableMachineUrlModal.setAppElement = ReactModal.setAppElement;
 export default WrappedTeachableMachineUrlModal;
 
 
-// teachable machine to marty machine converter
-function tm2mm(tmModelJSON, tmModelWeights, tmMetadata) {
-    const mmModelJSON = JSON.stringify(tmModelJSON.modelTopology);
-    const mmWeightsInfo = []
-    for (let i = 0; i < tmModelJSON.weightsManifest.length; i++) {
-        const tmWeightInfo = tmModelJSON.weightsManifest[i];
-        for (let j = 0; j < tmWeightInfo.weights.length; j++) {
-            const tmWeight = tmWeightInfo.weights[j];
-            const mmWeightInfo = {
-                id: j + 1,
-                name: tmWeight.name,
-                originalName: tmWeight.name,
-                shape: tmWeight.shape,
-                dtype: tmWeight.dtype,
-            };
-            mmWeightsInfo.push(mmWeightInfo);
-        }
-    }
-    const mmModelWeights = deFlattenWeights(mmWeightsInfo, tmModelWeights);
+// tmMetadata to trainingData
+function getTrainingDataFromMeta(tmMetadata) {
     const mmMetadata = {classes: []};
     for (const className of tmMetadata.labels) {
         mmMetadata.classes.push({
             name: className,
-            samples: [null],
+            samples: [],
         });
     }
-    const mmModel = {
-        modelJSON: mmModelJSON,
-        weightBuffers: mmModelWeights,
-        weightInfo: mmWeightsInfo,
-        trainingData: mmMetadata,
-    };
-    return mmModel;
+    return mmMetadata;
 }
 
-
-function deFlattenWeights(weightsInfo, weightsArr) {
-    // need to de-flatten the weights
-    const longArrayFloat32 = new Float32Array(weightsArr[0].buffer);
-
-    // Calculate lengths based on the shape metadata. 
-    const lengths = weightsInfo.map((weightInfo) => {
-        const { shape } = weightInfo;
-        const oneDArrLength = shape.reduce((acc, curr) => acc * curr, 1);
-        return oneDArrLength;
-    });
-
-    // Initialize empty Float32Arrays based on these lengths.
-    const weights = lengths.map((length) => new Float32Array(length));
-
-    // populate the weights
-    let offset = 0;
-    for (let i = 0; i < weights.length; i++) {
-        const weight = weights[i];
-        const length = lengths[i];
-        weight.set(longArrayFloat32.slice(offset, offset + length));
-        offset += length;
-    }
-    return weights;
-}
-
-async function saveModelToVm(modelJSON, weightBuffers, weightInfo, trainingData, modelName, modelType) {
-    const storage = vm.runtime.storage;
-
-    const vmModel = {
-        format: '',
-        dataFormat: storage.DataFormat.BIN,
-        modelType: modelType
-    };
-
-    // Create an asset from the model JSON
-    vmModel.asset = storage.createAsset(
-        storage.AssetType.MLModelWeights,
-        storage.DataFormat.BIN,
-        weightBuffers,
-        null,
-        true // generate md5
-    );
-
-    vmModel.dependencies = [modelJSON, weightInfo, trainingData];
-    vmModel.assetId = vmModel.asset.assetId;
-
-    // update vmModel object with md5 property
-    vmModel.md5 = `${vmModel.assetId}.${vmModel.dataFormat}`;
-    // The VM will update the Model name to a fresh name
-    vmModel.name = modelName;
-    await vm.addModel(vmModel);
-    console.log('Model saved');
-}

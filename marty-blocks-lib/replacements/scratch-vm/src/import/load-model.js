@@ -24,9 +24,8 @@ const loadModelFromAsset = function (model, modelAsset, runtime) {
   return martyMachine
     .loadModel(modelJSON, weightBuffers, weightInfo)
     .then((MLModel) => {
-        MLModel.setTrainingData(modelTrainingData);
+      MLModel.setTrainingData(modelTrainingData);
       log.debug("Loaded model: ", MLModel);
-      // set training data here
       return { ...model, MLModel };
     });
 };
@@ -74,34 +73,44 @@ const handleModelLoadError = function (model, runtime) {
  * @returns {!Promise} - a promise which will resolve to the model when ready.
  */
 const loadModel = function (model, runtime) {
-  if (!runtime.storage) {
-    log.warn("No storage module present; cannot load model asset: ", model.md5);
-    return Promise.resolve(model);
-  }
-  const idParts = StringUtil.splitFirst(model.md5, ".");
-  const md5 = idParts[0];
-  const ext = idParts[1].toLowerCase();
-  model.dataFormat = ext;
-
-  return (
-    (model.asset && Promise.resolve(model.asset)) ||
-    runtime.storage.load(runtime.storage.AssetType.MLModel, md5, ext)
-  )
-    .then((modelAsset) => {
-      log.debug("Loaded model asset: ", modelAsset);
-      model.asset = modelAsset;
-
-      if (!modelAsset) {
-        log.warn("Failed to find model data: ", model.md5);
-        return handleModelLoadError(model, runtime);
-      }
-
-      return loadModelFromAsset(model, modelAsset, runtime);
-    })
-    .catch((e) => {
-      log.warn(`Failed to load model: ${model.md5} with error: ${e}`);
-      return handleModelLoadError(model, runtime);
+  if (model.tmModelUrl) {
+    // this is a Teachable Machine model, we just need to load using the url
+    return martyMachine.loadTmModel(model.tmModelUrl).then((MLModel) => {
+      const modelTrainingData = model.dependencies[2];
+      MLModel.setTrainingData(modelTrainingData);
+      log.debug("Loaded TM model: ", MLModel);
+      return { ...model, MLModel };
     });
+  } else {
+    if (!runtime.storage) {
+      log.warn("No storage module present; cannot load model asset: ", model.md5);
+      return Promise.resolve(model);
+    }
+    const idParts = StringUtil.splitFirst(model.md5, ".");
+    const md5 = idParts[0];
+    const ext = idParts[1].toLowerCase();
+    model.dataFormat = ext;
+
+    return (
+      (model.asset && Promise.resolve(model.asset)) ||
+      runtime.storage.load(runtime.storage.AssetType.MLModel, md5, ext)
+    )
+      .then((modelAsset) => {
+        log.debug("Loaded model asset: ", modelAsset);
+        model.asset = modelAsset;
+
+        if (!modelAsset) {
+          log.warn("Failed to find model data: ", model.md5);
+          return handleModelLoadError(model, runtime);
+        }
+
+        return loadModelFromAsset(model, modelAsset, runtime);
+      })
+      .catch((e) => {
+        log.warn(`Failed to load model: ${model.md5} with error: ${e}`);
+        return handleModelLoadError(model, runtime);
+      });
+  }
 };
 
 module.exports = {

@@ -24,6 +24,36 @@ import { setRestore } from "../reducers/restore-deletion";
 import Modal from "./modal.jsx";
 import WrappedTeachableMachineUrlModal from "../components/teachable-machine-url-modal/teachable-machine-url-modal.jsx";
 
+export const modelNameCheckExists = (name) => {
+    const allTargets = vm.runtime.targets;
+    let allModels = [];
+    for (let targetId in allTargets) {
+        allModels = allModels.concat(allTargets[targetId].sprite.models);
+    }
+    const allModelNames = allModels.map((model) => model.name);
+    return allModelNames.includes(name);
+};
+
+function generateUniqueModelName(modelName, vmModel) {
+    if (!modelNameCheckExists(modelName)) {
+      vmModel.name = modelName;
+      return modelName;
+    }
+  
+    // Model name already exists, try to increment
+    const counter = modelName[modelName.length - 1];
+  
+    // Check if the last character is a number
+    if (!isNaN(counter)) {
+      const newCounter = parseInt(counter) + 1;
+      const newModelName = modelName.slice(0, -1) + newCounter;
+      return generateUniqueModelName(newModelName, vmModel);
+    } else {
+      const newModelName = modelName + "1";
+      return generateUniqueModelName(newModelName, vmModel);
+    }
+  }
+
 class MartyMachineTab extends React.Component {
     constructor(props) {
         super(props);
@@ -134,31 +164,20 @@ class MartyMachineTab extends React.Component {
         });
     }
 
-    onTMModelLoaded = (modelJSON, weightBuffers, weightInfo, trainingData, modelName, modelType) => {
+    onTMModelLoaded = (tmModelUrl, trainingData, modelName, modelType) => {
         const storage = vm.runtime.storage;
 
         const vmModel = {
             format: '',
-            dataFormat: storage.DataFormat.BIN,
-            modelType: modelType
+            dataFormat: storage.DataFormat.JSON,
+            modelType: modelType,
+            dependencies: [null, null, trainingData],
+            tmModelUrl: tmModelUrl,
+            name: modelName,
         };
 
-        // Create an asset from the model JSON
-        vmModel.asset = storage.createAsset(
-            storage.AssetType.MLModelWeights,
-            storage.DataFormat.BIN,
-            weightBuffers,
-            null,
-            true // generate md5
-        );
+        generateUniqueModelName(modelName, vmModel);
 
-        vmModel.dependencies = [modelJSON, weightInfo, trainingData];
-        vmModel.assetId = vmModel.asset.assetId;
-
-        // update vmModel object with md5 property
-        vmModel.md5 = `${vmModel.assetId}.${vmModel.dataFormat}`;
-        // The VM will update the Model name to a fresh name
-        vmModel.name = modelName;
         vm.addModel(vmModel).then(() => {
             console.log('Model saved');
             this.handleNewModel();
@@ -355,3 +374,6 @@ const mapDispatchToProps = (dispatch) => ({
 export default errorBoundaryHOC("Marty Machine Tab")(
     injectIntl(connect(mapStateToProps, mapDispatchToProps)(MartyMachineTab))
 );
+
+
+

@@ -12,7 +12,11 @@ paths.forEach((path) => {
   const data = fs.readFileSync(path, "utf-8");
 
   // Replace the `mode` line with the new value
-  const newData = data.replace("mode: 'production'", "mode: 'development'");
+  const newData = data
+  .replace("mode: 'production'", "mode: 'development'")
+  .replace('mode: "production"', 'mode: "development"')
+  .replace("devtool: false", "devtool: 'cheap-module-source-map'")
+  .replace('devtool: false', 'devtool: "cheap-module-source-map"');
 
   // Write the new data back to the file
   fs.writeFileSync(path, newData, "utf-8");

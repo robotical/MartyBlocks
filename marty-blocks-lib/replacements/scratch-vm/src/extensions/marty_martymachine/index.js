@@ -204,6 +204,14 @@ const Message = {
         'ko': '좌우 뒤집기',
         'zh-cn': '镜像开启',
         'zh-tw': '翻轉'
+    },
+    clear_model: {
+        'ja': 'モデルをクリアする',
+        'ja-Hira': 'モデルをクリアする',
+        'en': 'clear model',
+        'ko': '모델 지우기',
+        'zh-cn': '清除模型',
+        'zh-tw': '清除模型'
     }
 };
 
@@ -218,11 +226,11 @@ class MartyMachineBlocks {
         this.video.autoplay = true;
 
         this.interval = 1000;
-        this.minInterval = 100;
+        this.minInterval = 50;
 
-        this.timer = setInterval(() => {
-            this.classifyVideoImage();
-        }, this.minInterval);
+        // this.timer = setInterval(() => {
+        //     this.classifyVideoImage();
+        // }, this.minInterval);
 
         this.imageModelUrl = null;
         this.imageMetadata = null;
@@ -234,6 +242,7 @@ class MartyMachineBlocks {
         this.soundMetadata = null;
         this.soundClassifier = null;
         this.soundClassifierEnabled = false;
+        this.imageClassifierEnabled = false;
         this.initSoundProbableLabels();
 
         // this.runtime.ioDevices.video.enableVideo();
@@ -241,6 +250,22 @@ class MartyMachineBlocks {
         let script = document.createElement('script');
         script.src = 'https://stretch3.github.io/ml5-library/ml5.min.js';
         document.head.appendChild(script);
+    }
+
+    recordFrameWrapper() {
+        let lastCaptureTime = 0;
+        const recordFrame = (timestamp) => {
+            if (!lastCaptureTime || timestamp - lastCaptureTime >= this.interval) {
+                if (!this.imageClassifierEnabled) {
+                    return;
+                }
+                this.classifyVideoImage();
+                lastCaptureTime = timestamp;
+            }
+            requestAnimationFrame(recordFrame);
+        };
+
+        requestAnimationFrame(recordFrame);
     }
 
     /**
@@ -473,6 +498,13 @@ class MartyMachineBlocks {
                             defaultValue: 'off'
                         }
                     }
+                },
+                {
+                    opcode: 'clearModel',
+                    text: Message.clear_model[this.locale],
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591"
                 }
             ],
             menus: {
@@ -534,11 +566,11 @@ class MartyMachineBlocks {
      * @param {object} util - utility object provided by the runtime.
      */
     loadImageModel(args, util) {
-        this.runtime.ioDevices.video.enableVideo();
+        // this.runtime.ioDevices.video.enableVideo();
         const media = navigator.mediaDevices.getUserMedia({
             video: {
-                width: 160,
-                height: 120
+                width: martyMachine.image_size,
+                height: martyMachine.image_size,
             },
             audio: false
         });
@@ -965,15 +997,12 @@ class MartyMachineBlocks {
      */
     toggleClassification(args) {
         const state = args.CLASSIFICATION_STATE;
-        if (this.timer) {
-            clearTimeout(this.timer);
-        }
         this.soundClassifierEnabled = false;
+        this.imageClassifierEnabled = false;
         if (state === 'on') {
-            this.timer = setInterval(() => {
-                this.classifyVideoImage();
-            }, this.minInterval);
+            this.imageClassifierEnabled = true;
             this.soundClassifierEnabled = true;
+            this.recordFrameWrapper();
         }
     }
 
@@ -983,13 +1012,7 @@ class MartyMachineBlocks {
      * @property {number} CLASSIFICATION_INTERVAL - Interval time (seconds).
      */
     setClassificationInterval(args) {
-        if (this.timer) {
-            clearTimeout(this.timer);
-        }
         this.interval = args.CLASSIFICATION_INTERVAL * 1000;
-        this.timer = setInterval(() => {
-            this.classifyVideoImage();
-        }, this.minInterval);
     }
 
     /**
@@ -1005,6 +1028,32 @@ class MartyMachineBlocks {
             this.runtime.ioDevices.video.enableVideo();
             this.runtime.ioDevices.video.mirror = state === 'on';
         }
+    }
+
+    /**
+     * Clears the loaded model by essentially removing the video/sound stream
+     */
+
+    clearModel() {
+        // remove all the streams of the video
+        const stream = this.video.srcObject;
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+
+        this.imageModelUrl = null;
+        this.imageMetadata = null;
+        this.imageClassifier = null;
+        this.initImageProbableLabels();
+        this.confidenceThreshold = 0.5;
+
+        this.soundModelUrl = null;
+        this.soundMetadata = null;
+        this.soundClassifier = null;
+        this.soundClassifierEnabled = false;
+        this.imageClassifierEnabled = false;
+        this.initSoundProbableLabels();
     }
 
     /**
@@ -1120,15 +1169,15 @@ class ImageClassifier {
 
     async classify(videoElement) {
         const canvas = document.createElement('canvas');
-        canvas.width = 160;
-        canvas.height = 120;
+        canvas.width = martyMachine.image_size;
+        canvas.height = martyMachine.image_size;
         document.body.appendChild(canvas);
         const ctx = canvas.getContext('2d');
 
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        let imageSrc = canvas.toDataURL('image/png');
-        imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-        const predictions = await this.model.MLModel.runModel(martyMachine.newImage(imageSrc));
+        // let imageSrc = canvas.toDataURL('image/png');
+        // imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
+        const predictions = await this.model.MLModel.runModel(canvas);
         return predictions.output;
     }
 }

@@ -22,10 +22,10 @@ class MartyMachine {
     return new Promise((resolve, reject) => {
 
       const model = this.getNewModelInstance();
-  
+
       model.setLoadModelCallback = () => {
         console.log("model loaded");
-        resolve(model); 
+        resolve(model);
         model.setLoadModelCallback = undefined;
       };
 
@@ -34,8 +34,29 @@ class MartyMachine {
         model.setLoadModelCallback = undefined;
         clearTimeout(timeout);
       }, 10000);
-  
-      model.loadModel(modelJSON, weightBuffers, weightInfo);
+
+      model.loadModel({modelJSON, weightBuffers, weightInfo});
+    });
+  }
+
+  async loadTmModel(tmModelUrl) {
+    return new Promise((resolve, reject) => {
+
+      const model = this.getNewModelInstance();
+
+      model.setLoadModelCallback = () => {
+        console.log("tm model loaded");
+        resolve(model);
+        model.setLoadModelCallback = undefined;
+      };
+
+      const timeout = setTimeout(() => {
+        reject("Model took too long to load");
+        model.setLoadModelCallback = undefined;
+        clearTimeout(timeout);
+      }, 10000);
+
+      model.loadModel({tmModelUrl});
     });
   }
 
@@ -45,7 +66,7 @@ class MartyMachine {
       console.log("training model")
       model.addStatusCallback(TRAIN_CB_ID, () => {
         console.log("model trained");
-        resolve(true); 
+        resolve(true);
         model.removeStatusCallback(TRAIN_CB_ID);
       });
 
@@ -54,7 +75,7 @@ class MartyMachine {
         clearTimeout(timeout);
         model.removeStatusCallback(TRAIN_CB_ID);
       }, 200000);
-  
+
       model.trainModel(trainingData);
     });
   }
@@ -65,8 +86,8 @@ class MartyMachine {
   }
 
   newImage(imageSrc) {
-    return { 
-      jpegBase64: imageSrc, 
+    return {
+      jpegBase64: imageSrc,
       width: 160,
       height: 120,
       depth: 3,

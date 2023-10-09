@@ -5,6 +5,7 @@ import VM from 'scratch-vm';
 
 import { connect } from 'react-redux';
 import MartyMachineModelEditorComponent from '../components/marty-machine-model-editor/marty-machine-model-editor.jsx';
+import { modelNameCheckExists } from './marty-machine-tab.jsx';
 
 class MartyMachineModelEditor extends React.Component {
     constructor(props) {
@@ -192,13 +193,11 @@ class MartyMachineModelEditor extends React.Component {
             const ctx = canvas.getContext('2d');
             let lastCaptureTime = 0;
 
-            // Flag to check if recording should continue
-            this.isRecording = true;
-
             const recordFrame = (timestamp) => {
 
                 if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
                     if (!this.isRunning) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
                         return;
                     }
                     ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
@@ -240,6 +239,13 @@ class MartyMachineModelEditor extends React.Component {
                 dataFormat: storage.DataFormat.BIN,
                 modelType: this.state.modelType,
             };
+
+            if(modelNameCheckExists(this.state.modelName)) {
+                this.isSaving = false;
+                this.setState({});
+                alert('Oops! Model name already exists, please choose a different name.');
+                return;
+            }
 
             // Create an asset from the model JSON
             vmModel.asset = storage.createAsset(
