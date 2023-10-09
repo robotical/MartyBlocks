@@ -8,7 +8,7 @@ var path = require('path');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = [{
-  mode: 'development',
+  mode: 'production',
   entry: {
     horizontal: './shim/horizontal.js',
     vertical: './shim/vertical.js'
@@ -26,7 +26,7 @@ module.exports = [{
     hints: false
   }
 }, {
-  mode: 'development',
+  mode: 'production',
   entry: {
     horizontal: './shim/horizontal.js',
     vertical: './shim/vertical.js'
@@ -49,7 +49,7 @@ module.exports = [{
   plugins: []
 },
 {
-  mode: 'development',
+  mode: 'production',
   entry: './shim/gh-pages.js',
   output: {
     filename: '[name].js',

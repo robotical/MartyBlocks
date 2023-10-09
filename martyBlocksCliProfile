@@ -31,6 +31,13 @@ checkoutScratch() {
     cd $gui_original && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
 }
 
+# Step 1c: Restore scratch repos (only relevant if you have made changes on the repos and want to restore them to their original state)
+restoreScratch() {
+    cd $blocks_original && git restore . && git clean -fd
+    cd $vm_original && git restore . && git clean -fd
+    cd $gui_original && git restore . && git clean -fd
+}
+
 # Step 2: Install scratch
 installScratch() {
     cd $blocks_original && npm install 
@@ -58,6 +65,7 @@ buildAllAndStart () {
     # arguments [all, blocks, vm, gui]
     local type="${1:-all}"
     setDevelopment
+    # setProduction
     cpReplacements
     buildScratchStart $type
     cd $gui_original
