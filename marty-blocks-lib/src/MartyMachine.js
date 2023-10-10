@@ -14,8 +14,18 @@ class MartyMachine {
     this.image_size = IMAGE_SIZE;
   }
 
-  getNewModelInstance() {
-    return new MLModel("static/MLModelWorker.js");
+  /**
+   * 
+   * @param {string} modelType - "image-device" or "audio"
+   * @returns {MLModel} - a new instance of MLModel
+   */
+
+  getNewModelInstance(modelType = "image-device") {
+    if (modelType === "image-device") {
+      return new MLModel("static/MLModelWorker.js");
+    } else if (modelType === "audio") {
+      return new MLModel("static/MLModelWorker.js");
+    }
   }
 
   async loadModel(modelJSON, weightBuffers, weightInfo) {
@@ -35,7 +45,7 @@ class MartyMachine {
         clearTimeout(timeout);
       }, 10000);
 
-      model.loadModel({modelJSON, weightBuffers, weightInfo});
+      model.loadModel({ modelJSON, weightBuffers, weightInfo });
     });
   }
 
@@ -56,7 +66,7 @@ class MartyMachine {
         clearTimeout(timeout);
       }, 10000);
 
-      model.loadModel({tmModelUrl});
+      model.loadModel({ tmModelUrl });
     });
   }
 

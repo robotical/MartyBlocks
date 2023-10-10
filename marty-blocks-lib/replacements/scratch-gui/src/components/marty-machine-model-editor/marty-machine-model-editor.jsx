@@ -8,15 +8,15 @@ import Label from '../forms/label.jsx';
 import Input from '../forms/input.jsx';
 
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
-import IconButton from '../icon-button/icon-button.jsx';
 
 import styles from './marty-machine-model-editor.css';
 
 import playIcon from './icon--play.svg';
 import stopIcon from './icon--stop.svg';
-import deleteIcon from './icon--delete.svg';
 import MartyMachineModelPredictions from './predictions/predictions.jsx';
 import TfVisChart from './TfVisChart/TfVisChart.jsx';
+import SoundFeed from '../marty-sound-feed/marty-sound-feed.jsx';
+import ModelClass from './model-class/model-class.jsx';
 
 const BufferedInput = BufferedInputHOC(Input);
 
@@ -68,7 +68,7 @@ const MartyMachineModelEditor = props => {
     } else if (props.modelType === 'image-marty') {
         feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
     } else if (props.modelType === 'audio') {
-        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
+        feedJSX = <SoundFeed setRef={props.setAudioCanvasRef} />;
     }
 
     const canBeTrained = (props.modelClasses.length > 1 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning) && !props.isModelLoaded;
@@ -198,44 +198,21 @@ const MartyMachineModelEditor = props => {
             </div>
         </div>
         {!props.isModelLoaded ? <div className={styles.modelClassesOuterContainer}>
+            {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
             <div className={styles.row}>
                 <div className={styles.classesContainer}>
                     {props.modelClasses.map((modelClass, classIndex) => {
-                        return <div key={classIndex} className={styles.classContainer}>
-                            <div className={styles.classLabel}>{modelClass.name}<IconButton
-                                title=""
-                                className={styles.effectButton}
-                                img={deleteIcon}
-                                onClick={() => props.onRemoveClass(classIndex)}
-                            /></div>
-
-                            <div className={styles.modelSamplesContainer}>
-                                <div className={styles.rowCustom}>
-                                    <p className={styles.samplesLengthTitle}>{modelClass.samples.length} samples</p>
-                                </div>
-                                <div className={styles.rowCustom}>
-                                    {modelClass.samples.map((sample, sampleIndex) => {
-                                        return <div key={sampleIndex} className={styles.modelSampleContainer}>
-                                            <div className={styles.modelSampleOverlay}>
-                                                <div className={styles.modelSampleOverlayDelete}>
-                                                    <IconButton
-                                                        title=""
-                                                        className={styles.effectButton}
-                                                        img={deleteIcon}
-                                                        onClick={() => props.onRemoveSample(classIndex, sampleIndex)}
-                                                    />
-                                                </div>
-                                                <img className={styles.modelSample} src={"data:image/png;base64," + sample.image.jpegBase64} alt="sample" />
-                                            </div>
-                                        </div>
-                                    })}
-                                </div>
-                            </div>
-                        </div>
+                        return <ModelClass 
+                        key={classIndex} 
+                        modelClass={modelClass} 
+                        onRemoveClass={() => props.onRemoveClass(classIndex)} 
+                        onRemoveSample={props.onRemoveSample.bind(this, classIndex)}
+                        modelType={props.modelType} />
                     })}
                 </div>
             </div>
-        </div> : // if model is loaded
+        </div> : 
+        // the model is loaded, so we can only show the classe names from the model (no samples)
             <div className={styles.modelClassesOuterContainer}>
                 <div className={styles.row}>
                     <div className={styles.classesContainer}>
@@ -263,6 +240,7 @@ MartyMachineModelEditor.propTypes = {
     onContainerClick: PropTypes.func.isRequired,
     modelType: PropTypes.string.isRequired,
     setDeviceStreamRef: PropTypes.func,
+    setAudioCanvasRef: PropTypes.func,
     modelClasses: PropTypes.arrayOf(PropTypes.object),
     onClassNameChange: PropTypes.func.isRequired,
     className: PropTypes.string.isRequired,

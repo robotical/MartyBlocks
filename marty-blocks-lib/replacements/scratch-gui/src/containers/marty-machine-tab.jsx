@@ -36,23 +36,23 @@ export const modelNameCheckExists = (name) => {
 
 function generateUniqueModelName(modelName, vmModel) {
     if (!modelNameCheckExists(modelName)) {
-      vmModel.name = modelName;
-      return modelName;
+        vmModel.name = modelName;
+        return modelName;
     }
-  
+
     // Model name already exists, try to increment
     const counter = modelName[modelName.length - 1];
-  
+
     // Check if the last character is a number
     if (!isNaN(counter)) {
-      const newCounter = parseInt(counter) + 1;
-      const newModelName = modelName.slice(0, -1) + newCounter;
-      return generateUniqueModelName(newModelName, vmModel);
+        const newCounter = parseInt(counter) + 1;
+        const newModelName = modelName.slice(0, -1) + newCounter;
+        return generateUniqueModelName(newModelName, vmModel);
     } else {
-      const newModelName = modelName + "1";
-      return generateUniqueModelName(newModelName, vmModel);
+        const newModelName = modelName + "1";
+        return generateUniqueModelName(newModelName, vmModel);
     }
-  }
+}
 
 class MartyMachineTab extends React.Component {
     constructor(props) {
@@ -262,6 +262,7 @@ class MartyMachineTab extends React.Component {
         let contentJSX = null;
         if (this.state.modelType === "image-device") {
             contentJSX = <MartyMachineModelEditor
+                key={this.state.modelName + this.state.modelType}
                 modelIndex={this.state.selectedModelIndex}
                 model={this.model}
                 onNewModel={this.handleNewModel}
@@ -272,7 +273,15 @@ class MartyMachineTab extends React.Component {
         } else if (this.state.modelType === "image-marty") {
             contentJSX = null;
         } else if (this.state.modelType === "audio") {
-            contentJSX = null;
+            contentJSX = <MartyMachineModelEditor
+                key={this.state.modelName + this.state.modelType}
+                modelIndex={this.state.selectedModelIndex}
+                model={this.model}
+                onNewModel={this.handleNewModel}
+                modelType={this.state.modelType}
+                modelName={this.state.modelName}
+                isModelLoaded={this.state.isModelLoaded}
+            />;
         }
 
         return (
@@ -305,7 +314,7 @@ class MartyMachineTab extends React.Component {
                         {
                             title: intl.formatMessage(messages.newAudioModel),
                             img: audioIcon,
-                            onClick: () => { },
+                            onClick: () => this.onNewModelClick("audio"),
                         },
                         {
                             title: intl.formatMessage(messages.loadTMModel),
