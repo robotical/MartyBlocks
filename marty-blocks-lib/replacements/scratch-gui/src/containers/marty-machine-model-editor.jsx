@@ -43,6 +43,7 @@ class MartyMachineModelEditor extends React.Component {
         this.isRunning = false;
         this.isTrained = false;
         this.isSaving = false;
+        this.audioExtractor = null;
         this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
     }
     componentDidMount() {
@@ -137,6 +138,7 @@ class MartyMachineModelEditor extends React.Component {
             this.isRunning = false;
             this.isTrained = false;
             this.isSaving = false;
+            this.audioExtractor = null;
             this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
             console.log('New model selected', this);
         }
@@ -199,7 +201,14 @@ class MartyMachineModelEditor extends React.Component {
                     ctx.drawImage(videoElement, 0, 0, martyMachine.image_size, martyMachine.image_size);
                     let imageSrc = canvas.toDataURL('image/png');
                     imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-                    this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE, payload: { id: selectedClassIdx, image: martyMachine.newImage(imageSrc), canvas, sampleType: 'image' } });
+                    this.trainingDataReducer.reduce({ 
+                        type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE, 
+                        payload: { 
+                            id: selectedClassIdx, 
+                            image: martyMachine.newImage(imageSrc), 
+                            canvas, 
+                            sampleType: 'image' 
+                        } });
                     this.setState({});
 
                     // Update the last capture time
@@ -220,8 +229,7 @@ class MartyMachineModelEditor extends React.Component {
                 clearTimeout(stopLoopTimeout);
             }, RECORD_TIME);
         } else if (this.props.modelType === 'audio') {
-            const SAMPLE_TIME = 1000;
-
+            const SAMPLE_TIME = 1200;
             const audioExtractor = new AudioExtractor();
             await audioExtractor.start();
             await new Promise(resolve => setTimeout(resolve, SAMPLE_TIME));
@@ -232,62 +240,15 @@ class MartyMachineModelEditor extends React.Component {
                 type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE,
                 payload: {
                     id: selectedClassIdx,
-                    audioData: audioExtractor.timeDataQueue,
-                    image: martyMachine.newImage(imageSrc),
+                    timeDataQueue: audioExtractor.timeDataQueue,
+                    freqDataQueue: audioExtractor.freqDataQueue,
+                    image: martyMachine.newImage(imageSrc), // we need the image so we can print it as a sample in the UI
                     sampleType: 'audio'
                 }
             });
             this.isRecording = false;
             this.setState({});
             await audioExtractor.stop();
-            // const recordFrame = (timestamp) => {
-            //     if (!this.isRecording) return;
-
-            //     if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
-            //         if (!this.isRecording) return;
-
-            //         // Capture the current audio data
-            //         analyser.getByteTimeDomainData(dataArray);
-            //         console.log("dataArray", dataArray);
-            //         audioData.push([...dataArray]);
-
-            //         // Update the last capture time
-            //         lastCaptureTime = timestamp;
-
-            //         if (timestamp - lastSampleTime >= SAMPLE_TIME) {
-            //             // Process the 1-second chunk of audio data
-            // let imageSrc = canvas.toDataURL('image/png');
-            // imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-            // this.trainingDataReducer.reduce({
-            //     type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE,
-            //     payload: {
-            //         id: selectedClassIdx,
-            //         audioData: [...audioData],
-            //         image: martyMachine.newImage(imageSrc),
-            //         sampleType: 'audio'
-            //     }
-            // });
-            // this.setState({});
-
-            //             // Reset last sample time and clear audioData
-            //             lastSampleTime = timestamp;
-            //             audioData = [];
-            //         }
-            //     }
-
-            //     // Continue the loop
-            //     requestAnimationFrame(recordFrame);
-            // };
-
-            // // Start the loop
-            // requestAnimationFrame(recordFrame);
-
-            // // Set a timeout to stop the loop after RECORD_TIME has passed
-            // const stopLoopTimeout = setTimeout(() => {
-            //     this.isRecording = false;
-            //     this.setState({});
-            //     clearTimeout(stopLoopTimeout);
-            // }, RECORD_TIME);
         }
     }
     onStopRecordingSamples = () => {
@@ -302,21 +263,24 @@ class MartyMachineModelEditor extends React.Component {
         this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_REMOVE_SAMPLE, payload: { id: classIndex, sampleIdx } });
         this.setState({});
     }
+
     onTrainModel = () => {
         this.isTraining = true;
-        martyMachine.trainModel(this.props.model, this.trainingDataReducer.state).then(res => {
-            this.isTrained = res;
+        martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType).then((isTrained) => {
+            this.isTrained = isTrained;
             this.isTraining = false;
             this.setState({});
         });
         this.setState({});
     }
+
     onStopTraining = () => {
         this.isTraining = false;
         this.props.model.stopTraining();
         this.setState({});
     }
-    onRunModel = () => {
+
+    onRunModel = async() => {
         this.isRunning = true;
         if (this.props.modelType === 'image-device') {
             const INTERVAL_TIME = 30;
@@ -348,6 +312,12 @@ class MartyMachineModelEditor extends React.Component {
 
             // Start the loop
             requestAnimationFrame(recordFrame);
+        } else if (this.props.modelType === 'audio') {
+            const audioExtractor = new AudioExtractor(true, this.props.model);
+            await audioExtractor.start();
+            this.props.model.runAudioModel();
+            this.audioExtractor = audioExtractor;
+            this.setState({});
         }
         this.setState({});
     }
@@ -355,6 +325,10 @@ class MartyMachineModelEditor extends React.Component {
     onStopRunningModel = () => {
         this.isRunning = false;
         this.setState({});
+        if (this.props.modelType === 'audio' && this.audioExtractor) {
+            this.audioExtractor.stop();
+            this.props.model.stopAudioModel();
+        }
     }
     onSaveModel = () => {
         this.isSaving = true;
@@ -400,14 +374,15 @@ class MartyMachineModelEditor extends React.Component {
             // The VM will update the Model name to a fresh name
             vmModel.name = this.state.modelName;
             this.isSaving = false;
+            console.log("saving:", vmModel)
             this.setState({});
             vm.addModel(vmModel).then(() => {
                 // if (callback) callback();
-                console.log('Model saved');
+                console.log('Model saved', vmModel);
                 this.props.onNewModel();
             });
         }
-        this.props.model.saveModel();
+        this.props.model.saveModel(this.props.modelType);
         this.setState({});
     }
 
@@ -472,14 +447,16 @@ export default connect(
 
 
 class AudioExtractor {
-    constructor() {
-        this.sampleRateHz = 48000;
-        this.fftSize = 2048;
-        this.frameDurationMillis = this.fftSize / this.sampleRateHz * 1e3;
-        this.columnTruncateLength = this.fftSize;
+    constructor(shouldStreamToWebWorker = false, model = null) {
+        const trainingOptions = new martyMachine.AudioTrainingOptions();
+        this.sampleRateHz = trainingOptions.sampleRateHz;
+        this.fftSize = trainingOptions.fftSize;
+        this.columnTruncateLength = trainingOptions.columnTruncateLength;
         this.includeRawAudio = true;
+        console.log(`sampleRateHz=${this.sampleRateHz}, fftSize=${this.fftSize}, frameDurationMillis=${this.frameDurationMillis}, columnTruncateLength=${this.columnTruncateLength}, includeRawAudio=${this.includeRawAudio}`)
+        this.shouldStreamToWebWorker = shouldStreamToWebWorker;
+        this.mlmodel = model;
     }
-
 
     async start() {
         this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
@@ -497,11 +474,7 @@ class AudioExtractor {
             this.timeDataQueue = [];
             this.timeData = new Float32Array(this.fftSize);
         }
-        const period =
-            Math.max(1, Math.round(this.numFrames * (1 - this.overlapFactor)));
-        this.tracker = new Tracker(
-            period,
-            Math.round(this.suppressionTimeMillis / this.frameDurationMillis));
+
         this.frameIntervalTask = setInterval(
             this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
     }
@@ -512,33 +485,21 @@ class AudioExtractor {
             return;
         }
 
-        this.freqDataQueue.push(this.freqData.slice(0, this.columnTruncateLength));
+        const freqDataSliced = this.freqData.slice(0, this.columnTruncateLength);
+        this.freqDataQueue.push([...freqDataSliced]);
+        // if (this.shouldStreamToWebWorker) {
+        //     martyMachine.streamAudioToWebWorker(this.mlmodel, {freqData: [...freqDataSliced]});
+        // }
         if (this.includeRawAudio) {
             this.analyser.getFloatTimeDomainData(this.timeData);
             this.timeDataQueue.push(this.timeData.slice());
+            // if (this.shouldStreamToWebWorker) {
+            //     martyMachine.streamAudioToWebWorker(this.mlmodel, {timeData: [...this.timeData]});
+            // }
         }
-        if (this.freqDataQueue.length > this.numFrames) {
-            // Drop the oldest frame (least recent).
-            this.freqDataQueue.shift();
+        if (this.shouldStreamToWebWorker) {
+            martyMachine.streamAudioToWebWorker(this.mlmodel, {freqData: [...freqDataSliced], timeData: [...this.timeData]});
         }
-        // const shouldFire = this.tracker.tick();
-        // if (shouldFire) {
-        //     const freqData = flattenQueue(this.freqDataQueue);
-        //     const freqDataTensor = getInputTensorFromFrequencyData(
-        //         freqData, [1, this.numFrames, this.columnTruncateLength, 1]);
-        //     let timeDataTensor;
-        //     if (this.includeRawAudio) {
-        //         const timeData = flattenQueue(this.timeDataQueue);
-        //         timeDataTensor = getInputTensorFromFrequencyData(
-        //             timeData, [1, this.numFrames * this.fftSize]);
-        //     }
-        //     const shouldRest =
-        //         await this.spectrogramCallback(freqDataTensor, timeDataTensor);
-        //     if (shouldRest) {
-        //         this.tracker.suppress();
-        //     }
-        //     tf.dispose([freqDataTensor, timeDataTensor]);
-        // }
     }
 
     async stop() {
@@ -557,61 +518,6 @@ class AudioExtractor {
 
 }
 
-
-/**
- * A class that manages the firing of events based on periods
- * and suppression time.
- */
-export class Tracker {
-    /**
-     * Constructor of Tracker.
-     *
-     * @param period The event-firing period, in number of frames.
-     * @param suppressionPeriod The suppression period, in number of frames.
-     */
-    constructor(period, suppressionPeriod) {
-        this.period = period;
-        this.suppressionTime = suppressionPeriod == null ? 0 : suppressionPeriod;
-        this.counter = 0;
-
-    }
-
-    /**
-     * Mark a frame.
-     *
-     * @returns Whether the event should be fired at the current frame.
-     */
-    tick() {
-        this.counter++;
-        const shouldFire = (this.counter % this.period === 0) &&
-            (this.suppressionOnset == null ||
-                this.counter - this.suppressionOnset > this.suppressionTime);
-        return shouldFire;
-    }
-
-    /**
-     * Order the beginning of a supression period.
-     */
-    suppress() {
-        this.suppressionOnset = this.counter;
-    }
-}
-
-function flattenQueue(queue) {
-    const frameSize = queue[0].length;
-    const freqData = new Float32Array(queue.length * frameSize);
-    queue.forEach((data, i) => freqData.set(data, i * frameSize));
-    return freqData;
-}
-
-
-export function getInputTensorFromFrequencyData(
-    freqData, shape) {
-    const vals = new Float32Array(tf.util.sizeFromShape(shape));
-    // If the data is less than the output shape, the rest is padded with zeros.
-    vals.set(freqData, vals.length - freqData.length);
-    return tf.tensor(vals, shape);
-}
 
 
 function drawData(canvas, dataQueue) {

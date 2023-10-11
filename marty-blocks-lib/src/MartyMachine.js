@@ -4,7 +4,8 @@ const {
   TrainingDataHelper,
   TrainingDataActionTypes,
   tfvis,
-  IMAGE_SIZE
+  IMAGE_SIZE,
+  AudioTrainingOptions
 } = require("@robotical/marty-machine-lib/dist/marty-machine-lib.umd");
 
 class MartyMachine {
@@ -12,6 +13,7 @@ class MartyMachine {
     this.trainingDataActionTypes = TrainingDataActionTypes;
     this.tfvis = tfvis;
     this.image_size = IMAGE_SIZE;
+    this.AudioTrainingOptions = AudioTrainingOptions;
   }
 
   /**
@@ -70,7 +72,7 @@ class MartyMachine {
     });
   }
 
-  async trainModel(model, trainingData) {
+  async trainModel(model, trainingData, modelType = "image-device", trainingOptions = {}) {
     const TRAIN_CB_ID = "training-marty-machine";
     return new Promise((resolve, reject) => {
       console.log("training model")
@@ -86,8 +88,21 @@ class MartyMachine {
         model.removeStatusCallback(TRAIN_CB_ID);
       }, 200000);
 
-      model.trainModel(trainingData);
+      if (modelType === "image-device") {
+        model.trainModel(trainingData, trainingOptions);
+      } else if (modelType === "audio") {
+        model.trainAudioModel(trainingData, trainingOptions);
+      }
     });
+  }
+
+
+  /**
+   * @param {MLModel} model - instance of MLModel
+   * @param {object} data - {timeData?, freqData?}
+   */
+  streamAudioToWebWorker(model, data) {
+    model.streamAudioToWebWorker(data);
   }
 
 

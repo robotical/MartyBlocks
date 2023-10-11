@@ -64,7 +64,7 @@ class ModelClass extends React.Component {
                       title=""
                       className={styles.overlayButton}
                       img={playIcon}
-                      onClick={() => this.onPlaySample(sample.audioData)}
+                      onClick={() => this.onPlaySample(sample.timeDataQueue)}
                     />
                   </div>
                   <img className={styles.modelSample} src={"data:image/png;base64," + sample.image.jpegBase64} alt="sample" />
