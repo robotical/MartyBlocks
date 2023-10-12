@@ -252,6 +252,13 @@ class MartyMachineBlocks {
         document.head.appendChild(script);
     }
 
+    recordAudioFrameWrapper() {
+        if (!this.soundClassifierEnabled) {
+            return;
+        }
+        this.classifyAudio();
+    }
+
     recordFrameWrapper() {
         let lastCaptureTime = 0;
         const recordFrame = (timestamp) => {
@@ -372,49 +379,49 @@ class MartyMachineBlocks {
                     blockType: BlockType.REPORTER
                 },
                 '---',
-                // {
-                //     opcode: 'whenReceivedSoundLabel',
-                //     text: Message.when_received_sound_label_block[this.locale],
-                //     blockType: BlockType.HAT,
-                //     colour: "#5ba591",
-                //     colourSecondary: "#5ba591",
-                //     arguments: {
-                //         LABEL: {
-                //             type: ArgumentType.STRING,
-                //             menu: 'received_sound_label_menu',
-                //             defaultValue: Message.any[this.locale]
-                //         }
-                //     }
-                // },
-                // {
-                //     opcode: 'isSoundLabelDetected',
-                //     text: Message.is_sound_label_detected[this.locale],
-                //     blockType: BlockType.BOOLEAN,
-                //     colour: "#5ba591",
-                //     colourSecondary: "#5ba591",
-                //     arguments: {
-                //         LABEL: {
-                //             type: ArgumentType.STRING,
-                //             menu: 'sound_labels_menu',
-                //             defaultValue: Message.any_without_of[this.locale]
-                //         }
-                //     }
-                // },
-                // {
-                //     opcode: 'soundLabelConfidence',
-                //     text: Message.sound_label_confidence[this.locale],
-                //     blockType: BlockType.REPORTER,
-                //     disableMonitor: true,
-                //     colour: "#5ba591",
-                //     colourSecondary: "#5ba591",
-                //     arguments: {
-                //         LABEL: {
-                //             type: ArgumentType.STRING,
-                //             menu: 'sound_labels_without_any_menu',
-                //             defaultValue: ''
-                //         }
-                //     }
-                // },
+                {
+                    opcode: 'whenReceivedSoundLabel',
+                    text: Message.when_received_sound_label_block[this.locale],
+                    blockType: BlockType.HAT,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LABEL: {
+                            type: ArgumentType.STRING,
+                            menu: 'received_sound_label_menu',
+                            defaultValue: Message.any[this.locale]
+                        }
+                    }
+                },
+                {
+                    opcode: 'isSoundLabelDetected',
+                    text: Message.is_sound_label_detected[this.locale],
+                    blockType: BlockType.BOOLEAN,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LABEL: {
+                            type: ArgumentType.STRING,
+                            menu: 'sound_labels_menu',
+                            defaultValue: Message.any_without_of[this.locale]
+                        }
+                    }
+                },
+                {
+                    opcode: 'soundLabelConfidence',
+                    text: Message.sound_label_confidence[this.locale],
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LABEL: {
+                            type: ArgumentType.STRING,
+                            menu: 'sound_labels_without_any_menu',
+                            defaultValue: ''
+                        }
+                    }
+                },
                 // {
                 //     opcode: 'setSoundClassificationModelURL',
                 //     text: Message.sound_classification_model_url[this.locale],
@@ -428,13 +435,13 @@ class MartyMachineBlocks {
                 //         }
                 //     }
                 // },
-                // {
-                //     opcode: 'getSoundLabel',
-                //     text: Message.sound_label[this.locale],
-                //     colour: "#5ba591",
-                //     colourSecondary: "#5ba591",
-                //     blockType: BlockType.REPORTER
-                // },
+                {
+                    opcode: 'getSoundLabel',
+                    text: Message.sound_label[this.locale],
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    blockType: BlockType.REPORTER
+                },
                 '---',
                 {
                     opcode: 'toggleClassification',
@@ -566,25 +573,35 @@ class MartyMachineBlocks {
      * @param {object} util - utility object provided by the runtime.
      */
     loadImageModel(args, util) {
-        // this.runtime.ioDevices.video.enableVideo();
-        const media = navigator.mediaDevices.getUserMedia({
-            video: {
-                width: martyMachine.image_size,
-                height: martyMachine.image_size,
-            },
-            audio: false
-        });
-
-        media.then(stream => {
-            this.video.srcObject = stream;
-        });
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
-        this.imageMetadata = this.createModelMetadataFromModelDependencies(model.name, model.dependencies);
-        this.imageModelUrl = null;
-        this.imageClassifier = new ImageClassifier(model);
-        log.info(`Loaded image model: ${model.name}`);
-        return `"${model.name}" Loaded!`;
+        this.model = model;
+        if (model.modelType === "image-device") {
+            // this.runtime.ioDevices.video.enableVideo();
+            const media = navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: martyMachine.image_size,
+                    height: martyMachine.image_size,
+                },
+                audio: false
+            });
+
+            media.then(stream => {
+                this.video.srcObject = stream;
+            });
+
+            this.imageMetadata = this.createModelMetadataFromModelDependencies(model.name, model.dependencies);
+            this.imageModelUrl = null;
+            this.imageClassifier = new ImageClassifier(model);
+            log.info(`Loaded image model: ${model.name}`);
+            return `"${model.name}" Loaded!`;
+        } else if (model.modelType === "audio") {
+            this.soundMetadata = this.createModelMetadataFromModelDependencies(model.name, model.dependencies);
+            this.soundModelUrl = null;
+            this.soundClassifier = new SoundClassifier(model);
+            log.info(`Loaded sound model: ${model.name}`);
+            return `"${model.name}" Loaded!`;
+        }
     }
 
     /**
@@ -934,16 +951,17 @@ class MartyMachineBlocks {
      * Classify sound.
      */
     classifySound() {
-        this.soundClassifier.classify((err, result) => {
-            if (this.soundClassifierEnabled && result) {
-                this.soundProbableLabels = result.slice();
+        this.soundClassifier.classify((predictions) => {
+            if (this.soundClassifierEnabled && predictions) {
+                const predictionIdx = predictions.predictionIdx;
+                if (predictionIdx >= 0) {
+                    const actualPredictions = predictions.output;
+                    this.soundProbableLabels = actualPredictions.slice();
+                }
                 setTimeout(() => {
                     // Initialize probabilities to reset whenReceivedSoundLabel blocks.
                     this.initSoundProbableLabels();
                 }, this.interval);
-            }
-            if (err) {
-                console.error(err);
             }
         });
     }
@@ -1002,7 +1020,12 @@ class MartyMachineBlocks {
         if (state === 'on') {
             this.imageClassifierEnabled = true;
             this.soundClassifierEnabled = true;
-            this.recordFrameWrapper();
+
+            if (this.model.modelType === "image-device") {
+                this.recordFrameWrapper();
+            } else if (this.model.modelType === "audio") {
+                this.recordAudioFrameWrapper();
+            }
         }
     }
 
@@ -1048,6 +1071,10 @@ class MartyMachineBlocks {
         this.initImageProbableLabels();
         this.confidenceThreshold = 0.5;
 
+        if (this.soundClassifier) {
+            this.soundClassifier.stop();
+        }
+
         this.soundModelUrl = null;
         this.soundMetadata = null;
         this.soundClassifier = null;
@@ -1064,6 +1091,16 @@ class MartyMachineBlocks {
     classifyVideoImage() {
         if (this._isImageClassifying) return Promise.resolve([]);
         return this.classifyImage(this.video);
+    }
+
+    /**
+     * Classify audio stream.
+     * @return {Promise} - A Promise that resolves the result of classification.
+     * The result will be empty when another classification was under going.
+     */
+    classifyAudio() {
+        if (this._isSoundClassifying) return Promise.resolve([]);
+        return this.classifySound();
     }
 
     /**
@@ -1181,5 +1218,116 @@ class ImageClassifier {
         return predictions.output;
     }
 }
+
+class SoundClassifier {
+    constructor(model) {
+        this.model = model;
+        this.audioExtractor = null;
+        this.RECORD_TIME = 1200;
+    }
+
+    async classify(predictionCb = null) {
+        console.log("Classifying sound...");
+        const audioExtractor = new AudioExtractor(true, this.model);
+        await audioExtractor.start();
+        this.model.MLModel.runAudioModel();
+        this.audioExtractor = audioExtractor;
+
+        if (predictionCb) return this.model.MLModel.setPredictionCallback = predictionCb;
+        return new Promise(async (resolve, reject) => {
+            this.model.MLModel.setPredictionCallback = (predictions) => {
+                const predictionIdx = predictions.predictionIdx;
+                if (predictionIdx >= 0) {
+                    const actualPredictions = predictions.output;
+                    resolve(actualPredictions);
+                } else {
+                    reject();
+                }
+            };
+        });
+    }
+
+    stop() {
+        if (this.audioExtractor) {
+            this.audioExtractor.stop();
+        }
+        this.model.MLModel.stopAudioModel();
+    }
+}
+
+
+
+class AudioExtractor {
+    constructor(shouldStreamToWebWorker = false, model = null) {
+        const trainingOptions = new martyMachine.AudioTrainingOptions();
+        this.sampleRateHz = trainingOptions.sampleRateHz;
+        this.fftSize = trainingOptions.fftSize;
+        this.columnTruncateLength = trainingOptions.columnTruncateLength;
+        this.includeRawAudio = true;
+        console.log(`sampleRateHz=${this.sampleRateHz}, fftSize=${this.fftSize}, frameDurationMillis=${this.frameDurationMillis}, columnTruncateLength=${this.columnTruncateLength}, includeRawAudio=${this.includeRawAudio}`)
+        this.shouldStreamToWebWorker = shouldStreamToWebWorker;
+        this.model = model;
+    }
+
+    async start() {
+        this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        this.audioContext = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
+        const streamSource = this.audioContext.createMediaStreamSource(this.stream);
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = this.fftSize * 2;
+        this.analyser.smoothingTimeConstant = 0.0;
+        streamSource.connect(this.analyser);
+
+        // Reset the queue
+        this.freqDataQueue = [];
+        this.freqData = new Float32Array(this.fftSize);
+        if (this.includeRawAudio) {
+            this.timeDataQueue = [];
+            this.timeData = new Float32Array(this.fftSize);
+        }
+
+        this.frameIntervalTask = setInterval(
+            this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
+    }
+
+    async onAudioFrame() {
+        this.analyser.getFloatFrequencyData(this.freqData);
+        if (this.freqData[0] === -Infinity) {
+            return;
+        }
+
+        const freqDataSliced = this.freqData.slice(0, this.columnTruncateLength);
+        this.freqDataQueue.push([...freqDataSliced]);
+        // if (this.shouldStreamToWebWorker) {
+        //     martyMachine.streamAudioToWebWorker(this.model, {freqData: [...freqDataSliced]});
+        // }
+        if (this.includeRawAudio) {
+            this.analyser.getFloatTimeDomainData(this.timeData);
+            this.timeDataQueue.push(this.timeData.slice());
+            // if (this.shouldStreamToWebWorker) {
+            //     martyMachine.streamAudioToWebWorker(this.model, {timeData: [...this.timeData]});
+            // }
+        }
+        if (this.shouldStreamToWebWorker) {
+            martyMachine.streamAudioToWebWorker(this.model.MLModel, { freqData: [...freqDataSliced], timeData: [...this.timeData] });
+        }
+    }
+
+    async stop() {
+        if (this.frameIntervalTask == null) {
+            throw new Error(
+                'Cannot stop because there is no ongoing streaming activity.');
+        }
+        clearInterval(this.frameIntervalTask);
+        this.frameIntervalTask = null;
+        this.analyser.disconnect();
+        this.audioContext.close();
+        if (this.stream != null && this.stream.getTracks().length > 0) {
+            this.stream.getTracks()[0].stop();
+        }
+    }
+
+}
+
 
 module.exports = MartyMachineBlocks;

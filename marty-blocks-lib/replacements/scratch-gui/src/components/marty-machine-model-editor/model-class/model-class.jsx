@@ -11,13 +11,14 @@ class ModelClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ["onPlaySample"]);
+    bindAll(this, ["onPlaySample", "onClassNameSelected", "onRemoveClass", "onRemoveSample"]);
   }
 
   componentWillUnmount() {
   }
 
-  onPlaySample(audioData) {
+  onPlaySample(event, audioData) {
+    event.stopPropagation();
     // Flatten the queue into a single Float32Array
     const flattenedAudioData = Float32Array.from(
       audioData.reduce(
@@ -34,16 +35,36 @@ class ModelClass extends React.Component {
     audioSource.connect(audioContext.destination);
     audioSource.start();
   }
-  
+
+  onClassNameSelected() {
+    if (this.props.onClassNameSelected) {
+      this.props.onClassNameSelected(this.props.modelClass.name);
+    }
+  }
+
+  onRemoveClass(event) {
+    event.stopPropagation();
+    if (this.props.onRemoveClass) {
+      this.props.onRemoveClass();
+    }
+  }
+
+  onRemoveSample(event, sampleIndex) {
+    event.stopPropagation();
+    if (this.props.onRemoveSample) {
+      this.props.onRemoveSample(sampleIndex);
+    }
+  }
+
   render() {
     return (
-      <div className={styles.classContainer}>
-        <div className={styles.classLabel}>{this.props.modelClass.name}<IconButton
+      <div className={styles.classContainer} onClick={this.onClassNameSelected}>
+        <div className={styles.classLabel}>{this.props.modelClass.name}{this.props.onRemoveClass && <IconButton
           title=""
           className={styles.overlayButton}
           img={deleteIcon}
-          onClick={this.props.onRemoveClass}
-        /></div>
+          onClick={this.onRemoveClass}
+        />}</div>
 
         <div className={styles.modelSamplesContainer}>
           <div className={styles.rowCustom}>
@@ -58,13 +79,13 @@ class ModelClass extends React.Component {
                       title=""
                       className={styles.overlayButton}
                       img={deleteIcon}
-                      onClick={() => this.props.onRemoveSample(sampleIndex)}
+                      onClick={(e) => this.onRemoveSample(e, sampleIndex)}
                     />
                     <IconButton
                       title=""
                       className={styles.overlayButton}
                       img={playIcon}
-                      onClick={() => this.onPlaySample(sample.timeDataQueue)}
+                      onClick={(e) => this.onPlaySample(e, sample.timeDataQueue)}
                     />
                   </div>
                   <img className={styles.modelSample} src={"data:image/png;base64," + sample.image.jpegBase64} alt="sample" />
@@ -83,7 +104,8 @@ ModelClass.propTypes = {
   modelClass: PropTypes.object,
   onRemoveClass: PropTypes.func,
   onRemoveSample: PropTypes.func,
-  modelType: string
+  onClassNameSelected: PropTypes.func,
+  modelType: string,
 };
 
 export default ModelClass;

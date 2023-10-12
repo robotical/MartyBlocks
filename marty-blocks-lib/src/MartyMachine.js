@@ -30,10 +30,15 @@ class MartyMachine {
     }
   }
 
-  async loadModel(modelJSON, weightBuffers, weightInfo) {
+  async loadModel(modelJSON, weightBuffers, weightInfo, modelType = "image-device", modelTrainingData = undefined) {
+    // transform modelTrainingData to audioAlphabeticalWords
+    let audioAlphabeticalWords = undefined;
+    if (modelTrainingData) {
+      audioAlphabeticalWords = modelTrainingData.classes.map((cls) => cls.name).sort();
+    }
     return new Promise((resolve, reject) => {
 
-      const model = this.getNewModelInstance();
+      const model = this.getNewModelInstance(modelType);
 
       model.setLoadModelCallback = () => {
         console.log("model loaded");
@@ -47,7 +52,11 @@ class MartyMachine {
         clearTimeout(timeout);
       }, 10000);
 
-      model.loadModel({ modelJSON, weightBuffers, weightInfo });
+      if (modelType === "image-device") {
+        model.loadModel({ modelJSON, weightBuffers, weightInfo });
+      } else if (modelType === "audio") {
+        model.loadAudioModel({ modelJSON, weightBuffers, weightInfo, audioAlphabeticalWords });
+      }
     });
   }
 

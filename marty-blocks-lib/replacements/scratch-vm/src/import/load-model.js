@@ -22,7 +22,7 @@ const loadModelFromAsset = function (model, modelAsset, runtime) {
   const modelTrainingData = model.dependencies[2];
   const weightBuffers = modelAsset.data;
   return martyMachine
-    .loadModel(modelJSON, weightBuffers, weightInfo)
+    .loadModel(modelJSON, weightBuffers, weightInfo, model.modelType, modelTrainingData)
     .then((MLModel) => {
       MLModel.setTrainingData(modelTrainingData);
       log.debug("Loaded model: ", MLModel);
@@ -103,7 +103,6 @@ const loadModel = function (model, runtime) {
           log.warn("Failed to find model data: ", model.md5);
           return handleModelLoadError(model, runtime);
         }
-
         return loadModelFromAsset(model, modelAsset, runtime);
       })
       .catch((e) => {

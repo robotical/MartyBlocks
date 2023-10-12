@@ -26,7 +26,8 @@ class MartyMachineModelEditor extends React.Component {
             'onStopTraining',
             'onRunModel',
             'onStopRunningModel',
-            'onSaveModel'
+            'onSaveModel',
+            "onClassNameSelected"
         ]);
         this.state = {
             deviceStream: null,
@@ -146,7 +147,8 @@ class MartyMachineModelEditor extends React.Component {
     componentWillUnmount() {
         if (this.state.deviceStream) {
             this.state.deviceStream.getTracks().forEach(track => track.stop());
-        }
+        } 
+        this.onStopRunningModel();
     }
     handleChangeName(name) {
         this.setState({ modelName: name });
@@ -169,6 +171,10 @@ class MartyMachineModelEditor extends React.Component {
 
         }
     }
+    onClassNameSelected = (className) => {
+        this.setState({ className });
+    }
+
     onClassNameChange = (className) => {
         this.setState({ className });
     }
@@ -230,30 +236,33 @@ class MartyMachineModelEditor extends React.Component {
             }, RECORD_TIME);
         } else if (this.props.modelType === 'audio') {
             const SAMPLE_TIME = 1200;
-            const audioExtractor = new AudioExtractor();
-            await audioExtractor.start();
+            this.audioExtractor = new AudioExtractor();
+            await this.audioExtractor.start();
             await new Promise(resolve => setTimeout(resolve, SAMPLE_TIME));
-            drawData(this.canvasRef, audioExtractor.timeDataQueue);
+            drawData(this.canvasRef, this.audioExtractor.timeDataQueue);
             let imageSrc = this.canvasRef.toDataURL('image/png');
             imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
             this.trainingDataReducer.reduce({
                 type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE,
                 payload: {
                     id: selectedClassIdx,
-                    timeDataQueue: audioExtractor.timeDataQueue,
-                    freqDataQueue: audioExtractor.freqDataQueue,
+                    timeDataQueue: this.audioExtractor.timeDataQueue,
+                    freqDataQueue: this.audioExtractor.freqDataQueue,
                     image: martyMachine.newImage(imageSrc), // we need the image so we can print it as a sample in the UI
                     sampleType: 'audio'
                 }
             });
             this.isRecording = false;
             this.setState({});
-            await audioExtractor.stop();
+            await this.audioExtractor.stop();
         }
     }
     onStopRecordingSamples = () => {
         this.isRecording = false;
         this.setState({});
+        if (this.props.modelType === 'audio' && this.audioExtractor) {
+            this.audioExtractor.stop();
+        }
     }
     onRemoveClass = (classIndex) => {
         this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_REMOVE_CLASS, payload: { id: classIndex } });
@@ -376,6 +385,7 @@ class MartyMachineModelEditor extends React.Component {
             this.isSaving = false;
             console.log("saving:", vmModel)
             this.setState({});
+            this.onStopRunningModel();
             vm.addModel(vmModel).then(() => {
                 // if (callback) callback();
                 console.log('Model saved', vmModel);
@@ -416,6 +426,7 @@ class MartyMachineModelEditor extends React.Component {
                     setRef={this.setRef}
                     setAudioCanvasRef={this.setAudioCanvasRef}
                     setDeviceStreamRef={this.setDeviceStreamRef}
+                    onClassNameSelected={this.onClassNameSelected}
                 />
                 <canvas ref={this.setCanvasRef} width={martyMachine.image_size} height={martyMachine.image_size} style={{ display: 'none' }} />
             </>
@@ -503,16 +514,16 @@ class AudioExtractor {
     }
 
     async stop() {
-        if (this.frameIntervalTask == null) {
-            throw new Error(
-                'Cannot stop because there is no ongoing streaming activity.');
-        }
         clearInterval(this.frameIntervalTask);
         this.frameIntervalTask = null;
         this.analyser.disconnect();
-        this.audioContext.close();
         if (this.stream != null && this.stream.getTracks().length > 0) {
             this.stream.getTracks()[0].stop();
+        }
+        console.log("this.audioContext.state", this.audioContext.state)
+        if (this.audioContext.state !== 'closed') {
+            this.audioContext.close();
+
         }
     }
 

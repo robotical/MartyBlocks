@@ -53,7 +53,7 @@ class TeachableMachineUrlModal extends React.Component {
                 tmModelUrl,
                 trainingData,
                 "tmModel",
-                'image-device'
+                trainingData.modelType
             );
             this.props.onBack();
         } else {
@@ -129,13 +129,21 @@ export default WrappedTeachableMachineUrlModal;
 
 // tmMetadata to trainingData
 function getTrainingDataFromMeta(tmMetadata) {
-    const mmMetadata = {classes: []};
-    for (const className of tmMetadata.labels) {
+    const mmMetadata = { classes: [] };
+
+    const labels = tmMetadata.labels || tmMetadata.wordLabels;
+    if (!labels) return mmMetadata;
+
+    const modelType = tmMetadata.labels ? 'image-device' : 'audio';
+    mmMetadata.modelType = modelType;
+
+    for (const className of labels) {
         mmMetadata.classes.push({
             name: className,
             samples: [],
         });
     }
+
     return mmMetadata;
 }
 

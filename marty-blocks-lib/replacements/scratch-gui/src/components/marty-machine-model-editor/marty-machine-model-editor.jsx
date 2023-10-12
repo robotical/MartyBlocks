@@ -201,18 +201,25 @@ const MartyMachineModelEditor = props => {
             {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
             <div className={styles.row}>
                 <div className={styles.classesContainer}>
+                    {props.modelType === "audio" && <ModelClass
+                        onClassNameSelected={props.onClassNameSelected}
+                        key={"default_noise_class"}
+                        modelClass={{ name: "Backround Noise", samples: [] }}
+                        onRemoveSample={props.onRemoveSample.bind(this, 0)}
+                        modelType={props.modelType} />}
                     {props.modelClasses.map((modelClass, classIndex) => {
-                        return <ModelClass 
-                        key={classIndex} 
-                        modelClass={modelClass} 
-                        onRemoveClass={() => props.onRemoveClass(classIndex)} 
-                        onRemoveSample={props.onRemoveSample.bind(this, classIndex)}
-                        modelType={props.modelType} />
+                        return <ModelClass
+                            onClassNameSelected={props.onClassNameSelected}
+                            key={classIndex}
+                            modelClass={modelClass}
+                            onRemoveClass={() => props.onRemoveClass(classIndex)}
+                            onRemoveSample={props.onRemoveSample.bind(this, classIndex)}
+                            modelType={props.modelType} />
                     })}
                 </div>
             </div>
-        </div> : 
-        // the model is loaded, so we can only show the classe names from the model (no samples)
+        </div> :
+            // the model is loaded, so we can only show the classe names from the model (no samples)
             <div className={styles.modelClassesOuterContainer}>
                 <div className={styles.row}>
                     <div className={styles.classesContainer}>
@@ -259,7 +266,8 @@ MartyMachineModelEditor.propTypes = {
     onSaveModel: PropTypes.func.isRequired,
     isSaving: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
-    isModelLoaded: PropTypes.bool.isRequired
+    isModelLoaded: PropTypes.bool.isRequired,
+    onClassNameSelected: PropTypes.func.isRequired,
 };
 
 export default injectIntl(MartyMachineModelEditor);
