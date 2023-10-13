@@ -119,7 +119,7 @@ jobs:
           BUILD_MODE=dist npm run build
         
       - name: Copy marty-machine web workder 
-          run: |
+        run: |
           cp ${{ env.mblib }}/node_modules/@robotical/marty-machine-lib/dist/assets/* ${{ env.gui_original }}/static
         
       - name: Print web worker files
