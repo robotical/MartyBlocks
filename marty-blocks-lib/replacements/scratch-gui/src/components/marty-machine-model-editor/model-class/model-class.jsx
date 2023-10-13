@@ -59,12 +59,13 @@ class ModelClass extends React.Component {
   render() {
     return (
       <div className={styles.classContainer} onClick={this.onClassNameSelected}>
-        <div className={styles.classLabel}>{this.props.modelClass.name}{this.props.onRemoveClass && <IconButton
-          title=""
-          className={styles.overlayButton}
-          img={deleteIcon}
-          onClick={this.onRemoveClass}
-        />}</div>
+        <div className={styles.classLabel}>
+          {this.props.modelClass.name}{this.props.subtitle && <span className={styles.subtitle}>{this.props.subtitle}</span>}{this.props.onRemoveClass && <IconButton
+            title=""
+            className={styles.overlayButton}
+            img={deleteIcon}
+            onClick={this.onRemoveClass}
+          />}</div>
 
         <div className={styles.modelSamplesContainer}>
           <div className={styles.rowCustom}>
@@ -81,12 +82,12 @@ class ModelClass extends React.Component {
                       img={deleteIcon}
                       onClick={(e) => this.onRemoveSample(e, sampleIndex)}
                     />
-                    <IconButton
+                    {this.props.modelType === "audio" && <IconButton
                       title=""
                       className={styles.overlayButton}
                       img={playIcon}
                       onClick={(e) => this.onPlaySample(e, sample.timeDataQueue)}
-                    />
+                    />}
                   </div>
                   <img className={styles.modelSample} src={"data:image/png;base64," + sample.image.jpegBase64} alt="sample" />
                 </div>
@@ -106,6 +107,7 @@ ModelClass.propTypes = {
   onRemoveSample: PropTypes.func,
   onClassNameSelected: PropTypes.func,
   modelType: string,
+  subtitle: string,
 };
 
 export default ModelClass;

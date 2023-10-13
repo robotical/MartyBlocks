@@ -9,7 +9,6 @@ import audioIcon from "../components/asset-panel/icon--audio.svg";
 import audioIconBlack from "../components/asset-panel/icon--audio-black.svg";
 import imageIcon from "../components/asset-panel/icon--image.svg";
 import imageIconBlack from "../components/asset-panel/icon--image-black.svg";
-import robotIcon from "../components/asset-panel/icon--robot.svg";
 import fileUploadIcon from "../components/action-menu/icon--file-upload.svg";
 
 import MartyMachineModelEditor from "./marty-machine-model-editor.jsx";
@@ -110,6 +109,7 @@ class MartyMachineTab extends React.Component {
     }
 
     handleSelectModel(modelIndex) {
+        console.log("setting isModelLoaded to true in handleSelectModel")
         this.setState({
             selectedModelIndex: modelIndex,
             isModelLoaded: true,
@@ -206,6 +206,7 @@ class MartyMachineTab extends React.Component {
 
     onNewModelClick = (modelType) => {
         this.setState({ modelType: modelType, isModelLoaded: false });
+        console.log("setting isModelLoaded to false in marty-machine-tab")
         this.model = martyMachine.getNewModelInstance(modelType);
     };
 
@@ -259,30 +260,32 @@ class MartyMachineTab extends React.Component {
             },
         });
 
-        let contentJSX = null;
-        if (this.state.modelType === "image-device") {
-            contentJSX = <MartyMachineModelEditor
-                key={this.state.modelName + this.state.modelType}
-                modelIndex={this.state.selectedModelIndex}
-                model={this.model}
-                onNewModel={this.handleNewModel}
-                modelType={this.state.modelType}
-                modelName={this.state.modelName}
-                isModelLoaded={this.state.isModelLoaded}
-            />;
-        } else if (this.state.modelType === "image-marty") {
-            contentJSX = null;
-        } else if (this.state.modelType === "audio") {
-            contentJSX = <MartyMachineModelEditor
-                key={this.state.modelName + this.state.modelType}
-                modelIndex={this.state.selectedModelIndex}
-                model={this.model}
-                onNewModel={this.handleNewModel}
-                modelType={this.state.modelType}
-                modelName={this.state.modelName}
-                isModelLoaded={this.state.isModelLoaded}
-            />;
-        }
+        console.log("isModelLoaded", this.state.isModelLoaded)
+
+        let contentJSX = <MartyMachineModelEditor
+            key={this.state.modelName + this.state.modelType}
+            modelIndex={this.state.selectedModelIndex}
+            model={this.model}
+            onNewModel={this.handleNewModel}
+            modelType={this.state.modelType}
+            modelName={this.state.modelName}
+            isModelLoaded={this.state.isModelLoaded}
+        />;
+        // if (this.state.modelType === "image-device") {
+        //     ;
+        // } else if (this.state.modelType === "image-marty") {
+        //     contentJSX = null;
+        // } else if (this.state.modelType === "audio") {
+        //     contentJSX = <MartyMachineModelEditor
+        //         key={this.state.modelName + this.state.modelType}
+        //         modelIndex={this.state.selectedModelIndex}
+        //         model={this.model}
+        //         onNewModel={this.handleNewModel}
+        //         modelType={this.state.modelType}
+        //         modelName={this.state.modelName}
+        //         isModelLoaded={this.state.isModelLoaded}
+        //     />;
+        // }
 
         return (
             <>
@@ -301,16 +304,16 @@ class MartyMachineTab extends React.Component {
                             img: imageIcon,
                             onClick: () => this.onNewModelClick("image-device"),
                         },
-                        {
-                            title: intl.formatMessage(messages.newImageModelMarty),
-                            img: robotIcon,
-                            onClick: () => { },
-                        },
-                        {
-                            title: intl.formatMessage(messages.newImageModelDevice),
-                            img: imageIcon,
-                            onClick: () => this.onNewModelClick("image-device"),
-                        },
+                        // {
+                        //     title: intl.formatMessage(messages.newImageModelMarty),
+                        //     img: robotIcon,
+                        //     onClick: () => { },
+                        // },
+                        // {
+                        //     title: intl.formatMessage(messages.newImageModelDevice),
+                        //     img: imageIcon,
+                        //     onClick: () => this.onNewModelClick("image-device"),
+                        // },
                         {
                             title: intl.formatMessage(messages.newAudioModel),
                             img: audioIcon,

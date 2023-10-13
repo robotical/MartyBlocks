@@ -27,7 +27,9 @@ class MartyMachineModelEditor extends React.Component {
             'onRunModel',
             'onStopRunningModel',
             'onSaveModel',
-            "onClassNameSelected"
+            "onClassNameSelected",
+            'addBackgroundNoiseClassIF',
+            'checkIfBackgroundNoiseClassHasSamplesIF'
         ]);
         this.state = {
             deviceStream: null,
@@ -46,6 +48,7 @@ class MartyMachineModelEditor extends React.Component {
         this.isSaving = false;
         this.audioExtractor = null;
         this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
+        this.addBackgroundNoiseClassIF();
     }
     componentDidMount() {
         const asyncFunc = async () => {
@@ -141,13 +144,25 @@ class MartyMachineModelEditor extends React.Component {
             this.isSaving = false;
             this.audioExtractor = null;
             this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
-            console.log('New model selected', this);
+            console.log('New model selected');
+            this.addBackgroundNoiseClassIF(newProps);
         }
     }
+
+    addBackgroundNoiseClassIF(newProps) {
+        const props = newProps || this.props;
+        if (props.modelType === "audio" && !props.isModelLoaded) {
+            this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: martyMachine.BACKGROUND_NOISE_TAG } });
+            setTimeout(() => {
+                this.onClassNameSelected(martyMachine.BACKGROUND_NOISE_TAG);
+            }, 200);
+        }
+    }
+
     componentWillUnmount() {
         if (this.state.deviceStream) {
             this.state.deviceStream.getTracks().forEach(track => track.stop());
-        } 
+        }
         this.onStopRunningModel();
     }
     handleChangeName(name) {
@@ -207,14 +222,15 @@ class MartyMachineModelEditor extends React.Component {
                     ctx.drawImage(videoElement, 0, 0, martyMachine.image_size, martyMachine.image_size);
                     let imageSrc = canvas.toDataURL('image/png');
                     imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
-                    this.trainingDataReducer.reduce({ 
-                        type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE, 
-                        payload: { 
-                            id: selectedClassIdx, 
-                            image: martyMachine.newImage(imageSrc), 
-                            canvas, 
-                            sampleType: 'image' 
-                        } });
+                    this.trainingDataReducer.reduce({
+                        type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE,
+                        payload: {
+                            id: selectedClassIdx,
+                            image: martyMachine.newImage(imageSrc),
+                            canvas,
+                            sampleType: 'image'
+                        }
+                    });
                     this.setState({});
 
                     // Update the last capture time
@@ -273,7 +289,21 @@ class MartyMachineModelEditor extends React.Component {
         this.setState({});
     }
 
+    checkIfBackgroundNoiseClassHasSamplesIF() {
+        // the background noise class needs at least 10 samples to be trained
+        if (this.props.modelType === "audio" && !this.props.isModelLoaded) {
+            const backgroundNoiseClass = this.trainingDataReducer.state.classes.find(c => c.name === martyMachine.BACKGROUND_NOISE_TAG);
+            if (backgroundNoiseClass && backgroundNoiseClass.samples.length < 10) {
+                alert("Oops! The background noise class needs at least 10 samples to be trained. Please add more samples to the background noise class.");
+                return false;
+            }
+        }
+        return true;
+    }
+
     onTrainModel = () => {
+        if (!this.checkIfBackgroundNoiseClassHasSamplesIF()) return;
+
         this.isTraining = true;
         martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType).then((isTrained) => {
             this.isTrained = isTrained;
@@ -289,7 +319,7 @@ class MartyMachineModelEditor extends React.Component {
         this.setState({});
     }
 
-    onRunModel = async() => {
+    onRunModel = async () => {
         this.isRunning = true;
         if (this.props.modelType === 'image-device') {
             const INTERVAL_TIME = 30;
@@ -509,7 +539,7 @@ class AudioExtractor {
             // }
         }
         if (this.shouldStreamToWebWorker) {
-            martyMachine.streamAudioToWebWorker(this.mlmodel, {freqData: [...freqDataSliced], timeData: [...this.timeData]});
+            martyMachine.streamAudioToWebWorker(this.mlmodel, { freqData: [...freqDataSliced], timeData: [...this.timeData] });
         }
     }
 

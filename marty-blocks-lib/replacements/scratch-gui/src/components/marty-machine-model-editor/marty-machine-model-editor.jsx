@@ -201,18 +201,19 @@ const MartyMachineModelEditor = props => {
             {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
             <div className={styles.row}>
                 <div className={styles.classesContainer}>
-                    {props.modelType === "audio" && <ModelClass
-                        onClassNameSelected={props.onClassNameSelected}
-                        key={"default_noise_class"}
-                        modelClass={{ name: "Backround Noise", samples: [] }}
-                        onRemoveSample={props.onRemoveSample.bind(this, 0)}
-                        modelType={props.modelType} />}
                     {props.modelClasses.map((modelClass, classIndex) => {
+                        let onRemoveClass = props.onRemoveClass.bind(this, classIndex);
+                        let subtitle = null;
+                        if (modelClass.name === martyMachine.BACKGROUND_NOISE_TAG) {
+                            onRemoveClass = null;
+                            subtitle = `Requires at least 10 samples (${modelClass.samples.length}/10)`;
+                        }
                         return <ModelClass
                             onClassNameSelected={props.onClassNameSelected}
                             key={classIndex}
+                            subtitle={subtitle}
                             modelClass={modelClass}
-                            onRemoveClass={() => props.onRemoveClass(classIndex)}
+                            onRemoveClass={onRemoveClass}
                             onRemoveSample={props.onRemoveSample.bind(this, classIndex)}
                             modelType={props.modelType} />
                     })}

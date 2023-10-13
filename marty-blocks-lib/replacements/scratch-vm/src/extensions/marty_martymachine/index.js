@@ -590,13 +590,13 @@ class MartyMachineBlocks {
                 this.video.srcObject = stream;
             });
 
-            this.imageMetadata = this.createModelMetadataFromModelDependencies(model.name, model.dependencies);
+            this.imageMetadata = this.createImageModelMetadataFromModelDependencies(model.name, model.dependencies);
             this.imageModelUrl = null;
             this.imageClassifier = new ImageClassifier(model);
             log.info(`Loaded image model: ${model.name}`);
             return `"${model.name}" Loaded!`;
         } else if (model.modelType === "audio") {
-            this.soundMetadata = this.createModelMetadataFromModelDependencies(model.name, model.dependencies);
+            this.soundMetadata = this.createAudioModelMetadataFromModelDependencies(model.name, model.dependencies);
             this.soundModelUrl = null;
             this.soundClassifier = new SoundClassifier(model);
             log.info(`Loaded sound model: ${model.name}`);
@@ -1184,11 +1184,24 @@ class MartyMachineBlocks {
 
 
     // HELPERS
-    createModelMetadataFromModelDependencies(modelName, modelDependencies) {
+    createImageModelMetadataFromModelDependencies(modelName, modelDependencies) {
         const modelClasses = modelDependencies[2]?.classes || [];
         return {
             imageSize: null,
             labels: modelClasses.map(clsObj => clsObj.name),
+            modelName: modelName,
+            packageName: null,
+            packageVersion: null,
+            timeStamp: new Date().toISOString(),
+            tmVersion: null,
+            getUserMetadata: {}
+        }
+    }
+
+    createAudioModelMetadataFromModelDependencies(modelName, modelDependencies) {
+        const modelClasses = modelDependencies[2]?.classes || [];
+        return {
+            wordLabels: modelClasses.map(clsObj => clsObj.name),
             modelName: modelName,
             packageName: null,
             packageVersion: null,

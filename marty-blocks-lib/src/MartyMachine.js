@@ -5,7 +5,8 @@ const {
   TrainingDataActionTypes,
   tfvis,
   IMAGE_SIZE,
-  AudioTrainingOptions
+  AudioTrainingOptions,
+  BACKGROUND_NOISE_TAG
 } = require("@robotical/marty-machine-lib/dist/marty-machine-lib.umd");
 
 class MartyMachine {
@@ -14,6 +15,7 @@ class MartyMachine {
     this.tfvis = tfvis;
     this.image_size = IMAGE_SIZE;
     this.AudioTrainingOptions = AudioTrainingOptions;
+    this.BACKGROUND_NOISE_TAG = BACKGROUND_NOISE_TAG;
   }
 
   /**
@@ -21,7 +23,6 @@ class MartyMachine {
    * @param {string} modelType - "image-device" or "audio"
    * @returns {MLModel} - a new instance of MLModel
    */
-
   getNewModelInstance(modelType = "image-device") {
     if (modelType === "image-device") {
       return new MLModel("static/MLModelWorker.js");
