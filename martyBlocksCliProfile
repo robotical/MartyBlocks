@@ -54,7 +54,7 @@ installMBLib() {
 # Step 4: Link repositories
 npmlinkAll() {
     # local type="${1:-all"}
-    cd $mblib && npm link && npm link ../../marty-machine-lib
+    cd $mblib && npm link # && npm link ../../marty-machine-lib
     cd $blocks_original && npm link && npm link marty-blocks-lib
     cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
     cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
@@ -62,8 +62,6 @@ npmlinkAll() {
 
 # Step 4.1: Copy web worker of marty machine into scratch gui static
 cpWebWorker() {
-    # cp $mblib/node_modules/@robotical/marty-machine-lib/dist/assets/MLModelWorker.js $gui_original/static
-    # cp $mblib/node_modules/@robotical/marty-machine-lib/dist/assets/MLModelWorker.map $gui_original/static
     cp $mblib/node_modules/@robotical/marty-machine-lib/dist/assets/* $gui_original/static
 
 }
@@ -73,7 +71,6 @@ buildAllAndStart () {
     # arguments [all, blocks, vm, gui]
     local type="${1:-all}"
     setDevelopment
-    # setProduction
     cpReplacements
     buildScratchStart $type
     cd $gui_original

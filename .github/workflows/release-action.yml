@@ -117,6 +117,15 @@ jobs:
         run: |
           cd ${{ env.gui_original }}
           BUILD_MODE=dist npm run build
+        
+      - name: Copy marty-machine web workder 
+          run: |
+          cp ${{ env.mblib }}/node_modules/@robotical/marty-machine-lib/dist/assets/* ${{ env.gui_original }}/static
+        
+      - name: Print web worker files
+        run: |
+          cd ${{ env.gui_original }}
+          ls -l ${{ env.gui_original }}/static
 
       - name: print gui components
         run: |
