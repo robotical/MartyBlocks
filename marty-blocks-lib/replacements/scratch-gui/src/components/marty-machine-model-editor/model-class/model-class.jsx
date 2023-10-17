@@ -86,7 +86,13 @@ class ModelClass extends React.Component {
     return (
       <div className={styles.classContainer} onClick={this.onClassNameSelected}>
         <div className={styles.classLabel}>
-          <input className={styles.classNameInput} type="text" value={this.props.modelClass.name}  onChange={(e) => this.onClassNameChange(e)} />
+          <input 
+          className={styles.classNameInput} 
+          type="text" 
+          value={this.props.modelClass.name}  
+          onChange={(e) => this.onClassNameChange(e)}
+          readOnly={this.props.modelClass.name === martyMachine.BACKGROUND_NOISE_TAG} 
+          />
           {subtitleJSX}
           {this.props.onRemoveClass && <IconButton
             title=""
