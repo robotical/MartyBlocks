@@ -6,6 +6,7 @@ import styles from './marty-sound-feed.css';
 
 const MartySoundFeedEditor = props => (
     <div className={styles.martySoundFeedContainer}>
+        {props.isRecording && <div className={styles.recording}></div>}
         <canvas
             className={styles.martySoundFeed}
             width="160" height="120"
@@ -16,6 +17,7 @@ const MartySoundFeedEditor = props => (
 
 MartySoundFeedEditor.propTypes = {
     setRef: PropTypes.func,
+    isRecording: PropTypes.bool,
 };
 
 export default injectIntl(MartySoundFeedEditor);

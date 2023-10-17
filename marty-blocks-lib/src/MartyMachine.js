@@ -106,7 +106,6 @@ class MartyMachine {
     });
   }
 
-
   /**
    * @param {MLModel} model - instance of MLModel
    * @param {object} data - {timeData?, freqData?}

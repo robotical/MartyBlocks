@@ -6,6 +6,7 @@ import styles from './marty-camera-feed.css';
 
 const MartyCameraFeedEditor = props => (
     <div className={styles.martyCameraFeedContainer}>
+        {props.isRecording && <div className={styles.recording}></div>}
         <video
             className={styles.martyCameraFeed}
             autoPlay

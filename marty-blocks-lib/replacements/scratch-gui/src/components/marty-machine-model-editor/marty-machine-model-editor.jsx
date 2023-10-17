@@ -60,15 +60,14 @@ const messages = defineMessages({
 
 const PLOT_WIDTH = 299;
 const PLOT_HEIGHT = 183;
-
 const MartyMachineModelEditor = props => {
-    let feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
+    let feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} isRecording={props.isRecording} />;
     if (props.modelType === 'image-device') {
-        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
+        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} isRecording={props.isRecording} />;
     } else if (props.modelType === 'image-marty') {
-        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} />;
+        feedJSX = <CameraFeed setRef={props.setDeviceStreamRef} isRecording={props.isRecording} />;
     } else if (props.modelType === 'audio') {
-        feedJSX = <SoundFeed setRef={props.setAudioCanvasRef} />;
+        feedJSX = <SoundFeed setRef={props.setAudioCanvasRef} isRecording={props.isRecording} />;
     }
 
     const canBeTrained = (props.modelClasses.length > 1 && props.modelClasses.every(modelClass => modelClass.samples.length > 0) && !props.isRecording && !props.isTraining && !props.isRunning) && !props.isModelLoaded;
@@ -206,7 +205,15 @@ const MartyMachineModelEditor = props => {
                         let subtitle = null;
                         if (modelClass.name === martyMachine.BACKGROUND_NOISE_TAG) {
                             onRemoveClass = null;
-                            subtitle = `Requires at least 10 samples (${modelClass.samples.length}/10)`;
+                            subtitle = <span style={{
+                                backgroundColor: modelClass.samples.length >= 10 ? 'green' : 'rgb(255, 171, 25)',
+                                fontWeight: modelClass.samples.length >= 10 ? '500' : 'bold',
+                                color: modelClass.samples.length >= 10 ? 'white' : 'black',
+                                fontSize: '0.8em',
+                                alignSelf: 'self-start',
+                                padding: '2px 10px',
+                                borderRadius: '4px',
+                            }}>{`Requires at least 10 samples (${modelClass.samples.length}/10)`}</span>;
                         }
                         return <ModelClass
                             onClassNameSelected={props.onClassNameSelected}

@@ -9,6 +9,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px;
+    position: relative;
 }
 
 .martyCameraFeed {
@@ -17,4 +18,16 @@
     border-radius: 8px;
     object-fit: cover;
     transform: scaleX(-1); /* Mirrors the video */
+}
+
+
+.recording {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    background: rgb(194, 6, 6);
+    border-radius: 50%;
 }

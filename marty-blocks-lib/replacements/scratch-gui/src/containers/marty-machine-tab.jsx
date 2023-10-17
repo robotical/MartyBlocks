@@ -10,6 +10,7 @@ import audioIconBlack from "../components/asset-panel/icon--audio-black.svg";
 import imageIcon from "../components/asset-panel/icon--image.svg";
 import imageIconBlack from "../components/asset-panel/icon--image-black.svg";
 import fileUploadIcon from "../components/action-menu/icon--file-upload.svg";
+import addNewIcon from "../components/action-menu/icon--plus.svg";
 
 import MartyMachineModelEditor from "./marty-machine-model-editor.jsx";
 
@@ -22,6 +23,7 @@ import { connect } from "react-redux";
 import { setRestore } from "../reducers/restore-deletion";
 import Modal from "./modal.jsx";
 import WrappedTeachableMachineUrlModal from "../components/teachable-machine-url-modal/teachable-machine-url-modal.jsx";
+import WrappedMartyMachineNewModelConfirmationModal from "../components/marty-machine-new-model-confirmation-modal/marty-machine-new-model-confirmation-modal.jsx";
 
 export const modelNameCheckExists = (name) => {
     const allTargets = vm.runtime.targets;
@@ -66,6 +68,7 @@ class MartyMachineTab extends React.Component {
             "setFileInput",
             "onNewModelClick",
             "onTMModelLoaded",
+            "confirmDialogForNewModel"
         ]);
 
         // console.debug("MartyMachineTab stored model:", props.vm.editingTarget.sprite.models[0]);
@@ -75,6 +78,9 @@ class MartyMachineTab extends React.Component {
             modelType: props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
             isModelLoaded: !!props.vm.editingTarget.sprite.models[0],
             modelName: props.vm.editingTarget.sprite.models[0]?.name || "New Model",
+            loadTMModelModalVisible: false,
+            newModelConfirmationModalVisible: false,
+            newModelModelType: null
         };
         this.model = props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance();
     }
@@ -161,6 +167,8 @@ class MartyMachineTab extends React.Component {
             modelType: model.modelType,
             modelName: model.name,
             loadTMModelModalVisible: false,
+            newModelConfirmationModalVisible: false,
+            newModelModelType: null
         });
     }
 
@@ -210,6 +218,10 @@ class MartyMachineTab extends React.Component {
         this.model = martyMachine.getNewModelInstance(modelType);
     };
 
+    confirmDialogForNewModel = (modelType) => {
+        this.setState({ newModelConfirmationModalVisible: true, newModelModelType: modelType });
+    }
+
     render() {
         const {
             dispatchUpdateRestore, // eslint-disable-line no-unused-vars
@@ -237,6 +249,11 @@ class MartyMachineTab extends React.Component {
             : [];
 
         const messages = defineMessages({
+            addNewModel: {
+                defaultMessage: "Add New Model",
+                description: "Button to add a new model",
+                id: "gui.martyMachineTab.addNew",
+            },
             newImageModelMarty: {
                 defaultMessage: "New Image Model (Marty)",
                 description:
@@ -260,7 +277,6 @@ class MartyMachineTab extends React.Component {
             },
         });
 
-        console.log("isModelLoaded", this.state.isModelLoaded)
 
         let contentJSX = <MartyMachineModelEditor
             key={this.state.modelName + this.state.modelType}
@@ -271,21 +287,6 @@ class MartyMachineTab extends React.Component {
             modelName={this.state.modelName}
             isModelLoaded={this.state.isModelLoaded}
         />;
-        // if (this.state.modelType === "image-device") {
-        //     ;
-        // } else if (this.state.modelType === "image-marty") {
-        //     contentJSX = null;
-        // } else if (this.state.modelType === "audio") {
-        //     contentJSX = <MartyMachineModelEditor
-        //         key={this.state.modelName + this.state.modelType}
-        //         modelIndex={this.state.selectedModelIndex}
-        //         model={this.model}
-        //         onNewModel={this.handleNewModel}
-        //         modelType={this.state.modelType}
-        //         modelName={this.state.modelName}
-        //         isModelLoaded={this.state.isModelLoaded}
-        //     />;
-        // }
 
         return (
             <>
@@ -297,27 +298,38 @@ class MartyMachineTab extends React.Component {
                         />
                     </Modal>
                 }
+                {this.state.newModelConfirmationModalVisible &&
+                    <Modal>
+                        <WrappedMartyMachineNewModelConfirmationModal
+                            onBack={() => this.setState({ newModelConfirmationModalVisible: false })}
+                            onProceed={() => {
+                                this.setState({ newModelConfirmationModalVisible: false });
+                                this.onNewModelClick(this.state.newModelModelType);
+                            }}
+                        />
+                    </Modal>
+                }
                 <AssetPanel
                     buttons={[
                         {
-                            title: intl.formatMessage(messages.newImageModelDevice),
-                            img: imageIcon,
-                            onClick: () => this.onNewModelClick("image-device"),
+                            title: intl.formatMessage(messages.addNewModel),
+                            img: addNewIcon,
+                            onClick: (e) => e.stopPropagation(),
                         },
                         // {
                         //     title: intl.formatMessage(messages.newImageModelMarty),
                         //     img: robotIcon,
                         //     onClick: () => { },
                         // },
-                        // {
-                        //     title: intl.formatMessage(messages.newImageModelDevice),
-                        //     img: imageIcon,
-                        //     onClick: () => this.onNewModelClick("image-device"),
-                        // },
+                        {
+                            title: intl.formatMessage(messages.newImageModelDevice),
+                            img: imageIcon,
+                            onClick: () => this.confirmDialogForNewModel("image-device"),
+                        },
                         {
                             title: intl.formatMessage(messages.newAudioModel),
                             img: audioIcon,
-                            onClick: () => this.onNewModelClick("audio"),
+                            onClick: () => this.confirmDialogForNewModel("audio"),
                         },
                         {
                             title: intl.formatMessage(messages.loadTMModel),

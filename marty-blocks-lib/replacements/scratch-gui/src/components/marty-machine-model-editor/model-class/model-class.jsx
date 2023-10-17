@@ -11,10 +11,22 @@ class ModelClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    bindAll(this, ["onPlaySample", "onClassNameSelected", "onRemoveClass", "onRemoveSample"]);
+    bindAll(this, ["onPlaySample", "onClassNameSelected", "onRemoveClass", "onRemoveSample", "setSampleContainerRef"]);
+    this.sampleContainerRef = null;
   }
 
   componentWillUnmount() {
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.modelClass.samples.length > prevProps.modelClass.samples.length) {
+      const container = this.sampleContainerRef;
+      container.scrollLeft = container.scrollWidth;
+    }
+  }
+
+  setSampleContainerRef(element) {
+    this.sampleContainerRef = element;
   }
 
   onPlaySample(event, audioData) {
@@ -56,11 +68,27 @@ class ModelClass extends React.Component {
     }
   }
 
+  onClassNameChange(event) {
+    this.props.modelClass.name = event.target.value;  
+    console.log("onClassNameChange: " + this.props.modelClass.name);
+    this.setState({});
+  }
+
   render() {
+    let subtitleJSX = null;
+    if (this.props.subtitle) {
+      if (typeof this.props.subtitle === "string") {
+        subtitleJSX = <span className={styles.subtitle}>{this.props.subtitle}</span>;
+      } else {
+        subtitleJSX = this.props.subtitle;
+      }
+    }
     return (
       <div className={styles.classContainer} onClick={this.onClassNameSelected}>
         <div className={styles.classLabel}>
-          {this.props.modelClass.name}{this.props.subtitle && <span className={styles.subtitle}>{this.props.subtitle}</span>}{this.props.onRemoveClass && <IconButton
+          <input className={styles.classNameInput} type="text" value={this.props.modelClass.name}  onChange={(e) => this.onClassNameChange(e)} />
+          {subtitleJSX}
+          {this.props.onRemoveClass && <IconButton
             title=""
             className={styles.overlayButton}
             img={deleteIcon}
@@ -71,7 +99,7 @@ class ModelClass extends React.Component {
           <div className={styles.rowCustom}>
             <p className={styles.samplesLengthTitle}>{this.props.modelClass.samples.length} samples</p>
           </div>
-          <div className={styles.rowCustom}>
+          <div className={styles.rowCustom} ref={this.setSampleContainerRef}>
             {this.props.modelClass.samples.map((sample, sampleIndex) => {
               return <div key={sampleIndex} className={styles.modelSampleContainer}>
                 <div className={styles.modelSampleOverlay}>
@@ -107,7 +135,7 @@ ModelClass.propTypes = {
   onRemoveSample: PropTypes.func,
   onClassNameSelected: PropTypes.func,
   modelType: string,
-  subtitle: string,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.element])
 };
 
 export default ModelClass;

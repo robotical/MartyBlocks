@@ -251,7 +251,7 @@ class MartyMachineModelEditor extends React.Component {
                 clearTimeout(stopLoopTimeout);
             }, RECORD_TIME);
         } else if (this.props.modelType === 'audio') {
-            const SAMPLE_TIME = 1200;
+            const SAMPLE_TIME = 1500;
             this.audioExtractor = new AudioExtractor();
             await this.audioExtractor.start();
             await new Promise(resolve => setTimeout(resolve, SAMPLE_TIME));
@@ -303,14 +303,16 @@ class MartyMachineModelEditor extends React.Component {
 
     onTrainModel = () => {
         if (!this.checkIfBackgroundNoiseClassHasSamplesIF()) return;
-
         this.isTraining = true;
-        martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType).then((isTrained) => {
-            this.isTrained = isTrained;
-            this.isTraining = false;
-            this.setState({});
-        });
         this.setState({});
+        setTimeout(() => {
+            // setTimeout because it allows the UI to update before starting training
+            martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType).then((isTrained) => {
+                this.isTrained = isTrained;
+                this.isTraining = false;
+                this.setState({});
+            });
+        }, 200);
     }
 
     onStopTraining = () => {
@@ -437,6 +439,7 @@ class MartyMachineModelEditor extends React.Component {
                     name={this.state.modelName}
                     onChangeName={this.handleChangeName}
                     onClassNameChange={this.onClassNameChange}
+                    onClassNameSelected={this.onClassNameSelected}
                     onContainerClick={this.handleContainerClick}
                     onStartRecordingSamples={this.onStartRecordingSamples}
                     onRemoveClass={this.onRemoveClass}
@@ -456,7 +459,6 @@ class MartyMachineModelEditor extends React.Component {
                     setRef={this.setRef}
                     setAudioCanvasRef={this.setAudioCanvasRef}
                     setDeviceStreamRef={this.setDeviceStreamRef}
-                    onClassNameSelected={this.onClassNameSelected}
                 />
                 <canvas ref={this.setCanvasRef} width={martyMachine.image_size} height={martyMachine.image_size} style={{ display: 'none' }} />
             </>
