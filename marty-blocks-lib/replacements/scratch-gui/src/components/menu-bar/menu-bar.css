@@ -17,7 +17,7 @@
         simplifies by all of this by removing padding from the equation.
     */
     box-sizing: border-box;
-    height: 35px;
+    height: 100%;
 
     /*
         @todo: This adds ~20px in Chrome, when scrolling to the right,
@@ -50,7 +50,7 @@
     cursor: pointer;
 }
 
-.language-icon {
+.language-icon { 
     height:  1.5rem;
     vertical-align: middle;
 }
@@ -62,7 +62,7 @@
 .language-menu {
     box-sizing: border-box;
     display: inline-flex;
-    width: $language-selector-width;
+    /* width: $language-selector-width; */
 }
 
 .menu-bar-item {
@@ -76,7 +76,7 @@
     position: relative;
     align-items: center;
     white-space: nowrap;
-    height: $menu-bar-height;
+    /* height: $menu-bar-height; */
 }
 
 .menu-bar-item.hoverable {
@@ -105,11 +105,11 @@
 }
 
 .file-group .menu-bar-item {
-    padding: 0 0.75rem;
+    /* padding: 0 0.75rem; */
 }
 
 .menu-bar-item.language-menu {
-    padding: 0 0.5rem;
+    /* padding: 0 0.5rem; */
 }
 
 .menu-bar-menu {

@@ -1,24 +1,24 @@
 .marty-connect-btn-container {
-    display: grid;
-    align-items: center;
-    height: 100%;
-    cursor: pointer;
-  }
-  
-  .marty-connect-btn-container svg {
-    width: 110px;
-  }
+  display: grid;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.marty-connect-btn-container svg {
+  width: 100px;
+}
 
 
-  .marty-disconnect-btn-container {
-    display: grid;
-    align-items: center;
-    height: 100%;
-    cursor: pointer;
-  }
-  
-  .marty-disconnect-btn-container svg {
-    width: 20px;
-    min-width: 15px;
-    max-width: 25px;
-  }
+.marty-disconnect-btn-container {
+  display: grid;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.marty-disconnect-btn-container svg {
+  width: 20px;
+  min-width: 15px;
+  max-width: 25px;
+}

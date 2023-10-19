@@ -4,13 +4,13 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const base = {
-    mode: 'production',
+    mode: 'development',
     devServer: {
         contentBase: false,
         host: '0.0.0.0',
         port: process.env.PORT || 8073
     },
-    devtool: false,
+    devtool: 'cheap-module-source-map',
     output: {
         library: 'VirtualMachine',
         filename: '[name].js'

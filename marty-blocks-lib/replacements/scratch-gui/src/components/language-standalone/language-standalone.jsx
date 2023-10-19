@@ -19,7 +19,6 @@ import {
 import languageIcon from '../language-selector/language-icon.svg';
 import classNames from 'classnames';
 import styles from '../menu-bar/menu-bar.css';
-import dropdownCaret from '../menu-bar/dropdown-caret.svg';
 import Box from '../box/box.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
@@ -77,10 +76,10 @@ class LanguageStandalone extends React.Component {
                                     className={styles.languageIcon}
                                     src={languageIcon}
                                 />
-                                <img
+                                {/* <img
                                     className={styles.languageCaret}
                                     src={dropdownCaret}
-                                />
+                                /> */}
                             </div>
                             <LanguageSelector label={this.props.intl.formatMessage(ariaMessages.language)} />
                         </div>)}

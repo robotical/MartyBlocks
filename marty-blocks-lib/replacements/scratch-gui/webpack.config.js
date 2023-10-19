@@ -15,8 +15,8 @@ var postcssImport = require("postcss-import");
 const STATIC_PATH = process.env.STATIC_PATH || "/static";
 
 const base = {
-  mode: "production",
-  devtool: false,
+  mode: "development",
+  devtool: 'cheap-module-source-map',
   devServer: {
     headers: {
       "Access-Control-Allow-Origin": "*",

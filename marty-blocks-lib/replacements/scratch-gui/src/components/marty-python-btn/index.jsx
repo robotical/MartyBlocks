@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "./styles.css";
-import pythonLogo from "./python-logo.png";
+import pythonLogo from "./icon--show-code.svg";
 import PythonCodeModal from "../python-code-modal/index.jsx";
 
 export default class MartyPythonButton extends React.Component {
@@ -26,9 +26,14 @@ export default class MartyPythonButton extends React.Component {
             .fromSb3JSON(JSON.parse(vm.toJSON()), { getAsset: () => {} })
             .then((r) => r.toPython())
             .then((re) => {
+                if (re.trim() === "") {
+                    re = `
+# Uh-oh! We can't find any Marty Blocks.
+# To see what your project would look like in code, don't forget to add some Marty Blocks!
+`;
+                }
                 this.setState({ code: re });
                 this.setState({ modalVisible: true });
-                console.log(re);
             });
     }
 
