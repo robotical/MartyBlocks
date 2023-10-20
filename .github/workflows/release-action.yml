@@ -103,6 +103,12 @@ jobs:
         run: |
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
+      - name: Remove unused assets
+        run: |
+          cd ${{ env.gui_original }}
+          rm -f src/lib/libraries/decks/thumbnails/*
+          rm -f src/lib/libraries/decks/steps/*
+
       - name: Build Blocks
         run: |
           cd ${{ env.blocks_original }}

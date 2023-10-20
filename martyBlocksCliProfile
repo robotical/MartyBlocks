@@ -68,6 +68,7 @@ buildAllAndStart () {
     # setDevelopment
     # setProduction
     cpReplacements
+    removeUnusedAssets
     buildScratchStart $type $NODE_ENV
     cd $gui_original
     NODE_ENV=$NODE_ENV npm start
@@ -86,6 +87,7 @@ buildAllAndCpToWebApp () {
     local NODE_ENV="${2:-development}"
     # setDevelopment
     cpReplacements
+    removeUnusedAssets
     buildScratch $type $NODE_ENV
     cpToDist
     cpToWebapp
@@ -104,6 +106,12 @@ setDevelopment () {
 cpReplacements ()
 {
     cp -r $REPLACEMENTS/* $MBHome
+}
+
+removeUnusedAssets () {
+    cd $gui_original
+    /bin/rm -f ./src/lib/libraries/decks/thumbnails/*
+    /bin/rm -f ./src/lib/libraries/decks/steps/* 
 }
 
 buildScratch () {
