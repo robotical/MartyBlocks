@@ -83,9 +83,10 @@ buildAllAndStart () {
 ##################### Helper functions ####################
 buildAllAndCpToWebApp () {
     local type="${1:-all}"
-    setDevelopment
+    local NODE_ENV="${2:-development}"
+    # setDevelopment
     cpReplacements
-    buildScratch $type
+    buildScratch $type $NODE_ENV
     cpToDist
     cpToWebapp
 }
@@ -107,10 +108,11 @@ cpReplacements ()
 
 buildScratch () {
     local type="${1:-all}"
-    if [ $type = all ]; then buildBlocks; buildVm; buildGui; fi
-    if [ $type = blocks ]; then buildBlocks; fi
-    if [ $type = vm ]; then buildBlocks; buildVm; fi
-    if [ $type = gui ]; then buildGui; fi
+    local NODE_ENV="${2:-development}"
+    if [ $type = all ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; buildGui $NODE_ENV; fi
+    if [ $type = blocks ]; then buildBlocks $NODE_ENV; fi
+    if [ $type = vm ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; fi
+    if [ $type = gui ]; then buildGui $NODE_ENV; fi
 }
 
 buildScratchStart () {
