@@ -64,12 +64,13 @@ npmlinkAll() {
 buildAllAndStart () {
     # arguments [all, blocks, vm, gui]
     local type="${1:-all}"
-    setDevelopment
+    local NODE_ENV="${2:-development}"
+    # setDevelopment
     # setProduction
     cpReplacements
-    buildScratchStart $type
+    buildScratchStart $type $NODE_ENV
     cd $gui_original
-    npm start
+    NODE_ENV=$NODE_ENV npm start
 }
 
 # To make changes on the project, edit the appropriate files in the /replacements 
@@ -114,10 +115,11 @@ buildScratch () {
 
 buildScratchStart () {
     local type="${1:-all}"
-    if [ $type = all ]; then buildBlocks; buildVm; buildGui; fi
-    if [ $type = blocks ]; then buildBlocks; fi
-    if [ $type = vm ]; then buildBlocks; buildVm; fi
-    if [ $type = gui ]; then buildGuiStart; fi
+    local NODE_ENV="${2:-development}"
+    if [ $type = all ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; buildGui $NODE_ENV; fi
+    if [ $type = blocks ]; then buildBlocks $NODE_ENV; fi
+    if [ $type = vm ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; fi
+    if [ $type = gui ]; then buildGuiStart $NODE_ENV; fi
 }
 
 cpToWebapp () {
@@ -139,19 +141,23 @@ cpToDist () {
 }
 
 buildBlocks() {
-    cd $blocks_original && ln -s $(npm root)/google-closure-library ../closure-library; npm run prepublish
+    local NODE_ENV="${1:-development}"
+    cd $blocks_original && ln -s $(npm root)/google-closure-library ../closure-library; NODE_ENV=$NODE_ENV npm run prepublish
 }
 
 buildVm() {
-    cd $vm_original && npm run build
+    local NODE_ENV="${1:-development}"
+    cd $vm_original && NODE_ENV=$NODE_ENV npm run build
 }
 
 buildGui() {
-    cd $gui_original && BUILD_MODE=dist npm run build
+    local NODE_ENV="${1:-development}"
+    cd $gui_original && NODE_ENV=$NODE_ENV npm run build
 }
 
 buildGuiStart() {
-    cd $gui_original && npm run build
+    local NODE_ENV="${1:-development}"
+    cd $gui_original && NODE_ENV=$NODE_ENV npm run build
 }
 
 publishPackage() {

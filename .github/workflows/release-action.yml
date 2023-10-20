@@ -106,17 +106,17 @@ jobs:
       - name: Build Blocks
         run: |
           cd ${{ env.blocks_original }}
-          npm run prepublish
+          NODE_ENV=production npm run prepublish
 
       - name: Build VM
         run: |
           cd ${{ env.vm_original }}
-          npm run build
+          NODE_ENV=production npm run build
           
       - name: Build Scratch
         run: |
           cd ${{ env.gui_original }}
-          BUILD_MODE=dist npm run build
+          NODE_ENV=production npm run build
 
       - name: print gui components
         run: |
