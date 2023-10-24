@@ -34,6 +34,7 @@ import LanguageStandalone from "../language-standalone/language-standalone.jsx";
 import WebGlModal from "../../containers/webgl-modal.jsx";
 import TipsLibrary from "../../containers/tips-library.jsx";
 import Cards from "../../containers/cards.jsx";
+import DraggableModal from "../../containers/draggable-modal.jsx";
 import Alerts from "../../containers/alerts.jsx";
 import DragLayer from "../../containers/drag-layer.jsx";
 import ConnectionModal from "../../containers/connection-modal.jsx";
@@ -96,6 +97,7 @@ const GUIComponent = (props) => {
     connectionModalVisible,
     costumeLibraryVisible,
     costumesTabVisible,
+    draggableModalVisible,
     enableCommunity,
     intl,
     isCreating,
@@ -197,6 +199,7 @@ const GUIComponent = (props) => {
             {isRendererSupported ? null : <WebGlModal isRtl={isRtl} />}
             {tipsLibraryVisible ? <TipsLibrary /> : null}
             {cardsVisible ? <Cards /> : null}
+            {draggableModalVisible ? <DraggableModal /> : null}
             {alertsVisible ? (
               <Alerts className={styles.alertsContainer} />
             ) : null}
@@ -425,6 +428,7 @@ GUIComponent.propTypes = {
   children: PropTypes.node,
   costumeLibraryVisible: PropTypes.bool,
   costumesTabVisible: PropTypes.bool,
+  draggableModalVisible: PropTypes.bool,
   enableCommunity: PropTypes.bool,
   intl: intlShape.isRequired,
   isCreating: PropTypes.bool,
