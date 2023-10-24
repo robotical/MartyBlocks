@@ -44,6 +44,7 @@ class MartyMachineModelEditor extends React.Component {
         this.isRecording = false;
         this.isTraining = false;
         this.isRunning = false;
+        this.hasRun = false;
         this.isTrained = false;
         this.isSaving = false;
         this.audioExtractor = null;
@@ -140,6 +141,7 @@ class MartyMachineModelEditor extends React.Component {
             this.isRecording = false;
             this.isTraining = false;
             this.isRunning = false;
+            this.hasRun = false;
             this.isTrained = false;
             this.isSaving = false;
             this.audioExtractor = null;
@@ -166,6 +168,13 @@ class MartyMachineModelEditor extends React.Component {
         this.onStopRunningModel();
     }
     handleChangeName(name) {
+        const sprite = this.props.vm.editingTarget.sprite;
+        const models = sprite.models ? sprite.models : [];
+        const storedModel = models[this.props.modelIndex];
+        const isTheSameModel = this.props.modelName === storedModel?.name && this.props.isModelLoaded;
+        if (isTheSameModel) {
+            this.props.setModelName(name);
+        }
         this.setState({ modelName: name });
     }
     setRef(element) {
@@ -309,6 +318,7 @@ class MartyMachineModelEditor extends React.Component {
             // setTimeout because it allows the UI to update before starting training
             martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType).then((isTrained) => {
                 this.isTrained = isTrained;
+                this.hasRun = false;
                 this.isTraining = false;
                 this.setState({});
             });
@@ -365,6 +375,7 @@ class MartyMachineModelEditor extends React.Component {
 
     onStopRunningModel = () => {
         this.isRunning = false;
+        this.hasRun = true;
         this.setState({});
         if (this.props.modelType === 'audio' && this.audioExtractor) {
             this.audioExtractor.stop();
@@ -453,6 +464,7 @@ class MartyMachineModelEditor extends React.Component {
                     isRecording={this.isRecording}
                     isTraining={this.isTraining}
                     isRunning={this.isRunning}
+                    hasRun={this.hasRun}
                     isTrained={this.isTrained || this.props.isModelLoaded}
                     isSaving={this.isSaving}
                     isModelLoaded={this.props.isModelLoaded}

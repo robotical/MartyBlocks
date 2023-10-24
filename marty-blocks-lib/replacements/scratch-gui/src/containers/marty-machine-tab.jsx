@@ -11,6 +11,7 @@ import imageIcon from "../components/asset-panel/icon--image.svg";
 import imageIconBlack from "../components/asset-panel/icon--image-black.svg";
 import fileUploadIcon from "../components/action-menu/icon--file-upload.svg";
 import addNewIcon from "../components/action-menu/icon--plus.svg";
+import helpIcon from "../lib/assets/icon--tutorials.svg";
 
 import MartyMachineModelEditor from "./marty-machine-model-editor.jsx";
 
@@ -24,6 +25,9 @@ import { setRestore } from "../reducers/restore-deletion";
 import Modal from "./modal.jsx";
 import WrappedTeachableMachineUrlModal from "../components/teachable-machine-url-modal/teachable-machine-url-modal.jsx";
 import WrappedMartyMachineNewModelConfirmationModal from "../components/marty-machine-new-model-confirmation-modal/marty-machine-new-model-confirmation-modal.jsx";
+import { activateDeck } from "../reducers/cards.js";
+
+const TUTORIALS_COOKIE = "ROBOTICAL_MARTYBLOCKS_hasSeenTutorials";
 
 export const modelNameCheckExists = (name) => {
     const allTargets = vm.runtime.targets;
@@ -86,10 +90,31 @@ class MartyMachineTab extends React.Component {
     }
 
     componentDidMount() {
+        this.shouldShowTutorialsCard();
         const sprite = vm.editingTarget.sprite;
         const areThereSavedModels = sprite.models && sprite.models.length > 0;
         if (areThereSavedModels) {
             this.setState({ modelType: sprite.models[0].modelType });
+        }
+    }
+
+    shouldShowTutorialsCard() {
+        const MAX_TUTORIALS_COUNT = 5;
+        // we check to see if the user has seen the tutorials by checking the localStorage
+        // if the user has never seen the tutorials card, show it
+        // if the user has seen the tutorials card less than MAX_TUTORIALS_COUNT times, show it
+        // set a cookie to indicate that the user has seen the tutorials card
+        // increment the counter
+
+        const hasSeenTutorials = localStorage.getItem(TUTORIALS_COOKIE);
+        if (hasSeenTutorials === null) {
+            localStorage.setItem(TUTORIALS_COOKIE, 1);
+            return this.props.showTutorialCard();
+        } 
+        const hasSeenTutorialsCount = parseInt(hasSeenTutorials);
+        if (hasSeenTutorialsCount < MAX_TUTORIALS_COUNT) {
+            localStorage.setItem(TUTORIALS_COOKIE, hasSeenTutorialsCount + 1);
+            return this.props.showTutorialCard();
         }
     }
 
@@ -222,6 +247,17 @@ class MartyMachineTab extends React.Component {
         this.setState({ newModelConfirmationModalVisible: true, newModelModelType: modelType });
     }
 
+    setModelName = (newModelName) => {
+        const doesExist = modelNameCheckExists(newModelName);
+        if (doesExist) {
+            return alert("Model name already exists, please choose another name.");
+        }
+        const storedModel = this.props.vm.editingTarget.sprite.models[this.state.selectedModelIndex];
+        storedModel.name = newModelName;
+        this.model.name = newModelName;
+        this.setState({ modelName: newModelName });
+    }
+
     render() {
         const {
             dispatchUpdateRestore, // eslint-disable-line no-unused-vars
@@ -275,6 +311,11 @@ class MartyMachineTab extends React.Component {
                 description: "Button to load a Teachable Machine model",
                 id: "gui.martyMachineTab.loadTMModel",
             },
+            tutorials: {
+                defaultMessage: "Tutorials",
+                description: "Button to open the tutorials page",
+                id: "gui.martyMachineTab.tutorials",
+            }
         });
 
 
@@ -282,6 +323,7 @@ class MartyMachineTab extends React.Component {
             key={this.state.modelName + this.state.modelType}
             modelIndex={this.state.selectedModelIndex}
             model={this.model}
+            setModelName={(newModelName) => this.setModelName(newModelName)}
             onNewModel={this.handleNewModel}
             modelType={this.state.modelType}
             modelName={this.state.modelName}
@@ -336,6 +378,11 @@ class MartyMachineTab extends React.Component {
                             img: fileUploadIcon,
                             onClick: () => this.setState({ loadTMModelModalVisible: true }),
                         },
+                        {
+                            title: intl.formatMessage(messages.tutorials),
+                            img: helpIcon,
+                            onClick: () => this.props.showTutorialCard(),
+                        },
                     ]}
                     dragType={DragConstants.MODEL}
                     isRtl={isRtl}
@@ -381,6 +428,7 @@ MartyMachineTab.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+    scratchGui: state.scratchGui,
     editingTarget: state.scratchGui.targets.editingTarget,
     isRtl: state.locales.isRtl,
     sprites: state.scratchGui.targets.sprites,
@@ -393,9 +441,12 @@ const mapDispatchToProps = (dispatch) => ({
     dispatchUpdateRestore: (restoreState) => {
         dispatch(setRestore(restoreState));
     },
+    showTutorialCard: () => {
+        dispatch(activateDeck("mm-create-model"));
+    }
 });
 
-export default errorBoundaryHOC("Marty Machine Tab")(
+export default errorBoundaryHOC("Machine Learning Tab")(
     injectIntl(connect(mapStateToProps, mapDispatchToProps)(MartyMachineTab))
 );
 

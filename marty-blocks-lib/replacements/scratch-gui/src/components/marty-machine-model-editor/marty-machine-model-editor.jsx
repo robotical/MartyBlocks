@@ -11,7 +11,7 @@ import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 
 import styles from './marty-machine-model-editor.css';
 
-import playIcon from './icon--play.svg';
+import recordIcon from './icon--record.svg';
 import stopIcon from './icon--stop.svg';
 import MartyMachineModelPredictions from './predictions/predictions.jsx';
 import TfVisChart from './TfVisChart/TfVisChart.jsx';
@@ -76,7 +76,7 @@ const MartyMachineModelEditor = props => {
     const canBeSaved = props.isTrained && !props.isModelLoaded;
 
     let trainingOrRunningJSX = null;
-    if ((props.isTraining || props.isTrained) && !props.isModelLoaded) {
+    if ((props.isTraining || props.isTrained) && !props.isModelLoaded && !props.hasRun) {
         trainingOrRunningJSX = <TfVisChart id="lossChart" title="Loss" xLabel="epoch" yLabel="loss" width={PLOT_WIDTH} height={PLOT_HEIGHT} model={props.model} />;
     }
     if (props.isRunning) {
@@ -96,7 +96,6 @@ const MartyMachineModelEditor = props => {
                         type="text"
                         value={props.name}
                         onSubmit={props.onChangeName}
-                        disabled={props.isModelLoaded}
                     />
                 </Label>
             </div>
@@ -141,7 +140,7 @@ const MartyMachineModelEditor = props => {
                     >
                         <img
                             draggable={false}
-                            src={playIcon}
+                            src={recordIcon}
                         />
                     </button>
                 )}
@@ -270,6 +269,7 @@ MartyMachineModelEditor.propTypes = {
     onRun: PropTypes.func.isRequired,
     onStopRunning: PropTypes.func.isRequired,
     isRunning: PropTypes.bool.isRequired,
+    hasRun: PropTypes.bool.isRequired,
     isTrained: PropTypes.bool.isRequired,
     onSaveModel: PropTypes.func.isRequired,
     isSaving: PropTypes.bool.isRequired,

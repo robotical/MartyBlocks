@@ -11,12 +11,12 @@ const path = require('path');
 
 const Message = {
     load_marty_machine_model: {
-        'en': 'Load Marty Machine model[MODEL_NAME]',
-        'ja': 'Marty Machineモデルを読み込む[MODEL_NAME]',
-        'ja-Hira': 'Marty Machineモデルをよみこむ[MODEL_NAME]',
-        'ko': 'Marty Machine 모델 불러오기[MODEL_NAME]',
-        'zh-cn': '加载Marty Machine模型[MODEL_NAME]',
-        'zh-tw': '載入Marty Machine模型[MODEL_NAME]'
+        'en': 'Load Machine Learning model[MODEL_NAME]',
+        'ja': 'Machine Learningモデルを読み込む[MODEL_NAME]',
+        'ja-Hira': 'Machine Learningモデルをよみこむ[MODEL_NAME]',
+        'ko': 'Machine Learning 모델 불러오기[MODEL_NAME]',
+        'zh-cn': '加载Machine Learning模型[MODEL_NAME]',
+        'zh-tw': '載入Machine Learning模型[MODEL_NAME]'
     },
     image_classification_model_url: {
         'ja': '画像分類モデルURL[URL]',
@@ -291,7 +291,7 @@ class MartyMachineBlocks {
 
         return {
             id: 'martymachine',
-            name: 'MartyMachine',
+            name: 'ML',
             blockIconURI: blockIconURI,
             blocks: [
                 {
@@ -576,7 +576,7 @@ class MartyMachineBlocks {
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
         this.model = model;
-        if (model.modelType === "image-device") {
+        if (model?.modelType === "image-device") {
             // this.runtime.ioDevices.video.enableVideo();
             const media = navigator.mediaDevices.getUserMedia({
                 video: {
@@ -595,7 +595,7 @@ class MartyMachineBlocks {
             this.imageClassifier = new ImageClassifier(model);
             log.info(`Loaded image model: ${model.name}`);
             return `"${model.name}" Loaded!`;
-        } else if (model.modelType === "audio") {
+        } else if (model?.modelType === "audio") {
             this.soundMetadata = this.createAudioModelMetadataFromModelDependencies(model.name, model.dependencies);
             this.soundModelUrl = null;
             this.soundClassifier = new SoundClassifier(model);
@@ -1021,9 +1021,9 @@ class MartyMachineBlocks {
             this.imageClassifierEnabled = true;
             this.soundClassifierEnabled = true;
 
-            if (this.model.modelType === "image-device") {
+            if (this.model?.modelType === "image-device") {
                 this.recordFrameWrapper();
-            } else if (this.model.modelType === "audio") {
+            } else if (this.model?.modelType === "audio") {
                 this.recordAudioFrameWrapper();
             }
         }

@@ -301,8 +301,8 @@ const GUIComponent = (props) => {
                       >
                         <img draggable={false} src={martyMachineIcon} />
                         <FormattedMessage
-                          defaultMessage="Marty Machine"
-                          description="Button to toggle Marty Machine tab"
+                          defaultMessage="Machine Learning"
+                          description="Button to toggle Machine Learning tab"
                           id="gui.gui.toggleMartyMachineTab"
                         />
                       </Tab>
