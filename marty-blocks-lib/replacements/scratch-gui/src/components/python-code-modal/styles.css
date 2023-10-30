@@ -123,3 +123,31 @@ pre[class*="language-"] {
     overflow: auto;  
 }
 
+.header {
+    background: $ui-white;
+    border-bottom: 1px solid $ui-black-transparent;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.cpToClipboardBtn {
+    background: $motion-primary;
+    border: $motion-primary;
+    color: white;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.5rem;
+}
+
+.cpToClipboardBtnIcon  {
+    width: 20px;
+    height: 20px;
+}

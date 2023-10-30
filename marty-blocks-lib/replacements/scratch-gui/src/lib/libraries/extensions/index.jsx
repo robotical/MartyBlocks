@@ -169,21 +169,21 @@ export default [
         ),
         featured: true
     },
-    {
-        name: 'Teachable Machine Image & Sound',
-        extensionId: 'tm2scratch',
-        collaborator: 'champierre',
-        iconURL: tm2scratchIconURL,
-        insetIconURL: tm2scratchInsetIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="Use Teachable Machine to recognize images and sounds."
-                description="Description for the 'Teachable Machine' extension"
-                id="gui.extension.tm2scratch.description"
-            />
-        ),
-        featured: true
-    },
+    // {
+    //     name: 'Teachable Machine Image & Sound',
+    //     extensionId: 'tm2scratch',
+    //     collaborator: 'champierre',
+    //     iconURL: tm2scratchIconURL,
+    //     insetIconURL: tm2scratchInsetIconURL,
+    //     description: (
+    //         <FormattedMessage
+    //             defaultMessage="Use Teachable Machine to recognize images and sounds."
+    //             description="Description for the 'Teachable Machine' extension"
+    //             id="gui.extension.tm2scratch.description"
+    //         />
+    //     ),
+    //     featured: true
+    // },
     // {
     //     name: 'Teachable Machine Pose',
     //     extensionId: 'tmpose2scratch',
