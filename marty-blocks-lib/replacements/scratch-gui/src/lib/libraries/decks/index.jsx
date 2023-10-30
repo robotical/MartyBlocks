@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 // translated in thumbnails.
 
 // Text to Speech
-import libraryTXTSpeech from './thumbnails/text-to-speech.jpg';
+import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
 
 
 export default {
