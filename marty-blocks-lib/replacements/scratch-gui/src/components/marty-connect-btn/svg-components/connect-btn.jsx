@@ -23,7 +23,7 @@ class ConnectBtnSVG extends React.Component {
             ry="9.1484"
             fill="#37abc8"
             stroke="#050505"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
           />
           <rect
             x="15.2596"
@@ -35,8 +35,8 @@ class ConnectBtnSVG extends React.Component {
             transform="translate(51.4612 12.2835) rotate(90)"
             fill="#a1d5e3"
             stroke="#020202"
-            stroke-miterlimit="10"
-            stroke-width=".25"
+            strokeMiterlimit="10"
+            strokeWidth=".25"
           />
           <circle
             cx="15.7005"
@@ -44,8 +44,8 @@ class ConnectBtnSVG extends React.Component {
             r="4.3613"
             fill="#70888e"
             stroke="#020202"
-            stroke-miterlimit="10"
-            stroke-width=".25"
+            strokeMiterlimit="10"
+            strokeWidth=".25"
           />
           <g>
             <path
@@ -136,8 +136,8 @@ class ConnectBtnSVG extends React.Component {
             ry="7.0013"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
-            stroke-width=".25"
+            strokeMiterlimit="10"
+            strokeWidth=".25"
           />
         </svg>
       </div>

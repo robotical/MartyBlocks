@@ -11,9 +11,10 @@ export NODE_OPTIONS="--max-old-space-size=5120"
 alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
 export PATH=$(pyenv root)/shims:$PATH
-
 ## install python 2 and add it to path
 ## install Java Runtime Environment (JRE)
+
+# restoreScratch && installScratch && installMBLib && npmlinkAll && cpWebWorker && buildAllAndStart
 
 ##################### Steps to set up the project #######################
 
@@ -42,7 +43,7 @@ restoreScratch() {
 installScratch() {
     cd $blocks_original && npm install 
     cd $vm_original && npm install && npm install soundtouchjs@0.1.30
-    cd $gui_original && npm install && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
+    cd $gui_original && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
 }
 
 # Step 3: Install marty blocks library
@@ -54,10 +55,15 @@ installMBLib() {
 # Step 4: Link repositories
 npmlinkAll() {
     # local type="${1:-all"}
-    cd $mblib && npm link
+    cd $mblib && npm link # && npm link ../../marty-machine-lib
     cd $blocks_original && npm link && npm link marty-blocks-lib
     cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
     cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
+}
+
+# Step 4.1: Copy web worker of marty machine into scratch gui static
+cpWebWorker() {
+    cp $mblib/node_modules/@robotical/marty-machine-lib/dist/assets/* $gui_original/static
 }
 
 # Step 5: build all repositories and start scratch gui

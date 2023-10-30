@@ -16,6 +16,7 @@ import {
     BLOCKS_TAB_INDEX,
     COSTUMES_TAB_INDEX,
     SOUNDS_TAB_INDEX,
+    MARTY_MACHINE_TAB_INDEX,
     SAVE_LOAD_TAB_INDEX
 } from '../reducers/editor-tab';
 
@@ -146,6 +147,7 @@ const mapStateToProps = state => {
         loadingStateVisible: state.scratchGui.modals.loadingProject,
         projectId: state.scratchGui.projectState.projectId,
         saveLoadTabVisible: state.scratchGui.editorTab.activeTabIndex === SAVE_LOAD_TAB_INDEX,
+        martyMachineTabVisible: state.scratchGui.editorTab.activeTabIndex === MARTY_MACHINE_TAB_INDEX,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
         targetIsStage: (
             state.scratchGui.targets.stage &&
@@ -162,6 +164,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
+    onActivateMartyMachineTab: () => dispatch(activateTab(MARTY_MACHINE_TAB_INDEX)),
     onActivateSaveLoadTab: () => dispatch(activateTab(SAVE_LOAD_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),

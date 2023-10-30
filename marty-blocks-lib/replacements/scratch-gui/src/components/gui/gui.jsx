@@ -19,6 +19,7 @@ import Blocks from "../../containers/blocks.jsx";
 import CostumeTab from "../../containers/costume-tab.jsx";
 import TargetPane from "../../containers/target-pane.jsx";
 import SoundTab from "../../containers/sound-tab.jsx";
+import MartyMachineTab from "../../containers/marty-machine-tab.jsx";
 import SaveLoadTab from "../../containers/save-load-tab.jsx";
 import StageWrapper from "../../containers/stage-wrapper.jsx";
 import Loader from "../loader/loader.jsx";
@@ -49,6 +50,7 @@ import codeIcon from "./icon--code.svg";
 import costumesIcon from "./icon--costumes.svg";
 import soundsIcon from "./icon--sounds.svg";
 import saveIcon from "./icon--save.svg";
+import martyMachineIcon from "./icon--marty-machine.svg";
 
 import Controls from "../../containers/controls.jsx";
 import StageHeader from "../../containers/editor-stagesize-header.jsx";
@@ -116,6 +118,7 @@ const GUIComponent = (props) => {
     onActivateCostumesTab,
     onActivateSaveLoadTab,
     onActivateSoundsTab,
+    onActivateMartyMachineTab,
     onActivateTab,
     onClickLogo,
     onExtensionButtonClick,
@@ -129,6 +132,7 @@ const GUIComponent = (props) => {
     onTelemetryModalOptIn,
     onTelemetryModalOptOut,
     saveLoadTabVisible,
+    martyMachineTabVisible,
     showComingSoon,
     soundsTabVisible,
     stageSizeForSensors,
@@ -297,13 +301,24 @@ const GUIComponent = (props) => {
                       </Tab>
                       <Tab
                         className={tabClassNames.tab}
+                        onClick={onActivateMartyMachineTab}
+                      >
+                        <img draggable={false} src={martyMachineIcon} />
+                        <FormattedMessage
+                          defaultMessage="Machine Learning"
+                          description="Button to toggle Machine Learning tab"
+                          id="gui.gui.toggleMartyMachineTab"
+                        />
+                      </Tab>
+                      <Tab
+                        className={tabClassNames.tab}
                         onClick={onActivateSaveLoadTab}
                       >
                         <img draggable={false} src={saveIcon} />
                         <FormattedMessage
-                          defaultMessage="Save / Load"
+                          defaultMessage="Save/Load"
                           description="Button to toggle save/load tab"
-                          id="gui.gui.toggleSpriteTab"
+                          id="gui.gui.toggleSaveLoadTab"
                         />
                       </Tab>
                       <LanguageStandalone
@@ -359,6 +374,9 @@ const GUIComponent = (props) => {
                     </TabPanel>
                     <TabPanel className={tabClassNames.tabPanel}>
                       {soundsTabVisible ? <SoundTab vm={vm} /> : null}
+                    </TabPanel>
+                    <TabPanel className={tabClassNames.tabPanel}>
+                      {martyMachineTabVisible ? <MartyMachineTab vm={vm} /> : null}
                     </TabPanel>
                     <TabPanel
                       className={[
@@ -440,6 +458,8 @@ GUIComponent.propTypes = {
   logo: PropTypes.string,
   onActivateCostumesTab: PropTypes.func,
   onActivateSoundsTab: PropTypes.func,
+  onActivateMartyMachineTab: PropTypes.func,
+  onActivateSaveLoadTab: PropTypes.func,
   onActivateTab: PropTypes.func,
   onClickAccountNav: PropTypes.func,
   onClickLogo: PropTypes.func,
@@ -458,6 +478,7 @@ GUIComponent.propTypes = {
   onTelemetryModalOptOut: PropTypes.func,
   onToggleLoginOpen: PropTypes.func,
   renderLogin: PropTypes.func,
+  martyMachineTabVisible: PropTypes.bool,
   saveLoadTabVisible: PropTypes.bool,
   showComingSoon: PropTypes.bool,
   soundsTabVisible: PropTypes.bool,

@@ -1,0 +1,69 @@
+
+/* PREDICTIONS */
+.predictions {
+    height: 100%;
+    max-width: 183px;
+    width: 200px;
+    margin-left: 10px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.predictionsTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.predictionsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.predictionsRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.predictionsLabel {
+    flex: 1;
+    font-size: 12px;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.predictionsValue {
+    flex: 3;
+    height: 24px;
+    background-color: #ddd;
+    position: relative;
+    width: 100%;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.predictionsValue::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: hsla(215, 100%, 65%, 1);
+    width: var(--dynamic-width, calc(0 * 100%));
+    /* border-radius only on right top and bottom corners */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.predictionsValue::after {
+    content: var(--dynamic-content, "0%");
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 10px;
+}

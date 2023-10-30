@@ -65,7 +65,7 @@ jobs:
         run: |
           cd ${{ env.blocks_original }} && npm install 
           cd ${{ env.vm_original }} && npm install && npm install soundtouchjs@0.1.30
-          cd ${{ env.gui_original }} && npm install && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
+          cd ${{ env.gui_original }} && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
 
       - name: Install marty blocks library
         run: |
@@ -83,6 +83,15 @@ jobs:
           cd ${{ env.blocks_original }} && npm link && npm link marty-blocks-lib
           cd ${{ env.vm_original }} && npm link && npm link marty-blocks-lib scratch-blocks
           cd ${{ env.gui_original }} && npm link marty-blocks-lib scratch-blocks scratch-vm
+
+      - name: Copy marty-machine web workder 
+        run: |
+          cp ${{ env.mblib }}/node_modules/@robotical/marty-machine-lib/dist/assets/* ${{ env.gui_original }}/static
+        
+      - name: Print web worker files
+        run: |
+          cd ${{ env.gui_original }}
+          ls -l ${{ env.gui_original }}/static
 
       - name: check if scracth-blocks linking worked
         run: |
