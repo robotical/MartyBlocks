@@ -9,10 +9,7 @@ const Clone = require("../../util/clone");
 const log = require("../../util/log");
 const fetchWithTimeout = require("../../util/fetch-with-timeout");
 const Scratch3Mv2Blocks = require("marty-blocks-lib/src/Scratch3Mv2Blocks");
-// import { PitchShifter } from 'soundtouchjs';
-const SimpleFilter = require("soundtouchjs").SimpleFilter;
 const PitchShifter = require("soundtouchjs").PitchShifter;
-const SoundTouch = require("soundtouchjs").SoundTouch;
 
 /**
  * Icon svg to be displayed in the blocks category menu, encoded as a data URI.

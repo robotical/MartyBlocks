@@ -35,7 +35,7 @@
   align-items: center;
   height: 100%;
   border-radius: 4px;
-  margin: 1px;
+  /* margin: 1px; */
 }
 
 .battery-signal-container {

@@ -65,7 +65,7 @@ jobs:
         run: |
           cd ${{ env.blocks_original }} && npm install 
           cd ${{ env.vm_original }} && npm install && npm install soundtouchjs@0.1.30
-          cd ${{ env.gui_original }} && npm install && npm i uglifyjs-webpack-plugin@2.2.0
+          cd ${{ env.gui_original }} && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
 
       - name: Install marty blocks library
         run: |
@@ -112,20 +112,26 @@ jobs:
         run: |
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
+      - name: Remove unused assets
+        run: |
+          cd ${{ env.gui_original }}
+          rm -f src/lib/libraries/decks/thumbnails/*
+          rm -f src/lib/libraries/decks/steps/*
+
       - name: Build Blocks
         run: |
           cd ${{ env.blocks_original }}
-          npm run prepublish
+          NODE_ENV=production npm run prepublish
 
       - name: Build VM
         run: |
           cd ${{ env.vm_original }}
-          npm run build
+          NODE_ENV=production npm run build
           
       - name: Build Scratch
         run: |
           cd ${{ env.gui_original }}
-          BUILD_MODE=dist npm run build
+          NODE_ENV=production npm run build
 
       - name: print gui components
         run: |

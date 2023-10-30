@@ -5,11 +5,14 @@ const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
 const Cast = require("./util/cast");
 const Color = require("./util/color");
-const meSpeak = require("./util/mespeak");
+// const meSpeak = require("./util/mespeak"); // for text to speech locally -- removed as we don't use it anymore
+const { Project } = require("@robotical/scratch-to-python-transpiler");
+
 
 mv2Interface = new Mv2Interface();
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine(); 
+pythonTranspiler = Project; 
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality
 
@@ -1222,34 +1225,34 @@ class Scratch3Mv2Blocks {
     if (isOnAir) return "air";
     else {
       const colours = [
-        { hue: [0, 10], chroma: [75, 200], clear: [40, 150], name: "red" },
+        { hue: [0, 10], chroma: [60, 200], clear: [40, 150], name: "red" },
         {
           hue: [20, 50],
-          chroma: [75, 300],
+          chroma: [40, 300],
           clear: [100, 255],
           name: "yellow",
         },
         {
           hue: [85, 160],
-          chroma: [10, 100],
-          clear: [40, 150],
+          chroma: [5, 100],
+          clear: [25, 150],
           name: "green",
         },
         {
-          hue: [190, 220],
-          chroma: [70, 230],
-          clear: [70, 255],
+          hue: [180, 220],
+          chroma: [45, 230],
+          clear: [55, 255],
           name: "blue",
         },
         {
-          hue: [210, 320],
-          chroma: [10, 70],
-          clear: [30, 150],
+          hue: [200, 320],
+          chroma: [0, 50],
+          clear: [25, 150],
           name: "purple",
         },
         {
           hue: [345, 361],
-          chroma: [75, 200],
+          chroma: [60, 200],
           clear: [40, 150],
           name: "red",
         },
@@ -1995,72 +1998,75 @@ class Scratch3Mv2Blocks {
     }
   }
 
-  static async speech2TextLocally(voice, words, target, isMarty) {
-    // voice: "ALTO f" | "KITTEN f" | "SQUEAK f" | "TENOR m" | "GIANT m"
-    let variant;
-    if (voice === "ALTO") {
-      variant = "whisperf";
-    } else if (voice === "KITTEN") {
-      variant = "f5";
-    } else if (voice === "SQUEAK") {
-      variant = "f2";
-    } else if (voice === "TENOR") {
-      variant = "m1";
-    } else if (voice === "GIANT") {
-      variant = "m7";
-    } else {
-      variant = "f1";
-    }
+  /**
+   * @DEPRECATED
+   */
+  // static async speech2TextLocally(voice, words, target, isMarty) {
+  //   // voice: "ALTO f" | "KITTEN f" | "SQUEAK f" | "TENOR m" | "GIANT m"
+  //   let variant;
+  //   if (voice === "ALTO") {
+  //     variant = "whisperf";
+  //   } else if (voice === "KITTEN") {
+  //     variant = "f5";
+  //   } else if (voice === "SQUEAK") {
+  //     variant = "f2";
+  //   } else if (voice === "TENOR") {
+  //     variant = "m1";
+  //   } else if (voice === "GIANT") {
+  //     variant = "m7";
+  //   } else {
+  //     variant = "f1";
+  //   }
 
-    meSpeak.loadVoice(require("./util/mespeak/voices/en/en-us.json"));
-    if (!meSpeak.isConfigLoaded()) {
-      meSpeak.loadConfig(require("./util/mespeak/src/mespeak_config.json"));
-    }
-    if (isMarty) {
-      const uint8Array = meSpeak.speak(words, {
-        rawdata: "buffer",
-        variant: variant,
-        wordgap: 7,
-      });
-      const audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
+  //   meSpeak.loadVoice(require("./util/mespeak/voices/en/en-us.json"));
+  //   if (!meSpeak.isConfigLoaded()) {
+  //     meSpeak.loadConfig(require("./util/mespeak/src/mespeak_config.json"));
+  //   }
+  //   if (isMarty) {
+  //     const uint8Array = meSpeak.speak(words, {
+  //       rawdata: "buffer",
+  //       variant: variant,
+  //       wordgap: 7,
+  //     });
+  //     const audioContext = new (window.AudioContext ||
+  //       window.webkitAudioContext)();
 
-      const audioBuffer = await audioContext.decodeAudioData(uint8Array.buffer);
+  //     const audioBuffer = await audioContext.decodeAudioData(uint8Array.buffer);
 
-      Scratch3Mv2Blocks.increaseVolume(audioBuffer, target.volume / 30);
-      console.log("here");
+  //     Scratch3Mv2Blocks.increaseVolume(audioBuffer, target.volume / 30);
+  //     console.log("here");
 
-      const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(audioBuffer);
-      const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
-        mp3SoundBuffers
-      );
-      mv2Interface.streamAudio(mp3SoundData, audioBuffer.duration * 1000);
-      return new Promise((resolve) => {
-        const timeout = setTimeout(() => {
-          clearTimeout(timeout);
-          resolve();
-        }, audioBuffer.duration * 1000 + 800);
-      });
-    } else {
-      let isFinished;
-      meSpeak.speak(words, {
-        variant: variant,
-        wordgap: 7,
-        callback: function () {
-          isFinished = true;
-        },
-      });
-      return new Promise((resolve) => {
-        // iteratively check if the speech is finished
-        const interval = setInterval(() => {
-          if (isFinished) {
-            clearInterval(interval);
-            resolve();
-          }
-        }, 100);
-      });
-    }
-  }
+  //     const mp3SoundBuffers = Scratch3Mv2Blocks.convertSoundToMP3(audioBuffer);
+  //     const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
+  //       mp3SoundBuffers
+  //     );
+  //     mv2Interface.streamAudio(mp3SoundData, audioBuffer.duration * 1000);
+  //     return new Promise((resolve) => {
+  //       const timeout = setTimeout(() => {
+  //         clearTimeout(timeout);
+  //         resolve();
+  //       }, audioBuffer.duration * 1000 + 800);
+  //     });
+  //   } else {
+  //     let isFinished;
+  //     meSpeak.speak(words, {
+  //       variant: variant,
+  //       wordgap: 7,
+  //       callback: function () {
+  //         isFinished = true;
+  //       },
+  //     });
+  //     return new Promise((resolve) => {
+  //       // iteratively check if the speech is finished
+  //       const interval = setInterval(() => {
+  //         if (isFinished) {
+  //           clearInterval(interval);
+  //           resolve();
+  //         }
+  //       }, 100);
+  //     });
+  //   }
+  // }
 }
 
 class VolumeEffect {

@@ -12,6 +12,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@robotical/marty-machine-lib": "^1.0.4",
+    "@robotical/scratch-to-python-transpiler": "^1.0.9",
     "semver": "^7.3.7"
   },
   "devDependencies": {
