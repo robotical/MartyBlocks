@@ -11,7 +11,7 @@
   "author": "Rob Dobson",
   "license": "Apache-2.0",
   "dependencies": {
-    "@robotical/marty-machine-lib": "^1.0.3",
+    "@robotical/marty-machine-lib": "^1.0.4",
     "semver": "^7.3.7"
   },
   "devDependencies": {

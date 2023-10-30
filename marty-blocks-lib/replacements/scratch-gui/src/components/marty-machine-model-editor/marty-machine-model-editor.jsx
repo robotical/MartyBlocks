@@ -99,6 +99,9 @@ const MartyMachineModelEditor = props => {
                     />
                 </Label>
             </div>
+            <p className={styles.betaTag}>
+                BETA<span className={styles.betaTagSpan}>{" "}(may contain bugs!)</span>
+            </p>
         </div>
         <div className={styles.row}>
             <div className={styles.feedContainer}>

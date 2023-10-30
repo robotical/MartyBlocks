@@ -11,9 +11,10 @@ export NODE_OPTIONS="--max-old-space-size=5120"
 alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
 export PATH=$(pyenv root)/shims:$PATH
-
 ## install python 2 and add it to path
 ## install Java Runtime Environment (JRE)
+
+# restoreScratch && installScratch && installMBLib && npmlinkAll && cpWebWorker && buildAllAndStart
 
 ##################### Steps to set up the project #######################
 
@@ -63,7 +64,6 @@ npmlinkAll() {
 # Step 4.1: Copy web worker of marty machine into scratch gui static
 cpWebWorker() {
     cp $mblib/node_modules/@robotical/marty-machine-lib/dist/assets/* $gui_original/static
-
 }
 
 # Step 5: build all repositories and start scratch gui

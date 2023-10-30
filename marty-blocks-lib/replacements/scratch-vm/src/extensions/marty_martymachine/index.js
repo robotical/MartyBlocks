@@ -576,6 +576,7 @@ class MartyMachineBlocks {
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
         this.model = model;
+        this.toggleClassification({CLASSIFICATION_STATE: 'on'});
         if (model?.modelType === "image-device") {
             // this.runtime.ioDevices.video.enableVideo();
             const media = navigator.mediaDevices.getUserMedia({
