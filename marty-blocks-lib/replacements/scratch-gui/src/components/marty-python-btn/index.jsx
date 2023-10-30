@@ -21,7 +21,10 @@ class MartyPythonButton extends React.Component {
     componentDidMount() {
         pythonTranspiler.setModal = (code) => {
             this.setState({ code: code });
-            // this.setState({ modalVisible: true });
+            this.props.onOpenPythonModal(<PythonCodeModal
+                code={this.state.code}
+            />, "Python (βeta -- May contain bugs!)", () => this.setState({ helpModalVisible: true }));
+            
         }
     }
 
