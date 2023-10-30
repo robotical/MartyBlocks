@@ -1225,7 +1225,7 @@ class Scratch3Mv2Blocks {
     if (isOnAir) return "air";
     else {
       const colours = [
-        { hue: [0, 10], chroma: [60, 200], clear: [40, 150], name: "red" },
+        { hue: [0, 10], chroma: [50, 200], clear: [40, 150], name: "red" },
         {
           hue: [20, 50],
           chroma: [40, 300],
@@ -1240,19 +1240,19 @@ class Scratch3Mv2Blocks {
         },
         {
           hue: [180, 220],
-          chroma: [45, 230],
+          chroma: [40, 230],
           clear: [55, 255],
           name: "blue",
         },
         {
           hue: [200, 320],
-          chroma: [0, 50],
+          chroma: [0, 40],
           clear: [25, 150],
           name: "purple",
         },
         {
           hue: [345, 361],
-          chroma: [60, 200],
+          chroma: [50, 200],
           clear: [40, 150],
           name: "red",
         },
