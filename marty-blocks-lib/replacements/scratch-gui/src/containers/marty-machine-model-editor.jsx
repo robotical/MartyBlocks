@@ -214,9 +214,10 @@ class MartyMachineModelEditor extends React.Component {
         // selectedClass = MODEL_CLASSES.find(c => c.name === this.state.className);
         this.isRecording = true;
         this.setState({});
+        
         if (this.props.modelType === 'image-device') {
             const RECORD_TIME = 2000;
-            const INTERVAL_TIME = 30;
+            const INTERVAL_TIME = 60;
             const videoElement = this.deviceStreamRef;
             const canvas = this.canvasRef;
             const ctx = canvas.getContext('2d');
