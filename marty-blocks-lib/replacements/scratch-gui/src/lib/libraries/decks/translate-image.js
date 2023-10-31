@@ -3,7 +3,7 @@
  * Utility functions for handling tutorial images in multiple languages
  */
 
-// import {enImages as defaultImages} from './en-steps.js';
+import {enImages as defaultImages} from './en-steps.js';
 
 let savedImages = {};
 let savedLocale = '';
