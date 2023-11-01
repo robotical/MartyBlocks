@@ -17,7 +17,8 @@ import {
     COSTUMES_TAB_INDEX,
     SOUNDS_TAB_INDEX,
     MARTY_MACHINE_TAB_INDEX,
-    SAVE_LOAD_TAB_INDEX
+    SAVE_LOAD_TAB_INDEX,
+    CODE_ASSESS_TAB_INDEX
 } from '../reducers/editor-tab';
 
 import {
@@ -47,6 +48,10 @@ class GUI extends React.Component {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
+
+        // check if we have google classroom parameters in the URL
+        // if so, we need to log in the user
+        codeAssess.API.connectionAPI.getAuthCode(this.props.onActivateCodeAssessTab);
     }
     componentDidUpdate (prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
@@ -148,6 +153,7 @@ const mapStateToProps = state => {
         projectId: state.scratchGui.projectState.projectId,
         saveLoadTabVisible: state.scratchGui.editorTab.activeTabIndex === SAVE_LOAD_TAB_INDEX,
         martyMachineTabVisible: state.scratchGui.editorTab.activeTabIndex === MARTY_MACHINE_TAB_INDEX,
+        codeAssessTabVisible: state.scratchGui.editorTab.activeTabIndex === CODE_ASSESS_TAB_INDEX,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
         targetIsStage: (
             state.scratchGui.targets.stage &&
@@ -165,6 +171,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onActivateMartyMachineTab: () => dispatch(activateTab(MARTY_MACHINE_TAB_INDEX)),
+    onActivateCodeAssessTab: () => dispatch(activateTab(CODE_ASSESS_TAB_INDEX)),
     onActivateSaveLoadTab: () => dispatch(activateTab(SAVE_LOAD_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),

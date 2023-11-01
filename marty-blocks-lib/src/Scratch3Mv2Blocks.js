@@ -1,5 +1,6 @@
 const Mv2Interface = require("./Mv2Interface");
 const MartyMachine = require("./MartyMachine");
+const CodeAssess = require("./code-assess/CodeAssess");
 const MSTTesting = require("./MSTTesting");
 const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
@@ -12,6 +13,7 @@ const { Project } = require("@robotical/scratch-to-python-transpiler");
 mv2Interface = new Mv2Interface();
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine(); 
+codeAssess = new CodeAssess();
 pythonTranspiler = Project; 
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality

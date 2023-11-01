@@ -1,0 +1,62 @@
+.outer-container {
+    display: grid;
+    grid-area: details-card;
+    width: 90%;
+    min-width: 300px;
+    height: 100%;
+    max-height: 400px;
+    align-self: center;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: 2px 2px 5px 5px rgba(0,0,0,.5);
+    align-items: start;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    grid-template-rows: min-content 1fr;
+}
+
+.title-row {
+    display: grid;
+    grid-auto-flow: column;
+    position: relative;
+    padding: 20px;
+    background-color: #D9E3F2;
+}
+
+.title-row p {
+    font-size: 30px;
+    text-align: right;
+}
+
+.content-row {
+    background-color: #4C97FF;
+    height: 100%;
+}
+
+
+.detailsParagraphContainer {
+    padding: 20px;
+}
+
+.paragraphTitle {
+    font-size: 20px;
+}
+
+.paragraphIntense {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.paragraph {
+    font-size: 18px;
+}
+
+.marty-img {
+    width: 150px;
+    position: absolute;
+    top: -30px;
+    left: -30px;   
+}
+
+.marty-img-container {
+    /* width: 150px; */
+}

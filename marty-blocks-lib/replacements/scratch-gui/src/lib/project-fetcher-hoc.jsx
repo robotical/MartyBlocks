@@ -15,7 +15,7 @@ import {
   projectError,
   setProjectId,
 } from "../reducers/project-state";
-import { activateTab, BLOCKS_TAB_INDEX } from "../reducers/editor-tab";
+import { activateTab, BLOCKS_TAB_INDEX, CODE_ASSESS_TAB_INDEX } from "../reducers/editor-tab";
 
 import storage from "./storage";
 
@@ -69,7 +69,10 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         this.props.isShowingProject &&
         (prevProps.isLoadingProject || prevProps.isCreatingNew)
       ) {
-        this.props.onActivateTab(BLOCKS_TAB_INDEX);
+        // activate blocks tab only if we are not on code assess tab
+        if (this.props.activeTabIndex !== CODE_ASSESS_TAB_INDEX) {
+          this.props.onActivateTab(BLOCKS_TAB_INDEX);
+        }
       }
     }
 
@@ -174,6 +177,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
   };
 
   const mapStateToProps = (state) => ({
+    activeTabIndex: state.scratchGui.editorTab.activeTabIndex,
     isCreatingNew: getIsCreatingNew(state.scratchGui.projectState.loadingState),
     isFetchingWithId: getIsFetchingWithId(
       state.scratchGui.projectState.loadingState

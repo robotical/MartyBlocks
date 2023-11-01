@@ -1,0 +1,21 @@
+.userLogin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.userLoginTitle {
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+.userLoginInput {
+    margin-bottom: 1em;
+}
+.userLoginInputTitle {
+    margin-bottom: 0.5em;
+}
+.userLoginButton {
+    margin-top: 1em;
+}

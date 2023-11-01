@@ -51,6 +51,7 @@ import costumesIcon from "./icon--costumes.svg";
 import soundsIcon from "./icon--sounds.svg";
 import saveIcon from "./icon--save.svg";
 import martyMachineIcon from "./icon--marty-machine.svg";
+import codeAssessIcon from "./icon--code-assess.svg";
 
 import Controls from "../../containers/controls.jsx";
 import StageHeader from "../../containers/editor-stagesize-header.jsx";
@@ -59,6 +60,7 @@ import MonitorList from "../../containers/monitor-list.jsx";
 import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 import MartyPythonButton from "../marty-python-btn/index.jsx";
+import CodeAssessTab from "../../containers/code-assess-tab.jsx";
 
 const messages = defineMessages({
   addExtension: {
@@ -118,6 +120,7 @@ const GUIComponent = (props) => {
     onActivateCostumesTab,
     onActivateSaveLoadTab,
     onActivateSoundsTab,
+    onActivateCodeAssessTab,
     onActivateMartyMachineTab,
     onActivateTab,
     onClickLogo,
@@ -132,6 +135,7 @@ const GUIComponent = (props) => {
     onTelemetryModalOptIn,
     onTelemetryModalOptOut,
     saveLoadTabVisible,
+    codeAssessTabVisible,
     martyMachineTabVisible,
     showComingSoon,
     soundsTabVisible,
@@ -312,6 +316,17 @@ const GUIComponent = (props) => {
                       </Tab>
                       <Tab
                         className={tabClassNames.tab}
+                        onClick={onActivateCodeAssessTab}
+                      >
+                        <img draggable={false} src={codeAssessIcon} />
+                        <FormattedMessage
+                          defaultMessage="Code Assessment"
+                          description="Button to toggle Code Assessment tab"
+                          id="gui.gui.toggleCodeAssessTab"
+                        />
+                      </Tab>
+                      <Tab
+                        className={tabClassNames.tab}
                         onClick={onActivateSaveLoadTab}
                       >
                         <img draggable={false} src={saveIcon} />
@@ -377,6 +392,9 @@ const GUIComponent = (props) => {
                     </TabPanel>
                     <TabPanel className={tabClassNames.tabPanel}>
                       {martyMachineTabVisible ? <MartyMachineTab vm={vm} /> : null}
+                    </TabPanel>
+                    <TabPanel className={tabClassNames.tabPanel}>
+                      {codeAssessTabVisible ? <CodeAssessTab vm={vm} /> : null}
                     </TabPanel>
                     <TabPanel
                       className={[
