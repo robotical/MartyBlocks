@@ -61,7 +61,8 @@ class CodeAssessConnectionAPI {
         // remove params from url
         window.history.replaceState({}, document.title, "/");
         if (googleClassroomCode && verifier) {
-            fetch("http://localhost:3000/exchange", {
+            // fetch("http://localhost:3000/exchange", {
+            fetch("https://ocsqy2jx5b.execute-api.us-east-1.amazonaws.com/prod/exchange_code", {
                 method: "POST",
                 body: JSON.stringify({
                     code: googleClassroomCode,
@@ -77,6 +78,13 @@ class CodeAssessConnectionAPI {
 
                 })
                 .then(data => {
+                    if (data.statusCode === 200) {
+                        try {
+                            data = JSON.parse(data.body);
+                        } catch (e) {
+                            console.log("error parsing data", e);
+                        }
+                    }
                     if (data.success) {
                         console.log("user logged in successfully")
                         this.access_token = data.tokens.access_token;
