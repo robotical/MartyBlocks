@@ -1,12 +1,18 @@
 import React from "react";
 import styles from "./teacher-view.css";
+import bindAll from 'lodash.bindall';
 
 class TeacherView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             teacherClassrooms: [],
+            selectedClassroom: null,
+            selectedClassroomStudents: [],
         };
+        bindAll(this, [
+            'handleClassroomChange',
+        ]);
     }
 
     componentDidMount() {
@@ -15,6 +21,25 @@ class TeacherView extends React.Component {
         });
     }
 
+    // when the component state is changed
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.selectedClassroom !== this.state.selectedClassroom) {
+            this.getStudentsOfClassroom(this.state.selectedClassroom.id);
+        }
+    }
+
+    handleClassroomChange(event) {
+        console.log("handleClassroomChange")
+        this.setState({ selectedClassroom: this.state.teacherClassrooms[event.target.value] });
+    }
+
+    // when the teacherClassrooms state is updated, this function is called
+    async getStudentsOfClassroom(classroomId) {
+        const students = await codeAssess.API.classroomAPI.listStudents(classroomId);
+        this.setState({ selectedClassroomStudents: students });
+    }
+
+
     render() {
         return (
             <div className={styles.outerContainer}>
@@ -22,21 +47,25 @@ class TeacherView extends React.Component {
                     <div className={styles.title}>Teacher View</div>
                     <div className={styles.classroomsContainer}>
                         <div className={styles.classroomsTitle}>Classrooms</div>
-                        <div className={styles.classrooms}>
-                            {this.state.teacherClassrooms.map((classroom) => {
-                                return (
-                                    <div className={styles.classroom} key={classroom.id}>
-                                        <div className={styles.classroomTitle}>{classroom.name}</div>
-                                        <div className={styles.classroomStudents}>
-                                            {classroom.students?.map((student) => {
-                                                return (
-                                                    <div className={styles.classroomStudent} key={student.id}>{student.name}</div>
-                                                );
-                                            })}
-                                        </div>
+                        <div className={styles.dropdownContainer}>
+                            <select className={styles.classroomDropdown}
+                                onChange={this.handleClassroomChange}
+                                value={this.state.selectedClassroom ? this.state.selectedClassroom.id : ""}>
+                                <option value="" disabled>Select a classroom</option>
+                                {this.state.teacherClassrooms.map((classroom, classroomIdx) => (
+                                    <option value={classroomIdx} key={classroom.id}>
+                                        {classroom.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={styles.classroomStudents}>
+                            {this.state.selectedClassroomStudents
+                                .map((student) => (
+                                    <div className={styles.classroomStudent} key={student.profile.id}>
+                                        {student.profile.name.fullName}
                                     </div>
-                                );
-                            })}
+                                ))}
                         </div>
                     </div>
                 </div>

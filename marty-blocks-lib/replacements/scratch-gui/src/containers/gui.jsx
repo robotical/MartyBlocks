@@ -51,7 +51,7 @@ class GUI extends React.Component {
 
         // check if we have google classroom parameters in the URL
         // if so, we need to log in the user
-        codeAssess.API.connectionAPI.getAuthCode(this.props.onActivateCodeAssessTab);
+        // codeAssess.API.connectionAPI.getAuthCode(this.props.onActivateCodeAssessTab);
     }
     componentDidUpdate (prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {

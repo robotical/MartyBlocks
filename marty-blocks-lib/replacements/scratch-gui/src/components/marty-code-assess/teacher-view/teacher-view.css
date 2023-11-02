@@ -1,0 +1,65 @@
+.outerContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+}
+
+.innerContainer {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.classroomsContainer {
+    width: 100%;
+}
+
+.classroomsTitle {
+    font-size: 20px;
+    font-weight: semi-bold;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.dropdownContainer {
+    margin-bottom: 15px;
+}
+
+.classroomDropdown {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+    outline: none;
+}
+
+.classroomDropdown:focus {
+    border-color: #0099ff;
+}
+
+.classroomStudents {
+    margin-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 10px;
+}
+
+.classroomStudent {
+    font-size: 16px;
+    padding: 5px 0;
+    color: #777;
+}
