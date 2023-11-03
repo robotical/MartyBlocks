@@ -22,11 +22,11 @@
     color: #333;
 }
 
-.classroomsContainer {
+.classesContainer {
     width: 100%;
 }
 
-.classroomsTitle {
+.classesTitle {
     font-size: 20px;
     font-weight: semi-bold;
     margin-bottom: 15px;
@@ -37,7 +37,7 @@
     margin-bottom: 15px;
 }
 
-.classroomDropdown {
+.classDropdown {
     width: 100%;
     padding: 8px 12px;
     border: 1px solid #ccc;
@@ -48,17 +48,17 @@
     outline: none;
 }
 
-.classroomDropdown:focus {
+.classDropdown:focus {
     border-color: #0099ff;
 }
 
-.classroomStudents {
+.classStudents {
     margin-top: 15px;
     border-top: 1px solid #e0e0e0;
     padding-top: 10px;
 }
 
-.classroomStudent {
+.classStudent {
     font-size: 16px;
     padding: 5px 0;
     color: #777;

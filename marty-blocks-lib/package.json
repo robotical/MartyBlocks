@@ -13,7 +13,6 @@
   "dependencies": {
     "@robotical/marty-machine-lib": "^1.0.6",
     "@robotical/scratch-to-python-transpiler": "^1.0.10",
-    "js-sha256": "^0.10.1",
     "semver": "^7.3.7"
   },
   "devDependencies": {
