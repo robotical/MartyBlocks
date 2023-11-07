@@ -10,10 +10,11 @@ class TeacherView extends React.Component {
             teacherClassess: [],
             selectedClass: null,
             selectedClassStudents: [],
-            selectedClassCourseWork: [],
         };
         bindAll(this, [
             'handleClassChange',
+            "subscribeToStudentData",
+            "getStudentsOfClass"
         ]);
     }
 
@@ -23,14 +24,16 @@ class TeacherView extends React.Component {
     }
 
     // when the component state is changed
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps, prevState) {
         // when the selectedClass changes
         if (prevState.selectedClass !== this.state.selectedClass) {
             this.getStudentsOfClass();
-            this.getCourseworskOfClass();
+            await codeAssess.createClassIfDoesntExist(this.state.selectedClass.id, this.state.selectedClass.name, this.state.teacher.id);
+            this.subscribeToStudentData();
         }
         // when the teacher changes
         if (prevState.teacher !== this.state.teacher) {
+            codeAssess.createTeacherIfDoesntExist(this.state.teacher.id, this.state.teacher.name);
             this.state.teacher.getListOfClassess().then((classess) => {
                 this.setState({ teacherClassess: classess });
             });
@@ -47,16 +50,18 @@ class TeacherView extends React.Component {
         this.setState({ selectedClassStudents: students });
     }
 
-    // when the teacherClassess state is updated, this function is called
-    async getCourseworskOfClass() {
-        await codeAssess.createDefaultCourseWorkForClass(this.state.selectedClass.id);
-        const courseWork = await this.state.selectedClass.getListOfCourseWorks();
-        this.setState({ selectedClassCourseWork: courseWork });
+    async subscribeToStudentData() {
+        await this.state.selectedClass.appendFetchedStudentDataToStudents();
+        this.state.selectedClass.students.forEach((student) => {
+            student.studentData.subscribeToDbDocChanges((changes) => {
+                console.log(changes);
+            });
+        });
     }
 
     render() {
         return (
-            <div className={styles.outerContainer}>
+            <div className={styles.outerContainer} >
                 <div className={styles.innerContainer}>
                     <div className={styles.title}>Teacher View</div>
                     <div className={styles.teacherContainer}>
@@ -71,7 +76,7 @@ class TeacherView extends React.Component {
                                 value={this.state.selectedClass ? this.state.selectedClass.id : ""}>
                                 <option value="" disabled>Select a class</option>
                                 {this.state.teacherClassess.map((cls, classIdx) => (
-                                    <option value={classIdx} key={cls.id}>
+                                    <option value={classIdx} key={cls.id} selected={this.state.selectedClass?.id === cls.id}>
                                         {cls.name}
                                     </option>
                                 ))}
@@ -82,15 +87,6 @@ class TeacherView extends React.Component {
                                 .map((student) => (
                                     <div className={styles.classStudent} key={student.id}>
                                         {student.name}
-                                    </div>
-                                ))}
-                        </div>
-                        <div className={styles.classCourseWork}>
-                            {this.state.selectedClassCourseWork
-                                .map((courseWork) => (
-                                    <div className={styles.classCourseWorkItem} key={courseWork.id}>
-                                        {courseWork.title}
-                                        <p>{courseWork.description}</p>
                                     </div>
                                 ))}
                         </div>

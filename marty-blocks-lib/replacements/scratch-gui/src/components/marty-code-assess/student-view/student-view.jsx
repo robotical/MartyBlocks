@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./student-view.css";
-import bindAll from 'lodash.bindall';
+import bindAll from "lodash.bindall";
 
 class StudentView extends React.Component {
     constructor(props) {
@@ -10,12 +10,12 @@ class StudentView extends React.Component {
             studentClassess: [],
             selectedClass: null,
             selectedClassStudents: [],
-            selectedClassCourseWorks: [],
-            selectedCourseWork: null,
+            classCode: "",
         };
         bindAll(this, [
-            'handleClassChange',
-            'onAssessMe'
+            "handleClassChange",
+            "onStartSendingStudentData",
+            "onStopSendingStudentData",
         ]);
     }
 
@@ -25,11 +25,15 @@ class StudentView extends React.Component {
     }
 
     // when the component state is changed
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps, prevState) {
         // when the selectedClass changes
         if (prevState.selectedClass !== this.state.selectedClass) {
             this.getStudentsOfClass();
-            this.getCourseworskOfClass();
+            codeAssess.createClassIfDoesntExist(
+                this.state.selectedClass.id,
+                this.state.selectedClass.name,
+                this.state.selectedClass.teacherId
+            );
         }
         // when the student changes
         if (prevState.student !== this.state.student) {
@@ -37,15 +41,34 @@ class StudentView extends React.Component {
                 this.setState({ studentClassess: classess });
             });
         }
-        // when the selectedCourseWork changes
-        if (prevState.selectedCourseWork !== this.state.selectedCourseWork) {
-            console.log("selectedCourseWork changed", this.state.selectedCourseWork);
+        // when the selectedClass changes and the student and selectedClass are not null
+        if (
+            prevState.selectedClass !== this.state.selectedClass &&
+            this.state.selectedClass &&
+            this.state.student
+        ) {
+            await codeAssess.addStudentToClass(
+                this.state.selectedClass.id,
+                this.state.selectedClass.name,
+                this.state.selectedClass.teacherId,
+                this.state.student.id
+            );
+            await codeAssess.createStudentIfDoesntExist(
+                this.state.student.id,
+                this.state.student.name
+            );
+            await codeAssess.createStudentDataIfDoesntExist(
+                this.state.selectedClass.id,
+                this.state.student.id
+            );
         }
     }
 
     handleClassChange(event) {
-        console.log("handleClassChange")
-        this.setState({ selectedClass: this.state.studentClassess[event.target.value] });
+        const classIdx = +event.target.value;
+        this.setState({
+            selectedClass: this.state.studentClassess[classIdx],
+        });
     }
 
     // when the studentClassess state is updated, this function is called
@@ -54,16 +77,14 @@ class StudentView extends React.Component {
         this.setState({ selectedClassStudents: students });
     }
 
-    // when the studentClassess state is updated, this function is called
-    async getCourseworskOfClass() {
-        const courseWork = await this.state.selectedClass.getListOfCourseWorks();
-        this.setState({ selectedClassCourseWorks: courseWork });
+    async onStartSendingStudentData() {
+        const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
+        await studentData.initialiseHeartbeat();
     }
 
-    async onAssessMe() {
-        const assessment = codeAssess.assess(vm.runtime.targets)
-        console.log("assessment", assessment);
-        this.state.student.addAttachmentInCourseWork(this.state.selectedClass.id, this.state.selectedCourseWork.id, JSON.stringify(assessment).repeat(1000));
+    async onStopSendingStudentData() {
+        const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
+        await studentData.stopHeartbeat();
     }
 
     render() {
@@ -73,47 +94,62 @@ class StudentView extends React.Component {
                     <div className={styles.title}>Student View</div>
                     <div className={styles.studentContainer}>
                         <div className={styles.studentTitle}>Student</div>
-                        <div className={styles.studentName}>{this.state.student ? this.state.student.name : ""}</div>
+                        <div className={styles.studentName}>
+                            {this.state.student ? this.state.student.name : ""}
+                        </div>
                     </div>
                     <div className={styles.classessContainer}>
                         <div className={styles.classessTitle}>Classess</div>
                         <div className={styles.dropdownContainer}>
-                            <select className={styles.classDropdown}
+                            <select
+                                className={styles.classDropdown}
                                 onChange={this.handleClassChange}
-                                value={this.state.selectedClass ? this.state.selectedClass.id : ""}>
-                                <option value="" disabled>Select a class</option>
+                                value={
+                                    this.state.selectedClass ? this.state.selectedClass.id : ""
+                                }
+                            >
+                                <option value="" disabled>
+                                    Select a class
+                                </option>
                                 {this.state.studentClassess.map((cls, classIdx) => (
-                                    <option value={classIdx} key={cls.id}>
+                                    <option
+                                        value={classIdx}
+                                        key={cls.id}
+                                    >
                                         {cls.name}
                                     </option>
                                 ))}
                             </select>
                         </div>
                         <div className={styles.classStudents}>
-                            {this.state.selectedClassStudents
-                                .map((student) => (
-                                    <div className={styles.classStudent} key={student.id}>
-                                        {student.name}
-                                    </div>
-                                ))}
-                        </div>
-                        <div className={styles.classCourseWork}>
-                            {this.state.selectedClassCourseWorks
-                                .map((courseWork) => (
-                                    <div className={styles.classCourseWorkItem} key={courseWork.id} onClick={() => this.setState({ selectedCourseWork: courseWork })}>
-                                        {courseWork.title}
-                                        <p>{courseWork.description}</p>
-                                    </div>
-                                ))}
-                            {this.state.selectedCourseWork && <button onClick={this.onAssessMe}>Assess me</button>}
+                            {this.state.selectedClassStudents.map((student) => (
+                                <div className={styles.classStudent} key={student.id}>
+                                    {student.name}
+                                </div>
+                            ))}
                         </div>
                     </div>
+                    {!!this.state.selectedClass && (
+                        <div className={styles.studentDataButtons}>
+                            <div
+                                className={styles.studentDataButton}
+                                onClick={this.onStartSendingStudentData}
+                            >
+                                Start Sending Data
+                            </div>
+                            <div
+                                className={styles.studentDataButton}
+                                onClick={this.onStopSendingStudentData}
+                            >
+                                Stop Sending Data
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         );
     }
 }
-
 
 export default StudentView;
 
@@ -135,7 +171,7 @@ export default StudentView;
 //         this.openModal = this.openModal.bind(this);
 //         this.totalScore = this.totalScore.bind(this);
 //     }
-    
+
 //     closeModal() {
 //         this.setState({ showModal: false });
 //     }
@@ -181,6 +217,5 @@ export default StudentView;
 //         );
 //     }
 // }
-
 
 // export default StudentView;

@@ -9,7 +9,7 @@ class UserLogin extends React.Component {
     }
 
     onLogin() {
-        codeAssess.API.connectionAPI.login();
+        codeAssess.logUserIn();
     }
 
     render() {
@@ -23,10 +23,8 @@ class UserLogin extends React.Component {
 }
 
 
-UserLogin.propTypes = {
+UserLogin.propTypes = {};
 
-  };
-  
 
 
 export default UserLogin;
