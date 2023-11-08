@@ -1,4 +1,5 @@
 import React from "react";
+import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import VM from "scratch-vm";
 import styles from "./marty-code-assess.css";
@@ -9,17 +10,31 @@ import TeacherView from "./teacher-view/teacher-view.jsx";
 const STUDENT_OR_TEACHER_SUBSCRIPTION = "studentOrTeacherChanged";
 const IS_USER_LOGGED_IN_SUBSCRIPTION = "isUserLoggedInChanged";
 
+
+const messages = defineMessages({
+  student: {
+    defaultMessage: "Student",
+    description: "Button to select student view",
+    id: "gui.martyCodeAssess.studentOrTeacherButtons.student",
+  },
+  teacher: {
+    defaultMessage: "Teacher",
+    description: "Button to select teacher view",
+    id: "gui.martyCodeAssess.studentOrTeacherButtons.teacher",
+  },
+});
+
+
+
 class MartyCodeAssess extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scores: codeAssess.assess(vm.runtime.targets),
-      showModal: false,
-      modalData: { content: null, title: "" },
+      // scores: codeAssess.assess(vm.runtime.targets),
+      // showModal: false,
+      // modalData: { content: null, title: "" },
     };
-    this.closeModal = this.closeModal.bind(this);
-    this.openModal = this.openModal.bind(this);
-    this.totalScore = this.totalScore.bind(this);
+    // this.totalScore = this.totalScore.bind(this);
   }
 
   componentDidMount() {
@@ -36,32 +51,25 @@ class MartyCodeAssess extends React.Component {
     this.setState({});
   }
 
-  closeModal() {
-    this.setState({ showModal: false });
-  }
-
-  openModal(modalData) {
-    this.setState({ showModal: true, modalData: modalData });
-  }
-
-  totalScore() {
-    let total = 0;
-    Object.keys(this.state.scores).forEach(categoryKey => {
-      total += this.state.scores[categoryKey];
-    })
-    return total;
-  }
+  // totalScore() {
+  //   let total = 0;
+  //   Object.keys(this.state.scores).forEach(categoryKey => {
+  //     total += this.state.scores[categoryKey];
+  //   })
+  //   return total;
+  // }
 
   render() {
+    const { intl } = this.props;
     let studentOrTeacherJSX = null;
     if (codeAssess.studentOrTeacher === "teacher") {
       studentOrTeacherJSX = <TeacherView />;
     } else if (codeAssess.studentOrTeacher === "student") {
       studentOrTeacherJSX = <StudentView />;
     } else {
-      studentOrTeacherJSX = <div>
-        <button onClick={() => codeAssess.setStudentOrTeacher("teacher")}>Teacher</button>
-        <button onClick={() => codeAssess.setStudentOrTeacher("student")}>Student</button>
+      studentOrTeacherJSX = <div className={styles.studentOrTeacherButtonsContainer}>
+        <button onClick={() => codeAssess.setStudentOrTeacher("teacher")}>{intl.formatMessage(messages.teacher)}</button>
+        <button onClick={() => codeAssess.setStudentOrTeacher("student")}>{intl.formatMessage(messages.student)}</button>
       </div>;
     }
 
@@ -82,7 +90,8 @@ class MartyCodeAssess extends React.Component {
 
 MartyCodeAssess.propTypes = {
   vm: PropTypes.instanceOf(VM).isRequired,
+  intl: intlShape.isRequired,
 };
 
 
-export default MartyCodeAssess;
+export default injectIntl(MartyCodeAssess);

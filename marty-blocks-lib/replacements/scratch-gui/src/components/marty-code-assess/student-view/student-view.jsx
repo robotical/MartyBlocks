@@ -16,6 +16,7 @@ class StudentView extends React.Component {
             "handleClassChange",
             "onStartSendingStudentData",
             "onStopSendingStudentData",
+            "onSendAssessment"
         ]);
     }
 
@@ -66,6 +67,7 @@ class StudentView extends React.Component {
 
     handleClassChange(event) {
         const classIdx = +event.target.value;
+        codeAssess.student.setJoinedClass(this.state.studentClassess[classIdx]?.id || "");
         this.setState({
             selectedClass: this.state.studentClassess[classIdx],
         });
@@ -85,6 +87,12 @@ class StudentView extends React.Component {
     async onStopSendingStudentData() {
         const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
         await studentData.stopHeartbeat();
+    }
+
+    async onSendAssessment() {
+        const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
+        const assessment = codeAssess.assess(vm.runtime.targets);
+        await studentData.sendStudentAssessmentScores(assessment);
     }
 
     render() {
@@ -143,6 +151,11 @@ class StudentView extends React.Component {
                             >
                                 Stop Sending Data
                             </div>
+                        </div>
+                    )}
+                    {!!this.state.selectedClass && (
+                        <div className={styles.assessStudentContainer}>
+                            <button className={styles.assessStudentBtn} onClick={this.onSendAssessment}>Send Assessment</button>
                         </div>
                     )}
                 </div>

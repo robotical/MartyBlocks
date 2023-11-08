@@ -87,6 +87,12 @@ const vmListenerHOC = function (WrappedComponent) {
                 this.props.onProjectChanged();
             }
             this.autoSaveProject();
+            this.assessStudent();
+        }
+        async assessStudent() {
+            const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
+            const assessment = codeAssess.assess(vm.runtime.targets);
+            await studentData.sendStudentAssessmentScores(assessment);
         }
         autoSaveProject () {
             // eslint-disable-next-line no-console
