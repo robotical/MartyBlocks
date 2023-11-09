@@ -576,7 +576,6 @@ class MartyMachineBlocks {
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
         this.model = model;
-        this.toggleClassification({CLASSIFICATION_STATE: 'on'});
         if (model?.modelType === "image-device") {
             // this.runtime.ioDevices.video.enableVideo();
             const media = navigator.mediaDevices.getUserMedia({
@@ -595,12 +594,14 @@ class MartyMachineBlocks {
             this.imageModelUrl = null;
             this.imageClassifier = new ImageClassifier(model);
             log.info(`Loaded image model: ${model.name}`);
+            this.toggleClassification({CLASSIFICATION_STATE: 'on'});
             return `"${model.name}" Loaded!`;
         } else if (model?.modelType === "audio") {
             this.soundMetadata = this.createAudioModelMetadataFromModelDependencies(model.name, model.dependencies);
             this.soundModelUrl = null;
             this.soundClassifier = new SoundClassifier(model);
             log.info(`Loaded sound model: ${model.name}`);
+            this.toggleClassification({CLASSIFICATION_STATE: 'on'});
             return `"${model.name}" Loaded!`;
         }
     }
