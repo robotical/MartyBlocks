@@ -35,7 +35,7 @@ class ClassStudent extends React.Component {
 
     componentDidMount() {
         // comment this out for development so we don't make too many requests to the db
-        heartBeatInterval = setInterval(this.fetchStudentData.bind(this), HEART_BEAT_CHECK_INTERVAL);
+        // heartBeatInterval = setInterval(this.fetchStudentData.bind(this), HEART_BEAT_CHECK_INTERVAL);
         this.fetchStudentData();
     }
 

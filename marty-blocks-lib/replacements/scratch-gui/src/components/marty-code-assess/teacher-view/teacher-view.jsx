@@ -6,6 +6,7 @@ import { defineMessages, intlShape, injectIntl } from "react-intl";
 import classroomIcon from "../../../lib/assets/icon--classroom.svg";
 import helpIcon from "../../../lib/assets/icon--tutorials.svg";
 import ClassStudent from "./class-student/class-student.jsx";
+import LiveStreamTab from "./live-stream-tab/live-stream-tab.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -22,12 +23,12 @@ class TeacherView extends React.Component {
             teacherClassess: [],
             selectedClassIdx: 0,
             selectedClassStudents: [],
+            selectedTab: "Overview",
         };
         bindAll(this, [
             'handleClassChange',
-            "subscribeToStudentData",
-            "getStudentsOfClass",
-            "removeStudentDataSubscription"
+            'getStudentsOfClass',
+            'onSelectTab'
         ]);
     }
 
@@ -67,27 +68,13 @@ class TeacherView extends React.Component {
         this.setState({ selectedClassStudents: students });
     }
 
-    async subscribeToStudentData() {
-        const selectedClass = this.state.teacherClassess[this.state.selectedClassIdx];
-        await selectedClass.appendFetchedStudentDataToStudents();
-        selectedClass.students.forEach((student) => {
-            student.studentData.subscribeToDbDocChanges((changes) => {
-                console.log(changes);
-            });
-        });
-    }
-
-    async removeStudentDataSubscription() {
-        const selectedClass = this.state.teacherClassess[this.state.selectedClassIdx];
-        selectedClass.students.forEach((student) => {
-            student.studentData.unsubscribeFromDbDocChanges();
-        });
+    onSelectTab(tab) {
+        this.setState({ selectedTab: tab });
     }
 
     render() {
         const { intl } = this.props;
         const teacherClassessAssets = this.state.teacherClassess?.map((cls) => {
-            console.log("cls", cls);
             return ({
                 url: classroomIcon,
                 name: cls.name,
@@ -106,34 +93,39 @@ class TeacherView extends React.Component {
                 items={teacherClassessAssets}
                 selectedItemIndex={this.state.selectedClassIdx}
                 onItemClick={this.handleClassChange}
-                onDrop={() => {}}
+                onDrop={() => { }}
+                externalStylesClass={styles.assetPanel}
             >
                 <div className={styles.outerContainer} >
-                    <div className={styles.innerContainer}>
-                        <div className={styles.title}>Teacher View</div>
-                        <div className={styles.teacherContainer}>
-                            <div className={styles.teacherName}>Teacher: {codeAssess.teacher ? codeAssess.teacher.name : ""}</div>
+                    <div className={styles.header}>
+                        {/* <div className={styles.tabsContainer}> */}
+                        <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
+                        <div onClick={() => this.onSelectTab("Students")} className={[styles.tab, (this.state.selectedTab === "Students" ? styles.selectedTab : "")].join(" ")}>Students</div>
+                        <div onClick={() => this.onSelectTab("Live stream")} className={[styles.tab, (this.state.selectedTab === "Live stream" ? styles.selectedTab : "")].join(" ")}>Live Stream</div>
+                        {/* </div> */}
+                    </div>
+                    <div className={styles.selectedTabContentContainer}>
+                        {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
+                            <div className={styles.overviewClassName}>Class name: {this.state.teacherClassess[this.state.selectedClassIdx]?.name}</div>
+                            <div className={styles.overviewClassDescription}>{this.state.teacherClassess[this.state.selectedClassIdx]?.description}</div>
+                            <div className={styles.overviewTotalStudents}>Enrolled Students: {this.state.selectedClassStudents.length}</div>
                         </div>
-                        <div className={styles.studentsContainer}>
-                            <div className={styles.studentsTitle}>Students</div>
+                        }
+                        {this.state.selectedTab === "Students" && <div className={styles.studentsContainer}>
                             <div className={styles.classStudents}>
                                 {this.state.selectedClassStudents
                                     .map((student) => (
                                         <ClassStudent key={student.id} student={student} classId={this.state.teacherClassess[this.state.selectedClassIdx].id} />
                                     ))}
                             </div>
+                        </div>}
+                        {this.state.selectedTab === "Live stream" && <div className={styles.liveStreamContainer}>
+                            <LiveStreamTab selectedClass={this.state.teacherClassess[this.state.selectedClassIdx]} />
                         </div>
-                        {/* {!!this.state.teacherClassess[this.state.selectedClassIdx] && <div className={styles.dataSubscriptionContainer}>
-                            <div className={styles.dataSubscriptionTitle}>Data Subscription</div>
-                            <div className={styles.dataSubscriptionButtons}>
-                                <div className={styles.dataSubscriptionButton} onClick={this.subscribeToStudentData}>Listen</div>
-                                <div className={styles.dataSubscriptionButton} onClick={this.removeStudentDataSubscription}>Stop</div>
-                            </div>
-                        </div>} */}
+                        }
                     </div>
                 </div>
             </AssetPanel>
-
         );
     }
 }

@@ -90,6 +90,7 @@ const vmListenerHOC = function (WrappedComponent) {
             this.assessStudent();
         }
         async assessStudent() {
+            // this has changed
             const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
             const assessment = codeAssess.assess(vm.runtime.targets);
             await studentData.sendStudentAssessmentScores(assessment);

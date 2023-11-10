@@ -35,15 +35,15 @@ class AssessmentOverTimeLineGraph extends React.Component {
         this.plotRef = plotRef;
     }
 
+    
     renderPlot() {
         if (!this.plotRef) return;
-        const dataTraces = codeAssess.dataTransformationUtils.studentAssessmentScoresOverTimeToLineGraphData(this.props.data);
         const currentLayout = this.plotRef.layout || {};
 
         // Use Plotly.react to update the plot data and layout
-        Plotly.react(this.plotRef, dataTraces, {
+        Plotly.react(this.plotRef, [this.props.data], {
             ...currentLayout,
-            title: 'Student Assessment Scores Over Time',
+            title: this.props.plotTitle,
             xaxis: {
                 ...currentLayout.xaxis, // Maintain current xaxis settings
                 type: 'date',
@@ -84,7 +84,6 @@ class AssessmentOverTimeLineGraph extends React.Component {
     }
 
     render() {
-        console.log("re-rendering AssessmentOverTimeLineGraph")
         return (
             <div ref={this.setPlotRef} className={styles.assessmentOverTimeLineGraph} />
         );
@@ -95,6 +94,7 @@ class AssessmentOverTimeLineGraph extends React.Component {
 AssessmentOverTimeLineGraph.propTypes = {
     intl: intlShape.isRequired,
     data: PropTypes.object.isRequired,
+    plotTitle: PropTypes.string.isRequired,
 };
 
 export default injectIntl(AssessmentOverTimeLineGraph);
