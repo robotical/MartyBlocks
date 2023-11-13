@@ -52,9 +52,12 @@ class LiveStreamTab extends React.Component {
         let rawData = this.state.fetchedStudentData;
         if (Array.isArray(rawData)) {
             rawData = rawData.map(studentData => studentData.scoresOverTime);
-        }
-        else {
+        } else {
             rawData = rawData?.scoresOverTime;
+        }
+
+        if (!rawData) {
+            return <div>No student data yet!</div>;
         }
 
         const dataTraces = codeAssess.dataTransformationUtils.studentAssessmentScoresOverTimeToLineGraphData(rawData);

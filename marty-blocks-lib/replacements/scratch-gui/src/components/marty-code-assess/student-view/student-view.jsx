@@ -1,234 +1,115 @@
 import React from "react";
 import styles from "./student-view.css";
-import bindAll from "lodash.bindall";
+import bindAll from 'lodash.bindall';
+import AssetPanel from "../../asset-panel/asset-panel.jsx";
+import { defineMessages, intlShape, injectIntl } from "react-intl";
+import classroomIcon from "../../../lib/assets/icon--classroom.svg";
+import helpIcon from "../../../lib/assets/icon--tutorials.svg";
+import StudentAssessment from "./student-assessment/student-assessment.jsx";
+
+const messages = defineMessages({
+    tutorials: {
+        defaultMessage: "Tutorials",
+        description: "Button to open the tutorials page",
+        id: "gui.martyCodeAssess.studentView.tutorials",
+    }
+});
 
 class StudentView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            student: null,
             studentClassess: [],
-            selectedClass: null,
+            selectedClassIdx: 0,
             selectedClassStudents: [],
-            classCode: "",
+            selectedTab: "Overview",
+            fetchedStudentData: null
         };
         bindAll(this, [
-            "handleClassChange",
-            "onStartSendingStudentData",
-            "onStopSendingStudentData",
-            "onSendAssessment"
+            'handleClassChange',
+            'onSelectTab',
         ]);
     }
 
     componentDidMount() {
-        // get the student object
-        this.setState({ student: codeAssess.student });
+        const asyncFunc = async () => {
+            await codeAssess.createStudentIfDoesntExist(codeAssess.student.id, codeAssess.student.name);
+            codeAssess.student.getListOfClassess().then((classess) => {
+                this.setState({ studentClassess: classess });
+            });
+        }
+        asyncFunc();
     }
 
     // when the component state is changed
     async componentDidUpdate(prevProps, prevState) {
         // when the selectedClass changes
-        if (prevState.selectedClass !== this.state.selectedClass) {
-            this.getStudentsOfClass();
-            codeAssess.createClassIfDoesntExist(
-                this.state.selectedClass.id,
-                this.state.selectedClass.name,
-                this.state.selectedClass.teacherId
-            );
-        }
-        // when the student changes
-        if (prevState.student !== this.state.student) {
-            this.state.student.getListOfClassess().then((classess) => {
-                this.setState({ studentClassess: classess });
-            });
-        }
-        // when the selectedClass changes and the student and selectedClass are not null
-        if (
-            prevState.selectedClass !== this.state.selectedClass &&
-            this.state.selectedClass &&
-            this.state.student
-        ) {
-            await codeAssess.addStudentToClass(
-                this.state.selectedClass.id,
-                this.state.selectedClass.name,
-                this.state.selectedClass.teacherId,
-                this.state.student.id
-            );
-            await codeAssess.createStudentIfDoesntExist(
-                this.state.student.id,
-                this.state.student.name
-            );
-            await codeAssess.createStudentDataIfDoesntExist(
-                this.state.selectedClass.id,
-                this.state.student.id
-            );
+        if (prevState.selectedClassIdx !== this.state.selectedClassIdx) {
+            const selectedClass = this.state.studentClassess[this.state.selectedClassIdx];
+            await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.student.id);
         }
     }
 
-    handleClassChange(event) {
-        const classIdx = +event.target.value;
-        codeAssess.student.setJoinedClass(this.state.studentClassess[classIdx]?.id || "");
-        this.setState({
-            selectedClass: this.state.studentClassess[classIdx],
-        });
+    handleClassChange(classIdx) {
+        this.setState({ selectedClassIdx: classIdx });
     }
 
-    // when the studentClassess state is updated, this function is called
-    async getStudentsOfClass() {
-        const students = await this.state.selectedClass.getListOfStudents();
-        this.setState({ selectedClassStudents: students });
-    }
-
-    async onStartSendingStudentData() {
-        const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
-        await studentData.initialiseHeartbeat();
-    }
-
-    async onStopSendingStudentData() {
-        const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
-        await studentData.stopHeartbeat();
-    }
-
-    async onSendAssessment() {
-        const studentData = await this.state.student.requestStudentData(this.state.selectedClass.id);
-        const assessment = codeAssess.assess(vm.runtime.targets);
-        await studentData.sendStudentAssessmentScores(assessment);
+    onSelectTab(tab) {
+        this.setState({ selectedTab: tab });
     }
 
     render() {
+        const { intl } = this.props;
+        const studentClassessAssets = this.state.studentClassess?.map((cls) => {
+            return ({
+                url: classroomIcon,
+                name: cls.name,
+                details: cls.description || "",
+            })
+        }) || [];
+
+
         return (
-            <div className={styles.outerContainer}>
-                <div className={styles.innerContainer}>
-                    <div className={styles.title}>Student View</div>
-                    <div className={styles.studentContainer}>
-                        <div className={styles.studentTitle}>Student</div>
-                        <div className={styles.studentName}>
-                            {this.state.student ? this.state.student.name : ""}
-                        </div>
+            <AssetPanel
+                buttons={[
+                    {
+                        title: intl.formatMessage(messages.tutorials),
+                        img: helpIcon,
+                        onClick: () => this.props.showTutorialCard(), // TODO: implement
+                    },
+                ]}
+                items={studentClassessAssets}
+                selectedItemIndex={this.state.selectedClassIdx}
+                onItemClick={this.handleClassChange}
+                onDrop={() => { }}
+                externalStylesClass={styles.assetPanel}
+            >
+                <div className={styles.outerContainer} >
+                    <div className={styles.header}>
+                        <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
+                        <div onClick={() => this.onSelectTab("My Assessment")} className={[styles.tab, (this.state.selectedTab === "My Assessment" ? styles.selectedTab : "")].join(" ")}>My Assessment</div>
                     </div>
-                    <div className={styles.classessContainer}>
-                        <div className={styles.classessTitle}>Classess</div>
-                        <div className={styles.dropdownContainer}>
-                            <select
-                                className={styles.classDropdown}
-                                onChange={this.handleClassChange}
-                                value={
-                                    this.state.selectedClass ? this.state.selectedClass.id : ""
-                                }
-                            >
-                                <option value="" disabled>
-                                    Select a class
-                                </option>
-                                {this.state.studentClassess.map((cls, classIdx) => (
-                                    <option
-                                        value={classIdx}
-                                        key={cls.id}
-                                    >
-                                        {cls.name}
-                                    </option>
-                                ))}
-                            </select>
+                    <div className={styles.selectedTabContentContainer}>
+                        {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
+                            <div className={styles.overviewClassName}>Class name: {this.state.studentClassess[this.state.selectedClassIdx]?.name}</div>
+                            <div className={styles.overviewClassDescription}>{this.state.studentClassess[this.state.selectedClassIdx]?.description}</div>
                         </div>
-                        <div className={styles.classStudents}>
-                            {this.state.selectedClassStudents.map((student) => (
-                                <div className={styles.classStudent} key={student.id}>
-                                    {student.name}
-                                </div>
-                            ))}
+                        }
+                        {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>
+                            <StudentAssessment classId={this.state.studentClassess[this.state.selectedClassIdx]?.id} />
                         </div>
+                        }
                     </div>
-                    {!!this.state.selectedClass && (
-                        <div className={styles.studentDataButtons}>
-                            <div
-                                className={styles.studentDataButton}
-                                onClick={this.onStartSendingStudentData}
-                            >
-                                Start Sending Data
-                            </div>
-                            <div
-                                className={styles.studentDataButton}
-                                onClick={this.onStopSendingStudentData}
-                            >
-                                Stop Sending Data
-                            </div>
-                        </div>
-                    )}
-                    {!!this.state.selectedClass && (
-                        <div className={styles.assessStudentContainer}>
-                            <button className={styles.assessStudentBtn} onClick={this.onSendAssessment}>Send Assessment</button>
-                        </div>
-                    )}
                 </div>
-            </div>
+            </AssetPanel>
         );
     }
 }
 
-export default StudentView;
+StudentView.propTypes = {
+    intl: intlShape.isRequired,
+};
 
-// import React from "react";
-// import Modal from "../../../containers/modal.jsx";
-// import ScoresCard from "../scores-card/scores-card.jsx";
-// import styles from "./student-view.css";
-// import DetailsCard from "../details-card/details-card.jsx";
 
-// class StudentView extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             scores: codeAssess.assess(vm.runtime.targets),
-//             showModal: false,
-//             modalData: { content: null, title: "" },
-//         };
-//         this.closeModal = this.closeModal.bind(this);
-//         this.openModal = this.openModal.bind(this);
-//         this.totalScore = this.totalScore.bind(this);
-//     }
+export default injectIntl(StudentView);
 
-//     closeModal() {
-//         this.setState({ showModal: false });
-//     }
-
-//     openModal(modalData) {
-//         this.setState({ showModal: true, modalData: modalData });
-//     }
-
-//     totalScore() {
-//         let total = 0;
-//         Object.keys(this.state.scores).forEach(categoryKey => {
-//             total += this.state.scores[categoryKey];
-//         })
-//         return total;
-//     }
-
-//     render() {
-//         return (
-//             <div className={styles.outerContainer}>
-//                 {this.state.showModal && (
-//                     <Modal
-//                         id="assessment-modal"
-//                         className={styles.modalContent}
-//                         contentLabel={this.state.modalData.title}
-//                         onRequestClose={this.closeModal}
-//                         fullScreen={true}
-//                     >
-//                         <div className={styles.modalContainer}>{this.state.modalData.content}</div>
-//                     </Modal>
-//                 )}
-//                 <ScoresCard
-//                     onCategoryClick={this.openModal}
-//                     dataRepresentation={this.state.scores.DataRepresentation}
-//                     flowControl={this.state.scores.FlowControl}
-//                     interactivity={this.state.scores.Interactivity}
-//                     logic={this.state.scores.Logic}
-//                     abstraction={this.state.scores.Abstraction}
-//                     synchronisation={this.state.scores.Synchronisation}
-//                     parallelism={this.state.scores.Parallelism}
-//                 />
-//                 <DetailsCard totalScore={this.totalScore()} />
-//             </div>
-//         );
-//     }
-// }
-
-// export default StudentView;

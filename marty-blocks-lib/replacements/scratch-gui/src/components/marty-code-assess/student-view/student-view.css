@@ -1,27 +1,92 @@
-.outer-container {
-  display: grid;
-  width: 100%;
+@import "../../../css/units.css";
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
+@import "../../../css/typography.css";
+
+.assetPanel {
   height: 100%;
-  grid-template-columns: 1.5fr 1fr;
+}
+.outerContainer {
+  background-color: $ui-white;
+  border: 1px solid $ui-black-transparent;
+  display: grid;
+  grid-template-rows: 0.12fr 0.88fr;
+  grid-template-columns: 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.header {
+  background-color: #b5d0ee;
+  border: 1px solid $ui-black-transparent;
+  padding: calc(2 * $space);
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  align-items: center;
+}
+
+.classNameTitle {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.tabsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.tab {
+  background-color: #608dc9;
+  outline: none;
+  border-radius: 2rem;
+  border: 1px solid $ui-black-transparent;
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
+  margin: 0px;
+  padding: 0 2rem;
+  height: 3rem;
+  display: grid;
   grid-template-rows: 1fr;
-  grid-template-areas: "scores-card details-card";
+  justify-items: center;
+  align-items: center;
+
+  color: $ui-white;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+  align-self: end;
 }
 
-.modal-container {
-  margin: 50px;
+.selectedTab {
+  background-color: #f18921;
 }
 
-@media screen and (max-width: 800px) {
-  .outer-container {
-    grid-template-areas:
-      "details-card"
-      "scores-card";
+.selectedTabContentContainer {
+  background-color: $ui-primary;
+}
 
-    grid-template-columns: 1fr;
-    row-gap: 40px;
-    margin: 50px;
-    padding: 40px;
-    overflow: scroll;
-    height: 90vh;
-  }
+.overviewContainer {
+  padding: 20px;
+  height: calc(100% - 100px);
+  overflow-y: auto;
+}
+
+.overviewClassName {
+  font-size: 20px;
+  font-weight: 500;
+}
+.overviewClassDescription {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.myAssessmentContainer {
+  padding: 20px;
+  overflow-y: auto;
 }
