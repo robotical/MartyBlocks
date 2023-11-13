@@ -1111,6 +1111,19 @@ class Scratch3Text2SpeechBlocks {
               const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
                 mp3SoundBuffers
               );
+                            // Download the MP3 file from the console
+                            const blob = new Blob([mp3SoundData], { type: 'audio/mp3' });
+                            const blobUrl = URL.createObjectURL(blob);
+                            console.log(`Download MP3 by calling %cwindow.downloadMP3()`, 'color: red');
+                            window.downloadMP3 = () => {
+                              const downloadLink = document.createElement('a');
+                              downloadLink.href = blobUrl;
+                              downloadLink.download = 'downloaded_sound.mp3';
+                              document.body.appendChild(downloadLink);
+                              downloadLink.click();
+                              document.body.removeChild(downloadLink);
+                            }
+                            //// END OF DOWNLOAD MP3
               if (isMartyBlock) {
                 if (mv2Interface.isConnected) {
                   mv2Interface.streamAudio(mp3SoundData, maxDuration * 1000);
