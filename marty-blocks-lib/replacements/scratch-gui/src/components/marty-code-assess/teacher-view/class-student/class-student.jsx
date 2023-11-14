@@ -45,8 +45,10 @@ class ClassStudent extends React.Component {
 
     async fetchStudentData() {
         const fetchedStudentData = await this.props.student.fetchStudentData(this.props.classId);
-        const isStudentActive = this.props.student.isActive({ lastHeartbeat: fetchedStudentData.lastHeartbeat });
-        this.setState({ isStudentActive, fetchedStudentData });
+        if (fetchedStudentData) {
+            const isStudentActive = this.props.student.isActive({ lastHeartbeat: fetchedStudentData.lastHeartbeat });
+            this.setState({ isStudentActive, fetchedStudentData });
+        }
     }
 
     onStudentClick() {

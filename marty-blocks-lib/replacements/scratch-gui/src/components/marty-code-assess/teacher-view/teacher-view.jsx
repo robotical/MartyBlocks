@@ -53,6 +53,8 @@ class TeacherView extends React.Component {
         }
 
         if (prevState.teacherClassess !== this.state.teacherClassess) {
+            const selectedClass = this.state.teacherClassess[this.state.selectedClassIdx];
+            await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.teacher.id);
             await this.getStudentsOfClass();
         }
     }

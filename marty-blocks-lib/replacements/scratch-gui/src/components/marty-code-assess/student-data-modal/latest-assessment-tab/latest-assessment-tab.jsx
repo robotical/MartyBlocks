@@ -31,10 +31,13 @@ class LatestAssessmentTab extends React.Component {
     render() {
         const { intl } = this.props;
         const studentData = this.props.studentData;
+        if (!studentData) {
+            return <div>No student data yet!</div>;
+        }
         // studentData can either be an array of student data or a single student data object
         let rawData = studentData;
         if (Array.isArray(rawData)) {
-            rawData = rawData.map(studentData => studentData.scoresOverTime);
+            rawData = rawData.map(studentData => studentData?.scoresOverTime).filter(studentData => studentData);
         } else {
             rawData = rawData?.scoresOverTime;
         }

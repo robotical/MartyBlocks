@@ -27,7 +27,8 @@ class StudentView extends React.Component {
         bindAll(this, [
             'handleClassChange',
             'onSelectTab',
-            'onJoinClass'
+            'onJoinClass',
+            'onExitClass'
         ]);
     }
 
@@ -48,6 +49,10 @@ class StudentView extends React.Component {
             const selectedClass = this.state.studentClassess[this.state.selectedClassIdx];
             await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.student.id);
         }
+        if (prevState.studentClassess !== this.state.studentClassess) {
+            const selectedClass = this.state.studentClassess[this.state.selectedClassIdx];
+            await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, selectedClass.teacherId);
+        }
     }
 
     handleClassChange(classIdx) {
@@ -62,9 +67,20 @@ class StudentView extends React.Component {
         const classId = this.state.studentClassess[this.state.selectedClassIdx]?.id;
         // TODO: refactor so setJoinedClass takes care of fetching student data and initialising the heartbeat
         const studentData = await codeAssess.student.requestStudentData(classId);
-        await studentData.initialiseHeartbeat();
-        codeAssess.student.setJoinedClass(classId);
+        if (studentData) {
+            await studentData.initialiseHeartbeat();
+            codeAssess.student.setJoinedClass(classId);
+            this.setState({ });
+        }
+    }
+
+    async onExitClass() {
+        // TODO: refactor so there is a method in student that takes care of this
+        codeAssess.student.joinedClass = null;
         this.setState({ });
+        const studentData = await codeAssess.student.requestStudentData(classId);
+        if (!studentData) return;
+        await studentData.stopHeartbeat();
     }
 
     render() {
@@ -73,7 +89,7 @@ class StudentView extends React.Component {
             return ({
                 url: classroomIcon,
                 name: cls.name,
-                details: cls.description || "",
+                details: cls.section || "",
             })
         }) || [];
 
@@ -106,7 +122,7 @@ class StudentView extends React.Component {
                             <div className={styles.overviewClassRoom}>{this.state.studentClassess[this.state.selectedClassIdx]?.room}</div>
                             <div className={styles.overviewHasJoined}>
                                 {!!(codeAssess?.student?.joinedClass?.id === this.state.studentClassess[this.state.selectedClassIdx]?.id) ?
-                                    "Joined" :
+                                    <button onClick={() => { }}>Exit Class</button> :
                                     <button onClick={this.onJoinClass}>Join</button>
                                 }
                             </div>
