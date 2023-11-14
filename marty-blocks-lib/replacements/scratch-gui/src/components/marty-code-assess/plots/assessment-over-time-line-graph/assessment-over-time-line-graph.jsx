@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import styles from "./assessment-over-time-line-graph.css";
 import bindAll from 'lodash.bindall';
-import { defineMessages, intlShape, injectIntl } from "react-intl";
-import Plot from 'react-plotly.js';
+import { intlShape, injectIntl } from "react-intl";
 import Plotly from "plotly.js"
 
 class AssessmentOverTimeLineGraph extends React.Component {

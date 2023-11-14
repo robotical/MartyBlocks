@@ -6,7 +6,7 @@ import { defineMessages, intlShape, injectIntl } from "react-intl";
 import classroomIcon from "../../../lib/assets/icon--classroom.svg";
 import helpIcon from "../../../lib/assets/icon--tutorials.svg";
 import ClassStudent from "./class-student/class-student.jsx";
-import LiveStreamTab from "./live-stream-tab/live-stream-tab.jsx";
+import ClassPerformanceTab from "./class-performance-tab/class-performance-tab.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -98,16 +98,16 @@ class TeacherView extends React.Component {
             >
                 <div className={styles.outerContainer} >
                     <div className={styles.header}>
-                        {/* <div className={styles.tabsContainer}> */}
                         <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
                         <div onClick={() => this.onSelectTab("Students")} className={[styles.tab, (this.state.selectedTab === "Students" ? styles.selectedTab : "")].join(" ")}>Students</div>
-                        <div onClick={() => this.onSelectTab("Live stream")} className={[styles.tab, (this.state.selectedTab === "Live stream" ? styles.selectedTab : "")].join(" ")}>Live Stream</div>
-                        {/* </div> */}
+                        <div onClick={() => this.onSelectTab("Class Performance")} className={[styles.tab, (this.state.selectedTab === "Class Performance" ? styles.selectedTab : "")].join(" ")}>Class Performance</div>
                     </div>
                     <div className={styles.selectedTabContentContainer}>
                         {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
                             <div className={styles.overviewClassName}>Class name: {this.state.teacherClassess[this.state.selectedClassIdx]?.name}</div>
-                            <div className={styles.overviewClassDescription}>{this.state.teacherClassess[this.state.selectedClassIdx]?.description}</div>
+                            <div className={styles.overviewClassSection}>{this.state.teacherClassess[this.state.selectedClassIdx]?.section}</div>
+                            <div className={styles.overviewClassSubject}>{this.state.teacherClassess[this.state.selectedClassIdx]?.subject}</div>
+                            <div className={styles.overviewClassRoom}>{this.state.teacherClassess[this.state.selectedClassIdx]?.room}</div>
                             <div className={styles.overviewTotalStudents}>Enrolled Students: {this.state.selectedClassStudents.length}</div>
                         </div>
                         }
@@ -119,8 +119,8 @@ class TeacherView extends React.Component {
                                     ))}
                             </div>
                         </div>}
-                        {this.state.selectedTab === "Live stream" && <div className={styles.liveStreamContainer}>
-                            <LiveStreamTab selectedClass={this.state.teacherClassess[this.state.selectedClassIdx]} />
+                        {this.state.selectedTab === "Class Performance" && <div className={styles.liveStreamContainer}>
+                            <ClassPerformanceTab selectedClass={this.state.teacherClassess[this.state.selectedClassIdx]} />
                         </div>
                         }
                     </div>

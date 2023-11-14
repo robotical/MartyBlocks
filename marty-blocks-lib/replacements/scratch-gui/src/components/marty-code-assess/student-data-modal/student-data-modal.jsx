@@ -3,8 +3,9 @@ import styles from "./student-data-modal.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
-import AssessmentOverTimeLineGraph from "../plots/assessment-over-time-line-graph/assessment-over-time-line-graph.jsx";
-import AssessmentSpiderGraph from "../plots/assessment-spider-graph/assessment-spider-graph.jsx";
+import LatestAssessmentTab from "./latest-assessment-tab/latest-assessment-tab.jsx";
+import LiveStreamTab from "./live-stream-tab/live-stream-tab.jsx";
+import PerformanceHistoryTab from "./performance-history-tab/performance-history-tab.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -18,7 +19,7 @@ class StudentDataModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            selectedTab: "Latest Assessment"
         };
         bindAll(this, [
         ]);
@@ -39,29 +40,22 @@ class StudentDataModal extends React.Component {
             return <div>No student data yet!</div>;
         }
         console.log("studentData.scoresOverTime.length", Object.keys(studentData.scoresOverTime).length)
-        const lineGraphDataTraces = codeAssess.dataTransformationUtils.transformDataForStackedAreaChart(studentData.scoresOverTime);
-        const abstractionDataTrace = lineGraphDataTraces.find(trace => trace.name === "Abstraction");
-        const dataRepresentationDataTrace = lineGraphDataTraces.find(trace => trace.name === "DataRepresentation");
-        const flowControlDataTrace = lineGraphDataTraces.find(trace => trace.name === "FlowControl");
-        const interactivityDataTrace = lineGraphDataTraces.find(trace => trace.name === "Interactivity");
-        const logicDataTrace = lineGraphDataTraces.find(trace => trace.name === "Logic");
-        const parallelismDataTrace = lineGraphDataTraces.find(trace => trace.name === "Parallelism");
-        const synchronisation = lineGraphDataTraces.find(trace => trace.name === "Synchronisation");
-
-        const spiderChartData = codeAssess.dataTransformationUtils.transformDataForSpiderChart(studentData.scoresOverTime);
 
         return (
             <div className={styles.studentDataModal}>
                 <div className={styles.studentDataModalContent}>
-                    {/* <AssessmentOverTimeLineGraph data={dataTraces} plotTitle="Abstraction"/> */}
-                    <AssessmentSpiderGraph data={spiderChartData} plotTitle="Spider"/>
-                    <AssessmentOverTimeLineGraph data={abstractionDataTrace} plotTitle="Abstraction" />
-                    <AssessmentOverTimeLineGraph data={dataRepresentationDataTrace} plotTitle="Data Representation" />
-                    <AssessmentOverTimeLineGraph data={flowControlDataTrace} plotTitle="Flow Control" />
-                    <AssessmentOverTimeLineGraph data={interactivityDataTrace} plotTitle="Interactivity" />
-                    <AssessmentOverTimeLineGraph data={logicDataTrace} plotTitle="Logic" />
-                    <AssessmentOverTimeLineGraph data={parallelismDataTrace} plotTitle="Parallelism" />
-                    <AssessmentOverTimeLineGraph data={synchronisation} plotTitle="Synchronisation" />
+                    <div className={styles.studentDataModalHeader}>
+                        <div className={styles.navigationTabs}>
+                            <div className={[styles.navigationTab, this.state.selectedTab === "Latest Assessment" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Latest Assessment" })}>Latest Assessment</div>
+                            <div className={[styles.navigationTab, this.state.selectedTab === "Live Stream" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Live Stream" })}>Live Stream</div>
+                            <div className={[styles.navigationTab, this.state.selectedTab === "Performance History" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Performance History" })}>Performance History</div>
+                        </div>
+                    </div>
+                    <div className={styles.modalBody}>
+                        {this.state.selectedTab === "Latest Assessment" && <LatestAssessmentTab studentData={studentData} student={student} />}
+                        {this.state.selectedTab === "Live Stream" && <LiveStreamTab studentData={studentData} student={student} />}
+                        {this.state.selectedTab === "Performance History" && <PerformanceHistoryTab studentData={studentData} student={student} />}
+                    </div>
                 </div>
             </div>
         );

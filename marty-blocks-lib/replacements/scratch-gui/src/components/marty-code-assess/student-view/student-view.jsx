@@ -23,11 +23,11 @@ class StudentView extends React.Component {
             selectedClassIdx: 0,
             selectedClassStudents: [],
             selectedTab: "Overview",
-            fetchedStudentData: null
         };
         bindAll(this, [
             'handleClassChange',
             'onSelectTab',
+            'onJoinClass'
         ]);
     }
 
@@ -56,6 +56,15 @@ class StudentView extends React.Component {
 
     onSelectTab(tab) {
         this.setState({ selectedTab: tab });
+    }
+
+    async onJoinClass() {
+        const classId = this.state.studentClassess[this.state.selectedClassIdx]?.id;
+        // TODO: refactor so setJoinedClass takes care of fetching student data and initialising the heartbeat
+        const studentData = await codeAssess.student.requestStudentData(classId);
+        await studentData.initialiseHeartbeat();
+        codeAssess.student.setJoinedClass(classId);
+        this.setState({ });
     }
 
     render() {
@@ -91,8 +100,16 @@ class StudentView extends React.Component {
                     </div>
                     <div className={styles.selectedTabContentContainer}>
                         {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
-                            <div className={styles.overviewClassName}>Class name: {this.state.studentClassess[this.state.selectedClassIdx]?.name}</div>
-                            <div className={styles.overviewClassDescription}>{this.state.studentClassess[this.state.selectedClassIdx]?.description}</div>
+                            <div className={styles.overviewClassName}>Name: {this.state.studentClassess[this.state.selectedClassIdx]?.name}</div>
+                            <div className={styles.overviewClassSection}>{this.state.studentClassess[this.state.selectedClassIdx]?.section}</div>
+                            <div className={styles.overviewClassSubject}>{this.state.studentClassess[this.state.selectedClassIdx]?.subject}</div>
+                            <div className={styles.overviewClassRoom}>{this.state.studentClassess[this.state.selectedClassIdx]?.room}</div>
+                            <div className={styles.overviewHasJoined}>
+                                {!!(codeAssess?.student?.joinedClass?.id === this.state.studentClassess[this.state.selectedClassIdx]?.id) ?
+                                    "Joined" :
+                                    <button onClick={this.onJoinClass}>Join</button>
+                                }
+                            </div>
                         </div>
                         }
                         {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>

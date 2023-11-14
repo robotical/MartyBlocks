@@ -91,9 +91,13 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         async assessStudent() {
             // this has changed
-            const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
-            const assessment = codeAssess.assess(vm.runtime.targets);
-            await studentData.sendStudentAssessmentScores(assessment);
+            try {
+                const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
+                const assessment = codeAssess.assess(vm.runtime.targets);
+                await studentData.sendStudentAssessmentScores(assessment);
+            } catch (error) {
+                console.warn("Could not assess student -- probably not in a class");
+            }
         }
         autoSaveProject () {
             // eslint-disable-next-line no-console
