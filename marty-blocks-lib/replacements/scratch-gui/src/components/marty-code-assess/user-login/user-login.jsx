@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./user-login.css";
 import { defineMessages, intlShape, injectIntl } from "react-intl";
-
-
+import googleLoginIcon from "./icon--google-login.png";
+import Spinner from '../../spinner/spinner.jsx';
+import spinnerStyles from '../../spinner/spinner.css';
 
 const messages = defineMessages({
     userLogin: {
@@ -21,21 +22,31 @@ const messages = defineMessages({
 class UserLogin extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isLoading: false,
+        };
+        this.onLogin = this.onLogin.bind(this);
     }
 
-    onLogin() {
-        codeAssess.logUserIn();
+    async onLogin() {
+        this.setState({ isLoading: true });
+        try {
+            await codeAssess.logUserIn();
+        } catch (e) {
+            console.error("Error logging in using google", e);
+        } finally {
+            this.setState({ isLoading: false });
+        }
     }
 
     render() {
         const { intl } = this.props;
         return (
             <div className={styles.userLogin}>
-                <div className={styles.userLoginTitle}>{intl.formatMessage(messages.userLogin)}</div>
-                <div className={styles.userLoginButton} onClick={() => this.onLogin(this.state.email, this.state.password)}>
-                    {intl.formatMessage(messages.login)}
-                </div>
+                {this.state.isLoading ?
+                    <Spinner level='warn' large className={spinnerStyles.primary} /> :
+                    <img className={styles.googleLoginIcon} src={googleLoginIcon} onClick={this.onLogin} />
+                }
             </div>
         );
     }

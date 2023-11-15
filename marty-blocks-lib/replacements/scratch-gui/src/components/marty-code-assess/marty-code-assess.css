@@ -14,3 +14,16 @@
   align-items: center;
   height: 100%;
 }
+
+.teacher_icon_container,
+.student_icon_container {
+  cursor: pointer;
+  text-align: center;
+}
+
+.teacher_icon_container {
+  width: 100px;
+}
+.student_icon_container {
+  width: 265px;
+}

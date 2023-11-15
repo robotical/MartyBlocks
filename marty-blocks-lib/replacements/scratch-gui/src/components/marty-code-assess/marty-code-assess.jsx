@@ -6,6 +6,8 @@ import styles from "./marty-code-assess.css";
 import StudentView from "./student-view/student-view.jsx";
 import UserLogin from "./user-login/user-login.jsx";
 import TeacherView from "./teacher-view/teacher-view.jsx";
+import studentIcon from "./icon--student.svg";
+import teacherIcon from "./icon--teacher.svg";
 
 const STUDENT_OR_TEACHER_SUBSCRIPTION = "studentOrTeacherChanged";
 const IS_USER_LOGGED_IN_SUBSCRIPTION = "isUserLoggedInChanged";
@@ -68,8 +70,10 @@ class MartyCodeAssess extends React.Component {
       studentOrTeacherJSX = <StudentView />;
     } else {
       studentOrTeacherJSX = <div className={styles.studentOrTeacherButtonsContainer}>
-        <button onClick={() => codeAssess.setStudentOrTeacher("teacher")}>{intl.formatMessage(messages.teacher)}</button>
-        <button onClick={() => codeAssess.setStudentOrTeacher("student")}>{intl.formatMessage(messages.student)}</button>
+        {/* <button onClick={() => codeAssess.setStudentOrTeacher("teacher")}>{intl.formatMessage(messages.teacher)}</button>
+        <button onClick={() => codeAssess.setStudentOrTeacher("student")}>{intl.formatMessage(messages.student)}</button> */}
+        <div className={styles.teacher_icon_container} onClick={() => codeAssess.setStudentOrTeacher("teacher")}><img src={teacherIcon} /><p>{intl.formatMessage(messages.teacher)}</p></div>
+        <div className={styles.student_icon_container} onClick={() => codeAssess.setStudentOrTeacher("student")}><img src={studentIcon} /><p>{intl.formatMessage(messages.student)}</p></div>
       </div>;
     }
 
