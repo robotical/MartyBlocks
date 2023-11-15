@@ -25,6 +25,10 @@ class PythonCodeModal extends React.Component {
 
     componentDidMount() {
         this.highlight();
+        pythonTranspiler.isModalOpen = true;
+    }
+    componentWillUnmount() {
+        pythonTranspiler.isModalOpen = false;
     }
     componentDidUpdate(prevProps, prevState) {
         this.highlight();
