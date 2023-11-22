@@ -80,7 +80,7 @@ class TeacherView extends React.Component {
             return ({
                 url: classroomIcon,
                 name: cls.name,
-                details: cls.description || "",
+                details: cls.section || "",
             })
         }) || [];
         return (

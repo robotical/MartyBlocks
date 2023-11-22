@@ -75,6 +75,7 @@ class StudentView extends React.Component {
     }
 
     async onExitClass() {
+        const classId = this.state.studentClassess[this.state.selectedClassIdx]?.id;
         // TODO: refactor so there is a method in student that takes care of this
         codeAssess.student.joinedClass = null;
         this.setState({ });
@@ -122,7 +123,7 @@ class StudentView extends React.Component {
                             <div className={styles.overviewClassRoom}>{this.state.studentClassess[this.state.selectedClassIdx]?.room}</div>
                             <div className={styles.overviewHasJoined}>
                                 {!!(codeAssess?.student?.joinedClass?.id === this.state.studentClassess[this.state.selectedClassIdx]?.id) ?
-                                    <button onClick={() => { }}>Exit Class</button> :
+                                    <button onClick={this.onExitClass}>Exit Class</button> :
                                     <button onClick={this.onJoinClass}>Join</button>
                                 }
                             </div>
