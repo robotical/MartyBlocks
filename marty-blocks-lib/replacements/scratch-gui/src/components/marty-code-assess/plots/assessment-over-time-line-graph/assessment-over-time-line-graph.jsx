@@ -27,8 +27,7 @@ class AssessmentOverTimeLineGraph extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-    }
+    componentWillUnmount() {}
 
     setPlotRef(plotRef) {
         this.plotRef = plotRef;

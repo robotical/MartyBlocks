@@ -16,6 +16,7 @@ martyMachine = new MartyMachine();
 const codeAssessLocal = new CodeAssess();
 codeAssess = codeAssessLocal.codeAssessLib;
 codeAssess.assess = codeAssessLocal.assess;
+codeAssess.assessBadHabits = codeAssessLocal.assessBadHabits;
 pythonTranspiler = Project; 
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality

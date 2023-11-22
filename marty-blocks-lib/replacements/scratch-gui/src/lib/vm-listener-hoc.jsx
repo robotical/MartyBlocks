@@ -52,6 +52,7 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             // debounce the auto save function so we aren't continuously saving if there are lots of changes happening
             this.autoSaveProject = debounce(this.autoSaveProject.bind(this), 1000);
+            this.assessStudent = debounce(this.assessStudent.bind(this), 1000);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
