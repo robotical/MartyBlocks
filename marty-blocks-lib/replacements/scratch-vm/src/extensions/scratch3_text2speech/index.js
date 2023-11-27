@@ -981,6 +981,42 @@ class Scratch3Text2SpeechBlocks {
     return this.speakHelper(args, util, true);
   }
 
+  async tryAllLanguagesIfUnsupported(gender, words) {
+    try {
+
+      const pathsObj = [{}];
+      for (const languageKey of Object.keys(this.LANGUAGE_INFO)) {
+        const language = this.LANGUAGE_INFO[languageKey].speechSynthLocale;
+        const path = `${SERVER_HOST}/synth?locale=${language}&gender=${gender}&text=${encodeURIComponent(words.substring(0, 128))}`;
+        pathsObj.push({
+          language: this.LANGUAGE_INFO[languageKey].name,
+          path
+        });
+      }
+      const responses = await Promise.all(pathsObj.map(pathObj => fetchWithTimeout(pathObj.path, {}, SERVER_TIMEOUT)));
+      const buffersPromises = responses.map(response => response.arrayBuffer() || Promise.resolve());
+      const buffers = await Promise.all(buffersPromises);
+      buffers.forEach((b, i) => pathsObj[i].buffer = b);
+      // get the buffer with the largest size
+      let correctBufferObj = pathsObj.reduce((prev, current) => (prev.buffer.byteLength > current.buffer.byteLength) ? prev : current);
+      if (correctBufferObj.buffer.byteLength < 910) {
+        // we don't have any data back
+        mv2Interface.send_REST(
+          "notification/warn-message/Oops! Marty doesn't speak this language yet! Please try another language."
+        );
+        return correctBufferObj.buffer;
+      }
+      mv2Interface.send_REST(
+        `notification/warn-message/Oops! Marty doesn't have an accent for this language yet! We will use the ${correctBufferObj.language} accent instead.`
+      );
+      return correctBufferObj.buffer;
+    } catch (e) {
+      console.log("error", e);
+      return null;
+    }
+  }
+
+
   speakHelper(args, util, isMartyBlock) {
     return new Promise((resolve, reject) => {
       // Cast input to string
@@ -1022,39 +1058,14 @@ class Scratch3Text2SpeechBlocks {
           }
           // if the length is 0, then we try all the languages in case the language is not supported
           const buffer = await res.arrayBuffer();
-          console.log("buffer", buffer)
           if (buffer.byteLength === 909) { // when the buffer length is 909 we don't have data back suggesting that the language is not supported so we try all the languages
-            const pathsObj = [{}];
-            for (const languageKey of Object.keys(this.LANGUAGE_INFO)) {
-              const language = this.LANGUAGE_INFO[languageKey].speechSynthLocale;
-              const path = `${SERVER_HOST}/synth?locale=${language}&gender=${gender}&text=${encodeURIComponent(words.substring(0, 128))}`;
-              pathsObj.push({
-                language: this.LANGUAGE_INFO[languageKey].name,
-                path
-              });
+            const didWeFind = await this.tryAllLanguagesIfUnsupported(gender, words);
+            if (didWeFind) {
+              return didWeFind;
             }
-            const responses = await Promise.all(pathsObj.map(pathObj => fetchWithTimeout(pathObj.path, {}, SERVER_TIMEOUT)));
-            const buffersPromises = responses.map(response => response.arrayBuffer() || Promise.resolve());
-            const buffers = await Promise.all(buffersPromises);
-            buffers.forEach((b,i)=> pathsObj[i].buffer = b);
-            console.log("buffers", buffers)
-            // get the buffer with the largest size
-            let correctBufferObj = pathsObj.reduce((prev, current) => (prev.buffer.byteLength > current.buffer.byteLength) ? prev : current);
-            console.log("correctBufferObj", correctBufferObj)
-            if (correctBufferObj.buffer.byteLength < 910) {
-              // we don't have any data back
-              mv2Interface.send_REST(
-                "notification/warn-message/Oops! Marty doesn't speak this language yet! Please try another language."
-              );
-              return correctBufferObj.buffer;
-            }
-            mv2Interface.send_REST(
-              `notification/warn-message/Oops! Marty doesn't have an accent for this language yet! We will use the ${correctBufferObj.language} accent instead.`
-            );
-            return correctBufferObj.buffer;
           }
-            return buffer;
-          })
+          return buffer;
+        })
         .then((buffer) => {
           // Play the sound
 
