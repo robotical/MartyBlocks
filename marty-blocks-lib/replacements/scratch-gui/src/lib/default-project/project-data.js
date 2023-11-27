@@ -52,7 +52,7 @@ const projectData = (translateFunction) => {
           },
         ],
         sounds: [],
-        volume: 70,
+        volume: 100,
       },
       {
         isStage: false,
@@ -117,7 +117,7 @@ const projectData = (translateFunction) => {
               md5ext: "whistle.wav",
           },
         ],
-        volume: 70,
+        volume: 100,
         visible: true,
         x: -100,
         y: 0,

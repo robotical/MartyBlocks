@@ -1117,8 +1117,8 @@ class Scratch3Text2SpeechBlocks {
             44100
           );
           const gainNode = offlineContext.createGain();
-          gainNode.gain.value = window.volume || (util.target.volume / 100) * 2;
-          console.log("window.volume", window.volume);
+          gainNode.gain.value = window.volume || (util.target.volume / 100) * 2.5;
+          console.log("gainNode.gain.value", gainNode.gain.value);
           const source = offlineContext.createBufferSource();
           source.buffer = extendedBuffer;
 
