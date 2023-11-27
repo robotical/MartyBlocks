@@ -325,68 +325,68 @@ class Scratch3Text2SpeechBlocks {
         playbackRate: 1.3,
         pitch: 0.7,
       },
-    //   [DAWN_ID]: {
-    //     name: formatMessage({
-    //       id: "text2speech.dawn",
-    //       default: "Dawn",
-    //       description:
-    //         "Female voice with standard pitch and low playback rate.",
-    //     }),
-    //     gender: "female",
-    //     playbackRate: 0.7,
-    //     pitch: 1,
-    //   },
-    //   [CRYSTAL_ID]: {
-    //     name: formatMessage({
-    //       id: "text2speech.crystal",
-    //       default: "Crystal",
-    //       description: "Standard female voice.",
-    //     }),
-    //     gender: "female",
-    //     playbackRate: 1,
-    //     pitch: 1,
-    //   },
-    //   [LULLABY_ID]: {
-    //     name: formatMessage({
-    //       id: "text2speech.lullaby",
-    //       default: "Lullaby",
-    //       description:
-    //         "Female voice with standard pitch and high playback rate.",
-    //     }),
-    //     gender: "female",
-    //     playbackRate: 1.3,
-    //     pitch: 1,
-    //   },
-    //   [AURORA_ID]: {
-    //     name: formatMessage({
-    //       id: "text2speech.aurora",
-    //       default: "Aurora",
-    //       description: "Female voice with high pitch and low playback rate.",
-    //     }),
-    //     gender: "female",
-    //     playbackRate: 0.7,
-    //     pitch: 1.3,
-    //   },
-    //   [RADIANCE_ID]: {
-    //     name: formatMessage({
-    //       id: "text2speech.radiance",
-    //       default: "Radiance",
-    //       description: "High-pitched female voice.",
-    //     }),
-    //     gender: "female",
-    //     playbackRate: 1,
-    //     pitch: 1.3,
-    //   },
-    //   [FLASH_ID]: {
-    //     name: formatMessage({
-    //       id: "text2speech.flash",
-    //       default: "Flash",
-    //       description: "Female voice with high pitch and playback rate.",
-    //     }),
-    //     gender: "female",
-    //     playbackRate: 1.3,
-    //     pitch: 1.3,
-    //   },
+      //   [DAWN_ID]: {
+      //     name: formatMessage({
+      //       id: "text2speech.dawn",
+      //       default: "Dawn",
+      //       description:
+      //         "Female voice with standard pitch and low playback rate.",
+      //     }),
+      //     gender: "female",
+      //     playbackRate: 0.7,
+      //     pitch: 1,
+      //   },
+      //   [CRYSTAL_ID]: {
+      //     name: formatMessage({
+      //       id: "text2speech.crystal",
+      //       default: "Crystal",
+      //       description: "Standard female voice.",
+      //     }),
+      //     gender: "female",
+      //     playbackRate: 1,
+      //     pitch: 1,
+      //   },
+      //   [LULLABY_ID]: {
+      //     name: formatMessage({
+      //       id: "text2speech.lullaby",
+      //       default: "Lullaby",
+      //       description:
+      //         "Female voice with standard pitch and high playback rate.",
+      //     }),
+      //     gender: "female",
+      //     playbackRate: 1.3,
+      //     pitch: 1,
+      //   },
+      //   [AURORA_ID]: {
+      //     name: formatMessage({
+      //       id: "text2speech.aurora",
+      //       default: "Aurora",
+      //       description: "Female voice with high pitch and low playback rate.",
+      //     }),
+      //     gender: "female",
+      //     playbackRate: 0.7,
+      //     pitch: 1.3,
+      //   },
+      //   [RADIANCE_ID]: {
+      //     name: formatMessage({
+      //       id: "text2speech.radiance",
+      //       default: "Radiance",
+      //       description: "High-pitched female voice.",
+      //     }),
+      //     gender: "female",
+      //     playbackRate: 1,
+      //     pitch: 1.3,
+      //   },
+      //   [FLASH_ID]: {
+      //     name: formatMessage({
+      //       id: "text2speech.flash",
+      //       default: "Flash",
+      //       description: "Female voice with high pitch and playback rate.",
+      //     }),
+      //     gender: "female",
+      //     playbackRate: 1.3,
+      //     pitch: 1.3,
+      //   },
     };
   }
 
@@ -1014,15 +1014,47 @@ class Scratch3Text2SpeechBlocks {
 
       // Perform HTTP request to get audio file
       return fetchWithTimeout(path, {}, SERVER_TIMEOUT)
-        .then((res) => {
+        .then(async (res) => {
           if (res.status !== 200) {
             throw new Error(
               `HTTP ${res.status} error reaching translation service`
             );
           }
-
-          return res.arrayBuffer();
-        })
+          // if the length is 0, then we try all the languages in case the language is not supported
+          const buffer = await res.arrayBuffer();
+          console.log("buffer", buffer)
+          if (buffer.byteLength === 909) { // when the buffer length is 909 we don't have data back suggesting that the language is not supported so we try all the languages
+            const pathsObj = [{}];
+            for (const languageKey of Object.keys(this.LANGUAGE_INFO)) {
+              const language = this.LANGUAGE_INFO[languageKey].speechSynthLocale;
+              const path = `${SERVER_HOST}/synth?locale=${language}&gender=${gender}&text=${encodeURIComponent(words.substring(0, 128))}`;
+              pathsObj.push({
+                language: this.LANGUAGE_INFO[languageKey].name,
+                path
+              });
+            }
+            const responses = await Promise.all(pathsObj.map(pathObj => fetchWithTimeout(pathObj.path, {}, SERVER_TIMEOUT)));
+            const buffersPromises = responses.map(response => response.arrayBuffer() || Promise.resolve());
+            const buffers = await Promise.all(buffersPromises);
+            buffers.forEach((b,i)=> pathsObj[i].buffer = b);
+            console.log("buffers", buffers)
+            // get the buffer with the largest size
+            let correctBufferObj = pathsObj.reduce((prev, current) => (prev.buffer.byteLength > current.buffer.byteLength) ? prev : current);
+            console.log("correctBufferObj", correctBufferObj)
+            if (correctBufferObj.buffer.byteLength < 910) {
+              // we don't have any data back
+              mv2Interface.send_REST(
+                "notification/warn-message/Oops! Marty doesn't speak this language yet! Please try another language."
+              );
+              return correctBufferObj.buffer;
+            }
+            mv2Interface.send_REST(
+              `notification/warn-message/Oops! Marty doesn't have an accent for this language yet! We will use the ${correctBufferObj.language} accent instead.`
+            );
+            return correctBufferObj.buffer;
+          }
+            return buffer;
+          })
         .then((buffer) => {
           // Play the sound
 
