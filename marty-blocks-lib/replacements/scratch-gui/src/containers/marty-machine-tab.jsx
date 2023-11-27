@@ -99,7 +99,7 @@ class MartyMachineTab extends React.Component {
     }
 
     shouldShowTutorialsCard() {
-        const MAX_TUTORIALS_COUNT = 5;
+        const MAX_TUTORIALS_COUNT = 10000; // we essentially always show the tutorials card
         // we check to see if the user has seen the tutorials by checking the localStorage
         // if the user has never seen the tutorials card, show it
         // if the user has seen the tutorials card less than MAX_TUTORIALS_COUNT times, show it
