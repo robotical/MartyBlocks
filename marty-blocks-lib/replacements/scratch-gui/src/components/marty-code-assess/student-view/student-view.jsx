@@ -6,6 +6,12 @@ import { defineMessages, intlShape, injectIntl } from "react-intl";
 import classroomIcon from "../../../lib/assets/icon--classroom.svg";
 import helpIcon from "../../../lib/assets/icon--tutorials.svg";
 import StudentAssessment from "./student-assessment/student-assessment.jsx";
+import {
+    openStudentEmojiFeedback,
+} from '../../../reducers/modals.js';
+import { connect } from 'react-redux';
+import errorBoundaryHOC from '../../../lib/error-boundary-hoc.jsx';
+
 
 const messages = defineMessages({
     tutorials: {
@@ -28,7 +34,8 @@ class StudentView extends React.Component {
             'handleClassChange',
             'onSelectTab',
             'onJoinClass',
-            'onExitClass'
+            'onExitClass',
+            'onNewClassAnnouncement'
         ]);
     }
 
@@ -65,23 +72,30 @@ class StudentView extends React.Component {
 
     async onJoinClass() {
         const classId = this.state.studentClassess[this.state.selectedClassIdx]?.id;
-        // TODO: refactor so setJoinedClass takes care of fetching student data and initialising the heartbeat
-        const studentData = await codeAssess.student.requestStudentData(classId);
-        if (studentData) {
-            await studentData.initialiseHeartbeat();
-            codeAssess.student.setJoinedClass(classId);
-            this.setState({ });
+        const didJoin = await codeAssess.student.joinClass(classId);
+        if (didJoin) {
+            codeAssess.subscribe(
+                codeAssess.TypesOfPublishedEvents.NEW_CLASS_ANNOUNCEMENT,
+                codeAssess.TypesOfPublishedEvents.NEW_CLASS_ANNOUNCEMENT,
+                this.onNewClassAnnouncement.bind(this)
+            );
+        }
+        this.setState({});
+    }
+
+    async onNewClassAnnouncement(announcement) {
+        console.log(announcement);
+        if (announcement.classId === this.state.studentClassess[this.state.selectedClassIdx]?.id) {
+            this.props.showStudentEmojiFeedbackModal(announcement);
         }
     }
 
     async onExitClass() {
-        const classId = this.state.studentClassess[this.state.selectedClassIdx]?.id;
-        // TODO: refactor so there is a method in student that takes care of this
-        codeAssess.student.joinedClass = null;
-        this.setState({ });
-        const studentData = await codeAssess.student.requestStudentData(classId);
-        if (!studentData) return;
-        await studentData.stopHeartbeat();
+        const didExit = codeAssess.student.exitClass();
+        if (didExit) {
+            codeAssess.unsubscribe(codeAssess.TypesOfPublishedEvents.NEW_CLASS_ANNOUNCEMENT);
+        }
+        this.setState({});
     }
 
     render() {
@@ -144,6 +158,15 @@ StudentView.propTypes = {
     intl: intlShape.isRequired,
 };
 
+const mapDispatchToProps = dispatch => ({
+    showStudentEmojiFeedbackModal: (announcement) => dispatch(openStudentEmojiFeedback({ announcement })),
+});
 
-export default injectIntl(StudentView);
+
+export default errorBoundaryHOC('StudentView')(
+    injectIntl(connect(
+        null,
+        mapDispatchToProps
+    )(StudentView))
+);
 

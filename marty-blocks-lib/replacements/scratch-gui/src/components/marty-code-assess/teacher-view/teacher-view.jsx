@@ -7,6 +7,7 @@ import classroomIcon from "../../../lib/assets/icon--classroom.svg";
 import helpIcon from "../../../lib/assets/icon--tutorials.svg";
 import ClassStudent from "./class-student/class-student.jsx";
 import ClassPerformanceTab from "./class-performance-tab/class-performance-tab.jsx";
+import ClassAnnouncementResponses from "./class-announcement-responses/class-announcement-responses.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -24,11 +25,13 @@ class TeacherView extends React.Component {
             selectedClassIdx: 0,
             selectedClassStudents: [],
             selectedTab: "Overview",
+            latestAnnouncementId: null,
         };
         bindAll(this, [
             'handleClassChange',
             'getStudentsOfClass',
-            'onSelectTab'
+            'onSelectTab',
+            'askForFeedbackHandler',
         ]);
     }
 
@@ -74,6 +77,15 @@ class TeacherView extends React.Component {
         this.setState({ selectedTab: tab });
     }
 
+    async askForFeedbackHandler() {
+        this.setState({ latestAnnouncementId: null });
+        const selectedClass = this.state.teacherClassess[this.state.selectedClassIdx];
+        const announcementId = await codeAssess.teacher.askForEmojiFeedback(selectedClass.id, "Do you like this class?");
+        if (announcementId) {
+            this.setState({ latestAnnouncementId: announcementId });
+        }
+    }
+
     render() {
         const { intl } = this.props;
         const teacherClassessAssets = this.state.teacherClassess?.map((cls) => {
@@ -111,6 +123,14 @@ class TeacherView extends React.Component {
                             <div className={styles.overviewClassSubject}>{this.state.teacherClassess[this.state.selectedClassIdx]?.subject}</div>
                             <div className={styles.overviewClassRoom}>{this.state.teacherClassess[this.state.selectedClassIdx]?.room}</div>
                             <div className={styles.overviewTotalStudents}>Enrolled Students: {this.state.selectedClassStudents.length}</div>
+                            <button className={styles.overviewAsForFeedbackButton} onClick={this.askForFeedbackHandler}>Ask for feedback</button>
+                            {this.state.latestAnnouncementId &&
+                                <ClassAnnouncementResponses
+                                    classId={this.state.teacherClassess[this.state.selectedClassIdx].id}
+                                    announcementId={this.state.latestAnnouncementId}
+                                    classStudentsCount={this.state.selectedClassStudents.length}
+                                />
+                            }
                         </div>
                         }
                         {this.state.selectedTab === "Students" && <div className={styles.studentsContainer}>

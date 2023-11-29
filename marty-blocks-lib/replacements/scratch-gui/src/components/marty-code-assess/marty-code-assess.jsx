@@ -45,8 +45,8 @@ class MartyCodeAssess extends React.Component {
   }
 
   componentWillUnmount() {
-    codeAssess.unsubscribe(STUDENT_OR_TEACHER_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.STUDENT_OR_TEACHER_CHANGED, this.updateState.bind(this));
-    codeAssess.unsubscribe(IS_USER_LOGGED_IN_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.IS_USER_LOGGED_IN_CHANGED, this.updateState.bind(this));
+    codeAssess.unsubscribe(STUDENT_OR_TEACHER_SUBSCRIPTION);
+    codeAssess.unsubscribe(IS_USER_LOGGED_IN_SUBSCRIPTION);
   }
 
   updateState() {
