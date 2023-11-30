@@ -63,7 +63,7 @@ class TfVisChart extends React.Component {
                 </div>
         );
     }
-}
+} 
 
 TfVisChart.propTypes = {
     id: PropTypes.string.isRequired,
