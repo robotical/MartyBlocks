@@ -16,6 +16,13 @@ class MartyMachine {
     this.image_size = IMAGE_SIZE;
     this.AudioTrainingOptions = AudioTrainingOptions;
     this.BACKGROUND_NOISE_TAG = BACKGROUND_NOISE_TAG;
+    this.currentModel = undefined;
+    this.currentTrainingReducer = undefined;
+  }
+  
+  cleanupAfterSave() {
+    this.currentModel = undefined;
+    this.currentTrainingReducer = undefined;
   }
 
   /**
@@ -24,11 +31,15 @@ class MartyMachine {
    * @returns {MLModel} - a new instance of MLModel
    */
   getNewModelInstance(modelType = "image-device") {
+    let model = undefined;
     if (modelType === "image-device") {
-      return new MLModel("static/MLModelWorker.js");
+      model = new MLModel("static/MLModelWorker.js");
     } else if (modelType === "audio") {
-      return new MLModel("static/MLModelWorker.js");
+      model = new MLModel("static/MLModelWorker.js");
     }
+    this.currentModel = model;
+    this.currentModel.modelType = modelType;
+    return model;
   }
 
   async loadModel(modelJSON, weightBuffers, weightInfo, modelType = "image-device", modelTrainingData = undefined) {
@@ -116,7 +127,9 @@ class MartyMachine {
 
 
   getNewTrainingDataReducer() {
-    return new TDReducerWrapper();
+    const trainingReducer =  new TDReducerWrapper();
+    this.currentTrainingReducer = trainingReducer;
+    return trainingReducer;
   }
 
   newImage(imageSrc) {

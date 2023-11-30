@@ -77,16 +77,27 @@ class MartyMachineTab extends React.Component {
 
         // console.debug("MartyMachineTab stored model:", props.vm.editingTarget.sprite.models[0]);
         // console.debug("MartyMachineTab modelType:", props.vm.editingTarget.sprite.models[0]?.modelType);
+        const modelToLoad = {
+            modelType: martyMachine.currentModel?.modelType || props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
+            isModelLoaded: !martyMachine.currentModel && !!props.vm.editingTarget.sprite.models[0],
+            modelName: martyMachine.currentModel?.name || props.vm.editingTarget.sprite.models[0]?.name || "New Model",
+            MLModel: martyMachine.currentModel || props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance()
+        };
+        console.debug("modelToLoad",modelToLoad)
+
         this.state = {
             selectedModelIndex: 0,
-            modelType: props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
-            isModelLoaded: !!props.vm.editingTarget.sprite.models[0],
-            modelName: props.vm.editingTarget.sprite.models[0]?.name || "New Model",
+            modelType: modelToLoad.modelType,
+            isModelLoaded: modelToLoad.isModelLoaded,
+            modelName: modelToLoad.modelName,
             loadTMModelModalVisible: false,
             newModelConfirmationModalVisible: false,
             newModelModelType: null
         };
-        this.model = props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance();
+        if (martyMachine.currentModel) {
+            martyMachine.currentModel.name = modelToLoad.modelName;
+        }
+        this.model = modelToLoad.MLModel;
     }
 
     componentDidMount() {
@@ -238,6 +249,7 @@ class MartyMachineTab extends React.Component {
     }
 
     onNewModelClick = (modelType) => {
+        martyMachine.cleanupAfterSave();
         this.setState({ modelType: modelType, isModelLoaded: false });
         console.log("setting isModelLoaded to false in marty-machine-tab")
         this.model = martyMachine.getNewModelInstance(modelType);

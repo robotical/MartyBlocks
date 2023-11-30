@@ -48,7 +48,7 @@ class MartyMachineModelEditor extends React.Component {
         this.isTrained = false;
         this.isSaving = false;
         this.audioExtractor = null;
-        this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
+        this.trainingDataReducer = martyMachine.currentTrainingReducer || martyMachine.getNewTrainingDataReducer();
         this.addBackgroundNoiseClassIF();
     }
     componentDidMount() {
@@ -153,7 +153,7 @@ class MartyMachineModelEditor extends React.Component {
 
     addBackgroundNoiseClassIF(newProps) {
         const props = newProps || this.props;
-        if (props.modelType === "audio" && !props.isModelLoaded) {
+        if (props.modelType === "audio" && !props.isModelLoaded && !this.trainingDataReducer.state.classes.find(c => c.name === martyMachine.BACKGROUND_NOISE_TAG)) {
             this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: martyMachine.BACKGROUND_NOISE_TAG } });
             setTimeout(() => {
                 this.onClassNameSelected(martyMachine.BACKGROUND_NOISE_TAG);
@@ -437,6 +437,7 @@ class MartyMachineModelEditor extends React.Component {
             });
         }
         this.props.model.saveModel(this.props.modelType);
+        martyMachine.cleanupAfterSave();
         this.setState({});
     }
 

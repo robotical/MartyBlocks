@@ -32,9 +32,12 @@ class TfVisChart extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log("plotting loss values")
         if (this.chartRef !== null &&
             this.state.data &&
             this.state.data.lossValues.length > 0) {
+            // Clear the existing chart
+            window.document.getElementById("vg-tooltip-element")?.remove();
             martyMachine.tfvis.render.linechart(
                 this.chartRef,
                 { values: this.state.data.lossValues, series: ['train'] },
@@ -51,9 +54,10 @@ class TfVisChart extends React.Component {
     render() {
         return (
             this.state.data ?
-                <div className={styles.container} id={this.props.id} ref={this.setChartRef}></div> :
+                <div className={styles.container} id={this.props.id} ref={this.setChartRef}></div>
+                :
                 <div className={`${styles.container} ${styles.modern_sharp}`}>
-                    <Spinner level='warn' large className={spinnerStyles.primary}/>
+                    <Spinner level='warn' large className={spinnerStyles.primary} />
                     <div className={styles.loading_title}>Loading Loss Plot</div>
                     <div className={styles.loading_subtitle}>This might take a while, please wait...</div>
                 </div>
