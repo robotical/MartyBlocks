@@ -5,9 +5,10 @@ import AssetPanel from "../../asset-panel/asset-panel.jsx";
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import classroomIcon from "../../../lib/assets/icon--classroom.svg";
 import helpIcon from "../../../lib/assets/icon--tutorials.svg";
-import ClassStudent from "./class-student/class-student.jsx";
+import ClassStudent from "./class-students/class-student/class-student.jsx";
 import ClassPerformanceTab from "./class-performance-tab/class-performance-tab.jsx";
 import ClassAnnouncementResponses from "./class-announcement-responses/class-announcement-responses.jsx";
+import ClassStudents from "./class-students/class-students.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -133,14 +134,7 @@ class TeacherView extends React.Component {
                             }
                         </div>
                         }
-                        {this.state.selectedTab === "Students" && <div className={styles.studentsContainer}>
-                            <div className={styles.classStudents}>
-                                {this.state.selectedClassStudents
-                                    .map((student) => (
-                                        <ClassStudent key={student.id} student={student} classId={this.state.teacherClassess[this.state.selectedClassIdx].id} />
-                                    ))}
-                            </div>
-                        </div>}
+                        {this.state.selectedTab === "Students" && <ClassStudents students={this.state.selectedClassStudents} classId={this.state.teacherClassess[this.state.selectedClassIdx].id} />}
                         {this.state.selectedTab === "Class Performance" && <div className={styles.liveStreamContainer}>
                             <ClassPerformanceTab selectedClass={this.state.teacherClassess[this.state.selectedClassIdx]} />
                         </div>

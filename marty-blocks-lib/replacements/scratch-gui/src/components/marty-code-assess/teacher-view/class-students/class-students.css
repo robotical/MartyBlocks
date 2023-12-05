@@ -1,0 +1,24 @@
+.studentsContainer {
+  padding: 20px;
+  height: calc(100% - 100px);
+  overflow-y: auto;
+}
+
+.classStudents {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.sortContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.sortLabel {
+    margin-right: 5px;
+}
+.sortSelect {
+    
+}

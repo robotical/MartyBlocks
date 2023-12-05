@@ -4,7 +4,6 @@ import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import AssessmentOverTimeLineGraph from "../../plots/assessment-over-time-line-graph/assessment-over-time-line-graph.jsx";
-import AssessmentSpiderGraph from "../../plots/assessment-spider-graph/assessment-spider-graph.jsx";
 
 const messages = defineMessages({
     tutorials: {

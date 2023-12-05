@@ -70,18 +70,6 @@
   background-color: $ui-primary;
 }
 
-.studentsContainer {
-  padding: 20px;
-  height: calc(100% - 100px);
-  overflow-y: auto;
-}
-
-.classStudents {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
 .overviewContainer {
   padding: 20px;
   height: calc(100% - 100px);
