@@ -24,10 +24,11 @@
 
 .row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 30px 1fr 1fr;
+    column-gap: 10px;
     border-bottom: 1px solid gainsboro;     
-    margin-bottom: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 15px;
+    padding-top: 15px;
     align-items: center;
 }
 

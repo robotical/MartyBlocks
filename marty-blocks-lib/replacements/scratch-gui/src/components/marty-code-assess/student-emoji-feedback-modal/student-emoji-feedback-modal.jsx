@@ -8,10 +8,11 @@ import {
     closeStudentEmojiFeedback,
 } from '../../../reducers/modals.js';
 import bindAll from 'lodash.bindall';
-import IconSad from './icon--sad-emoji.svg';
-import IconSmile from './icon--smile-emoji.svg';
-import IconVeryBad from './icon--verybad-emoji.svg';
-import IconVeryHappy from './icon--cool-emoji.svg';
+import icon1 from './icon--1.svg';
+import icon2 from './icon--2.svg';
+import icon3 from './icon--3.svg';
+import icon4 from './icon--4.svg';
+import icon5 from './icon--5.svg';
 
 class StudentEmojiFeedbackModal extends React.Component {
     constructor(props) {
@@ -42,19 +43,21 @@ class StudentEmojiFeedbackModal extends React.Component {
                 onRequestClose={() => { }}
             >
                 <Box className={styles.body}>
-                    {/* 5 buttons representing from sad to smiley emojis for feedback */}
                     <Box className={styles.emojiFeedbackContainer}>
                         <Box className={styles.emojiFeedbackButton} onClick={() => this.onEmojiFeedback(1)}>
-                            <img className={styles.emojiFeedbackIcon} src={IconVeryBad} />
+                            <img className={styles.emojiFeedbackIcon} src={icon1} />
                         </Box>
                         <Box className={styles.emojiFeedbackButton} onClick={() => this.onEmojiFeedback(2)}>
-                            <img className={styles.emojiFeedbackIcon} src={IconSad} />
+                            <img className={styles.emojiFeedbackIcon} src={icon2} />
                         </Box>
                         <Box className={styles.emojiFeedbackButton} onClick={() => this.onEmojiFeedback(3)}>
-                            <img className={styles.emojiFeedbackIcon} src={IconSmile} />
+                            <img className={styles.emojiFeedbackIcon} src={icon3} />
                         </Box>
                         <Box className={styles.emojiFeedbackButton} onClick={() => this.onEmojiFeedback(4)}>
-                            <img className={styles.emojiFeedbackIcon} src={IconVeryHappy} />
+                            <img className={styles.emojiFeedbackIcon} src={icon4} />
+                        </Box>
+                        <Box className={styles.emojiFeedbackButton} onClick={() => this.onEmojiFeedback(5)}>
+                            <img className={styles.emojiFeedbackIcon} src={icon5} />
                         </Box>
                     </Box>
                 </Box>

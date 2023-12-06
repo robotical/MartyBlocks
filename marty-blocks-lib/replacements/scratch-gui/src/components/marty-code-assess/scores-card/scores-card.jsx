@@ -10,6 +10,13 @@ import Logic from "../categories-info/logic-info.jsx";
 import Parallelism from "../categories-info/parallelism-info.jsx";
 import Synchronisation from "../categories-info/synchronisation-info.jsx";
 
+import iconSynchronisation from "./icon--synchronisation.svg";
+import iconParallelism from "./icon--parallelism.svg";
+import iconLogic from "./icon--logic.svg";
+import iconInteractivity from "./icon--interactivity.svg";
+import iconDataRepresentation from "./icon--dataRepresentation.svg";
+import iconFlowControl from "./icon--flowControl.svg";
+import iconAbstraction from "./icon--abstraction.svg";
 
 class ScoresCard extends React.Component {
     constructor(props) {
@@ -20,10 +27,12 @@ class ScoresCard extends React.Component {
         return (
             <div className={styles.outerContainer}>
                 <div className={[styles.row, styles.titleRow].join(" ")}>
+                    <div></div>
                     <p>Category</p>
                     <p>Level</p>
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconAbstraction} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({
@@ -37,6 +46,7 @@ class ScoresCard extends React.Component {
                     <ProgressBar completed={this.props.abstraction} />
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconDataRepresentation} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({
@@ -50,6 +60,7 @@ class ScoresCard extends React.Component {
                     <ProgressBar completed={this.props.dataRepresentation} />
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconFlowControl} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({
@@ -63,6 +74,7 @@ class ScoresCard extends React.Component {
                     <ProgressBar completed={this.props.flowControl} />
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconLogic} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({ content: <Logic />, title: "Logic" })
@@ -73,6 +85,7 @@ class ScoresCard extends React.Component {
                     <ProgressBar completed={this.props.logic} />
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconInteractivity} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({
@@ -86,6 +99,7 @@ class ScoresCard extends React.Component {
                     <ProgressBar completed={this.props.parallelism} />
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconParallelism} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({
@@ -99,6 +113,7 @@ class ScoresCard extends React.Component {
                     <ProgressBar completed={this.props.synchronisation} />
                 </div>
                 <div className={styles.row}>
+                    <img className={styles.icon} src={iconSynchronisation} />
                     <p
                         onClick={() =>
                             this.props.onCategoryClick({

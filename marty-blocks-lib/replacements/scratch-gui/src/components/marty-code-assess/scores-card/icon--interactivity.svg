@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.09 155.08">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6 {
+        stroke: #414042;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        fill: #36abc7;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5, .cls-6 {
+        stroke-width: .5px;
+      }
+
+      .cls-3 {
+        stroke-dasharray: 0 0 6 6;
+      }
+
+      .cls-3, .cls-4, .cls-5 {
+        fill: none;
+        stroke-linecap: round;
+      }
+
+      .cls-5 {
+        stroke-dasharray: 0 0 5.93 5.93;
+      }
+
+      .cls-7 {
+        fill: #414042;
+        stroke-width: 0px;
+      }
+
+      .cls-6 {
+        fill: #ffda61;
+      }
+    </style>
+  </defs>
+  <g id="Layer_3" data-name="Layer 3">
+    <g>
+      <g>
+        <rect class="cls-7" x="4.95" y="4.95" width="117.14" height="150.13" rx="17.21" ry="17.21"/>
+        <rect class="cls-1" x=".5" y=".5" width="117.14" height="150.13" rx="17.21" ry="17.21"/>
+      </g>
+      <g>
+        <rect class="cls-2" x="12.09" y="30.91" width="46.98" height="17.36" rx="6.64" ry="6.64"/>
+        <rect class="cls-2" x="59.07" y="111.76" width="46.98" height="17.36" rx="6.64" ry="6.64"/>
+        <g>
+          <path class="cls-4" d="m59.07,39.59s1.06-.43,2.84-.95"/>
+          <path class="cls-5" d="m67.68,37.3c5.71-.97,13.31-1.18,19.73,2.29,13.53,7.32,16.94,43.66-2.98,45.45-19.91,1.79-61.61-12.22-65.7,7.68-5.08,24.71,21.19,27.84,33.84,27.94"/>
+          <path class="cls-4" d="m55.54,120.63c1.37-.04,2.41-.1,2.99-.15"/>
+          <polygon class="cls-7" points="57.01 122.63 56.65 122.28 58.34 120.49 56.42 118.93 56.74 118.55 59.07 120.44 57.01 122.63"/>
+        </g>
+        <circle class="cls-6" cx="70.65" cy="64.12" r="8"/>
+        <g>
+          <line class="cls-3" x1="28.63" y1="64.12" x2="62.65" y2="64.12"/>
+          <polygon class="cls-7" points="30.29 66.17 30.63 65.8 28.83 64.12 30.63 62.44 30.29 62.08 28.09 64.12 30.29 66.17"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

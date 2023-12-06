@@ -6,8 +6,10 @@ import styles from "./marty-code-assess.css";
 import StudentView from "./student-view/student-view.jsx";
 import UserLogin from "./user-login/user-login.jsx";
 import TeacherView from "./teacher-view/teacher-view.jsx";
-import studentIcon from "./icon--student.svg";
-import teacherIcon from "./icon--teacher.svg";
+import studentIconHover from "./icon--student-default.svg";
+import studentIconDefault from "./icon--student-hover.svg";
+import teacherIconHover from "./icon--teacher-default.svg";
+import teacherIconDefault from "./icon--teacher-hover.svg";
 
 const STUDENT_OR_TEACHER_SUBSCRIPTION = "studentOrTeacherChanged";
 const IS_USER_LOGGED_IN_SUBSCRIPTION = "isUserLoggedInChanged";
@@ -35,6 +37,8 @@ class MartyCodeAssess extends React.Component {
       // scores: codeAssess.assess(vm.runtime.targets),
       // showModal: false,
       // modalData: { content: null, title: "" },
+      teacherIcon: teacherIconDefault,
+      studentIcon: studentIconDefault,
     };
     // this.totalScore = this.totalScore.bind(this);
   }
@@ -72,8 +76,12 @@ class MartyCodeAssess extends React.Component {
       studentOrTeacherJSX = <div className={styles.studentOrTeacherButtonsContainer}>
         {/* <button onClick={() => codeAssess.setStudentOrTeacher("teacher")}>{intl.formatMessage(messages.teacher)}</button>
         <button onClick={() => codeAssess.setStudentOrTeacher("student")}>{intl.formatMessage(messages.student)}</button> */}
-        <div className={styles.teacher_icon_container} onClick={() => codeAssess.setStudentOrTeacher("teacher")}><img src={teacherIcon} /><p>{intl.formatMessage(messages.teacher)}</p></div>
-        <div className={styles.student_icon_container} onClick={() => codeAssess.setStudentOrTeacher("student")}><img src={studentIcon} /><p>{intl.formatMessage(messages.student)}</p></div>
+        <div className={styles.teacher_icon_container} onClick={() => codeAssess.setStudentOrTeacher("teacher")}>
+          <img src={this.state.teacherIcon} onMouseOver={() => this.setState({ teacherIcon: teacherIconHover })} onMouseOut={() => this.setState({ teacherIcon: teacherIconDefault })} />
+        </div>
+        <div className={styles.student_icon_container} onClick={() => codeAssess.setStudentOrTeacher("student")}>
+          <img src={this.state.studentIcon} onMouseOver={() => this.setState({ studentIcon: studentIconHover })} onMouseOut={() => this.setState({ studentIcon: studentIconDefault })} />
+        </div>
       </div>;
     }
 
