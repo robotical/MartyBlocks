@@ -8,11 +8,11 @@ import {
     closeStudentEmojiFeedback,
 } from '../../../reducers/modals.js';
 import bindAll from 'lodash.bindall';
-import icon1 from './icon--1.svg';
-import icon2 from './icon--2.svg';
-import icon3 from './icon--3.svg';
-import icon4 from './icon--4.svg';
-import icon5 from './icon--5.svg';
+import icon1 from './icon--marty-1.svg';
+import icon2 from './icon--marty-2.svg';
+import icon3 from './icon--marty-3.svg';
+import icon4 from './icon--marty-4.svg';
+import icon5 from './icon--marty-5.svg';
 
 class StudentEmojiFeedbackModal extends React.Component {
     constructor(props) {
