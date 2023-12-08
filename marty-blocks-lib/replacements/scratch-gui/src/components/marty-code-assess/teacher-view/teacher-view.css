@@ -10,7 +10,7 @@
   background-color: $ui-white;
   border: 1px solid $ui-black-transparent;
   display: grid;
-  grid-template-rows: 0.12fr 0.88fr;
+  grid-template-rows: min-content 1fr;
   grid-template-columns: 1fr;
   height: 100%;
   width: 100%;
@@ -68,6 +68,7 @@
 
 .selectedTabContentContainer {
   background-color: $ui-primary;
+  overflow-y: auto;
 }
 
 .overviewContainer {
@@ -104,4 +105,7 @@
   padding: 20px;
   height: calc(100% - 100px);
   overflow-y: auto;
+}
+
+.classAnnouncementsContainer {
 }

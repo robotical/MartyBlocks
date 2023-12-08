@@ -1,0 +1,55 @@
+.announcementModal {
+    padding: 20px;
+  }
+  
+  .announcementModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .announcementModalText {
+    margin: 10px 0;
+  }
+  
+  .announcementModalTimestamp {
+    font-size: 0.8rem;
+    color: #999;
+  }
+  
+  .announcementModalBody {
+    margin-top: 20px;
+  }
+  
+  .announcementModalResponses {
+    margin-top: 20px;
+  }
+  
+  .announcementModalResponsesTitle {
+    margin-bottom: 10px;
+  }
+  
+  .announcementModalResponsesSpan {
+    margin-right: 5px;
+  }
+  
+  .announcementModalResponse {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .announcementModalResponseText {
+    margin: 0;
+  }
+  
+  .announcementModalResponseText {
+    margin: 0;
+  }
+  
+  .announcementIsActive {
+    color: rgb(12, 223, 132);
+    text-decoration: underline;
+    cursor: pointer;
+  }

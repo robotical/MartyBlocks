@@ -424,30 +424,3 @@
     background: $error-primary;
 }
 
-
-.emojiFeedbackContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-}
-
-.emojiFeedbackButton {
-    padding: 0.6rem 0.75rem;
-    border-radius: 0.5rem;
-    background: $motion-primary;
-    color: white;
-    font-weight: 600;
-    font-size: 0.85rem;
-    margin: 0.25rem;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.emojiFeedbackIcon {
-    width: 2.5rem;
-    height: 2.5rem;
-}

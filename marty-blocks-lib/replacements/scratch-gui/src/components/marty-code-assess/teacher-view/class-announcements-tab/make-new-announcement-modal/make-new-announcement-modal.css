@@ -1,0 +1,42 @@
+.makeNewAnnouncementModal {
+  background-color: #f9f9f9; /* Modal background */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px; /* Adjust width as needed */
+  margin: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.makeNewAnnouncementModal section {
+  margin-bottom: 20px;
+}
+
+.makeNewAnnouncementModal h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.makeNewAnnouncementModal textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  height: 100px; /* Adjust height as needed */
+  resize: vertical; /* Allows the user to resize the textarea vertically */
+}
+
+.makeNewAnnouncementModal button {
+  background-color: #4caf50; /* Button background color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px; /* Space between buttons */
+}
+
+.makeNewAnnouncementModal button:hover {
+  background-color: #45a049; /* Darker shade for hover effect */
+}

@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import LatestAssessmentTab from "../../student-data-modal/latest-assessment-tab/latest-assessment-tab.jsx";
 import LiveStreamTab from "../../student-data-modal/live-stream-tab/live-stream-tab.jsx";
 import PerformanceHistoryTab from "../../student-data-modal/performance-history-tab/performance-history-tab.jsx";
+import Spinner from '../../../spinner/spinner.jsx';
+import spinnerStyles from '../../../spinner/spinner.css';
 
 const messages = defineMessages({
     tutorials: {
@@ -47,7 +49,7 @@ class TrackedPerformanceTab extends React.Component {
 
     render() {
         const { intl } = this.props;
-        if (!this.state.fetchedStudentData) return (<div>Loading...</div>);
+        if (!this.state.fetchedStudentData) return (<Spinner level='warn' large className={spinnerStyles.primary} />);
         
         return (
             <div className={styles.classPerformance}>

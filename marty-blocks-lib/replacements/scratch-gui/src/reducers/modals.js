@@ -11,7 +11,7 @@ const MODAL_SPRITE_LIBRARY = 'spriteLibrary';
 const MODAL_SOUND_RECORDER = 'soundRecorder';
 const MODAL_CONNECTION = 'connectionModal';
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
-const MODAL_STUDENT_EMOJI_FEEDBACK = 'studentEmojiFeedbackModal';
+const MODAL_STUDENT_EMOJI_FEEDBACK = 'studentAnnouncementModal';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -59,7 +59,7 @@ const closeModal = function (modal) {
     };
 };
 
-const openStudentEmojiFeedback = function (modalProps) {
+const openStudentAnnouncement = function (modalProps) {
     return openModal(MODAL_STUDENT_EMOJI_FEEDBACK, modalProps);
 }
 const openBackdropLibrary = function () {
@@ -92,7 +92,7 @@ const openConnectionModal = function () {
 const openTipsLibrary = function () {
     return openModal(MODAL_TIPS_LIBRARY);
 };
-const closeStudentEmojiFeedback = function () {
+const closeStudentAnnouncement = function () {
     return closeModal(MODAL_STUDENT_EMOJI_FEEDBACK);
 }
 const closeBackdropLibrary = function () {
@@ -148,6 +148,6 @@ export {
     closeTelemetryModal,
     closeTipsLibrary,
     closeConnectionModal,
-    openStudentEmojiFeedback,
-    closeStudentEmojiFeedback
+    openStudentAnnouncement,
+    closeStudentAnnouncement
 };

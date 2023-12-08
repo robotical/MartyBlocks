@@ -39,7 +39,7 @@ import DraggableModal from "../../containers/draggable-modal.jsx";
 import Alerts from "../../containers/alerts.jsx";
 import DragLayer from "../../containers/drag-layer.jsx";
 import ConnectionModal from "../../containers/connection-modal.jsx";
-import StudentEmojiFeedbackModal from "../marty-code-assess/student-emoji-feedback-modal/student-emoji-feedback-modal.jsx";
+import StudentAnnouncementModal from "../marty-code-assess/student-announcement-modal/student-announcement-modal.jsx";
 
 import TelemetryModal from "../telemetry-modal/telemetry-modal.jsx";
 
@@ -101,7 +101,7 @@ const GUIComponent = (props) => {
     canUseCloud,
     children,
     connectionModalVisible,
-    studentEmojiFeedbackModalVisible,
+    studentAnnouncementModalVisible,
     costumeLibraryVisible,
     costumesTabVisible,
     draggableModalVisible,
@@ -215,7 +215,7 @@ const GUIComponent = (props) => {
               <Alerts className={styles.alertsContainer} />
             ) : null}
             {connectionModalVisible ? <ConnectionModal vm={vm} /> : null}
-            {studentEmojiFeedbackModalVisible && <StudentEmojiFeedbackModal />}
+            {studentAnnouncementModalVisible && <StudentAnnouncementModal />}
             {costumeLibraryVisible ? (
               <CostumeLibrary
                 vm={vm}
