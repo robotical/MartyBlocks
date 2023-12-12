@@ -100,3 +100,62 @@
   padding: 20px;
   overflow-y: auto;
 }
+
+.button {
+  background-color: #608dc9;
+  outline: none;
+  border-radius: 2rem;
+  border: 1px solid $ui-black-transparent;
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
+  margin: 0px;
+  padding: 0 2rem;
+  height: 3rem;
+  display: grid;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  align-items: center;
+
+  color: $ui-white;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+  align-self: end;
+}
+
+.exit_btn {
+  background-color: #c96075;
+}
+
+.join_btn {
+  background-color: #60c9b2;
+}
+
+.exitConfirmationModal {
+  width: max-content;
+}
+
+.exitConfirmationModalContainer {
+  background-color: $ui-white;
+  border: 1px solid $ui-black-transparent;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.exitConfirmationModalTitle {
+  font-size: 20px;
+  font-weight: 500;
+  padding: calc(2 * $space);
+}
+
+.exitConfirmationModalButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: calc(2 * $space);
+  column-gap: 2rem;
+}

@@ -20,6 +20,7 @@ import CostumeTab from "../../containers/costume-tab.jsx";
 import TargetPane from "../../containers/target-pane.jsx";
 import SoundTab from "../../containers/sound-tab.jsx";
 import MartyMachineTab from "../../containers/marty-machine-tab.jsx";
+import CodeAssessTab from "../../containers/code-assess-tab.jsx";
 import SaveLoadTab from "../../containers/save-load-tab.jsx";
 import StageWrapper from "../../containers/stage-wrapper.jsx";
 import Loader from "../loader/loader.jsx";
@@ -62,7 +63,6 @@ import MonitorList from "../../containers/monitor-list.jsx";
 import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 import MartyPythonButton from "../marty-python-btn/index.jsx";
-import CodeAssessTab from "../../containers/code-assess-tab.jsx";
 
 const messages = defineMessages({
   addExtension: {
@@ -268,6 +268,15 @@ const GUIComponent = (props) => {
                     selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                     onSelect={onActivateTab}
                   >
+                    <TabList className={[tabClassNames.tabList, styles.buttonsTabListContainer].join(" ")}>
+                      <LanguageStandalone
+                      className={styles.languageSelectorWrapper}
+                        canChangeLanguage={canChangeLanguage}
+                      />
+                      <MartyConnectBtn />
+                      <SensorsDashboardBtn />
+                      <MartyPythonButton />
+                    </TabList>
                     <TabList className={tabClassNames.tabList}>
                       <Tab className={tabClassNames.tab}>
                         <img draggable={false} src={codeIcon} />
@@ -340,12 +349,6 @@ const GUIComponent = (props) => {
                           id="gui.gui.toggleSaveLoadTab"
                         />
                       </Tab>
-                      <LanguageStandalone
-                        canChangeLanguage={canChangeLanguage}
-                      />
-                      <MartyConnectBtn />
-                      <SensorsDashboardBtn />
-                      <MartyPythonButton />
                       <Box className={styles.controlsWrapper}>
                         <Controls vm={vm} />
                         <StageHeader stageSize={stageSize} vm={vm} />

@@ -50,8 +50,14 @@
     cursor: pointer;
 }
 
+.language-icon-container {
+    background-color: white;
+    border-radius: 6px;
+    padding: 2px;
+}
+
 .language-icon { 
-    height:  1.5rem;
+    height:  1.8rem;
     vertical-align: middle;
 }
 

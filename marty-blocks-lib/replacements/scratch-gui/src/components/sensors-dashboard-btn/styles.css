@@ -1,6 +1,14 @@
+.icon-container {
+  background-color: white;
+  border-radius: 6px;
+  padding: 2px;
+  margin-left: 5px;
+  display: flex;
+  align-self: center;
+}
+
 .icon {
-    cursor: pointer;
-    height: 90%;
-    align-self: center;
-    margin-left: 5px
+  cursor: pointer;
+  height: 1.8rem;
+  align-self: center;
 }

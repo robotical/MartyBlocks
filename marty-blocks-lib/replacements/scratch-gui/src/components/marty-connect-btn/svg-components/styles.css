@@ -22,3 +22,14 @@
   min-width: 15px;
   max-width: 25px;
 }
+
+.icon-container {
+  background-color: white;
+  border-radius: 6px;
+  padding: 2px;
+  display: flex;
+}
+
+.icon {
+  height: 1.8rem;
+}

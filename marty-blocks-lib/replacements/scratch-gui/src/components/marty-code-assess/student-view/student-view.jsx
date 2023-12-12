@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import errorBoundaryHOC from '../../../lib/error-boundary-hoc.jsx';
 import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
+import Modal from "../../../containers/modal.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -31,13 +32,15 @@ class StudentView extends React.Component {
             selectedClassStudents: [],
             selectedTab: "Overview",
             isLoading: false,
+            exitConfirmationModalVisible: false,
         };
         bindAll(this, [
             'handleClassChange',
             'onSelectTab',
             'onJoinClass',
             'onExitClass',
-            'onNewClassAnnouncement'
+            'onNewClassAnnouncement',
+            'exitClassHandler'
         ]);
     }
 
@@ -105,12 +108,16 @@ class StudentView extends React.Component {
     }
 
     async onExitClass() {
+        this.setState({ exitConfirmationModalVisible: true });
+    }
+
+    async exitClassHandler() {
         this.setState({ isLoading: true });
         const didExit = await codeAssess.student.exitClass();
         if (didExit) {
             codeAssess.unsubscribe(codeAssess.TypesOfPublishedEvents.NEW_CLASS_ANNOUNCEMENT);
         }
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, exitConfirmationModalVisible: false });
     }
 
     render() {
@@ -125,50 +132,66 @@ class StudentView extends React.Component {
 
 
         return (
-            <AssetPanel
-                buttons={[
-                    {
-                        title: intl.formatMessage(messages.tutorials),
-                        img: helpIcon,
-                        onClick: () => this.props.showTutorialCard(), // TODO: implement
-                    },
-                ]}
-                items={studentClassessAssets}
-                selectedItemIndex={this.state.selectedClassIdx}
-                onItemClick={this.handleClassChange}
-                onDrop={() => { }}
-                externalStylesClass={styles.assetPanel}
-            >
-                <div className={styles.outerContainer} >
-                    <div className={styles.header}>
-                        <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
-                        <div onClick={() => this.onSelectTab("My Assessment")} className={[styles.tab, (this.state.selectedTab === "My Assessment" ? styles.selectedTab : "")].join(" ")}>My Assessment</div>
+            <>
+                {this.state.exitConfirmationModalVisible && <Modal
+                    onRequestClose={() => this.setState({ exitConfirmationModalVisible: false })}
+                    id="exitConfirmationModal"
+                    contentLabel="Are you sure you want to exit this class?"
+                    className={styles.exitConfirmationModal}
+                >
+                    <div className={styles.exitConfirmationModalContainer}>
+                        <div className={styles.exitConfirmationModalTitle}>Are you sure you want to exit this class?</div>
+                        <div className={styles.exitConfirmationModalButtonsContainer}>
+                            <button className={[styles.button].join(" ")} onClick={() => this.setState({ exitConfirmationModalVisible: false })}>Cancel</button>
+                            <button className={[styles.button].join(" ")} onClick={this.exitClassHandler}>Yes</button>
+                        </div>
                     </div>
-                    <div className={styles.selectedTabContentContainer}>
-                        {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
-                            <>
-                                {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
-                                    <div className={styles.overviewClassName}>Name: {this.state.studentClassess[this.state.selectedClassIdx]?.name}</div>
-                                    <div className={styles.overviewClassSection}>{this.state.studentClassess[this.state.selectedClassIdx]?.section}</div>
-                                    <div className={styles.overviewClassSubject}>{this.state.studentClassess[this.state.selectedClassIdx]?.subject}</div>
-                                    <div className={styles.overviewClassRoom}>{this.state.studentClassess[this.state.selectedClassIdx]?.room}</div>
-                                    <div className={styles.overviewHasJoined}>
-                                        {!!(codeAssess?.student?.joinedClass?.id === this.state.studentClassess[this.state.selectedClassIdx]?.id) ?
-                                            <button onClick={this.onExitClass}>Exit Class</button> :
-                                            <button onClick={this.onJoinClass}>Join</button>
-                                        }
+                </Modal>}
+                <AssetPanel
+                    buttons={[
+                        {
+                            title: intl.formatMessage(messages.tutorials),
+                            img: helpIcon,
+                            onClick: () => this.props.showTutorialCard(), // TODO: implement
+                        },
+                    ]}
+                    items={studentClassessAssets}
+                    selectedItemIndex={this.state.selectedClassIdx}
+                    onItemClick={this.handleClassChange}
+                    onDrop={() => { }}
+                    externalStylesClass={styles.assetPanel}
+                >
+                    <div className={styles.outerContainer} >
+                        <div className={styles.header}>
+                            <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
+                            <div onClick={() => this.onSelectTab("My Assessment")} className={[styles.tab, (this.state.selectedTab === "My Assessment" ? styles.selectedTab : "")].join(" ")}>My Assessment</div>
+                        </div>
+                        <div className={styles.selectedTabContentContainer}>
+                            {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
+                                <>
+                                    {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
+                                        <div className={styles.overviewClassName}>Name: {this.state.studentClassess[this.state.selectedClassIdx]?.name}</div>
+                                        <div className={styles.overviewClassSection}>{this.state.studentClassess[this.state.selectedClassIdx]?.section}</div>
+                                        <div className={styles.overviewClassSubject}>{this.state.studentClassess[this.state.selectedClassIdx]?.subject}</div>
+                                        <div className={styles.overviewClassRoom}>{this.state.studentClassess[this.state.selectedClassIdx]?.room}</div>
+                                        <div className={styles.overviewHasJoined}>
+                                            {!!(codeAssess?.student?.joinedClass?.id === this.state.studentClassess[this.state.selectedClassIdx]?.id) ?
+                                                <button onClick={this.onExitClass} className={[styles.button, styles.exit_btn].join(" ")}>Exit Class</button> :
+                                                <button onClick={this.onJoinClass} className={[styles.button, styles.join_btn].join(" ")}>Join</button>
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                                }
-                                {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>
-                                    <StudentAssessment classId={this.state.studentClassess[this.state.selectedClassIdx]?.id} />
-                                </div>
-                                }
-                            </>
-                        )}
+                                    }
+                                    {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>
+                                        <StudentAssessment classId={this.state.studentClassess[this.state.selectedClassIdx]?.id} />
+                                    </div>
+                                    }
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </AssetPanel>
+                </AssetPanel>
+            </>
         );
     }
 }

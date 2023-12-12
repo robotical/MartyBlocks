@@ -71,7 +71,7 @@ class LanguageStandalone extends React.Component {
                         {(this.props.canChangeLanguage) && (<div
                             className={classNames(styles.menuBarItem, styles.hoverable, styles.languageMenu)}
                         >
-                            <div>
+                            <div className={styles.languageIconContainer}>
                                 <img
                                     className={styles.languageIcon}
                                     src={languageIcon}
