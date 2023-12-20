@@ -96,6 +96,7 @@ class SaveLoad extends React.Component {
       alert("Loaded Project");
       // this seems to be required to let the wm load the project
       window.setTimeout(() => this.props.onActivateBlocksTab());
+      codeAssess.setIsProjectLoaded(true);
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(`Failed to load project: ${error.message}`);

@@ -85,6 +85,7 @@ class SaveLoad extends React.Component {
       mv2Interface.send_REST(`notification/info-message/Project loaded!`);
       // this seems to be required to let the wm load the project
       window.setTimeout(() => this.props.onActivateBlocksTab());
+      codeAssess.setIsProjectLoaded(true);
     } catch (error) {
       // eslint-disable-next-line no-alert
       mv2Interface.send_REST(

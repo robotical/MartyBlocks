@@ -91,10 +91,10 @@ const vmListenerHOC = function (WrappedComponent) {
             this.assessStudent();
         }
         async assessStudent() {
-            // this has changed
             try {
                 const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
                 const assessment = codeAssess.assess(vm.runtime.targets);
+                const badges = codeAssess.assessBadges(vm.runtime.targets);
                 await studentData.sendStudentAssessmentScores(assessment);
             } catch (error) {
                 console.warn("Could not assess student -- probably not in a class");
