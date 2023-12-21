@@ -15,7 +15,6 @@ const messages = defineMessages({
     }
 });
 
-
 class ClassStudents extends React.Component {
     constructor(props) {
         super(props);
@@ -63,6 +62,7 @@ class ClassStudents extends React.Component {
         Promise.all(students.map((student) => student.fetchStudentData(this.props.classId)))
             .then((fetchedStudentData) => {
                 // now we can sort the students by performance
+                console.log("compop", students[0].getCompositeScore(fetchedStudentData[0]));
                 const sortedStudents = students.sort((a, b) => {
                     const aStudentData = fetchedStudentData.find((studentData) => studentData.studentId === a.id);
                     const bStudentData = fetchedStudentData.find((studentData) => studentData.studentId === b.id);
@@ -71,7 +71,7 @@ class ClassStudents extends React.Component {
                     return bPerformance - aPerformance;
                 });
                 this.setState({ sortedStudents, isLoading: false });
-            });
+            }).catch((err) => console.log(err)).finally(() => this.setState({ isLoading: false }));
     }
 
     sortByActivityStatus() {

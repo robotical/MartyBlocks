@@ -94,7 +94,10 @@ const vmListenerHOC = function (WrappedComponent) {
             try {
                 const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
                 const assessment = codeAssess.assess(vm.runtime.targets);
-                const badges = codeAssess.assessBadges(vm.runtime.targets);
+                const badgesResults = codeAssess.assessBadges(vm.runtime.targets);
+                if (badgesResults.hasCountChanged) {
+                    await studentData.sendStudentBadgesData(badgesResults.badgesCount);
+                }
                 await studentData.sendStudentAssessmentScores(assessment);
             } catch (error) {
                 console.warn("Could not assess student -- probably not in a class");

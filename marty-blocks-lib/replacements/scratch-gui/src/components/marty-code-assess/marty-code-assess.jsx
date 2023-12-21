@@ -6,46 +6,42 @@ import styles from "./marty-code-assess.css";
 import StudentView from "./student-view/student-view.jsx";
 import UserLogin from "./user-login/user-login.jsx";
 import TeacherView from "./teacher-view/teacher-view.jsx";
-import studentIconHover from "./icon--student-default.svg";
-import studentIconDefault from "./icon--student-hover.svg";
-import teacherIconHover from "./icon--teacher-default.svg";
-import teacherIconDefault from "./icon--teacher-hover.svg";
+import bindAll from 'lodash.bindall';
+import AssetPanel from "../asset-panel/asset-panel.jsx";
+import helpIcon from "../../lib/assets/icon--tutorials.svg";
+import classroomIcon from "../../lib/assets/icon--classroom.svg";
+import Spinner from '../spinner/spinner.jsx';
+import spinnerStyles from '../spinner/spinner.css';
 
 const STUDENT_OR_TEACHER_SUBSCRIPTION = "studentOrTeacherChanged";
 const IS_USER_LOGGED_IN_SUBSCRIPTION = "isUserLoggedInChanged";
 
 
 const messages = defineMessages({
-  student: {
-    defaultMessage: "Student",
-    description: "Button to select student view",
-    id: "gui.martyCodeAssess.studentOrTeacherButtons.student",
-  },
-  teacher: {
-    defaultMessage: "Teacher",
-    description: "Button to select teacher view",
-    id: "gui.martyCodeAssess.studentOrTeacherButtons.teacher",
-  },
+  tutorials: {
+    defaultMessage: "Tutorials",
+    description: "Button to open the tutorials page",
+    id: "gui.martyCodeAssess.teacherView.tutorials",
+  }
 });
-
-
 
 class MartyCodeAssess extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // scores: codeAssess.assess(vm.runtime.targets),
-      // showModal: false,
-      // modalData: { content: null, title: "" },
-      teacherIcon: teacherIconDefault,
-      studentIcon: studentIconDefault,
+      classes: [],
+      selectedClassIdx: 0,
+      isLoading: false,
     };
-    // this.totalScore = this.totalScore.bind(this);
+    bindAll(this, [
+      'handleClassChange',
+      'setUserRole'
+    ]);
   }
 
   componentDidMount() {
     codeAssess.subscribe(STUDENT_OR_TEACHER_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.STUDENT_OR_TEACHER_CHANGED, this.updateState.bind(this));
-    codeAssess.subscribe(IS_USER_LOGGED_IN_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.IS_USER_LOGGED_IN_CHANGED, this.updateState.bind(this));
+    codeAssess.subscribe(IS_USER_LOGGED_IN_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.IS_USER_LOGGED_IN_CHANGED, this.onUserLoggedIn.bind(this));
   }
 
   componentWillUnmount() {
@@ -57,32 +53,44 @@ class MartyCodeAssess extends React.Component {
     this.setState({});
   }
 
-  // totalScore() {
-  //   let total = 0;
-  //   Object.keys(this.state.scores).forEach(categoryKey => {
-  //     total += this.state.scores[categoryKey];
-  //   })
-  //   return total;
-  // }
+  async componentDidUpdate(prevProps, prevState) {
+    // when the selectedClassIdx or the classes change
+    if ((prevState.selectedClassIdx !== this.state.selectedClassIdx) || (prevState.classes !== this.state.classes)) {
+      this.setState({ isLoading: true });
+      const selectedClass = this.state.classes[this.state.selectedClassIdx];
+      await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.userProfile.id);
+      await this.setUserRole(selectedClass);
+      this.setState({ isLoading: false });
+    }
+  }
+
+  async onUserLoggedIn() {
+    this.setState({ isLoading: true });
+    const classes = await codeAssess.userProfile.getListOfClassess();
+    if (classes.length > 0) {
+      await this.setUserRole(classes[0]);
+    }
+    this.setState({ classes, isLoading: false });
+  }
+
+  async setUserRole(selectedClass) {
+    const teacherOrStudent = await codeAssess.userProfile.determineIfStudentOrTeacherInClass(selectedClass.id);
+    if (teacherOrStudent) {
+      await codeAssess.setStudentOrTeacher(teacherOrStudent);
+    }
+  }
+
+  handleClassChange(classIdx) {
+    this.setState({ selectedClassIdx: classIdx });
+  }
 
   render() {
     const { intl } = this.props;
     let studentOrTeacherJSX = null;
     if (codeAssess.studentOrTeacher === "teacher") {
-      studentOrTeacherJSX = <TeacherView />;
+      studentOrTeacherJSX = <TeacherView selectedClass={this.state.classes[this.state.selectedClassIdx]} />;
     } else if (codeAssess.studentOrTeacher === "student") {
-      studentOrTeacherJSX = <StudentView />;
-    } else {
-      studentOrTeacherJSX = <div className={styles.studentOrTeacherButtonsContainer}>
-        {/* <button onClick={() => codeAssess.setStudentOrTeacher("teacher")}>{intl.formatMessage(messages.teacher)}</button>
-        <button onClick={() => codeAssess.setStudentOrTeacher("student")}>{intl.formatMessage(messages.student)}</button> */}
-        <div className={styles.teacher_icon_container} onClick={() => codeAssess.setStudentOrTeacher("teacher")}>
-          <img src={this.state.teacherIcon} onMouseOver={() => this.setState({ teacherIcon: teacherIconHover })} onMouseOut={() => this.setState({ teacherIcon: teacherIconDefault })} />
-        </div>
-        <div className={styles.student_icon_container} onClick={() => codeAssess.setStudentOrTeacher("student")}>
-          <img src={this.state.studentIcon} onMouseOver={() => this.setState({ studentIcon: studentIconHover })} onMouseOut={() => this.setState({ studentIcon: studentIconDefault })} />
-        </div>
-      </div>;
+      studentOrTeacherJSX = <StudentView selectedClass={this.state.classes[this.state.selectedClassIdx]} />;
     }
 
     let userLoggedInJSX = null;
@@ -92,10 +100,33 @@ class MartyCodeAssess extends React.Component {
       userLoggedInJSX = <UserLogin />;
     }
 
+    const classesAssets = this.state.classes?.map((cls) => {
+      return ({
+        url: classroomIcon,
+        name: cls.name,
+        details: cls.section || "",
+      })
+    }) || [];
+
     return (
-      <div className={styles.outerContainer}>
-        {userLoggedInJSX}
-      </div>
+      <AssetPanel
+        buttons={[
+          {
+            title: intl.formatMessage(messages.tutorials),
+            img: helpIcon,
+            onClick: () => this.props.showTutorialCard(), // TODO: implement
+          },
+        ]}
+        items={classesAssets}
+        selectedItemIndex={this.state.selectedClassIdx}
+        onItemClick={this.handleClassChange}
+        onDrop={() => { }}
+        externalStylesClass={styles.assetPanel}
+      >
+        <div className={styles.outerContainer}>
+          {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : userLoggedInJSX}
+        </div>
+      </AssetPanel >
     );
   }
 }

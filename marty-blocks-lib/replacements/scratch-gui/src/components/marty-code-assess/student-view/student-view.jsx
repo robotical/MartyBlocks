@@ -1,10 +1,7 @@
 import React from "react";
 import styles from "./student-view.css";
 import bindAll from 'lodash.bindall';
-import AssetPanel from "../../asset-panel/asset-panel.jsx";
 import { defineMessages, intlShape, injectIntl } from "react-intl";
-import classroomIcon from "../../../lib/assets/icon--classroom.svg";
-import helpIcon from "../../../lib/assets/icon--tutorials.svg";
 import StudentAssessment from "./student-assessment/student-assessment.jsx";
 import {
     openStudentAnnouncement,
@@ -14,9 +11,10 @@ import errorBoundaryHOC from '../../../lib/error-boundary-hoc.jsx';
 import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 import Modal from "../../../containers/modal.jsx";
+import PropTypes from "prop-types";
 
 const messages = defineMessages({
-    tutorials: {
+    placeholder: {
         defaultMessage: "Tutorials",
         description: "Button to open the tutorials page",
         id: "gui.martyCodeAssess.studentView.tutorials",
@@ -27,15 +25,12 @@ class StudentView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentClassess: [],
-            selectedClassIdx: 0,
             selectedClassStudents: [],
             selectedTab: "Overview",
             isLoading: false,
             exitConfirmationModalVisible: false,
         };
         bindAll(this, [
-            'handleClassChange',
             'onSelectTab',
             'onJoinClass',
             'onExitClass',
@@ -48,33 +43,9 @@ class StudentView extends React.Component {
         const asyncFunc = async () => {
             this.setState({ isLoading: true });
             await codeAssess.createStudentIfDoesntExist(codeAssess.student.id, codeAssess.student.name);
-            codeAssess.student.getListOfClassess().then((classess) => {
-                this.setState({ studentClassess: classess });
-            });
             this.setState({ isLoading: false });
         }
         asyncFunc();
-    }
-
-    // when the component state is changed
-    async componentDidUpdate(prevProps, prevState) {
-        // when the selectedClass changes
-        if (prevState.selectedClassIdx !== this.state.selectedClassIdx) {
-            this.setState({ isLoading: true });
-            const selectedClass = this.state.studentClassess[this.state.selectedClassIdx];
-            await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.student.id);
-            this.setState({ isLoading: false });
-        }
-        if (prevState.studentClassess !== this.state.studentClassess) {
-            this.setState({ isLoading: true });
-            const selectedClass = this.state.studentClassess[this.state.selectedClassIdx];
-            await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, selectedClass.teacherId);
-            this.setState({ isLoading: false });
-        }
-    }
-
-    handleClassChange(classIdx) {
-        this.setState({ selectedClassIdx: classIdx });
     }
 
     onSelectTab(tab) {
@@ -83,7 +54,7 @@ class StudentView extends React.Component {
 
     async onJoinClass() {
         this.setState({ isLoading: true });
-        const classId = this.state.studentClassess[this.state.selectedClassIdx]?.id;
+        const classId = this.props.selectedClass?.id;
         const didJoin = await codeAssess.student.joinClass(classId);
         if (didJoin) {
             codeAssess.subscribe(
@@ -101,8 +72,7 @@ class StudentView extends React.Component {
         announcement.responses.forEach((response) => {
             if (response.studentId === codeAssess.student.id) haveIAnswered = true;
         });
-        console.log(announcement);
-        if (announcement.classId === this.state.studentClassess[this.state.selectedClassIdx]?.id && !haveIAnswered) {
+        if (announcement.classId === this.props.selectedClass?.id && !haveIAnswered) {
             this.props.showStudentAnnouncementModal(announcement);
         }
     }
@@ -122,14 +92,6 @@ class StudentView extends React.Component {
 
     render() {
         const { intl } = this.props;
-        const studentClassessAssets = this.state.studentClassess?.map((cls) => {
-            return ({
-                url: classroomIcon,
-                name: cls.name,
-                details: cls.section || "",
-            })
-        }) || [];
-
 
         return (
             <>
@@ -147,50 +109,35 @@ class StudentView extends React.Component {
                         </div>
                     </div>
                 </Modal>}
-                <AssetPanel
-                    buttons={[
-                        {
-                            title: intl.formatMessage(messages.tutorials),
-                            img: helpIcon,
-                            onClick: () => this.props.showTutorialCard(), // TODO: implement
-                        },
-                    ]}
-                    items={studentClassessAssets}
-                    selectedItemIndex={this.state.selectedClassIdx}
-                    onItemClick={this.handleClassChange}
-                    onDrop={() => { }}
-                    externalStylesClass={styles.assetPanel}
-                >
-                    <div className={styles.outerContainer} >
-                        <div className={styles.header}>
-                            <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
-                            <div onClick={() => this.onSelectTab("My Assessment")} className={[styles.tab, (this.state.selectedTab === "My Assessment" ? styles.selectedTab : "")].join(" ")}>My Assessment</div>
-                        </div>
-                        <div className={styles.selectedTabContentContainer}>
-                            {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
-                                <>
-                                    {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
-                                        <div className={styles.overviewClassName}>Name: {this.state.studentClassess[this.state.selectedClassIdx]?.name}</div>
-                                        <div className={styles.overviewClassSection}>{this.state.studentClassess[this.state.selectedClassIdx]?.section}</div>
-                                        <div className={styles.overviewClassSubject}>{this.state.studentClassess[this.state.selectedClassIdx]?.subject}</div>
-                                        <div className={styles.overviewClassRoom}>{this.state.studentClassess[this.state.selectedClassIdx]?.room}</div>
-                                        <div className={styles.overviewHasJoined}>
-                                            {!!(codeAssess?.student?.joinedClass?.id === this.state.studentClassess[this.state.selectedClassIdx]?.id) ?
-                                                <button onClick={this.onExitClass} className={[styles.button, styles.exit_btn].join(" ")}>Exit Class</button> :
-                                                <button onClick={this.onJoinClass} className={[styles.button, styles.join_btn].join(" ")}>Join</button>
-                                            }
-                                        </div>
-                                    </div>
-                                    }
-                                    {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>
-                                        <StudentAssessment classId={this.state.studentClassess[this.state.selectedClassIdx]?.id} />
-                                    </div>
-                                    }
-                                </>
-                            )}
-                        </div>
+                <div className={styles.outerContainer} >
+                    <div className={styles.header}>
+                        <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
+                        <div onClick={() => this.onSelectTab("My Assessment")} className={[styles.tab, (this.state.selectedTab === "My Assessment" ? styles.selectedTab : "")].join(" ")}>My Assessment</div>
                     </div>
-                </AssetPanel>
+                    <div className={styles.selectedTabContentContainer}>
+                        {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
+                            <>
+                                {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
+                                    <div className={styles.overviewClassName}>Name: {this.props.selectedClass?.name}</div>
+                                    <div className={styles.overviewClassSection}>{this.props.selectedClass?.section}</div>
+                                    <div className={styles.overviewClassSubject}>{this.props.selectedClass?.subject}</div>
+                                    <div className={styles.overviewClassRoom}>{this.props.selectedClass?.room}</div>
+                                    <div className={styles.overviewHasJoined}>
+                                        {!!(codeAssess?.student?.joinedClass?.id === this.props.selectedClass?.id) ?
+                                            <button onClick={this.onExitClass} className={[styles.button, styles.exit_btn].join(" ")}>Exit Class</button> :
+                                            <button onClick={this.onJoinClass} className={[styles.button, styles.join_btn].join(" ")}>Join</button>
+                                        }
+                                    </div>
+                                </div>
+                                }
+                                {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>
+                                    <StudentAssessment classId={this.props.selectedClass?.id} />
+                                </div>
+                                }
+                            </>
+                        )}
+                    </div>
+                </div>
             </>
         );
     }
@@ -198,6 +145,7 @@ class StudentView extends React.Component {
 
 StudentView.propTypes = {
     intl: intlShape.isRequired,
+    selectedClass: PropTypes.object,
 };
 
 const mapDispatchToProps = dispatch => ({
