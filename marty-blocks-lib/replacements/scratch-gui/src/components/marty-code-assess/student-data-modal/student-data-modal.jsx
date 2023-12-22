@@ -4,7 +4,7 @@ import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import LatestAssessmentTab from "./latest-assessment-tab/latest-assessment-tab.jsx";
-import LiveStreamTab from "./live-stream-tab/live-stream-tab.jsx";
+import StudentBadges from "./student-badges/student-badges.jsx";
 import PerformanceHistoryTab from "./performance-history-tab/performance-history-tab.jsx";
 
 const messages = defineMessages({
@@ -47,13 +47,13 @@ class StudentDataModal extends React.Component {
                     <div className={styles.studentDataModalHeader}>
                         <div className={styles.navigationTabs}>
                             <div className={[styles.navigationTab, this.state.selectedTab === "Latest Assessment" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Latest Assessment" })}>Latest Assessment</div>
-                            <div className={[styles.navigationTab, this.state.selectedTab === "Live Stream" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Live Stream" })}>Live Stream</div>
+                            <div className={[styles.navigationTab, this.state.selectedTab === "Badges" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Badges" })}>Badges</div>
                             <div className={[styles.navigationTab, this.state.selectedTab === "Performance History" ? styles.selectedTab : null].join(" ")} onClick={() => this.setState({ selectedTab: "Performance History" })}>Performance History</div>
                         </div>
                     </div>
                     <div className={styles.modalBody}>
                         {this.state.selectedTab === "Latest Assessment" && <LatestAssessmentTab studentData={studentData} student={student} />}
-                        {this.state.selectedTab === "Live Stream" && <LiveStreamTab studentData={studentData} student={student} />}
+                        {this.state.selectedTab === "Badges" && <StudentBadges studentData={studentData} student={student} />}
                         {this.state.selectedTab === "Performance History" && <PerformanceHistoryTab studentData={studentData} student={student} />}
                     </div>
                 </div>

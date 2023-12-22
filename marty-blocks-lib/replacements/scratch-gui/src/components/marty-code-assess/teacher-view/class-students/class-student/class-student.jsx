@@ -66,19 +66,47 @@ class ClassStudent extends React.Component {
         const student = this.props.student;
         console.log("re-rendering ClassStudent")
 
-        const spiderChartData = codeAssess.dataTransformationUtils.transformDataForSpiderChart(this.state.fetchedStudentData?.scoresOverTime || {});
+        const preprocessor = new codeAssess.Preprocessor(this.state.fetchedStudentData?.scoresOverTime || {});
+        const transformedData =
+            preprocessor
+                .sortData()
+                .calculateAverageGivenTimeWindow(10, 5, "minutes")
+                .normaliseScores()
+                .exportToSpiderGraphData([
+                    "Algorithms Composite Score", 
+                    "Generalisation and Abstraction Composite Score", 
+                    "Analysis Composite Score", 
+                    "Decomposition Composite Score", 
+                    "Pattern Recognition and Data Representation Composite Score",
+
+                    // "Comments",
+                    // "Conditionals",
+                    // "Data Types",
+                    // "Debugging",
+                    // "Function Reuse",
+                    // "Functions",
+                    // "Functions with Arguments",
+                    // "Loops",
+                    // "Naming",
+                    // "Operators",
+                    // "Parallelism",
+                    // "Sequencing",
+                    // "Synchronization and Messages",
+                    // "Variables Instead of Literals",
+                    // "Variables and Data Structures"
+                ]);
 
         let studentJsx = null;
         // if the student has data then show the spider chart
         // if the student doesn't have data
         // if the student is active then show the green education icon
         // if the student is not active then show the red education icon
-        if (spiderChartData) {
-            studentJsx = <AssessmentSpiderGraph 
-            data={spiderChartData} 
-            plotTitle={student.name} 
-            isStudentPreview={true}
-            colour={STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP[this.state.studentActivityStatus]}
+        if (transformedData) {
+            studentJsx = <AssessmentSpiderGraph
+                data={transformedData}
+                plotTitle={student.name}
+                isStudentPreview={true}
+                colour={STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP[this.state.studentActivityStatus]}
             />;
         } else {
             studentJsx = <img className={styles.classStudentImg} src={this.state.studentActivityStatus === "active" ? educationIconGreen : educationIconRed} />;

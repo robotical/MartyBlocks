@@ -46,24 +46,50 @@ class PerformanceHistoryTab extends React.Component {
             return <div>No student data yet!</div>;
         }
 
-        const lineGraphDataTraces = codeAssess.dataTransformationUtils.transformDataForStackedAreaChart(rawData);
-        const abstractionDataTrace = lineGraphDataTraces.find(trace => trace.name === "Abstraction");
-        const dataRepresentationDataTrace = lineGraphDataTraces.find(trace => trace.name === "DataRepresentation");
-        const flowControlDataTrace = lineGraphDataTraces.find(trace => trace.name === "FlowControl");
-        const interactivityDataTrace = lineGraphDataTraces.find(trace => trace.name === "Interactivity");
-        const logicDataTrace = lineGraphDataTraces.find(trace => trace.name === "Logic");
-        const parallelismDataTrace = lineGraphDataTraces.find(trace => trace.name === "Parallelism");
-        const synchronisation = lineGraphDataTraces.find(trace => trace.name === "Synchronisation");
+        console.log("rawData", rawData)
+        const linegraphData = new codeAssess.Preprocessor(rawData).sortData().normaliseScores()
+            .calculateMovingMaxBasedOnDates(1, "days")
+            .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
+            .exportToLeakyIntegratorData([
+                "Algorithms Composite Score",
+                "Generalisation and Abstraction Composite Score",
+                "Analysis Composite Score",
+                "Decomposition Composite Score",
+                "Pattern Recognition and Data Representation Composite Score",
+
+                "Comments",
+                "Conditionals",
+                "Data Types",
+                "Debugging",
+                "Function Reuse",
+                "Functions",
+                "Functions with Arguments",
+                "Loops",
+                "Naming",
+                "Operators",
+                "Parallelism",
+                "Sequencing",
+                "Synchronization and Messages",
+                "Variables Instead of Literals",
+                "Variables and Data Structures"
+            ]);
+
+            console.log("linegraphData", linegraphData)
+
+        const plots = [];
+        for (let i = 0; i < linegraphData.length; i += 4) {
+            plots.push(
+                <AssessmentOverTimeLineGraph
+                    key={i}
+                    data={linegraphData.slice(i, i + 4)}
+                    plotTitle={linegraphData[i].name}
+                />
+            );
+        }
 
         return (
             <div className={styles.performanceHistoryContainer}>
-                {abstractionDataTrace && <AssessmentOverTimeLineGraph data={abstractionDataTrace} plotTitle="Abstraction" />}
-                {dataRepresentationDataTrace && <AssessmentOverTimeLineGraph data={dataRepresentationDataTrace} plotTitle="Data Representation" />}
-                {flowControlDataTrace && <AssessmentOverTimeLineGraph data={flowControlDataTrace} plotTitle="Flow Control" />}
-                {interactivityDataTrace && <AssessmentOverTimeLineGraph data={interactivityDataTrace} plotTitle="Interactivity" />}
-                {logicDataTrace && <AssessmentOverTimeLineGraph data={logicDataTrace} plotTitle="Logic" />}
-                {parallelismDataTrace && <AssessmentOverTimeLineGraph data={parallelismDataTrace} plotTitle="Parallelism" />}
-                {synchronisation && <AssessmentOverTimeLineGraph data={synchronisation} plotTitle="Synchronisation" />}
+                {plots}
             </div>
         );
     }

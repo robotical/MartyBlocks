@@ -2,6 +2,7 @@ const assess = require("@robotical/automatic-assessments/lib").assess;
 const assessBadges = require("@robotical/automatic-assessments/lib").assessBadges;
 const BadgesManager = require("@robotical/automatic-assessments/lib").BadgesManager;
 const CodeAssessLib = require("@robotical/code-assess-lib").default;
+const Preprocessor = require("@robotical/code-assess-lib").Preprocessor;
 
 class CodeAssess {
     constructor() {
@@ -10,6 +11,7 @@ class CodeAssess {
         // this.assessBadges = assessBadges;
         this.BadgesManager = BadgesManager;
         this.isProjectLoaded = false;
+        this.Preprocessor = Preprocessor;
     }
 
     setIsProjectLoaded(isLoaded) {

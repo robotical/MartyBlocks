@@ -80,7 +80,7 @@ class AssessmentSpiderGraph extends React.Component {
                 radialaxis: {
                     ...currentLayout.polar?.radialaxis,
                     visible: !isStudentPreview,
-                    range: [0, 3],
+                    range: [0, 1],
                 },
                 angularaxis: {
                     ...currentLayout.polar?.angularaxis,

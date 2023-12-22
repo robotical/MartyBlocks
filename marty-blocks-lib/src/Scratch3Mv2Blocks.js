@@ -16,6 +16,7 @@ martyMachine = new MartyMachine();
 const codeAssessLocal = new CodeAssess();
 codeAssess = codeAssessLocal.codeAssessLib;
 codeAssess.assess = codeAssessLocal.assess;
+codeAssess.Preprocessor = codeAssessLocal.Preprocessor;
 codeAssess.setIsProjectLoaded = codeAssessLocal.setIsProjectLoaded;
 codeAssess.assessBadges = codeAssessLocal.assessBadges;
 codeAssess.BadgesManager = codeAssessLocal.BadgesManager;

@@ -46,11 +46,41 @@ class LatestAssessmentTab extends React.Component {
             return <div>No student data yet!</div>;
         }
 
-        const spiderChartData = codeAssess.dataTransformationUtils.transformDataForSpiderChart(rawData);
+        const preprocessor = new codeAssess.Preprocessor(rawData || {});
+        const transformedData =
+            preprocessor
+                .sortData()
+                .calculateAverageGivenTimeWindow(10, 5, "minutes")
+                .normaliseScores()
+                .exportToSpiderGraphData([
+                    "Algorithms Composite Score", 
+                    "Generalisation and Abstraction Composite Score", 
+                    "Analysis Composite Score", 
+                    "Decomposition Composite Score", 
+                    "Pattern Recognition and Data Representation Composite Score",
+
+                    "Comments",
+                    "Conditionals",
+                    "Data Types",
+                    "Debugging",
+                    "Function Reuse",
+                    "Functions",
+                    "Functions with Arguments",
+                    "Loops",
+                    "Naming",
+                    "Operators",
+                    "Parallelism",
+                    "Sequencing",
+                    "Synchronization and Messages",
+                    "Variables Instead of Literals",
+                    "Variables and Data Structures"
+                ]);
+
+        // const spiderChartData = codeAssess.dataTransformationUtils.transformDataForSpiderChart(rawData);
 
         return (
             <div className={styles.latestAssessmentContainer}>
-                <AssessmentSpiderGraph data={spiderChartData} plotTitle="Latest Assessment" />
+                <AssessmentSpiderGraph data={transformedData} plotTitle="Latest Assessment" />
             </div>
         );
     }
