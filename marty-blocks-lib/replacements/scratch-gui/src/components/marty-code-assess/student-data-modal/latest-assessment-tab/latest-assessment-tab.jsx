@@ -53,10 +53,10 @@ class LatestAssessmentTab extends React.Component {
                 .calculateAverageGivenTimeWindow(10, 5, "minutes")
                 .normaliseScores()
                 .exportToSpiderGraphData([
-                    "Algorithms Composite Score", 
-                    "Generalisation and Abstraction Composite Score", 
-                    "Analysis Composite Score", 
-                    "Decomposition Composite Score", 
+                    "Algorithms Composite Score",
+                    "Generalisation and Abstraction Composite Score",
+                    "Analysis Composite Score",
+                    "Decomposition Composite Score",
                     "Pattern Recognition and Data Representation Composite Score",
 
                     "Comments",
@@ -74,8 +74,7 @@ class LatestAssessmentTab extends React.Component {
                     "Synchronization and Messages",
                     "Variables Instead of Literals",
                     "Variables and Data Structures"
-                ]);
-
+                ], "scores", true);
         // const spiderChartData = codeAssess.dataTransformationUtils.transformDataForSpiderChart(rawData);
 
         return (

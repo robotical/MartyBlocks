@@ -4,6 +4,8 @@ import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import AssessmentOverTimeLineGraph from "../../plots/assessment-over-time-line-graph/assessment-over-time-line-graph.jsx";
+import Spinner from '../../../spinner/spinner.jsx';
+import spinnerStyles from '../../../spinner/spinner.css';
 
 const messages = defineMessages({
     tutorials: {
@@ -17,12 +19,49 @@ class PerformanceHistoryTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoading: false,
+            linegraphData: null,
         };
         bindAll(this, [
         ]);
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true });
+        const studentData = this.props.studentData;
+        if (studentData && studentData.scoresOverTime && Object.keys(studentData.scoresOverTime).length > 0) {
+            const linegraphData = new codeAssess.Preprocessor(studentData.scoresOverTime)
+                .sortData().normaliseScores()
+                .calculateMovingMaxBasedOnDates(10, "hours")
+                .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
+                .exportToLeakyIntegratorData([
+                    "Algorithms Composite Score",
+                    "Generalisation and Abstraction Composite Score",
+                    "Analysis Composite Score",
+                    "Decomposition Composite Score",
+                    "Pattern Recognition and Data Representation Composite Score",
+
+                    "Comments",
+                    "Conditionals",
+                    "Data Types",
+                    "Debugging",
+                    "Function Reuse",
+                    "Functions",
+                    "Functions with Arguments",
+                    "Loops",
+                    "Naming",
+                    "Operators",
+                    "Parallelism",
+                    "Sequencing",
+                    "Synchronization and Messages",
+                    "Variables Instead of Literals",
+                    "Variables and Data Structures"
+                ]);
+            console.log("linegraphData", linegraphData);
+            this.setState({ linegraphData, isLoading: false });
+        } else {
+            this.setState({ isLoading: false });
+        }
     }
 
     componentWillUnmount() {
@@ -30,59 +69,23 @@ class PerformanceHistoryTab extends React.Component {
 
     render() {
         const { intl } = this.props;
-        const studentData = this.props.studentData;
-        if (!studentData) {
-            return <div>No student data yet!</div>;
-        }
-        // studentData can either be an array of student data or a single student data object
-        let rawData = studentData;
-        if (Array.isArray(rawData)) {
-            rawData = rawData.map(studentData => studentData?.scoresOverTime).filter(studentData => studentData);
-        } else {
-            rawData = rawData?.scoresOverTime;
+
+        if (this.state.isLoading) {
+            return <Spinner level='warn' large className={spinnerStyles.primary} />;
         }
 
-        if (!rawData) {
-            return <div>No student data yet!</div>;
+        if (!this.state.linegraphData || this.state.linegraphData?.[0]?.x?.length < 5) {
+            const dataLength = this.state.linegraphData?.[0]?.x?.length || 0;
+            return <div>Not enough student data yet. There must be at least 5 sessions to show the history, but there {dataLength === 1 ? "is" : "are"} only {dataLength}.</div>;
         }
-
-        console.log("rawData", rawData)
-        const linegraphData = new codeAssess.Preprocessor(rawData).sortData().normaliseScores()
-            .calculateMovingMaxBasedOnDates(1, "days")
-            .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
-            .exportToLeakyIntegratorData([
-                "Algorithms Composite Score",
-                "Generalisation and Abstraction Composite Score",
-                "Analysis Composite Score",
-                "Decomposition Composite Score",
-                "Pattern Recognition and Data Representation Composite Score",
-
-                "Comments",
-                "Conditionals",
-                "Data Types",
-                "Debugging",
-                "Function Reuse",
-                "Functions",
-                "Functions with Arguments",
-                "Loops",
-                "Naming",
-                "Operators",
-                "Parallelism",
-                "Sequencing",
-                "Synchronization and Messages",
-                "Variables Instead of Literals",
-                "Variables and Data Structures"
-            ]);
-
-            console.log("linegraphData", linegraphData)
 
         const plots = [];
-        for (let i = 0; i < linegraphData.length; i += 4) {
+        for (let i = 0; i < this.state.linegraphData.length; i += 4) {
             plots.push(
                 <AssessmentOverTimeLineGraph
                     key={i}
-                    data={linegraphData.slice(i, i + 4)}
-                    plotTitle={linegraphData[i].name}
+                    data={this.state.linegraphData.slice(i, i + 4)}
+                    plotTitle={this.state.linegraphData[i].name}
                 />
             );
         }

@@ -46,6 +46,7 @@ class AssessmentSpiderGraph extends React.Component {
             dataAsArray = [dataAsArray];
         }
         const isStudentPreview = this.props.isStudentPreview;
+
         // if there is a colour given, change the colour of the trace
         if (this.props.colour) {
             dataAsArray.forEach(trace => {
