@@ -1,6 +1,7 @@
 import {applyMiddleware, compose, combineReducers} from 'redux';
 import alertsReducer, {alertsInitialState} from './alerts';
 import assetDragReducer, {assetDragInitialState} from './asset-drag';
+import badgePopupReducer, {badgePopupInitialState} from './code-assess-badges-achievement-popup';
 import cardsReducer, {cardsInitialState} from './cards';
 import colorPickerReducer, {colorPickerInitialState} from './color-picker';
 import connectionModalReducer, {connectionModalInitialState} from './connection-modal';
@@ -36,6 +37,7 @@ const guiMiddleware = compose(applyMiddleware(throttle(300, {leading: true, trai
 const guiInitialState = {
     alerts: alertsInitialState,
     assetDrag: assetDragInitialState,
+    badgePopup: badgePopupInitialState,
     blockDrag: blockDragInitialState,
     cards: cardsInitialState,
     colorPicker: colorPickerInitialState,
@@ -136,6 +138,7 @@ const initTelemetryModal = function (currentState) {
 const guiReducer = combineReducers({
     alerts: alertsReducer,
     assetDrag: assetDragReducer,
+    badgePopup: badgePopupReducer,
     blockDrag: blockDragReducer,
     cards: cardsReducer,
     colorPicker: colorPickerReducer,

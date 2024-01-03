@@ -12,6 +12,7 @@ import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 import Modal from "../../../containers/modal.jsx";
 import PropTypes from "prop-types";
+import StudentBadges from "../student-data-modal/student-badges/student-badges.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -43,6 +44,9 @@ class StudentView extends React.Component {
         const asyncFunc = async () => {
             this.setState({ isLoading: true });
             await codeAssess.createStudentIfDoesntExist(codeAssess.student.id, codeAssess.student.name);
+            const fetchedStudentData = await codeAssess.student.fetchStudentData(this.props.selectedClass?.id);
+
+
             this.setState({ isLoading: false });
         }
         asyncFunc();
@@ -112,7 +116,8 @@ class StudentView extends React.Component {
                 <div className={styles.outerContainer} >
                     <div className={styles.header}>
                         <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
-                        <div onClick={() => this.onSelectTab("My Assessment")} className={[styles.tab, (this.state.selectedTab === "My Assessment" ? styles.selectedTab : "")].join(" ")}>My Assessment</div>
+                        <div onClick={() => this.onSelectTab("My Progress")} className={[styles.tab, (this.state.selectedTab === "My Progress" ? styles.selectedTab : "")].join(" ")}>My Progress</div>
+                        <div onClick={() => this.onSelectTab("My Accomplishments")} className={[styles.tab, (this.state.selectedTab === "My Accomplishments" ? styles.selectedTab : "")].join(" ")}>My Accomplishments</div>
                     </div>
                     <div className={styles.selectedTabContentContainer}>
                         {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
@@ -130,8 +135,12 @@ class StudentView extends React.Component {
                                     </div>
                                 </div>
                                 }
-                                {this.state.selectedTab === "My Assessment" && <div className={styles.myAssessmentContainer}>
+                                {this.state.selectedTab === "My Progress" && <div className={styles.myAssessmentContainer}>
                                     <StudentAssessment classId={this.props.selectedClass?.id} />
+                                </div>
+                                }
+                                {this.state.selectedTab === "My Accomplishments" && <div className={styles.myAccomplishmentsContainer}>
+                                    <StudentBadges classId={this.props.selectedClass?.id} />
                                 </div>
                                 }
                             </>

@@ -1,10 +1,10 @@
 import React from "react";
 import Modal from "../../../../containers/modal.jsx";
-import ScoresCard from "../../scores-card/scores-card.jsx";
 import styles from "./student-assessment.css";
 import DetailsCard from "../../details-card/details-card.jsx";
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
+import ScoreGauges from "../score-gauges/score-gauges.jsx";
 
 class StudentAssessment extends React.Component {
     constructor(props) {
@@ -13,11 +13,11 @@ class StudentAssessment extends React.Component {
             showModal: false,
             modalData: { content: null, title: "" },
             scores: null,
+            totalScore: 0,
         };
         bindAll(this, [
             "closeModal",
             "openModal",
-            "totalScore",
             "fetchStudentData"
         ]);
     }
@@ -34,20 +34,21 @@ class StudentAssessment extends React.Component {
         this.setState({ showModal: true, modalData: modalData });
     }
 
-    totalScore() {
-        if (!this.state.scores) return 0;
-        let total = 0;
-        Object.keys(this.state.scores).forEach(categoryKey => {
-            total += this.state.scores[categoryKey];
-        })
-        return total;
-    }
-
     async fetchStudentData() {
         const fetchedStudentData = await codeAssess.student.fetchStudentData(this.props.classId);
-        const studentDataProcessed = codeAssess.dataTransformationUtils.getLatestScores(fetchedStudentData?.scoresOverTime);
-        console.log("studentDataProcessed", studentDataProcessed);
-        this.setState({ scores: studentDataProcessed });
+        const compositeScore = codeAssess.student.getCompositeScore(fetchedStudentData, false);
+        
+        const finalScores = {};
+        const lastScore = fetchedStudentData.getLastScore();
+        const preprocessor = new codeAssess.Preprocessor(lastScore || {});
+        const transformedData = preprocessor.normaliseScores().data
+        finalScores["Algorithms"] = transformedData.algorithmsCompoScores?.scores[0] || 0;
+        finalScores["Analysis"] = transformedData.analysisCompoScores?.scores[0] || 0;
+        finalScores["Decomposition"] = transformedData.decompositionCompoScores?.scores[0] || 0;
+        finalScores["Generalisation and Abstraction"] = transformedData.generalisationAndAbstrCompoScores?.scores[0] || 0;
+        finalScores["Pattern Recognition and Data Representation"] = transformedData.patternRecAndDataRepCompoScores?.scores[0] || 0;
+
+        this.setState({ scores: finalScores, totalScore: compositeScore });
     }
 
     render() {
@@ -65,7 +66,7 @@ class StudentAssessment extends React.Component {
                         <div className={styles.modalContainer}>{this.state.modalData.content}</div>
                     </Modal>
                 )}
-                <ScoresCard
+                {/* <ScoresCard
                     onCategoryClick={this.openModal}
                     dataRepresentation={this.state.scores.DataRepresentation}
                     flowControl={this.state.scores.FlowControl}
@@ -74,8 +75,9 @@ class StudentAssessment extends React.Component {
                     abstraction={this.state.scores.Abstraction}
                     synchronisation={this.state.scores.Synchronisation}
                     parallelism={this.state.scores.Parallelism}
-                />
-                <DetailsCard totalScore={this.totalScore()} />
+                /> */}
+                <ScoreGauges scores={this.state.scores} />
+                <DetailsCard totalScore={this.state.totalScore} />
             </div>
         );
     }

@@ -10,36 +10,43 @@ class DetailsCard extends React.Component {
 
   render() {
     let detailsParagraphJSX;
+    let firstParagraphJSX;
     if (this.props.totalScore <= 10) {
+      firstParagraphJSX = (
+        <p className={styles.paragraphTitle}>
+          Guess what level your project is at...
+        </p>
+      );
       detailsParagraphJSX = (
         <div className={styles.detailsParagraphContainer}>
-          <p className={styles.paragraphTitle}>
-            The level of your project is....
-          </p>
-          <p className={styles.paragraphIntense}>BASIC!</p>
+          <p className={styles.paragraphIntense}>BEGINNER BUDDY!</p>
           <p className={styles.paragraph}>
-            You're at the beginning of a great adventure . . . Keep it up!
+            You've just started an awesome journey. You're doing great, keep exploring!
           </p>
         </div>
       );
-    } else if (this.props.totalScore > 10 && this.props.totalScore < 20) {
+    } else if (this.props.totalScore > 10 && this.props.totalScore < 24) {
+      firstParagraphJSX = (
+        <p className={styles.paragraphTitle}>
+          Ready to find out your project level?
+        </p>
+      );
       detailsParagraphJSX = (
         <div className={styles.detailsParagraphContainer}>
-          <p className={styles.paragraphTitle}>
-            The level of your project is....
-          </p>
-          <p className={styles.paragraphIntense}>INTERMEDIATE!</p>
-          <p className={styles.paragraph}>Excellent work . . . Keep it up!</p>
+          <p className={styles.paragraphIntense}>SUPER EXPLORER!</p>
+          <p className={styles.paragraph}>Fantastic job, you're really getting the hang of this. Keep up the fun work!</p>
         </div>
       );
-    } else if (this.props.totalScore >= 20) {
+    } else if (this.props.totalScore >= 24) {
+      firstParagraphJSX = (
+        <p className={styles.paragraphTitle}>
+          Let's see how far you've come in your project...
+        </p>
+      );
       detailsParagraphJSX = (
         <div className={styles.detailsParagraphContainer}>
-          <p className={styles.paragraphTitle}>
-            The level of your project is....
-          </p>
-          <p className={styles.paragraphIntense}>ADVANCED!</p>
-          <p className={styles.paragraph}>You are at the top!</p>
+          <p className={styles.paragraphIntense}>MASTER INVENTOR!</p>
+          <p className={styles.paragraph}>Wow, you're soaring high! Keep shining bright at the top!</p>
         </div>
       );
     }
@@ -50,7 +57,8 @@ class DetailsCard extends React.Component {
           <div className={styles.martyImgContainer}>
             <img className={styles.martyImg} src={martyImg} alt="marty-img" />
           </div>
-          <p>Score: {this.props.totalScore} / 21</p>
+          {/* <p>Score: {this.props.totalScore} / 29</p> */}
+          {firstParagraphJSX}
         </div>
         <div className={styles.contentRow}>{detailsParagraphJSX}</div>
       </div>

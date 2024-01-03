@@ -53,7 +53,7 @@ class StudentDataModal extends React.Component {
                     </div>
                     <div className={styles.modalBody}>
                         {this.state.selectedTab === "Latest Assessment" && <LatestAssessmentTab studentData={studentData} student={student} />}
-                        {this.state.selectedTab === "Badges" && <StudentBadges studentData={studentData} student={student} />}
+                        {this.state.selectedTab === "Badges" && <StudentBadges classId={this.props.classId} />}
                         {this.state.selectedTab === "Performance History" && <PerformanceHistoryTab studentData={studentData} student={student} />}
                     </div>
                 </div>
@@ -69,6 +69,7 @@ StudentDataModal.propTypes = {
     studentData: PropTypes.object,
     onClose: PropTypes.func.isRequired,
     student: PropTypes.object.isRequired,
+    classId: PropTypes.string.isRequired,
 };
 
 

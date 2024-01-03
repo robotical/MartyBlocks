@@ -28,6 +28,10 @@ import {
     openExtensionLibrary
 } from '../reducers/modals';
 
+import {
+    closePopupBadge
+} from '../reducers/code-assess-badges-achievement-popup';
+
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
@@ -139,6 +143,7 @@ const mapStateToProps = state => {
         backdropLibraryVisible: state.scratchGui.modals.backdropLibrary,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,
+        codeAssessBadgeAchievementsPopupVisible: state.scratchGui.badgePopup.badgePopup,
         connectionModalVisible: state.scratchGui.modals.connectionModal,
         studentAnnouncementModalVisible: state.scratchGui.modals.studentAnnouncementModal,
         costumeLibraryVisible: state.scratchGui.modals.costumeLibrary,
@@ -175,6 +180,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateCodeAssessTab: () => dispatch(activateTab(CODE_ASSESS_TAB_INDEX)),
     onActivateSaveLoadTab: () => dispatch(activateTab(SAVE_LOAD_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
+    onRequestCloseBadgePopup: () => dispatch(closePopupBadge()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
     onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())
 });

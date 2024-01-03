@@ -100,6 +100,7 @@ const GUIComponent = (props) => {
     canShare,
     canUseCloud,
     children,
+    codeAssessBadgeAchievementsPopupVisible,
     connectionModalVisible,
     studentAnnouncementModalVisible,
     costumeLibraryVisible,
@@ -130,6 +131,7 @@ const GUIComponent = (props) => {
     onExtensionButtonClick,
     onProjectTelemetryEvent,
     onRequestCloseBackdropLibrary,
+    onRequestCloseBadgePopup,
     onRequestCloseCostumeLibrary,
     onRequestCloseTelemetryModal,
     onSeeCommunity,
@@ -214,6 +216,7 @@ const GUIComponent = (props) => {
             {alertsVisible ? (
               <Alerts className={styles.alertsContainer} />
             ) : null}
+            {codeAssessBadgeAchievementsPopupVisible ? <div onClick={onRequestCloseBadgePopup}>BADGES POPUP</div> : null}
             {connectionModalVisible ? <ConnectionModal vm={vm} /> : null}
             {studentAnnouncementModalVisible && <StudentAnnouncementModal />}
             {costumeLibraryVisible ? (
@@ -469,6 +472,7 @@ GUIComponent.propTypes = {
   canUseCloud: PropTypes.bool,
   cardsVisible: PropTypes.bool,
   children: PropTypes.node,
+  codeAssessBadgeAchievementsPopupVisible: PropTypes.bool,
   costumeLibraryVisible: PropTypes.bool,
   costumesTabVisible: PropTypes.bool,
   draggableModalVisible: PropTypes.bool,
@@ -493,6 +497,7 @@ GUIComponent.propTypes = {
   onLogOut: PropTypes.func,
   onOpenRegistration: PropTypes.func,
   onRequestCloseBackdropLibrary: PropTypes.func,
+  onRequestCloseBadgePopup: PropTypes.func,
   onRequestCloseCostumeLibrary: PropTypes.func,
   onRequestCloseTelemetryModal: PropTypes.func,
   onSeeCommunity: PropTypes.func,

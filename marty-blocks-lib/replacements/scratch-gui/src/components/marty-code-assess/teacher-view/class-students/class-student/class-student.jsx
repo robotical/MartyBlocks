@@ -125,6 +125,7 @@ class ClassStudent extends React.Component {
                             onClose={() => this.setState({ studentDataModalVisible: false })}
                             studentData={this.state.fetchedStudentData}
                             student={student}
+                            classId={this.props.classId}
                         />
                     </Modal>
                 }

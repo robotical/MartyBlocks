@@ -3,6 +3,8 @@ const assessBadges = require("@robotical/automatic-assessments/lib").assessBadge
 const BadgesManager = require("@robotical/automatic-assessments/lib").BadgesManager;
 const CodeAssessLib = require("@robotical/code-assess-lib").default;
 const Preprocessor = require("@robotical/code-assess-lib").Preprocessor;
+const StarProgressTracker = require("@robotical/code-assess-lib").StarProgressTracker;
+const DataToStars = require("@robotical/code-assess-lib").DataToStars;
 
 class CodeAssess {
     constructor() {
@@ -12,6 +14,7 @@ class CodeAssess {
         this.BadgesManager = BadgesManager;
         this.isProjectLoaded = false;
         this.Preprocessor = Preprocessor;
+        this.StarProgressTracker = StarProgressTracker;
     }
 
     setIsProjectLoaded(isLoaded) {
@@ -40,6 +43,25 @@ class CodeAssess {
             const results = assessBadges(targets);
             return { badgesCount: results.badgesCount, hasCountChanged: results.hasChanged };
         }
+    }
+
+    hasStarAchieved(badgesCount) {
+        // check if the student has achieved any stars in this session
+        /**
+         * Example of returned data
+         {
+            "Loops": [false, false, false],
+            "Functions": [false, false, false],
+            "Conditionals": [false, false, false],
+            "Data Types": [false, false, false],
+            "Operators": [false, false, false],
+            "Parallelism": [ false, false],
+            "Variables and Lists": [false, false, false]
+        }
+         */
+        const starsData = DataToStars.toStars(badgesCount);
+        const achievedStars = this.StarProgressTracker.compareStars(starsData);
+        return achievedStars;
     }
 }
 

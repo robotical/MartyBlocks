@@ -97,6 +97,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 const badgesResults = codeAssess.assessBadges(vm.runtime.targets);
                 if (badgesResults.hasCountChanged) {
                     await studentData.sendStudentBadgesData(badgesResults.badgesCount);
+                    codeAssess.hasStarAchieved(badgesResults.badgesCount);
                 }
                 await studentData.sendStudentAssessmentScores(assessment);
             } catch (error) {

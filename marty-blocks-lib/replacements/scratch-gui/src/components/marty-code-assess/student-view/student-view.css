@@ -68,6 +68,7 @@
 
 .selectedTabContentContainer {
   background-color: $ui-primary;
+  overflow-y: auto;
 }
 
 .overviewContainer {

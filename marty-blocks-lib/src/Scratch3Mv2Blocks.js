@@ -19,7 +19,10 @@ codeAssess.assess = codeAssessLocal.assess;
 codeAssess.Preprocessor = codeAssessLocal.Preprocessor;
 codeAssess.setIsProjectLoaded = codeAssessLocal.setIsProjectLoaded;
 codeAssess.assessBadges = codeAssessLocal.assessBadges;
+codeAssess.hasStarAchieved = codeAssessLocal.hasStarAchieved;
 codeAssess.BadgesManager = codeAssessLocal.BadgesManager;
+codeAssess.StarProgressTracker = codeAssessLocal.StarProgressTracker;
+codeAssess.DataToStars = codeAssessLocal.DataToStars;
 pythonTranspiler = Project; 
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality

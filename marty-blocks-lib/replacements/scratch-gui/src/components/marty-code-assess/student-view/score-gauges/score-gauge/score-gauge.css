@@ -1,0 +1,185 @@
+.outer-container {
+  /* Gauge base dimensions and colors */
+  --gauge-width: 200px;
+  --gauge-height: 100px;
+  --gauge-color: #ffd700;
+  --gauge-border-color: #736203;
+  --border-width: 2px;
+  --arcs-radius: 55%;
+
+  /* Pointer styles */
+  --pointer-width: 2px;
+  --pointer-height: 70px;
+  --pointer-color: #000000;
+  --pointer-angle: 5deg;
+  --pointer-top: 19px;
+  --pointer-left: 50%;
+  --pointer-border-radius: 15px;
+  --pointer-base-size: 10px;
+
+  /* Arc positions */
+  --top-arc-top: 0;
+  --top-arc-left: 0;
+  --bottom-arc-top: 88px;
+  --bottom-arc-left: 0;
+  --inner-arc-top: 25px;
+  --inner-arc-left: 50%;
+
+  /* Slash styles */
+  --slash-width: 1px;
+  --slash-height: 80px;
+  --slash-rotate: 20deg;
+  --slash-top: 27px;
+  --slash-x-axis: 22px;
+
+  /* Arrow styles */
+  --arrow-width: 15px;
+  --arrow-height: 15px;
+  --arrow-top: 25px;
+  --arrow-left: 140px;
+  --arrow-rotate: 20deg;
+  --arrow-clip-path: polygon(50% 0, 50% 100%, 100% 46%);
+
+  /* Background and inner arc clip paths */
+  --top-arc-polygon: polygon(0 0, 100% 0%, 100% 30%, 0 30%);
+  --inner-arc-polygon: polygon(25% 0%, 80% 0%, 90% 0%, 0% 50%);
+  --background-square-polygon: polygon(5% 30%, 95% 30%, 83% 100%, 17% 100%);
+  --background-square-top: 0;
+  --background-square-left: 0;
+
+  /* Inner arc specific styles */
+  --inner-arc-width: 180px;
+  --inner-arc-border-color: rgba(0, 0, 0, 0.2);
+}
+/* 
+@keyframes swing-pointer {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(-45deg);
+    height: 70px;
+    top: calc(19px + 0px);
+  }
+  25%,
+  75% {
+    height: 60px;
+    top: calc(19px + 10px);
+  }
+  50% {
+    transform: translateX(-50%) rotate(45deg);
+    height: 70px;
+    top: calc(19px + 0px);
+  }
+} */
+
+.gauge {
+  width: var(--gauge-width);
+  height: var(--gauge-height);
+  position: relative;
+  overflow: hidden;
+}
+
+.top-arc {
+  width: 100%;
+  height: 100%;
+  background-color: var(--gauge-color);
+  border-radius: var(--arcs-radius);
+  position: absolute;
+  clip-path: var(--top-arc-polygon);
+  border: var(--border-width) solid var(--gauge-border-color);
+  top: var(--top-arc-top);
+  left: var(--top-arc-left);
+  z-index: 1;
+}
+
+.bottom-arc {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--arcs-radius);
+  position: absolute;
+  border: var(--border-width) solid var(--gauge-border-color);
+  top: var(--bottom-arc-top);
+  left: var(--bottom-arc-left);
+  background-color: white;
+  z-index: 1;
+}
+
+.inner-arc {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--arcs-radius);
+  position: absolute;
+  border: var(--border-width) solid var(--inner-arc-border-color);
+  top: var(--inner-arc-top);
+  left: var(--inner-arc-left);
+  clip-path: var(--inner-arc-polygon);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.background-square {
+  width: 100%;
+  height: 100%;
+  background-color: var(--gauge-color);
+  position: absolute;
+  clip-path: var(--background-square-polygon);
+  border: var(--border-width) solid var(--gauge-border-color);
+  top: var(--background-square-top);
+  left: var(--background-square-left);
+  z-index: 1;
+}
+
+.left-slash,
+.right-slash {
+  position: absolute;
+  width: var(--slash-width);
+  height: var(--slash-height);
+  border: var(--border-width) solid var(--gauge-border-color);
+  top: var(--slash-top);
+  z-index: 1;
+}
+
+.right-slash {
+  right: var(--slash-x-axis);
+  transform: rotate(var(--slash-rotate));
+}
+
+.left-slash {
+  left: var(--slash-x-axis);
+  transform: rotate(calc(-1 * var(--slash-rotate)));
+}
+
+.pointer {
+  position: absolute;
+  width: var(--pointer-width);
+  height: var(--pointer-height);
+  background-color: var(--gauge-border-color);
+  top: var(--pointer-top);
+  border-radius: var(--pointer-border-radius);
+  left: var(--pointer-left);
+  /* when rotating it must change the base/origin of the pointer */
+  transform-origin: bottom;
+  transform: translateX(-50%) rotate(var(--pointer-angle));
+  z-index: 2;
+  /* animation: swing-pointer 2s infinite; */
+}
+
+.inner-arc-arrow {
+  position: absolute;
+  width: var(--arrow-width);
+  height: var(--arrow-height);
+  top: var(--arrow-top);
+  left: var(--arrow-left);
+  clip-path: var(--arrow-clip-path);
+  z-index: 1;
+  transform: rotate(var(--arrow-rotate));
+  background-color: var(--gauge-border-color);
+}
+
+.title {
+    width: var(--gauge-width);
+    color: var(--gauge-border-color);
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: capitalize;
+    text-align: center;
+}

@@ -10,20 +10,20 @@
     border-radius: 2px;
     box-shadow: 2px 2px 5px 5px rgba(0,0,0,.5);
     align-items: start;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     grid-template-rows: min-content 1fr;
 }
 
 .title-row {
     display: grid;
     grid-auto-flow: column;
+    grid-template-columns: 1fr 2fr;
     position: relative;
     padding: 20px;
     background-color: #D9E3F2;
 }
 
 .title-row p {
-    font-size: 30px;
+    font-size: 18px;
     text-align: right;
 }
 
@@ -38,16 +38,20 @@
 }
 
 .paragraphTitle {
-    font-size: 20px;
+    font-size: 18px;
+    text-align: right;
 }
 
 .paragraphIntense {
     font-size: 24px;
     font-weight: bold;
+    color: mintcream;
 }
 
 .paragraph {
     font-size: 18px;
+    color: aliceblue;
+    line-height: 1.2;
 }
 
 .marty-img {

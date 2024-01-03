@@ -4,7 +4,7 @@
 }
 
 .assetPanel {
-  height: 100%;
+  height: calc(100vh - (2.75rem + 2.75rem)); /* 2.75 for the menu buttons. Adjust if you change the height of the menu buttons */
 }
 
 .modal-container {
