@@ -41,7 +41,8 @@ class StudentBadgesTab extends React.Component {
 
     async fetchStudentData() {
         this.setState({ isLoading: true });
-        const fetchedStudentData = await codeAssess.student.fetchStudentData(this.props.classId);
+        const student = codeAssess.student || this.props.student;
+        const fetchedStudentData = await student.fetchStudentData(this.props.classId);
         this.setState({ studentData: fetchedStudentData, isLoading: false });
     }
 
@@ -59,10 +60,14 @@ class StudentBadgesTab extends React.Component {
             <div className={styles.svgsContainer}>
                 {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                     <>
-                        <SVGWrapper svg={svgs.conditionals} colors={starScores.Conditionals[0]} offsets={starScores.Conditionals[1]} category="conditionals" />
-                        <SVGWrapper svg={svgs.loops} colors={starScores.Loops[0]} offsets={starScores.Loops[1]} category="loops" />
-                        <SVGWrapper svg={svgs.functions} colors={starScores.Functions[0]} offsets={starScores.Functions[1]} category="functions" />
-                        <SVGWrapper svg={svgs.operators} colors={starScores.Operators[0]} offsets={starScores.Operators[1]} category="operators" />
+                        <SVGWrapper svg={svgs.Conditionals} colors={starScores.Conditionals[0]} offsets={starScores.Conditionals[1]} category="conditionals" />
+                        <SVGWrapper svg={svgs.Loops} colors={starScores.Loops[0]} offsets={starScores.Loops[1]} category="loops" />
+                        <SVGWrapper svg={svgs.Functions} colors={starScores.Functions[0]} offsets={starScores.Functions[1]} category="functions" />
+                        <SVGWrapper svg={svgs.Operators} colors={starScores.Operators[0]} offsets={starScores.Operators[1]} category="operators" />
+
+                        <SVGWrapper svg={svgs["Data Types"]} colors={starScores["Data Types"][0]} offsets={starScores["Data Types"][1]} category="dataTypes" />
+                        <SVGWrapper svg={svgs.Parallelism} colors={starScores["Parallelism"][0]} offsets={starScores["Parallelism"][1]} category="parallelism" />
+                        <SVGWrapper svg={svgs["Variables and Lists"]} colors={starScores["Variables and Lists"][0]} offsets={starScores["Variables and Lists"][1]} category="variablesAndLists" />
                     </>
                 )}
             </div>
@@ -75,6 +80,7 @@ class StudentBadgesTab extends React.Component {
 StudentBadgesTab.propTypes = {
     intl: intlShape.isRequired,
     classId: PropTypes.string.isRequired,
+    student: PropTypes.object
 };
 
 

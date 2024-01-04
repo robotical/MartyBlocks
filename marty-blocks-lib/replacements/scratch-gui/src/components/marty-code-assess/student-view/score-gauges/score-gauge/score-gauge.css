@@ -99,7 +99,7 @@
   border: var(--border-width) solid var(--gauge-border-color);
   top: var(--bottom-arc-top);
   left: var(--bottom-arc-left);
-  background-color: white;
+  background-color: hsla(215, 100%, 95%, 1);
   z-index: 1;
 }
 

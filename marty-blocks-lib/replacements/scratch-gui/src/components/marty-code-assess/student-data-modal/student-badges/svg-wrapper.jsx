@@ -2,8 +2,6 @@ import React from "react";
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 
-
-
 class SVGWrapper extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +12,15 @@ class SVGWrapper extends React.Component {
             'setStarColor',
         ]);
         this.svgRef = null;
+    }
+
+    // when the props offsets changes
+    async componentDidUpdate(prevProps, prevState) {
+        if (prevProps.offsets !== this.props.offsets) {
+            this.setStarColor("1");
+            this.setStarColor("2");
+            this.setStarColor("3");
+        }
     }
 
     setStarColor(starId) {
@@ -53,10 +60,13 @@ class SVGWrapper extends React.Component {
         }
     }
 
-
     render() {
+        const areAllStars0 = this.props.offsets.every((offset) => offset === 0);
+        if (areAllStars0) {
+            console.log(this.props);
+        }
         return (
-            <div ref={this.setSVGRef} style={{ width: "200px", height: "200px" }}>
+            <div ref={this.setSVGRef} style={{ width: "200px", height: "200px", opacity: areAllStars0 ? 0.5 : 1 }}>
                 {this.props.svg}
             </div>
         );

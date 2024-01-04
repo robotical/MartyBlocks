@@ -63,6 +63,7 @@ import MonitorList from "../../containers/monitor-list.jsx";
 import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 import MartyPythonButton from "../marty-python-btn/index.jsx";
+import BadgePopup from "../marty-code-assess/badge-popup/badge-popup.jsx";
 
 const messages = defineMessages({
   addExtension: {
@@ -88,6 +89,7 @@ const GUIComponent = (props) => {
     backdropLibraryVisible,
     backpackHost,
     backpackVisible,
+    badgePopupProps,
     blocksTabVisible,
     cardsVisible,
     canChangeLanguage,
@@ -216,7 +218,7 @@ const GUIComponent = (props) => {
             {alertsVisible ? (
               <Alerts className={styles.alertsContainer} />
             ) : null}
-            {codeAssessBadgeAchievementsPopupVisible ? <div onClick={onRequestCloseBadgePopup}>BADGES POPUP</div> : null}
+            {codeAssessBadgeAchievementsPopupVisible ? <BadgePopup onRequestClose={onRequestCloseBadgePopup} {...badgePopupProps} /> : null}
             {connectionModalVisible ? <ConnectionModal vm={vm} /> : null}
             {studentAnnouncementModalVisible && <StudentAnnouncementModal />}
             {costumeLibraryVisible ? (
@@ -272,11 +274,11 @@ const GUIComponent = (props) => {
                     onSelect={onActivateTab}
                   >
                     <TabList className={[tabClassNames.tabList, styles.buttonsTabListContainer].join(" ")}>
+                      <MartyConnectBtn />
                       <LanguageStandalone
-                      className={styles.languageSelectorWrapper}
+                        className={styles.languageSelectorWrapper}
                         canChangeLanguage={canChangeLanguage}
                       />
-                      <MartyConnectBtn />
                       <SensorsDashboardBtn />
                       <MartyPythonButton />
                     </TabList>
@@ -336,8 +338,8 @@ const GUIComponent = (props) => {
                       >
                         <img draggable={false} src={codeAssessIcon} />
                         <FormattedMessage
-                          defaultMessage="Code Assessment"
-                          description="Button to toggle Code Assessment tab"
+                          defaultMessage="Classroom"
+                          description="Button to toggle Classroom tab"
                           id="gui.gui.toggleCodeAssessTab"
                         />
                       </Tab>
@@ -459,6 +461,7 @@ GUIComponent.propTypes = {
   backdropLibraryVisible: PropTypes.bool,
   backpackHost: PropTypes.string,
   backpackVisible: PropTypes.bool,
+  badgePopupProps: PropTypes.object,
   basePath: PropTypes.string,
   blocksTabVisible: PropTypes.bool,
   canChangeLanguage: PropTypes.bool,

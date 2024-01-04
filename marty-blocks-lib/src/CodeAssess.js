@@ -50,7 +50,7 @@ class CodeAssess {
         /**
          * Example of returned data
          {
-            "Loops": [false, false, false],
+            "Loops": ["gold", false, false],
             "Functions": [false, false, false],
             "Conditionals": [false, false, false],
             "Data Types": [false, false, false],
@@ -61,7 +61,8 @@ class CodeAssess {
          */
         const starsData = DataToStars.toStars(badgesCount);
         const achievedStars = this.StarProgressTracker.compareStars(starsData);
-        return achievedStars;
+        const anyStarAchieved = Object.values(achievedStars).some((stars) => stars.some((star) => star));
+        return { achievedStars, anyStarAchieved };
     }
 }
 

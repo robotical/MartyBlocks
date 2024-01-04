@@ -29,7 +29,7 @@ import {
 } from '../reducers/modals';
 
 import {
-    closePopupBadge
+    closePopupBadge, openPopupBadge
 } from '../reducers/code-assess-badges-achievement-popup';
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
@@ -141,6 +141,7 @@ const mapStateToProps = state => {
         activeTabIndex: state.scratchGui.editorTab.activeTabIndex,
         alertsVisible: state.scratchGui.alerts.visible,
         backdropLibraryVisible: state.scratchGui.modals.backdropLibrary,
+        badgePopupProps: state.scratchGui.badgePopup.popupProps,
         blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
         cardsVisible: state.scratchGui.cards.visible,
         codeAssessBadgeAchievementsPopupVisible: state.scratchGui.badgePopup.badgePopup,

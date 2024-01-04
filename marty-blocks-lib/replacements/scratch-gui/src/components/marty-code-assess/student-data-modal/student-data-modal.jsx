@@ -4,7 +4,7 @@ import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import LatestAssessmentTab from "./latest-assessment-tab/latest-assessment-tab.jsx";
-import StudentBadges from "./student-badges/student-badges.jsx";
+import StudentBadgesTab from "./student-badges/student-badges.jsx";
 import PerformanceHistoryTab from "./performance-history-tab/performance-history-tab.jsx";
 
 const messages = defineMessages({
@@ -53,7 +53,7 @@ class StudentDataModal extends React.Component {
                     </div>
                     <div className={styles.modalBody}>
                         {this.state.selectedTab === "Latest Assessment" && <LatestAssessmentTab studentData={studentData} student={student} />}
-                        {this.state.selectedTab === "Badges" && <StudentBadges classId={this.props.classId} />}
+                        {this.state.selectedTab === "Badges" && <StudentBadgesTab classId={this.props.classId}  student={student} />}
                         {this.state.selectedTab === "Performance History" && <PerformanceHistoryTab studentData={studentData} student={student} />}
                     </div>
                 </div>

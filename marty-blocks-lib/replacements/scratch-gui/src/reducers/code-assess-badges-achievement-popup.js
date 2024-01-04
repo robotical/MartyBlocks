@@ -11,41 +11,43 @@ const initialState = {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case OPEN_POPUP:
-        return Object.assign({}, state, {
-            [action.popup]: true,
-            popupProps: action.popupProps
-        });
-    case CLOSE_POPUP:
-        return Object.assign({}, state, {
-            [action.modal]: false,
-            modalProps: {}
-        });
-    default:
-        return state;
+        case OPEN_POPUP:
+            return Object.assign({}, state, {
+                [action.popup]: true,
+                popupProps: action.popupProps
+            });
+        case CLOSE_POPUP:
+            return Object.assign({}, state, {
+                [action.popup]: false,
+                popupProps: {}
+            });
+        default:
+            return state;
     }
 };
-const openPopup = function (modal, modalProps) {
+
+const openPopup = function (popup, popupProps) {
     return {
         type: OPEN_POPUP,
-        modal: modal,
-        modalProps: modalProps || {}
-    };
-};
-const closePopup = function (modal) {
-    return {
-        type: CLOSE_POPUP,
-        modal: modal
+        popup: popup,
+        popupProps: popupProps || {}
     };
 };
 
-const openPopupBadge = function (modalProps) {
-    return openPopup(POPUP_BADGE, modalProps);
-}
+const closePopup = function (popup) {
+    return {
+        type: CLOSE_POPUP,
+        popup: popup
+    };
+};
+
+const openPopupBadge = function (popupProps) {
+    return openPopup(POPUP_BADGE, popupProps);
+};
 
 const closePopupBadge = function () {
     return closePopup(POPUP_BADGE);
-}
+};
 
 export {
     reducer as default,
