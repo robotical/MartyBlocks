@@ -51,9 +51,9 @@ class ClassStudents extends React.Component {
             if (aName > bName) return 1;
             return 0;
         });
+
         this.setState({ sortedStudents });
     }
-
 
     sortByPerformance() {
         const students = this.props.students || [];
@@ -122,6 +122,7 @@ class ClassStudents extends React.Component {
                     </select>
                 </div>
                 {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <div className={styles.classStudents}>
+                    {this.state.sortedStudents.length === 0 && <div className={styles.noStudents}>There are no students in this class</div>}
                     {this.state.sortedStudents
                         .map((student) => (
                             <ClassStudent key={student.id} student={student} classId={this.props.classId} />

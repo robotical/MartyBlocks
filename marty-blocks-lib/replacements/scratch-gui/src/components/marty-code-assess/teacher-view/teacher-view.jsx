@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./teacher-view.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
-import ClassPerformanceTab from "./class-performance-tab/class-performance-tab.jsx";
 import ClassAnnouncementsTab from "./class-announcements-tab/class-announcements-tab.jsx";
 import ClassStudents from "./class-students/class-students.jsx";
 import Spinner from '../../spinner/spinner.jsx';

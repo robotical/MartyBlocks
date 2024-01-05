@@ -42,6 +42,19 @@ class MartyCodeAssess extends React.Component {
   componentDidMount() {
     codeAssess.subscribe(STUDENT_OR_TEACHER_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.STUDENT_OR_TEACHER_CHANGED, this.updateState.bind(this));
     codeAssess.subscribe(IS_USER_LOGGED_IN_SUBSCRIPTION, codeAssess.TypesOfPublishedEvents.IS_USER_LOGGED_IN_CHANGED, this.onUserLoggedIn.bind(this));
+    // if user is already logged in, fetch the classes
+    if (codeAssess.isUserLoggedIn) {
+      this.setState({ isLoading: true });
+      codeAssess.userProfile.getListOfClassess()
+        .then((classes) => {
+          this.setState({ classes });
+        })
+        .catch(e => console.error(e))
+        .finally(() => {
+          this.setState({ isLoading: false });
+        });
+
+    }
   }
 
   componentWillUnmount() {
@@ -58,8 +71,9 @@ class MartyCodeAssess extends React.Component {
     if ((prevState.selectedClassIdx !== this.state.selectedClassIdx) || (prevState.classes !== this.state.classes)) {
       this.setState({ isLoading: true });
       const selectedClass = this.state.classes[this.state.selectedClassIdx];
-      await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.userProfile.id);
-      await this.setUserRole(selectedClass);
+      if (selectedClass) {
+        await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.userProfile.id);
+      }
       this.setState({ isLoading: false });
     }
   }
@@ -95,7 +109,11 @@ class MartyCodeAssess extends React.Component {
 
     let userLoggedInJSX = null;
     if (codeAssess.isUserLoggedIn) {
-      userLoggedInJSX = studentOrTeacherJSX;
+      if (this.state.classes.length === 0) {
+        userLoggedInJSX = <div>There are no classes to display</div>;
+      } else {
+        userLoggedInJSX = studentOrTeacherJSX;
+      }
     } else {
       userLoggedInJSX = <UserLogin />;
     }

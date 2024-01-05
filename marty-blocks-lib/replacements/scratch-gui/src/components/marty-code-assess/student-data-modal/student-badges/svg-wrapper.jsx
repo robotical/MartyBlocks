@@ -62,9 +62,6 @@ class SVGWrapper extends React.Component {
 
     render() {
         const areAllStars0 = this.props.offsets.every((offset) => offset === 0);
-        if (areAllStars0) {
-            console.log(this.props);
-        }
         return (
             <div ref={this.setSVGRef} style={{ width: "200px", height: "200px", opacity: areAllStars0 ? 0.5 : 1 }}>
                 {this.props.svg}

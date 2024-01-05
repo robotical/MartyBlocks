@@ -49,33 +49,32 @@ class AssessmentOverTimeLineGraph extends React.Component {
             title: this.props.plotTitle,
             xaxis: {
                 ...currentLayout.xaxis, // Maintain current xaxis settings
-                type: 'date',
-                title: 'Date',
-                rangeselector: {
-                    buttons: [
-                        {
-                            count: 10,
-                            label: '10m',
-                            step: 'minute',
-                            stepmode: 'backward'
-                        },
-                        {
-                            count: 20,
-                            label: '20m',
-                            step: 'minute',
-                            stepmode: 'backward'
-                        },
-                        {
-                            count: 30,
-                            label: '30m',
-                            step: 'minute',
-                            stepmode: 'backward'
-                        },
-                        { step: 'all' }
-                    ]
-                },
+                // type: 'date',
+                title: 'Session',
+                // rangeselector: {
+                //     buttons: [
+                //         {
+                //             count: 10,
+                //             label: '10m',
+                //             step: 'minute',
+                //             stepmode: 'backward'
+                //         },
+                //         {
+                //             count: 20,
+                //             label: '20m',
+                //             step: 'minute',
+                //             stepmode: 'backward'
+                //         },
+                //         {
+                //             count: 30,
+                //             label: '30m',
+                //             step: 'minute',
+                //             stepmode: 'backward'
+                //         },
+                //         { step: 'all' }
+                //     ]
+                // },
                 rangeslider: {},
-                type: 'date'
             },
             yaxis: {
                 ...currentLayout.yaxis, // Maintain current yaxis settings

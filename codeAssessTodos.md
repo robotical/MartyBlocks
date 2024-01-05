@@ -1,15 +1,12 @@
 - fix new announcementes button style, priority: 1 ✅
 - under student accomplishments, all badges should be shown. The ones that are not earned should be grayed out, priority: 1 ✅
-- internal documentation, priority: 2
+- internal documentation, priority: 2 ✅
 - test (generate dummy data), priority: 2
 - publish google app, priority: 5
 - write tutorials that depend on user role, priority: 5
 - add analytics, priority: 5
 - test code assess in phones, priority: 6
 - tab name should depend on user role: student: "Achievements", teacher: "Class Assess", priority: 10
-
-
-
 
 Code Assess Features
 - embedded in martyblocks
@@ -32,15 +29,24 @@ Code Assess Features
             - student activity status
         - detailed view of each student
             - latest assessment score
+                - current session
             - badges
+                - all sessions
             - performance history
+                - need at least 5 sessions to show performance history
 - class announcements
     - teacher
         - create new announcement
             - text announcement 
             - emoji feedback
         - view all announcements
-        -
     - student
-        - view all announcements
-
+        - receive announcements
+- badges
+    - students can earn badges if they achieve a certain score in an assessment
+    - badges have stars 
+        - each star represents a different type of assessment within a subject 
+        - each star can have 3 levels: bronze, silver, gold
+            - each level can be earned by achieving a certain score in an assessment
+    - badges can be viewed in the student overview
+    - badges show up as a gamified pop up when earned

@@ -97,10 +97,13 @@ const vmListenerHOC = function (WrappedComponent) {
                 const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
                 const assessment = codeAssess.assess(vm.runtime.targets);
                 const badgesResults = codeAssess.assessBadges(vm.runtime.targets);
+                console.debug("badgesResults.hasCountChanged", badgesResults.hasCountChanged);
                 if (badgesResults.hasCountChanged) {
                     await studentData.sendStudentBadgesData(badgesResults.badgesCount);
                     const hasStarAchievedResults = codeAssess.hasStarAchieved(badgesResults.badgesCount);
+                    console.debug("hasStarAchievedResults", hasStarAchievedResults);
                     if (hasStarAchievedResults.anyStarAchieved) {
+                        console.debug("requesting open badge popup");
                         this.props.onRequestOpenBadgePopup({ achievedStars: hasStarAchievedResults.achievedStars });
                     }
                 }

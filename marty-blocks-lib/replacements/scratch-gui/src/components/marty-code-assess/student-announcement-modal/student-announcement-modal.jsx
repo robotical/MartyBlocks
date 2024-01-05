@@ -45,7 +45,7 @@ class StudentAnnouncementModal extends React.Component {
         return (
             <Modal
                 className={styles.modalContent}
-                contentLabel={this.props.externalProps.announcement.text}
+                contentLabel={"Your teacher is talking to you!"}
                 headerClassName={styles.header}
                 // headerImage={}
                 id="studentAnnouncementModal"
