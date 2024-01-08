@@ -65,7 +65,7 @@ jobs:
         run: |
           cd ${{ env.blocks_original }} && npm install 
           cd ${{ env.vm_original }} && npm install && npm install soundtouchjs@0.1.30
-          cd ${{ env.gui_original }} && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
+          cd ${{ env.gui_original }} && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs && npm i plotly.js react-plotly.js
 
       - name: Install marty blocks library
         run: |
