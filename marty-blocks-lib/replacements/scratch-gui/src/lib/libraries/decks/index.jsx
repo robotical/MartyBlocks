@@ -409,5 +409,39 @@ export default {
     },
 
 
+    'code-assess-login': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Login to Code Assess"
+                description="Name for the 'Login to Code Assess' how-to"
+                id="gui.howtos.code-assess-login.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: [{
+            title: (
+                <FormattedMessage
+                    defaultMessage="Login to Code Assess"
+                    description="Step name for 'Login to Code Assess' step"
+                    id="gui.howtos.code-assess-login.step_login-to-code-assess"
+                />
+            ),
+            image: 'codeAssessLogin',
+        },
+        {
+            externalUrl: {
+                label: (
+                    <FormattedMessage
+                        defaultMessage="Visit our User Guide for more info"
+                        description="Label for link to User Guide for more info"
+                        id="gui.howtos.code-assess-login.step_visit-user-guide"
+                    />
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/codeassess'
+            }
+        },
+        ],
+    }
+
 
 };

@@ -12,6 +12,8 @@ import helpIcon from "../../lib/assets/icon--tutorials.svg";
 import classroomIcon from "../../lib/assets/icon--classroom.svg";
 import Spinner from '../spinner/spinner.jsx';
 import spinnerStyles from '../spinner/spinner.css';
+import { connect } from "react-redux";
+import { activateDeck } from "../../reducers/cards.js";
 
 const STUDENT_OR_TEACHER_SUBSCRIPTION = "studentOrTeacherChanged";
 const IS_USER_LOGGED_IN_SUBSCRIPTION = "isUserLoggedInChanged";
@@ -132,7 +134,7 @@ class MartyCodeAssess extends React.Component {
           {
             title: intl.formatMessage(messages.tutorials),
             img: helpIcon,
-            onClick: () => this.props.showTutorialCard(), // TODO: implement
+            onClick: () => this.props.showTutorialCard(),
           },
         ]}
         items={classesAssets}
@@ -155,4 +157,11 @@ MartyCodeAssess.propTypes = {
 };
 
 
-export default injectIntl(MartyCodeAssess);
+const mapDispatchToProps = (dispatch) => ({
+  showTutorialCard: () => {
+      dispatch(activateDeck("code-assess-login"));
+  }
+});
+
+
+export default injectIntl(connect(null, mapDispatchToProps)(MartyCodeAssess))
