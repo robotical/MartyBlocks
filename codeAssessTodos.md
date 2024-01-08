@@ -1,8 +1,8 @@
 - fix new announcementes button style, priority: 1 ✅
 - under student accomplishments, all badges should be shown. The ones that are not earned should be grayed out, priority: 1 ✅
 - internal documentation, priority: 2 ✅
-- test (generate dummy data), priority: 2
-- publish google app, priority: 5
+- test (generate dummy data), priority: 2 ✅
+- publish google app, priority: 5 
 - write tutorials that depend on user role, priority: 5
 - add analytics, priority: 5
 - test code assess in phones, priority: 6
