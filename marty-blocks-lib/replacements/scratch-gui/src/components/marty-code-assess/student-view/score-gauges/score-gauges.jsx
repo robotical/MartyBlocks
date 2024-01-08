@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./score-gauges.css";
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
-import ScoreGauge from "../score-gauge/score-gauge.jsx";
+import ScoreGauge from "./score-gauge/score-gauge.jsx";
 
 class ScoreGauges extends React.Component {
     constructor(props) {
