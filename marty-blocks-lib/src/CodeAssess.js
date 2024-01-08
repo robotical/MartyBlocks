@@ -11,7 +11,7 @@ class CodeAssess {
         // this.assess = assess;
         this.codeAssessLib = new CodeAssessLib();
         // export type PlatformEnum = "web" |"mobile" |"staging" |"dev-mb" |"dev-webapp";
-        this.codeAssessLib.platform = "dev-mb";
+        this.codeAssessLib.platform = "staging";
         // this.assessBadges = assessBadges;
         this.BadgesManager = BadgesManager;
         this.isProjectLoaded = false;
