@@ -94,6 +94,10 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         async assessStudent() {
             try {
+                if (!codeAssess.student.joinedClass) {
+                    console.warn("Joined class is not defined, not assessing student");
+                    return;
+                }
                 const studentData = await codeAssess.student.requestStudentData(codeAssess.student.joinedClass.id);
                 const assessment = codeAssess.assess(vm.runtime.targets);
                 const badgesResults = codeAssess.assessBadges(vm.runtime.targets);
