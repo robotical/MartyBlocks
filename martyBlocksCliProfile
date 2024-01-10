@@ -58,7 +58,7 @@ npmlinkAll() {
     cd $mblib && npm link && npm link ../../scratch-automatic-assessment ../../code-assess/code-assess-lib # && npm link ../../marty-machine-lib
     cd $blocks_original && npm link && npm link marty-blocks-lib
     cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
-    cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
+    cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm 
 }
 
 # Step 4.1: Copy web worker of marty machine into scratch gui static
@@ -97,6 +97,16 @@ buildAllAndCpToWebApp () {
     buildScratch $type $NODE_ENV
     cpToDist
     cpToWebapp
+}
+
+buildAllAndCpToPhoneApp () {
+    local type="${1:-all}"
+    local NODE_ENV="${2:-development}"
+    # setDevelopment
+    cpReplacements
+    removeUnusedAssets
+    buildScratch $type $NODE_ENV
+    cpToPhoneApp
 }
 
 setProduction () {

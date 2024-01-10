@@ -41,12 +41,13 @@ class StudentAssessment extends React.Component {
         const finalScores = {};
         const lastScore = fetchedStudentData.getLastScore();
         const preprocessor = new codeAssess.Preprocessor(lastScore || {});
-        const transformedData = preprocessor.normaliseScores().data
-        finalScores["Algorithms"] = transformedData.algorithmsCompoScores?.scores[0] || 0;
-        finalScores["Analysis"] = transformedData.analysisCompoScores?.scores[0] || 0;
-        finalScores["Decomposition"] = transformedData.decompositionCompoScores?.scores[0] || 0;
-        finalScores["Generalisation and Abstraction"] = transformedData.generalisationAndAbstrCompoScores?.scores[0] || 0;
-        finalScores["Pattern Recognition and Data Representation"] = transformedData.patternRecAndDataRepCompoScores?.scores[0] || 0;
+        const transformedData = preprocessor.sortData().normaliseScores().data
+        const lastScoreIdx = transformedData.algorithmsCompoScores?.scores.length - 1;
+        finalScores["Algorithms"] = transformedData.algorithmsCompoScores?.scores[lastScoreIdx] || 0;
+        finalScores["Analysis"] = transformedData.analysisCompoScores?.scores[lastScoreIdx] || 0;
+        finalScores["Decomposition"] = transformedData.decompositionCompoScores?.scores[lastScoreIdx] || 0;
+        finalScores["Generalisation and Abstraction"] = transformedData.generalisationAndAbstrCompoScores?.scores[lastScoreIdx] || 0;
+        finalScores["Pattern Recognition and Data Representation"] = transformedData.patternRecAndDataRepCompoScores?.scores[lastScoreIdx] || 0;
 
         this.setState({ scores: finalScores, totalScore: compositeScore });
     }

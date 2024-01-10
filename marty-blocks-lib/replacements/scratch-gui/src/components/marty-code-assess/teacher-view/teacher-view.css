@@ -71,36 +71,6 @@
   overflow-y: auto;
 }
 
-.overviewContainer {
-  padding: 20px;
-  height: calc(100% - 100px);
-  overflow-y: auto;
-}
-
-.overviewClassName {
-  font-size: 20px;
-  font-weight: 500;
-}
-.overviewClassSection {
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 10px;
-}
-.overviewClassSubject {
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 10px;
-}
-.overviewClassRoom {
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 10px;
-}
-.overviewTotalStudents {
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 10px;
-}
 .liveStreamContainer {
   padding: 20px;
   height: calc(100% - 100px);

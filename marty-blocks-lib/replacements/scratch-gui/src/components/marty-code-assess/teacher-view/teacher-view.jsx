@@ -7,6 +7,7 @@ import ClassStudents from "./class-students/class-students.jsx";
 import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 import PropTypes from "prop-types";
+import ClassOverview from "./class-overview/class-overview.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -72,14 +73,7 @@ class TeacherView extends React.Component {
                 <div className={styles.selectedTabContentContainer}>
                     {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                         <>
-                            {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
-                                <div className={styles.overviewClassName}>Class name: {this.props.selectedClass?.name}</div>
-                                <div className={styles.overviewClassSection}>{this.props.selectedClass?.section}</div>
-                                <div className={styles.overviewClassSubject}>{this.props.selectedClass?.subject}</div>
-                                <div className={styles.overviewClassRoom}>{this.props.selectedClass?.room}</div>
-                                <div className={styles.overviewTotalStudents}>Enrolled Students: {this.state.selectedClassStudents.length}</div>
-                            </div>
-                            }
+                            {this.state.selectedTab === "Overview" && <ClassOverview class={this.props.selectedClass} students={this.state.selectedClassStudents} classId={this.props.selectedClass?.id}/>}
                             {this.state.selectedTab === "Students" && <ClassStudents students={this.state.selectedClassStudents} classId={this.props.selectedClass?.id} />}
                             {/* {this.state.selectedTab === "Class Performance" && <div className={styles.liveStreamContainer}>
                                 <ClassPerformanceTab selectedClass={this.props.selectedClass} />
