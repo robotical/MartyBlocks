@@ -39,7 +39,8 @@ class ClassOverview extends React.Component {
                 const normalisedData = new codeAssess.Preprocessor(mappedScoresOverTime[studentName])
                     .sortData()
                     .normaliseScores()
-                    .calculateMovingMaxBasedOnDates(.9, "minutes")
+                    // .calculateMovingMaxBasedOnDates(2, "hours")
+                    .calculateMovingMaxBasedOnDates(.9, "minutes") // this is for testing
                     .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
                     .data
                 transformedData["Algorithms"] = normalisedData.algorithmsCompoScores?.leakyScores;
@@ -50,7 +51,10 @@ class ClassOverview extends React.Component {
                 transformedData["Dates"] = normalisedData.dates;
                 mappedTransformedDatas[studentName] = transformedData;
             }
-            this.setState({ tableData: calculateAverageForCategories(mappedTransformedDatas) });
+            const alignedData = alignStudentData(mappedTransformedDatas);
+            console.log("mappedTransformedDatas", mappedTransformedDatas);
+            console.log("alignedData", alignedData);
+            this.setState({ tableData: calculateAverageForCategories(alignedData) });
         });
     }
 
@@ -108,4 +112,41 @@ const calculateAverageForCategories = (mappedData) => {
         collapsedData[studentName] = collapsedDataForStudent;
     }
     return collapsedData;
+}
+
+function alignStudentData(studentData) {
+    // Extract all unique dates from all students
+    let allDates = new Set();
+    for (let student in studentData) {
+        studentData[student].Dates.forEach(date => allDates.add(date));
+    }
+    allDates = Array.from(allDates).sort();
+
+    // Align each student's data with the master date list
+    let alignedData = {};
+    for (let student in studentData) {
+        alignedData[student] = {};
+        let studentFormattedDates = studentData[student].Dates.map(date => formatDate(date));
+
+        for (let category in studentData[student]) {
+            if (category === 'Dates') {
+                alignedData[student][category] = allDates;
+                continue;
+            }
+
+            alignedData[student][category] = allDates.map(date => {
+                let dateIndex = studentFormattedDates.indexOf(formatDate(date));
+                return dateIndex >= 0 ? studentData[student][category][dateIndex] : 0;
+            });
+        }
+    }
+
+    return alignedData;
+}
+
+const formatDate = (date, testing = true) => {
+    // FOR TESTING THE 1-DAY SESSIONS
+    if (testing) return date;
+    const dateObj = new Date(date);
+    return dateObj.getDate() + "/" + (dateObj.getMonth() + 1) + "/" + dateObj.getFullYear();
 }

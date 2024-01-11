@@ -18,7 +18,6 @@ const messages = defineMessages({
 });
 
 const HEART_BEAT_CHECK_INTERVAL = 5000;
-let heartBeatInterval = null;
 
 const STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP = {
     "offline": "#FF0000",
@@ -36,21 +35,26 @@ class ClassStudent extends React.Component {
         };
         bindAll(this, [
             "fetchStudentData",
-            "onStudentClick"
+            "modalToggle",
         ]);
+        this.heartBeatInterval = null;
     }
 
     componentDidMount() {
         // comment this out for development so we don't make too many requests to the db
-        heartBeatInterval = setInterval(() => {
-            if (this.state.studentDataModalVisible) return; // we only want to fetch data if the modal is not open -- the only real-time data is in the students section
+        this.heartBeatInterval = setInterval(() => {
+            if (this.props.isAnyStudentDataModalVisible) return; // we only want to fetch data if the modal is not open -- the only real-time data is in the students section
             this.fetchStudentData();
         }, HEART_BEAT_CHECK_INTERVAL);
         this.fetchStudentData();
     }
 
     componentWillUnmount() {
-        if (heartBeatInterval) clearInterval(heartBeatInterval);
+        if (this.heartBeatInterval) {
+            console.log("CLEARING INTERVAL");
+            clearInterval(this.heartBeatInterval);
+            this.heartBeatInterval = null;
+        }
     }
 
     async fetchStudentData() {
@@ -61,9 +65,11 @@ class ClassStudent extends React.Component {
         }
     }
 
-    onStudentClick() {
-        this.setState({ studentDataModalVisible: true });
+    modalToggle() {
+        this.setState({ studentDataModalVisible: !this.state.studentDataModalVisible });
+        this.props.setIsAnyStudentDataModalVisible(!this.state.studentDataModalVisible);
     }
+
     render() {
         const { intl } = this.props;
         const student = this.props.student;
@@ -115,24 +121,25 @@ class ClassStudent extends React.Component {
             studentJsx = <img className={styles.classStudentImg} src={this.state.studentActivityStatus === "active" ? educationIconGreen : educationIconRed} />;
         }
 
+
         return (
             <>
                 {this.state.studentDataModalVisible &&
                     <Modal
-                        onRequestClose={() => this.setState({ studentDataModalVisible: false })}
+                        onRequestClose={this.modalToggle}
                         fullScreen
                         id="studentDataModal"
                         contentLabel={`${student.name} Progress`}
                     >
                         <StudentDataModal
-                            onClose={() => this.setState({ studentDataModalVisible: false })}
+                            onClose={this.modalToggle}
                             studentData={this.state.fetchedStudentData}
                             student={student}
                             classId={this.props.classId}
                         />
                     </Modal>
                 }
-                <div className={styles.classStudent} onClick={this.onStudentClick}>
+                <div className={styles.classStudent} onClick={this.modalToggle}>
                     <div className={styles.classStudentPltContainer}>
                         {studentJsx}
                     </div>
@@ -147,6 +154,8 @@ ClassStudent.propTypes = {
     student: PropTypes.object.isRequired,
     classId: PropTypes.string.isRequired,
     intl: intlShape.isRequired,
+    isAnyStudentDataModalVisible: PropTypes.bool.isRequired,
+    setIsAnyStudentDataModalVisible: PropTypes.func.isRequired
 };
 
 export default injectIntl(ClassStudent);

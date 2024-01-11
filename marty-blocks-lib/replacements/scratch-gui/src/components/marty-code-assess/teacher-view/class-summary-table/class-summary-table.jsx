@@ -103,6 +103,29 @@ class ClassSummaryTable extends React.Component {
                         <div onClick={() => this.setState({ tableMode: "All Sessions" })} className={this.state.tableMode === "All Sessions" ? styles.tableModeToggleSelected : styles.tableModeToggle}>All Sessions</div>
                     </div>
                 </div>
+                <div className={styles.colourTableContainer}>
+                    <div className={styles.colourTable}>
+                        <div className={styles.colourTableRowsContainer}>
+                            <div className={styles.colourTableRow}>
+                                <div className={styles.colourTableRowColour} style={{ backgroundColor: "#FF6F61" }}></div>
+                                <div className={styles.colourTableRowText}>Beginner</div>
+                            </div>
+                            <div className={styles.colourTableRow}>
+                                <div className={styles.colourTableRowColour} style={{ backgroundColor: "#FFC107" }}></div>
+                                <div className={styles.colourTableRowText}>Intermediate</div>
+                            </div>
+                            <div className={styles.colourTableRow}>
+                                <div className={styles.colourTableRowColour} style={{ backgroundColor: "#8BC34A" }}></div>
+                                <div className={styles.colourTableRowText}>Advanced</div>
+                            </div>
+                            <div className={styles.colourTableRow}>
+                                <div className={styles.colourTableRowColour} style={{ backgroundColor: "#009688" }}></div>
+                                <div className={styles.colourTableRowText}>Expert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div className={styles.table}>
                     {tableFirstColumnJSX}
                     {tableColumnsJSX}
@@ -139,19 +162,10 @@ const getLastScore = (dataArr) => {
 }
 
 const getStylesForScore = (score) => {
-    if (score < 0.5) {
-        return {
-            backgroundColor: "red"
-        }
-    } else if (score < 0.75) {
-        return {
-            backgroundColor: "orange"
-        }
-    } else {
-        return {
-            backgroundColor: "green"
-        }
-    }
+    if (score < 0.25) return { backgroundColor: "#FF6F61" }; // Coral Red
+    if (score < 0.5) return { backgroundColor: "#FFC107" };  // Amber
+    if (score < 0.75) return { backgroundColor: "#8BC34A" }; // Light Green
+    return { backgroundColor: "#009688" };
 }
 
 const getClassAverage = (data) => {
@@ -180,7 +194,9 @@ const getClassAverage = (data) => {
     return data;
 }
 
-const formatDate = (date) => {
+const formatDate = (date, testing = true) => {
+    // FOR TESTING THE 1-DAY SESSIONS
+    if (testing) return date;
     const dateObj = new Date(date);
     return dateObj.getDate() + "/" + (dateObj.getMonth() + 1) + "/" + dateObj.getFullYear();
 }

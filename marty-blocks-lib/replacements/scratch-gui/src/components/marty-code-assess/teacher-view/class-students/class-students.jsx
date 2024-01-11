@@ -21,12 +21,14 @@ class ClassStudents extends React.Component {
         this.state = {
             sortBy: "alphabetical", // alphabetical, performance, activity
             isLoading: false,
-            sortedStudents: []
+            sortedStudents: [],
+            isAnyStudentDataModalVisible: false
         };
         bindAll(this, [
             'sortByPerformance',
             'sortByActivityStatus',
-            'sortByAlphabetical'
+            'sortByAlphabetical',
+            'setIsAnyStudentDataModalVisible'
         ]);
     }
 
@@ -106,6 +108,10 @@ class ClassStudents extends React.Component {
         if (sortBy === "activity") this.sortByActivityStatus();
     }
 
+    setIsAnyStudentDataModalVisible(isAnyStudentDataModalVisible) {
+        this.setState({ isAnyStudentDataModalVisible });
+    }
+
     render() {
         if (!this.props.students) {
             return null;
@@ -125,7 +131,7 @@ class ClassStudents extends React.Component {
                     {this.state.sortedStudents.length === 0 && <div className={styles.noStudents}>There are no students in this class</div>}
                     {this.state.sortedStudents
                         .map((student) => (
-                            <ClassStudent key={student.id} student={student} classId={this.props.classId} />
+                            <ClassStudent key={student.id} student={student} classId={this.props.classId} setIsAnyStudentDataModalVisible={this.setIsAnyStudentDataModalVisible} isAnyStudentDataModalVisible={this.state.isAnyStudentDataModalVisible} />
                         ))}
                 </div>}
             </div>
