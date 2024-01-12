@@ -11,8 +11,8 @@ const { Project } = require("@robotical/scratch-to-python-transpiler");
 
 mv2Interface = new Mv2Interface();
 mstTesting = new MSTTesting(mv2Interface);
-martyMachine = new MartyMachine(); 
-pythonTranspiler = Project; 
+martyMachine = new MartyMachine();
+pythonTranspiler = Project;
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality
 
@@ -503,14 +503,24 @@ class Scratch3Mv2Blocks {
     return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
-  ledIdMapping(id, isFromColorPicker) {
+  ledIdMapping(id, isFromColorPicker, boardtypeWhoAmI = "LEDeye") {
     // map led position id to code id
+    // boardtypeWhoAmI: LEDeye, LEDarm, LEDfoot (different mappings for each)
     // the order starting from the top id is: 6 5 4 3 2 1 0 11 10 9 8 7
-    const MAP = [6, 5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7];
-    if (isFromColorPicker) {
-      return MAP[(id + 3) % 12];
-    }
-    return MAP[id];
+    if (boardtypeWhoAmI === "LEDeye") {
+      const MAP = [6, 5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7];
+      if (isFromColorPicker) {
+        return MAP[(id + 3) % 12];
+      }
+      return MAP[id];
+    } else if (boardtypeWhoAmI === "LEDarm") {
+      const MAP = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+      return MAP[id];
+    } else if (boardtypeWhoAmI === "LEDfoot") {
+      const MAP = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+      return MAP[id];
+    } 
+    return id; // no mapping
   }
 
   ledIDtoHex(ledID) {
@@ -560,7 +570,7 @@ class Scratch3Mv2Blocks {
       }
     }
 
-    const ledIdMapped = this.ledIdMapping(ledID);
+    const ledIdMapped = this.ledIdMapping(ledID, false, boardtypeWhoAmI);
     this.addonNotConnectedAlert(boardtypeObj.name);
     let marty_cmd = `led/${boardtypeObj.name}/setled/${ledIdMapped}/${colour}`;
     if (
@@ -587,10 +597,10 @@ class Scratch3Mv2Blocks {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
       : null;
   }
 
