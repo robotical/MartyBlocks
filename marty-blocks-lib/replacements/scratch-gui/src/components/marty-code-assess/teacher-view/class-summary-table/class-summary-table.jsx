@@ -115,7 +115,7 @@ class ClassSummaryTable extends React.Component {
                                 <div className={styles.colourTableRowText}>Intermediate</div>
                             </div>
                             <div className={styles.colourTableRow}>
-                                <div className={styles.colourTableRowColour} style={{ backgroundColor: "#8BC34A" }}></div>
+                                <div className={styles.colourTableRowColour} style={{ backgroundColor: "#50C124" }}></div>
                                 <div className={styles.colourTableRowText}>Advanced</div>
                             </div>
                             <div className={styles.colourTableRow}>
@@ -164,7 +164,7 @@ const getLastScore = (dataArr) => {
 const getStylesForScore = (score) => {
     if (score < 0.25) return { backgroundColor: "#FF6F61" }; // Coral Red
     if (score < 0.5) return { backgroundColor: "#FFC107" };  // Amber
-    if (score < 0.75) return { backgroundColor: "#8BC34A" }; // Light Green
+    if (score < 0.75) return { backgroundColor: "#50C124" }; // Light Green
     return { backgroundColor: "#009688" };
 }
 
