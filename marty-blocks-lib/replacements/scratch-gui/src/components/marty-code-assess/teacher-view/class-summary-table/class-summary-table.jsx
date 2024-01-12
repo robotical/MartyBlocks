@@ -19,7 +19,8 @@ class ClassSummaryTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tableMode: "All Sessions" // "Final Score" or "All Sessions"
+            tableMode: "All Sessions", // "Final Score" or "All Sessions",
+            colourCodingMode: "Absolute Score", // "Absolute Score" or "Relative Score"
         };
         bindAll(this, [
 
@@ -39,6 +40,11 @@ class ClassSummaryTable extends React.Component {
             return null;
         }
         const dataWithClassAverage = getClassAverage(this.props.data);
+
+        let relativeData;
+        if (this.state.colourCodingMode === "Relative Score") {
+            relativeData = generateRelativeData(dataWithClassAverage);
+        }
 
         let tableFirstColumnJSX = [];
         let tableColumnsJSX = [];
@@ -61,15 +67,16 @@ class ClassSummaryTable extends React.Component {
             tableColumnsJSX = orderedStudentNames.map((studentName, studentNameIdx) => {
                 const studentData = dataWithClassAverage[studentName];
                 const columnClassName = studentName === "Class Average" ? [styles.column, styles.classAverageColumn].join(" ") : styles.column;
+                const data = this.state.colourCodingMode === "Absolute Score" ? studentData : relativeData[studentName];
                 return (
                     <div className={columnClassName} key={studentName + studentNameIdx}>
                         <SimpleTooltip className={styles.cell} text={minimiseString(studentName)} tooltipText={studentName} />
-                        <div style={getStylesForScore(getLastScore(studentData["Algorithms"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Algorithms"]))}%</div>
-                        <div style={getStylesForScore(getLastScore(studentData["Analysis"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Analysis"]))}%</div>
-                        <div style={getStylesForScore(getLastScore(studentData["Decomposition"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Decomposition"]))}%</div>
-                        <div style={getStylesForScore(getLastScore(studentData["Generalisation and Abstraction"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Generalisation and Abstraction"]))}%</div>
-                        <div style={getStylesForScore(getLastScore(studentData["Pattern Recognition and Data Representation"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Pattern Recognition and Data Representation"]))}%</div>
-                        <div style={getStylesForScore(getLastScore(studentData["Average"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Average"]))}%</div>
+                        <div style={getStylesForScore(getLastScore(data["Algorithms"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Algorithms"]))}%</div>
+                        <div style={getStylesForScore(getLastScore(data["Analysis"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Analysis"]))}%</div>
+                        <div style={getStylesForScore(getLastScore(data["Decomposition"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Decomposition"]))}%</div>
+                        <div style={getStylesForScore(getLastScore(data["Generalisation and Abstraction"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Generalisation and Abstraction"]))}%</div>
+                        <div style={getStylesForScore(getLastScore(data["Pattern Recognition and Data Representation"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Pattern Recognition and Data Representation"]))}%</div>
+                        <div style={getStylesForScore(getLastScore(data["Average"]))} className={styles.cell}>{roundToTwo(getLastScore(studentData["Average"]))}%</div>
                     </div>
                 )
             });
@@ -81,7 +88,8 @@ class ClassSummaryTable extends React.Component {
                     <div className={columnClassName} key={studentName + studentNameIdx}>
                         <SimpleTooltip className={styles.cell} text={minimiseString(studentName)} tooltipText={studentName} />
                         {studentData["Average"].map((sessionValue, sessionValueIdx) => {
-                            return <SimpleTooltip key={sessionValueIdx} style={getStylesForScore(sessionValue)} className={styles.cell} text={roundToTwo(sessionValue) + "%"} tooltipText={"Average: " + roundToTwo(sessionValue) + "%"} />
+                            const data = this.state.colourCodingMode === "Absolute Score" ? studentData["Average"] : relativeData[studentName]["Average"];
+                            return <SimpleTooltip key={sessionValueIdx} style={getStylesForScore(data[sessionValueIdx])} className={styles.cell} text={roundToTwo(sessionValue) + "%"} tooltipText={"Average: " + roundToTwo(sessionValue) + "%"} />
                         })}
                     </div>
                 )
@@ -98,9 +106,15 @@ class ClassSummaryTable extends React.Component {
         return (
             <div className={styles.container}>
                 <div className={styles.tableButtonsContainer}>
+                    <label className={styles.toggleLabel} htmlFor="">Table Mode{" "}</label>
                     <div className={styles.tableModeToggleContainer}>
                         <div onClick={() => this.setState({ tableMode: "Final Score" })} className={this.state.tableMode === "Final Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Final Score</div>
                         <div onClick={() => this.setState({ tableMode: "All Sessions" })} className={this.state.tableMode === "All Sessions" ? styles.tableModeToggleSelected : styles.tableModeToggle}>All Sessions</div>
+                    </div>
+                    <label className={styles.toggleLabel} htmlFor="">Color Coding{" "}</label>
+                    <div className={styles.tableModeToggleContainer}>
+                        <div onClick={() => this.setState({ colourCodingMode: "Absolute Score" })} className={this.state.colourCodingMode === "Absolute Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Absolute Score</div>
+                        <div onClick={() => this.setState({ colourCodingMode: "Relative Score" })} className={this.state.colourCodingMode === "Relative Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Relative Score</div>
                     </div>
                 </div>
                 <div className={styles.colourTableContainer}>
@@ -108,19 +122,19 @@ class ClassSummaryTable extends React.Component {
                         <div className={styles.colourTableRowsContainer}>
                             <div className={styles.colourTableRow}>
                                 <div className={styles.colourTableRowColour} style={{ backgroundColor: "#FF6F61" }}></div>
-                                <div className={styles.colourTableRowText}>Beginner</div>
+                                <div className={styles.colourTableRowText}>{this.state.colourCodingMode === "Absolute Score" ? "Beginner" : "Underachieving"}</div>
                             </div>
                             <div className={styles.colourTableRow}>
                                 <div className={styles.colourTableRowColour} style={{ backgroundColor: "#FFC107" }}></div>
-                                <div className={styles.colourTableRowText}>Intermediate</div>
+                                <div className={styles.colourTableRowText}>{this.state.colourCodingMode === "Absolute Score" ? "Intermediate" : "Intermediate"}</div>
                             </div>
                             <div className={styles.colourTableRow}>
                                 <div className={styles.colourTableRowColour} style={{ backgroundColor: "#50C124" }}></div>
-                                <div className={styles.colourTableRowText}>Advanced</div>
+                                <div className={styles.colourTableRowText}>{this.state.colourCodingMode === "Absolute Score" ? "Advanced" : "Adept"}</div>
                             </div>
                             <div className={styles.colourTableRow}>
                                 <div className={styles.colourTableRowColour} style={{ backgroundColor: "#009688" }}></div>
-                                <div className={styles.colourTableRowText}>Expert</div>
+                                <div className={styles.colourTableRowText}>{this.state.colourCodingMode === "Absolute Score" ? "Expert" : "Champion"}</div>
                             </div>
                         </div>
                     </div>
@@ -199,4 +213,43 @@ const formatDate = (date, testing = true) => {
     if (testing) return date;
     const dateObj = new Date(date);
     return dateObj.getDate() + "/" + (dateObj.getMonth() + 1) + "/" + dateObj.getFullYear();
+}
+
+const generateRelativeData = (data) => {
+    // assumes that the data are square
+    let minMaxByCategory = {};
+    // First pass: Determine min and max for each session in each category
+    for (let student in data) {
+        for (let category in data[student]) {
+            if (category === "Dates") continue;
+            minMaxByCategory[category] = minMaxByCategory[category] || [];
+            data[student][category].forEach((score, index) => {
+                if (!minMaxByCategory[category][index]) {
+                    minMaxByCategory[category][index] = { min: score, max: score };
+                } else {
+                    minMaxByCategory[category][index].min = Math.min(minMaxByCategory[category][index].min, score);
+                    minMaxByCategory[category][index].max = Math.max(minMaxByCategory[category][index].max, score);
+                }
+            });
+        }
+    }
+
+    // Second pass: Rescale scores
+    const rescaledData = {};
+    for (let student in data) {
+        for (let category in data[student]) {
+            if (category === "Dates") continue;
+            rescaledData[student] = rescaledData[student] || {};
+            rescaledData[student][category] = data[student][category].map((score, index) => {
+                let min = minMaxByCategory[category][index].min;
+                let max = minMaxByCategory[category][index].max;
+
+                if (max === min) {
+                    return 1; // Avoid division by zero when all scores are the same
+                }
+                return (score - min) / (max - min);
+            });
+        }
+    }
+    return rescaledData;
 }

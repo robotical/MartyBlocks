@@ -55,7 +55,6 @@ class MartyCodeAssess extends React.Component {
         .finally(() => {
           this.setState({ isLoading: false });
         });
-
     }
   }
 

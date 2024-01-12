@@ -86,7 +86,6 @@ class LatestAssessmentTab extends React.Component {
 }
 
 
-
 LatestAssessmentTab.propTypes = {
     intl: intlShape.isRequired,
     studentData: PropTypes.oneOfType([

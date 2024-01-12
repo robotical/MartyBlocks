@@ -45,8 +45,6 @@ class StudentView extends React.Component {
             this.setState({ isLoading: true });
             await codeAssess.createStudentIfDoesntExist(codeAssess.student.id, codeAssess.student.name);
             const fetchedStudentData = await codeAssess.student.fetchStudentData(this.props.selectedClass?.id);
-
-
             this.setState({ isLoading: false });
         }
         asyncFunc();

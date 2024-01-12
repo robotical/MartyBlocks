@@ -82,7 +82,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         const urlParams = new URLSearchParams(window.location.search);
         const projectIdInDB = urlParams.get('p');
         const codeAssesTestWithMockData = urlParams.get('mockDataCodeAsses');
-        codeAssess.isTestingWithMockData = codeAssesTestWithMockData === 'true';
+        codeAssess.isTestingWithMockData = codeAssesTestWithMockData;
         const dbUrl =
           "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
         const res = await fetch(dbUrl + projectIdInDB + ".json");
