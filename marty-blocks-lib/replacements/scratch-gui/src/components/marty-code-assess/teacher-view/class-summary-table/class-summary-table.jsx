@@ -3,9 +3,10 @@ import styles from "./class-summary-table.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
-import Spinner from '../../../spinner/spinner.jsx';
-import spinnerStyles from '../../../spinner/spinner.css';
 import SimpleTooltip from "../../../simple-tooltip/simple-tooltip.jsx";
+import MoreInfoButton from "../../../more-info-button/more-info-button.jsx";
+import TableModeInfo from "../../../more-info-components/code-asses-table-mode/code-asses-table-mode.jsx";
+import TableColorCodingInfo from "../../../more-info-components/code-asses-table-coding/code-asses-table-coding.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -56,7 +57,7 @@ class ClassSummaryTable extends React.Component {
         });
         if (this.state.tableMode === "Final Score") {
             tableFirstColumnJSX = <div className={styles.column}>
-                <SimpleTooltip className={styles.cell} text={""} tooltipText={""} />
+                <SimpleTooltip className={styles.cell} text={"-"} tooltipText={""} />
                 <SimpleTooltip className={styles.cell} text={minimiseString("Algorithms")} tooltipText={"Algorithms"} />
                 <SimpleTooltip className={styles.cell} text={minimiseString("Analysis")} tooltipText={"Analysis"} />
                 <SimpleTooltip className={styles.cell} text={minimiseString("Decomposition")} tooltipText={"Decomposition"} />
@@ -95,7 +96,7 @@ class ClassSummaryTable extends React.Component {
                 )
             });
             tableFirstColumnJSX = <div className={styles.column}>
-                <SimpleTooltip className={styles.cell} text={""} tooltipText={""} />
+                <SimpleTooltip className={styles.cell} text={"-"} tooltipText={""} />
                 {dataWithClassAverage[orderedStudentNames[0]]["Dates"].map((sessionValue, sessionValueIdx) => {
                     const sessionDate = formatDate(sessionValue);
                     return <SimpleTooltip className={styles.cell} text={sessionValueIdx + 1} tooltipText={sessionDate} key={sessionValueIdx} />
@@ -106,15 +107,25 @@ class ClassSummaryTable extends React.Component {
         return (
             <div className={styles.container}>
                 <div className={styles.tableButtonsContainer}>
-                    <label className={styles.toggleLabel} htmlFor="">Table Mode{" "}</label>
+                    <label className={styles.toggleLabel} htmlFor="">Table Mode{" "}<MoreInfoButton modalTitle="Table Mode" contentComponent={TableModeInfo}>
+                        <div className={styles.moreInfoIconContainer}>
+                            <div className={styles.moreInfoIcon} onClick={this.clickHandler}>?</div>
+                        </div>
+                    </MoreInfoButton>
+                    </label>
                     <div className={styles.tableModeToggleContainer}>
                         <div onClick={() => this.setState({ tableMode: "Final Score" })} className={this.state.tableMode === "Final Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Final Score</div>
                         <div onClick={() => this.setState({ tableMode: "All Sessions" })} className={this.state.tableMode === "All Sessions" ? styles.tableModeToggleSelected : styles.tableModeToggle}>All Sessions</div>
                     </div>
-                    <label className={styles.toggleLabel} htmlFor="">Color Coding{" "}</label>
+                    <label className={styles.toggleLabel} htmlFor="">Color Coding{" "}<MoreInfoButton modalTitle="Color Coding" contentComponent={TableColorCodingInfo}>
+                        <div className={styles.moreInfoIconContainer}>
+                            <div className={styles.moreInfoIcon} onClick={this.clickHandler}>?</div>
+                        </div>
+                    </MoreInfoButton>
+                    </label>
                     <div className={styles.tableModeToggleContainer}>
-                        <div onClick={() => this.setState({ colourCodingMode: "Absolute Score" })} className={this.state.colourCodingMode === "Absolute Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Absolute Score</div>
-                        <div onClick={() => this.setState({ colourCodingMode: "Relative Score" })} className={this.state.colourCodingMode === "Relative Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Relative Score</div>
+                        <div onClick={() => this.setState({ colourCodingMode: "Absolute Score" })} className={this.state.colourCodingMode === "Absolute Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Absolute</div>
+                        <div onClick={() => this.setState({ colourCodingMode: "Relative Score" })} className={this.state.colourCodingMode === "Relative Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Relative</div>
                     </div>
                 </div>
                 <div className={styles.colourTableContainer}>
