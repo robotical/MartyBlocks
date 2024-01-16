@@ -171,10 +171,6 @@
 .step-body {
     width: 100%;
     background: #272822;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     position: relative;
     text-align: center;
 

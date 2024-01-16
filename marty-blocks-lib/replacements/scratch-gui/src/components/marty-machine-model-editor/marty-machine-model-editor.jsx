@@ -17,6 +17,7 @@ import MartyMachineModelPredictions from './predictions/predictions.jsx';
 import TfVisChart from './TfVisChart/TfVisChart.jsx';
 import SoundFeed from '../marty-sound-feed/marty-sound-feed.jsx';
 import ModelClass from './model-class/model-class.jsx';
+import MoreInfoButton from "../more-info-button/more-info-button.jsx";
 
 const BufferedInput = BufferedInputHOC(Input);
 
@@ -30,6 +31,11 @@ const messages = defineMessages({
         id: 'gui.martyMachineModelEditor.className',
         description: 'Label for the name of the class',
         defaultMessage: 'Collect Data for:'
+    },
+    createNewClass: {
+        id: 'gui.martyMachineModelEditor.createNewClass',
+        description: 'Label for the name of the class',
+        defaultMessage: 'Create new class'
     },
     record: {
         id: 'gui.MartyMachineModelEditor.record',
@@ -198,6 +204,24 @@ const MartyMachineModelEditor = props => {
                     </button>}
             </div>
         </div>
+        <div className={classNames(styles.row, styles.rowReverse)}>
+            <div className={styles.inputGroup}>
+                <Label text={props.intl.formatMessage(messages.createNewClass)}>
+                    <BufferedInput
+                        tabIndex="1"
+                        type="text"
+                        value={props.className}
+                        onSubmit={props.onClassNameChange}
+                    />
+                    <MoreInfoButton modalTitle="Create New Class" contentComponent={() => <div>hello</div>}>
+                        <div className={styles.moreInfoIconContainer}>
+                            <div className={styles.moreInfoIcon} onClick={this.onCreateNewClassMoreInfoHandler}>?</div>
+                        </div>
+                    </MoreInfoButton>
+                </Label>
+            </div>
+        </div>
+
         {!props.isModelLoaded ? <div className={styles.modelClassesOuterContainer}>
             {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
             <div className={styles.row}>
