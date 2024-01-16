@@ -109,7 +109,7 @@ class ClassSummaryTable extends React.Component {
                 <div className={styles.tableButtonsContainer}>
                     <label className={styles.toggleLabel} htmlFor="">Table Mode{" "}<MoreInfoButton modalTitle="Table Mode" contentComponent={TableModeInfo}>
                         <div className={styles.moreInfoIconContainer}>
-                            <div className={styles.moreInfoIcon} onClick={this.clickHandler}>?</div>
+                            <div className={styles.moreInfoIcon}>?</div>
                         </div>
                     </MoreInfoButton>
                     </label>
@@ -119,7 +119,7 @@ class ClassSummaryTable extends React.Component {
                     </div>
                     <label className={styles.toggleLabel} htmlFor="">Color Coding{" "}<MoreInfoButton modalTitle="Color Coding" contentComponent={TableColorCodingInfo}>
                         <div className={styles.moreInfoIconContainer}>
-                            <div className={styles.moreInfoIcon} onClick={this.clickHandler}>?</div>
+                            <div className={styles.moreInfoIcon}>?</div>
                         </div>
                     </MoreInfoButton>
                     </label>
