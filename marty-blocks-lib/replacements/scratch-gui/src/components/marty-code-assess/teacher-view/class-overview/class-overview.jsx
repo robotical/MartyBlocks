@@ -36,11 +36,12 @@ class ClassOverview extends React.Component {
             const mappedTransformedDatas = {};
             for (const studentName in mappedScoresOverTime) {
                 const transformedData = {};
+                const isTesting = !!codeAssess.isTestingWithMockData;
                 const normalisedData = new codeAssess.Preprocessor(mappedScoresOverTime[studentName])
                     .sortData()
                     .normaliseScores()
                     // .calculateMovingMaxBasedOnDates(2, "hours")
-                    .calculateMovingMaxBasedOnDates(.9, "minutes") // this is for testing
+                    .calculateMovingMaxBasedOnDates(isTesting ? .9 : 2, isTesting ? "minutes" : "hours") // this is for testing
                     .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
                     .data
                 transformedData["Algorithms"] = normalisedData.algorithmsCompoScores?.leakyScores;

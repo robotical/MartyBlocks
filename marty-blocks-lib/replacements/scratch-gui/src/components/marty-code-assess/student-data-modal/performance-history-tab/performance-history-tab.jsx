@@ -29,11 +29,13 @@ class PerformanceHistoryTab extends React.Component {
     componentDidMount() {
         this.setState({ isLoading: true });
         const studentData = this.props.studentData;
+        const isTesting = !!codeAssess.isTestingWithMockData;
         if (studentData && studentData.scoresOverTime && Object.keys(studentData.scoresOverTime).length > 0) {
             setTimeout(() => { // it seems that having a timeout here is necessary to avoid the UI freezing --just 200ms is enough to give the UI a chance to render the spinner
                 const linegraphData = new codeAssess.Preprocessor(studentData.scoresOverTime)
                     .sortData().normaliseScores()
-                    .calculateMovingMaxBasedOnDates(.9, "minutes")
+                    // .calculateMovingMaxBasedOnDates(2, "hours")
+                    .calculateMovingMaxBasedOnDates(isTesting ? .9 : 2, isTesting ? "minutes" : "hours") // this is for testing
                     .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
                     .exportToLeakyIntegratorData([
                         "Algorithms Composite Score",
@@ -72,7 +74,7 @@ class PerformanceHistoryTab extends React.Component {
     render() {
         const { intl } = this.props;
         if (this.state.isLoading) {
-            return <Spinner level='warn' large className={spinnerStyles.primary} />;
+            return <div>This may take a while, please wait... <Spinner level='warn' large className={spinnerStyles.primary} /></div>;
         }
 
         if (!this.state.linegraphData || this.state.linegraphData?.[0]?.x?.length < 5) {
