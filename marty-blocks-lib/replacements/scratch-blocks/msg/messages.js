@@ -364,6 +364,7 @@ Blockly.Msg.MV2_CHANGELEDSEYESBLOCK = '%1 %2 Set %3 to %4';
 Blockly.Msg.MV2_LEDEYESLEFT = 'Left eye';
 Blockly.Msg.MV2_LEDEYESRIGHT = 'Right eye';
 Blockly.Msg.MV2_LEDEYESBOTH = 'Both eyes';
+Blockly.Msg.MV2_TURNOFFALLLEDS = '%1 %2 Turn off all LEDs';
 
 Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK = '%1 %2 Set %3 LED %4 to %5';
 

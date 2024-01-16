@@ -411,6 +411,8 @@ export function MartyBlocksToolbox_disco() {
         </value>
     </block>
 
+    <block type="mv2_turnAllLEDsOff" />
+
     <block type="mv2_RGBOperator">
       <value name="NUM_R">
         <shadow type="math_number">

@@ -61,42 +61,6 @@ class Scratch3Mv2Blocks {
 
       mv2_getReady: (args, utils) =>
         this._martyIsConnectedWrapper(this.getReady.bind(this, args, utils)),
-      mv2_discoChangeBackColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.discoChangeBackColour.bind(this, args, utils)
-        ),
-      mv2_discoSetBreatheBackColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.discoSetBreatheBackColour.bind(this, args, utils)
-        ),
-      mv2_discoTurnOffBackColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.discoTurnOffBackColour.bind(this, args, utils)
-        ),
-      mv2_LEDEyesColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.LEDEyesColour.bind(this, args, utils)
-        ),
-      mv2_LEDEyesColourLEDs: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.LEDEyesColourLEDs.bind(this, args, utils)
-        ),
-      mv2_LEDEyesColour_SpecificLED: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.LEDEyesColour_SpecificLED.bind(this, args, utils)
-        ),
-      mv2_RGBOperator: (args, utils) =>
-        this._martyIsConnectedWrapper(this.RGBOperator.bind(this, args, utils)),
-      mv2_HSLOperator: (args, utils) =>
-        this._martyIsConnectedWrapper(this.HSLOperator.bind(this, args, utils)),
-      mv2_discoChangeBlockPattern: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.discoChangeBlockPattern.bind(this, args, utils)
-        ),
-      mv2_discoChangeRegionColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
-          this.discoChangeRegionColour.bind(this, args, utils)
-        ),
       mv2_walk_fw: (args, utils) =>
         this._martyIsConnectedWrapper(this.walk_fw.bind(this, args, utils)),
       mv2_walk_bw: (args, utils) =>
@@ -146,6 +110,48 @@ class Scratch3Mv2Blocks {
       mv2_gripperArmTimed: (args, utils) =>
         this._martyIsConnectedWrapper(
           this.gripperArmTimed.bind(this, args, utils)
+        ),
+
+      // looks
+      mv2_discoChangeBackColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeBackColour.bind(this, args, utils)
+        ),
+      mv2_discoSetBreatheBackColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoSetBreatheBackColour.bind(this, args, utils)
+        ),
+      mv2_discoTurnOffBackColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoTurnOffBackColour.bind(this, args, utils)
+        ),
+      mv2_LEDEyesColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.LEDEyesColour.bind(this, args, utils)
+        ),
+      mv2_LEDEyesColourLEDs: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.LEDEyesColourLEDs.bind(this, args, utils)
+        ),
+      mv2_LEDEyesColour_SpecificLED: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.LEDEyesColour_SpecificLED.bind(this, args, utils)
+        ),
+      mv2_RGBOperator: (args, utils) =>
+        this._martyIsConnectedWrapper(this.RGBOperator.bind(this, args, utils)),
+      mv2_HSLOperator: (args, utils) =>
+        this._martyIsConnectedWrapper(this.HSLOperator.bind(this, args, utils)),
+      mv2_discoChangeBlockPattern: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeBlockPattern.bind(this, args, utils)
+        ),
+      mv2_discoChangeRegionColour: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.discoChangeRegionColour.bind(this, args, utils)
+        ),
+        mv2_turnAllLEDsOff: (args, utils) =>
+        this._martyIsConnectedWrapper(
+          this.turnAllLEDsOff.bind(this, args, utils)
         ),
 
       // sensors
@@ -519,7 +525,7 @@ class Scratch3Mv2Blocks {
     } else if (boardtypeWhoAmI === "LEDfoot") {
       const MAP = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
       return MAP[id];
-    } 
+    }
     return id; // no mapping
   }
 
@@ -743,6 +749,18 @@ class Scratch3Mv2Blocks {
     mv2Interface.send_REST(
       `led/${boardtypeObj.name}/region/${regionChoice}/${colour}`
     );
+    return new Promise((resolve) => setTimeout(resolve, resolveTime));
+  }
+
+  turnAllLEDsOff(args, util) {
+    const resolveTime = 100;
+    const cmdEyes = "led/LEDeye/off";
+    const cmdFoot = "led/LEDfoot/off";
+    const cmdArm = "led/LEDarm/off";
+
+    mv2Interface.send_REST(cmdEyes);
+    mv2Interface.send_REST(cmdFoot);
+    mv2Interface.send_REST(cmdArm);
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 

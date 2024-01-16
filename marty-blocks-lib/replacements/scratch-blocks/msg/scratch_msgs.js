@@ -2903,6 +2903,7 @@ Blockly.ScratchMsgs.locales["bg"] =
     "MV2_MOVEJOINT": "%1 %2 Премести %3 на %4 градуса за %5 секунди",
     "MV2_NOISE_SENSOR": "%1 %2 %3 Сензор за шум",
     "MV2_OBSTACLE": "%1 %2 %3 Усещане за препядствие на краката",
+    "MV2_TURNOFFALLLEDS": "%1 %2 Изключи всички светодиоди",
     "MV2_PLAYSOUND": "%1 %2 Възпроизвеждане на звук: %3",
     "MV2_POSITION": "%1 %2 Положение на %3 (в градуси)",
     "MV2_SLIDE": "%1 %2 Преплъзни се %3 пъти на %4",
@@ -3565,6 +3566,7 @@ Blockly.ScratchMsgs.locales["cs"] =
     "MV2_LOWERFOOT": "%1 %2 Dolní část %3 nohy",
     "MV2_NOISE_SENSOR": "%1 %2 %3 Zvukový senzor",
     "MV2_OBSTACLE": "%1 %2 %3 Snímání překážek nohou",
+    "MV2_TURNOFFALLLEDS": "%1 %2 Vypnout všechny LED diody",
     
     "DROPDOWN_OPTION_LEAN_LEFT": "levou",
     "DROPDOWN_OPTION_LEAN_RIGHT": "pravou",
@@ -5119,6 +5121,7 @@ Blockly.ScratchMsgs.locales["el"] =
     'MV2_MOVEJOINT': '%1 %2 Κούνησε  %3 σε %4 μοίρες σε %5 δευτερόλεπτα ',
     'MV2_NOISE_SENSOR': '%1 %2 %3 Αισθητήρας θορύβου',
     'MV2_OBSTACLE': '%1 %2 %3 Εμπόδιο Ποδιού',
+    "MV2_TURNOFFALLLEDS": "%1 %2 Σβήσε όλα τα LEDs",
     'MV2_PLAYSOUND': '%1 %2 Παίξε ήχο: %3',
     'MV2_POSITION': '%1 %2 Θέση %3 (σε μοίρες)',
     'MV2_SLIDE': '%1 %2 Τσούλα %3 φορέςς στα %4',
@@ -5493,6 +5496,7 @@ Blockly.ScratchMsgs.locales["en"] =
     "MV2_LOWERFOOT": "%1 %2 Lower %3 foot",
     "MV2_NOISE_SENSOR": "%1 %2 %3 Noise sensor",
     "MV2_OBSTACLE": "%1 %2 %3 Foot Obstacle Sensed",
+    "MV2_TURNOFFALLLEDS": "%1 %2 Turn off all LEDs",
     
     "DROPDOWN_OPTION_LEAN_LEFT": "left",
     "DROPDOWN_OPTION_LEAN_RIGHT": "right",
@@ -14286,6 +14290,7 @@ Blockly.ScratchMsgs.locales["nl"] =
     "MV2_LOWERFOOT": "%1 %2 zet %3 voet neer",
     "MV2_NOISE_SENSOR": "%1 %2 %3 geluids sensor",
     "MV2_OBSTACLE": "%1 %2 %3 voet obstakel gevoeld",
+    "MV2_TURNOFFALLLEDS": "%1 %2 zet alle led lampjes uit",
     
     "DROPDOWN_OPTION_LEAN_LEFT": "links",
     "DROPDOWN_OPTION_LEAN_RIGHT": "rechts",
@@ -14650,6 +14655,7 @@ Blockly.ScratchMsgs.locales["ja"] =
     "MV2_LOWERFOOT": "%1 %2 %3 足を下げる",
     "MV2_NOISE_SENSOR": "%1 %2 %3 ノイズセンサー",
     "MV2_OBSTACLE": "%1 %2 %3 足元障害物検知",
+    "MV2_TURNOFFALLLEDS": "%1 %2 全ての LED を消す",
     
     "DROPDOWN_OPTION_LEAN_LEFT": "左",
     "DROPDOWN_OPTION_LEAN_RIGHT": "右",
