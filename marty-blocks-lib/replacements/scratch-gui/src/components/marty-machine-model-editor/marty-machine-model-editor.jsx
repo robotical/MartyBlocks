@@ -18,6 +18,8 @@ import TfVisChart from './TfVisChart/TfVisChart.jsx';
 import SoundFeed from '../marty-sound-feed/marty-sound-feed.jsx';
 import ModelClass from './model-class/model-class.jsx';
 import MoreInfoButton from "../more-info-button/more-info-button.jsx";
+import MMCreateNewClass from '../more-info-components/marty-machine-create-new-class/marty-machine-create-new-class.jsx';
+import addNewIcon from "../action-menu/icon--plus.svg";
 
 const BufferedInput = BufferedInputHOC(Input);
 
@@ -119,7 +121,12 @@ const MartyMachineModelEditor = props => {
         </div>
         <div className={classNames(styles.row, styles.rowReverse)}>
             {!props.isModelLoaded && <div className={styles.inputGroup}>
-                <Label text={props.intl.formatMessage(messages.className)}>
+                <Label text={props.intl.formatMessage(messages.className)} spanStyle={{ marginRight: 0 }}>
+                    <MoreInfoButton modalTitle="Create New Class" contentComponent={MMCreateNewClass}>
+                        <div className={styles.moreInfoIconContainer}>
+                            <div className={styles.moreInfoIcon}>?</div>
+                        </div>
+                    </MoreInfoButton>
                     <BufferedInput
                         tabIndex="1"
                         type="text"
@@ -204,27 +211,10 @@ const MartyMachineModelEditor = props => {
                     </button>}
             </div>
         </div>
-        <div className={classNames(styles.row, styles.rowReverse)}>
-            <div className={styles.inputGroup}>
-                <Label text={props.intl.formatMessage(messages.createNewClass)}>
-                    <BufferedInput
-                        tabIndex="1"
-                        type="text"
-                        value={props.className}
-                        onSubmit={props.onClassNameChange}
-                    />
-                    <MoreInfoButton modalTitle="Create New Class" contentComponent={() => <div>hello</div>}>
-                        <div className={styles.moreInfoIconContainer}>
-                            <div className={styles.moreInfoIcon} onClick={this.onCreateNewClassMoreInfoHandler}>?</div>
-                        </div>
-                    </MoreInfoButton>
-                </Label>
-            </div>
-        </div>
 
-        {!props.isModelLoaded ? <div className={styles.modelClassesOuterContainer}>
+        <div className={styles.modelClassesOuterContainer}>
             {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
-            <div className={styles.row}>
+            {!props.isModelLoaded ? <div className={styles.row}>
                 <div className={styles.classesContainer}>
                     {props.modelClasses.map((modelClass, classIndex) => {
                         let onRemoveClass = props.onRemoveClass.bind(this, classIndex);
@@ -251,26 +241,52 @@ const MartyMachineModelEditor = props => {
                             modelType={props.modelType} />
                     })}
                 </div>
-            </div>
-        </div> :
-            // the model is loaded, so we can only show the classe names from the model (no samples)
-            <div className={styles.modelClassesOuterContainer}>
-                <div className={styles.row}>
-                    <div className={styles.classesContainer}>
-                        {props.model.trainingData.classes.map((modelClass, classIndex) => {
-                            return <div key={classIndex} className={styles.classContainer}>
-                                <div className={styles.classLabel}>{modelClass.name}</div>
-                                <div className={styles.modelSamplesContainer}>
-                                    <div className={styles.rowCustom}>
-                                        <p className={styles.samplesLengthTitle}>{modelClass.samples.length} samples</p>
-                                    </div>
+            </div> : <div className={styles.row}>
+                {/* // the model is loaded, so we can only show the classe names from the model (no samples) */}
+                <div className={styles.classesContainer}>
+                    {props.model.trainingData.classes.map((modelClass, classIndex) => {
+                        return <div key={classIndex} className={styles.classContainer}>
+                            <div className={styles.classLabel}>{modelClass.name}</div>
+                            <div className={styles.modelSamplesContainer}>
+                                <div className={styles.rowCustom}>
+                                    <p className={styles.samplesLengthTitle}>{modelClass.samples.length} samples</p>
                                 </div>
                             </div>
-                        })}
-                    </div>
+                        </div>
+                    })}
                 </div>
+            </div>}
+            <div className={classNames(styles.row, styles.rowReverse)}>
+                <div className={styles.inputGroup}>
+                    <Label text={props.intl.formatMessage(messages.createNewClass)} spanStyle={{ marginRight: 0 }}>
+                        <MoreInfoButton modalTitle="Create New Class" contentComponent={MMCreateNewClass}>
+                            <div className={styles.moreInfoIconContainer}>
+                                <div className={styles.moreInfoIcon}>?</div>
+                            </div>
+                        </MoreInfoButton>
+                        <BufferedInput
+                            tabIndex="1"
+                            type="text"
+                            value={props.className}
+                            onSubmit={props.onClassNameChange}
+                        />
+                    </Label>
+                </div>
+                <div className={styles.inputGroup}>
+                    <button
+                        className={classNames(styles.roundButton, styles.trainButton)}
+                        title={props.intl.formatMessage(messages.createNewClass)}
+                        onClick={props.onCreateNewClass}
+                    >
+                        <img
+                            draggable={false}
+                            src={addNewIcon}
+                        />
+                    </button>
+                </div>
+
             </div>
-        }
+        </div>
     </div>
 };
 
@@ -279,6 +295,7 @@ MartyMachineModelEditor.propTypes = {
     name: PropTypes.string.isRequired,
     onChangeName: PropTypes.func.isRequired,
     onContainerClick: PropTypes.func.isRequired,
+    onCreateNewClass: PropTypes.func.isRequired,
     modelType: PropTypes.string.isRequired,
     setDeviceStreamRef: PropTypes.func,
     setAudioCanvasRef: PropTypes.func,

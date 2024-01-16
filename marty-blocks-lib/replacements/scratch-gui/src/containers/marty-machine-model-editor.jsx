@@ -17,6 +17,7 @@ class MartyMachineModelEditor extends React.Component {
             'setDeviceStreamRef',
             'setAudioCanvasRef',
             'onClassNameChange',
+            'onCreateNewClass',
             'setCanvasRef',
             'onStartRecordingSamples',
             'onRemoveClass',
@@ -201,6 +202,17 @@ class MartyMachineModelEditor extends React.Component {
 
     onClassNameChange = (className) => {
         this.setState({ className });
+    }
+
+    onCreateNewClass = () => {
+        const className = this.state.className;
+        // check if class name already exists
+        if (this.trainingDataReducer.state.classes.find(c => c.name === className)) {
+            alert("Oops! Class name already exists, please choose a different name.");
+            return;
+        }
+        this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: className } });
+        this.setState({});
     }
 
     onStartRecordingSamples = async () => {
@@ -454,6 +466,7 @@ class MartyMachineModelEditor extends React.Component {
                     onClassNameChange={this.onClassNameChange}
                     onClassNameSelected={this.onClassNameSelected}
                     onContainerClick={this.handleContainerClick}
+                    onCreateNewClass={this.onCreateNewClass}
                     onStartRecordingSamples={this.onStartRecordingSamples}
                     onRemoveClass={this.onRemoveClass}
                     onRemoveSample={this.onRemoveSample}
