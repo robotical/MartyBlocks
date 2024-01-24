@@ -73,6 +73,7 @@ class Mv2Interface extends EventDispatcher {
     this.deleteScratchFile = this.deleteScratchFile.bind(this);
     this.setRSSI = this.setRSSI.bind(this);
     this.setIsStreamStarting = this.setIsStreamStarting.bind(this);
+    this.sessionDbs = null;
   }
 
   getMartyFwVersion() {

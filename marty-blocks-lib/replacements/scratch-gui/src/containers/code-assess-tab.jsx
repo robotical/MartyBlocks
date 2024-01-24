@@ -8,6 +8,10 @@ class CodeAssessTab extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        mv2Interface.sessionDbs?.CodeAsses.startSession();
+    }
+
     render() {
         return (
             <MartyCodeAssess vm={this.props.vm} />
