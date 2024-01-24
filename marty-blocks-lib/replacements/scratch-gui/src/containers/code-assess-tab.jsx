@@ -9,7 +9,7 @@ class CodeAssessTab extends React.Component {
     }
 
     componentDidMount() {
-        mv2Interface.sessionDbs?.CodeAsses.startSession();
+        mv2Interface.startCodeAssesSession();
     }
 
     render() {

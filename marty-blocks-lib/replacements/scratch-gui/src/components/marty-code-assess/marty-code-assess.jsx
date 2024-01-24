@@ -80,7 +80,7 @@ class MartyCodeAssess extends React.Component {
   }
 
   async onUserLoggedIn() {
-    mv2Interface.sessionDbs?.CodeAsses.setSessionToActive();
+    mv2Interface.setCodeAssesSessionActive();
     this.setState({ isLoading: true });
     const classes = await codeAssess.userProfile.getListOfClassess();
     if (classes.length > 0) {
