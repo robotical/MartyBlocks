@@ -442,11 +442,84 @@ class Mv2Interface extends EventDispatcher {
    * Currently available only in the desktop version of MartyBlocks
    */
   toggleSensorsDashboard() {
-    // try {
-    //   window.ReactNativeWebView.postMessage("notification/warn-message/This feature is currently available only in the desktop version of MartyBlocks.");
-    // } catch (err) {
     this.send_REST("toggle-sensors-dashboard");
-    // }
+  }
+
+  /**
+   * Starts PythonTranslator session and sets it to active if it needs to be
+   * @param {boolean} setActive Whether to set the session to active or not
+   * @returns {void} 
+   */
+  startPythonTranslatorSession(setActive = false) {
+    if (setActive) {
+      this.send_REST("set-python-translator-session-active");
+    } else {
+      this.send_REST("start-python-translator-session");
+    }
+  }
+
+  /**
+   * Ends PythonTranslator session
+   * @returns {void}
+   */
+  endPythonTranslatorSession() {
+    this.send_REST("end-python-translator-session");
+  }
+
+  /**
+   * Start Machine Learning session
+   * @returns {void}
+   */
+  startMLSession() {
+    this.send_REST("start-ml-session");
+  }
+
+  /**
+   * Sets ML session to active
+   * @returns {void}
+   */
+  setMLSessionActive() {
+    this.send_REST("set-ml-session-active");
+  }
+
+  /**
+   * Starts and sets ML session to active in one go
+   * @returns {void}
+   */
+  startAndSetActiveAndEndMLSession() {
+    this.send_REST("start-and-set-active-and-end-ml-session");
+  }
+
+  /**
+   * Starts code asses session
+   * @returns {void}
+   */
+  startCodeAssesSession() {
+    this.send_REST("start-code-asses-session");
+  }
+
+  /**
+   * Ends code asses session
+   * @returns {void}
+   */
+  endCodeAssesSession() {
+    this.send_REST("end-code-asses-session");
+  }
+
+  /**
+   * Sets code asses session to active
+   * @returns {void}
+   */
+  setCodeAssesSessionActive() {
+    this.send_REST("set-code-asses-session-active");
+  }
+
+  /**
+   * Ends ML session
+   * @returns {void}
+   */
+  endMLSession() {
+    this.send_REST("end-ml-session");
   }
 
   set_demo_sensor(sensorval) {

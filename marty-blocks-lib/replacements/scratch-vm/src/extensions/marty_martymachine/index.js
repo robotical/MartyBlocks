@@ -575,10 +575,7 @@ class MartyMachineBlocks {
     loadImageModel(args, util) {
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
-        mv2Interface.sessionDbs?.MachineLearning.startSession()
-            .then(() => mv2Interface.sessionDbs?.MachineLearning.setSessionToActive()
-                .then(() => mv2Interface.sessionDbs?.MachineLearning.endSession()))
-            .catch(() => console.log("error starting/setting active/ending ML session"));
+        mv2Interface.startAndSetActiveAndEndMLSession();
         this.model = model;
         if (model?.modelType === "image-device") {
             // this.runtime.ioDevices.video.enableVideo();

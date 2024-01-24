@@ -345,7 +345,7 @@ class MartyMachineModelEditor extends React.Component {
     }
 
     onRunModel = async () => {
-        mv2Interface.sessionDbs?.MachineLearning.setSessionToActive();
+        mv2Interface.setMLSessionActive();
         this.isRunning = true;
         if (this.props.modelType === 'image-device') {
             const INTERVAL_TIME = 30;

@@ -101,7 +101,7 @@ class MartyMachineTab extends React.Component {
     }
 
     componentDidMount() {
-        mv2Interface.sessionDbs?.MachineLearning.startSession();
+        mv2Interface.startMLSession();
         this.shouldShowTutorialsCard();
         const sprite = vm.editingTarget.sprite;
         const areThereSavedModels = sprite.models && sprite.models.length > 0;
@@ -111,7 +111,7 @@ class MartyMachineTab extends React.Component {
     }
 
     componentWillUnmount() {
-        mv2Interface.sessionDbs?.MachineLearning.endSession();
+        mv2Interface.endMLSession();
     }
 
     shouldShowTutorialsCard() {
