@@ -83,7 +83,7 @@ class MartyMachineTab extends React.Component {
             modelName: martyMachine.currentModel?.name || props.vm.editingTarget.sprite.models[0]?.name || "New Model",
             MLModel: martyMachine.currentModel || props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance()
         };
-        console.debug("modelToLoad",modelToLoad)
+        console.debug("modelToLoad", modelToLoad)
 
         this.state = {
             selectedModelIndex: 0,
@@ -101,12 +101,17 @@ class MartyMachineTab extends React.Component {
     }
 
     componentDidMount() {
+        mv2Interface.sessionDbs?.MachineLearning.startSession();
         this.shouldShowTutorialsCard();
         const sprite = vm.editingTarget.sprite;
         const areThereSavedModels = sprite.models && sprite.models.length > 0;
         if (areThereSavedModels) {
             this.setState({ modelType: sprite.models[0].modelType });
         }
+    }
+
+    componentWillUnmount() {
+        mv2Interface.sessionDbs?.MachineLearning.endSession();
     }
 
     shouldShowTutorialsCard() {
@@ -121,7 +126,7 @@ class MartyMachineTab extends React.Component {
         if (hasSeenTutorials === null) {
             localStorage.setItem(TUTORIALS_COOKIE, 1);
             return this.props.showTutorialCard();
-        } 
+        }
         const hasSeenTutorialsCount = parseInt(hasSeenTutorials);
         if (hasSeenTutorialsCount < MAX_TUTORIALS_COUNT) {
             localStorage.setItem(TUTORIALS_COOKIE, hasSeenTutorialsCount + 1);

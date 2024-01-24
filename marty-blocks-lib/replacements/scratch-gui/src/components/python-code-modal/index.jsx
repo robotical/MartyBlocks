@@ -26,9 +26,15 @@ class PythonCodeModal extends React.Component {
     componentDidMount() {
         this.highlight();
         pythonTranspiler.isModalOpen = true;
+        mv2Interface.sessionDbs?.PythonTranslator.startSession().then(() => {
+            if (!this.props.code.includes("# Uh-oh! We can't find any Marty Blocks.")) {
+                mv2Interface.sessionDbs?.PythonTranslator.setSessionToActive();
+            }
+        })
     }
     componentWillUnmount() {
         pythonTranspiler.isModalOpen = false;
+        mv2Interface.sessionDbs?.PythonTranslator.endSession();
     }
     componentDidUpdate(prevProps, prevState) {
         this.highlight();

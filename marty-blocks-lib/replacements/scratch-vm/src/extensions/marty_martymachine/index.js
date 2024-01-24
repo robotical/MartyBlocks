@@ -575,6 +575,10 @@ class MartyMachineBlocks {
     loadImageModel(args, util) {
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
+        mv2Interface.sessionDbs?.MachineLearning.startSession()
+            .then(() => mv2Interface.sessionDbs?.MachineLearning.setSessionToActive()
+                .then(() => mv2Interface.sessionDbs?.MachineLearning.endSession()))
+            .catch(() => console.log("error starting/setting active/ending ML session"));
         this.model = model;
         if (model?.modelType === "image-device") {
             // this.runtime.ioDevices.video.enableVideo();
@@ -594,14 +598,14 @@ class MartyMachineBlocks {
             this.imageModelUrl = null;
             this.imageClassifier = new ImageClassifier(model);
             log.info(`Loaded image model: ${model.name}`);
-            this.toggleClassification({CLASSIFICATION_STATE: 'on'});
+            this.toggleClassification({ CLASSIFICATION_STATE: 'on' });
             return `"${model.name}" Loaded!`;
         } else if (model?.modelType === "audio") {
             this.soundMetadata = this.createAudioModelMetadataFromModelDependencies(model.name, model.dependencies);
             this.soundModelUrl = null;
             this.soundClassifier = new SoundClassifier(model);
             log.info(`Loaded sound model: ${model.name}`);
-            this.toggleClassification({CLASSIFICATION_STATE: 'on'});
+            this.toggleClassification({ CLASSIFICATION_STATE: 'on' });
             return `"${model.name}" Loaded!`;
         }
     }
