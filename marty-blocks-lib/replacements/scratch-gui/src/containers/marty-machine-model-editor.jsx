@@ -57,7 +57,6 @@ class MartyMachineModelEditor extends React.Component {
             if (this.props.modelType === 'image-device') {
                 const constraints = {
                     video: {
-                        facingMode: 'user',
                         width: 160,
                         height: 120,
                     }
