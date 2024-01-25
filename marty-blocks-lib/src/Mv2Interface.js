@@ -452,10 +452,18 @@ class Mv2Interface extends EventDispatcher {
    */
   startPythonTranslatorSession(setActive = false) {
     if (setActive) {
-      this.send_REST("set-python-translator-session-active");
-    } else {
+      this.send_REST("start-and-set-python-translator-session-active");
+    } else { 
       this.send_REST("start-python-translator-session");
     }
+  }
+
+  /**
+   * Sets PythonTranslator session to active
+   * @returns {void}
+   */
+  setPythonTranslatorSessionActive() {
+    this.send_REST("set-python-translator-session-active");
   }
 
   /**

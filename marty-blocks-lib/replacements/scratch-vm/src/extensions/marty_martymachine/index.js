@@ -575,7 +575,7 @@ class MartyMachineBlocks {
     loadImageModel(args, util) {
         const model = util.target.sprite.models.find(model => model.name === args.MODEL_NAME);
         if (!model) return;
-        mv2Interface.startAndSetActiveAndEndMLSession();
+        // mv2Interface.startAndSetActiveAndEndMLSession();
         this.model = model;
         if (model?.modelType === "image-device") {
             // this.runtime.ioDevices.video.enableVideo();

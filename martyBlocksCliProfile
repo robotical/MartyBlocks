@@ -99,6 +99,16 @@ buildAllAndCpToWebApp () {
     cpToWebapp
 }
 
+buildAllAndCpToPhoneApp() {
+    local type="${1:-all}"
+    local NODE_ENV="${2:-development}"
+    # setDevelopment
+    cpReplacements
+    removeUnusedAssets
+    buildScratch $type $NODE_ENV
+    cpToPhoneApp
+}
+
 setProduction () {
     cd $mblib
     npx node ./set-production.js

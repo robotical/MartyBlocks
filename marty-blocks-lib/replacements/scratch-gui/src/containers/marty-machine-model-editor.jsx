@@ -345,7 +345,6 @@ class MartyMachineModelEditor extends React.Component {
     }
 
     onRunModel = async () => {
-        mv2Interface.setMLSessionActive();
         this.isRunning = true;
         if (this.props.modelType === 'image-device') {
             const INTERVAL_TIME = 30;
@@ -397,6 +396,7 @@ class MartyMachineModelEditor extends React.Component {
         }
     }
     onSaveModel = () => {
+        mv2Interface.setMLSessionActive();
         this.isSaving = true;
         this.props.model.setSaveModelCallback = (model) => {
             const storage = vm.runtime.storage;
