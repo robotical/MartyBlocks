@@ -445,7 +445,7 @@ class Mv2Interface extends EventDispatcher {
   toggleSensorsDashboard() {
     this.send_REST("toggle-sensors-dashboard");
   }
-
+ 
   /**
    * Save 'usedBlock' in MartyBlocks session
    * @param {string} usedBlock Block name
