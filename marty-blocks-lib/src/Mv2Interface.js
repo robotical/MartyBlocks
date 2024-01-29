@@ -366,6 +366,7 @@ class Mv2Interface extends EventDispatcher {
     }
   }
 
+
   /**
    * List the saved scratch files
    * @returns {Promise} Promise
@@ -446,6 +447,15 @@ class Mv2Interface extends EventDispatcher {
   }
 
   /**
+   * Save 'usedBlock' in MartyBlocks session
+   * @param {string} usedBlock Block name
+   * @returns {void}
+   */
+  saveUsedBlock(usedBlock) {
+    this.send_REST(`save-used-block-mb/${usedBlock}`);
+  }
+
+  /**
    * Starts PythonTranslator session and sets it to active if it needs to be
    * @param {boolean} setActive Whether to set the session to active or not
    * @returns {void} 
@@ -453,7 +463,7 @@ class Mv2Interface extends EventDispatcher {
   startPythonTranslatorSession(setActive = false) {
     if (setActive) {
       this.send_REST("start-and-set-python-translator-session-active");
-    } else { 
+    } else {
       this.send_REST("start-python-translator-session");
     }
   }

@@ -243,7 +243,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     if (this.draggingBlock_.wasInFlyout) {
-      console.debug('Block was in flyout, moving to workspace.');
+      mv2Interface.saveUsedBlock(this.draggingBlock_.type)
       this.draggingBlock_.wasInFlyout = false;
     }
     // These are expensive and don't need to be done if we're deleting.
