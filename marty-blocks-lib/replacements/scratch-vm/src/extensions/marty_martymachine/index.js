@@ -1224,6 +1224,7 @@ class ImageClassifier {
         const canvas = document.createElement('canvas');
         canvas.width = martyMachine.image_size;
         canvas.height = martyMachine.image_size;
+        canvas.style.display = 'none';
         document.body.appendChild(canvas);
         const ctx = canvas.getContext('2d');
 
