@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Draggable from 'react-draggable';
 
 import styles from './styles.css';
@@ -12,9 +12,9 @@ import expandIcon from './icon--expand.svg';
 import helpIcon from '../../lib/assets/icon--help.svg';
 import closeIcon from './icon--close.svg';
 
-const DraggableModalHeader = ({onCloseDraggableModal, onShrinkExpandDraggableModal, expanded, title, onHelp}) => (
+const DraggableModalHeader = ({ onCloseDraggableModal, onShrinkExpandDraggableModal, expanded, title, onHelp }) => (
     <div className={expanded ? styles.headerButtons : classNames(styles.headerButtons, styles.headerButtonsHidden)} id="draggable-modal-header">
-        <div
+        {onHelp && <div
             className={styles.allButton}
             onClick={onHelp}
         >
@@ -27,7 +27,7 @@ const DraggableModalHeader = ({onCloseDraggableModal, onShrinkExpandDraggableMod
                 description="Title for button to open the help modal"
                 id="gui.draggable-modal.help"
             />
-        </div>
+        </div>}
         <div className={styles.headerTitle}>
             {title}
         </div>
@@ -93,7 +93,7 @@ const DraggableModal = props => {
         expanded,
         ...posProps
     } = props;
-    let {x, y} = posProps;
+    let { x, y } = posProps;
 
 
     // Tutorial cards need to calculate their own dragging bounds
@@ -130,7 +130,7 @@ const DraggableModal = props => {
                 bounds="parent"
                 cancel="#video-div" // disable dragging on video div
                 handle="#draggable-modal-header" // only the header is draggable
-                position={{x: x, y: y}}
+                position={{ x: x, y: y }}
                 onDrag={onDrag}
                 onStart={onStartDrag}
                 onStop={onEndDrag}
