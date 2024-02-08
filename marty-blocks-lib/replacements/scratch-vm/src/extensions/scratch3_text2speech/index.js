@@ -1016,11 +1016,28 @@ class Scratch3Text2SpeechBlocks {
     }
   }
 
+  removeBannedWords(text) {
+    // removes banned words from the text
+    const BANNED_WORDS = ["gimp", "giimp", "giiimp", "gimmp", "gimmmp"];
+    let regexPattern = '';
+
+    BANNED_WORDS.forEach(word => {
+      if (regexPattern.length > 0) {
+        regexPattern += '|';
+      }
+      regexPattern += word.split('').join('.*?'); 
+    });
+
+    const regex = new RegExp(regexPattern, 'gi');
+    return text.replace(regex, '');
+  }
+
 
   speakHelper(args, util, isMartyBlock) {
     return new Promise((resolve, reject) => {
       // Cast input to string
       let words = Cast.toString(args.WORDS);
+      words = this.removeBannedWords(words);
       let locale = this._getSpeechSynthLocale();
 
       const state = this._getState(util.target);
