@@ -63,6 +63,11 @@ Blockly.FieldColourPickerLEDEyes = function (colour, opt_validator) {
   this.eyeMatrix = new Blockly.FieldLEDEyeMatrix();
   // Flag to track whether or not the slider callbacks should execute
   this.sliderCallbacksEnabled_ = false;
+
+  /**
+   * Colour button on the block
+   */
+  this.colourBtn = null;
 };
 goog.inherits(Blockly.FieldColourPickerLEDEyes, Blockly.Field);
 
@@ -83,6 +88,24 @@ Blockly.FieldColourPickerLEDEyes.fromJson = function (options) {
 Blockly.FieldColourPickerLEDEyes.EYEDROPPER_PATH = "eyedropper.svg";
 
 /**
+ * The Matrix size for the Colour button
+ */
+Blockly.FieldColourPickerLEDEyes.COLOUR_BTN_MATRIX_SIZE = 25;
+
+/**
+ * Matrix size in px
+ */
+Blockly.FieldColourPickerLEDEyes.CIRCLE_RADIUS = 90;
+
+/**
+ * Fixed corner radius for 3x4 matrix buttons, in px.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldColourPickerLEDEyes.MATRIX_NODE_RADIUS = 35;
+
+
+/**
  * Install this field on a block.
  * @param {!Blockly.Block} block The block containing this field.
  */
@@ -97,6 +120,11 @@ Blockly.FieldColourPickerLEDEyes.prototype.init = function (block) {
     this.colour_ = colour;
     this.colourSecondary_ = colour;
   }
+  console.log("block", block);
+  // block.svgPath_.remove();
+  this.colourBtn = this.createColourButton_(this.colour_);
+  block.svgGroup_.appendChild(this.colourBtn);
+
   if (this.fieldGroup_) {
     // Colour slider has already been initialized once.
     return;
@@ -104,6 +132,83 @@ Blockly.FieldColourPickerLEDEyes.prototype.init = function (block) {
   Blockly.FieldColourPickerLEDEyes.superClass_.init.call(this, block);
   this.setValue(this.getValue());
 };
+
+Blockly.FieldColourPickerLEDEyes.prototype.updateColourBtn = function (colour) {
+  const nodes = this.colourBtn.getElementsByTagName("rect");
+  for (let i = 0; i < nodes.length; i++) {
+    if (i === 0) {
+      // Skip the first rectangle, which is the background
+      continue;
+    }
+    nodes[i].setAttribute("fill", colour);
+  }
+};
+
+Blockly.FieldColourPickerLEDEyes.prototype.degreesToRad = function degrees_to_radians(degrees) {
+  return degrees * (Math.PI / 180);
+};
+
+/**
+ * Make an svg object that resembles a 3x3 matrix to be used as a button.
+ * @param {string} fill The color to fill the matrix nodes.
+ * @return {SvgElement} The button svg element.
+ */
+Blockly.FieldColourPickerLEDEyes.prototype.createColourButton_ = function (fill) {
+  const matrixSize = Blockly.FieldColourPickerLEDEyes.COLOUR_BTN_MATRIX_SIZE;
+  var button = Blockly.utils.createSvgElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    "xmlns:html": "http://www.w3.org/1999/xhtml",
+    "xmlns:xlink": "http://www.w3.org/1999/xlink",
+    version: "1.1",
+    height: matrixSize * 1.6 + "px",
+    width: matrixSize * 1.8 + "px",
+    x: "-1px",
+    y: "-1px",
+  });
+  var nodeSize = matrixSize / 4;
+  const angleDistance = 360 / 6;
+  const radius = Blockly.FieldColourPickerLEDEyes.CIRCLE_RADIUS / 10;
+  let currAngleDist = 0;
+
+  // Define stroke properties
+  const strokeColor = "#000000";
+  const strokeWidth = 1;
+
+  // Create background rectangle
+  Blockly.utils.createSvgElement("rect", {
+    x: "0px",
+    y: "0px",
+    height: matrixSize * 1.5,
+    width: matrixSize * 1.8,
+    fill: "#5ba591"
+  }, button);
+
+  // Calculate the center of the SVG container
+  const centerX = (matrixSize * 1.5) / 2;
+  const centerY = (matrixSize * 2) / 2;
+
+  for (let n = 0; n < 6; n++) {
+    const x = radius * Math.cos(currAngleDist) + centerX - nodeSize / 2;
+    const y = radius * Math.sin(currAngleDist) + centerY - nodeSize / 2;
+    var attr = {
+      x: x + 1 + "px",
+      y: y - 8 + "px",
+      width: nodeSize,
+      height: nodeSize,
+      rx: Blockly.FieldColourPickerLEDEyes.MATRIX_NODE_RADIUS / 7,
+      ry: Blockly.FieldColourPickerLEDEyes.MATRIX_NODE_RADIUS / 7,
+      fill: fill,
+      stroke: strokeColor,
+      "stroke-width": strokeWidth
+    };
+    Blockly.utils.createSvgElement("rect", attr, button);
+    currAngleDist += this.degreesToRad(angleDistance);
+  }
+
+  return button;
+};
+
+
 
 /**
  * Return the current colour.
@@ -329,6 +434,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.hueSliderCallback_ = function (
     this.shouldUpdateHueSlider = true;
     this.hueSlider_.fillCircleCenter(colour);
     this.eyeMatrix.updateApplyToAllBtn();
+    this.updateColourBtn(colour);
     // this.eyeMatrix.updateMatrix_();
   }
 };
@@ -370,6 +476,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.sliderCallbackFactory_ = function (
       thisField.setValue(colour, true);
       thisField.hueSlider_.fillCircleCenter(colour);
       thisField.eyeMatrix.updateApplyToAllBtn();
+      thisField.updateColourBtn(colour);
       // thisField.eyeMatrix.updateMatrix_();
     }
   };
@@ -473,6 +580,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.showEditor_ = function () {
   this.hueSlider_.updateCircle(this.hue_ + this.hueSlider_.settings.offset);
   this.hueSlider_.fillCircleCenter(this.getValue());
   this.eyeMatrix.updateApplyToAllBtn();
+  this.updateColourBtn(this.getValue());
   // Set value updates the slider positions
   // Do this before attaching callbacks to avoid extra events from initial set
   this.setValue(this.getValue());

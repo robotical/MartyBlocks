@@ -360,7 +360,7 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
 // Marty new LED eyes blocks
 Blockly.Msg.MV2_CHANGELEDEYESBLOCK = '%1 %2 Set %3 LEDs to %4';
-Blockly.Msg.MV2_CHANGELEDSEYESBLOCK = '%1 %2 Set %3 to %4';
+Blockly.Msg.MV2_CHANGELEDSEYESBLOCK = '%1 %2 Set %3 using the ColorPicker %4';
 Blockly.Msg.MV2_LEDEYESLEFT = 'Left eye';
 Blockly.Msg.MV2_LEDEYESRIGHT = 'Right eye';
 Blockly.Msg.MV2_LEDEYESBOTH = 'Both eyes';
