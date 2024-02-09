@@ -122,7 +122,10 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         handleKeyDown(e) {
             // Don't capture keys intended for Blockly inputs.
-            if (e.target !== document && e.target !== document.body) return;
+            if (e.target.id !== "dummyInputToBringUpDeviceKeyboard") {
+                if (e.target !== document && e.target !== document.body) return;
+            }
+            console.log("pass")
 
             const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {

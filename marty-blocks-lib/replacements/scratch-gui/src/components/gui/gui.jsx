@@ -59,6 +59,7 @@ import MonitorList from "../../containers/monitor-list.jsx";
 import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 import MartyPythonButton from "../marty-python-btn/index.jsx";
+import KeyboardCaller from "../keyboard-caller/keyboard-caller.jsx";
 
 const messages = defineMessages({
   addExtension: {
@@ -220,6 +221,7 @@ const GUIComponent = (props) => {
                 onRequestClose={onRequestCloseBackdropLibrary}
               />
             ) : null}
+            <KeyboardCaller />
             {/* <MenuBar
                     accountNavOpen={accountNavOpen}
                     authorId={authorId}
