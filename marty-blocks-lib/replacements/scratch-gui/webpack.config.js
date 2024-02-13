@@ -110,12 +110,7 @@ const base = {
       },
       {
         test: /prism-okaidia\.css$/, // Only target prism-okaidia.css
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 16 * 1024
-          }
-        }],
+        use: ["style-loader", "css-loader"]
       }
     ],
   },

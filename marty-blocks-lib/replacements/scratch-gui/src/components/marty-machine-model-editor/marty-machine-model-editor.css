@@ -3,7 +3,7 @@
 
 .editor-container {
     display: flex;
-    max-height: 94vh;
+    max-height: 87vh;
     flex-direction: column;
     flex-grow: 1;
     padding: calc(2 * $space);

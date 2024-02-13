@@ -41,53 +41,53 @@
    pagecolor="#ffffff" />
 <g
    transform="matrix(0.5625,0,0,0.5625,112,112)"
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g837">
 	<g
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g835">
 		<path
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="path833"
    d="M 346,422 H 166 c -8.284,0 -15,6.716 -15,15 0,8.284 6.716,15 15,15 h 180 c 8.284,0 15,-6.716 15,-15 0,-8.284 -6.716,-15 -15,-15 z" />
 	</g>
 </g>
 <g
    transform="matrix(0.5625,0,0,0.5625,112,112)"
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g843">
 	<g
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g841">
 		<path
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="path839"
    d="M 346,302 H 166 c -8.284,0 -15,6.716 -15,15 0,8.284 6.716,15 15,15 h 180 c 8.284,0 15,-6.716 15,-15 0,-8.284 -6.716,-15 -15,-15 z" />
 	</g>
 </g>
 <g
    transform="matrix(0.5625,0,0,0.5625,112,112)"
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g849">
 	<g
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g847">
 		<path
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="path845"
    d="M 346,362 H 166 c -8.284,0 -15,6.716 -15,15 0,8.284 6.716,15 15,15 h 180 c 8.284,0 15,-6.716 15,-15 0,-8.284 -6.716,-15 -15,-15 z" />
 	</g>
 </g>
 <g
    transform="matrix(0.5625,0,0,0.5625,112,112)"
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g855">
 	<g
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g853">
 		<rect
    y="0"
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="rect851"
    height="130"
    width="210"
@@ -96,13 +96,13 @@
 </g>
 <g
    transform="matrix(0.5625,0,0,0.5625,112,112)"
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g861">
 	<g
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="g859">
 		<path
-   style="fill:#0096ff;fill-opacity:1"
+   style="fill:#855CD6;fill-opacity:1"
    id="path857"
    d="m 507.606,84.394 -80,-80 C 424.793,1.581 420.978,0 417,0 h -56 v 145 c 0,8.284 -6.716,15 -15,15 H 106 c -8.284,0 -15,-6.716 -15,-15 V 0 H 15 C 6.716,0 0,6.716 0,15 v 482 c 0,8.284 6.716,15 15,15 4.645,0 475.762,0 482,0 8.284,0 15,-6.716 15,-15 V 95 c 0,-3.978 -1.581,-7.793 -4.394,-10.606 z M 391,482 H 121 V 272 h 270 z" />
 	</g>

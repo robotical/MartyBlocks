@@ -54,7 +54,7 @@ const StageHeaderComponent = function (props) {
         onKeyPress,
         onSetStageLarge,
         onSetStageSmall,
-        // onSetStageFull,
+        onSetStageFull,
         onSetStageUnFull,
         showBranding,
         stageSizeMode,
