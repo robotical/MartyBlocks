@@ -5482,6 +5482,9 @@ Blockly.ScratchMsgs.locales["en"] =
     "MV2_WALK_FW": "%1 %2 Walk %3 steps forwards",
     "MV2_WAVE": "%1 %2 Wave %3 arm",
     "MV2_WIGGLE": "%1 %2 Wiggle",
+    "MV2_STOP": "%1 %2 Stop Marty %3",
+    "MV2_PAUSE": "%1 %2 Pause movement",
+    "MV2_RESUME": "%1 %2 Resume movement",
 
     "MV2_COLOUR": "%1 %2 %3 Colour Sensor",
     "MV2_COLOUR_RAW": "%1 %2 %3 Colour Sensor %4 channel",

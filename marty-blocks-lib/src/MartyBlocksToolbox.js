@@ -214,6 +214,18 @@ export function MartyBlocksToolbox_motion() {
         </value>
     </block>
 
+    <block type="mv2_stop" >
+        <value name="STOP_TYPE">
+            <shadow type="text">
+                <field name="TEXT"></field>
+            </shadow>
+        </value>
+    </block>
+
+    <block type="mv2_pause" />
+    <block type="mv2_resume" />
+
+
 
     <!-- OLD MARTY MOTION BLOCKS -->
 

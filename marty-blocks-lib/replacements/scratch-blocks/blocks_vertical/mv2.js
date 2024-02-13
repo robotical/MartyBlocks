@@ -666,6 +666,98 @@ Blockly.Blocks["mv2_wave"] = {
   },
 };
 
+Blockly.Blocks["mv2_stop"] = {
+  /**
+   * Block to make Marty stop
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.MV2_STOP,
+      category: Blockly.Categories.motion,
+      colour: 164,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/marty-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "field_dropdown",
+          name: "STOP_TYPE",
+          options: [
+            [Blockly.Msg.MV2_STOP_IMMEDIATELY, "stop"],
+            [Blockly.Msg.MV2_STOP_AFTER_MOVE, "stopAfterMove"],
+          ],
+        },
+      ],
+      extensions: ["shape_statement"],
+    });
+  },
+};
+
+Blockly.Blocks["mv2_pause"] = {
+  /**
+   * Block to make Marty pause
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.MV2_PAUSE,
+      category: Blockly.Categories.motion,
+      colour: 164,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/marty-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+      ],
+      extensions: ["shape_statement"],
+    });
+  },
+};
+
+Blockly.Blocks["mv2_resume"] = {
+  /**
+   * Block to make Marty resume
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.MV2_RESUME,
+      category: Blockly.Categories.motion,
+      colour: 164,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/marty-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+      ],
+      extensions: ["shape_statement"],
+    });
+  },
+};
+
 Blockly.Blocks["mv2_dance"] = {
   /**
    * Block to make Marty perform a chosen dance

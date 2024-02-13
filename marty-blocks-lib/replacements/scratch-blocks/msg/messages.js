@@ -408,6 +408,11 @@ Blockly.Msg.MV2_STANDSTRAIGHT = '%1 %2 Stand straight in %3s';
 Blockly.Msg.MV2_HOLD = '%1 %2 Hold this position for %3s';
 Blockly.Msg.MV2_GRIPPERARMBASIC = '%1 %2 %3 gripper';
 Blockly.Msg.MV2_GRIPPERARMTIMED = '%1 %2 %3 gripper in %4s';
+Blockly.Msg.MV2_STOP = '%1 %2 Stop Marty %3';
+Blockly.Msg.MV2_PAUSE = '%1 %2 Pause movement';
+Blockly.Msg.MV2_RESUME = '%1 %2 Resume movement';
+Blockly.Msg.MV2_STOP_IMMEDIATELY = 'immediately';
+Blockly.Msg.MV2_STOP_AFTER_MOVE = 'after move';
 
 // Operators blocks
 Blockly.Msg.OPERATORS_ADD = '%1 + %2';
