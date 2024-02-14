@@ -672,8 +672,11 @@ class MenuBar extends React.Component {
                             ) : [])}
                             */}
                     </div>
+                    <Divider className={classNames(styles.divider)} />
                     <MartyConnectBtn />
+                    <Divider className={classNames(styles.divider)} />
                     <SensorsDashboardBtn />
+                    <Divider className={classNames(styles.divider)} />
                     <MartyPythonButton />
 
                     <Divider className={classNames(styles.divider)} />

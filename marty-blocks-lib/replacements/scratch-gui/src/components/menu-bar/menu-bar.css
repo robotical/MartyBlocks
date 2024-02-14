@@ -27,7 +27,7 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: $menu-bar-standard-font-size;
     font-weight: bold;
-    background-color: $looks-secondary;
+    background-color: $marty-MAIN_BLUE;
     color: $ui-white;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .file-group .menu-bar-item {
-    margin: 0 .25rem;
+    margin: 0 .5rem;
     padding: 0 0.75rem;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .feedback-link {
-    color: $looks-secondary;
+    color: $marty-MAIN_BLUE;
     text-decoration: none;
 }
 
