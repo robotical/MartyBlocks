@@ -692,8 +692,8 @@ Blockly.Blocks["mv2_stop"] = {
           type: "field_dropdown",
           name: "STOP_TYPE",
           options: [
-            [Blockly.Msg.MV2_STOP_IMMEDIATELY, "stop"],
-            [Blockly.Msg.MV2_STOP_AFTER_MOVE, "stopAfterMove"],
+            [Blockly.Msg.DROPDOWN_OPTION_STOP_IMMEDIATELY, "stop"],
+            [Blockly.Msg.DROPDOWN_OPTION_STOP_AFTER_MOVE, "stopAfterMove"],
           ],
         },
       ],
@@ -958,8 +958,8 @@ Blockly.Blocks["mv2_discoChangeBlockPattern"] = {
           type: "field_dropdown",
           name: "PATTERN",
           options: [
-            [Blockly.Msg.MV2_PATTERN_OPTION_SHOWOFF, "show-off"],
-            [Blockly.Msg.MV2_PATTERN_OPTION_PINWHEEL, "pinwheel"],
+            [Blockly.Msg.DROPDOWN_OPTION_PATTERN_SHOWOFF, "show-off"],
+            [Blockly.Msg.DROPDOWN_OPTION_PATTERN_PINWHEEL, "pinwheel"],
             [Blockly.Msg.DROPDOWN_OPTION_OFF, "off"],
           ],
         },

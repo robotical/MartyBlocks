@@ -597,7 +597,7 @@ Blockly.Extensions.register(
           ) {
             if (!bothOptionAdded) {
               addonOptions.push([
-                Blockly.Msg.MV2_LEDEYESBOTH,
+                Blockly.Msg.DROPDOWN_OPTION_LEDEYESBOTH,
                 RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
               ]);
               bothOptionAdded = true;

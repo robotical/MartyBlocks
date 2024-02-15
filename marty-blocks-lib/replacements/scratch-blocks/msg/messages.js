@@ -355,15 +355,9 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
 // Marty Messages
 
-// Blockly.Msg.MV2_CONNECTVIAIP ='%1 %2 Connect via IP: %3';
-
-
 // Marty new LED eyes blocks
 Blockly.Msg.MV2_CHANGELEDEYESBLOCK = '%1 %2 Set %3 LEDs to %4';
 Blockly.Msg.MV2_CHANGELEDSEYESBLOCK = '%1 %2 Set %3 using the ColorPicker %4';
-Blockly.Msg.MV2_LEDEYESLEFT = 'Left eye';
-Blockly.Msg.MV2_LEDEYESRIGHT = 'Right eye';
-Blockly.Msg.MV2_LEDEYESBOTH = 'Both eyes';
 Blockly.Msg.MV2_TURNOFFALLLEDS = '%1 %2 Turn off all LEDs';
 
 Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK = '%1 %2 Set %3 LED %4 to %5';
@@ -381,8 +375,6 @@ Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off function LED';
 Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
 Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
 
-Blockly.Msg.MV2_PATTERN_OPTION_PINWHEEL = 'pinwheel';
-Blockly.Msg.MV2_PATTERN_OPTION_SHOWOFF = 'show-off';
 
 
 // MARTY V2 Motion Blocks
@@ -398,7 +390,6 @@ Blockly.Msg.MV2_SLIDE = '%1 %2 Slide %3 times to the %4';
 Blockly.Msg.MV2_SLIDE_MS_LENGTH = '%1 %2 Slide %3 times to the %4 in %5s, length %6';
 Blockly.Msg.MV2_LEAN = '%1 %2 Lean %3 for %4s';
 Blockly.Msg.MV2_EYES = '%1 %2 Eyes: %3';
-Blockly.Msg.MV2_MOVELEG = '%1 %2 Move %3 leg %4';
 Blockly.Msg.MV2_LIFTFOOT = '%1 %2 Lift %3 foot';
 Blockly.Msg.MV2_LOWERFOOT = '%1 %2 Lower %3 foot';
 Blockly.Msg.MV2_MOVEJOINT = '%1 %2 Move %3 to %4deg in %5s';
@@ -411,8 +402,7 @@ Blockly.Msg.MV2_GRIPPERARMTIMED = '%1 %2 %3 gripper in %4s';
 Blockly.Msg.MV2_STOP = '%1 %2 Stop Marty %3';
 Blockly.Msg.MV2_PAUSE = '%1 %2 Pause movement';
 Blockly.Msg.MV2_RESUME = '%1 %2 Resume movement';
-Blockly.Msg.MV2_STOP_IMMEDIATELY = 'immediately';
-Blockly.Msg.MV2_STOP_AFTER_MOVE = 'after move';
+
 
 // Operators blocks
 Blockly.Msg.OPERATORS_ADD = '%1 + %2';
@@ -545,6 +535,14 @@ Blockly.Msg.MV2_STOPSOUNDS = '%1 %2 Stop all sounds';
 
 
 // MARTY V2 block drop-down options
+Blockly.Msg.DROPDOWN_OPTION_STOP_IMMEDIATELY = 'immediately';
+Blockly.Msg.DROPDOWN_OPTION_STOP_AFTER_MOVE = 'after move';
+Blockly.Msg.DROPDOWN_OPTION_LEDEYESLEFT = 'Left eye';
+Blockly.Msg.DROPDOWN_OPTION_LEDEYESRIGHT = 'Right eye';
+Blockly.Msg.DROPDOWN_OPTION_LEDEYESBOTH = 'Both eyes';
+Blockly.Msg.DROPDOWN_OPTION_PATTERN_PINWHEEL = 'pinwheel';
+Blockly.Msg.DROPDOWN_OPTION_PATTERN_SHOWOFF = 'show-off';
+
 Blockly.Msg.DROPDOWN_OPTION_LEFT = 'left';
 Blockly.Msg.DROPDOWN_OPTION_RIGHT = 'right';
 Blockly.Msg.DROPDOWN_OPTION_FORWARD = 'forward';
