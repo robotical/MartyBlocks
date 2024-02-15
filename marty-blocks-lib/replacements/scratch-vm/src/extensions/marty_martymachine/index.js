@@ -312,9 +312,7 @@ class MartyMachineBlocks {
     }
 
     getInfo() {
-        console.log('getInfo');
         this.locale = this.setLocale();
-        console.log("locale: " + this.locale);
 
         return {
             id: 'martymachine',
