@@ -24,7 +24,7 @@ class MartyPythonButton extends React.Component {
             this.props.onOpenPythonModal(<PythonCodeModal
                 code={this.state.code}
             />, "Python (βeta -- May contain bugs!)", () => this.setState({ helpModalVisible: true }));
-            
+
         }
     }
 
@@ -83,12 +83,14 @@ class MartyPythonButton extends React.Component {
                     </Box>
                 </ModalComponent>
             }
-            <img
-                className={styles.icon}
-                src={pythonLogo}
-                alt="Python Logo"
-                onClick={this.clickHandler}
-            />
+            <div className={styles.button} onClick={this.clickHandler}>
+                <img
+                    className={styles.icon}
+                    src={pythonLogo}
+                    alt="Python Logo"
+                />
+                <div className={styles.buttonTitle}>Show Code</div>
+            </div>
         </>
     );
 }

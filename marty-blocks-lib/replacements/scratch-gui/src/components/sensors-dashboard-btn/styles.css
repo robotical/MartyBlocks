@@ -1,6 +1,30 @@
 .icon {
-    cursor: pointer;
-    height: 40%;
-    align-self: center;
-    margin-left: 5px
+  cursor: pointer;
+  align-self: center;
+  height: 100%;
+}
+
+.button {
+  margin: 0 0.5rem;
+  padding: 0 0.75rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  cursor: pointer;
+}
+
+.buttonTitle {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.75rem;
+  margin-left: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+  .buttonTitle {
+    display: none;
+  }
 }
