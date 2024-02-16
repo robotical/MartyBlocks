@@ -7,7 +7,7 @@ const Cast = require("../../util/cast");
 const MathUtil = require("../../util/math-util");
 const Clone = require("../../util/clone");
 const log = require("../../util/log");
-const fetchWithTimeout = require("../../util/fetch-with-timeout");
+const { fetchWithTimeout } = require('../../util/fetch-with-timeout');
 const Scratch3Mv2Blocks = require("marty-blocks-lib/src/Scratch3Mv2Blocks");
 const PitchShifter = require("soundtouchjs").PitchShifter;
 
@@ -1025,7 +1025,7 @@ class Scratch3Text2SpeechBlocks {
       if (regexPattern.length > 0) {
         regexPattern += '|';
       }
-      regexPattern += word.split('').join('.*?'); 
+      regexPattern += word.split('').join('.*?');
     });
 
     const regex = new RegExp(regexPattern, 'gi');
