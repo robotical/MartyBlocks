@@ -52,7 +52,6 @@ import MonitorList from "../../containers/monitor-list.jsx";
 import KeyboardCaller from "../keyboard-caller/keyboard-caller.jsx";
 
 
-
 const messages = defineMessages({
   addExtension: {
     id: 'gui.gui.addExtension',
@@ -292,87 +291,6 @@ const GUIComponent = props => {
                   <Tab
                     className={tabClassNames.tab}
                     onClick={onActivateCostumesTab}
-          >
-            {alertsVisible ? (
-              <Alerts className={styles.alertsContainer} />
-            ) : null}
-          </StageWrapper>
-        ) : (
-          <Box
-            className={styles.pageWrapper}
-            dir={isRtl ? "rtl" : "ltr"}
-            {...componentProps}
-          >
-            {telemetryModalVisible ? (
-              <TelemetryModal
-                onCancel={onTelemetryModalCancel}
-                onOptIn={onTelemetryModalOptIn}
-                onOptOut={onTelemetryModalOptOut}
-                onRequestClose={onRequestCloseTelemetryModal}
-              />
-            ) : null}
-            {loading ? <Loader /> : null}
-            {isCreating ? <Loader messageId="gui.loader.creating" /> : null}
-            {isRendererSupported ? null : <WebGlModal isRtl={isRtl} />}
-            {tipsLibraryVisible ? <TipsLibrary /> : null}
-            {cardsVisible ? <Cards /> : null}
-            {draggableModalVisible ? <DraggableModal /> : null}
-            {alertsVisible ? (
-              <Alerts className={styles.alertsContainer} />
-            ) : null}
-            {connectionModalVisible ? <ConnectionModal vm={vm} /> : null}
-            {costumeLibraryVisible ? (
-              <CostumeLibrary
-                vm={vm}
-                onRequestClose={onRequestCloseCostumeLibrary}
-              />
-            ) : null}
-            {backdropLibraryVisible ? (
-              <BackdropLibrary
-                vm={vm}
-                onRequestClose={onRequestCloseBackdropLibrary}
-              />
-            ) : null}
-            <KeyboardCaller />
-            {/* <MenuBar
-                    accountNavOpen={accountNavOpen}
-                    authorId={authorId}
-                    authorThumbnailUrl={authorThumbnailUrl}
-                    authorUsername={authorUsername}
-                    canChangeLanguage={canChangeLanguage}
-                    canCreateCopy={canCreateCopy}
-                    canCreateNew={canCreateNew}
-                    canEditTitle={canEditTitle}
-                    canManageFiles={canManageFiles}
-                    canRemix={canRemix}
-                    canSave={canSave}
-                    canShare={canShare}
-                    className={styles.menuBarPosition}
-                    enableCommunity={enableCommunity}
-                    isShared={isShared}
-                    logo={logo}
-                    renderLogin={renderLogin}
-                    showComingSoon={showComingSoon}
-                    onClickAccountNav={onClickAccountNav}
-                    onClickLogo={onClickLogo}
-                    onCloseAccountNav={onCloseAccountNav}
-                    onLogOut={onLogOut}
-                    onOpenRegistration={onOpenRegistration}
-                    onProjectTelemetryEvent={onProjectTelemetryEvent}
-                    onSeeCommunity={onSeeCommunity}
-                    onShare={onShare}
-                    onToggleLoginOpen={onToggleLoginOpen}
-                />*/}
-            <Box className={styles.bodyWrapper}>
-              <Box className={styles.flexWrapper}>
-                <Box className={styles.editorWrapper}>
-                  <Tabs
-                    forceRenderTabPanel
-                    className={tabClassNames.tabs}
-                    selectedIndex={activeTabIndex}
-                    selectedTabClassName={tabClassNames.tabSelected}
-                    selectedTabPanelClassName={tabClassNames.tabPanelSelected}
-                    onSelect={onActivateTab}
                   >
                     <img
                       draggable={false}
