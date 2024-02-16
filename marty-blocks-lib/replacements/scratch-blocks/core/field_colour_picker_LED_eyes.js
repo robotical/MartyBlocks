@@ -120,8 +120,6 @@ Blockly.FieldColourPickerLEDEyes.prototype.init = function (block) {
     this.colour_ = colour;
     this.colourSecondary_ = colour;
   }
-  console.log("block", block);
-  // block.svgPath_.remove();
   this.colourBtn = this.createColourButton_(this.colour_);
   block.svgGroup_.appendChild(this.colourBtn);
 

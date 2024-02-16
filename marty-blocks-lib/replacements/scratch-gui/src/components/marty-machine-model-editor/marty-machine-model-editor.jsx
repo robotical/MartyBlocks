@@ -32,7 +32,7 @@ const messages = defineMessages({
     className: {
         id: 'gui.martyMachineModelEditor.className',
         description: 'Label for the name of the class',
-        defaultMessage: 'Collect Data for:'
+        defaultMessage: 'Collect data for'
     },
     createNewClass: {
         id: 'gui.martyMachineModelEditor.createNewClass',
@@ -91,6 +91,13 @@ const MartyMachineModelEditor = props => {
         trainingOrRunningJSX = <MartyMachineModelPredictions model={props.model} />;
     }
 
+    const handleClassNameChangeFromSelect = (event) => {
+        if (event.target.value === '') {
+            return;
+        }
+        props.onClassNameChange(event.target.value);
+    };
+
     return <div
         className={styles.editorContainer}
         ref={props.setRef}
@@ -122,17 +129,30 @@ const MartyMachineModelEditor = props => {
         <div className={classNames(styles.row, styles.rowReverse)}>
             {!props.isModelLoaded && <div className={styles.inputGroup}>
                 <Label text={props.intl.formatMessage(messages.className)} spanStyle={{ marginRight: 0 }}>
-                    <MoreInfoButton modalTitle="Create New Class" contentComponent={MMCreateNewClass}>
+                    <MoreInfoButton modalTitle="Collect data for" contentComponent={MMCreateNewClass}>
                         <div className={styles.moreInfoIconContainer}>
                             <div className={styles.moreInfoIcon}>?</div>
                         </div>
                     </MoreInfoButton>
-                    <BufferedInput
+                    <select className={styles.selectClassName} value={props.className} onChange={handleClassNameChangeFromSelect}>
+                        {props.modelClasses.length === 0 ? (
+                            <option disabled value="">
+                                Create a class first
+                            </option>
+                        ) : (
+                            props.modelClasses.map((option, index) => (
+                                <option key={index} value={option.name}>
+                                    {option.name}
+                                </option>
+                            ))
+                        )}
+                    </select>
+                    {/* <BufferedInput
                         tabIndex="1"
                         type="text"
                         value={props.className}
                         onSubmit={props.onClassNameChange}
-                    />
+                    /> */}
                 </Label>
             </div>}
             <div className={styles.inputGroup}>

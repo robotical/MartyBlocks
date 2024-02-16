@@ -134,7 +134,7 @@ to adjust for the border using a different method */
 
 .frame {
     box-sizing: content-box !important;
-    background: $motion-transparent;
+    /* background: $motion-transparent; */
     border: 2px solid $motion-primary;
     border-radius: 0.5rem;
     animation-name: flash;

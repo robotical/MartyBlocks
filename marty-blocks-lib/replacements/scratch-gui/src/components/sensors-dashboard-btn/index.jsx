@@ -8,14 +8,16 @@ const SensorsDashboardBtn = () => {
     mv2Interface.toggleSensorsDashboard();
   };
 
- 
+
   return (
-    <img
-      className={styles.icon}
-      src={sensorsDashboardIcon}
-      alt="Sensors Dashboard BTN"
-      onClick={clickHandler}
-    />
+    <div className={styles.button} onClick={clickHandler}>
+      <img
+        className={styles.icon}
+        src={sensorsDashboardIcon}
+        alt="Sensors Dashboard BTN"
+      />
+      <div className={styles.buttonTitle}>Sensors Dashboard</div>
+    </div>
   );
 };
 

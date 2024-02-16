@@ -214,157 +214,17 @@ export function MartyBlocksToolbox_motion() {
         </value>
     </block>
 
-
-    <!-- OLD MARTY MOTION BLOCKS -->
-
-<!--               <block type="mv2_moveLeg">
-        <value>
-            <field name="SIDE">left</field>
-        </value>
-        <value>
-            <field name="DIRECTION"></field>
-        </value>
-    </block>-->
-
-    <!--<block type="mv2_stepLeft" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="STEPLENGTH">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="TURN">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_stepRight" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="STEPLENGTH">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="TURN">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_kickLeft" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="TURN">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_kickRight" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="TURN">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_sidestepLeft" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="STEPLENGTH">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_sidestepRight" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-        <value name="STEPLENGTH">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_circleLeft" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_circleRight" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_waveLeft" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-    </block>
-
-    <block type="mv2_waveRight" >
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">5</field>
-            </shadow>
-        </value>
-    </block>
--->
-    <!--<block type="mv2_stop" />-->
-
-    <!--<block type="mv2_sidefall" >
-        <value name="SIDE">
+    <block type="mv2_stop" >
+        <value name="STOP_TYPE">
             <shadow type="text">
                 <field name="TEXT"></field>
             </shadow>
         </value>
-        <value name="MOVETIME">
-            <shadow type="math_number">
-                <field name="NUM">1</field>
-            </shadow>
-        </value>
-        <value name="STEPLEN">
-            <shadow type="math_number">
-                <field name="NUM">2</field>
-            </shadow>
-        </value>
-    </block>-->
+    </block>
+
+    <block type="mv2_pause" />
+    <block type="mv2_resume" />
+
     `;
 }
 
@@ -600,21 +460,5 @@ export function MartyBlocksToolbox_sensing() {
     <block type="mv2_lightsense" />
 
     <block type="mv2_noisesense" />
-
-    <!--<block type="mv2_current" />-->
-
-    <!--<block type="mv2_accelerometer" />-->
-
-    <!--<block type="mv2_proximity" />-->
-
-    <!--<block type="mv2_demo_sensor" />-->
-
-    <!--<block type="mv2_set_demo_sensor" >
-        <value name="SENSORVAL">
-            <shadow type="math_number">
-                <field name="NUM">42</field>
-            </shadow>
-        </value>
-    </block>-->
     `;
 }

@@ -69,6 +69,12 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(this.walk.bind(this, args, utils)),
       mv2_turn: (args, utils) =>
         this._martyIsConnectedWrapper(this.turn.bind(this, args, utils)),
+      mv2_stop: (args, utils) =>
+        this._martyIsConnectedWrapper(this.stop.bind(this, args, utils)),
+      mv2_pause: (args, utils) =>
+        this._martyIsConnectedWrapper(this.pause.bind(this, args, utils)),
+      mv2_resume: (args, utils) =>
+        this._martyIsConnectedWrapper(this.resume.bind(this, args, utils)),
       mv2_wiggle: (args, utils) =>
         this._martyIsConnectedWrapper(this.wiggle.bind(this, args, utils)),
       mv2_circle: (args, utils) =>
@@ -149,7 +155,7 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(
           this.discoChangeRegionColour.bind(this, args, utils)
         ),
-        mv2_turnAllLEDsOff: (args, utils) =>
+      mv2_turnAllLEDsOff: (args, utils) =>
         this._martyIsConnectedWrapper(
           this.turnAllLEDsOff.bind(this, args, utils)
         ),
@@ -846,6 +852,31 @@ class Scratch3Mv2Blocks {
       `traj/step/${steps}/?moveTime=${moveTime}&turn=${turn}&stepLength=1`
     );
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
+  }
+
+  stop(args, util) {
+    const stopType = args.STOP_TYPE; // stop, stopAfterMove
+    const moveTime = 500;
+    const command = `robot/${stopType}`;
+    console.log(command);
+    mv2Interface.send_REST(command);
+    return new Promise((resolve) => setTimeout(resolve, moveTime));
+  }
+
+  resume(args, util) {
+    const moveTime = 500;
+    const command = "robot/resume";
+    console.log(command);
+    mv2Interface.send_REST(command);
+    return new Promise((resolve) => setTimeout(resolve, moveTime));
+  }
+
+  pause(args, util) {
+    const moveTime = 500;
+    const command = "robot/pause";
+    console.log(command);
+    mv2Interface.send_REST(command);
+    return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   wiggle(args, util) {

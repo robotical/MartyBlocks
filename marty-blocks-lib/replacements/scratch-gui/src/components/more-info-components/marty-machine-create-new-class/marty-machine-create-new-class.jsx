@@ -28,10 +28,9 @@ const MMCreateNewClass = props => {
                 <div className={styles.viewSection}>
                     <h3 className={styles.viewTitle}>Collect Data for</h3>
                     <ul className={styles.viewDetails}>
-                        <li>Enter the class name in the "Collect Data for" field.</li>
+                        <li>Select the class you want to collect data for.</li>
+                        <li><strong>If there are no classes yet, you need to create one first.</strong></li>
                         <li>Click the "Record" button.</li>
-                        <li><strong>If the class name already exists:</strong> Data collection starts for the existing class.</li>
-                        <li><strong>If the class name does not exist:</strong> A new class is created and data collection for this new class begins.</li>
                     </ul>
                 </div>
             </div>

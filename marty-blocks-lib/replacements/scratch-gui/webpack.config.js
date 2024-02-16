@@ -57,6 +57,7 @@ const base = {
           babelrc: false,
           plugins: [
             "@babel/plugin-syntax-dynamic-import",
+            '@babel/plugin-transform-async-to-generator',
             "@babel/plugin-proposal-object-rest-spread",
             [
               "react-intl",
@@ -99,8 +100,17 @@ const base = {
         ],
       },
       {
+        test: /\.hex$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 16 * 1024
+          }
+        }]
+      },
+      {
         test: /prism-okaidia\.css$/, // Only target prism-okaidia.css
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", "css-loader"]
       }
     ],
   },
@@ -111,7 +121,25 @@ const base = {
       }),
     ],
   },
-  plugins: [],
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'node_modules/scratch-blocks/media',
+          to: 'static/blocks-media/default'
+        },
+        {
+          from: 'node_modules/scratch-blocks/media',
+          to: 'static/blocks-media/high-contrast'
+        },
+        {
+          from: 'src/lib/themes/high-contrast/blocks-media',
+          to: 'static/blocks-media/high-contrast',
+          force: true
+        }
+      ]
+    })
+  ],
 };
 
 if (!process.env.CI) {
@@ -139,8 +167,8 @@ module.exports = [
     module: {
       rules: base.module.rules.concat([
         {
-          test: /\.(svg|png|wav|gif|jpg)$/,
-          loader: "file-loader",
+          test: /\.(svg|png|wav|mp3|gif|jpg)$/,
+          loader: 'url-loader',
           options: {
             outputPath: "static/assets/",
           },
@@ -158,9 +186,9 @@ module.exports = [
     },
     plugins: base.plugins.concat([
       new webpack.DefinePlugin({
-        "process.env.NODE_ENV": '"' + process.env.NODE_ENV + '"',
-        "process.env.DEBUG": Boolean(process.env.DEBUG),
-        "process.env.GA_ID": '"' + (process.env.GA_ID || "UA-000000-01") + '"',
+        'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+        'process.env.DEBUG': Boolean(process.env.DEBUG),
+        'process.env.GA_ID': `"${process.env.GA_ID || 'UA-000000-01'}"`
       }),
       new HtmlWebpackPlugin({
         chunks: ["lib.min", "gui"],
@@ -226,60 +254,66 @@ module.exports = [
 ].concat(
   process.env.NODE_ENV === "production" || process.env.BUILD_MODE === "dist"
     ? // export as library
-      defaultsDeep({}, base, {
-        target: "web",
-        entry: {
-          "scratch-gui": "./src/index.js",
-        },
-        output: {
-          libraryTarget: "umd",
-          path: path.resolve("dist"),
-          publicPath: `${STATIC_PATH}/`,
-        },
-        externals: {
-          react: "react",
-          "react-dom": "react-dom",
-        },
-        module: {
-          rules: base.module.rules.concat([
-            {
-              test: /\.(svg|png|wav|gif|jpg)$/,
-              loader: "file-loader",
-              options: {
-                outputPath: "static/assets/",
-                publicPath: `${STATIC_PATH}/assets/`,
-              },
+    defaultsDeep({}, base, {
+      target: "web",
+      entry: {
+        "scratch-gui": "./src/index.js",
+      },
+      output: {
+        libraryTarget: "umd",
+        path: path.resolve("dist"),
+        publicPath: `${STATIC_PATH}/`,
+      },
+      externals: {
+        react: "react",
+        "react-dom": "react-dom",
+      },
+      module: {
+        rules: base.module.rules.concat([
+          {
+            test: /\.(svg|png|wav|mp3|gif|jpg)$/,
+            loader: 'url-loader',
+            options: {
+              limit: 2048,
+              outputPath: "static/assets/",
+              publicPath: `${STATIC_PATH}/assets/`,
             },
-          ]),
-        },
-        plugins: base.plugins.concat([
-          new CopyWebpackPlugin({
-            patterns: [
-              {
-                from: "node_modules/scratch-blocks/media",
-                to: "static/blocks-media",
-              },
-            ],
-          }),
-          new CopyWebpackPlugin({
-            patterns: [
-              {
-                from: "extension-worker.{js,js.map}",
-                context: "node_modules/scratch-vm/dist/web",
-              },
-            ],
-          }),
-          // Include library JSON files for scratch-desktop to use for downloading
-          new CopyWebpackPlugin({
-            patterns: [
-              {
-                from: "src/lib/libraries/*.json",
-                to: "libraries",
-                flatten: true,
-              },
-            ],
-          }),
+          },
         ]),
-      })
+      },
+      plugins: base.plugins.concat([
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: "node_modules/scratch-blocks/media",
+              to: "static/blocks-media",
+            },
+            {
+              from: 'extension-worker.{js,js.map}',
+              context: 'node_modules/scratch-vm/dist/web',
+              noErrorOnMissing: true
+            }
+          ],
+        }),
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: "extension-worker.{js,js.map}",
+              context: "node_modules/scratch-vm/dist/web",
+            },
+          ],
+        }),
+        // Include library JSON files for scratch-desktop to use for downloading
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: "src/lib/libraries/*.json",
+              to: "libraries",
+              flatten: true,
+            },
+          ],
+        }),
+      ]),
+    })
     : []
 );
