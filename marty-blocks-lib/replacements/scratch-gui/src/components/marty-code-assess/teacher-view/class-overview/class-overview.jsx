@@ -28,6 +28,7 @@ class ClassOverview extends React.Component {
 
     componentDidMount() {
         this.props.class.getStudentDataForAllStudents().then((data) => {
+            if (!data || !data.length) return;
             const mappedData = mapDataToStudents(data, this.props.students);
             const mappedScoresOverTime = {};
             for (const studentName in mappedData) {

@@ -40,6 +40,9 @@ class ClassSummaryTable extends React.Component {
         if (!this.props.data) {
             return null;
         }
+        if (!this.props.data.length === 0) {
+            return null;
+        }
         const dataWithClassAverage = getClassAverage(this.props.data);
 
         let relativeData;
