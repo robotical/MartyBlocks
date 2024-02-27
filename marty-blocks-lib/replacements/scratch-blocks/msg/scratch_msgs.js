@@ -5486,8 +5486,8 @@ Blockly.ScratchMsgs.locales["en"] =
     "MV2_PAUSE": "%1 %2 Pause movement",
     "MV2_RESUME": "%1 %2 Resume movement",
 
-    "MV2_COLOUR": "%1 %2 %3 Colour Sensor",
-    "MV2_COLOUR_RAW": "%1 %2 %3 Colour Sensor %4 channel",
+    "MV2_COLOUR": "%1 %2 %3 Color Sensor",
+    "MV2_COLOUR_RAW": "%1 %2 %3 Color Sensor %4 channel",
     "MV2_DISCOCHANGEBLOCKCOLOUR": "%1 %2 Set %3 LEDs to %4",
     "MV2_DISCOCHANGEREGIONCOLOUR": "%1 %2 Set region %3 on %4 LEDs to %5",
     "MV2_DISCOCHANGEBLOCKPATTERN": "%1 %2 Set %3 LEDs to pattern %4",
