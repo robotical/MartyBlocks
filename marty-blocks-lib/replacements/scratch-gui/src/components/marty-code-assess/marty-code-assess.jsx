@@ -56,6 +56,10 @@ class MartyCodeAssess extends React.Component {
           this.setState({ isLoading: false });
         });
     }
+
+    setTimeout(() => {
+      this.props.showTutorialCard();
+    }, 200);
   }
 
   componentWillUnmount() {
@@ -159,7 +163,7 @@ MartyCodeAssess.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   showTutorialCard: () => {
-      dispatch(activateDeck("code-assess-login"));
+      dispatch(activateDeck("code-assess-welcome"));
   }
 });
 

@@ -409,6 +409,79 @@ export default {
     },
 
 
+    'code-assess-welcome': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Welcome to Code Assess"
+                description="Name for the 'Welcome to Code Assess' how-to"
+                id="gui.howtos.code-assess-welcome.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: [{
+            title: (
+                <FormattedMessage
+                    defaultMessage="Welcome to Code Assess"
+                    description="Step name for 'Welcome to Code Assess' step"
+                    id="gui.howtos.code-assess-welcome.step"
+                />
+            ),
+            image: 'welcome',
+        },
+        {
+            title: (
+                <FormattedMessage
+                    defaultMessage="Code Assess Algorithms"
+                    description="Step name for 'Algorithms' step"
+                    id="gui.howtos.code-assess-welcome.step_algorithms"
+                />
+            ),
+            image: 'algorithms',
+        },
+        {
+            title: (
+                <FormattedMessage
+                    defaultMessage="Code Assess Analysis"
+                    description="Step name for 'Analysis' step"
+                    id="gui.howtos.code-assess-welcome.step_analysis"
+                />
+            ),
+            image: 'analysis',
+        },
+        {
+            title: (
+                <FormattedMessage
+                    defaultMessage="Code Assess Decomposition"
+                    description="Step name for 'Decomposition' step"
+                    id="gui.howtos.code-assess-welcome.step_decomposition"
+                />
+            ),
+            image: 'decomposition',
+        },
+        {
+            title: (
+                <FormattedMessage
+                    defaultMessage="Code Assess Generalisation and Abstraction"
+                    description="Step name for 'Generalisation and Abstraction' step"
+                    id="gui.howtos.code-assess-welcome.step_genandabs"
+                />
+            ),
+            image: 'genandabs',
+        },
+        {
+            title: (
+                <FormattedMessage
+                    defaultMessage="Code Assess Pattern Recognition and Data Representation"
+                    description="Step name for 'Pattern Recognition and Data Representation' step"
+                    id="gui.howtos.code-assess-welcome.step_patternrec"
+                />
+            ),
+            image: 'patternrec',
+        }
+        ],
+    },
+
     'code-assess-login': {
         name: (
             <FormattedMessage

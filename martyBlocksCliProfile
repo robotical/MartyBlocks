@@ -39,6 +39,13 @@ restoreScratch() {
     cd $gui_original && git restore . && git clean -fd
 }
 
+# Step 1d: Remove package-lock.json and node_modules from scratch repos
+removeNodeModules() {
+    cd $blocks_original && rm -rf package-lock.json node_modules
+    cd $vm_original && rm -rf package-lock.json node_modules
+    cd $gui_original && rm -rf package-lock.json node_modules
+}
+
 # Step 2: Install scratch
 installScratch() {
     cd $blocks_original && npm install 

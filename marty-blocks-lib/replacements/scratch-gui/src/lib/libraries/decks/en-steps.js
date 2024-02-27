@@ -1,6 +1,8 @@
 
 
 const S3_URL = 'https://roboticalpublic.s3.eu-west-1.amazonaws.com/martyblocks-tutorials/';
+const CODE_ASSESS_PATH = 'codeassess';
+
 const enImages = {
     // Marty Machine
     mmCreateModel: S3_URL + "create-model.png",
@@ -19,6 +21,14 @@ const enImages = {
     mmBlocksClassificationOn: S3_URL + "mmBlocksClassificationOn.png",
     mmBlocksClassifyImage: S3_URL + "mmBlocksClassifyImage.png",
     mmBlocksClassifyAudio: S3_URL + "mmBlocksClassifyAudio.png",
+
+    // Code Assess
+    welcome: S3_URL + CODE_ASSESS_PATH + "/welcome.png",
+    genandabs: S3_URL + CODE_ASSESS_PATH + "/genandabs.png",
+    patternrec: S3_URL + CODE_ASSESS_PATH + "/patternrec.png",
+    algorithms: S3_URL + CODE_ASSESS_PATH + "/algorithms.png",
+    analysis: S3_URL + CODE_ASSESS_PATH + "/analysis.png",
+    decomposition: S3_URL + CODE_ASSESS_PATH + "/decomposition.png",
 
 };
 
