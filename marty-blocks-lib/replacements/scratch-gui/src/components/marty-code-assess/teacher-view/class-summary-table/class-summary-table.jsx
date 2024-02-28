@@ -1,12 +1,11 @@
 import React from "react";
 import styles from "./class-summary-table.css";
 import bindAll from 'lodash.bindall';
-import { defineMessages, intlShape, injectIntl } from "react-intl";
+import { defineMessages, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import SimpleTooltip from "../../../simple-tooltip/simple-tooltip.jsx";
-import MoreInfoButton from "../../../more-info-button/more-info-button.jsx";
-import TableModeInfo from "../../../more-info-components/code-asses-table-mode/code-asses-table-mode.jsx";
-import TableColorCodingInfo from "../../../more-info-components/code-asses-table-coding/code-asses-table-coding.jsx";
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     tutorials: {
@@ -110,21 +109,21 @@ class ClassSummaryTable extends React.Component {
         return (
             <div className={styles.container}>
                 <div className={styles.tableButtonsContainer}>
-                    <label className={styles.toggleLabel} htmlFor="">Table Mode{" "}<MoreInfoButton modalTitle="Table Mode" contentComponent={TableModeInfo}>
+                    <label className={styles.toggleLabel} htmlFor="">Table Mode{" "}<div onClick={() => this.props.showTutorialCard("code-assess-teacher-progress-table-mode")}>
                         <div className={styles.moreInfoIconContainer}>
                             <div className={styles.moreInfoIcon}>?</div>
                         </div>
-                    </MoreInfoButton>
+                    </div>
                     </label>
                     <div className={styles.tableModeToggleContainer}>
                         <div onClick={() => this.setState({ tableMode: "Final Score" })} className={this.state.tableMode === "Final Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Final Score</div>
                         <div onClick={() => this.setState({ tableMode: "All Sessions" })} className={this.state.tableMode === "All Sessions" ? styles.tableModeToggleSelected : styles.tableModeToggle}>All Sessions</div>
                     </div>
-                    <label className={styles.toggleLabel} htmlFor="">Color Coding{" "}<MoreInfoButton modalTitle="Color Coding" contentComponent={TableColorCodingInfo}>
+                    <label className={styles.toggleLabel} htmlFor="">Color Coding{" "}<div onClick={() => this.props.showTutorialCard("code-assess-teacher-progress-table-color-coding")}>
                         <div className={styles.moreInfoIconContainer}>
                             <div className={styles.moreInfoIcon}>?</div>
                         </div>
-                    </MoreInfoButton>
+                    </div>
                     </label>
                     <div className={styles.tableModeToggleContainer}>
                         <div onClick={() => this.setState({ colourCodingMode: "Absolute Score" })} className={this.state.colourCodingMode === "Absolute Score" ? styles.tableModeToggleSelected : styles.tableModeToggle}>Absolute</div>
@@ -164,10 +163,17 @@ class ClassSummaryTable extends React.Component {
 }
 
 ClassSummaryTable.propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    showTutorialCard: PropTypes.func.isRequired,
 };
 
-export default injectIntl(ClassSummaryTable);
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
+
+export default injectIntl(connect(null, mapDispatchToProps)(ClassSummaryTable))
 
 const roundToTwo = (num) => {
     return Math.round(num * 100);

@@ -8,6 +8,127 @@ import { FormattedMessage } from 'react-intl';
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
 
 
+const teacherProgressTableSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Teacher Progress Table"
+            description="Step name for 'Teacher Progress Table' step"
+            id="gui.howtos.code-assess-teacher-progress-table.step_teacher-progress-table"
+        />
+    ),
+    image: 'teacherProgressTable',
+}
+];
+
+const teacherProgressTableModeSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Teacher Progress Table Mode"
+            description="Step name for 'Teacher Progress Table Mode' step"
+            id="gui.howtos.code-assess-teacher-progress-table-mode.step_teacher-progress-table-mode"
+        />
+    ),
+    image: 'teacherProgressTableMode',
+},
+];
+
+const teacherProgressTableColorCodingSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Teacher Progress Table Color Coding Absolute"
+            description="Step name for 'Teacher Progress Table Color Coding' step"
+            id="gui.howtos.code-assess-teacher-progress-table-color-coding.step_teacher-progress-table-color-coding-absolute"
+        />
+    ),
+    image: 'teacherProgressTableColorCodingAbsolute',
+},
+{
+    title: (
+        <FormattedMessage
+            defaultMessage="Teacher Progress Table Color Coding Relative"
+            description="Step name for 'Teacher Progress Table Color Coding' step"
+            id="gui.howtos.code-assess-teacher-progress-table-color-coding.step_teacher-progress-table-color-coding-relative"
+        />
+    ),
+    image: 'teacherProgressTableColorCodingRelative',
+},
+];
+
+
+const teacherStudentsTabSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Teacher Students Tab"
+            description="Step name for 'Teacher Students Tab' step"
+            id="gui.howtos.code-assess-teacher-students-tab.step_teacher-students-tab"
+        />
+    ),
+    image: 'studentsTab',
+}];
+const teacherStudentsTabLatestAssessmentSteps = [
+    {
+        title: (
+            <FormattedMessage
+                defaultMessage="Student Latest Assessment"
+                description="Step name for 'Student Latest Assessment' step"
+                id="gui.howtos.code-assess-teacher-students-tab-latest-assessment.step_student-latest-assessment"
+            />
+        ),
+        image: 'studentLatestAssessment',
+    },
+];
+const teacherStudentsTabBadgesSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Student Badges"
+            description="Step name for 'Student Badges' step"
+            id="gui.howtos.code-assess-teacher-students-tab-badges.step_student-badges"
+        />
+    ),
+    image: 'studentBadges',
+}];
+const teacherStudentsTabPerformanceHistorySteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Student Performance History"
+            description="Step name for 'Student Performance History' step"
+            id="gui.howtos.code-assess-teacher-students-tab-performance-history.step_student-performance-history"
+        />
+    ),
+    image: 'studentPerformanceHistory',
+}];
+const teacherClassAnnouncementsTabSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Teacher Class Announcements Tab"
+            description="Step name for 'Teacher Class Announcements Tab' step"
+            id="gui.howtos.code-assess-teacher-class-announcements-tab.step_teacher-class-announcements-tab"
+        />
+    ),
+    image: 'teacherClassAnnouncements',
+}];
+const teacherClassAnnouncementsTextAnnouncementSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Text Announcement"
+            description="Step name for 'Text Announcement' step"
+            id="gui.howtos.code-assess-teacher-class-announcements-text-announcement.step_text-announcement"
+        />
+    ),
+    image: 'textAnnouncement',
+}];
+const teacherClassAnnouncementsEmojiAnnouncementSteps = [{
+    title: (
+        <FormattedMessage
+            defaultMessage="Emoji Announcement"
+            description="Step name for 'Emoji Announcement' step"
+            id="gui.howtos.code-assess-teacher-class-announcements-emoji-announcement.step_emoji-announcement"
+        />
+    ),
+    image: 'emojiAnnouncement',
+}];
+
+
 export default {
 
     "mm-create-model": {
@@ -408,7 +529,6 @@ export default {
         ],
     },
 
-
     'code-assess-welcome': {
         name: (
             <FormattedMessage
@@ -514,7 +634,164 @@ export default {
             }
         },
         ],
-    }
+    },
 
+    'code-assess-teacher-overview-tab': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Teacher Overview Tab"
+                description="Name for the 'Teacher Overview Tab' how-to"
+                id="gui.howtos.code-assess-teacher-overview-tab.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: [{
+            title: (
+                <FormattedMessage
+                    defaultMessage="Teacher Overview Tab"
+                    description="Step name for 'Teacher Overview Tab' step"
+                    id="gui.howtos.code-assess-teacher-overview-tab.step_teacher-overview-tab"
+                />
+            ),
+            image: 'teacherOverviewTab'
+        },
+            ...teacherProgressTableSteps,
+            ...teacherProgressTableModeSteps,
+            ...teacherProgressTableColorCodingSteps,
+        ]
+    },
 
+    'code-assess-teacher-progress-table': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Teacher Progress Table"
+                description="Name for the 'Teacher Progress Table' how-to"
+                id="gui.howtos.code-assess-teacher-progress-table.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: [
+            ...teacherProgressTableSteps,
+            ...teacherProgressTableModeSteps,
+            ...teacherProgressTableColorCodingSteps,
+        ]
+    },
+
+    'code-assess-teacher-progress-table-mode': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Teacher Progress Table Mode"
+                description="Name for the 'Teacher Progress Table Mode' how-to"
+                id="gui.howtos.code-assess-teacher-progress-table-mode.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherProgressTableModeSteps,
+    },
+
+    'code-assess-teacher-progress-table-color-coding': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Teacher Progress Table Color Coding"
+                description="Name for the 'Teacher Progress Table Color Coding' how-to"
+                id="gui.howtos.code-assess-teacher-progress-table-color-coding.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherProgressTableColorCodingSteps,
+    },
+
+    'code-assess-teacher-students-tab': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Teacher Students Tab"
+                description="Name for the 'Teacher Students Tab' how-to"
+                id="gui.howtos.code-assess-teacher-students-tab.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherStudentsTabSteps
+    },
+    'code-assess-teacher-students-tab-latest-assessment': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Student Latest Assessment"
+                description="Name for the 'Student Latest Assessment' how-to"
+                id="gui.howtos.code-assess-teacher-students-tab-latest-assessment.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherStudentsTabLatestAssessmentSteps
+    },
+    'code-assess-teacher-students-tab-badges': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Student Badges"
+                description="Name for the 'Student Badges' how-to"
+                id="gui.howtos.code-assess-teacher-students-tab-badges.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherStudentsTabBadgesSteps
+    },
+    'code-assess-teacher-students-tab-performance-history': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Student Performance History"
+                description="Name for the 'Student Performance History' how-to"
+                id="gui.howtos.code-assess-teacher-students-tab-performance-history.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherStudentsTabPerformanceHistorySteps
+    },
+
+    'code-assess-teacher-class-announcements-tab': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Teacher Class Announcements Tab"
+                description="Name for the 'Teacher Class Announcements Tab' how-to"
+                id="gui.howtos.code-assess-teacher-class-announcements-tab.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: [
+            ...teacherClassAnnouncementsTabSteps,
+            ...teacherClassAnnouncementsTextAnnouncementSteps,
+            ...teacherClassAnnouncementsEmojiAnnouncementSteps
+        ]
+    },
+    'code-assess-teacher-class-announcements-text-announcement': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Text Announcement"
+                description="Name for the 'Text Announcement' how-to"
+                id="gui.howtos.code-assess-teacher-class-announcements-text-announcement.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherClassAnnouncementsTextAnnouncementSteps
+    },
+    'code-assess-teacher-class-announcements-emoji-announcement': {
+        name: (
+            <FormattedMessage
+                defaultMessage="Emoji Announcement"
+                description="Name for the 'Emoji Announcement' how-to"
+                id="gui.howtos.code-assess-teacher-class-announcements-emoji-announcement.name"
+            />
+        ),
+        tags: ['marty', 'code', 'assess', 'codeassess', 'code-assess', 'classroom', 'class', 'teacher', 'student'],
+        img: libraryTXTSpeech,
+        steps: teacherClassAnnouncementsEmojiAnnouncementSteps
+    },
 };

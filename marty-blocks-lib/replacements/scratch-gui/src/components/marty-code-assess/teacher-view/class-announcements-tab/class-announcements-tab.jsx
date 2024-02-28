@@ -8,6 +8,8 @@ import Modal from "../../../../containers/modal.jsx";
 import AnnouncementModal from "./announcement-modal/announcement-modal.jsx";
 import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     placeholder: {
@@ -44,6 +46,7 @@ class ClassAnnouncementsTab extends React.Component {
     }
 
     componentDidMount() {
+        this.props.showTutorialCard("code-assess-teacher-class-announcements-tab");
         if (this.props.selectedClass) {
             this.fetchAnnouncements()
         }
@@ -179,6 +182,13 @@ ClassAnnouncementsTab.propTypes = {
     intl: intlShape.isRequired,
     selectedClass: PropTypes.object.isRequired,
     students: PropTypes.array.isRequired,
+    showTutorialCard: PropTypes.func
 };
 
-export default injectIntl(ClassAnnouncementsTab);
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
+
+export default injectIntl(connect(null, mapDispatchToProps)(ClassAnnouncementsTab));

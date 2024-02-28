@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import ClassStudent from "./class-student/class-student.jsx";
 import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     tutorials: {
@@ -33,6 +35,7 @@ class ClassStudents extends React.Component {
     }
 
     componentDidMount() {
+        this.props.showTutorialCard("code-assess-teacher-students-tab");
         this.sortByAlphabetical();
     }
 
@@ -145,6 +148,13 @@ ClassStudents.propTypes = {
     students: PropTypes.arrayOf(PropTypes.object),
     classId: PropTypes.string,
     intl: intlShape.isRequired,
+    showTutorialCard: PropTypes.func
 };
 
-export default injectIntl(ClassStudents);
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
+
+export default injectIntl(connect(null, mapDispatchToProps)(ClassStudents))

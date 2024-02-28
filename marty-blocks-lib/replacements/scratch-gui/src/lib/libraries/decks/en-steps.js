@@ -22,13 +22,34 @@ const enImages = {
     mmBlocksClassifyImage: S3_URL + "mmBlocksClassifyImage.png",
     mmBlocksClassifyAudio: S3_URL + "mmBlocksClassifyAudio.png",
 
-    // Code Assess
+    /* Code Assess */
+    // Welcoming
     welcome: S3_URL + CODE_ASSESS_PATH + "/welcome.png",
     genandabs: S3_URL + CODE_ASSESS_PATH + "/genandabs.png",
     patternrec: S3_URL + CODE_ASSESS_PATH + "/patternrec.png",
     algorithms: S3_URL + CODE_ASSESS_PATH + "/algorithms.png",
     analysis: S3_URL + CODE_ASSESS_PATH + "/analysis.png",
     decomposition: S3_URL + CODE_ASSESS_PATH + "/decomposition.png",
+
+    // Teacher Overview Tab
+    teacherOverviewTab: S3_URL + CODE_ASSESS_PATH + "/teacher-overview-tab.png",
+    teacherProgressTable: S3_URL + CODE_ASSESS_PATH + "/teacher-progress-table.png",
+    teacherProgressTableMode: S3_URL + CODE_ASSESS_PATH + "/teacher-progress-table-mode.png",
+    teacherProgressTableColorCodingAbsolute: S3_URL + CODE_ASSESS_PATH + "/teacher-progress-table-color-coding-absolute.png",
+    teacherProgressTableColorCodingRelative: S3_URL + CODE_ASSESS_PATH + "/teacher-progress-table-color-coding-relative.png",
+
+    // Teacher Students Tab
+    studentsTab: S3_URL + CODE_ASSESS_PATH + "/students-tab.png",
+    studentLatestAssessment: S3_URL + CODE_ASSESS_PATH + "/student-latest-assessment.png",
+    studentBadges: S3_URL + CODE_ASSESS_PATH + "/student-badges.png",
+    studentPerformanceHistory: S3_URL + CODE_ASSESS_PATH + "/student-performance-history.png",
+
+
+    // Class Announcements Tab
+    teacherClassAnnouncements: S3_URL + CODE_ASSESS_PATH + "/teacher-class-announcements.png",
+    textAnnouncement: S3_URL + CODE_ASSESS_PATH + "/text-announcement.png",
+    emojiAnnouncement: S3_URL + CODE_ASSESS_PATH + "/emoji-announcement.png",
+
 
 };
 

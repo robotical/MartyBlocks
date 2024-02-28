@@ -158,6 +158,7 @@ class MartyCodeAssess extends React.Component {
 MartyCodeAssess.propTypes = {
   vm: PropTypes.instanceOf(VM).isRequired,
   intl: intlShape.isRequired,
+  showTutorialCard: PropTypes.func,
 };
 
 

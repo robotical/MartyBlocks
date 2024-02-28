@@ -40,5 +40,19 @@ Pattern recognition is the process of identifying patterns and regularities in d
 - Use of loops to repeat a set of instructions
 - Use of variables operations and data structures such as lists
 
+7. Teacher Overview Tab
+The teacher Overview tab allows teachers to see an overview of the students' progress in MartyBlocks. It includes a table that contains information about the students' progress so far. 
+
+
+8. Teacher Progress Table
+The Progress Table shows the students' progress in the 5 main pillars of programming. The columns of that table represent the names of the students (beside the 1st column that represents the Class Average), while the rows of the column depend on the selected table mode. The table modes are:
+- All Sessions (default)
+- Last Session
+
+
+9. Teacher Progress Table: All Sessions
+
+10. Teacher Progress Table: Last Session
+
 
 viki loyverbi

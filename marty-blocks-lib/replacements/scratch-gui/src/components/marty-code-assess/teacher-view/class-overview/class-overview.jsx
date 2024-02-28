@@ -3,9 +3,9 @@ import styles from "./class-overview.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
-import Spinner from '../../../spinner/spinner.jsx';
-import spinnerStyles from '../../../spinner/spinner.css';
 import ClassSummaryTable from "../class-summary-table/class-summary-table.jsx";
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     tutorials: {
@@ -27,6 +27,8 @@ class ClassOverview extends React.Component {
     }
 
     componentDidMount() {
+        this.props.showTutorialCard("code-assess-teacher-overview-tab");
+
         this.props.class.getStudentDataForAllStudents().then((data) => {
             if (!data || !data.length) return;
             const mappedData = mapDataToStudents(data, this.props.students);
@@ -86,9 +88,16 @@ ClassOverview.propTypes = {
     students: PropTypes.arrayOf(PropTypes.object),
     classId: PropTypes.string,
     intl: intlShape.isRequired,
+    showTutorialCard: PropTypes.func
 };
 
-export default injectIntl(ClassOverview);
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
+
+export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview))
 
 const mapDataToStudents = (studentData, students) => {
     if (!studentData || !students || !studentData.length || !students.length) return {};

@@ -7,6 +7,8 @@ import svgs from "./svgs.jsx";
 import SVGWrapper from "./svg-wrapper.jsx";
 import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     tutorials: {
@@ -33,6 +35,7 @@ class StudentBadgesTab extends React.Component {
     }
 
     componentDidMount() {
+        this.props.showTutorialCard("code-assess-teacher-students-tab-badges");
         this.fetchStudentData();
     }
 
@@ -80,8 +83,14 @@ class StudentBadgesTab extends React.Component {
 StudentBadgesTab.propTypes = {
     intl: intlShape.isRequired,
     classId: PropTypes.string.isRequired,
-    student: PropTypes.object
+    student: PropTypes.object,
+    showTutorialCard: PropTypes.func
 };
 
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
 
-export default injectIntl(StudentBadgesTab);
+export default injectIntl(connect(null, mapDispatchToProps)(StudentBadgesTab))

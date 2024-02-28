@@ -4,6 +4,8 @@ import bindAll from 'lodash.bindall';
 import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import AssessmentSpiderGraph from "../../plots/assessment-spider-graph/assessment-spider-graph.jsx";
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     tutorials: {
@@ -23,6 +25,7 @@ class LatestAssessmentTab extends React.Component {
     }
 
     componentDidMount() {
+        this.props.showTutorialCard("code-assess-teacher-students-tab-latest-assessment");
     }
 
     componentWillUnmount() {
@@ -92,7 +95,13 @@ LatestAssessmentTab.propTypes = {
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.object,
     ]).isRequired,
+    showTutorialCard: PropTypes.func
 };
 
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
 
-export default injectIntl(LatestAssessmentTab);
+export default injectIntl(connect(null, mapDispatchToProps)(LatestAssessmentTab))

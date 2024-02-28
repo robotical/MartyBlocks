@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import AssessmentOverTimeLineGraph from "../../plots/assessment-over-time-line-graph/assessment-over-time-line-graph.jsx";
 import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
+import { activateDeck } from "../../../../reducers/cards.js";
+import { connect } from "react-redux";
 
 const messages = defineMessages({
     tutorials: {
@@ -27,6 +29,8 @@ class PerformanceHistoryTab extends React.Component {
     }
 
     componentDidMount() {
+        this.props.showTutorialCard("code-assess-teacher-students-tab-performance-history");
+
         this.setState({ isLoading: true });
         const studentData = this.props.studentData;
         const isTesting = !!codeAssess.isTestingWithMockData;
@@ -109,7 +113,13 @@ PerformanceHistoryTab.propTypes = {
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.object,
     ]).isRequired,
+    showTutorialCard: PropTypes.func
 };
 
+const mapDispatchToProps = (dispatch) => ({
+    showTutorialCard: (tutorialTitle) => {
+        dispatch(activateDeck(tutorialTitle));
+    }
+});
 
-export default injectIntl(PerformanceHistoryTab);
+export default injectIntl(connect(null, mapDispatchToProps)(PerformanceHistoryTab))
