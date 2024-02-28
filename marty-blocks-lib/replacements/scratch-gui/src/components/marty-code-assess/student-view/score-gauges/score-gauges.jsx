@@ -14,11 +14,9 @@ class ScoreGauges extends React.Component {
         ]);
     }
 
-    componentDidMount() {
-    }
+    componentDidMount() {}
 
     render() {
-
         return (
             <div className={styles.outerContainer}>
                 {this.props.scores && Object.keys(this.props.scores).map((key) => {

@@ -1,6 +1,6 @@
 .outer-container {
   /* Gauge base dimensions and colors */
-  --gauge-width: 200px;
+  --gauge-width: 160px;
   --gauge-height: 100px;
   --gauge-color: #ffd700;
   --gauge-border-color: #736203;
@@ -50,6 +50,9 @@
   /* Inner arc specific styles */
   --inner-arc-width: 180px;
   --inner-arc-border-color: rgba(0, 0, 0, 0.2);
+
+
+  width: var(--gauge-width);
 }
 /* 
 @keyframes swing-pointer {
@@ -178,8 +181,6 @@
 .title {
     width: var(--gauge-width);
     color: var(--gauge-border-color);
-    font-size: 18px;
-    font-weight: bold;
     text-transform: capitalize;
     text-align: center;
 }

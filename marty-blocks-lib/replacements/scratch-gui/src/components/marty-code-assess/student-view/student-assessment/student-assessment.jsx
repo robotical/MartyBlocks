@@ -67,18 +67,8 @@ class StudentAssessment extends React.Component {
                         <div className={styles.modalContainer}>{this.state.modalData.content}</div>
                     </Modal>
                 )}
-                {/* <ScoresCard
-                    onCategoryClick={this.openModal}
-                    dataRepresentation={this.state.scores.DataRepresentation}
-                    flowControl={this.state.scores.FlowControl}
-                    interactivity={this.state.scores.Interactivity}
-                    logic={this.state.scores.Logic}
-                    abstraction={this.state.scores.Abstraction}
-                    synchronisation={this.state.scores.Synchronisation}
-                    parallelism={this.state.scores.Parallelism}
-                /> */}
                 <ScoreGauges scores={this.state.scores} />
-                <DetailsCard totalScore={this.state.totalScore} />
+                <DetailsCard totalScore={this.state.totalScore} scoresOrBadges="scores" />
             </div>
         );
     }

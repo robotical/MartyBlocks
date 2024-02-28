@@ -9,6 +9,7 @@ import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
 import { activateDeck } from "../../../../reducers/cards.js";
 import { connect } from "react-redux";
+import DetailsCard from "../../details-card/details-card.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -17,12 +18,6 @@ const messages = defineMessages({
         id: "gui.martyCodeAssess.StudentDataModal.studentBadgesTab",
     }
 });
-
-const STAR_COLORS = {
-    "bronze": "#cd7f32",
-    "silver": "silver",
-    "gold": "gold",
-};
 
 class StudentBadgesTab extends React.Component {
     constructor(props) {
@@ -35,7 +30,7 @@ class StudentBadgesTab extends React.Component {
     }
 
     componentDidMount() {
-        this.props.showTutorialCard("code-assess-teacher-students-tab-badges");
+        codeAssess.studentOrTeacher === "teacher" && this.props.showTutorialCard("code-assess-teacher-students-tab-badges");
         this.fetchStudentData();
     }
 
@@ -55,24 +50,26 @@ class StudentBadgesTab extends React.Component {
         if (!studentData) {
             return <div>No student data yet!</div>;
         }
-        console.log("studentData.badges", studentData.badges)
-        console.log("studentData.badgesToStars()", studentData.badgesToStars())
 
         const starScores = studentData.badgesToStars();
         return (
-            <div className={styles.svgsContainer}>
-                {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
-                    <>
-                        <SVGWrapper svg={svgs.Conditionals} colors={starScores.Conditionals[0]} offsets={starScores.Conditionals[1]} category="conditionals" />
-                        <SVGWrapper svg={svgs.Loops} colors={starScores.Loops[0]} offsets={starScores.Loops[1]} category="loops" />
-                        <SVGWrapper svg={svgs.Functions} colors={starScores.Functions[0]} offsets={starScores.Functions[1]} category="functions" />
-                        <SVGWrapper svg={svgs.Operators} colors={starScores.Operators[0]} offsets={starScores.Operators[1]} category="operators" />
+            <div className={styles.outerContainer}>
 
-                        <SVGWrapper svg={svgs["Data Types"]} colors={starScores["Data Types"][0]} offsets={starScores["Data Types"][1]} category="dataTypes" />
-                        <SVGWrapper svg={svgs.Parallelism} colors={starScores["Parallelism"][0]} offsets={starScores["Parallelism"][1]} category="parallelism" />
-                        <SVGWrapper svg={svgs["Variables and Lists"]} colors={starScores["Variables and Lists"][0]} offsets={starScores["Variables and Lists"][1]} category="variablesAndLists" />
-                    </>
-                )}
+                <div className={styles.svgsContainer}>
+                    {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
+                        <>
+                            <SVGWrapper svg={svgs.Conditionals} colors={starScores.Conditionals[0]} offsets={starScores.Conditionals[1]} category="conditionals" />
+                            <SVGWrapper svg={svgs.Loops} colors={starScores.Loops[0]} offsets={starScores.Loops[1]} category="loops" />
+                            <SVGWrapper svg={svgs.Functions} colors={starScores.Functions[0]} offsets={starScores.Functions[1]} category="functions" />
+                            <SVGWrapper svg={svgs.Operators} colors={starScores.Operators[0]} offsets={starScores.Operators[1]} category="operators" />
+
+                            <SVGWrapper svg={svgs["Data Types"]} colors={starScores["Data Types"][0]} offsets={starScores["Data Types"][1]} category="dataTypes" />
+                            <SVGWrapper svg={svgs.Parallelism} colors={starScores["Parallelism"][0]} offsets={starScores["Parallelism"][1]} category="parallelism" />
+                            <SVGWrapper svg={svgs["Variables and Lists"]} colors={starScores["Variables and Lists"][0]} offsets={starScores["Variables and Lists"][1]} category="variablesAndLists" />
+                        </>
+                    )}
+                </div>
+                <DetailsCard scoresOrBadges="badges" />
             </div>
         );
     }

@@ -1,25 +1,25 @@
 .outer-container {
     display: grid;
     grid-area: details-card;
-    width: 90%;
     min-width: 300px;
     height: 100%;
     max-height: 400px;
-    align-self: center;
+    align-self: flex-start;
     background-color: white;
-    border-radius: 2px;
-    box-shadow: 2px 2px 5px 5px rgba(0,0,0,.5);
+    border-radius: 25px;
     align-items: start;
     grid-template-rows: min-content 1fr;
+    overflow: hidden;
 }
 
 .title-row {
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 1fr 2fr;
     position: relative;
     padding: 20px;
-    background-color: #D9E3F2;
+    background-color: #608dc9;
+    color: white;
+    font-size: 24px;
 }
 
 .title-row p {
@@ -28,8 +28,16 @@
 }
 
 .content-row {
-    background-color: #4C97FF;
+    background-color: white;
     height: 100%;
+
+    border: 2px solid #d4d4d4;
+    border-top: none;
+    border-radius: 25px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    overflow: auto;
 }
 
 
@@ -44,8 +52,7 @@
 
 .paragraphIntense {
     font-size: 24px;
-    font-weight: bold;
-    color: mintcream;
+    font-weight: bold;;
 }
 
 .paragraph {
@@ -64,3 +71,10 @@
 .marty-img-container {
     /* width: 150px; */
 }
+
+.contentList {
+    display: grid;
+    gap: 20px;
+}
+
+.contentListItem {}

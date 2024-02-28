@@ -27,7 +27,7 @@ class StudentView extends React.Component {
         super(props);
         this.state = {
             selectedClassStudents: [],
-            selectedTab: "Overview",
+            selectedTab: "Live Code Review",
             isLoading: false,
             exitConfirmationModalVisible: false,
         };
@@ -65,6 +65,9 @@ class StudentView extends React.Component {
                 this.onNewClassAnnouncement.bind(this)
             );
         }
+        if (!!codeAssess.isTestingWithMockData && codeAssess && codeAssess.student) {
+            codeAssess.student.joinedClass = this.props.selectedClass;
+        }
         this.setState({ isLoading: false });
     }
 
@@ -88,6 +91,9 @@ class StudentView extends React.Component {
         const didExit = await codeAssess.student.exitClass();
         if (didExit) {
             codeAssess.unsubscribe(codeAssess.TypesOfPublishedEvents.NEW_CLASS_ANNOUNCEMENT);
+        }
+        if (!!codeAssess.isTestingWithMockData && codeAssess && codeAssess.student) {
+            codeAssess.student.joinedClass = null;
         }
         this.setState({ isLoading: false, exitConfirmationModalVisible: false });
     }
@@ -113,27 +119,17 @@ class StudentView extends React.Component {
                 </Modal>}
                 <div className={styles.outerContainer} >
                     <div className={styles.header}>
-                        <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
-                        <div onClick={() => this.onSelectTab("My Progress")} className={[styles.tab, (this.state.selectedTab === "My Progress" ? styles.selectedTab : "")].join(" ")}>My Progress</div>
+                        <div onClick={() => this.onSelectTab("Live Code Review")} className={[styles.tab, (this.state.selectedTab === "Live Code Review" ? styles.selectedTab : "")].join(" ")}>Live Code Review</div>
                         <div onClick={() => this.onSelectTab("My Accomplishments")} className={[styles.tab, (this.state.selectedTab === "My Accomplishments" ? styles.selectedTab : "")].join(" ")}>My Accomplishments</div>
+                        {!!(codeAssess?.student?.joinedClass?.id === this.props.selectedClass?.id) ?
+                            <button onClick={this.onExitClass} className={[styles.button, styles.exit_btn].join(" ")}>Exit Class</button> :
+                            <button onClick={this.onJoinClass} className={[styles.button, styles.join_btn].join(" ")}>Join</button>
+                        }
                     </div>
                     <div className={styles.selectedTabContentContainer}>
                         {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                             <>
-                                {this.state.selectedTab === "Overview" && <div className={styles.overviewContainer}>
-                                    <div className={styles.overviewClassName}>Name: {this.props.selectedClass?.name}</div>
-                                    <div className={styles.overviewClassSection}>{this.props.selectedClass?.section}</div>
-                                    <div className={styles.overviewClassSubject}>{this.props.selectedClass?.subject}</div>
-                                    <div className={styles.overviewClassRoom}>{this.props.selectedClass?.room}</div>
-                                    <div className={styles.overviewHasJoined}>
-                                        {!!(codeAssess?.student?.joinedClass?.id === this.props.selectedClass?.id) ?
-                                            <button onClick={this.onExitClass} className={[styles.button, styles.exit_btn].join(" ")}>Exit Class</button> :
-                                            <button onClick={this.onJoinClass} className={[styles.button, styles.join_btn].join(" ")}>Join</button>
-                                        }
-                                    </div>
-                                </div>
-                                }
-                                {this.state.selectedTab === "My Progress" && <div className={styles.myAssessmentContainer}>
+                                {this.state.selectedTab === "Live Code Review" && <div className={styles.myAssessmentContainer}>
                                     <StudentAssessment classId={this.props.selectedClass?.id} />
                                 </div>
                                 }

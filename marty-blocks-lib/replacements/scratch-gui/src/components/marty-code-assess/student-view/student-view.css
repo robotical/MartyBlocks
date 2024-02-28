@@ -127,10 +127,12 @@
 
 .exit_btn {
   background-color: #c96075;
+  margin-left: 20px;
 }
 
 .join_btn {
   background-color: #60c9b2;
+  margin-left: 20px;
 }
 
 .exitConfirmationModal {

@@ -338,8 +338,8 @@ const GUIComponent = (props) => {
                       >
                         <img draggable={false} src={codeAssessIcon} />
                         <FormattedMessage
-                          defaultMessage="Classroom"
-                          description="Button to toggle Classroom tab"
+                          defaultMessage="Code Review"
+                          description="Button to toggle Code Review tab"
                           id="gui.gui.toggleCodeAssessTab"
                         />
                       </Tab>

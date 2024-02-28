@@ -1,66 +1,66 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./details-card.css";
-import martyImg from "../static/marty.png";
 
 class DetailsCard extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  render() {
-    let detailsParagraphJSX;
-    let firstParagraphJSX;
-    if (this.props.totalScore <= 10) {
-      firstParagraphJSX = (
-        <p className={styles.paragraphTitle}>
-          Guess what level your project is at...
-        </p>
-      );
-      detailsParagraphJSX = (
-        <div className={styles.detailsParagraphContainer}>
-          <p className={styles.paragraphIntense}>BEGINNER BUDDY!</p>
-          <p className={styles.paragraph}>
-            You've just started an awesome journey. You're doing great, keep exploring!
-          </p>
-        </div>
-      );
-    } else if (this.props.totalScore > 10 && this.props.totalScore < 24) {
-      firstParagraphJSX = (
-        <p className={styles.paragraphTitle}>
-          Ready to find out your project level?
-        </p>
-      );
-      detailsParagraphJSX = (
-        <div className={styles.detailsParagraphContainer}>
-          <p className={styles.paragraphIntense}>SUPER EXPLORER!</p>
-          <p className={styles.paragraph}>Fantastic job, you're really getting the hang of this. Keep up the fun work!</p>
-        </div>
-      );
-    } else if (this.props.totalScore >= 24) {
-      firstParagraphJSX = (
-        <p className={styles.paragraphTitle}>
-          Let's see how far you've come in your project...
-        </p>
-      );
-      detailsParagraphJSX = (
-        <div className={styles.detailsParagraphContainer}>
-          <p className={styles.paragraphIntense}>MASTER INVENTOR!</p>
-          <p className={styles.paragraph}>Wow, you're soaring high! Keep shining bright at the top!</p>
-        </div>
-      );
-    }
 
+  render() {
+
+    let lisJSX = <><li className={styles.contentListItem}>
+      <b>Algorithms</b> are essential programming instructions designed to solve specific problems. You can step-up your algorithm game by <b>using different conditional statements, operators, and synchronisation and messaging methods</b>.
+    </li>
+      <li className={styles.contentListItem}>
+        <b>Analysis</b> measures your understanding of both the problem and the solution. You can improve your analysis skills by <b>using helpful names for variables and functions, and by using comments and debugging tools</b>.
+      </li>
+      <li className={styles.contentListItem}>
+        <b>Decomposition</b> involves segmenting a problem into more manageable sub-problems. You can enhance your decomposition skills by <b>breaking down your project into smaller parts, using events that facilitate code parallelism and sequencing</b>.
+      </li>
+      <li className={styles.contentListItem}>
+        <b>Generalisation & Abstraction:</b> generalisation refers to formulating broad solutions applicatble to various scenarios, while abstraction focuses on distilling complex concepts to their essential elements. You can improve your generalisation and abstraction skills by <b>using variables, and functions</b>.
+      </li>
+      <li className={styles.contentListItem}>
+        <b>Pattern Recogniction & Data Representation:</b> pattern recognition entials identifying similarities and differences between different data sets, while data representation involves presenting data in a meaningful way. You can enhance your pattern recognition and data representation skills by <b>using diverse data types, use of loops and variable operations</b>.
+      </li></>;
+
+    if (this.props.scoresOrBadges === "badges") {
+      lisJSX = <>
+        <li className={styles.contentListItem}>
+          <b>Conditionals</b> use of conditional statements and operators.
+        </li>
+        <li className={styles.contentListItem}>
+          <b>Loops</b> use of all kinds of loops.
+        </li>
+        <li className={styles.contentListItem}>
+          <b>Functions</b> use of functions with and without parameters.
+        </li>
+        <li className={styles.contentListItem}>
+          <b>Operators</b> use of all kinds of operators.
+        </li>
+        <li className={styles.contentListItem}>
+          <b>Data Types</b> use of all kinds of data types.
+        </li>
+        <li className={styles.contentListItem}>
+          <b>Parallel Code</b> use of parallel code blocks and events.
+        </li>
+        <li className={styles.contentListItem}>
+          <b>Variables & Lists</b> use of variables and lists, as well as their operations.
+        </li>
+      </>;
+    }
     return (
       <div className={styles.outerContainer}>
         <div className={styles.titleRow}>
-          <div className={styles.martyImgContainer}>
-            <img className={styles.martyImg} src={martyImg} alt="marty-img" />
-          </div>
-          {/* <p>Score: {this.props.totalScore} / 29</p> */}
-          {firstParagraphJSX}
+          Tips & Tricks
         </div>
-        <div className={styles.contentRow}>{detailsParagraphJSX}</div>
+        <div className={styles.contentRow}>
+          <ul className={styles.contentList}>
+            {lisJSX}
+          </ul>
+        </div>
       </div>
     );
   }
@@ -68,6 +68,7 @@ class DetailsCard extends React.Component {
 
 DetailsCard.propTypes = {
   totalScore: PropTypes.number,
+  scoresOrBadges: PropTypes.string.isRequired,
 };
 
 export default DetailsCard;
