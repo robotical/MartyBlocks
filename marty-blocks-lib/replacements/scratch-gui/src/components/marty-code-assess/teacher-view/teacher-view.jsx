@@ -8,6 +8,7 @@ import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 import PropTypes from "prop-types";
 import ClassOverview from "./class-overview/class-overview.jsx";
+import AccountButton from "../account/account-button/account-button.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -67,13 +68,15 @@ class TeacherView extends React.Component {
                 <div className={styles.header}>
                     <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
                     <div onClick={() => this.onSelectTab("Students")} className={[styles.tab, (this.state.selectedTab === "Students" ? styles.selectedTab : "")].join(" ")}>Students</div>
-                    {/* <div onClick={() => this.onSelectTab("Class Performance")} className={[styles.tab, (this.state.selectedTab === "Class Performance" ? styles.selectedTab : "")].join(" ")}>Class Performance</div> */}
                     <div onClick={() => this.onSelectTab("Class Announcements")} className={[styles.tab, (this.state.selectedTab === "Class Announcements" ? styles.selectedTab : "")].join(" ")}>Class Announcements</div>
+                    <div className={styles.headerAccountButtonDiv}>
+                        <AccountButton class={this.props.selectedClass} students={this.state.selectedClassStudents || []} />
+                    </div>
                 </div>
                 <div className={styles.selectedTabContentContainer}>
                     {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                         <>
-                            {this.state.selectedTab === "Overview" && <ClassOverview class={this.props.selectedClass} students={this.state.selectedClassStudents} classId={this.props.selectedClass?.id}/>}
+                            {this.state.selectedTab === "Overview" && <ClassOverview class={this.props.selectedClass} students={this.state.selectedClassStudents} classId={this.props.selectedClass?.id} />}
                             {this.state.selectedTab === "Students" && <ClassStudents students={this.state.selectedClassStudents} classId={this.props.selectedClass?.id} />}
                             {/* {this.state.selectedTab === "Class Performance" && <div className={styles.liveStreamContainer}>
                                 <ClassPerformanceTab selectedClass={this.props.selectedClass} />

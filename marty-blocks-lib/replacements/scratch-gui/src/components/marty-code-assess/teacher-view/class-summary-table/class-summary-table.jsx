@@ -189,7 +189,7 @@ const minimiseString = (str) => {
     return minimisedStr;
 }
 
-const getLastScore = (dataArr) => {
+export const getLastScore = (dataArr) => {
     if (!dataArr || !dataArr.length) return 0;
     const lastScoreIdx = dataArr.length - 1;
     return dataArr[lastScoreIdx];
@@ -202,7 +202,7 @@ const getStylesForScore = (score) => {
     return { backgroundColor: "#009688" };
 }
 
-const getClassAverage = (data) => {
+export const getClassAverage = (data) => {
     let classAverage = {};
     let studentCount = Object.keys(data).length;
 

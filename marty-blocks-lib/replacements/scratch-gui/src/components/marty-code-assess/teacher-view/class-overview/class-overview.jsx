@@ -30,35 +30,8 @@ class ClassOverview extends React.Component {
         this.props.showTutorialCard("code-assess-teacher-overview-tab");
 
         this.props.class.getStudentDataForAllStudents().then((data) => {
-            if (!data || !data.length) return;
-            const mappedData = mapDataToStudents(data, this.props.students);
-            const mappedScoresOverTime = {};
-            for (const studentName in mappedData) {
-                mappedScoresOverTime[studentName] = mappedData[studentName].scoresOverTime;
-            }
-            const mappedTransformedDatas = {};
-            for (const studentName in mappedScoresOverTime) {
-                const transformedData = {};
-                const isTesting = !!codeAssess.isTestingWithMockData;
-                const normalisedData = new codeAssess.Preprocessor(mappedScoresOverTime[studentName])
-                    .sortData()
-                    .normaliseScores()
-                    // .calculateMovingMaxBasedOnDates(2, "hours")
-                    .calculateMovingMaxBasedOnDates(isTesting ? .9 : 2, isTesting ? "minutes" : "hours") // this is for testing
-                    .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
-                    .data
-                transformedData["Algorithms"] = normalisedData.algorithmsCompoScores?.leakyScores;
-                transformedData["Analysis"] = normalisedData.analysisCompoScores?.leakyScores;
-                transformedData["Decomposition"] = normalisedData.decompositionCompoScores?.leakyScores;
-                transformedData["Generalisation and Abstraction"] = normalisedData.generalisationAndAbstrCompoScores?.leakyScores;
-                transformedData["Pattern Recognition and Data Representation"] = normalisedData.patternRecAndDataRepCompoScores?.leakyScores;
-                transformedData["Dates"] = normalisedData.dates;
-                mappedTransformedDatas[studentName] = transformedData;
-            }
-            const alignedData = alignStudentData(mappedTransformedDatas);
-            console.log("mappedTransformedDatas", mappedTransformedDatas);
-            console.log("alignedData", alignedData);
-            this.setState({ tableData: calculateAverageForCategories(alignedData) });
+            const averages = rawStudentDataToAverages(data, this.props.students);
+            this.setState({ tableData: averages });
         });
     }
 
@@ -75,7 +48,6 @@ class ClassOverview extends React.Component {
         return (
             <div className={styles.overviewContainer}>
                 <div className={styles.overviewClassName}>{this.props.class?.name} || <span className={styles.overviewClassSection}>{this.props.class?.section}</span> <span className={styles.overviewClassSubject}>{this.props.class?.subject}</span></div>
-                {/* <div className={styles.overviewClassRoom}>{this.props.class?.room}</div> */}
                 <div className={styles.overviewTotalStudents}>Enrolled Students: {this.props.students.length}</div>
                 <ClassSummaryTable data={this.state.tableData} />
             </div>
@@ -98,6 +70,39 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview))
+
+
+export const rawStudentDataToAverages = (data, students) => {
+    if (!data || !data.length) return;
+    const mappedData = mapDataToStudents(data, students);
+    const mappedScoresOverTime = {};
+    for (const studentName in mappedData) {
+        mappedScoresOverTime[studentName] = mappedData[studentName].scoresOverTime;
+    }
+    const mappedTransformedDatas = {};
+    for (const studentName in mappedScoresOverTime) {
+        const transformedData = {};
+        const isTesting = !!codeAssess.isTestingWithMockData;
+        const normalisedData = new codeAssess.Preprocessor(mappedScoresOverTime[studentName])
+            .sortData()
+            .normaliseScores()
+            // .calculateMovingMaxBasedOnDates(2, "hours")
+            .calculateMovingMaxBasedOnDates(isTesting ? .9 : 2, isTesting ? "minutes" : "hours") // this is for testing
+            .calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
+            .data
+        transformedData["Algorithms"] = normalisedData.algorithmsCompoScores?.leakyScores;
+        transformedData["Analysis"] = normalisedData.analysisCompoScores?.leakyScores;
+        transformedData["Decomposition"] = normalisedData.decompositionCompoScores?.leakyScores;
+        transformedData["Generalisation and Abstraction"] = normalisedData.generalisationAndAbstrCompoScores?.leakyScores;
+        transformedData["Pattern Recognition and Data Representation"] = normalisedData.patternRecAndDataRepCompoScores?.leakyScores;
+        transformedData["Dates"] = normalisedData.dates;
+        mappedTransformedDatas[studentName] = transformedData;
+    }
+    const alignedData = alignStudentData(mappedTransformedDatas);
+    console.log("mappedTransformedDatas", mappedTransformedDatas);
+    console.log("alignedData", alignedData);
+    return calculateAverageForCategories(alignedData);
+}
 
 const mapDataToStudents = (studentData, students) => {
     if (!studentData || !students || !studentData.length || !students.length) return {};
