@@ -75,6 +75,9 @@
     color: #000;
     transition: color 0.3s;
 }
+.dropdownItemText_Remove {
+    color: #ff0000;
+}
 
 .modal {
     width: max-content;

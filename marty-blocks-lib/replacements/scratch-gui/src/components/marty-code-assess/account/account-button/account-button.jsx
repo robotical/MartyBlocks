@@ -6,6 +6,7 @@ import styles from './account-button.css';
 import accountIcon from "./icon--account.svg";
 import Modal from "../../../../containers/modal.jsx";
 import ExportDataModalTeacher from '../export-data-modal/teacher/export-data-modal__teacher.jsx';
+import RemoveAccountModal from '../remove-account-modal/remove-account-modal.jsx';
 
 
 class AccountButton extends React.Component {
@@ -65,6 +66,8 @@ class AccountButton extends React.Component {
                 class={this.props.class}
                 onClose={this.onCloseModal}
             />, 'Export Data'); 
+        } else if (item === 'removeAccount') {
+            this.onSetModal(<RemoveAccountModal onClose={this.onCloseModal}/>, 'Remove Account');
         }
         this.setState({ dropdownOpen: false });
     }
@@ -108,6 +111,9 @@ class AccountButton extends React.Component {
                         </div>
                         <div className={styles.dropdownItem}>
                             <div className={styles.dropdownItemText} onClick={(event) => this.dropdownItemClicked(event, 'logout')}>Sign Out</div>
+                        </div>
+                        <div className={styles.dropdownItem}>
+                            <div className={[styles.dropdownItemText, styles.dropdownItemText_Remove].join(" ")} onClick={(event) => this.dropdownItemClicked(event, 'removeAccount')}>Remove Account</div>
                         </div>
                     </div>}
                 </div>

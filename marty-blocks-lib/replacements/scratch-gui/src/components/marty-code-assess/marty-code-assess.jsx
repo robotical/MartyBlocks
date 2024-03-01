@@ -76,8 +76,11 @@ class MartyCodeAssess extends React.Component {
     if ((prevState.selectedClassIdx !== this.state.selectedClassIdx) || (prevState.classes !== this.state.classes)) {
       this.setState({ isLoading: true });
       const selectedClass = this.state.classes[this.state.selectedClassIdx];
-      if (selectedClass) {
+      if (selectedClass && codeAssess.userProfile) {
         await codeAssess.createClassIfDoesntExist(selectedClass.id, selectedClass.name, codeAssess.userProfile.id);
+      }
+      if (!codeAssess.isUserLoggedIn && this.state.classes.length > 0) {
+        this.setState({ classes: [] });
       }
       this.setState({ isLoading: false });
     }
@@ -94,7 +97,7 @@ class MartyCodeAssess extends React.Component {
   }
 
   async setUserRole(selectedClass) {
-    const teacherOrStudent = await codeAssess.userProfile.determineIfStudentOrTeacherInClass(selectedClass.id);
+    const teacherOrStudent = await codeAssess.userProfile?.determineIfStudentOrTeacherInClass(selectedClass.id);
     if (teacherOrStudent) {
       await codeAssess.setStudentOrTeacher(teacherOrStudent);
     }
