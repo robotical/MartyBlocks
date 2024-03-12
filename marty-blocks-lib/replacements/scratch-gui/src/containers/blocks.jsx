@@ -97,6 +97,7 @@ class Blocks extends React.Component {
             {rtl: this.props.isRtl, toolbox: this.props.toolboxXML}
         );
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
+        window.workspace = this.workspace;
 
         // Register buttons under new callback keys for creating variables,
         // lists, and procedures from extensions.

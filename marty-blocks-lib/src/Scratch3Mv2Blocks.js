@@ -1154,12 +1154,14 @@ class Scratch3Mv2Blocks {
       servoChoice = 0;
     }
     const servoObj = JSON.parse(mv2Interface.servos);
-    return servoObj.smartServos[servoChoice].current;
+    if (!servoObj || !servoObj.smartServos || !servoObj.smartServos[servoChoice]) return 0;
+    return servoObj.smartServos[servoChoice].current || 0;
   }
 
   accelerometerX(args, util) {
     //console.log('Report accelerometer reading!');
     const accelObj = JSON.parse(mv2Interface.accel);
+    if (!accelObj || !accelObj.accel || !accelObj.accel.x) return 0;
     const xAccel = accelObj.accel.x;
     return xAccel;
   }
@@ -1167,6 +1169,7 @@ class Scratch3Mv2Blocks {
   accelerometerY(args, util) {
     //console.log('Report accelerometer reading!');
     const accelObj = JSON.parse(mv2Interface.accel);
+    if (!accelObj || !accelObj.accel || !accelObj.accel.y) return 0;
     const yAccel = accelObj.accel.y;
     return yAccel;
   }
@@ -1174,6 +1177,7 @@ class Scratch3Mv2Blocks {
   accelerometerZ(args, util) {
     //console.log('Report accelerometer reading!');
     const accelObj = JSON.parse(mv2Interface.accel);
+    if (!accelObj || !accelObj.accel || !accelObj.accel.z) return 0;
     const zAccel = accelObj.accel.z;
     return zAccel;
   }
