@@ -15,10 +15,9 @@ import { selectLocale } from '../../reducers/locales.js';
 import styles from './settings-menu.css';
 
 import dropdownCaret from './dropdown-caret.svg';
-
 // languages to include in the list of available languages
 const languagesToInclude = [
-    "el", "en", "bg", "ja", "zh-cn", "zh-tw", // fully translated languages
+    "el", "en", "bg", "ja", "zh-cn", "zh-tw", "pl", // fully translated languages
     "de", "nl", "cs", "ru", "es", "fr", // partially translated languages
 ];
 // creating a list that has only the languages to ingore (all languages BUT the ones to include)

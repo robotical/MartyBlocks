@@ -490,7 +490,6 @@ Blockly.Msg.SENSING_USERNAME = 'username';
 Blockly.Msg.SENSING_USERID = 'user id';
 
 // MARTY V2 sensing blocks
-
 Blockly.Msg.MV2_BATTERYLEVEL = '%1 %2 Remaining battery (%)';
 Blockly.Msg.MV2_POSITION = '%1 %2 Position of %3 joint (in deg from \'zero\')';
 Blockly.Msg.MV2_CURRENT = '%1 %2 Current at %3 joint (in mA)';
@@ -535,11 +534,14 @@ Blockly.Msg.MV2_STOPSOUNDS = '%1 %2 Stop all sounds';
 
 
 // MARTY V2 block drop-down options
+// MARTY V2 sensing blocks options
+Blockly.Msg.DROPDOWN_OPTION_SELECT  = 'Select';
+Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND = 'No LED addons found';
+
 Blockly.Msg.DROPDOWN_OPTION_STOP_IMMEDIATELY = 'immediately';
 Blockly.Msg.DROPDOWN_OPTION_STOP_AFTER_MOVE = 'after move';
 Blockly.Msg.DROPDOWN_OPTION_LEDEYESLEFT = 'Left eye';
 Blockly.Msg.DROPDOWN_OPTION_LEDEYESRIGHT = 'Right eye';
-Blockly.Msg.DROPDOWN_OPTION_LEDEYESBOTH = 'Both eyes';
 Blockly.Msg.DROPDOWN_OPTION_PATTERN_PINWHEEL = 'pinwheel';
 Blockly.Msg.DROPDOWN_OPTION_PATTERN_SHOWOFF = 'show-off';
 
@@ -668,3 +670,4 @@ Blockly.Msg.COLOUR_CYAN = 'Cyan';
 Blockly.Msg.COLOUR_BLUE = 'Blue';
 Blockly.Msg.COLOUR_PURPLE = 'Purple';
 Blockly.Msg.COLOUR_PINK = 'Pink';
+

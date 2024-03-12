@@ -306,8 +306,8 @@ Blockly.Extensions.register(
     this.getInput("SERVOCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
         var options = [
-          ["Select", "Select"],
-          ["No sensor found", "No sensor found"],
+          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
         if (!mv2Interface.isConnected) return options;
         const servoObj = JSON.parse(mv2Interface.servos);
@@ -348,8 +348,8 @@ Blockly.Extensions.register(
     this.getInput("SERVOCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
         var options = [
-          ["Select", "Select"],
-          ["No sensor found", "No sensor found"],
+          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
         if (!mv2Interface.isConnected) return options;
         const servoObj = JSON.parse(mv2Interface.servos);
@@ -390,8 +390,8 @@ Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
       var defaultOptions = [
-        ["Select", "Select"],
-        ["No sensor found", "No sensor found"],
+        [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+        [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
       if (!mv2Interface.isConnected || !mv2Interface.addons)
         return defaultOptions;
@@ -419,8 +419,8 @@ Blockly.Extensions.register(
     this.getInput("SENSORCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
-          ["Select", "Select"],
-          ["No sensor found", "No sensor found"],
+          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
         if (!mv2Interface.isConnected || !mv2Interface.addons)
           return defaultOptions;
@@ -444,8 +444,8 @@ Blockly.Extensions.register("dynamic_menu_sensor_light_extension", function () {
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
       var defaultOptions = [
-        ["Select", "Select"],
-        ["No sensor found", "No sensor found"],
+        [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+        [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
       if (!mv2Interface.isConnected || !mv2Interface.addons)
         return defaultOptions;
@@ -468,8 +468,8 @@ Blockly.Extensions.register("dynamic_menu_sensor_noise_extension", function () {
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
       var defaultOptions = [
-        ["Select", "Select"],
-        ["No sensor found", "No sensor found"],
+        [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+        [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
       if (!mv2Interface.isConnected || !mv2Interface.addons)
         return defaultOptions;
@@ -495,8 +495,8 @@ Blockly.Extensions.register(
     this.getInput("BOARDTYPE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
-          ["Select", "Select"],
-          ["No LED addons found", "No LED addons found"],
+          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
         if (!mv2Interface.isConnected || !mv2Interface.addons)
           return defaultOptions;
@@ -580,7 +580,7 @@ Blockly.Extensions.register(
     this.getInput("SIDE").appendField(
       new Blockly.FieldDropdown(function () {
         var defaultOptions = [
-          ["Select", "Select"],
+          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
           ["No LED eyes found", "No LED eyes found"],
         ];
         if (!mv2Interface.isConnected || !mv2Interface.addons)
@@ -597,7 +597,7 @@ Blockly.Extensions.register(
           ) {
             if (!bothOptionAdded) {
               addonOptions.push([
-                Blockly.Msg.DROPDOWN_OPTION_LEDEYESBOTH,
+                Blockly.Msg.DROPDOWN_OPTION_BOTH_EYES,
                 RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE,
               ]);
               bothOptionAdded = true;

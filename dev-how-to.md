@@ -1,4 +1,4 @@
-#### How to add a new block
+### How to add a new block
 ###### Relevant files: 
 - `marty-blocks-lib/src/Scratch3Mv2Blocks.js` 
 - `marty-blocks-lib/src/MartyBlocksToolbox.js` 
@@ -11,6 +11,18 @@ Step 2: in `marty-blocks-lib/src/MartyBlocksToolbox.js`, add the block to the UI
 Step 3: in `marty-blocks-lib/replacements/scratch-blocks/blocks_vertical/mv2.js`, add the blockly block definition
 Step 4: in `marty-blocks-lib/replacements/scratch-blocks/msg/messages.js`, add the name of the block to the list of blocks that need to be translated
 Step 5: in `marty-blocks-lib/replacements/scratch-blocks/msg/scratch_msgs.js`, add the translation of the block
+
+### How to add translations
+###### Relevant files:  
+- `marty-blocks-lib/replacements/scratch-blocks/msg/messages.js` 
+- `marty-blocks-lib/replacements/scratch-blocks/msg/scratch_msgs.js`
+- `marty-blocks-lib/replacements/scratch-gui/src/components/menu-bar/language-menu.jsx`
+- `marty-blocks-lib/replacements/scratch-vm/src/extensions/marty_martymachine/index.js`
+
+Step 1: if this is a new language, go to the `language-menu.jsx` file and add its ISO to the list of languages to include.
+Step 2: if there are new blocks, add their english version in `messages.js` 
+Step 2: go to `scratch_msgs.js`, look for the language ISO code and add the translations for the new blocks
+Step 3: go to `marty_martymachine/index.js` and add the translations for the new blocks there as well
 
 ### How to add a new modal
 ##### RELEVANT FILES: 

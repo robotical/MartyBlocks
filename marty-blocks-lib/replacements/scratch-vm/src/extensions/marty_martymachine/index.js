@@ -17,7 +17,8 @@ const Message = {
         'ko': 'Machine Learning 모델 불러오기[MODEL_NAME]',
         'zh-cn': '加载Machine Learning模型[MODEL_NAME]',
         'zh-tw': '載入Machine Learning模型[MODEL_NAME]',
-        'el': 'Φόρτωση μοντέλου Μηχανικής Μάθησης [MODEL_NAME]'
+        'el': 'Φόρτωση μοντέλου Μηχανικής Μάθησης [MODEL_NAME]',
+        'pl': 'Załaduj model uczenia maszynowego [MODEL_NAME]',
     },
     image_classification_model_url: {
         'ja': '画像分類モデルURL[URL]',
@@ -25,14 +26,17 @@ const Message = {
         'en': 'image classification model URL [URL]',
         'ko': '이미지 분류 모델 URL [URL]',
         'zh-tw': '影像分類模型網址[URL]',
-        'el': 'Διεύθυνση URL μοντέλου ταξινόμησης εικόνας [URL]'
+        'el': 'Διεύθυνση URL μοντέλου ταξινόμησης εικόνας [URL]',
+        'pl': 'Adres URL modelu klasyfikacji obrazu [URL]'
     },
     image_classification_sample_model_url: {
         'ja': 'https://teachablemachine.withgoogle.com/models/0rX_3hoH/',
         'ja-Hira': 'https://teachablemachine.withgoogle.com/models/0rX_3hoH/',
         'en': ' ',
         'ko': ' ',
-        'zh-tw': ' '
+        'zh-tw': ' ',
+        'el': ' ',
+        'pl': ' '
     },
     sound_classification_model_url: {
         'ja': '音声分類モデルURL[URL]',
@@ -40,14 +44,17 @@ const Message = {
         'en': 'sound classification model URL [URL]',
         'ko': '소리 분류 모델 URL [URL]',
         'zh-tw': '聲音分類模型網址[URL]',
-        'el': 'Διεύθυνση URL μοντέλου ταξινόμησης ήχου [URL]'
+        'el': 'Διεύθυνση URL μοντέλου ταξινόμησης ήχου [URL]',
+        'pl': 'Adres URL modelu klasyfikacji dźwięku [URL]'
     },
     sound_classification_sample_model_url: {
         'ja': 'https://teachablemachine.withgoogle.com/models/xP0spGSB/',
         'ja-Hira': 'https://teachablemachine.withgoogle.com/models/xP0spGSB/',
         'en': ' ',
         'ko': ' ',
-        'zh-tw': ' '
+        'zh-tw': ' ',
+        'el': ' ',
+        'pl': ' '
     },
     classify_image: {
         'ja': '画像を分類する',
@@ -55,7 +62,8 @@ const Message = {
         'en': 'classify image',
         'ko': '이미지 분류하기',
         'zh-tw': '影像分類',
-        'el': 'Ταξινόμηση εικόνας'
+        'el': 'Ταξινόμηση εικόνας',
+        'pl': 'Klasyfikuj obraz'
     },
     image_label: {
         'ja': '画像ラベル',
@@ -63,7 +71,8 @@ const Message = {
         'en': 'image label',
         'ko': '이미지 라벨',
         'zh-tw': '影像標籤',
-        'el': 'Ετικέτα εικόνας'
+        'el': 'Ετικέτα εικόνας',
+        'pl': 'Etykieta obrazu'
     },
     sound_label: {
         'ja': '音声ラベル',
@@ -71,7 +80,8 @@ const Message = {
         'en': 'sound label',
         'ko': '소리 라벨',
         'zh-tw': '聲音標籤',
-        'el': 'Ετικέτα ήχου'
+        'el': 'Ετικέτα ήχου',
+        'pl': 'Etykieta dźwięku'
     },
     when_received_block: {
         'ja': '画像ラベル[LABEL]を受け取ったとき',
@@ -80,7 +90,8 @@ const Message = {
         'ko': '[LABEL] 이미지 라벨을 받았을 때:',
         'zh-cn': '接收到类别[LABEL]时',
         'zh-tw': '接收到影像標籤:[LABEL]時',
-        'el': 'Όταν ληφθεί ετικέτα εικόνας: [LABEL]'
+        'el': 'Όταν ληφθεί ετικέτα εικόνας: [LABEL]',
+        'pl': 'Kiedy otrzymano etykietę obrazu: [LABEL]'
     },
     is_image_label_detected: {
         'ja': '[LABEL]の画像が見つかった',
@@ -88,7 +99,8 @@ const Message = {
         'en': 'image [LABEL] detected',
         'ko': '[LABEL] 이미지가 감지됨',
         'zh-tw': '影像[LABEL]被偵測？',
-        'el': 'Εικόνα [LABEL] ανιχνεύθηκε'
+        'el': 'Εικόνα [LABEL] ανιχνεύθηκε',
+        'pl': 'Wykryto obraz [LABEL]'
     },
     is_sound_label_detected: {
         'ja': '[LABEL]の音声が聞こえた',
@@ -96,7 +108,8 @@ const Message = {
         'en': 'sound [LABEL] detected',
         'ko': '[LABEL] 소리가 감지됨',
         'zh-tw': '聲音[LABEL]被偵測？',
-        'el': '[LABEL] ήχου ανιχνεύθηκε'
+        'el': '[LABEL] ήχου ανιχνεύθηκε',
+        'pl': 'Wykryto dźwięk [LABEL]'
     },
     image_label_confidence: {
         'ja': '画像ラベル[LABEL]の確度',
@@ -104,7 +117,8 @@ const Message = {
         'en': 'confidence of image [LABEL]',
         'ko': '[LABEL] 이미지 신뢰도',
         'zh-tw': '影像置信度[LABEL]',
-        'el': 'Εμπιστοσύνη της εικόνας [LABEL]'
+        'el': 'Εμπιστοσύνη της εικόνας [LABEL]',
+        'pl': 'Pewność obrazu [LABEL]'
     },
     sound_label_confidence: {
         'ja': '音声ラベル[LABEL]の確度',
@@ -112,7 +126,8 @@ const Message = {
         'en': 'confidence of sound [LABEL]',
         'ko': '[LABEL] 소리 신뢰도',
         'zh-tw': '聲音置信度[LABEL]',
-        'el': 'Εμπιστοσύνη του ήχου [LABEL]'
+        'el': 'Εμπιστοσύνη του ήχου [LABEL]',
+        'pl': 'Pewność dźwięku [LABEL]'
     },
     when_received_sound_label_block: {
         'ja': '音声ラベル[LABEL]を受け取ったとき',
@@ -121,7 +136,8 @@ const Message = {
         'zh-cn': '接收到声音类别[LABEL]时',
         'ko': '[LABEL] 소리 라벨을 받았을 때:',
         'zh-tw': '接收到聲音標籤[LABEL]時',
-        'el': 'Όταν ληφθεί ετικέτα ήχου: [LABEL]'
+        'el': 'Όταν ληφθεί ετικέτα ήχου: [LABEL]',
+        'pl': 'Kiedy otrzymano etykietę dźwięku: [LABEL]'
     },
     label_block: {
         'ja': 'ラベル',
@@ -130,7 +146,8 @@ const Message = {
         'zh-cn': '标签',
         'ko': '라벨',
         'zh-tw': '標籤',
-        'el': 'Ετικέτα'
+        'el': 'Ετικέτα',
+        'pl': 'Etykieta'
     },
     any: {
         'ja': 'のどれか',
@@ -139,7 +156,8 @@ const Message = {
         'zh-cn': '任何',
         'ko': '어떤',
         'zh-tw': '任何',
-        'el': 'Οποιοδήποτε'
+        'el': 'Οποιοδήποτε',
+        'pl': 'dowolny'
     },
     any_without_of: {
         'ja': 'どれか',
@@ -148,7 +166,8 @@ const Message = {
         'ko': '어떤',
         'zh-cn': '任何',
         'zh-tw': '任何',
-        'el': 'Οποιοδήποτε'
+        'el': 'Οποιοδήποτε',
+        'pl': 'dowolny'
     },
     all: {
         'ja': 'の全て',
@@ -157,7 +176,8 @@ const Message = {
         'ko': '모든',
         'zh-cn': '所有',
         'zh-tw': '全部',
-        'el': 'Όλα'
+        'el': 'Όλα',
+        'pl': 'wszystkie'
     },
     toggle_classification: {
         'ja': 'ラベル付けを[CLASSIFICATION_STATE]にする',
@@ -166,7 +186,8 @@ const Message = {
         'ko': '라벨 분류 [CLASSIFICATION_STATE]',
         'zh-cn': '[CLASSIFICATION_STATE]分类',
         'zh-tw': '[CLASSIFICATION_STATE]分類',
-        'el': 'Ενεργοποίηση ταξινόμησης [CLASSIFICATION_STATE]'
+        'el': 'Ενεργοποίηση ταξινόμησης [CLASSIFICATION_STATE]',
+        'pl': 'Przełącz klasyfikację [CLASSIFICATION_STATE]'
     },
     set_confidence_threshold: {
         'ja': '確度のしきい値を[CONFIDENCE_THRESHOLD]にする',
@@ -174,7 +195,8 @@ const Message = {
         'en': 'set confidence threshold [CONFIDENCE_THRESHOLD]',
         'ko': '신뢰도 기준 설정 [CONFIDENCE_THRESHOLD]',
         'zh-tw': '設定置信度閾值[CONFIDENCE_THRESHOLD]',
-        'el': 'Ορισμός ορίου εμπιστοσύνης [CONFIDENCE_THRESHOLD]'
+        'el': 'Ορισμός ορίου εμπιστοσύνης [CONFIDENCE_THRESHOLD]',
+        'pl': 'Ustaw próg pewności [CONFIDENCE_THRESHOLD]'
     },
     get_confidence_threshold: {
         'ja': '確度のしきい値',
@@ -182,7 +204,8 @@ const Message = {
         'en': 'confidence threshold',
         'ko': '신뢰도 기준',
         'zh-tw': '置信度閾值',
-        'el': 'Όριο εμπιστοσύνης'
+        'el': 'Όριο εμπιστοσύνης',
+        'pl': 'Próg pewności'
     },
     set_classification_interval: {
         'ja': 'ラベル付けを[CLASSIFICATION_INTERVAL]秒間に1回行う',
@@ -191,7 +214,8 @@ const Message = {
         'zh-cn': '每隔[CLASSIFICATION_INTERVAL]秒标记一次',
         'ko': '매 [CLASSIFICATION_INTERVAL]초마다 라벨 분류하기',
         'zh-tw': '每隔[CLASSIFICATION_INTERVAL]秒標記一次',
-        'el': 'Ετικέτα κάθε [CLASSIFICATION_INTERVAL] δευτερόλεπτα'
+        'el': 'Ετικέτα κάθε [CLASSIFICATION_INTERVAL] δευτερόλεπτα',
+        'pl': 'Etykietuj raz na [CLASSIFICATION_INTERVAL] sekund'
     },
     video_toggle: {
         'ja': 'ビデオを[VIDEO_STATE]にする',
@@ -200,7 +224,8 @@ const Message = {
         'zh-cn': '[VIDEO_STATE]摄像头',
         'ko': '비디오 화면 [VIDEO_STATE]',
         'zh-tw': '視訊設為[VIDEO_STATE]',
-        'el': 'Ενεργοποίηση βίντεο [VIDEO_STATE]'
+        'el': 'Ενεργοποίηση βίντεο [VIDEO_STATE]',
+        'pl': 'Przełącz wideo [VIDEO_STATE]'
     },
     on: {
         'ja': '入',
@@ -209,7 +234,8 @@ const Message = {
         'ko': '켜기',
         'zh-cn': '开启',
         'zh-tw': '開啟',
-        'el': 'Ενεργοποίηση'
+        'el': 'Ενεργοποίηση',
+        'pl': 'włącz'
     },
     off: {
         'ja': '切',
@@ -218,7 +244,8 @@ const Message = {
         'ko': '멈추기',
         'zh-cn': '关闭',
         'zh-tw': '關閉',
-        'el': 'Απενεργοποίηση'
+        'el': 'Απενεργοποίηση',
+        'pl': 'wyłącz'
     },
     video_on_flipped: {
         'ja': '左右反転',
@@ -227,7 +254,8 @@ const Message = {
         'ko': '좌우 뒤집기',
         'zh-cn': '镜像开启',
         'zh-tw': '翻轉',
-        'el': 'Αναστροφή'
+        'el': 'Αναστροφή',
+        'pl': 'włączony odwrócony'
     },
     clear_model: {
         'ja': 'モデルをクリアする',
@@ -236,11 +264,12 @@ const Message = {
         'ko': '모델 지우기',
         'zh-cn': '清除模型',
         'zh-tw': '清除模型',
-        'el': 'Καθαρισμός μοντέλου'
+        'el': 'Καθαρισμός μοντέλου',
+        'pl': 'wyczyść model'
     }
 };
 
-const AvailableLocales = ['en', 'ja', 'ja-Hira', 'ko', 'zh-cn', 'zh-tw', 'el'];
+const AvailableLocales = ['en', 'ja', 'ja-Hira', 'ko', 'zh-cn', 'zh-tw', 'el', 'pl'];
 
 class MartyMachineBlocks {
     constructor(runtime) {
