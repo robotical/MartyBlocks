@@ -125,14 +125,11 @@ const vmListenerHOC = function (WrappedComponent) {
             if (e.target.id !== "dummyInputToBringUpDeviceKeyboard") {
                 if (e.target !== document && e.target !== document.body) return;
             }
-            console.log("pass")
-
-            const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
+            const key = (!e.key || e.key === "Unidentified" || e.key === 'Dead') ? e.keyCode : e.key;
             this.props.vm.postIOData('keyboard', {
                 key: key,
                 isDown: true
             });
-
             // Prevent space/arrow key from scrolling the page.
             if (e.keyCode === 32 || // 32=space
                 (e.keyCode >= 37 && e.keyCode <= 40)) { // 37, 38, 39, 40 are arrows
@@ -142,7 +139,28 @@ const vmListenerHOC = function (WrappedComponent) {
         handleKeyUp(e) {
             // Always capture up events,
             // even those that have switched to other targets.
-            const key = (!e.key || e.key === 'Dead') ? e.keyCode : e.key;
+            let key = (!e.key || e.key === "Unidentified" || e.key === 'Dead') ? e.keyCode : e.key;
+
+            //for android chrome keycode fix
+            if (navigator.userAgent.match(/Android/i)) {
+
+                const inputValue = e.target.value;
+                let charKeyCode = e.keyCode || e.which;
+                let charKey = e.key;
+                if (charKeyCode == 0 || charKeyCode == 229) {
+                    charKeyCode = inputValue.charCodeAt(inputValue.length-1);
+                    charKey = inputValue.charAt(inputValue.length-1);
+                }
+                if (charKeyCode == 13) {
+                    charKey = 'Enter';
+                }
+                key = charKey;
+                this.props.vm.postIOData('keyboard', {
+                    key: key,
+                    isDown: true
+                });
+            }
+
             this.props.vm.postIOData('keyboard', {
                 key: key,
                 isDown: false

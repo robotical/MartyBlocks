@@ -8,12 +8,40 @@ class KeyboardCaller extends React.Component {
     constructor(props) {
         super(props);
         bindAll(this, [
-            'onClick'
+            'onClick',
+            'onInput',
+            'onFocus',
+            'setInputRef',
+            'handleKeyDown'
         ]);
+
+        this.state = {
+            inputValue: ""
+        };
+
+        this.inputRef = null;
     }
 
     onClick() {
         document.getElementById("dummyInputToBringUpDeviceKeyboard").focus();
+    }
+
+    onInput(e) {
+        this.setState({ inputValue: e.target.value });
+    }
+
+    onFocus() {
+        this.setState({ inputValue: "" });
+    }
+
+    setInputRef = (input) => {
+        this.inputRef = input;
+    }
+
+    handleKeyDown(e) {
+        setTimeout(() => {
+            this.inputRef.blur();
+        }, 500);
     }
 
     render() {
@@ -33,6 +61,11 @@ class KeyboardCaller extends React.Component {
                     />
                 </div>
                 <input
+                    ref={this.setInputRef}
+                    onInput={this.onInput}
+                    onKeyDown={this.handleKeyDown}
+                    onFocus={this.onFocus}
+                    value={this.state.inputValue}
                     id="dummyInputToBringUpDeviceKeyboard"
                     type="text"
                     style={{

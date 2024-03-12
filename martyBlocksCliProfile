@@ -14,7 +14,7 @@ export PATH=$(pyenv root)/shims:$PATH
 ## install python 2 and add it to path
 ## install Java Runtime Environment (JRE)
 
-# restoreScratch && installScratch && installMBLib && npmlinkAll && cpWebWorker && buildAllAndStart
+# removeNodeModules && restoreScratch && checkoutScratch && installScratch && installMBLib && npmlinkAll && cpWebWorker && buildAllAndStart
 
 ##################### Steps to set up the project #######################
 
