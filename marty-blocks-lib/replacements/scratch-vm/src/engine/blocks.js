@@ -9,6 +9,7 @@ const BlocksRuntimeCache = require('./blocks-runtime-cache');
 const log = require('../util/log');
 const Variable = require('./variable');
 const getMonitorIdForBlockWithArgs = require('../util/get-monitor-id');
+const ScratchBlocks = require('scratch-blocks');
 
 /**
  * @fileoverview
@@ -639,6 +640,18 @@ class Blocks {
                     // This block has an argument which needs to get separated out into
                     // multiple monitor blocks with ids based on the selected argument
                     const newId = getMonitorIdForBlockWithArgs(block.id, block.fields);
+
+                    // if the newId contains "Select" or "No LED Addons found", then we shoudln't create a new monitor block
+                    // and should uncheck
+                    if (newId.includes(ScratchBlocks.Msg.DROPDOWN_OPTION_SELECT) ||
+                        newId.includes(ScratchBlocks.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND)) {
+                        // uncheck the checkbox
+                        const flyout = window.workspace.getFlyout();
+                        flyout.setCheckboxState(block.id, false);
+                        return;
+                    }
+
+
                     // Note: we're not just constantly creating a longer and longer id everytime we check
                     // the checkbox because we're using the id of the block in the flyout as the base
 
