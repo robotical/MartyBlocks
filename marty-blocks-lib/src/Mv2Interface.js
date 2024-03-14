@@ -59,6 +59,7 @@ class Mv2Interface extends EventDispatcher {
     this.rssi = 0;
     this.servos = 0;
     this.accel = 0;
+    this.magneto = 0;
     this.commandPromise = null;
     this.systemInfo = null;
     this.mp3EncodingBitRate = null;

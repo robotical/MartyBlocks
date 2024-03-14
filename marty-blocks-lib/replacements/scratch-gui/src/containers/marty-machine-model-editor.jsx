@@ -214,15 +214,15 @@ class MartyMachineModelEditor extends React.Component {
         this.setState({});
     }
 
-    onStartRecordingSamples = async () => {
+    onStartRecordingSamples = async (classTitle) => {
         // select class 
-        let selectedClassIdx = this.trainingDataReducer.state.classes.findIndex(c => c.name === this.state.className);
+        let selectedClassIdx = this.trainingDataReducer.state.classes.findIndex(c => c.name === classTitle);
         if (selectedClassIdx === -1) {
-            this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: this.state.className } });
+            this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: classTitle } });
             selectedClassIdx = this.trainingDataReducer.state.classes.length - 1;
-            // MODEL_CLASSES.push({ name: this.state.className, samples: [] });
+            // MODEL_CLASSES.push({ name: classTitle, samples: [] });
         }
-        // selectedClass = MODEL_CLASSES.find(c => c.name === this.state.className);
+        // selectedClass = MODEL_CLASSES.find(c => c.name === classTitle);
         this.isRecording = true;
         this.setState({});
         

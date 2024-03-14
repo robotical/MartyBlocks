@@ -11,7 +11,6 @@ import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 
 import styles from './marty-machine-model-editor.css';
 
-import recordIcon from './icon--record.svg';
 import stopIcon from './icon--stop.svg';
 import MartyMachineModelPredictions from './predictions/predictions.jsx';
 import TfVisChart from './TfVisChart/TfVisChart.jsx';
@@ -27,7 +26,7 @@ const messages = defineMessages({
     model: {
         id: 'gui.martyMachineModelEditor.model',
         description: 'Label for the name of the model',
-        defaultMessage: 'Model'
+        defaultMessage: 'Model Name'
     },
     className: {
         id: 'gui.martyMachineModelEditor.className',
@@ -37,7 +36,7 @@ const messages = defineMessages({
     createNewClass: {
         id: 'gui.martyMachineModelEditor.createNewClass',
         description: 'Label for the name of the class',
-        defaultMessage: 'Create new class'
+        defaultMessage: 'Create class'
     },
     record: {
         id: 'gui.MartyMachineModelEditor.record',
@@ -107,6 +106,7 @@ const MartyMachineModelEditor = props => {
             <div className={styles.inputGroup}>
                 <Label text={props.intl.formatMessage(messages.model)}>
                     <BufferedInput
+                        style={{ width: '100px' }}
                         tabIndex="1"
                         type="text"
                         value={props.name}
@@ -114,73 +114,38 @@ const MartyMachineModelEditor = props => {
                     />
                 </Label>
             </div>
-            <p className={styles.betaTag}>
-                BETA<span className={styles.betaTagSpan}>{" "}(may contain bugs!)</span>
-            </p>
-        </div>
-        <div className={styles.row}>
-            <div className={styles.feedContainer}>
-                {feedJSX}
-            </div>
-            <div className={styles.trainingRunningContainer} style={{ width: PLOT_WIDTH, height: PLOT_HEIGHT }}>
-                {trainingOrRunningJSX}
-            </div>
-        </div>
-        <div className={classNames(styles.row, styles.rowReverse)}>
-            {!props.isModelLoaded && <div className={styles.inputGroup}>
-                <Label text={props.intl.formatMessage(messages.className)} spanStyle={{ marginRight: 0 }}>
-                    <MoreInfoButton modalTitle="Collect data for" contentComponent={MMCreateNewClass}>
-                        <div className={styles.moreInfoIconContainer}>
-                            <div className={styles.moreInfoIcon}>?</div>
-                        </div>
-                    </MoreInfoButton>
-                    <select className={styles.selectClassName} value={props.className} onChange={handleClassNameChangeFromSelect}>
-                        {props.modelClasses.length === 0 ? (
-                            <option disabled value="">
-                                Create a class first
-                            </option>
-                        ) : (
-                            props.modelClasses.map((option, index) => (
-                                <option key={index} value={option.name}>
-                                    {option.name}
-                                </option>
-                            ))
-                        )}
-                    </select>
-                    {/* <BufferedInput
-                        tabIndex="1"
-                        type="text"
-                        value={props.className}
-                        onSubmit={props.onClassNameChange}
-                    /> */}
-                </Label>
-            </div>}
-            <div className={styles.inputGroup}>
-                {props.isRecording ? (
+
+            {!props.isModelLoaded && <>
+                <div className={styles.inputGroup}>
+                    <Label text={props.intl.formatMessage(messages.createNewClass)} spanStyle={{ marginRight: 0 }}>
+                        <MoreInfoButton modalTitle="Create New Class" contentComponent={MMCreateNewClass}>
+                            <div className={styles.moreInfoIconContainer}>
+                                <div className={styles.moreInfoIcon}>?</div>
+                            </div>
+                        </MoreInfoButton>
+                        <BufferedInput
+                            style={{ width: '100px' }}
+                            tabIndex="1"
+                            type="text"
+                            value={props.className}
+                            onSubmit={props.onClassNameChange}
+                        />
+                    </Label>
+                </div>
+                <div className={styles.inputGroup}>
                     <button
-                        className={classNames(styles.roundButton, styles.stopButtonn)}
-                        title={props.intl.formatMessage(messages.stop)}
-                        onClick={props.onStopRecording}
+                        className={classNames(styles.roundButton, styles.trainButton)}
+                        title={props.intl.formatMessage(messages.createNewClass)}
+                        onClick={props.onCreateNewClass}
                     >
                         <img
                             draggable={false}
-                            src={stopIcon}
+                            src={addNewIcon}
                         />
                     </button>
-                ) : (
-                    <button
-                        className={classNames(styles.roundButton, styles.playButton, canBeRecorded ? '' : styles.buttonDisabled)}
-                        title={props.intl.formatMessage(messages.record)}
-                        onClick={props.onStartRecordingSamples}
-                        disabled={!canBeRecorded}
-                    >
-                        <img
-                            draggable={false}
-                            src={recordIcon}
-                        />
-                    </button>
-                )}
-            </div>
+                </div>
+
+            </>}
             <div className={styles.inputGroup}>
                 {props.isTraining ? <button
                     className={classNames(styles.roundButton, styles.stopButtonn)}
@@ -230,7 +195,23 @@ const MartyMachineModelEditor = props => {
                         Save
                     </button>}
             </div>
+
+            {/* <p className={styles.betaTag}>
+                BETA<span className={styles.betaTagSpan}>{" "}(may contain bugs!)</span>
+            </p> */}
         </div>
+
+        <div className={styles.row}>
+            <div className={styles.feedContainer}>
+                {feedJSX}
+            </div>
+            <div className={styles.trainingRunningContainer} style={{ width: PLOT_WIDTH, height: PLOT_HEIGHT }}>
+                {trainingOrRunningJSX}
+            </div>
+        </div>
+        {/* <div className={classNames(styles.row, styles.rowReverse)}>
+
+        </div> */}
 
         <div className={styles.modelClassesOuterContainer}>
             {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
@@ -255,8 +236,12 @@ const MartyMachineModelEditor = props => {
                             onClassNameSelected={props.onClassNameSelected}
                             key={classIndex}
                             subtitle={subtitle}
+                            canBeRecorded={canBeRecorded}
+                            isRecording={props.isRecording}
                             modelClass={modelClass}
                             onRemoveClass={onRemoveClass}
+                            onStartRecordingSamples={props.onStartRecordingSamples}
+                            onStopRecording={props.onStopRecording}
                             onRemoveSample={props.onRemoveSample.bind(this, classIndex)}
                             modelType={props.modelType} />
                     })}
@@ -276,36 +261,6 @@ const MartyMachineModelEditor = props => {
                     })}
                 </div>
             </div>}
-            <div className={classNames(styles.row, styles.rowReverse)}>
-                <div className={styles.inputGroup}>
-                    <Label text={props.intl.formatMessage(messages.createNewClass)} spanStyle={{ marginRight: 0 }}>
-                        <MoreInfoButton modalTitle="Create New Class" contentComponent={MMCreateNewClass}>
-                            <div className={styles.moreInfoIconContainer}>
-                                <div className={styles.moreInfoIcon}>?</div>
-                            </div>
-                        </MoreInfoButton>
-                        <BufferedInput
-                            tabIndex="1"
-                            type="text"
-                            value={props.className}
-                            onSubmit={props.onClassNameChange}
-                        />
-                    </Label>
-                </div>
-                <div className={styles.inputGroup}>
-                    <button
-                        className={classNames(styles.roundButton, styles.trainButton)}
-                        title={props.intl.formatMessage(messages.createNewClass)}
-                        onClick={props.onCreateNewClass}
-                    >
-                        <img
-                            draggable={false}
-                            src={addNewIcon}
-                        />
-                    </button>
-                </div>
-
-            </div>
         </div>
     </div>
 };

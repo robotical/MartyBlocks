@@ -16,6 +16,9 @@ pythonTranspiler = Project;
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality
 
+// making sure that the magnetometer notification is only shown once
+let hasMagnetometerNotificationBeenShown = false;
+
 // device type IDs for Robotical Standard Add-ons
 const RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE = "VCNL4200";
 const RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT = "lightsensor";
@@ -172,6 +175,12 @@ class Scratch3Mv2Blocks {
         this.errorHandler(this.accelerometerY.bind(this, args, utils)),
       ZAxisMovement: (args, utils) =>
         this.errorHandler(this.accelerometerZ.bind(this, args, utils)),
+      XAxisMagnetometer: (args, utils) =>
+        this.errorHandler(this.magnetometerX.bind(this, args, utils)),
+      YAxisMagnetometer: (args, utils) =>
+        this.errorHandler(this.magnetometerY.bind(this, args, utils)),
+      ZAxisMagnetometer: (args, utils) =>
+        this.errorHandler(this.magnetometerZ.bind(this, args, utils)),
       ObstacleProximity: (args, utils) =>
         this.errorHandler(this.proximity.bind(this, args, utils)),
       BatteryPercentage: (args, utils) =>
@@ -1180,6 +1189,48 @@ class Scratch3Mv2Blocks {
     if (!accelObj || !accelObj.accel || !accelObj.accel.z) return 0;
     const zAccel = accelObj.accel.z;
     return zAccel;
+  }
+
+  magnetometerX(args, util) {
+    //console.log('Report magnetometer reading!');
+    const magObj = JSON.parse(mv2Interface.magneto);
+    if ((!magObj || !magObj.magneto || !magObj.magneto.x)) {
+      if (!hasMagnetometerNotificationBeenShown) {
+        mv2Interface.send_REST("notification/warn-message/Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
+        hasMagnetometerNotificationBeenShown = true;
+      }
+      return 0;
+    }
+    const xMag = magObj.magneto.x;
+    return xMag;
+  }
+
+  magnetometerY(args, util) {
+    //console.log('Report magnetometer reading!');
+    const magObj = JSON.parse(mv2Interface.magneto);
+    if ((!magObj || !magObj.magneto || !magObj.magneto.y)) {
+      if (!hasMagnetometerNotificationBeenShown) {
+        mv2Interface.send_REST("notification/warn-message/Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
+        hasMagnetometerNotificationBeenShown = true;
+      }
+      return 0;
+    }
+    const yMag = magObj.magneto.y;
+    return yMag;
+  }
+
+  magnetometerZ(args, util) {
+    //console.log('Report magnetometer reading!');
+    const magObj = JSON.parse(mv2Interface.magneto);
+    if ((!magObj || !magObj.magneto || !magObj.magneto.z)) {
+      if (!hasMagnetometerNotificationBeenShown) {
+        mv2Interface.send_REST("notification/warn-message/Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
+        hasMagnetometerNotificationBeenShown = true;
+      }
+      return 0;
+    }
+    const zMag = magObj.magneto.z;
+    return zMag;
   }
 
   proximity(args, util) {

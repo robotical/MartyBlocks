@@ -426,10 +426,12 @@ export function MartyBlocksToolbox_sound(soundName) {
 export function MartyBlocksToolbox_sensing() {
   return `
     <block type="XAxisMovement" />
-
     <block type="YAxisMovement" />
-
     <block type="ZAxisMovement" />
+
+    <block type="XAxisMagnetometer" />
+    <block type="YAxisMagnetometer" />
+    <block type="ZAxisMagnetometer" />
 
     <block type="BatteryPercentage" />
 

@@ -6,6 +6,24 @@ import PropTypes from 'prop-types';
 import IconButton from '../../icon-button/icon-button.jsx';
 import deleteIcon from '../icon--delete.svg';
 import playIcon from '../icon--play-black.svg';
+import recordIcon from '../icon--record.svg';
+import stopIcon from '../icon--stop.svg';
+
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import classNames from 'classnames';
+
+const messages = defineMessages({
+  record: {
+    id: 'gui.MartyMachineModelEditor.record',
+    description: 'Title of the button to start recording samples',
+    defaultMessage: 'Record Data'
+  },
+  stop: {
+    id: 'gui.MartyMachineModelEditor.stop',
+    description: 'Title of the button to stop recording samples',
+    defaultMessage: 'Stop'
+  },
+});
 
 class ModelClass extends React.Component {
   constructor(props) {
@@ -69,7 +87,7 @@ class ModelClass extends React.Component {
   }
 
   onClassNameChange(event) {
-    this.props.modelClass.name = event.target.value;  
+    this.props.modelClass.name = event.target.value;
     console.log("onClassNameChange: " + this.props.modelClass.name);
     this.setState({});
   }
@@ -86,13 +104,37 @@ class ModelClass extends React.Component {
     return (
       <div className={styles.classContainer} onClick={this.onClassNameSelected}>
         <div className={styles.classLabel}>
-          <input 
-          className={styles.classNameInput} 
-          type="text" 
-          value={this.props.modelClass.name}  
-          onChange={(e) => this.onClassNameChange(e)}
-          readOnly={this.props.modelClass.name === martyMachine.BACKGROUND_NOISE_TAG} 
+          <input
+            className={styles.classNameInput}
+            type="text"
+            value={this.props.modelClass.name}
+            onChange={(e) => this.onClassNameChange(e)}
+            readOnly={this.props.modelClass.name === martyMachine.BACKGROUND_NOISE_TAG}
           />
+          {this.props.isRecording ? (
+            <button
+              className={classNames(styles.roundButton, styles.stopButtonn)}
+              title={this.props.intl.formatMessage(messages.stop)}
+              onClick={this.props.onStopRecording}
+            >
+              <img
+                draggable={false}
+                src={stopIcon}
+              />
+            </button>
+          ) : (
+            <button
+              className={classNames(styles.roundButton, styles.playButton, this.props.canBeRecorded ? '' : styles.buttonDisabled)}
+              title={this.props.intl.formatMessage(messages.record)}
+              onClick={() => this.props.onStartRecordingSamples(this.props.modelClass.name)}
+              disabled={!this.props.canBeRecorded}
+            >
+              <img
+                draggable={false}
+                src={recordIcon}
+              />
+            </button>
+          )}
           {subtitleJSX}
           {this.props.onRemoveClass && <IconButton
             title=""
@@ -136,12 +178,17 @@ class ModelClass extends React.Component {
 
 
 ModelClass.propTypes = {
+  intl: intlShape,
   modelClass: PropTypes.object,
   onRemoveClass: PropTypes.func,
   onRemoveSample: PropTypes.func,
   onClassNameSelected: PropTypes.func,
   modelType: string,
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.element])
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.element]),
+  canBeRecorded: PropTypes.bool,
+  isRecording: PropTypes.bool,
+  onStartRecordingSamples: PropTypes.func,
+  onStopRecording: PropTypes.func
 };
 
-export default ModelClass;
+export default injectIntl(ModelClass);

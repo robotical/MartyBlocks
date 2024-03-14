@@ -448,10 +448,12 @@ const sensing = function (isInitialSetup, isStage) {
         ${isStage ? '' : `
 
             <block type="XAxisMovement" />
-
             <block type="YAxisMovement" />
-
             <block type="ZAxisMovement" />
+
+            <block type="XAxisMagnetometer" />
+            <block type="YAxisMagnetometer" />
+            <block type="ZAxisMagnetometer" />
 
             <block type="BatteryPercentage" />
 

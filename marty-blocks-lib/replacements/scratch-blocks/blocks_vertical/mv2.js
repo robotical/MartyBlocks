@@ -2705,6 +2705,93 @@ Blockly.Blocks["ZAxisMovement"] = {
   },
 };
 
+Blockly.Blocks["XAxisMagnetometer"] = {
+  /**
+   * Block to display Marty's magnetometer X-axis state
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.MV2_MAGNETOMETERX,
+      category: Blockly.Categories.sensing,
+      colour: 164,
+      checkboxInFlyout: true,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/marty-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+      ],
+      extensions: ["output_number"],
+    });
+  },
+};
+
+Blockly.Blocks["YAxisMagnetometer"] = {
+  /**
+   * Block to display Marty's magnetometer Y-axis state
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.MV2_MAGNETOMETERY,
+      category: Blockly.Categories.sensing,
+      colour: 164,
+      checkboxInFlyout: true,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/marty-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+      ],
+      extensions: ["output_number"],
+    });
+  },
+};
+
+Blockly.Blocks["ZAxisMagnetometer"] = {
+  /**
+   * Block to display Marty's magnetometer Z-axis state
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.MV2_MAGNETOMETERZ,
+      category: Blockly.Categories.sensing,
+      colour: 164,
+      checkboxInFlyout: true,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/marty-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+      ],
+      extensions: ["output_number"],
+    });
+  },
+};
+
 Blockly.Blocks["mv2_obstaclesense"] = {
   /**
    * Block to report on obstacle detection from an IR sensor

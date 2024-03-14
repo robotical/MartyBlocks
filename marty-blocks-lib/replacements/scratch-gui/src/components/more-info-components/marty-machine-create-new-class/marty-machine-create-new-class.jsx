@@ -22,15 +22,7 @@ const MMCreateNewClass = props => {
                         <li>Enter the class name in the "Create new class" field.</li>
                         <li>Click the "+" button.</li>
                         <li>This action will create a new class if the class name does not already exist.</li>
-                    </ul>
-                </div>
-
-                <div className={styles.viewSection}>
-                    <h3 className={styles.viewTitle}>Collect Data for</h3>
-                    <ul className={styles.viewDetails}>
-                        <li>Select the class you want to collect data for.</li>
-                        <li><strong>If there are no classes yet, you need to create one first.</strong></li>
-                        <li>Click the "Record" button.</li>
+                        <li>You can then start collecting data by pressing the record button ⏺ within that class section</li>
                     </ul>
                 </div>
             </div>
