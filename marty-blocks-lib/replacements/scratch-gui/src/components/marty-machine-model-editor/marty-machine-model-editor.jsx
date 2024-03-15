@@ -103,6 +103,14 @@ const MartyMachineModelEditor = props => {
         onMouseDown={props.onContainerClick}
     >
         <div className={styles.row}>
+            <div className={styles.feedContainer}>
+                {feedJSX}
+            </div>
+            <div className={styles.trainingRunningContainer} style={{ width: PLOT_WIDTH, height: PLOT_HEIGHT }}>
+                {trainingOrRunningJSX}
+            </div>
+        </div>
+        <div className={styles.row}>
             <div className={styles.inputGroup}>
                 <Label text={props.intl.formatMessage(messages.model)}>
                     <BufferedInput
@@ -201,17 +209,6 @@ const MartyMachineModelEditor = props => {
             </p> */}
         </div>
 
-        <div className={styles.row}>
-            <div className={styles.feedContainer}>
-                {feedJSX}
-            </div>
-            <div className={styles.trainingRunningContainer} style={{ width: PLOT_WIDTH, height: PLOT_HEIGHT }}>
-                {trainingOrRunningJSX}
-            </div>
-        </div>
-        {/* <div className={classNames(styles.row, styles.rowReverse)}>
-
-        </div> */}
 
         <div className={styles.modelClassesOuterContainer}>
             {/* the model is not loaded (we are creating it), so the classes should have samples etc */}
