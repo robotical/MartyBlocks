@@ -1763,6 +1763,8 @@ class Scratch3Mv2Blocks {
             renderedBuffer.duration * 1000,
             true
           );
+          // play the mp3 data on the browser
+          // Scratch3Mv2Blocks._testMp3SoundLocally(mp3SoundData);
         };
         const audioEngine = new player.audioEngine.constructor(audioContext);
         const playerNew = new player.constructor(audioEngine, {
@@ -1775,6 +1777,8 @@ class Scratch3Mv2Blocks {
           playerNew,
           target.volume / 100
         );
+      } else {
+        mv2Interface.send_REST("notification/warn-message/Something went wrong. Please try again.");
       }
       return new Promise((resolve) => {
         async function checkIfStreamingStartFinished() {
@@ -1788,6 +1792,8 @@ class Scratch3Mv2Blocks {
         }
         checkIfStreamingStartFinished();
       });
+    } else {
+      mv2Interface.send_REST("notification/warn-message/Something went wrong. Please try again.");
     }
   }
 
@@ -1828,7 +1834,7 @@ class Scratch3Mv2Blocks {
       affectedSampleCount / playbackRate
     );
     const sampleCount = unaffectedSampleCount + adjustedAffectedSampleCount;
-    return sampleCount;
+    return Math.round(sampleCount * 1.2) // adjusting because when recording the sample count is smaller
   }
 
   static convertMp3BufferToData(mp3SoundBuffers) {
@@ -1848,20 +1854,28 @@ class Scratch3Mv2Blocks {
 
   static _testMp3SoundLocally(mp3SoundData) {
     // Test code to play locally
-    var blob = new Blob(mp3SoundData, { type: "audio/mp3" });
+    console.log("mp3SoundData", mp3SoundData)
+    const uint8Array = new Uint8Array(mp3SoundData.buffer);
+
+    // Convert Uint8Array to Blob
+    const blob = new Blob([uint8Array], { type: 'audio/mpeg' });
+
     var url = window.URL.createObjectURL(blob);
-    console.log("MP3 URl: ", url);
-    const context = new AudioContext();
-    window
-      .fetch(url)
-      .then((response) => response.arrayBuffer())
-      .then((arrayBuffer) => context.decodeAudioData(arrayBuffer))
-      .then((audioBuffer) => {
-        const source = context.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(context.destination);
-        source.start();
-      });
+
+    // Create an audio element and set the source
+    const audio = new Audio(url);
+
+    // Play the audio
+    audio.play().then(() => {
+      console.log("Audio is playing!");
+    }).catch(err => {
+      console.error("Error in playing audio:", err);
+    });
+
+    // Optional: Revoke the object URL when the audio is finished to release memory
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
+    };
   }
 
   static convertSoundToMP3(audioBuffer) {
