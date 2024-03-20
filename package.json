@@ -1,6 +1,6 @@
 {
   "name": "@robotical/martyblocks",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "MartyBlocks based on Scratch for Marty the Robot by Robotical",
   "main": "README.md",
   "scripts": {
