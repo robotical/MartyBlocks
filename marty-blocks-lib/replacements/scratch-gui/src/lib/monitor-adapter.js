@@ -18,7 +18,9 @@ export default function ({id, spriteName, opcode, params, value, vm}) {
     // Extension monitors get their labels from the Runtime through `getLabelForOpcode`.
     // Other monitors' labels are hard-coded in `OpcodeLabels`.
     let {label, category, labelFn} = (vm && vm.runtime.getLabelForOpcode(opcode)) || OpcodeLabels.getLabel(opcode);
-    label = monitorLabelToSensorWhoAmIMAP[label](params) || label;
+    if(monitorLabelToSensorWhoAmIMAP[label]) {
+        label = monitorLabelToSensorWhoAmIMAP[label](params) || label;
+    } 
 
     // Use labelFn if provided for dynamic labelling (e.g. variables)
     if (!isUndefined(labelFn)) label = labelFn(params);
