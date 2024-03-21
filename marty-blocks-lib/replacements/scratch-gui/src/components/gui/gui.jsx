@@ -28,6 +28,7 @@ import Watermark from '../../containers/watermark.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
+import Lessons from '../../containers/lessons.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
@@ -79,6 +80,7 @@ const GUIComponent = props => {
     blocksId,
     blocksTabVisible,
     cardsVisible,
+    lessonsVisible,
     canChangeLanguage,
     canChangeTheme,
     canCreateNew,
@@ -161,7 +163,7 @@ const GUIComponent = props => {
   if (isRendererSupported === null) {
     isRendererSupported = Renderer.isSupported();
   }
-
+  
   return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
     const stageSize = resolveStageSize(stageSizeMode, isFullSize);
 
@@ -209,6 +211,9 @@ const GUIComponent = props => {
         ) : null}
         {cardsVisible ? (
           <Cards />
+        ) : null}
+        {lessonsVisible ? (
+          <Lessons />
         ) : null}
         {draggableModalVisible ? <DraggableModal /> : null}
         {alertsVisible ? (
@@ -469,6 +474,7 @@ GUIComponent.propTypes = {
   canShare: PropTypes.bool,
   canUseCloud: PropTypes.bool,
   cardsVisible: PropTypes.bool,
+  lessonsVisible: PropTypes.bool,
   children: PropTypes.node,
   costumeLibraryVisible: PropTypes.bool,
   costumesTabVisible: PropTypes.bool,

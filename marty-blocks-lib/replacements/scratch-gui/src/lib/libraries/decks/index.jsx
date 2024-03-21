@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 
 // Text to Speech
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
-
+import mlLesson1 from "./ML-lessons/lesson1";
 
 export default {
 
@@ -18,6 +18,7 @@ export default {
                 id="gui.howtos.marty-machine-create-model.name"
             />
         ),
+        urlId: 'mm-create-model',
         tags: ['marty', 'machine', 'ai', 'ml', 'AI', 'ML', 'artificial', 'intelligence', 'machine', 'learning'],
         img: libraryTXTSpeech,
         steps: [{
@@ -47,7 +48,6 @@ export default {
                 ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
             }
         }],
-        urlId: 'marty-machine'
     },
     "mm-create-image-model": {
         name: (
@@ -136,7 +136,6 @@ export default {
             }
         },
         ],
-        urlId: 'marty-machine'
     },
 
     "mm-create-audio-model": {
@@ -226,7 +225,6 @@ export default {
             }
         },
         ],
-        urlId: 'marty-machine'
     },
 
     "mm-load-tm-model": {
@@ -267,7 +265,6 @@ export default {
             }
         },
         ],
-        urlId: 'marty-machine'
     },
 
     'mm-load-and-run-image-model': {
@@ -408,6 +405,6 @@ export default {
         ],
     },
 
-
+    ...mlLesson1
 
 };
