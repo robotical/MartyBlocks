@@ -12,6 +12,9 @@ import expandIcon from './icon--expand.svg';
 import rightArrow from './icon--next.svg';
 import leftArrow from './icon--prev.svg';
 
+import audioIcon from './icon--audio.svg';
+import accessibilityIcon from './icon--accessibility.svg';
+
 import helpIcon from '../../lib/assets/icon--tutorials.svg';
 import closeIcon from './icon--close.svg';
 
@@ -154,36 +157,37 @@ ImageStep.propTypes = {
 };
 
 const NextPrevButtons = ({ isRtl, onNextStep, onPrevStep, expanded }) => (
-    <Fragment>
-        {onNextStep ? (
-            <div>
-                <div className={expanded ? (isRtl ? styles.leftCard : styles.rightCard) : styles.hidden} />
-                <div
-                    className={expanded ? (isRtl ? styles.leftButton : styles.rightButton) : styles.hidden}
-                    onClick={onNextStep}
-                >
-                    <img
-                        draggable={false}
-                        src={isRtl ? leftArrow : rightArrow}
-                    />
-                </div>
-            </div>
-        ) : null}
-        {onPrevStep ? (
-            <div>
-                <div className={expanded ? (isRtl ? styles.rightCard : styles.leftCard) : styles.hidden} />
-                <div
-                    className={expanded ? (isRtl ? styles.rightButton : styles.leftButton) : styles.hidden}
-                    onClick={onPrevStep}
-                >
-                    <img
-                        draggable={false}
-                        src={isRtl ? rightArrow : leftArrow}
-                    />
-                </div>
-            </div>
-        ) : null}
-    </Fragment>
+    <div className={styles.nextPrevButtonsContainer}>
+        <div
+            className={expanded ? (isRtl ? styles.rightButton : styles.leftButton) : styles.hidden}
+            onClick={onPrevStep}
+        >
+            <img
+                draggable={false}
+                src={isRtl ? rightArrow : leftArrow}
+            />
+        </div>
+
+        <div className={expanded ? styles.middleButton : styles.hidden}>
+            <img draggable={false} src={accessibilityIcon} />
+        </div>
+        <div className={expanded ? styles.middleButton : styles.hidden}>
+            <img draggable={false} src={audioIcon} />
+        </div>
+        <div className={expanded ? styles.middleButton : styles.hidden}>
+            <span>?</span>
+        </div>
+
+        <div
+            className={expanded ? (isRtl ? styles.leftButton : styles.rightButton) : styles.hidden}
+            onClick={onNextStep}
+        >
+            <img
+                draggable={false}
+                src={isRtl ? leftArrow : rightArrow}
+            />
+        </div>
+    </div>
 );
 
 NextPrevButtons.propTypes = {

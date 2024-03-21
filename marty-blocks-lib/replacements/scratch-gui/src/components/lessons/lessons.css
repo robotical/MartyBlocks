@@ -60,18 +60,51 @@
     left: 0;
     height: 2.5rem;
     width: 100%;
-    background: $extensions-primary;
+    background: rgb(55, 171, 200);
+}
+
+.next-prev-buttons-container {
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    cursor: default;
+}
+
+.middle-button {
+    z-index: 20;
+    user-select: none;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 0 0 2px rgb(55, 171, 200);
+    height: 34px;
+    width: 34px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+}
+
+.middle-button img {
+    width: 1.5rem;
+}
+
+.middle-button span {
+    font-size: 25px;
+    color: rgb(55, 171, 200);
 }
 
 .left-button,
 .right-button {
-    position: absolute;
+    /* position: absolute;
     top: 50%;
-    margin-top: -15px;
+    margin-top: -15px; */
     z-index: 20;
     user-select: none;
     cursor: pointer;
-    background: $extensions-primary;
+    background: rgb(55, 171, 200);
     box-shadow: 0 0 0 4px $extensions-transparent;
     height: 44px;
     width: 44px;
@@ -91,14 +124,6 @@
 .left-button img,
 .right-button img {
     width: 1.75rem;
-}
-
-.left-button {
-    left: -27px;
-}
-
-.right-button {
-    right: -27px;
 }
 
 .card {
