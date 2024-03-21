@@ -2,377 +2,421 @@
 @import "../../css/colors.css";
 @import "../../css/z-index.css";
 
+.modal-container-overlay {
+  position: fixed;
+  pointer-events: none;
+  z-index: 510;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(55, 171, 200, 0.5);
+}
+
 .card-container-overlay {
-    position: fixed;
-    pointer-events: none;
-    z-index: $z-index-card;
+  position: fixed;
+  pointer-events: none;
+  z-index: 509;
 }
 
 .card-container {
-    position: absolute;
-    pointer-events: auto;
-    z-index: $z-index-card;
-    width: 350px;
+  position: absolute;
+  pointer-events: auto;
+  z-index: 509;
+  width: 350px;
+}
+
+.modal-container {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 510;
+  width: 70%;
+  height: 50%;
+  min-width: 300px;
+  min-height: 300px;
 }
 
 .lesson-title-container {
+  margin-left: 0.5rem;
 }
 
 .lesson-title {
-    text-transform: uppercase;
-    font-size: 1rem;
-    color: white;
-    margin: 0.5rem 0;
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: white;
+  margin: 0.5rem 0;
 }
 
 .left-card,
 .right-card {
-    height: 90%;
-    position: absolute;
-    top: 5%;
-    background: $ui-white;
-    border: 1px solid $ui-tertiary;
-    width: 0.75rem;
-    z-index: 10;
-    opacity: 0.9;
-    overflow: hidden;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  background: $ui-white;
+  border: 1px solid $ui-tertiary;
+  width: 0.75rem;
+  z-index: 10;
+  opacity: 0.9;
+  overflow: hidden;
 }
 
 .left-card {
-    left: -0.75rem;
-    border-right: 0;
-    border-top-left-radius: 0.75rem;
-    border-bottom-left-radius: 0.75rem;
+  left: -0.75rem;
+  border-right: 0;
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
 }
 
 .right-card {
-    right: -0.75rem;
-    border-left: 0;
-    border-top-right-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
+  right: -0.75rem;
+  border-left: 0;
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
 }
 
 .left-card::after,
 .right-card::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2.5rem;
-    width: 100%;
-    background: rgb(55, 171, 200);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2.5rem;
+  width: 100%;
+  background: rgb(55, 171, 200);
 }
 
 .next-prev-buttons-container {
-    padding: 1rem;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background: white;
-    cursor: default;
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  cursor: default;
+}
+
+.lesson-start-modal-buttons-container {
+  padding: 1rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  column-gap: 1rem;
+  background: white;
+  cursor: default;
 }
 
 .middle-button {
-    z-index: 20;
-    user-select: none;
-    cursor: pointer;
-    background: white;
-    box-shadow: 0 0 0 2px rgb(55, 171, 200);
-    height: 34px;
-    width: 34px;
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.25s ease;
+  z-index: 20;
+  user-select: none;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 0 0 2px rgb(55, 171, 200);
+  height: 34px;
+  width: 34px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease;
 }
 
 .middle-button img {
-    width: 1.5rem;
+  width: 1.5rem;
 }
 
 .middle-button span {
-    font-size: 25px;
-    color: rgb(55, 171, 200);
+  font-size: 25px;
+  color: rgb(55, 171, 200);
 }
 
 .left-button,
-.right-button {
-    /* position: absolute;
-    top: 50%;
-    margin-top: -15px; */
-    z-index: 20;
-    user-select: none;
-    cursor: pointer;
-    background: rgb(55, 171, 200);
-    box-shadow: 0 0 0 4px $extensions-transparent;
-    height: 44px;
-    width: 44px;
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.25s ease;
+.right-button,
+.start-lesson-button {
+  z-index: 20;
+  user-select: none;
+  cursor: pointer;
+  background: rgb(55, 171, 200);
+  box-shadow: 0 0 0 4px $extensions-transparent;
+  height: 44px;
+  width: 44px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.start-lesson-button {
+  height: 30px;
+  width: 100px;
+  border-radius: 40px;
+}
+
+.start-lesson-button span {
+    color: white;
+    margin-left: 0.4rem;
 }
 
 .left-button:hover,
 .right-button:hover {
-    box-shadow: 0 0 0 6px $extensions-transparent;
-    transform: scale(1.125);
+  box-shadow: 0 0 0 6px $extensions-transparent;
+  transform: scale(1.125);
 }
 
 .left-button img,
 .right-button img {
-    width: 1.75rem;
+  width: 1.75rem;
 }
 
 .card {
-    border: 2px solid black;
-    border-radius: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    cursor: move;
-    z-index: 20;
-    overflow: hidden;
-    box-shadow: 0px 5px 25px 5px $ui-black-transparent;
-    align-items: center;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    height: 100%;
+  border: 2px solid black;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  cursor: move;
+  z-index: 20;
+  overflow: hidden;
+  box-shadow: 0px 5px 25px 5px $ui-black-transparent;
+  align-items: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
 }
 
 .header-buttons {
-    width: 100%;
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: min-content max-content 1fr;
-    align-items: center;
-    background: rgb(55, 171, 200);
-    border-bottom: 1px solid black;
-    font-size: 0.625rem;
-    font-weight: bold;
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: min-content max-content 1fr;
+  align-items: center;
+  background: rgb(55, 171, 200);
+  border-bottom: 1px solid black;
+  font-size: 0.625rem;
+  font-weight: bold;
 }
 
 .header-buttons-hidden {
-    border-bottom: 0px;
+  border-bottom: 0px;
 }
 
 .header-buttons-right {
-    justify-self: end;
-    display: flex;
-    flex-direction: row;
+  justify-self: end;
+  display: flex;
+  flex-direction: row;
 }
 
 .header-buttons img {
-    margin-bottom: 2px;
+  margin-bottom: 2px;
 }
 
 .shrink-expand-button {
-    cursor: pointer;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0.25rem;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
 }
 
 .step-number-on-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.8rem;
-    margin: 0 0.6rem;
-    text-align: center;
-    font-weight: bold;
-    color: black;
-    background: white;
-    padding: 5px;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  margin: 0 0.2rem;
+  text-align: center;
+  font-weight: bold;
+  color: black;
+  background: white;
+  padding: 5px;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border: 2px solid black;
 }
 
 .shrink-expand-button:hover {
-    background-color: $ui-black-transparent;
+  background-color: $ui-black-transparent;
 }
 
 .remove-button {
-    cursor: pointer;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0.25rem;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
 }
 
 .remove-button:hover {
-    background-color: $ui-black-transparent;
+  background-color: $ui-black-transparent;
 }
 
 .step-title {
-    font-size: 0.9rem;
-    margin: 0.9rem;
-    text-align: center;
-    font-weight: bold;
-    color: $text-primary;
+  font-size: 0.9rem;
+  margin: 0.9rem;
+  text-align: center;
+  font-weight: bold;
+  color: $text-primary;
 }
 
 .step-body {
-    height: 100%;
-    width: 100%;
-    background: $ui-white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    text-align: center;
+  height: 100%;
+  width: 100%;
+  background: $ui-white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  text-align: center;
 
-    /* Min height prevents layout changing when images change */
-    min-height: 256px;
+  /* Min height prevents layout changing when images change */
+  min-height: 256px;
 
-    cursor: default;
-    padding: 1rem;
+  cursor: default;
+  padding: 1rem;
 }
 
 .step-video {
-    height: 256px;
+  height: 256px;
 }
 
 .step-image {
-    max-width: 450px;
-    max-height: 200px;
-    object-fit: contain;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    margin: 0 0.5rem 0.5rem;
+  max-width: 450px;
+  max-height: 200px;
+  object-fit: contain;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin: 0 0.5rem 0.5rem;
 }
 
 .decks {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 0 1rem 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 1rem 0.5rem;
 }
 
 .deck {
-    display: flex;
-    flex-direction: column;
-    margin: 0 8px 8px;
-    cursor: pointer;
-    border: 1px solid $ui-black-transparent;
-    border-radius: 0.25rem;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0 8px 8px;
+  cursor: pointer;
+  border: 1px solid $ui-black-transparent;
+  border-radius: 0.25rem;
+  overflow: hidden;
 }
 
 .deck-image {
-    width: 200px;
-    height: 100px;
-    object-fit: cover;
+  width: 200px;
+  height: 100px;
+  object-fit: cover;
 }
 
 .deck-name {
-    color: $looks-secondary;
-    font-weight: bold;
-    font-size: 0.85rem;
-    margin: 0.625rem 0px;
-    text-align: center;
-    font-weight: bold;
-    text-align: center;
-    max-width: 200px;
+  color: $looks-secondary;
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin: 0.625rem 0px;
+  text-align: center;
+  font-weight: bold;
+  text-align: center;
+  max-width: 200px;
 }
 
 .help-icon {
-    height: 1.25rem;
+  height: 1.25rem;
 }
 
 .close-icon {
-    height: 1.25rem;
-    margin: 0.125rem 0; /* To offset the .25rem difference in icon size */
+  height: 1.25rem;
+  margin: 0.125rem 0; /* To offset the .25rem difference in icon size */
 }
 
 [dir="ltr"] .help-icon {
-    margin-right: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 [dir="rtl"] .help-icon {
-    margin-left: 0.25rem;
+  margin-left: 0.25rem;
 }
 
 [dir="ltr"] .close-icon {
-    margin-left: 0.25rem;
+  margin-left: 0.25rem;
 }
 
 [dir="rtl"] .close-icon {
-    margin-right: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 .see-all {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
 }
 
 .see-all-button {
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    background-color: $looks-secondary;
-    color: white;
-    font-weight: bold;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
-    color: $ui-white;
-    font-size: 0.75rem;
-    font-weight: bold;
-    line-height: 1rem;
-    text-align: center;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: $looks-secondary;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  color: $ui-white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 1rem;
+  text-align: center;
 }
 
 [dir="ltr"] .see-all-button img {
-    margin-left: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 [dir="rtl"] .see-all-button img {
-    margin-right: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .progress-bar-outer-container {
-    position: relative;
-    width: 100%;
-    height: 10px;
-    display: flex;
-    column-gap: 4px;
+  position: relative;
+  width: 100%;
+  height: 10px;
+  display: flex;
+  column-gap: 4px;
 }
 
 .progress-bar-container {
-    position: relative;
-    width: 100%;
-    height: 10px;
-    background-color: #e0e0e0;
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
 }
 
 .progress-bar {
-    height: 100%;
-    background-color: rgb(55, 171, 200);
-    border-radius: 6px 0 0 6px;
+  height: 100%;
+  background-color: rgb(55, 171, 200);
+  border-radius: 6px 0 0 6px;
 }
 
 .progress-bar-remaining-steps {
-    color: black;
-    font-size: 12px;
-    align-self: center;
+  color: black;
+  font-size: 12px;
+  align-self: center;
 }

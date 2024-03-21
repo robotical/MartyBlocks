@@ -16,6 +16,7 @@ export default {
         tags: ['marty', 'machine', 'ai', 'ml', 'AI', 'ML', 'artificial', 'intelligence', 'machine', 'learning', 'lessons'],
         img: libraryTXTSpeech,
         type: 'lesson',
+        description: 'Ml Lesson 1 Description lorem ipsum',
         internetConnectionRequired: true,
         steps: [{
             title: (

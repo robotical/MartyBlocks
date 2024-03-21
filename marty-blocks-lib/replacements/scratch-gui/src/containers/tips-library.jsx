@@ -86,6 +86,7 @@ class TipsLibrary extends React.PureComponent {
                 type: decksLibraryContent[id].type,
                 name: decksLibraryContent[id].name,
                 featured: true,
+                description: decksLibraryContent[id].description,
                 tags: decksLibraryContent[id].tags,
                 urlId: decksLibraryContent[id].urlId,
                 requiredProjectId: decksLibraryContent[id].requiredProjectId,

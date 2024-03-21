@@ -21,18 +21,21 @@ import closeIcon from './icon--close.svg';
 import { translateVideo } from '../../lib/libraries/decks/translate-video.js';
 import { translateImage } from '../../lib/libraries/decks/translate-image.js';
 
-const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, totalSteps, step, expanded }) => (
-    <div className={expanded ? styles.headerButtons : classNames(styles.headerButtons, styles.headerButtonsHidden)}>
-        <div
+const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded }) => (
+    <div className={expanded ? styles.headerButtons : classNames(styles.headerButtons, styles.headerButtonsHidden)}
+    style={{
+        gridTemplateColumns: step === undefined ? "max-content 1fr" : "min-content max-content 1fr"
+    }}>
+        {step !== undefined && <div
             className={styles.stepNumberOnTitle}
         >
             {step + 1}
-        </div>
-        <div className={styles.lessonTitleContaier}>
-            <span className={styles.lessonTitle}>Lesson Title</span>
+        </div>}
+        <div className={styles.lessonTitleContainer}>
+            <span className={styles.lessonTitle}>{lessonTitle}</span>
         </div>
         <div className={styles.headerButtonsRight}>
-            <div
+            {onShrinkExpandLessons && <div
                 className={styles.shrinkExpandButton}
                 onClick={onShrinkExpandLessons}
             >
@@ -52,7 +55,7 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, totalSteps, step,
                         id="gui.lessons.expand"
                     />
                 }
-            </div>
+            </div>}
             <div
                 className={styles.removeButton}
                 onClick={onCloseLessons}
@@ -156,8 +159,35 @@ ImageStep.propTypes = {
     title: PropTypes.node.isRequired
 };
 
+const LessonStartModalBottomButtons = ({ onStartLesson }) => (
+    <div className={styles.lessonStartModalButtonsContainer}>
+
+        <div className={styles.middleButton}>
+            <img draggable={false} src={accessibilityIcon} />
+        </div>
+        <div className={styles.middleButton}>
+            <img draggable={false} src={audioIcon} />
+        </div>
+
+        <div
+            className={styles.startLessonButton}
+            onClick={onStartLesson}
+        >
+            <img
+                draggable={false}
+                src={rightArrow}
+            />
+            <span>Start</span>
+        </div>
+    </div>
+);
+
+LessonStartModalBottomButtons.propTypes = {
+    onStartLesson: PropTypes.func,
+};
+
 const NextPrevButtons = ({ isRtl, onNextStep, onPrevStep, expanded }) => (
-    <div className={styles.nextPrevButtonsContainer}>
+    <div className={expanded ? styles.nextPrevButtonsContainer : styles.hidden}>
         <div
             className={expanded ? (isRtl ? styles.rightButton : styles.leftButton) : styles.hidden}
             onClick={onPrevStep}
@@ -200,9 +230,9 @@ NextPrevButtons.propTypes = {
 LessonHeader.propTypes = {
     expanded: PropTypes.bool.isRequired,
     onCloseLessons: PropTypes.func.isRequired,
-    onShrinkExpandLessons: PropTypes.func.isRequired,
+    onShrinkExpandLessons: PropTypes.func,
     step: PropTypes.number,
-    totalSteps: PropTypes.number
+    lessonTitle: PropTypes.string
 };
 
 const PreviewsStep = ({ deckIds, content, onActivateDeckFactory }) => (
@@ -261,131 +291,189 @@ PreviewsStep.propTypes = {
     onActivateDeckFactory: PropTypes.func.isRequired,
 };
 
-const Lessons = props => {
-    const {
-        activeDeckId,
-        content,
-        dragging,
-        isRtl,
-        locale,
-        onActivateDeckFactory,
-        onCloseLessons,
-        onShrinkExpandLessons,
-        onDrag,
-        onStartDrag,
-        onEndDrag,
-        onNextStep,
-        onPrevStep,
-        showVideos,
-        step,
-        expanded,
-        ...posProps
-    } = props;
+class Lessons extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            modal: {
+                title: this.props.content[this.props.activeDeckId].name,
+                content: this.props.content[this.props.activeDeckId].description
+            }
+        };
+        this.onCloseLessonStartModal = this.onCloseLessonStartModal.bind(this);
+    }
 
-    if (activeDeckId === null) return;
+    onCloseLessonStartModal = () => {
+        this.setState({
+            modal: {
+                title: '',
+                content: ''
+            }
+        });
+    }
 
-    // Tutorial lessons need to calculate their own dragging bounds
-    // to allow for dragging the lessons off the left, right and bottom
-    // edges of the workspace.
-    const lessonHorizontalDragOffset = 400; // ~80% of lesson width
-    const menuBarHeight = 46; // TODO: get pre-calculated from elsewhere?
+    render() {
 
-    const steps = content[activeDeckId].steps;
-    return (
-        // Custom overlay to act as the bounding parent for the draggable, using values from above
-        <div
-            className={styles.cardContainerOverlay}
-            style={{
-                width: `${window.innerWidth + (2 * lessonHorizontalDragOffset)}px`,
-                height: `${window.innerHeight - menuBarHeight}px`,
-                top: `${menuBarHeight}px`,
-                left: `${-lessonHorizontalDragOffset}px`
-            }}
-        >
-            <Draggable
-                bounds="parent"
-                cancel="#video-div" // disable dragging on video div
-                // top right
-                position={{
-                    x: window.innerWidth + 50, // the + is the difference the styles.cardContainer width has from 400. Currently is set at 350 so 400 - 350 = 50
-                    y: menuBarHeight
+        const {
+            activeDeckId,
+            content,
+            dragging,
+            isRtl,
+            locale,
+            onActivateDeckFactory,
+            onCloseLessons,
+            onShrinkExpandLessons,
+            onDrag,
+            onStartDrag,
+            onEndDrag,
+            onNextStep,
+            onPrevStep,
+            showVideos,
+            step,
+            expanded,
+            ...posProps
+        } = this.props;
+
+        if (activeDeckId === null) return;
+
+        // Tutorial lessons need to calculate their own dragging bounds
+        // to allow for dragging the lessons off the left, right and bottom
+        // edges of the workspace.
+        const lessonHorizontalDragOffset = 400; // ~80% of lesson width
+        const menuBarHeight = 46; // TODO: get pre-calculated from elsewhere?
+
+        const steps = content[activeDeckId].steps;
+        return (
+            // Custom overlay to act as the bounding parent for the draggable, using values from above
+            <div
+                className={styles.cardContainerOverlay}
+                style={{
+                    width: `${window.innerWidth + (2 * lessonHorizontalDragOffset)}px`,
+                    height: `${window.innerHeight - menuBarHeight}px`,
+                    top: `${menuBarHeight}px`,
+                    left: `${-lessonHorizontalDragOffset}px`
                 }}
-                disabled={true}
-                onDrag={onDrag}
-                onStart={onStartDrag}
-                onStop={onEndDrag}
             >
-                <div className={styles.cardContainer} style={{
-                    height: `calc(100% - ${menuBarHeight}px)`
-                }}>
-                    <div className={styles.card} style={{
-                        height: expanded ? '100%' : 'auto'
-                    }}>
-                        <LessonHeader
-                            expanded={expanded}
-                            step={step}
-                            totalSteps={steps.length}
-                            onCloseLessons={onCloseLessons}
-                            onShrinkExpandLessons={onShrinkExpandLessons}
-                        />
-                        <div className={expanded ? styles.stepBody : styles.hidden}>
-                            <div className={styles.progressBarOuterContainer}>
-                                <div className={styles.progressBarContainer}>
-                                    <div className={styles.progressBar} style={{ width: `calc(${step + 1} / ${steps.length} * 100%)` }}></div>
-                                </div>
-                                <span className={styles.progressBarRemainingSteps}>{step + 1}/{steps.length}</span>
-                            </div>
-                            {steps[step].externalUrl && (
-                                <div className={styles.externalUrl}>
-                                    <a
-                                        href={steps[step].externalUrl.url}
-                                        rel="noopener noreferrer"
-                                        target="_blank"
-                                    >
-                                        {steps[step].externalUrl.label}
-                                    </a>
-                                </div>
-                            )}
-                            {steps[step].deckIds ? (
-                                <PreviewsStep
-                                    content={content}
-                                    deckIds={steps[step].deckIds}
-                                    onActivateDeckFactory={onActivateDeckFactory}
-                                />
-                            ) : (
-                                steps[step].video ? (
-                                    showVideos ? (
-                                        <VideoStep
-                                            dragging={dragging}
-                                            expanded={expanded}
-                                            video={translateVideo(steps[step].video, locale)}
-                                        />
-                                    ) : ( // Else show the deck image and title
+                {
+                    this.state.modal.content && this.state.modal.title && <div
+                        className={styles.modalContainerOverlay}
+                    >
+                        <Draggable
+                            bounds="parent"
+                            cancel="#video-div" // disable dragging on video div
+                            disabled={true}
+                            onDrag={onDrag}
+                            onStart={onStartDrag}
+                            onStop={onEndDrag}
+                        >
+                            <div className={styles.modalContainer}>
+                                <div className={styles.card}>
+                                    <LessonHeader
+                                        expanded={true}
+                                        lessonTitle={content[activeDeckId].name}
+                                        onCloseLessons={onCloseLessons}
+                                    />
+                                    <div className={styles.stepBody}>
                                         <ImageStep
                                             image={content[activeDeckId].img}
-                                            title={content[activeDeckId].name}
+                                            title={content[activeDeckId].description}
+                                        />
+                                    </div>
+                                    <LessonStartModalBottomButtons
+                                        onStartLesson={this.onCloseLessonStartModal}
+                                    />
+                                </div>
+                            </div>
+                        </Draggable>
+                    </div>
+                }
+
+
+                <Draggable
+                    bounds="parent"
+                    cancel="#video-div" // disable dragging on video div
+                    // top right
+                    position={{
+                        x: window.innerWidth + 50, // the + is the difference the styles.cardContainer width has from 400. Currently is set at 350 so 400 - 350 = 50
+                        y: menuBarHeight
+                    }}
+                    disabled={true}
+                    onDrag={onDrag}
+                    onStart={onStartDrag}
+                    onStop={onEndDrag}
+                >
+                    <div className={styles.cardContainer} style={{
+                        height: `calc(100% - ${menuBarHeight}px)`
+                    }}>
+                        <div className={styles.card} style={{
+                            height: expanded ? '100%' : 'auto'
+                        }}>
+                            <LessonHeader
+                                expanded={expanded}
+                                step={step}
+                                lessonTitle={content[activeDeckId].name}
+                                onCloseLessons={onCloseLessons}
+                                onShrinkExpandLessons={onShrinkExpandLessons}
+                            />
+                            <div className={expanded ? styles.stepBody : styles.hidden}>
+                                <div className={styles.progressBarOuterContainer}>
+                                    <div className={styles.progressBarContainer}>
+                                        <div className={styles.progressBar} style={{ width: `calc(${step + 1} / ${steps.length} * 100%)` }}></div>
+                                    </div>
+                                    <span className={styles.progressBarRemainingSteps}>{step + 1}/{steps.length}</span>
+                                </div>
+                                {steps[step].externalUrl && (
+                                    <div className={styles.externalUrl}>
+                                        <a
+                                            href={steps[step].externalUrl.url}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                        >
+                                            {steps[step].externalUrl.label}
+                                        </a>
+                                    </div>
+                                )}
+                                {steps[step].deckIds ? (
+                                    <PreviewsStep
+                                        content={content}
+                                        deckIds={steps[step].deckIds}
+                                        onActivateDeckFactory={onActivateDeckFactory}
+                                    />
+                                ) : (
+                                    steps[step].video ? (
+                                        showVideos ? (
+                                            <VideoStep
+                                                dragging={dragging}
+                                                expanded={expanded}
+                                                video={translateVideo(steps[step].video, locale)}
+                                            />
+                                        ) : ( // Else show the deck image and title
+                                            <ImageStep
+                                                image={content[activeDeckId].img}
+                                                title={content[activeDeckId].name}
+                                            />
+                                        )
+                                    ) : (
+                                        <ImageStep
+                                            image={translateImage(steps[step].image, locale)}
+                                            title={steps[step].title}
                                         />
                                     )
-                                ) : (
-                                    <ImageStep
-                                        image={translateImage(steps[step].image, locale)}
-                                        title={steps[step].title}
-                                    />
-                                )
-                            )}
-                            {steps[step].trackingPixel && steps[step].trackingPixel}
+                                )}
+                                {steps[step].trackingPixel && steps[step].trackingPixel}
+                            </div>
+                            <NextPrevButtons
+                                expanded={expanded}
+                                isRtl={isRtl}
+                                onNextStep={step < steps.length - 1 ? onNextStep : null}
+                                onPrevStep={step > 0 ? onPrevStep : null}
+                            />
                         </div>
-                        <NextPrevButtons
-                            expanded={expanded}
-                            isRtl={isRtl}
-                            onNextStep={step < steps.length - 1 ? onNextStep : null}
-                            onPrevStep={step > 0 ? onPrevStep : null}
-                        />
                     </div>
-                </div>
-            </Draggable>
-        </div>
-    );
+                </Draggable>
+            </div>
+        );
+    }
 };
 
 Lessons.propTypes = {
