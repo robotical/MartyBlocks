@@ -146,11 +146,11 @@ const motion = function (isInitialSetup, isStage, targetId) {
 const xmlEscape = function (unsafe) {
     return unsafe.replace(/[<>&'"]/g, c => {
         switch (c) {
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '&': return '&amp;';
-        case '\'': return '&apos;';
-        case '"': return '&quot;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
         }
     });
 };
@@ -298,7 +298,7 @@ const sound = function (isInitialSetup, isStage, targetId, soundName) {
     return `
     <category name="%{BKY_CATEGORY_SOUND}" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
     ` + martyblockslib.MartyBlocksToolbox_sound(soundName) +
-    `
+        `
         ${blockSeparator}
 
         <!--Default blocks-->
@@ -443,6 +443,11 @@ const control = function (isInitialSetup, isStage) {
 
 const sensing = function (isInitialSetup, isStage) {
     const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
+    /*
+    <block type="XAxisMagnetometer" />
+            <block type="YAxisMagnetometer" />
+            <block type="ZAxisMagnetometer" />
+     */
     return `
     <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
         ${isStage ? '' : `
@@ -451,9 +456,7 @@ const sensing = function (isInitialSetup, isStage) {
             <block type="YAxisMovement" />
             <block type="ZAxisMovement" />
 
-            <block type="XAxisMagnetometer" />
-            <block type="YAxisMagnetometer" />
-            <block type="ZAxisMagnetometer" />
+            
 
             <block type="BatteryPercentage" />
 

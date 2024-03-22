@@ -1,5 +1,5 @@
 export function MartyBlocksToolbox_motion() {
-  return `
+    return `
     <!-- MARTY MOTION BLOCKS -->
 
     <block type="mv2_getReady" />
@@ -229,7 +229,7 @@ export function MartyBlocksToolbox_motion() {
 }
 
 export function MartyBlocksToolbox_disco() {
-  return `
+    return `
     <block type="mv2_discoChangeBlockPattern" >
         <value>
             <field name="BOARDTYPE"></field>
@@ -343,7 +343,7 @@ export function MartyBlocksToolbox_disco() {
 }
 
 export function MartyBlocksToolbox_sound(soundName) {
-  return `
+    return `
         <!--Marty blocks-->
 
 
@@ -424,14 +424,17 @@ export function MartyBlocksToolbox_sound(soundName) {
 }
 
 export function MartyBlocksToolbox_sensing() {
-  return `
+    /*
+        <block type="XAxisMagnetometer" />
+    <block type="YAxisMagnetometer" />
+    <block type="ZAxisMagnetometer" />
+
+    */
+    return `
     <block type="XAxisMovement" />
     <block type="YAxisMovement" />
     <block type="ZAxisMovement" />
 
-    <block type="XAxisMagnetometer" />
-    <block type="YAxisMagnetometer" />
-    <block type="ZAxisMagnetometer" />
 
     <block type="BatteryPercentage" />
 
