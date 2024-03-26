@@ -1,3 +1,5 @@
+const html2canvas = require("html2canvas");
+
 /**
  * @fileoverview
  * Functions for interacting with Marty v2 via a REST interface
@@ -92,7 +94,9 @@ class Mv2Interface extends EventDispatcher {
 
     const customLogger = (type, args) => {
       // Custom logging logic
-      this.analytics_log(JSON.stringify(args), type);
+      try {
+        this.analytics_log(JSON.stringify(args), type);
+      } catch {}
     };
 
     console.log = (...args) => {
@@ -125,6 +129,30 @@ class Mv2Interface extends EventDispatcher {
 
   }
 
+  async captureScreen() {
+    html2canvas(document.body).then(canvas => {
+      canvas.toBlob(blob => {
+        const storageUrl = `https://firebasestorage.googleapis.com/v0/b/web-app-deploy-preview.appspot.com/o/${sessionId}%2Fscreenshot-${Date.now()}.png?uploadType=media`;
+        fetch(storageUrl, {
+          method: 'POST',
+          body: blob,
+          headers: {
+            'Content-Type': 'image/png',
+            // Include Authorization header if necessary
+            // 'Authorization': 'Bearer YOUR_AUTH_TOKEN',
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Upload successful', data);
+          })
+          .catch(error => {
+            console.error('Error uploading screenshot:', error);
+          });
+      });
+    });
+  }
+
   shouldIgnoreMessage(msg) {
     if (msg.includes("componentWillUpdate has been renamed")) return true;
     if (msg.includes("componentWillReceiveProps has been renamed")) return true;
@@ -149,7 +177,7 @@ class Mv2Interface extends EventDispatcher {
       body: JSON.stringify({
         data: stringified_data,
       }),
-    }).catch(() => {});
+    }).catch(() => { });
   }
 
   getMartyFwVersion() {

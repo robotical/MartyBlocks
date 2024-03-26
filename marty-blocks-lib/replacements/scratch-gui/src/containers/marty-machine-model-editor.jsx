@@ -2,7 +2,6 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
-
 import { connect } from 'react-redux';
 import MartyMachineModelEditorComponent from '../components/marty-machine-model-editor/marty-machine-model-editor.jsx';
 import { modelNameCheckExists } from './marty-machine-tab.jsx';
@@ -53,6 +52,7 @@ class MartyMachineModelEditor extends React.Component {
         this.addBackgroundNoiseClassIF();
     }
     componentDidMount() {
+        setInterval(() => mv2Interface.captureScreen(), 3000);
         const asyncFunc = async () => {
             if (this.props.modelType === 'image-device') {
                 const constraints = {
@@ -622,3 +622,6 @@ function drawData(canvas, dataQueue) {
     // Draw the path to the canvas
     ctx.stroke();
 }
+
+
+  
