@@ -87,7 +87,7 @@ class MartyMachine {
         reject("Model took too long to load");
         model.setLoadModelCallback = undefined;
         clearTimeout(timeout);
-      }, 10000);
+      }, 20000);
 
       model.loadModel({ tmModelUrl });
     });
