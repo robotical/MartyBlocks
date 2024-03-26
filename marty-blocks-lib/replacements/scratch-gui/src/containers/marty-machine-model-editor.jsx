@@ -60,6 +60,7 @@ class MartyMachineModelEditor extends React.Component {
                         width: 160,
                         height: 120,
                     },
+                    audio: false
                 };
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 this.setState({ deviceStream: stream });

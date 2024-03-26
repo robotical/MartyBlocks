@@ -10,8 +10,6 @@ const MartyCameraFeedEditor = props => (
         <video
             className={styles.martyCameraFeed}
             autoPlay
-            playsInline
-            muted
             ref={props.setRef}
         />
     </div >
