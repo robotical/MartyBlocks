@@ -22,3 +22,5 @@ yarn-error.log*
 /closure-library
 
 /draft
+
+/public
