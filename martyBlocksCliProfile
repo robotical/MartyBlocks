@@ -114,6 +114,7 @@ buildAllAndCpToWebApp () {
     removeUnusedAssets
     buildScratch $type $NODE_ENV
     cpToDist
+    cpToPublic
     cpToWebapp
 }
 
@@ -182,6 +183,12 @@ cpToDist () {
     cdhome
     rm -rf dist/*
     cp -r $gui_original/build/* ./dist
+}
+
+cpToPublic () {
+    cdhome
+    rm -rf public/*
+    cp -r $gui_original/build/* ./public
 }
 
 buildBlocks() {

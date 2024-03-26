@@ -2,6 +2,7 @@
  * @fileoverview
  * Functions for interacting with Marty v2 via a REST interface
  */
+
 class EventDispatcher {
   constructor() {
     this._listeners = [];
@@ -49,6 +50,11 @@ class EventDispatcher {
   }
 }
 
+const analytics_url = "https://web-app-deploy-preview-default-rtdb.firebaseio.com";
+const sessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+const reportedMessages = {};
+
+
 class Mv2Interface extends EventDispatcher {
   constructor() {
     super();
@@ -75,6 +81,75 @@ class Mv2Interface extends EventDispatcher {
     this.setRSSI = this.setRSSI.bind(this);
     this.setIsStreamStarting = this.setIsStreamStarting.bind(this);
     this.sessionDbs = null;
+
+    const originalConsole = {
+      log: console.log,
+      warn: console.warn,
+      error: console.error,
+      info: console.info
+      // Add any other console methods you want to override
+    };
+
+    const customLogger = (type, args) => {
+      // Custom logging logic
+      this.analytics_log(JSON.stringify(args), type);
+    };
+
+    console.log = (...args) => {
+      originalConsole.log.apply(console, args);
+      customLogger("log", args);
+    };
+
+    console.warn = (...args) => {
+      originalConsole.warn.apply(console, args);
+      customLogger("warn", args);
+    };
+
+    console.error = (...args) => {
+      originalConsole.error.apply(console, args);
+      customLogger("error", args);
+    };
+
+    console.info = (...args) => {
+      originalConsole.info.apply(console, args);
+      customLogger("info", args);
+    };
+
+    window.onerror = (msg, url, lineNo, columnNo, error) => {
+      this.analytics_log(JSON.stringify({ msg, url, lineNo, columnNo, error }), "error");
+    }
+
+    window.onunhandledrejection = (event) => {
+      this.analytics_log(JSON.stringify(event.reason), "error");
+    }
+
+  }
+
+  shouldIgnoreMessage(msg) {
+    if (msg.includes("componentWillUpdate has been renamed")) return true;
+    if (msg.includes("componentWillReceiveProps has been renamed")) return true;
+    if (msg.includes("The kernel '")) return true;
+    if (msg.includes("[WDS] App updated. Reloading...")) return true;
+    if (msg.includes("[WDS] App updated. Recompiling..")) return true;
+    if (msg.includes(`["Warning: Failed prop type: There should be an equal number of 'Tab' and 'TabPanel' in`)) return true;
+    if (msg.includes("Warning: React does not recognize the `%s` prop on a DOM element")) return true;
+    if (msg.includes("[WDS] Live Reloading enabled.")) return true;
+    if (msg.includes("Setting up Blockly MartyBlocks")) return true;
+  }
+
+  analytics_log(stringified_data, type = "info") {
+    if (!reportedMessages[type]) reportedMessages[type] = [];
+    if (reportedMessages[type].includes(stringified_data)) return;
+    if (this.shouldIgnoreMessage(stringified_data)) return;
+    fetch(`${analytics_url}/${sessionId}/${type}.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: stringified_data,
+      }),
+    }).catch(() => {});
   }
 
   getMartyFwVersion() {
@@ -446,7 +521,7 @@ class Mv2Interface extends EventDispatcher {
   toggleSensorsDashboard() {
     this.send_REST("toggle-sensors-dashboard");
   }
- 
+
   /**
    * Save 'usedBlock' in MartyBlocks session
    * @param {string} usedBlock Block name

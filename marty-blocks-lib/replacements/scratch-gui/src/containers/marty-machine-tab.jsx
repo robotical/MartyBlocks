@@ -75,13 +75,13 @@ class MartyMachineTab extends React.Component {
             "confirmDialogForNewModel"
         ]);
 
-        // console.debug("MartyMachineTab stored model:", props.vm.editingTarget.sprite.models[0]);
-        // console.debug("MartyMachineTab modelType:", props.vm.editingTarget.sprite.models[0]?.modelType);
+        // console.debug("MartyMachineTab stored model:", props.vm.editingTarget?.sprite?.models[0]);
+        // console.debug("MartyMachineTab modelType:", props.vm.editingTarget?.sprite?.models[0]?.modelType);
         const modelToLoad = {
-            modelType: martyMachine.currentModel?.modelType || props.vm.editingTarget.sprite.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
-            isModelLoaded: !martyMachine.currentModel && !!props.vm.editingTarget.sprite.models[0],
-            modelName: martyMachine.currentModel?.name || props.vm.editingTarget.sprite.models[0]?.name || "New Model",
-            MLModel: martyMachine.currentModel || props.vm.editingTarget.sprite.models[0]?.MLModel || martyMachine.getNewModelInstance()
+            modelType: martyMachine.currentModel?.modelType || props.vm.editingTarget?.sprite?.models[0]?.modelType || "image-device",// "image-device" or "image-marty" or "audio" or "saved-model" 
+            isModelLoaded: !martyMachine.currentModel && !!props.vm.editingTarget?.sprite?.models[0],
+            modelName: martyMachine.currentModel?.name || props.vm.editingTarget?.sprite?.models[0]?.name || "New Model",
+            MLModel: martyMachine.currentModel || props.vm.editingTarget?.sprite?.models[0]?.MLModel || martyMachine.getNewModelInstance()
         };
         console.debug("modelToLoad", modelToLoad)
 
@@ -103,11 +103,11 @@ class MartyMachineTab extends React.Component {
     componentDidMount() {
         mv2Interface.startMLSession();
         this.shouldShowTutorialsCard();
-        const sprite = vm.editingTarget.sprite;
-        const areThereSavedModels = sprite.models && sprite.models.length > 0;
-        if (areThereSavedModels) {
-            this.setState({ modelType: sprite.models[0].modelType });
-        }
+        const sprite = vm.editingTarget?.sprite;
+        // const areThereSavedModels = sprite.models && sprite.models.length > 0;
+        // if (areThereSavedModels) {
+        //     this.setState({ modelType: sprite.models[0].modelType });
+        // }
     }
 
     componentWillUnmount() {
@@ -160,10 +160,10 @@ class MartyMachineTab extends React.Component {
         this.setState({
             selectedModelIndex: modelIndex,
             isModelLoaded: true,
-            modelType: this.props.vm.editingTarget.sprite.models[modelIndex].modelType,
-            modelName: this.props.vm.editingTarget.sprite.models[modelIndex].name
+            modelType: this.props.vm.editingTarget?.sprite?.models[modelIndex].modelType,
+            modelName: this.props.vm.editingTarget?.sprite?.models[modelIndex].name
         });
-        this.model = this.props.vm.editingTarget.sprite.models[modelIndex].MLModel;
+        this.model = this.props.vm.editingTarget?.sprite?.models[modelIndex].MLModel;
     }
 
     handleDeleteModel(modelIndex) {
@@ -172,7 +172,7 @@ class MartyMachineTab extends React.Component {
             this.setState({ selectedModelIndex: Math.max(0, modelIndex - 1) });
         }
         // if there are no other models, create a new one
-        if (this.props.vm.editingTarget.sprite.models.length === 0) {
+        if (this.props.vm.editingTarget?.sprite?.models.length === 0) {
             this.onNewModelClick("image-device");
             this.setState({ isModelLoaded: false });
         }
@@ -180,7 +180,7 @@ class MartyMachineTab extends React.Component {
     }
 
     handleExportModel(modelIndex) {
-        const item = this.props.vm.editingTarget.sprite.models[modelIndex];
+        const item = this.props.vm.editingTarget?.sprite?.models[modelIndex];
         const blob = new Blob([item.asset.data], {
             type: item.asset.assetType.contentType,
         });
@@ -197,8 +197,8 @@ class MartyMachineTab extends React.Component {
         if (!this.props.vm.editingTarget) {
             return null;
         }
-        const sprite = this.props.vm.editingTarget.sprite;
-        const models = sprite.models ? sprite.models : [];
+        const sprite = this.props.vm.editingTarget?.sprite;
+        const models = [] //sprite.models ? sprite.models : [];
         const selectedModelIndex = Math.max(models.length - 1, 0);
         const model = models[selectedModelIndex];
         this.model = model.MLModel;
@@ -233,20 +233,20 @@ class MartyMachineTab extends React.Component {
         });
     }
     handleDrop(dropInfo) {
-        if (dropInfo.dragType === DragConstants.MODEL) {
-            const sprite = this.props.vm.editingTarget.sprite;
-            const activeModel = sprite.models[this.state.selectedModelIndex];
+        // if (dropInfo.dragType === DragConstants.MODEL) {
+        //     const sprite = this.props.vm.editingTarget?.sprite;
+        //     const activeModel = sprite.models[this.state.selectedModelIndex];
 
-            this.props.vm.reorderModel(
-                this.props.vm.editingTarget.id,
-                dropInfo.index,
-                dropInfo.newIndex
-            );
+        //     this.props.vm.reorderModel(
+        //         this.props.vm.editingTarget.id,
+        //         dropInfo.index,
+        //         dropInfo.newIndex
+        //     );
 
-            this.setState({
-                selectedModelIndex: sprite.models.indexOf(activeModel),
-            });
-        }
+        //     this.setState({
+        //         selectedModelIndex: sprite.models.indexOf(activeModel),
+        //     });
+        // }
     }
 
     setFileInput(input) {
@@ -269,7 +269,7 @@ class MartyMachineTab extends React.Component {
         if (doesExist) {
             return alert("Model name already exists, please choose another name.");
         }
-        const storedModel = this.props.vm.editingTarget.sprite.models[this.state.selectedModelIndex];
+        const storedModel = this.props.vm.editingTarget?.sprite?.models[this.state.selectedModelIndex];
         storedModel.name = newModelName;
         this.model.name = newModelName;
         this.setState({ modelName: newModelName });
@@ -287,9 +287,9 @@ class MartyMachineTab extends React.Component {
             return null;
         }
 
-        const sprite = vm.editingTarget.sprite;
+        const sprite = vm.editingTarget?.sprite;
 
-        const models = sprite.models
+        const models = [] // sprite.models
             ? sprite.models.map((model) => {
                 // console.log("model", model);
                 return ({

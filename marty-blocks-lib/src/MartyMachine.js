@@ -19,7 +19,7 @@ class MartyMachine {
     this.currentModel = undefined;
     this.currentTrainingReducer = undefined;
   }
-  
+
   cleanupAfterSave() {
     this.currentModel = undefined;
     this.currentTrainingReducer = undefined;
@@ -125,9 +125,8 @@ class MartyMachine {
     model.streamAudioToWebWorker(data);
   }
 
-
   getNewTrainingDataReducer() {
-    const trainingReducer =  new TDReducerWrapper();
+    const trainingReducer = new TDReducerWrapper();
     this.currentTrainingReducer = trainingReducer;
     return trainingReducer;
   }

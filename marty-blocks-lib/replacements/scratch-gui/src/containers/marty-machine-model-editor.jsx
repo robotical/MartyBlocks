@@ -35,7 +35,7 @@ class MartyMachineModelEditor extends React.Component {
         this.state = {
             deviceStream: null,
             className: 'Class 1',
-            modelName: vm.editingTarget.sprite.models[this.props.modelIndex < vm.editingTarget.sprite.models.length ? this.props.modelIndex : vm.editingTarget.sprite.models.length - 1]?.name || 'Model 1'
+            modelName: "model 1"// vm.editingTarget.sprite.models[this.props.modelIndex < vm.editingTarget.sprite.models.length ? this.props.modelIndex : vm.editingTarget.sprite.models.length - 1]?.name || 'Model 1'
         };
 
         this.ref = null;
@@ -59,7 +59,7 @@ class MartyMachineModelEditor extends React.Component {
                     video: {
                         width: 160,
                         height: 120,
-                    }
+                    },
                 };
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 this.setState({ deviceStream: stream });
