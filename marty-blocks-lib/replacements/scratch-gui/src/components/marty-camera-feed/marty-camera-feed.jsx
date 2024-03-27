@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react';
-import { injectIntl } from 'react-intl';
 
 import styles from './marty-camera-feed.css';
 
@@ -19,4 +18,4 @@ MartyCameraFeedEditor.propTypes = {
     setRef: PropTypes.func,
 };
 
-export default injectIntl(MartyCameraFeedEditor);
+export default MartyCameraFeedEditor;

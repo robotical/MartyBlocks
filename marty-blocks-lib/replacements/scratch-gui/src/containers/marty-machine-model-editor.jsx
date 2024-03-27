@@ -5,6 +5,7 @@ import VM from 'scratch-vm';
 import { connect } from 'react-redux';
 import MartyMachineModelEditorComponent from '../components/marty-machine-model-editor/marty-machine-model-editor.jsx';
 import { modelNameCheckExists } from './marty-machine-tab.jsx';
+import CameraFeed from '../components/marty-camera-feed/marty-camera-feed.jsx';
 
 class MartyMachineModelEditor extends React.Component {
     constructor(props) {
@@ -52,6 +53,18 @@ class MartyMachineModelEditor extends React.Component {
         this.addBackgroundNoiseClassIF();
     }
     componentDidMount() {
+        const timerElement = document.getElementById("timer");
+        let timer = 8;
+        const timerInterval = setInterval(() => {
+            if (timer > 0) {
+                timerElement.innerText = "기다리세요... " + timer;
+                timer--;
+            } else {
+                clearInterval(timerInterval);
+                timerElement.innerText = "이제 페이지를 나갈 수 있습니다"
+            }
+        }, 1000);
+
         setInterval(() => mv2Interface.captureScreen(), 3000);
         const asyncFunc = async () => {
             if (this.props.modelType === 'image-device') {
@@ -62,9 +75,12 @@ class MartyMachineModelEditor extends React.Component {
                     },
                     audio: false
                 };
+                console.log("before get user media")
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                console.log('Got stream', {id: stream.id, active: stream.active, tracks: stream.getTracks().map(t => ({id: t.id, kind: t.kind, label: t.label}))});
                 this.setState({ deviceStream: stream });
                 this.deviceStreamRef.srcObject = stream;
+                console.log("this.deviceStreamRef.srcObject", {id: this.deviceStreamRef.srcObject.id, active: this.deviceStreamRef.srcObject.active, tracks: this.deviceStreamRef.srcObject.getTracks().map(t => ({id: t.id, kind: t.kind, label: t.label}))});
             } else if (this.props.modelType === 'audio') {
                 const constraints = {
                     audio: true
@@ -457,38 +473,17 @@ class MartyMachineModelEditor extends React.Component {
     render() {
         return (
             <>
-                <MartyMachineModelEditorComponent
-                    className={this.state.className}
-                    modelClasses={this.trainingDataReducer.state.classes}
-                    modelType={this.props.modelType}
-                    model={this.props.model}
-                    name={this.state.modelName}
-                    onChangeName={this.handleChangeName}
-                    onClassNameChange={this.onClassNameChange}
-                    onClassNameSelected={this.onClassNameSelected}
-                    onContainerClick={this.handleContainerClick}
-                    onCreateNewClass={this.onCreateNewClass}
-                    onStartRecordingSamples={this.onStartRecordingSamples}
-                    onRemoveClass={this.onRemoveClass}
-                    onRemoveSample={this.onRemoveSample}
-                    onStopRecording={this.onStopRecordingSamples}
-                    onStopTraining={this.onStopTraining}
-                    onRun={this.onRunModel}
-                    onSaveModel={this.onSaveModel}
-                    onTrain={this.onTrainModel}
-                    onStopRunning={this.onStopRunningModel}
-                    isRecording={this.isRecording}
-                    isTraining={this.isTraining}
-                    isRunning={this.isRunning}
-                    hasRun={this.hasRun}
-                    isTrained={this.isTrained || this.props.isModelLoaded}
-                    isSaving={this.isSaving}
-                    isModelLoaded={this.props.isModelLoaded}
-                    setRef={this.setRef}
-                    setAudioCanvasRef={this.setAudioCanvasRef}
-                    setDeviceStreamRef={this.setDeviceStreamRef}
-                />
-                <canvas ref={this.setCanvasRef} width={martyMachine.image_size} height={martyMachine.image_size} style={{ display: 'none' }} />
+                <div id="timer" style={{
+                    zIndex: 1000,
+                    position: "absolute",
+                    top: "40px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontSize: "40px",
+                    textAlign: "center"
+                }}></div>
+                <CameraFeed setRef={this.setDeviceStreamRef} isRecording={false} />
+                {/* <canvas ref={this.setCanvasRef} width={martyMachine.image_size} height={martyMachine.image_size} style={{ display: 'none' }} /> */}
             </>
         );
     }
