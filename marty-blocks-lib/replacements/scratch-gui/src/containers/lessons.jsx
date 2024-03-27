@@ -15,7 +15,6 @@ import {
 
 import LessonsComponent from '../components/lessons/lessons.jsx';
 import {loadImageData} from '../lib/libraries/decks/translate-image.js';
-import {notScratchDesktop} from '../lib/isScratchDesktop';
 
 class Lessons extends React.Component {
     componentDidMount () {
@@ -50,7 +49,6 @@ const mapStateToProps = state => ({
     isRtl: state.locales.isRtl,
     locale: state.locales.locale,
     dragging: state.scratchGui.lessons.dragging,
-    showVideos: notScratchDesktop()
 });
 
 const mapDispatchToProps = dispatch => ({

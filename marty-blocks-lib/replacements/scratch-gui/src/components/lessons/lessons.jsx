@@ -23,9 +23,9 @@ import { translateImage } from '../../lib/libraries/decks/translate-image.js';
 
 const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded }) => (
     <div className={expanded ? styles.headerButtons : classNames(styles.headerButtons, styles.headerButtonsHidden)}
-    style={{
-        gridTemplateColumns: step === undefined ? "max-content 1fr" : "min-content max-content 1fr"
-    }}>
+        style={{
+            gridTemplateColumns: step === undefined ? "max-content 1fr" : "min-content max-content 1fr"
+        }}>
         {step !== undefined && <div
             className={styles.stepNumberOnTitle}
         >
@@ -77,57 +77,17 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step
 class VideoStep extends React.Component {
 
     componentDidMount() {
-        const script = document.createElement('script');
-        script.src = `https://fast.wistia.com/embed/medias/${this.props.video}.jsonp`;
-        script.async = true;
-        script.setAttribute('id', 'wistia-video-content');
-        document.body.appendChild(script);
 
-        const script2 = document.createElement('script');
-        script2.src = 'https://fast.wistia.com/assets/external/E-v1.js';
-        script2.async = true;
-        script2.setAttribute('id', 'wistia-video-api');
-        document.body.appendChild(script2);
     }
 
-    // We use the Wistia API here to update or pause the video dynamically:
-    // https://wistia.com/support/developers/player-api
-    componentDidUpdate(prevProps) {
-        // Ensure the wistia API is loaded and available
-        if (!(window.Wistia && window.Wistia.api)) return;
-
-        // Get a handle on the currently loaded video
-        const video = window.Wistia.api(prevProps.video);
-
-        // Reset the video source if a new video has been chosen from the library
-        if (prevProps.video !== this.props.video) {
-            video.replaceWith(this.props.video);
-        }
-
-        // Pause the video if the modal is being shrunken
-        if (!this.props.expanded) {
-            video.pause();
-        }
-    }
-
-    componentWillUnmount() {
-        const script = document.getElementById('wistia-video-content');
-        script.parentNode.removeChild(script);
-
-        const script2 = document.getElementById('wistia-video-api');
-        script2.parentNode.removeChild(script2);
-    }
 
     render() {
         return (
-            <div className={styles.stepVideo}>
-                <div
-                    className={`wistia_embed wistia_async_${this.props.video}`}
-                    id="video-div"
-                    style={{ height: `257px`, width: `466px` }}
-                >
-                    &nbsp;
-                </div>
+            <div style={{ width: '100%' }}>
+                <video style={{ width: '100%', height: 'auto' }} controls>
+                    <source src={this.props.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
             </div>
         );
     }
@@ -138,12 +98,12 @@ VideoStep.propTypes = {
     video: PropTypes.string.isRequired
 };
 
-const ImageStep = ({ title, image }) => (
+const ImageStep = ({ image, title }) => (
     <Fragment>
-        <div className={styles.stepTitle}>
-            {title}
-        </div>
         <div className={styles.stepImageContainer}>
+            {title && <div className={styles.stepTitle}>
+                {title}
+            </div>}
             <img
                 className={styles.stepImage}
                 draggable={false}
@@ -159,7 +119,7 @@ ImageStep.propTypes = {
     title: PropTypes.node.isRequired
 };
 
-const LessonStartModalBottomButtons = ({ onStartLesson }) => (
+const ModalBottomButtons = ({ onCTAClick, closeModalButtonTitle = "Start" }) => (
     <div className={styles.lessonStartModalButtonsContainer}>
 
         <div className={styles.middleButton}>
@@ -171,25 +131,25 @@ const LessonStartModalBottomButtons = ({ onStartLesson }) => (
 
         <div
             className={styles.startLessonButton}
-            onClick={onStartLesson}
+            onClick={onCTAClick}
         >
             <img
                 draggable={false}
                 src={rightArrow}
             />
-            <span>Start</span>
+            <span>{closeModalButtonTitle}</span>
         </div>
     </div>
 );
 
-LessonStartModalBottomButtons.propTypes = {
-    onStartLesson: PropTypes.func,
+ModalBottomButtons.propTypes = {
+    onCTAClick: PropTypes.func,
 };
 
 const NextPrevButtons = ({ isRtl, onNextStep, onPrevStep, expanded }) => (
     <div className={expanded ? styles.nextPrevButtonsContainer : styles.hidden}>
         <div
-            className={expanded ? (isRtl ? styles.rightButton : styles.leftButton) : styles.hidden}
+            className={expanded ? (onPrevStep ? (isRtl ? styles.rightButton : styles.leftButton) : styles.disabledButton) : styles.hidden}
             onClick={onPrevStep}
         >
             <img
@@ -209,7 +169,7 @@ const NextPrevButtons = ({ isRtl, onNextStep, onPrevStep, expanded }) => (
         </div>
 
         <div
-            className={expanded ? (isRtl ? styles.leftButton : styles.rightButton) : styles.hidden}
+            className={expanded ? (onNextStep ? (isRtl ? styles.leftButton : styles.rightButton) : styles.disabledButton) : styles.hidden}
             onClick={onNextStep}
         >
             <img
@@ -291,25 +251,222 @@ PreviewsStep.propTypes = {
     onActivateDeckFactory: PropTypes.func.isRequired,
 };
 
+const LessonStartModalContent = ({ content, activeDeckId, onCloseModal }) => {
+    const { img, description } = content[activeDeckId];
+
+    return (
+        <>
+            <div className={styles.stepBody}>
+                <ImageStep
+                    image={img}
+                    title={description}
+                />
+            </div>
+            <ModalBottomButtons
+                onCTAClick={onCloseModal}
+                closeModalButtonTitle={"Start"}
+            />
+        </>
+    );
+};
+
+class MultipleChoice extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <form>
+                {this.props.possibleAnswers.map((answer, index) => (
+                    <div key={index}>
+                        <label>
+                            <input
+                                type="checkbox"
+                                value={answer.text}
+                                checked={this.props.selectedAnswers.includes(answer.text)}
+                                onChange={this.props.handleOptionChange}
+                            />
+                            {answer.text}
+                            <img src={answer.image} alt={`Option ${index}`} />
+                        </label>
+                    </div>
+                ))}
+            </form>
+        );
+    }
+}
+
+class CheckpointModalContent extends React.Component {
+    constructor() {
+        super();
+        this.onSubmit = this.onSubmit.bind(this);
+        this.tryAgainHandler = this.tryAgainHandler.bind(this);
+        this.handleOptionChange = this.handleOptionChange.bind(this);
+        this.state = {
+            answers: [],
+            showing: "question", // question, result,
+            results: null, // correct, incorrect, null
+            idxOfGivenAnswer: null // only relevant to 'single' question type
+        };
+    }
+
+    onSubmit() {
+        const { answers } = this.state;
+        const { correctAnswers, possibleAnswers, questionType } = this.props;
+        let correct = true;
+        let idxOfGivenAnswer;
+        if (questionType === "single") {
+            idxOfGivenAnswer = possibleAnswers.findIndex((possibleAnswer) => possibleAnswer.text === answers[0]);
+        }
+        correctAnswers.forEach((correctAnswer) => {
+            if (!answers.includes(correctAnswer)) {
+                correct = false;
+            }
+        });
+        if (answers.length !== correctAnswers.length) {
+            correct = false;
+        }
+        if (correct) {
+            this.setState({ showing: "result", results: "correct", idxOfGivenAnswer });
+        } else {
+            this.setState({ showing: "result", results: "incorrect", idxOfGivenAnswer });
+        }
+    }
+
+    tryAgainHandler() {
+        this.setState({ showing: "question", answers: [] });
+    }
+
+    handleOptionChange = (changeEvent) => {
+        const selectedOption = changeEvent.target.value;
+        this.setState(prevState => {
+            // Check if the selected option is already in the array
+            if (prevState.answers.includes(selectedOption)) {
+                // Filter out the option if it's already selected
+                return {
+                    answers: prevState.answers.filter(answer => answer !== selectedOption)
+                };
+            } else {
+                // Add the selected option to the array
+                return {
+                    answers: [...prevState.answers, selectedOption]
+                };
+            }
+        });
+    };
+
+    render() {
+        const { onCloseModal, question, possibleAnswers, questionType, answerExplanations } = this.props;
+
+        if (this.state.showing === "question") {
+            let answerFieldJSX;
+            if (questionType === "text") {
+                answerFieldJSX = <input type="text" onChange={(e) => this.setState({ answers: [e.target.value] })} value={this.state.answers[0] || ""} />;
+            } else if (questionType === "single") {
+                answerFieldJSX = <MultipleChoice possibleAnswers={possibleAnswers} handleOptionChange={this.handleOptionChange} selectedAnswers={this.state.answers} />;
+            } else if (questionType === "multiple") {
+                answerFieldJSX = <MultipleChoice possibleAnswers={possibleAnswers} handleOptionChange={this.handleOptionChange} selectedAnswers={this.state.answers} />;
+            }
+            return (
+                <>
+                    <div className={styles.stepBody}>
+                        <div className={styles.checkpointContainer}>
+                            <div className={styles.checkpointQuestion}>
+                                {question}
+                            </div>
+                            <div className={styles.checkpointAnswer}>
+                                {answerFieldJSX}
+                            </div>
+                        </div>
+                    </div>
+                    <ModalBottomButtons
+                        onCTAClick={this.onSubmit}
+                        closeModalButtonTitle={"Submit"}
+                    />
+                </>
+            );
+        } else if (this.state.showing === "result") {
+            let resultExplanationJSX;
+            if (questionType === "text" || questionType === "multiple") {
+                resultExplanationJSX = this.state.results === "correct" ? answerExplanations.correctAnswer : answerExplanations.incorrectAnswer;
+            } else {
+                resultExplanationJSX = answerExplanations[this.state.idxOfGivenAnswer];
+            }
+            return (
+                <>
+                    <div className={styles.stepBody}>
+                        <div className={styles.checkpointContainer}>
+                            <div className={styles.checkpointQuestion}>
+                                {question}
+                            </div>
+                            <div className={styles.checkpointAnswer}>
+                                {this.state.answers.join(", ")}
+                            </div>
+                            <div className={styles.checkpointResult}>
+                                <span>{this.state.results === "correct" ? "Correct!" : "Incorrect!"}</span>
+                                <div className={styles.checkpointResultExplanation}>
+                                    {resultExplanationJSX}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ModalBottomButtons
+                        onCTAClick={this.state.results === "correct" ? onCloseModal : this.tryAgainHandler}
+                        closeModalButtonTitle={this.state.results === "correct" ? "Close" : "Try Again"}
+                    />
+                </>
+            );
+        }
+    }
+}
+
 class Lessons extends React.Component {
     constructor(props) {
         super(props);
+        this.onCloseModal = this.onCloseModal.bind(this);
+        this.showCheckpointModal = this.showCheckpointModal.bind(this);
         this.state = {
             modal: {
                 title: this.props.content[this.props.activeDeckId].name,
-                content: this.props.content[this.props.activeDeckId].description
+                content: <LessonStartModalContent {...this.props} onCloseModal={this.onCloseModal} />,
             }
         };
-        this.onCloseLessonStartModal = this.onCloseLessonStartModal.bind(this);
     }
 
-    onCloseLessonStartModal = () => {
+    onCloseModal = () => {
         this.setState({
             modal: {
                 title: '',
-                content: ''
+                content: '',
             }
         });
+    }
+
+    showCheckpointModal = (steps, stepId) => {
+        this.setState({
+            modal: {
+                title: "CHECKPOINT",
+                content: <CheckpointModalContent
+                    question={steps[stepId].question}
+                    questionType={steps[stepId].questionType}
+                    possibleAnswers={steps[stepId].possibleAnswers}
+                    correctAnswers={steps[stepId].correctAnswers}
+                    answerExplanations={steps[stepId].answerExplanations}
+                    onCloseModal={this.onCloseModal}
+                />,
+            }
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.step !== prevProps.step) {
+            const steps = this.props.content[this.props.activeDeckId].steps;
+            const stepId = this.props.step;
+            if (steps[stepId].type === "checkpoint") {
+                this.showCheckpointModal(steps, stepId);
+            }
+        }
     }
 
     render() {
@@ -328,10 +485,8 @@ class Lessons extends React.Component {
             onEndDrag,
             onNextStep,
             onPrevStep,
-            showVideos,
             step,
             expanded,
-            ...posProps
         } = this.props;
 
         if (activeDeckId === null) return;
@@ -349,7 +504,7 @@ class Lessons extends React.Component {
                 className={styles.cardContainerOverlay}
                 style={{
                     width: `${window.innerWidth + (2 * lessonHorizontalDragOffset)}px`,
-                    height: `${window.innerHeight - menuBarHeight}px`,
+                    height: expanded ? `${window.innerHeight - menuBarHeight}px` : 'auto',
                     top: `${menuBarHeight}px`,
                     left: `${-lessonHorizontalDragOffset}px`
                 }}
@@ -370,25 +525,15 @@ class Lessons extends React.Component {
                                 <div className={styles.card}>
                                     <LessonHeader
                                         expanded={true}
-                                        lessonTitle={content[activeDeckId].name}
-                                        onCloseLessons={onCloseLessons}
+                                        lessonTitle={this.state.modal.title}
+                                        onCloseLessons={this.onCloseModal}
                                     />
-                                    <div className={styles.stepBody}>
-                                        <ImageStep
-                                            image={content[activeDeckId].img}
-                                            title={content[activeDeckId].description}
-                                        />
-                                    </div>
-                                    <LessonStartModalBottomButtons
-                                        onStartLesson={this.onCloseLessonStartModal}
-                                    />
+                                    {this.state.modal.content}
                                 </div>
                             </div>
                         </Draggable>
                     </div>
                 }
-
-
                 <Draggable
                     bounds="parent"
                     cancel="#video-div" // disable dragging on video div
@@ -422,45 +567,45 @@ class Lessons extends React.Component {
                                     </div>
                                     <span className={styles.progressBarRemainingSteps}>{step + 1}/{steps.length}</span>
                                 </div>
-                                {steps[step].externalUrl && (
-                                    <div className={styles.externalUrl}>
-                                        <a
-                                            href={steps[step].externalUrl.url}
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                        >
-                                            {steps[step].externalUrl.label}
-                                        </a>
-                                    </div>
-                                )}
-                                {steps[step].deckIds ? (
-                                    <PreviewsStep
-                                        content={content}
-                                        deckIds={steps[step].deckIds}
-                                        onActivateDeckFactory={onActivateDeckFactory}
-                                    />
-                                ) : (
-                                    steps[step].video ? (
-                                        showVideos ? (
-                                            <VideoStep
-                                                dragging={dragging}
-                                                expanded={expanded}
-                                                video={translateVideo(steps[step].video, locale)}
-                                            />
-                                        ) : ( // Else show the deck image and title
-                                            <ImageStep
-                                                image={content[activeDeckId].img}
-                                                title={content[activeDeckId].name}
-                                            />
+                                {steps[step].type === "info" && <>
+                                    {
+                                        steps[step].description && (
+                                            <div className={styles.stepDescription}>
+                                                {steps[step].description}
+                                            </div>
                                         )
-                                    ) : (
+                                    }
+                                    {steps[step].video && (
+                                        <VideoStep
+                                            dragging={dragging}
+                                            expanded={expanded}
+                                            video={translateVideo(steps[step].video, locale)}
+                                        />
+                                    )}
+                                    {steps[step].image && (
                                         <ImageStep
                                             image={translateImage(steps[step].image, locale)}
-                                            title={steps[step].title}
                                         />
-                                    )
-                                )}
-                                {steps[step].trackingPixel && steps[step].trackingPixel}
+                                    )}
+                                </>
+                                }
+                                {steps[step].type === "checkpoint" && <>
+                                    <div className={styles.checkpointStepTitle}>
+                                        <span>Checkpoint Question</span>
+                                    </div>
+                                    {
+                                        steps[step].question && (
+                                            <div className={styles.stepDescription}>
+                                                {steps[step].question}
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        <div className={styles.checkpointTryAgainDiv}>
+                                            <button onClick={() => this.showCheckpointModal(steps, step)}>Try Again</button>
+                                        </div>
+                                    }
+                                </>}
                             </div>
                             <NextPrevButtons
                                 expanded={expanded}
@@ -502,7 +647,6 @@ Lessons.propTypes = {
     onPrevStep: PropTypes.func.isRequired,
     onShrinkExpandLessons: PropTypes.func.isRequired,
     onStartDrag: PropTypes.func,
-    showVideos: PropTypes.bool,
     step: PropTypes.number.isRequired,
     x: PropTypes.number,
     y: PropTypes.number
