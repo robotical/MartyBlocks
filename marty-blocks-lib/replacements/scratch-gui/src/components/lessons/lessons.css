@@ -88,25 +88,6 @@
   background: rgb(55, 171, 200);
 }
 
-.next-prev-buttons-container {
-  padding: 1rem;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  background: white;
-  cursor: default;
-}
-
-.lesson-start-modal-buttons-container {
-  padding: 1rem;
-  width: 100%;
-  display: grid;
-  grid-template-columns: min-content 1fr min-content;
-  column-gap: 1rem;
-  background: white;
-  cursor: default;
-}
-
 .disabled-button {
   visibility: hidden;
 }
@@ -152,17 +133,6 @@
   transition: all 0.25s ease;
 }
 
-.start-lesson-button {
-  height: 30px;
-  width: 100px;
-  border-radius: 40px;
-}
-
-.start-lesson-button span {
-    color: white;
-    margin-left: 0.4rem;
-}
-
 .left-button:hover,
 .right-button:hover {
   box-shadow: 0 0 0 6px $extensions-transparent;
@@ -187,77 +157,6 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: 100%;
   max-height: 90vh;
-}
-
-.header-buttons {
-  width: 100%;
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: min-content max-content 1fr;
-  align-items: center;
-  background: rgb(55, 171, 200);
-  border-bottom: 1px solid black;
-  font-size: 0.625rem;
-  font-weight: bold;
-}
-
-.header-buttons-hidden {
-  border-bottom: 0px;
-}
-
-.header-buttons-right {
-  justify-self: end;
-  display: flex;
-  flex-direction: row;
-}
-
-.header-buttons img {
-  margin-bottom: 2px;
-}
-
-.shrink-expand-button {
-  cursor: pointer;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.25rem;
-}
-
-.step-number-on-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.8rem;
-  margin: 0 0.2rem;
-  text-align: center;
-  font-weight: bold;
-  color: black;
-  background: white;
-  padding: 5px;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  border: 2px solid black;
-}
-
-.shrink-expand-button:hover {
-  background-color: $ui-black-transparent;
-}
-
-.remove-button {
-  cursor: pointer;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.25rem;
-}
-
-.remove-button:hover {
-  background-color: $ui-black-transparent;
 }
 
 .step-title {
@@ -300,21 +199,6 @@
   padding: .5rem;
 }
 
-.step-video {
-  height: 256px;
-}
-
-.step-image {
-  max-width: 450px;
-  max-height: 200px;
-  object-fit: contain;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  margin: 0 0.5rem 0.5rem;
-}
-
 .decks {
   display: flex;
   flex-direction: row;
@@ -353,10 +237,7 @@
   height: 1.25rem;
 }
 
-.close-icon {
-  height: 1.25rem;
-  margin: 0.125rem 0; /* To offset the .25rem difference in icon size */
-}
+
 
 [dir="ltr"] .help-icon {
   margin-right: 0.25rem;
@@ -366,13 +247,6 @@
   margin-left: 0.25rem;
 }
 
-[dir="ltr"] .close-icon {
-  margin-left: 0.25rem;
-}
-
-[dir="rtl"] .close-icon {
-  margin-right: 0.25rem;
-}
 
 .see-all {
   display: flex;
@@ -438,4 +312,23 @@
   color: black;
   font-size: 12px;
   align-self: center;
+}
+
+.checkpoint-try-again-div {
+
+}
+
+.checkpoint-try-again-div button {
+  user-select: none;
+  cursor: pointer;
+  background: rgb(55, 171, 200);
+  box-shadow: 0 0 0 4px $extensions-transparent;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: white;
+  padding: 3px 4px;
+  outline: none;
 }

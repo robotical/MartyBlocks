@@ -1,0 +1,125 @@
+@import "../../../../css/units.css";
+@import "../../../../css/colors.css";
+@import "../../../../css/z-index.css";
+
+.step-body {
+  height: 100%;
+  width: 100%;
+  background: $ui-white;
+  display: flex;
+  flex-grow: 1;
+  row-gap: 0.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  text-align: center;
+
+  /* Min height prevents layout changing when images change */
+  min-height: 256px;
+
+  /* max-height: 350px; */
+  overflow: auto;
+
+  cursor: default;
+  padding: 0.5rem;
+}
+
+.checkpoint-container {
+  display: grid;
+  row-gap: 1rem;
+  width: 100%;
+}
+
+.checkpoint-question {
+  border: 1px solid gray;
+  width: 100%;
+  text-align: left;
+  padding: 1rem 0.5rem;
+}
+
+.checkpoint-answer {
+  text-align: left;
+}
+
+.checkpoint-answer-result-span {
+  border: 2px solid rgb(244, 218,97);
+  border-radius: 7px;
+  padding: 4px 5px;
+}
+
+.checkpoint-answer-answers-span {
+  font-size: 12px;
+}
+
+.checkpoint-result-explanation {
+  border: 1px solid gray;
+  width: 100%;
+  text-align: left;
+  padding: 1rem 0.5rem;
+}
+
+.container {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  justify-items: center;
+}
+
+.choice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  row-gap: .7rem;
+  max-width: 350px;
+  cursor: pointer;
+}
+
+.choice-image {
+  width: 100%; 
+  height: auto; 
+  object-fit: cover; 
+}
+
+.choice-checkbox {
+  padding: 2px;
+  background: rgb(148 219 236);
+  border-radius: 10px;
+  margin: 0 auto;
+  padding: 0.5rem;
+  color: white;
+  display: grid;
+  grid-auto-flow: column;
+  justify-items: start;
+  cursor: pointer;
+}
+
+/* Hide the original checkbox */
+.choice-input {
+  display: none;
+}
+.choice-label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Style when the checkbox is checked */
+.choice-input:checked + .choice-label {
+  background: rgb(75 109 118);
+}
+
+.choice-text {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  color: #696767;
+  padding-right: .2rem;
+  align-self: center;
+}

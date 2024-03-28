@@ -59,38 +59,38 @@ export default {
                 ),
                 image: 'mmCreateModel',
             },
-            {
-                type: 'checkpoint',
-                question: (
-                    <FormattedMessage
-                        defaultMessage="What is the name of the model you created?"
-                        description="Step name for 'Create New Model' step"
-                        id="gui.howtos.marty-machine-create-model.step4_create-model"
-                        values={{
-                            linebreak: <br />,
-                            em: (...chunks) => <em>{chunks}</em>,
-                        }}
-                    />
-                ),
-                questionType: 'text', // text, multiple, single
-                correctAnswers: ['marty'],
-                answerExplanations: {
-                    correctAnswer: (
-                        <FormattedMessage
-                            defaultMessage="Correct! You created a model named 'marty'."
-                            description="Answer explanation for 'Create New Model' step"
-                            id="gui.howtos.marty-machine-create-model.step4_create-model.correct_answer"
-                        />
-                    ),
-                    incorrectAnswer: (
-                        <FormattedMessage
-                            defaultMessage="Incorrect. Your model must be named 'marty'."
-                            description="Answer explanation for 'Create New Model' step"
-                            id="gui.howtos.marty-machine-create-model.step4_create-model.wrong_answer"
-                        />
-                    ),
-                },
-            },
+            // {
+            //     type: 'checkpoint',
+            //     question: (
+            //         <FormattedMessage
+            //             defaultMessage="What is the name of the model you created?"
+            //             description="Step name for 'Create New Model' step"
+            //             id="gui.howtos.marty-machine-create-model.step4_create-model"
+            //             values={{
+            //                 linebreak: <br />,
+            //                 em: (...chunks) => <em>{chunks}</em>,
+            //             }}
+            //         />
+            //     ),
+            //     questionType: 'text', // text, multiple, single
+            //     correctAnswers: ['marty'],
+            //     answerExplanations: {
+            //         correctAnswer: (
+            //             <FormattedMessage
+            //                 defaultMessage="Correct! You created a model named 'marty'."
+            //                 description="Answer explanation for 'Create New Model' step"
+            //                 id="gui.howtos.marty-machine-create-model.step4_create-model.correct_answer"
+            //             />
+            //         ),
+            //         incorrectAnswer: (
+            //             <FormattedMessage
+            //                 defaultMessage="Incorrect. Your model must be named 'marty'."
+            //                 description="Answer explanation for 'Create New Model' step"
+            //                 id="gui.howtos.marty-machine-create-model.step4_create-model.wrong_answer"
+            //             />
+            //         ),
+            //     },
+            // },
             {
                 type: 'checkpoint',
                 question: (
@@ -172,8 +172,19 @@ export default {
                         />
                     ),
                 },
-
-            }
+            },
+            {
+                type: 'end',
+                description: (
+                    <FormattedMessage
+                        defaultMessage="You have completed the 'Create New Model' lesson."
+                        description="Step name for 'Create New Model' step"
+                        id="gui.howtos.marty-machine-create-model.step7_create-model"
+                        values={{ linebreak: <br /> }}
+                    />
+                ),
+                extensionProjects: ["type-lesson-ml-2"]
+            },
         ],
     },
 }

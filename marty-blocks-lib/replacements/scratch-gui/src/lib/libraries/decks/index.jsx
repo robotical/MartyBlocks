@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 // Text to Speech
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
 import mlLesson1 from "./ML-lessons/lesson1";
+import mlLesson2 from "./ML-lessons/lesson2";
 
 export default {
 
@@ -405,6 +406,7 @@ export default {
         ],
     },
 
-    ...mlLesson1
+    ...mlLesson1,
+    ...mlLesson2
 
 };
