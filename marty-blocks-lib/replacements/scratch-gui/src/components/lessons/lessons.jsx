@@ -181,7 +181,13 @@ class Lessons extends React.Component {
                                 expanded={expanded}
                                 step={step}
                                 lessonTitle={content[activeDeckId].name}
-                                onCloseLessons={onCloseLessons}
+                                onCloseLessons={() => {
+                                    if (stepType === "end") {
+                                        onCloseLessons();
+                                    } else {
+                                        confirm('Are you sure you want to exit the lesson? All progress will be lost.') && onCloseLessons();
+                                    }
+                                }}
                                 onShrinkExpandLessons={onShrinkExpandLessons}
                             />
                             <div className={expanded ? styles.stepBody : styles.hidden}>
