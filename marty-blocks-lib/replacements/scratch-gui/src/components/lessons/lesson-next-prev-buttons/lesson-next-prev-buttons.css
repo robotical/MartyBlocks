@@ -52,7 +52,6 @@
 .middle-button {
   z-index: 20;
   user-select: none;
-  cursor: pointer;
   background: white;
   box-shadow: 0 0 0 2px rgb(55, 171, 200);
   height: 34px;
@@ -62,6 +61,7 @@
   justify-content: center;
   align-items: center;
   transition: all 0.25s ease;
+  cursor: pointer;
 }
 
 .middle-button img {
@@ -71,4 +71,8 @@
 .middle-button span {
   font-size: 25px;
   color: rgb(55, 171, 200);
+}
+
+.accessibilityEnabled {
+  filter: invert(1);
 }

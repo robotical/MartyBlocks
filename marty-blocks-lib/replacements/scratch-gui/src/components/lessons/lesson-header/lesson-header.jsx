@@ -7,58 +7,95 @@ import styles from './lesson-header.css';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded }) => (
-    <div className={expanded ? styles.headerButtons : classNames(styles.headerButtons, styles.headerButtonsHidden)}
-        style={{
-            gridTemplateColumns: step === undefined ? "max-content 1fr" : "min-content max-content 1fr"
-        }}>
-        {step !== undefined && <div
-            className={styles.stepNumberOnTitle}
-        >
-            {step + 1}
-        </div>}
-        <div className={styles.lessonTitleContainer}>
-            <span className={styles.lessonTitle}>{lessonTitle}</span>
-        </div>
-        <div className={styles.headerButtonsRight}>
-            {onShrinkExpandLessons && <div
-                className={styles.shrinkExpandButton}
-                onClick={onShrinkExpandLessons}
+const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded, isAccessibilityEnabled }) => {
+
+    const headerButtonsClass = classNames(styles.headerButtons, {
+        [styles.headerButtonsHidden]: !expanded,
+        [styles.headerButtonsAccessibility]: isAccessibilityEnabled
+    });
+
+    const stepNumberOnTitleClass = classNames(styles.stepNumberOnTitle, {
+        [styles.stepNumberOnTitleAccessibility]: isAccessibilityEnabled
+    });
+
+    const lessonTitleContainerClass = classNames(styles.lessonTitleContainer, {
+        [styles.lessonTitleContainerAccessibility]: isAccessibilityEnabled
+    });
+
+    const lessonTitleClass = classNames(styles.lessonTitle, {
+        [styles.lessonTitleAccessibility]: isAccessibilityEnabled
+    });
+
+    const headerButtonsRightClass = classNames(styles.headerButtonsRight, {
+        [styles.headerButtonsRightAccessibility]: isAccessibilityEnabled
+    });
+
+    const shrinkExpandButtonClass = classNames(styles.shrinkExpandButton, {
+        [styles.shrinkExpandButtonAccessibility]: isAccessibilityEnabled
+    });
+
+    const removeButtonClass = classNames(styles.removeButton, {
+        [styles.removeButtonAccessibility]: isAccessibilityEnabled
+    });
+
+    const closeIconClass = classNames(styles.closeIcon, {
+        [styles.closeIconAccessibility]: isAccessibilityEnabled
+    });
+
+
+    return (
+        <div className={headerButtonsClass}
+            style={{
+                gridTemplateColumns: step === undefined ? "max-content 1fr" : "min-content max-content 1fr"
+            }}>
+            {step !== undefined && <div
+                className={stepNumberOnTitleClass}
             >
-                <img
-                    draggable={false}
-                    src={expanded ? shrinkIcon : expandIcon}
-                />
-                {expanded ?
-                    <FormattedMessage
-                        defaultMessage="Shrink"
-                        description="Title for button to shrink how-to lesson"
-                        id="gui.lessons.shrink"
-                    /> :
-                    <FormattedMessage
-                        defaultMessage="Expand"
-                        description="Title for button to expand how-to lesson"
-                        id="gui.lessons.expand"
-                    />
-                }
+                {step + 1}
             </div>}
-            <div
-                className={styles.removeButton}
-                onClick={onCloseLessons}
-            >
-                <img
-                    className={styles.closeIcon}
-                    src={closeIcon}
-                />
-                <FormattedMessage
-                    defaultMessage="Close"
-                    description="Title for button to close how-to lesson"
-                    id="gui.lessons.close"
-                />
+            <div className={lessonTitleContainerClass}>
+                <span className={lessonTitleClass}>{lessonTitle}</span>
+            </div>
+            <div className={headerButtonsRightClass}>
+                {onShrinkExpandLessons && <div
+                    className={shrinkExpandButtonClass}
+                    onClick={onShrinkExpandLessons}
+                >
+                    <img
+                        draggable={false}
+                        src={expanded ? shrinkIcon : expandIcon}
+                    />
+                    {expanded ?
+                        <FormattedMessage
+                            defaultMessage="Shrink"
+                            description="Title for button to shrink how-to lesson"
+                            id="gui.lessons.shrink"
+                        /> :
+                        <FormattedMessage
+                            defaultMessage="Expand"
+                            description="Title for button to expand how-to lesson"
+                            id="gui.lessons.expand"
+                        />
+                    }
+                </div>}
+                <div
+                    className={removeButtonClass}
+                    onClick={onCloseLessons}
+                >
+                    <img
+                        className={closeIconClass}
+                        src={closeIcon}
+                    />
+                    <FormattedMessage
+                        defaultMessage="Close"
+                        description="Title for button to close how-to lesson"
+                        id="gui.lessons.close"
+                    />
+                </div>
             </div>
         </div>
-    </div>
-);
+    )
+};
 
 LessonHeader.propTypes = {
     expanded: PropTypes.bool.isRequired,

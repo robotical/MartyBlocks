@@ -96,3 +96,7 @@
 [dir="rtl"] .close-icon {
   margin-right: 0.25rem;
 }
+
+.headerButtonsAccessibility {
+  filter: invert(1);
+}

@@ -58,3 +58,29 @@
   text-align: left;
   padding: 1rem 0.5rem;
 }
+
+// Accessibility
+.stepBodyAccessibility {
+
+}
+
+.checkpointQuestionAccessibility {
+  font-size: 1.5rem;
+}
+
+.checkpointAnswerAccessibility {
+  font-size: 1.5rem;
+}
+
+.checkpointAnswerResultSpanAccessibility {
+  font-size: 1.5rem;
+  border: 2px solid black;
+}
+
+.checkpointAnswerAnswersSpanAccessibility {
+  font-size: 1.5rem;
+}
+
+.checkpointResultExplanationAccessibility {
+  font-size: 1.5rem;
+}

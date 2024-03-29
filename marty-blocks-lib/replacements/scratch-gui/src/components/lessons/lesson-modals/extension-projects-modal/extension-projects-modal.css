@@ -123,3 +123,10 @@
   padding-right: .2rem;
   align-self: center;
 }
+
+.choiceImageAccessibility {
+  filter: invert(1);
+}
+.choiceCheckboxAccessibility {
+  filter: invert(1);
+}

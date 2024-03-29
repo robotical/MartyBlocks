@@ -182,7 +182,7 @@
   background: $ui-white;
   display: flex;
   flex-grow: 1;
-  row-gap: .5rem;
+  row-gap: 0.5rem;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -196,7 +196,7 @@
   overflow: auto;
 
   cursor: default;
-  padding: .5rem;
+  padding: 0.5rem;
 }
 
 .decks {
@@ -237,8 +237,6 @@
   height: 1.25rem;
 }
 
-
-
 [dir="ltr"] .help-icon {
   margin-right: 0.25rem;
 }
@@ -246,7 +244,6 @@
 [dir="rtl"] .help-icon {
   margin-left: 0.25rem;
 }
-
 
 .see-all {
   display: flex;
@@ -315,7 +312,6 @@
 }
 
 .checkpoint-try-again-div {
-
 }
 
 .checkpoint-try-again-div button {
@@ -332,3 +328,53 @@
   padding: 3px 4px;
   outline: none;
 }
+
+// Accessibility
+.stepBodyAccessibility {
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none; 
+    transition: none;
+  }
+}
+
+.cardAccesibility {}
+
+.progressBarOuterContainerAccessibility {
+}
+
+.progressBarContainerAccessibility {
+  filter: invert(1);
+}
+
+.progressBarAccessibility {
+  height: 100%;
+  /* background-color: rgb(55, 171, 200);  */
+  border-radius: 6px 0 0 6px;
+}
+.progressBarAccessibility:focus-visible {
+  outline: 2px solid blue; 
+}
+
+.progressBarRemainingStepsAccessibility {
+  /* color: black;  */
+  font-size: 14px; 
+
+}
+
+.stepDescriptionAccessibility {
+  border: 1px solid black;
+  font-size: 1rem;
+}
+
+.checkpointStepTitleAccessibility {
+  font-size: 1.5rem;
+}
+
+.checkpointTryAgainDivAccessibility button {
+  filter: invert(1);
+}
+

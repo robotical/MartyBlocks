@@ -2,6 +2,7 @@ import React from 'react';
 import styles from "./checkpoint-modal.css";
 import MultipleChoice from './multiple-choice/multiple-choice.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
+import classNames from 'classnames';
 
 class CheckpointModalContent extends React.Component {
     constructor() {
@@ -19,6 +20,9 @@ class CheckpointModalContent extends React.Component {
 
     onSubmit() {
         const { answers } = this.state;
+        if (!answers || answers.length === 0) {
+            return alert("Please select an answer");
+        }
         const { correctAnswers, possibleAnswers, questionType } = this.props;
         let correct = true;
         let idxOfGivenAnswer;
@@ -69,8 +73,7 @@ class CheckpointModalContent extends React.Component {
     };
 
     render() {
-        const { onCloseModal, question, possibleAnswers, questionType, answerExplanations } = this.props;
-
+        const { onCloseModal, question, possibleAnswers, questionType, answerExplanations, isAccessibilityEnabled, onAccessibilityClick } = this.props;
         if (this.state.showing === "question") {
             return <QuestionSection
                 question={question}
@@ -80,6 +83,8 @@ class CheckpointModalContent extends React.Component {
                 answers={this.state.answers}
                 handleOptionChange={this.handleOptionChange}
                 onSubmit={this.onSubmit}
+                isAccessibilityEnabled={isAccessibilityEnabled}
+                onAccessibilityClick={onAccessibilityClick}
             />;
         } else if (this.state.showing === "result") {
             return <ResultSection
@@ -91,6 +96,8 @@ class CheckpointModalContent extends React.Component {
                 answers={this.state.answers}
                 question={question}
                 questionType={questionType}
+                isAccessibilityEnabled={isAccessibilityEnabled}
+                onAccessibilityClick={onAccessibilityClick}
             />
         }
     }
@@ -99,24 +106,34 @@ class CheckpointModalContent extends React.Component {
 export default CheckpointModalContent;
 
 function QuestionSection(props) {
-    const { question, possibleAnswers, questionType, setAnswer, answers, handleOptionChange, onSubmit } = props;
+    const { question, possibleAnswers, questionType, setAnswer, answers, handleOptionChange, onSubmit, isAccessibilityEnabled, onAccessibilityClick } = props;
     let answerFieldJSX;
     if (questionType === "text") {
         answerFieldJSX = <input type="text" onChange={(e) => setAnswer(e.target.value)} value={answers[0] || ""} />;
     } else if (questionType === "single") {
-        answerFieldJSX = <MultipleChoice possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "single")} selectedAnswers={answers} />;
+        answerFieldJSX = <MultipleChoice isAccessibilityEnabled={isAccessibilityEnabled} possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "single")} selectedAnswers={answers} />;
     } else if (questionType === "multiple") {
-        answerFieldJSX = <MultipleChoice possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "multiple")} selectedAnswers={answers} />;
+        answerFieldJSX = <MultipleChoice isAccessibilityEnabled={isAccessibilityEnabled} possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "multiple")} selectedAnswers={answers} />;
     }
+
+    const stepBodyClass = classNames(styles.stepBody, {
+        [styles.stepBodyAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointQuestionClass = classNames(styles.checkpointQuestion, {
+        [styles.checkpointQuestionAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointAnswerClass = classNames(styles.checkpointAnswer, {
+        [styles.checkpointAnswerAccessibility]: isAccessibilityEnabled
+    });
 
     return (
         <>
-            <div className={styles.stepBody}>
+            <div className={stepBodyClass}>
                 <div className={styles.checkpointContainer}>
-                    <div className={styles.checkpointQuestion}>
+                    <div className={checkpointQuestionClass}>
                         {question}
                     </div>
-                    <div className={styles.checkpointAnswer}>
+                    <div className={checkpointAnswerClass}>
                         {answerFieldJSX}
                     </div>
                 </div>
@@ -124,30 +141,51 @@ function QuestionSection(props) {
             <ModalBottomButtons
                 onCTAClick={onSubmit}
                 closeModalButtonTitle={"Submit"}
+                isAccessibilityEnabled={isAccessibilityEnabled}
+                onAccessibilityClick={onAccessibilityClick}
             />
         </>
     );
 }
 
 function ResultSection(props) {
-    const { onCloseModal, results, question, tryAgainHandler, answers, answerExplanations, idxOfGivenAnswer, questionType } = props;
+    const { onCloseModal, results, question, tryAgainHandler, answers, answerExplanations, idxOfGivenAnswer, questionType, isAccessibilityEnabled, onAccessibilityClick } = props;
     let resultExplanationJSX;
     if (questionType === "text" || questionType === "multiple") {
         resultExplanationJSX = results === "correct" ? answerExplanations.correctAnswer : answerExplanations.incorrectAnswer;
     } else {
         resultExplanationJSX = answerExplanations[idxOfGivenAnswer];
     }
+    const stepBodyClass = classNames(styles.stepBody, {
+        [styles.stepBodyAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointQuestionClass = classNames(styles.checkpointQuestion, {
+        [styles.checkpointQuestionAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointAnswerClass = classNames(styles.checkpointAnswer, {
+        [styles.checkpointAnswerAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointAnswerResultSpanClass = classNames(styles.checkpointAnswerResultSpan, {
+        [styles.checkpointAnswerResultSpanAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointAnswerAnswersSpanClass = classNames(styles.checkpointAnswerAnswersSpan, {
+        [styles.checkpointAnswerAnswersSpanAccessibility]: isAccessibilityEnabled
+    });
+    const checkpointResultExplanationClass = classNames(styles.checkpointResultExplanation, {
+        [styles.checkpointResultExplanationAccessibility]: isAccessibilityEnabled
+    });
+
     return (
         <>
-            <div className={styles.stepBody}>
+            <div className={stepBodyClass}>
                 <div className={styles.checkpointContainer}>
-                    <div className={styles.checkpointQuestion}>
+                    <div className={checkpointQuestionClass}>
                         {question}
                     </div>
-                    <div className={styles.checkpointAnswer}>
-                        <span className={styles.checkpointAnswerResultSpan}>{results === "correct" ? "CORRECT" : "INCORRECT"}</span><span className={styles.checkpointAnswerAnswersSpan}> ({answers.join("- ")})</span>
+                    <div className={checkpointAnswerClass}>
+                        <span className={checkpointAnswerResultSpanClass}>{results === "correct" ? "CORRECT" : "INCORRECT"}</span><span className={checkpointAnswerAnswersSpanClass}> ({answers.join("- ")})</span>
                     </div>
-                    <div className={styles.checkpointResultExplanation}>
+                    <div className={checkpointResultExplanationClass}>
                         {resultExplanationJSX}
                     </div>
                 </div>
@@ -155,6 +193,8 @@ function ResultSection(props) {
             <ModalBottomButtons
                 onCTAClick={results === "correct" ? onCloseModal : tryAgainHandler}
                 closeModalButtonTitle={results === "correct" ? "Close" : "Try Again"}
+                isAccessibilityEnabled={isAccessibilityEnabled}
+                onAccessibilityClick={onAccessibilityClick}
             />
         </>
     );

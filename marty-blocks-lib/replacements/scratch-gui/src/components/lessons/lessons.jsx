@@ -3,17 +3,18 @@ import React from 'react';
 import Draggable from 'react-draggable';
 
 import styles from './lessons.css';
+import classNames from 'classnames';
 
 import { translateVideo } from '../../lib/libraries/decks/translate-video.js';
 import { translateImage } from '../../lib/libraries/decks/translate-image.js';
 
 import CheckpointModalContent from './lesson-modals/checkpoint-modal/checkpoint-modal.jsx';
 import LessonStartModalContent from './lesson-modals/start-modal/start-modal.jsx';
+import ExtensionProjectsModal from './lesson-modals/extension-projects-modal/extension-projects-modal.jsx';
 import LessonHeader from "./lesson-header/lesson-header.jsx";
 import VideoStep from './lesson-video/lesson-video.jsx';
 import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
-import ExtensionProjectsModal from './lesson-modals/extension-projects-modal/extension-projects-modal.jsx';
 
 class Lessons extends React.Component {
     constructor(props) {
@@ -21,11 +22,14 @@ class Lessons extends React.Component {
         this.onCloseModal = this.onCloseModal.bind(this);
         this.showCheckpointModal = this.showCheckpointModal.bind(this);
         this.onOpenExtensionProjectsModal = this.onOpenExtensionProjectsModal.bind(this);
+        this.onAccessibilityClick = this.onAccessibilityClick.bind(this);
+
         this.state = {
             modal: {
                 title: '',
-                content: ''
-            }
+                content: '' //"lesson-start-modal-content" / "checkpoint-modal-content" / "extension-projects-modal-content" / ""
+            },
+            isAccessibilityEnabled: false
         };
     }
 
@@ -33,7 +37,7 @@ class Lessons extends React.Component {
         this.setState({
             modal: {
                 title: this.props.content[this.props.activeDeckId].name,
-                content: <LessonStartModalContent {...this.props} onCloseModal={this.onCloseModal} />,
+                content: "lesson-start-modal-content",
             }
         });
     }
@@ -43,18 +47,21 @@ class Lessons extends React.Component {
             const steps = this.props.content[this.props.activeDeckId].steps;
             const stepId = this.props.step;
             if (steps[stepId].type === "checkpoint") {
-                this.showCheckpointModal(steps, stepId);
+                this.showCheckpointModal();
             }
         }
-        console.log("component updated")
         if (this.props.activeDeckId !== prevProps.activeDeckId) {
             this.setState({
                 modal: {
                     title: this.props.content[this.props.activeDeckId].name,
-                    content: <LessonStartModalContent {...this.props} onCloseModal={this.onCloseModal} />,
+                    content: "lesson-start-modal-content",
                 }
             });
         }
+    }
+
+    onAccessibilityClick() {
+        this.setState({ isAccessibilityEnabled: !this.state.isAccessibilityEnabled });
     }
 
     onCloseModal = () => {
@@ -66,29 +73,20 @@ class Lessons extends React.Component {
         });
     }
 
-    showCheckpointModal = (steps, stepId) => {
+    showCheckpointModal = () => {
         this.setState({
             modal: {
                 title: "CHECKPOINT",
-                content: <CheckpointModalContent
-                    question={steps[stepId].question}
-                    questionType={steps[stepId].questionType}
-                    possibleAnswers={steps[stepId].possibleAnswers}
-                    correctAnswers={steps[stepId].correctAnswers}
-                    answerExplanations={steps[stepId].answerExplanations}
-                    onCloseModal={this.onCloseModal}
-                />,
+                content: "checkpoint-modal-content",
             }
         });
     }
 
-    onOpenExtensionProjectsModal = (steps, stepId) => {
+    onOpenExtensionProjectsModal = () => {
         this.setState({
             modal: {
                 title: "Extension Projects",
-                content: <ExtensionProjectsModal
-                    extensionProjectIds={steps[stepId].extensionProjects}
-                />,
+                content: "extension-projects-modal-content",
             }
         });
     }
@@ -122,6 +120,53 @@ class Lessons extends React.Component {
 
         const steps = content[activeDeckId].steps;
         const stepType = steps[step].type;
+
+        const cardClass = classNames({
+            [styles.card]: true,
+            [styles.cardAccesibility]: this.state.isAccessibilityEnabled
+        });
+
+        const stepBodyClass = classNames({
+            [styles.stepBody]: expanded,
+            [styles.hidden]: !expanded,
+            [styles.stepBodyAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const progressBarClass = classNames({
+            [styles.progressBar]: true,
+            [styles.progressBarAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const progressBarOuterContainerClass = classNames({
+            [styles.progressBarOuterContainer]: true,
+            [styles.progressBarOuterContainerAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const progressBarContainerClass = classNames({
+            [styles.progressBarContainer]: true,
+            [styles.progressBarContainerAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const progressBarRemainingStepsClass = classNames({
+            [styles.progressBarRemainingSteps]: true,
+            [styles.progressBarRemainingStepsAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const stepDescriptionClass = classNames({
+            [styles.stepDescription]: true,
+            [styles.stepDescriptionAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const checkpointStepTitleClass = classNames({
+            [styles.checkpointStepTitle]: true,
+            [styles.checkpointStepTitleAccessibility]: this.state.isAccessibilityEnabled
+        });
+
+        const checkpointTryAgainDivClass = classNames({
+            [styles.checkpointTryAgainDiv]: true,
+            [styles.checkpointTryAgainDivAccessibility]: this.state.isAccessibilityEnabled
+        });
+
         return (
             // Custom overlay to act as the bounding parent for the draggable, using values from above
             <div
@@ -146,13 +191,36 @@ class Lessons extends React.Component {
                             onStop={onEndDrag}
                         >
                             <div className={styles.modalContainer}>
-                                <div className={styles.card}>
+                                <div className={cardClass}>
                                     <LessonHeader
                                         expanded={true}
                                         lessonTitle={this.state.modal.title}
                                         onCloseLessons={this.onCloseModal}
+                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                     />
-                                    {this.state.modal.content}
+                                    {this.state.modal.content === "lesson-start-modal-content" && <LessonStartModalContent
+                                        {...this.props}
+                                        onCloseModal={this.onCloseModal}
+                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                        onAccessibilityClick={this.onAccessibilityClick} />
+                                    }
+                                    {this.state.modal.content === "checkpoint-modal-content" && < CheckpointModalContent
+                                        question={steps[step].question}
+                                        questionType={steps[step].questionType}
+                                        possibleAnswers={steps[step].possibleAnswers}
+                                        correctAnswers={steps[step].correctAnswers}
+                                        answerExplanations={steps[step].answerExplanations}
+                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                        onAccessibilityClick={this.onAccessibilityClick}
+                                        onCloseModal={this.onCloseModal}
+                                    />}
+                                    {this.state.modal.content === "extension-projects-modal-content" &&
+                                        steps[step].extensionProjects && <ExtensionProjectsModal
+                                            extensionProjectIds={steps[step].extensionProjects}
+                                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                            onAccessibilityClick={this.onAccessibilityClick}
+                                            onCloseModal={this.onCloseModal} />
+                                    }
                                 </div>
                             </div>
                         </Draggable>
@@ -174,10 +242,11 @@ class Lessons extends React.Component {
                     <div className={styles.cardContainer} style={{
                         height: `calc(100% - ${menuBarHeight}px)`
                     }}>
-                        <div className={styles.card} style={{
+                        <div className={cardClass} style={{
                             height: expanded ? '100%' : 'auto'
                         }}>
                             <LessonHeader
+                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                 expanded={expanded}
                                 step={step}
                                 lessonTitle={content[activeDeckId].name}
@@ -190,18 +259,18 @@ class Lessons extends React.Component {
                                 }}
                                 onShrinkExpandLessons={onShrinkExpandLessons}
                             />
-                            <div className={expanded ? styles.stepBody : styles.hidden}>
-                                <div className={styles.progressBarOuterContainer}>
-                                    <div className={styles.progressBarContainer}>
-                                        <div className={styles.progressBar} style={{ width: `calc(${step + 1} / ${steps.length} * 100%)` }}></div>
+                            <div className={stepBodyClass}>
+                                <div className={progressBarOuterContainerClass}>
+                                    <div className={progressBarContainerClass}>
+                                        <div className={progressBarClass} style={{ width: `calc(${step + 1} / ${steps.length} * 100%)` }}></div>
                                     </div>
-                                    <span className={styles.progressBarRemainingSteps}>{step + 1}/{steps.length}</span>
+                                    <span className={progressBarRemainingStepsClass}>{step + 1}/{steps.length}</span>
                                 </div>
                                 {
                                     stepType === "info" && <>
                                         {
                                             steps[step].description && (
-                                                <div className={styles.stepDescription}>
+                                                <div className={stepDescriptionClass}>
                                                     {steps[step].description}
                                                 </div>
                                             )
@@ -211,40 +280,42 @@ class Lessons extends React.Component {
                                                 dragging={dragging}
                                                 expanded={expanded}
                                                 video={translateVideo(steps[step].video, locale)}
+                                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                             />
                                         )}
                                         {steps[step].image && (
                                             <ImageStep
                                                 image={translateImage(steps[step].image, locale)}
+                                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                             />
                                         )}
                                     </>
                                 }
                                 {
                                     stepType === "checkpoint" && <>
-                                        <div className={styles.checkpointStepTitle}>
+                                        <div className={checkpointStepTitleClass}>
                                             <span>Checkpoint Question</span>
                                         </div>
                                         {
                                             steps[step].question && (
-                                                <div className={styles.stepDescription}>
+                                                <div className={stepDescriptionClass}>
                                                     {steps[step].question}
                                                 </div>
                                             )
                                         }
                                         {
-                                            <div className={styles.checkpointTryAgainDiv}>
-                                                <button onClick={() => this.showCheckpointModal(steps, step)}>Try Again</button>
+                                            <div className={checkpointTryAgainDivClass}>
+                                                <button onClick={this.showCheckpointModal}>Try Again</button>
                                             </div>
                                         }
                                     </>
                                 }
                                 {
                                     stepType === "end" && <>
-                                        <div className={styles.checkpointStepTitle}>
+                                        <div className={checkpointStepTitleClass}>
                                             <span>End of Lesson!</span>
                                         </div>
-                                        <div className={styles.stepDescription}>
+                                        <div className={stepDescriptionClass}>
                                             {steps[step].description}
                                         </div>
                                     </>
@@ -253,9 +324,11 @@ class Lessons extends React.Component {
                             <NextPrevButtons
                                 expanded={expanded}
                                 isRtl={isRtl}
-                                onNextStep={step < steps.length - 1 ? onNextStep : (steps[step].type === "end" && steps[step].extensionProjects) ? () => this.onOpenExtensionProjectsModal(steps, step) : null}
+                                onNextStep={step < steps.length - 1 ? onNextStep : (steps[step].type === "end" && steps[step].extensionProjects) ? this.onOpenExtensionProjectsModal : null}
                                 onPrevStep={step > 0 ? onPrevStep : null}
                                 isLastStep={step === steps.length - 1}
+                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                onAccessibilityClick={this.onAccessibilityClick}
                             />
                         </div>
                     </div>

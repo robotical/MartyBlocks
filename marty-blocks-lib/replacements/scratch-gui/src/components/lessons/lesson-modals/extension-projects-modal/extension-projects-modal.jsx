@@ -5,6 +5,7 @@ import decks from '../../../../lib/libraries/decks/index.jsx';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { activateDeck as activateLessonsDeck } from '../../../../reducers/lessons.js';
+import classNames from 'classnames';
 
 class ExtensionProjectsModal extends React.Component {
     constructor() {
@@ -16,23 +17,48 @@ class ExtensionProjectsModal extends React.Component {
     }
 
     render() {
-        const { extensionProjectIds } = this.props;
+        const { extensionProjectIds, isAccessibilityEnabled, onAccessibilityClick } = this.props;
         const extensionProjects = extensionProjectIds.map((projectId) => decks[projectId]);
 
+        const stepBodyClass = classNames(styles.stepBody, {
+            [styles.stepBodyAccessibility]: isAccessibilityEnabled
+        });
+        const checkpointContainerClass = classNames(styles.checkpointContainer, {
+            [styles.checkpointContainerAccessibility]: isAccessibilityEnabled
+        });
+        const checkpointQuestionClass = classNames(styles.checkpointQuestion, {
+            [styles.checkpointQuestionAccessibility]: isAccessibilityEnabled
+        });
+        const checkpointAnswerClass = classNames(styles.checkpointAnswer, {
+            [styles.checkpointAnswerAccessibility]: isAccessibilityEnabled
+        });
+        const choiceContainerClass = classNames(styles.choiceContainer, {
+            [styles.choiceContainerAccessibility]: isAccessibilityEnabled
+        });
+        const choiceImageClass = classNames(styles.choiceImage, {
+            [styles.choiceImageAccessibility]: isAccessibilityEnabled
+        });
+        const choiceCheckboxClass = classNames(styles.choiceCheckbox, {
+            [styles.choiceCheckboxAccessibility]: isAccessibilityEnabled
+        });
+        const choiceTextClass = classNames(styles.choiceText, {
+            [styles.choiceTextAccessibility]: isAccessibilityEnabled
+        });
+
         return <>
-            <div className={styles.stepBody}>
-                <div className={styles.checkpointContainer}>
-                    <div className={styles.checkpointQuestion}>
+            <div className={stepBodyClass}>
+                <div className={checkpointContainerClass}>
+                    <div className={checkpointQuestionClass}>
                         HAVE A GO
                     </div>
-                    <div className={styles.checkpointAnswer}>
+                    <div className={checkpointAnswerClass}>
 
                         <form className={styles.container}>
                             {extensionProjects.map((project, index) => {
-                                return <div key={index} className={styles.choiceContainer} onClick={() => this.onOpenProject(extensionProjectIds[index])}>
-                                    <img className={styles.choiceImage} src={project.img} alt={`Option ${project.name}`} />
-                                    <div className={styles.choiceCheckbox}>
-                                        <span className={styles.choiceText}>{project.name}</span>
+                                return <div key={index} className={choiceContainerClass} onClick={() => this.onOpenProject(extensionProjectIds[index])}>
+                                    <img className={choiceImageClass} src={project.img} alt={`Option ${project.name}`} />
+                                    <div className={choiceCheckboxClass}>
+                                        <span className={choiceTextClass}>{project.name}</span>
                                     </div>
                                 </div>
                             })}
@@ -40,7 +66,7 @@ class ExtensionProjectsModal extends React.Component {
                     </div>
                 </div>
             </div>
-            <ModalBottomButtons />
+            <ModalBottomButtons  isAccessibilityEnabled={isAccessibilityEnabled} onAccessibilityClick={onAccessibilityClick} />
         </>
     }
 }

@@ -61,3 +61,23 @@
     color: white;
     margin-left: 0.4rem;
 }
+
+.accessibilityEnabled {
+  background: rgb(13 17 18);
+}
+
+.startLessonButtonAccessibility {
+  filter: invert(1);
+}
+
+.startLessonButtonAccessibility img {
+
+}
+
+.startLessonButtonAccessibility span {
+
+}
+
+.middleButtonAccessibility {
+  filter: invert(1);
+}
