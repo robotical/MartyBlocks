@@ -1,13 +1,12 @@
 import React from 'react';
-import styles from "./extension-projects-modal.css";
+import styles from "./hint-modal.css";
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
-import decks from '../../../../lib/libraries/decks/index.jsx';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { activateDeck as activateLessonsDeck } from '../../../../reducers/lessons.js';
 import classNames from 'classnames';
 
-class ExtensionProjectsModal extends React.Component {
+class HintModal extends React.Component {
     constructor() {
         super();
     }
@@ -17,8 +16,7 @@ class ExtensionProjectsModal extends React.Component {
     }
 
     render() {
-        const { extensionProjectIds, isAccessibilityEnabled, onAccessibilityClick } = this.props;
-        const extensionProjects = extensionProjectIds.map((projectId) => decks[projectId]);
+        const { isAccessibilityEnabled, onAccessibilityClick } = this.props;
 
         const stepBodyClass = classNames(styles.stepBody, {
             [styles.stepBodyAccessibility]: isAccessibilityEnabled
@@ -54,7 +52,7 @@ class ExtensionProjectsModal extends React.Component {
                     <div className={checkpointAnswerClass}>
 
                         <form className={styles.container}>
-                            {extensionProjects.map((project, index) => {
+                            {[].map((project, index) => {
                                 return <div key={index} className={choiceContainerClass} onClick={() => this.onOpenProject(extensionProjectIds[index])}>
                                     <img className={choiceImageClass} src={project.img} alt={`Option ${project.name}`} />
                                     <div className={choiceCheckboxClass}>
@@ -69,7 +67,7 @@ class ExtensionProjectsModal extends React.Component {
             <ModalBottomButtons
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
-                textToReadOutLoud={"HAVE A GO" + extensionProjects.map(project => project.name).join(". ")}
+                textToReadOutLoud={"HAVE A GO"}
             />
         </>
     }
@@ -82,4 +80,4 @@ const mapDispatchToProps = dispatch => ({
 export default injectIntl(connect(
     null,
     mapDispatchToProps
-)(ExtensionProjectsModal));
+)(HintModal));

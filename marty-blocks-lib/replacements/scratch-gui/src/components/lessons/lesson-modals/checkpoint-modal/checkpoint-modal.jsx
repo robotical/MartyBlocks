@@ -3,6 +3,7 @@ import styles from "./checkpoint-modal.css";
 import MultipleChoice from './multiple-choice/multiple-choice.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
 import classNames from 'classnames';
+import { getDefaultMessageOrText } from '../../lessons.jsx';
 
 class CheckpointModalContent extends React.Component {
     constructor() {
@@ -10,11 +11,12 @@ class CheckpointModalContent extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.tryAgainHandler = this.tryAgainHandler.bind(this);
         this.handleOptionChange = this.handleOptionChange.bind(this);
+
         this.state = {
             answers: [],
             showing: "question", // question, result,
             results: null, // correct, incorrect, null
-            idxOfGivenAnswer: null // only relevant to 'single' question type
+            idxOfGivenAnswer: null, // only relevant to 'single' question type
         };
     }
 
@@ -143,6 +145,7 @@ function QuestionSection(props) {
                 closeModalButtonTitle={"Submit"}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
+                textToReadOutLoud={getDefaultMessageOrText(question) + "\n\n" + possibleAnswers.map(answer => answer.text).join("?\n\n")}
             />
         </>
     );
@@ -195,6 +198,7 @@ function ResultSection(props) {
                 closeModalButtonTitle={results === "correct" ? "Close" : "Try Again"}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
+                textToReadOutLoud={results + ". " + getDefaultMessageOrText(resultExplanationJSX)}
             />
         </>
     );

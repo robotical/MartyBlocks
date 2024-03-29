@@ -9,6 +9,31 @@ import accessibilityIcon from '../../icon--accessibility.svg';
 
 class ModalBottomButtons extends React.Component {
 
+    constructor() {
+        super();
+        this.onReadOutLoudClick = this.onReadOutLoudClick.bind(this);
+
+        this.state = {
+            isReadingOutLoud: false
+        }
+    }
+
+    onReadOutLoudClick() {
+        if (this.state.isReadingOutLoud) {
+            window.speechSynthesis.cancel();
+            this.setState({ isReadingOutLoud: false });
+            return;
+        }
+        this.setState({ isReadingOutLoud: true });
+        const utterance = new SpeechSynthesisUtterance(this.props.textToReadOutLoud);
+        utterance.rate = 0.7;
+        utterance.pitch = 1.4;
+        utterance.onend = () => {
+            this.setState({ isReadingOutLoud: false });
+        };
+        window.speechSynthesis.speak(utterance);
+    }
+
     render() {
         const { onCTAClick, isAccessibilityEnabled, onAccessibilityClick, closeModalButtonTitle = "Start" } = this.props;
 
@@ -22,13 +47,19 @@ class ModalBottomButtons extends React.Component {
             [styles.middleButtonAccessibility]: isAccessibilityEnabled
         });
 
+        const audioButtonClass = classNames({
+            [styles.middleButton]: true,
+            [styles.middleButtonAccessibility]: isAccessibilityEnabled,
+            [styles.readingOutLoudButton]: this.state.isReadingOutLoud
+        });
+
         return (
             <div className={styles.lessonStartModalButtonsContainer}>
 
                 <div className={accessibilityButtonClass} onClick={onAccessibilityClick}>
                     <img draggable={false} src={accessibilityIcon} />
                 </div>
-                <div className={accessibilityButtonClass}>
+                <div className={audioButtonClass} onClick={this.onReadOutLoudClick}>
                     <img draggable={false} src={audioIcon} />
                 </div>
 

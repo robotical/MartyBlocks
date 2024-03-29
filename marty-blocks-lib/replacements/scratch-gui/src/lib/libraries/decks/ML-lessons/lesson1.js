@@ -31,6 +31,16 @@ export default {
                 ),
                 video: "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-3.mp4",
                 image: 'mmCreateModel',
+                hint: {
+                    description: <FormattedMessage
+                        defaultMessage="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc ultricies ultricies. Nullam nec purus nec nunc ultricies ultricies. Nullam nec purus nec nunc ultricies ultricies."
+                        description="Hint for 'Create New Model' step"
+                        id="gui.howtos.marty-machine-create-model.hint_create-model"
+                        values={{ linebreak: <br /> }}
+                    />,
+                    image: 'https://roboticalpublic.s3.eu-west-1.amazonaws.com/martyblocks-tutorials/create-model.png',
+                    video: "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-3.mp4",
+                }
             },
             {
                 type: 'info',

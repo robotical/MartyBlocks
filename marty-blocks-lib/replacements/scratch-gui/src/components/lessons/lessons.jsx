@@ -8,13 +8,21 @@ import classNames from 'classnames';
 import { translateVideo } from '../../lib/libraries/decks/translate-video.js';
 import { translateImage } from '../../lib/libraries/decks/translate-image.js';
 
-import CheckpointModalContent from './lesson-modals/checkpoint-modal/checkpoint-modal.jsx';
 import LessonStartModalContent from './lesson-modals/start-modal/start-modal.jsx';
+import CheckpointModalContent from './lesson-modals/checkpoint-modal/checkpoint-modal.jsx';
 import ExtensionProjectsModal from './lesson-modals/extension-projects-modal/extension-projects-modal.jsx';
+import HintModalContent from './lesson-modals/hint-modal/hint-modal.jsx';
 import LessonHeader from "./lesson-header/lesson-header.jsx";
 import VideoStep from './lesson-video/lesson-video.jsx';
 import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
+
+export const getDefaultMessageOrText = (componentOrText) => {
+    if (componentOrText && componentOrText.props && componentOrText.props.defaultMessage) {
+        return componentOrText.props.defaultMessage;
+    }
+    return componentOrText || '';
+}
 
 class Lessons extends React.Component {
     constructor(props) {
@@ -23,13 +31,16 @@ class Lessons extends React.Component {
         this.showCheckpointModal = this.showCheckpointModal.bind(this);
         this.onOpenExtensionProjectsModal = this.onOpenExtensionProjectsModal.bind(this);
         this.onAccessibilityClick = this.onAccessibilityClick.bind(this);
+        this.onReadOutLoudClick = this.onReadOutLoudClick.bind(this);
+        this.onHintClick = this.onHintClick.bind(this);
 
         this.state = {
             modal: {
                 title: '',
-                content: '' //"lesson-start-modal-content" / "checkpoint-modal-content" / "extension-projects-modal-content" / ""
+                content: '' //"lesson-start-modal-content" / "checkpoint-modal-content" / "extension-projects-modal-content" / "hint-modal-content"
             },
-            isAccessibilityEnabled: false
+            isAccessibilityEnabled: false,
+            isReadingOutLoud: false,
         };
     }
 
@@ -64,13 +75,32 @@ class Lessons extends React.Component {
         this.setState({ isAccessibilityEnabled: !this.state.isAccessibilityEnabled });
     }
 
-    onCloseModal = () => {
+    onCloseModal() {
         this.setState({
             modal: {
                 title: '',
                 content: '',
             }
         });
+    }
+
+    onReadOutLoudClick() {
+        if (this.state.isReadingOutLoud) {
+            window.speechSynthesis.cancel();
+            this.setState({ isReadingOutLoud: false });
+            return;
+        }
+        this.setState({ isReadingOutLoud: true });
+        const steps = this.props.content[this.props.activeDeckId].steps;
+        const step = steps[this.props.step];
+        const currentStepUtterance = "Step " + (this.props.step + 1) + " of " + steps.length + ". "
+        const utterance = new SpeechSynthesisUtterance(currentStepUtterance + getDefaultMessageOrText(step.description));
+        utterance.rate = 0.7;
+        utterance.pitch = 1.4;
+        utterance.onend = () => {
+            this.setState({ isReadingOutLoud: false });
+        };
+        window.speechSynthesis.speak(utterance);
     }
 
     showCheckpointModal = () => {
@@ -87,6 +117,15 @@ class Lessons extends React.Component {
             modal: {
                 title: "Extension Projects",
                 content: "extension-projects-modal-content",
+            }
+        });
+    }
+
+    onHintClick = () => {
+        this.setState({
+            modal: {
+                title: "Hint",
+                content: "hint-modal-content",
             }
         });
     }
@@ -204,7 +243,7 @@ class Lessons extends React.Component {
                                         isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                         onAccessibilityClick={this.onAccessibilityClick} />
                                     }
-                                    {this.state.modal.content === "checkpoint-modal-content" && < CheckpointModalContent
+                                    {this.state.modal.content === "checkpoint-modal-content" && <CheckpointModalContent
                                         question={steps[step].question}
                                         questionType={steps[step].questionType}
                                         possibleAnswers={steps[step].possibleAnswers}
@@ -221,6 +260,12 @@ class Lessons extends React.Component {
                                             onAccessibilityClick={this.onAccessibilityClick}
                                             onCloseModal={this.onCloseModal} />
                                     }
+                                    {this.state.modal.content === "hint-modal-content" && <HintModalContent
+                                        hint={steps[step].hint}
+                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                        onAccessibilityClick={this.onAccessibilityClick}
+                                        onCloseModal={this.onCloseModal}
+                                    />}
                                 </div>
                             </div>
                         </Draggable>
@@ -329,6 +374,10 @@ class Lessons extends React.Component {
                                 isLastStep={step === steps.length - 1}
                                 isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                 onAccessibilityClick={this.onAccessibilityClick}
+                                onReadOutLoudClick={this.onReadOutLoudClick}
+                                isReadingOutLoud={this.state.isReadingOutLoud}
+                                onHintClick={this.onHintClick}
+                                hint={steps[step].hint}
                             />
                         </div>
                     </div>

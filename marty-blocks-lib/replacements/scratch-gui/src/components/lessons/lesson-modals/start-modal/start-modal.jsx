@@ -3,6 +3,7 @@ import styles from "./start-modal.css";
 import ImageStep from '../../lesson-image/lesson-image.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
 import classNames from 'classnames';
+import { getDefaultMessageOrText } from '../../lessons.jsx';
 
 const LessonStartModalContent = ({ content, activeDeckId, onCloseModal, isAccessibilityEnabled, onAccessibilityClick }) => {
     const { img, description } = content[activeDeckId];
@@ -25,6 +26,7 @@ const LessonStartModalContent = ({ content, activeDeckId, onCloseModal, isAccess
                 closeModalButtonTitle={"Start"}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
+                textToReadOutLoud={getDefaultMessageOrText(description)}
             />
         </>
     );

@@ -8,13 +8,62 @@ import plusIcon from '../icon--plus.svg';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+let hintTimeout;
 class NextPrevButtons extends React.Component {
     constructor() {
         super();
+        this.setHintTimeout = this.setHintTimeout.bind(this);
+        this.onHintClick = this.onHintClick.bind(this);
+        this.state = {
+            isHintAvailable: false
+        };
+    }
+
+    componentDidMount() {
+        this.setHintTimeout();
+    }
+
+    componentWillUnmount() {
+        hintTimeout && clearTimeout(hintTimeout);
+    }
+
+    setHintTimeout() {
+        hintTimeout = setTimeout(() => {
+            this.setState({
+                isHintAvailable: true
+            });
+        }, 5000);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.hint !== this.props.hint) {
+            this.setState({
+                isHintAvailable: false
+            });
+            hintTimeout && clearTimeout(hintTimeout);
+            this.setHintTimeout();
+        }
+    }
+
+    onHintClick() {
+        if (this.state.isHintAvailable) {
+            this.props.onHintClick();
+        }
     }
 
     render() {
-        const { isRtl, onNextStep, onPrevStep, expanded, isLastStep, isAccessibilityEnabled, onAccessibilityClick } = this.props;
+        const {
+            isRtl,
+            onNextStep,
+            onPrevStep,
+            expanded,
+            isLastStep,
+            isAccessibilityEnabled,
+            onAccessibilityClick,
+            onReadOutLoudClick,
+            isReadingOutLoud,
+            hint,
+        } = this.props;
 
         const nextPrevButtonsContainerClass = classNames({
             [styles.nextPrevButtonsContainer]: expanded,
@@ -34,10 +83,19 @@ class NextPrevButtons extends React.Component {
             [styles.hidden]: !expanded
         });
 
-        const middleButtonClass = classNames({
+        const audioButtonClass = classNames({
             [styles.middleButton]: expanded,
             [styles.hidden]: !expanded,
-            [styles.accessibilityEnabled]: expanded && isAccessibilityEnabled
+            [styles.accessibilityEnabled]: expanded && isAccessibilityEnabled,
+            [styles.readingOutLoudButton]: isReadingOutLoud,
+        });
+
+        const hintButtonClass = classNames({
+            [styles.middleButton]: expanded,
+            [styles.hidden]: !expanded,
+            [styles.accessibilityEnabled]: expanded && isAccessibilityEnabled,
+            [styles.grayedOut]: !this.state.isHintAvailable,
+            [styles.disabledButton]: !hint
         });
 
         const nextButtonClass = classNames({
@@ -57,10 +115,10 @@ class NextPrevButtons extends React.Component {
                 <div onClick={onAccessibilityClick} className={accessibilityButtonClass}>
                     <img draggable={false} src={accessibilityIcon} />
                 </div>
-                <div className={middleButtonClass}>
+                <div className={audioButtonClass} onClick={onReadOutLoudClick}>
                     <img draggable={false} src={audioIcon} />
                 </div>
-                <div className={middleButtonClass}>
+                <div className={hintButtonClass} onClick={this.onHintClick}>
                     <span>?</span>
                 </div>
 

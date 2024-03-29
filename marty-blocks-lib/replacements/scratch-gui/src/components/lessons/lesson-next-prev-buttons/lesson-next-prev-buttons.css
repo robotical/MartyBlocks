@@ -64,6 +64,10 @@
   cursor: pointer;
 }
 
+.readingOutLoudButton {
+  background: rgb(0 2 2);
+}
+
 .middle-button img {
   width: 1.5rem;
 }
@@ -75,4 +79,9 @@
 
 .accessibilityEnabled {
   filter: invert(1);
+}
+
+.grayedOut {
+  filter: grayscale(1);
+  cursor: not-allowed;
 }
