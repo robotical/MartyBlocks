@@ -80,6 +80,7 @@ class MartyMachineModelEditor extends React.Component {
                 console.log('Got stream', {id: stream.id, active: stream.active, tracks: stream.getTracks().map(t => ({id: t.id, kind: t.kind, label: t.label}))});
                 this.setState({ deviceStream: stream });
                 this.deviceStreamRef.srcObject = stream;
+                this.deviceStreamRef.play();
                 console.log("this.deviceStreamRef.srcObject", {id: this.deviceStreamRef.srcObject.id, active: this.deviceStreamRef.srcObject.active, tracks: this.deviceStreamRef.srcObject.getTracks().map(t => ({id: t.id, kind: t.kind, label: t.label}))});
             } else if (this.props.modelType === 'audio') {
                 const constraints = {
