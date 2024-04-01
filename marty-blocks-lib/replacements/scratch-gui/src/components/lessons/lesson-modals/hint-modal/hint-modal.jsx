@@ -15,7 +15,7 @@ class HintModal extends React.Component {
     }
 
     render() {
-        const { isAccessibilityEnabled, onAccessibilityClick } = this.props;
+        const { isAccessibilityEnabled, onAccessibilityClick, onExpandImage, onExpandVideo } = this.props;
 
         const stepBodyClass = classNames(styles.stepBody, {
             [styles.stepBodyAccessibility]: isAccessibilityEnabled
@@ -32,16 +32,18 @@ class HintModal extends React.Component {
         return <>
             <div className={stepBodyClass}>
                 <div className={hintContainerClass}>
-                    <div className={hintDescriptionClass}>
+                    {description && <div className={hintDescriptionClass}>
                         <div className={styles.hintText}>
                             {description}
                         </div>
-                    </div>
+                    </div>}
                     {image && <ImageStep
+                        onImageClick={onExpandImage}
                         image={image}
                         isAccessibilityEnabled={this.props.isAccessibilityEnabled}
                     />}
                     {video && <div className={styles.videoDiv}><VideoStep
+                        onVideoClick={onExpandVideo}
                         video={video}
                         isAccessibilityEnabled={this.props.isAccessibilityEnabled}
                     /></div>}

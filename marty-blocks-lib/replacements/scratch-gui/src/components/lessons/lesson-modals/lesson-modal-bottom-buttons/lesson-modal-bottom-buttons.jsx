@@ -35,7 +35,7 @@ class ModalBottomButtons extends React.Component {
     }
 
     render() {
-        const { onCTAClick, isAccessibilityEnabled, onAccessibilityClick, closeModalButtonTitle = "Start" } = this.props;
+        const { onCTAClick, isAccessibilityEnabled, onAccessibilityClick, closeModalButtonTitle = "Start", textToReadOutLoud } = this.props;
 
         const startLessonButtonClass = classNames({
             [styles.startLessonButton]: !!onCTAClick,
@@ -50,7 +50,8 @@ class ModalBottomButtons extends React.Component {
         const audioButtonClass = classNames({
             [styles.middleButton]: true,
             [styles.middleButtonAccessibility]: isAccessibilityEnabled,
-            [styles.readingOutLoudButton]: this.state.isReadingOutLoud
+            [styles.readingOutLoudButton]: this.state.isReadingOutLoud,
+            [styles.hidden]: !textToReadOutLoud
         });
 
         return (

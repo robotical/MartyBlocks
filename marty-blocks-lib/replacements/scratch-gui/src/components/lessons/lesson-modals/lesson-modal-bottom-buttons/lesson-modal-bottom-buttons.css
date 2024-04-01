@@ -59,6 +59,10 @@
   border-radius: 40px;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .start-lesson-button span {
     color: white;
     margin-left: 0.4rem;

@@ -17,7 +17,7 @@ class LessonImage extends React.Component {
                         {title}
                     </div>}
                     <img
-                        onClick={onImageClick ? onImageClick : null}
+                        onClick={(e) => onImageClick(e, image)}
                         className={styles.stepImage}
                         draggable={false}
                         key={image} /* Use src as key to prevent hanging around on slow connections */

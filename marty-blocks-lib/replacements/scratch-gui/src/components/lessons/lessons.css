@@ -39,7 +39,7 @@
   position: absolute;
   pointer-events: auto;
   z-index: 510;
-  width: 70%;
+  max-width: 70%;
   min-width: 300px;
   min-height: 300px;
 }
@@ -176,6 +176,11 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  cursor: default;
+}
+
+.step-image-expanded::-webkit-media-controls-fullscreen-button {
+  display: none;
 }
 
 .step-description {
@@ -193,9 +198,9 @@
   background: $ui-white;
   display: flex;
   flex-grow: 1;
-  row-gap: 0.5rem;
+  row-gap: 1.5rem;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   text-align: center;

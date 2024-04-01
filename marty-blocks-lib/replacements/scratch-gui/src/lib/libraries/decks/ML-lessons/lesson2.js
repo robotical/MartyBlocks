@@ -19,6 +19,7 @@ export default {
         type: 'lesson',
         description: 'Ml Lesson 2 Description lorem ipsum',
         internetConnectionRequired: true,
+        hidden: true,
         steps: [
             {
                 type: 'info',

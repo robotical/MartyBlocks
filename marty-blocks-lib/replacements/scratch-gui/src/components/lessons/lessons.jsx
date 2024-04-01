@@ -31,9 +31,11 @@ class Lessons extends React.Component {
         this.onReadOutLoudClick = this.onReadOutLoudClick.bind(this);
         this.onHintClick = this.onHintClick.bind(this);
         this.setExpandedImage = this.setExpandedImage.bind(this);
+        this.setExpandedVideo = this.setExpandedVideo.bind(this);
 
         this.state = {
             expandedImage: '',
+            expandedVideo: '',
             modal: {
                 title: '',
                 content: '' //"lesson-start-modal-content" / "checkpoint-modal-content" / "extension-projects-modal-content" / "hint-modal-content"
@@ -134,6 +136,15 @@ class Lessons extends React.Component {
         this.setState({ expandedImage: image });
     }
 
+    setExpandedVideo(e, video) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (e.target && e.target.tagName === 'VIDEO') {
+            e.target.pause();
+        }
+        this.setState({ expandedVideo: video });
+    }
+
     render() {
 
         const {
@@ -227,7 +238,7 @@ class Lessons extends React.Component {
                             <div className={cardClass}>
                                 <LessonHeader
                                     expanded={true}
-                                    lessonTitle={""}
+                                    lessonTitle={"Expanded Image"}
                                     onCloseLessons={() => this.setState({ expandedImage: false })}
                                     isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                 />
@@ -240,6 +251,33 @@ class Lessons extends React.Component {
                                         key={this.state.expandedImage} /* Use src as key to prevent hanging around on slow connections */
                                         src={this.state.expandedImage}
                                         style={{ filter: this.state.isAccessibilityEnabled ? 'invert(1)' : 'none' }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                {
+                    this.state.expandedVideo && <div className={styles.modalContainerOverlayExpandedImage}>
+                        <div className={styles.modalContainer}>
+                            <div className={cardClass}>
+                                <LessonHeader
+                                    expanded={true}
+                                    lessonTitle={"Expanded Video"}
+                                    onCloseLessons={() => this.setState({ expandedVideo: false })}
+                                    isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                />
+                            </div>
+                            <div className={cardClass}>
+                                <div style={{width:"100%", backgroundColor: "white"}}>
+                                    <video
+                                        autoPlay
+                                        className={styles.stepImageExpanded}
+                                        draggable={false}
+                                        key={this.state.expandedVideo} /* Use src as key to prevent hanging around on slow connections */
+                                        src={this.state.expandedVideo}
+                                        style={{ filter: this.state.isAccessibilityEnabled ? 'grayscale(100%)' : 'none' }}
+                                        controls
                                     />
                                 </div>
                             </div>
@@ -295,6 +333,8 @@ class Lessons extends React.Component {
                                         isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                         onAccessibilityClick={this.onAccessibilityClick}
                                         onCloseModal={this.onCloseModal}
+                                        onExpandImage={this.setExpandedImage}
+                                        onExpandVideo={this.setExpandedVideo}
                                     />}
                                 </div>
                             </div>
@@ -352,6 +392,7 @@ class Lessons extends React.Component {
                                         }
                                         {steps[step].video && (
                                             <VideoStep
+                                                onVideoClick={(e) => this.setExpandedVideo(e, steps[step].video)}
                                                 video={steps[step].video}
                                                 isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                             />
