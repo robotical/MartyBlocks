@@ -12,6 +12,7 @@ class MultipleChoice extends React.Component {
             <form className={styles.container}>
                 {this.props.possibleAnswers.map((answer, index) => (<MultipleChoiceCheckbox
                     key={index}
+                    onExpandImage={this.props.onExpandImage}
                     answer={answer}
                     selectedAnswers={this.props.selectedAnswers}
                     handleOptionChange={this.props.handleOptionChange}
@@ -44,7 +45,7 @@ class MultipleChoiceCheckbox extends React.Component {
 
 
     render() {
-        const { answer, selectedAnswers, handleOptionChange, isAccessibilityEnabled } = this.props;
+        const { answer, selectedAnswers, handleOptionChange, isAccessibilityEnabled, onExpandImage } = this.props;
 
         const choiceContainerClass = classNames(styles.choiceContainer, {
             [styles.choiceContainerAccessibility]: isAccessibilityEnabled
@@ -63,7 +64,7 @@ class MultipleChoiceCheckbox extends React.Component {
         });
         return (
             <div className={choiceContainerClass} onClick={this.toggleInput}>
-                <img onClick={this.toggleInput} className={choiceImageClass} src={answer.image} alt={`Option ${answer}`} />
+                <img onClick={(e) => onExpandImage(e, answer.image)} className={choiceImageClass} src={answer.image} alt={`Option ${answer}`} />
                 <div className={choiceCheckboxClass} onClick={this.toggleInput}><input
                     ref={this.setInputRef}
                     className={styles.choiceInput}

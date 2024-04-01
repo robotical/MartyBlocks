@@ -30,6 +30,7 @@
   justify-content: center;
   align-items: center;
   transition: all 0.25s ease;
+  border: none;
 }
 
 .left-button:hover,
@@ -47,6 +48,7 @@
   visibility: hidden;
   height: 44px;
   width: 44px;
+  border: none;
 }
 
 .middle-button {
@@ -62,6 +64,7 @@
   align-items: center;
   transition: all 0.25s ease;
   cursor: pointer;
+  border: none;
 }
 
 .readingOutLoudButton {

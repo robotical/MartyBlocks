@@ -108,23 +108,23 @@ class NextPrevButtons extends React.Component {
 
         return (
             <div className={nextPrevButtonsContainerClass}>
-                <div className={prevButtonClass} onClick={onPrevStep}>
+                <button className={prevButtonClass} onClick={onPrevStep} title="Previous">
                     <img draggable={false} src={isRtl ? rightArrow : leftArrow} />
-                </div>
+                </button>
 
-                <div onClick={onAccessibilityClick} className={accessibilityButtonClass}>
+                <button onClick={onAccessibilityClick} className={accessibilityButtonClass} title="Accessibility">
                     <img draggable={false} src={accessibilityIcon} />
-                </div>
-                <div className={audioButtonClass} onClick={onReadOutLoudClick}>
+                </button>
+                <button className={audioButtonClass} onClick={onReadOutLoudClick} title="Read out loud">
                     <img draggable={false} src={audioIcon} />
-                </div>
-                <div className={hintButtonClass} onClick={this.onHintClick}>
+                </button>
+                <button className={hintButtonClass} onClick={this.onHintClick} title="Hint">
                     <span>?</span>
-                </div>
+                </button>
 
-                <div className={nextButtonClass} onClick={onNextStep}>
+                <button className={nextButtonClass} onClick={onNextStep} title={isLastStep ? "More Activities" : "Next"}>
                     <img draggable={false} src={isLastStep ? plusIcon : rightArrow} />
-                </div>
+                </button>
             </div>
         );
     }

@@ -25,6 +25,7 @@
   justify-content: center;
   align-items: center;
   transition: all 0.25s ease;
+  border: none;
 }
 
 .middle-button img {
@@ -49,6 +50,7 @@
   justify-content: center;
   align-items: center;
   transition: all 0.25s ease;
+  border: none;
 }
 
 .start-lesson-button {

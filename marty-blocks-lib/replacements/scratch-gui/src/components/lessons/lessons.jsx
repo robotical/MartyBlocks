@@ -5,9 +5,6 @@ import Draggable from 'react-draggable';
 import styles from './lessons.css';
 import classNames from 'classnames';
 
-import { translateVideo } from '../../lib/libraries/decks/translate-video.js';
-import { translateImage } from '../../lib/libraries/decks/translate-image.js';
-
 import LessonStartModalContent from './lesson-modals/start-modal/start-modal.jsx';
 import CheckpointModalContent from './lesson-modals/checkpoint-modal/checkpoint-modal.jsx';
 import ExtensionProjectsModal from './lesson-modals/extension-projects-modal/extension-projects-modal.jsx';
@@ -33,8 +30,10 @@ class Lessons extends React.Component {
         this.onAccessibilityClick = this.onAccessibilityClick.bind(this);
         this.onReadOutLoudClick = this.onReadOutLoudClick.bind(this);
         this.onHintClick = this.onHintClick.bind(this);
+        this.setExpandedImage = this.setExpandedImage.bind(this);
 
         this.state = {
+            expandedImage: '',
             modal: {
                 title: '',
                 content: '' //"lesson-start-modal-content" / "checkpoint-modal-content" / "extension-projects-modal-content" / "hint-modal-content"
@@ -130,6 +129,11 @@ class Lessons extends React.Component {
         });
     }
 
+    setExpandedImage(e, image) {
+        e.stopPropagation();
+        this.setState({ expandedImage: image });
+    }
+
     render() {
 
         const {
@@ -218,6 +222,31 @@ class Lessons extends React.Component {
                 }}
             >
                 {
+                    this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}>
+                        <div className={styles.modalContainer}>
+                            <div className={cardClass}>
+                                <LessonHeader
+                                    expanded={true}
+                                    lessonTitle={""}
+                                    onCloseLessons={() => this.setState({ expandedImage: false })}
+                                    isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                />
+                            </div>
+                            <div className={cardClass}>
+                                <div style={{width:"100%", backgroundColor: "white"}}>
+                                    <img
+                                        className={styles.stepImageExpanded}
+                                        draggable={false}
+                                        key={this.state.expandedImage} /* Use src as key to prevent hanging around on slow connections */
+                                        src={this.state.expandedImage}
+                                        style={{ filter: this.state.isAccessibilityEnabled ? 'invert(1)' : 'none' }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                {
                     this.state.modal.content && this.state.modal.title && <div
                         className={styles.modalContainerOverlay}
                     >
@@ -252,6 +281,7 @@ class Lessons extends React.Component {
                                         isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                         onAccessibilityClick={this.onAccessibilityClick}
                                         onCloseModal={this.onCloseModal}
+                                        onExpandImage={this.setExpandedImage}
                                     />}
                                     {this.state.modal.content === "extension-projects-modal-content" &&
                                         steps[step].extensionProjects && <ExtensionProjectsModal
@@ -322,15 +352,14 @@ class Lessons extends React.Component {
                                         }
                                         {steps[step].video && (
                                             <VideoStep
-                                                dragging={dragging}
-                                                expanded={expanded}
-                                                video={translateVideo(steps[step].video, locale)}
+                                                video={steps[step].video}
                                                 isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                             />
                                         )}
                                         {steps[step].image && (
                                             <ImageStep
-                                                image={translateImage(steps[step].image, locale)}
+                                                onImageClick={(e) => this.setExpandedImage(e, steps[step].image)}
+                                                image={steps[step].image}
                                                 isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                             />
                                         )}

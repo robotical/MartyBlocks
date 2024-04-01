@@ -56,18 +56,18 @@ class ModalBottomButtons extends React.Component {
         return (
             <div className={styles.lessonStartModalButtonsContainer}>
 
-                <div className={accessibilityButtonClass} onClick={onAccessibilityClick}>
+                <button className={accessibilityButtonClass} onClick={onAccessibilityClick} title="Accessibility">
                     <img draggable={false} src={accessibilityIcon} />
-                </div>
-                <div className={audioButtonClass} onClick={this.onReadOutLoudClick}>
+                </button>
+                <button className={audioButtonClass} onClick={this.onReadOutLoudClick} title="Read out loud">
                     <img draggable={false} src={audioIcon} />
-                </div>
+                </button>
 
                 {onCTAClick && (
-                    <div className={startLessonButtonClass} onClick={onCTAClick}>
+                    <button className={startLessonButtonClass} onClick={onCTAClick} title={closeModalButtonTitle}>
                         <img draggable={false} src={rightArrow} />
                         <span>{closeModalButtonTitle}</span>
-                    </div>
+                    </button>
                 )}
             </div>
         );

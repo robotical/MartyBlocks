@@ -75,7 +75,7 @@ class CheckpointModalContent extends React.Component {
     };
 
     render() {
-        const { onCloseModal, question, possibleAnswers, questionType, answerExplanations, isAccessibilityEnabled, onAccessibilityClick } = this.props;
+        const { onCloseModal, question, possibleAnswers, questionType, answerExplanations, isAccessibilityEnabled, onAccessibilityClick, onExpandImage } = this.props;
         if (this.state.showing === "question") {
             return <QuestionSection
                 question={question}
@@ -87,6 +87,7 @@ class CheckpointModalContent extends React.Component {
                 onSubmit={this.onSubmit}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
+                onExpandImage={onExpandImage}
             />;
         } else if (this.state.showing === "result") {
             return <ResultSection
@@ -108,14 +109,14 @@ class CheckpointModalContent extends React.Component {
 export default CheckpointModalContent;
 
 function QuestionSection(props) {
-    const { question, possibleAnswers, questionType, setAnswer, answers, handleOptionChange, onSubmit, isAccessibilityEnabled, onAccessibilityClick } = props;
+    const { question, possibleAnswers, questionType, setAnswer, answers, handleOptionChange, onSubmit, isAccessibilityEnabled, onAccessibilityClick, onExpandImage } = props;
     let answerFieldJSX;
     if (questionType === "text") {
         answerFieldJSX = <input type="text" onChange={(e) => setAnswer(e.target.value)} value={answers[0] || ""} />;
     } else if (questionType === "single") {
-        answerFieldJSX = <MultipleChoice isAccessibilityEnabled={isAccessibilityEnabled} possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "single")} selectedAnswers={answers} />;
+        answerFieldJSX = <MultipleChoice isAccessibilityEnabled={isAccessibilityEnabled} possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "single")} selectedAnswers={answers} onExpandImage={onExpandImage} />;
     } else if (questionType === "multiple") {
-        answerFieldJSX = <MultipleChoice isAccessibilityEnabled={isAccessibilityEnabled} possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "multiple")} selectedAnswers={answers} />;
+        answerFieldJSX = <MultipleChoice isAccessibilityEnabled={isAccessibilityEnabled} possibleAnswers={possibleAnswers} handleOptionChange={(e) => handleOptionChange(e, "multiple")} selectedAnswers={answers} onExpandImage={onExpandImage} />;
     }
 
     const stepBodyClass = classNames(styles.stepBody, {
@@ -145,7 +146,7 @@ function QuestionSection(props) {
                 closeModalButtonTitle={"Submit"}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
-                textToReadOutLoud={getDefaultMessageOrText(question) + "\n\n" + possibleAnswers.map(answer => answer.text).join("?\n\n")}
+                textToReadOutLoud={getDefaultMessageOrText(question) + ".\n\n" + (possibleAnswers || []).map(answer => answer.text).join("?\n\n")}
             />
         </>
     );

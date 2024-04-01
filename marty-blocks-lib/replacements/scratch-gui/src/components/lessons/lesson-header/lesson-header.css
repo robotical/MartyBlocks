@@ -20,6 +20,7 @@
 
 .lesson-title-container {
   margin-left: 0.5rem;
+  max-width: 200px;
 }
 
 .lesson-title {

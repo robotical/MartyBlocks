@@ -1,13 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import libraryTXTSpeech from '../thumbs/text-to-speech.jpg';
+const BUCKET_URL = "https://roboticalpublic.s3.eu-west-1.amazonaws.com/marty-blocks-student-led-lessons/type-lesson-ml-creating-a-simple-image-model/";
 
 export default {
 
     "type-lesson-ml-2": {
         name: (
             <FormattedMessage
-                defaultMessage="Ml Lesson 2"
+                defaultMessage="Ml Activity 1"
                 description="Name for the 'Ml Lesson 2' lesson"
                 id="gui.howtos.lessons.type-lesson-ml-1.name"
             />
@@ -30,7 +31,7 @@ export default {
                     />
                 ),
                 video: "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-3.mp4",
-                image: 'mmCreateModel',
+                image: `${BUCKET_URL}model-class-names.png`
             },
             {
                 type: 'end',
