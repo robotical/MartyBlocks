@@ -163,7 +163,7 @@ const GUIComponent = props => {
   if (isRendererSupported === null) {
     isRendererSupported = Renderer.isSupported();
   }
-  
+
   return (<MediaQuery minWidth={layout.fullSizeMinWidth}>{isFullSize => {
     const stageSize = resolveStageSize(stageSizeMode, isFullSize);
 
@@ -211,9 +211,6 @@ const GUIComponent = props => {
         ) : null}
         {cardsVisible ? (
           <Cards />
-        ) : null}
-        {lessonsVisible ? (
-          <Lessons />
         ) : null}
         {draggableModalVisible ? <DraggableModal /> : null}
         {alertsVisible ? (
@@ -281,6 +278,7 @@ const GUIComponent = props => {
                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                 onSelect={onActivateTab}
               >
+
                 <TabList className={tabClassNames.tabList}>
                   <Tab className={tabClassNames.tab}>
                     <img
@@ -357,6 +355,9 @@ const GUIComponent = props => {
                   </Box>
                 </TabList>
                 <TabPanel className={tabClassNames.tabPanel}>
+                  {lessonsVisible ? (
+                    <Lessons />
+                  ) : null}
                   <Box className={styles.blocksWrapper}>
                     <Blocks
                       key={`${blocksId}/${theme}`}
@@ -419,16 +420,16 @@ const GUIComponent = props => {
             </Box>
 
             <Box
-                  className={classNames(
-                    styles.stageAndTargetWrapper,
-                    styles[stageSize]
-                  )}
-                  style={
-                    stageSize === STAGE_SIZE_MODES.small
-                      ? ""
-                      : { display: "none" }
-                  }
-                >
+              className={classNames(
+                styles.stageAndTargetWrapper,
+                styles[stageSize]
+              )}
+              style={
+                stageSize === STAGE_SIZE_MODES.small
+                  ? ""
+                  : { display: "none" }
+              }
+            >
               <StageWrapper
                 isFullScreen={isFullScreen}
                 isRendererSupported={isRendererSupported}

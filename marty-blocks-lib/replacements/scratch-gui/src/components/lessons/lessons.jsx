@@ -226,10 +226,11 @@ class Lessons extends React.Component {
             <div
                 className={styles.cardContainerOverlay}
                 style={{
-                    width: `${window.innerWidth + (2 * lessonHorizontalDragOffset)}px`,
-                    height: expanded ? `${window.innerHeight - menuBarHeight}px` : 'auto',
-                    top: `${menuBarHeight}px`,
-                    left: `${-lessonHorizontalDragOffset}px`
+                    // width: `${window.innerWidth + (2 * lessonHorizontalDragOffset)}px`,
+                    // height: expanded ? `${window.innerHeight - menuBarHeight}px` : 'auto',
+                    height: expanded ? "100%" : 'auto',
+                    // top: `${menuBarHeight}px`,
+                    // left: `${-lessonHorizontalDragOffset}px`
                 }}
             >
                 {
@@ -244,7 +245,7 @@ class Lessons extends React.Component {
                                 />
                             </div>
                             <div className={cardClass}>
-                                <div style={{width:"100%", backgroundColor: "white"}}>
+                                <div style={{ width: "100%", backgroundColor: "white" }}>
                                     <img
                                         className={styles.stepImageExpanded}
                                         draggable={false}
@@ -269,7 +270,7 @@ class Lessons extends React.Component {
                                 />
                             </div>
                             <div className={cardClass}>
-                                <div style={{width:"100%", backgroundColor: "white"}}>
+                                <div style={{ width: "100%", backgroundColor: "white" }}>
                                     <video
                                         autoPlay
                                         className={styles.stepImageExpanded}
@@ -341,7 +342,7 @@ class Lessons extends React.Component {
                         </Draggable>
                     </div>
                 }
-                <Draggable
+                {/* <Draggable
                     bounds="parent"
                     cancel="#video-div" // disable dragging on video div
                     // top right
@@ -353,105 +354,105 @@ class Lessons extends React.Component {
                     onDrag={onDrag}
                     onStart={onStartDrag}
                     onStop={onEndDrag}
-                >
-                    <div className={styles.cardContainer} style={{
-                        height: `calc(100% - ${menuBarHeight}px)`
+                > */}
+                <div className={styles.cardContainer} style={{
+                    // height: `calc(100% - ${menuBarHeight}px)`
+                }}>
+                    <div className={cardClass} style={{
+                        height: expanded ? '100%' : 'auto'
                     }}>
-                        <div className={cardClass} style={{
-                            height: expanded ? '100%' : 'auto'
-                        }}>
-                            <LessonHeader
-                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                expanded={expanded}
-                                step={step}
-                                lessonTitle={content[activeDeckId].name}
-                                onCloseLessons={() => {
-                                    if (stepType === "end") {
-                                        onCloseLessons();
-                                    } else {
-                                        confirm('Are you sure you want to exit the lesson? All progress will be lost.') && onCloseLessons();
-                                    }
-                                }}
-                                onShrinkExpandLessons={onShrinkExpandLessons}
-                            />
-                            <div className={stepBodyClass}>
-                                <div className={progressBarOuterContainerClass}>
-                                    <div className={progressBarContainerClass}>
-                                        <div className={progressBarClass} style={{ width: `calc(${step + 1} / ${steps.length} * 100%)` }}></div>
-                                    </div>
-                                    <span className={progressBarRemainingStepsClass}>{step + 1}/{steps.length}</span>
+                        <LessonHeader
+                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                            expanded={expanded}
+                            step={step}
+                            lessonTitle={content[activeDeckId].name}
+                            onCloseLessons={() => {
+                                if (stepType === "end") {
+                                    onCloseLessons();
+                                } else {
+                                    confirm('Are you sure you want to exit the lesson? All progress will be lost.') && onCloseLessons();
+                                }
+                            }}
+                            onShrinkExpandLessons={onShrinkExpandLessons}
+                        />
+                        <div className={stepBodyClass}>
+                            <div className={progressBarOuterContainerClass}>
+                                <div className={progressBarContainerClass}>
+                                    <div className={progressBarClass} style={{ width: `calc(${step + 1} / ${steps.length} * 100%)` }}></div>
                                 </div>
-                                {
-                                    stepType === "info" && <>
-                                        {
-                                            steps[step].description && (
-                                                <div className={stepDescriptionClass}>
-                                                    {steps[step].description}
-                                                </div>
-                                            )
-                                        }
-                                        {steps[step].video && (
-                                            <VideoStep
-                                                onVideoClick={(e) => this.setExpandedVideo(e, steps[step].video)}
-                                                video={steps[step].video}
-                                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                            />
-                                        )}
-                                        {steps[step].image && (
-                                            <ImageStep
-                                                onImageClick={(e) => this.setExpandedImage(e, steps[step].image)}
-                                                image={steps[step].image}
-                                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                            />
-                                        )}
-                                    </>
-                                }
-                                {
-                                    stepType === "checkpoint" && <>
-                                        <div className={checkpointStepTitleClass}>
-                                            <span>Checkpoint Question</span>
-                                        </div>
-                                        {
-                                            steps[step].question && (
-                                                <div className={stepDescriptionClass}>
-                                                    {steps[step].question}
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            <div className={checkpointTryAgainDivClass}>
-                                                <button onClick={this.showCheckpointModal}>Try Again</button>
-                                            </div>
-                                        }
-                                    </>
-                                }
-                                {
-                                    stepType === "end" && <>
-                                        <div className={checkpointStepTitleClass}>
-                                            <span>End of Lesson!</span>
-                                        </div>
-                                        <div className={stepDescriptionClass}>
-                                            {steps[step].description}
-                                        </div>
-                                    </>
-                                }
+                                <span className={progressBarRemainingStepsClass}>{step + 1}/{steps.length}</span>
                             </div>
-                            <NextPrevButtons
-                                expanded={expanded}
-                                isRtl={isRtl}
-                                onNextStep={step < steps.length - 1 ? onNextStep : (steps[step].type === "end" && steps[step].extensionProjects) ? this.onOpenExtensionProjectsModal : null}
-                                onPrevStep={step > 0 ? onPrevStep : null}
-                                isLastStep={step === steps.length - 1}
-                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                onAccessibilityClick={this.onAccessibilityClick}
-                                onReadOutLoudClick={this.onReadOutLoudClick}
-                                isReadingOutLoud={this.state.isReadingOutLoud}
-                                onHintClick={this.onHintClick}
-                                hint={steps[step].hint}
-                            />
+                            {
+                                stepType === "info" && <>
+                                    {
+                                        steps[step].description && (
+                                            <div className={stepDescriptionClass}>
+                                                {steps[step].description}
+                                            </div>
+                                        )
+                                    }
+                                    {steps[step].video && (
+                                        <VideoStep
+                                            onVideoClick={(e) => this.setExpandedVideo(e, steps[step].video)}
+                                            video={steps[step].video}
+                                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                        />
+                                    )}
+                                    {steps[step].image && (
+                                        <ImageStep
+                                            onImageClick={(e) => this.setExpandedImage(e, steps[step].image)}
+                                            image={steps[step].image}
+                                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                        />
+                                    )}
+                                </>
+                            }
+                            {
+                                stepType === "checkpoint" && <>
+                                    <div className={checkpointStepTitleClass}>
+                                        <span>Checkpoint Question</span>
+                                    </div>
+                                    {
+                                        steps[step].question && (
+                                            <div className={stepDescriptionClass}>
+                                                {steps[step].question}
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        <div className={checkpointTryAgainDivClass}>
+                                            <button onClick={this.showCheckpointModal}>Try Again</button>
+                                        </div>
+                                    }
+                                </>
+                            }
+                            {
+                                stepType === "end" && <>
+                                    <div className={checkpointStepTitleClass}>
+                                        <span>End of Lesson!</span>
+                                    </div>
+                                    <div className={stepDescriptionClass}>
+                                        {steps[step].description}
+                                    </div>
+                                </>
+                            }
                         </div>
+                        <NextPrevButtons
+                            expanded={expanded}
+                            isRtl={isRtl}
+                            onNextStep={step < steps.length - 1 ? onNextStep : (steps[step].type === "end" && steps[step].extensionProjects) ? this.onOpenExtensionProjectsModal : null}
+                            onPrevStep={step > 0 ? onPrevStep : null}
+                            isLastStep={step === steps.length - 1}
+                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                            onAccessibilityClick={this.onAccessibilityClick}
+                            onReadOutLoudClick={this.onReadOutLoudClick}
+                            isReadingOutLoud={this.state.isReadingOutLoud}
+                            onHintClick={this.onHintClick}
+                            hint={steps[step].hint}
+                        />
                     </div>
-                </Draggable>
+                </div>
+                {/* </Draggable> */}
             </div>
         );
     }

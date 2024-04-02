@@ -22,9 +22,14 @@
 }
 
 .card-container-overlay {
-  position: fixed;
+  position: absolute;
   pointer-events: none;
   z-index: 509;
+
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 350px;
 }
 
 .card-container {
@@ -33,6 +38,7 @@
   z-index: 509;
   width: 350px;
   background: white;
+  height: 100%;
 }
 
 .modal-container {

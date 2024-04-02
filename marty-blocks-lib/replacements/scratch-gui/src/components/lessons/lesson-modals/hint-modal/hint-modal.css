@@ -16,7 +16,7 @@
   text-align: center;
 
   /* Min height prevents layout changing when images change */
-  min-height: 256px;
+  /* min-height: 256px; */
 
   /* max-height: 350px; */
   overflow: auto;

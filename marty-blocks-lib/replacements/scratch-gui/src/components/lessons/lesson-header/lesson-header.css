@@ -12,6 +12,7 @@
   border-bottom: 1px solid black;
   font-size: 0.625rem;
   font-weight: bold;
+  cursor: default;
 }
 
 .header-buttons-hidden {
