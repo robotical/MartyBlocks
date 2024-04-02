@@ -43,9 +43,16 @@
 }
 
 .checkpoint-answer-result-span {
-  border: 2px solid rgb(244, 218,97);
   border-radius: 7px;
   padding: 4px 5px;
+}
+
+.checkpoint-answer-result-span-correct {
+  border: 2px solid rgb(97, 244, 110);
+}
+
+.checkpoint-answer-result-span-incorrect {
+  border: 2px solid rgb(244, 218,97);
 }
 
 .checkpoint-answer-answers-span {

@@ -7,7 +7,7 @@ import styles from './lesson-header.css';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded, isAccessibilityEnabled }) => {
+const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded, isAccessibilityEnabled, maxWidthTitleContainer }) => {
 
     const headerButtonsClass = classNames(styles.headerButtons, {
         [styles.headerButtonsHidden]: !expanded,
@@ -53,7 +53,7 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step
             >
                 {step + 1}
             </div>}
-            <div className={lessonTitleContainerClass}>
+            <div className={lessonTitleContainerClass} style={{ maxWidth: maxWidthTitleContainer ? maxWidthTitleContainer : "none" }}>
                 <span className={lessonTitleClass}>{lessonTitle}</span>
             </div>
             <div className={headerButtonsRightClass}>

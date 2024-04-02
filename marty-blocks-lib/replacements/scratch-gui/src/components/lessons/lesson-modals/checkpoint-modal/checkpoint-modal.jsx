@@ -170,7 +170,9 @@ function ResultSection(props) {
         [styles.checkpointAnswerAccessibility]: isAccessibilityEnabled
     });
     const checkpointAnswerResultSpanClass = classNames(styles.checkpointAnswerResultSpan, {
-        [styles.checkpointAnswerResultSpanAccessibility]: isAccessibilityEnabled
+        [styles.checkpointAnswerResultSpanAccessibility]: isAccessibilityEnabled,
+        [styles.checkpointAnswerResultSpanCorrect]: results === "correct",
+        [styles.checkpointAnswerResultSpanIncorrect]: results === "incorrect"
     });
     const checkpointAnswerAnswersSpanClass = classNames(styles.checkpointAnswerAnswersSpan, {
         [styles.checkpointAnswerAnswersSpanAccessibility]: isAccessibilityEnabled

@@ -73,7 +73,14 @@ class LibraryItemComponent extends React.PureComponent {
                                         className={styles.featuredExtensionMetadataDetail}
                                     >
                                         {this.props.internetConnectionRequired ? (
-                                            <img src={internetConnectionIconURL} />
+                                            <button title="Internet connection required" style={{
+                                                border: 'none',
+                                                background: 'none',
+                                                cursor: 'pointer',
+                                                outline: 'none'
+                                            }}>
+                                                <img src={internetConnectionIconURL} />
+                                            </button>
                                         ) : null}
                                     </div>
                                 </div>

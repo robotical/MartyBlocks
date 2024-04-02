@@ -362,6 +362,7 @@ class Lessons extends React.Component {
                         height: expanded ? '100%' : 'auto'
                     }}>
                         <LessonHeader
+                            maxWidthTitleContainer={"200px"}
                             isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                             expanded={expanded}
                             step={step}

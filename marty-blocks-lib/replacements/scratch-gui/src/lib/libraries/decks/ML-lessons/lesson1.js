@@ -137,6 +137,7 @@ export default {
         type: LESSON_TYPE,
         description: LESSON_DESCRIPTION,
         internetConnectionRequired: true,
+        collaborator: 'Tanya',
         steps: [
             {
                 type: STEP_1_TYPE,

@@ -83,6 +83,7 @@ class TipsLibrary extends React.PureComponent {
                 rawURL: decksLibraryContent[id].img,
                 id: id,
                 internetConnectionRequired: decksLibraryContent[id].internetConnectionRequired,
+                collaborator: decksLibraryContent[id].collaborator,
                 type: decksLibraryContent[id].type,
                 name: decksLibraryContent[id].name,
                 featured: true,
