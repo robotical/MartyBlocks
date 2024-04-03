@@ -5,7 +5,6 @@ import leftArrow from '../icon--prev.svg';
 import accessibilityIcon from '../icon--accessibility.svg';
 import audioIcon from '../icon--audio.svg';
 import plusIcon from '../icon--plus.svg';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 let hintTimeout;
@@ -32,7 +31,7 @@ class NextPrevButtons extends React.Component {
             this.setState({
                 isHintAvailable: true
             });
-        }, 5000);
+        }, this.props.hint?.waitTime || 1);
     }
 
     componentDidUpdate(prevProps) {
@@ -129,15 +128,5 @@ class NextPrevButtons extends React.Component {
         );
     }
 }
-
-NextPrevButtons.propTypes = {
-    expanded: PropTypes.bool.isRequired,
-    isRtl: PropTypes.bool,
-    onNextStep: PropTypes.func,
-    onPrevStep: PropTypes.func,
-    isLastStep: PropTypes.bool,
-    isAccessibilityEnabled: PropTypes.bool,
-    onAccessibilityClick: PropTypes.func
-};
 
 export default NextPrevButtons;

@@ -33,6 +33,7 @@ const STEP_1_HINT = {
     // />,
     // image: 'https://roboticalpublic.s3.eu-west-1.amazonaws.com/martyblocks-tutorials/create-model.png',
     video: `${BUCKET_URL}visit-ml-tab-and-create-doNothing-class.mp4`,
+    waitTime: 15000 // in milliseconds
 };
 
 /* Step 2 */

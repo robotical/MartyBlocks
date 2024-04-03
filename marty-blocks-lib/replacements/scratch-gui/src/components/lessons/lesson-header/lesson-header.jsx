@@ -5,7 +5,6 @@ import expandIcon from '../icon--expand.svg';
 import closeIcon from '../icon--close.svg';
 import styles from './lesson-header.css';
 import { FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
 
 const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded, isAccessibilityEnabled, maxWidthTitleContainer }) => {
 
@@ -95,14 +94,6 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step
             </div>
         </div>
     )
-};
-
-LessonHeader.propTypes = {
-    expanded: PropTypes.bool.isRequired,
-    onCloseLessons: PropTypes.func.isRequired,
-    onShrinkExpandLessons: PropTypes.func,
-    step: PropTypes.number,
-    lessonTitle: PropTypes.string
 };
 
 export default LessonHeader;

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Draggable from 'react-draggable';
 
 import styles from './lessons.css';
 import classNames from 'classnames';
@@ -9,12 +8,14 @@ import LessonStartModalContent from './lesson-modals/start-modal/start-modal.jsx
 import CheckpointModalContent from './lesson-modals/checkpoint-modal/checkpoint-modal.jsx';
 import ExtensionProjectsModal from './lesson-modals/extension-projects-modal/extension-projects-modal.jsx';
 import HintModalContent from './lesson-modals/hint-modal/hint-modal.jsx';
+
 import LessonHeader from "./lesson-header/lesson-header.jsx";
 import VideoStep from './lesson-video/lesson-video.jsx';
 import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
 
 export const getDefaultMessageOrText = (componentOrText) => {
+    /* Helper function that gets the default message from a FormattedMessage component or returns the plain text if there is no component */
     if (componentOrText && componentOrText.props && componentOrText.props.defaultMessage) {
         return componentOrText.props.defaultMessage;
     }
@@ -96,7 +97,7 @@ class Lessons extends React.Component {
         const step = steps[this.props.step];
         const currentStepUtterance = "Step " + (this.props.step + 1) + " of " + steps.length + ". "
         const utterance = new SpeechSynthesisUtterance(currentStepUtterance + getDefaultMessageOrText(step.description));
-        utterance.rate = 0.7;
+        utterance.rate = 1;
         utterance.pitch = 1.4;
         utterance.onend = () => {
             this.setState({ isReadingOutLoud: false });
@@ -132,15 +133,15 @@ class Lessons extends React.Component {
     }
 
     setExpandedImage(e, image) {
-        e.stopPropagation();
+        e.stopPropagation(); // we are stopping the event from bubbling up to the parent div. This helps in the checkpoint modal, where the image is inside the button that selects that option. When the image is clicked, the option won't be selected.
         this.setState({ expandedImage: image });
     }
 
     setExpandedVideo(e, video) {
         e.stopPropagation();
-        e.preventDefault();
+        e.preventDefault(); // preventing default so the video doesn't play in the background
         if (e.target && e.target.tagName === 'VIDEO') {
-            e.target.pause();
+            e.target.pause(); // we also make sure to pause the video if it's playing
         }
         this.setState({ expandedVideo: video });
     }
@@ -150,14 +151,9 @@ class Lessons extends React.Component {
         const {
             activeDeckId,
             content,
-            dragging,
             isRtl,
-            locale,
             onCloseLessons,
             onShrinkExpandLessons,
-            onDrag,
-            onStartDrag,
-            onEndDrag,
             onNextStep,
             onPrevStep,
             step,
@@ -165,12 +161,6 @@ class Lessons extends React.Component {
         } = this.props;
 
         if (activeDeckId === null) return;
-
-        // Tutorial lessons need to calculate their own dragging bounds
-        // to allow for dragging the lessons off the left, right and bottom
-        // edges of the workspace.
-        const lessonHorizontalDragOffset = 400; // ~80% of lesson width
-        const menuBarHeight = 46; // TODO: get pre-calculated from elsewhere?
 
         const steps = content[activeDeckId].steps;
         const stepType = steps[step].type;
@@ -222,17 +212,7 @@ class Lessons extends React.Component {
         });
 
         return (
-            // Custom overlay to act as the bounding parent for the draggable, using values from above
-            <div
-                className={styles.cardContainerOverlay}
-                style={{
-                    // width: `${window.innerWidth + (2 * lessonHorizontalDragOffset)}px`,
-                    // height: expanded ? `${window.innerHeight - menuBarHeight}px` : 'auto',
-                    height: expanded ? "100%" : 'auto',
-                    // top: `${menuBarHeight}px`,
-                    // left: `${-lessonHorizontalDragOffset}px`
-                }}
-            >
+            <div className={styles.cardContainerOverlay} style={{ height: expanded ? "100%" : 'auto' }}>
                 {
                     this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}>
                         <div className={styles.modalContainer}>
@@ -289,75 +269,51 @@ class Lessons extends React.Component {
                     this.state.modal.content && this.state.modal.title && <div
                         className={styles.modalContainerOverlay}
                     >
-                        <Draggable
-                            bounds="parent"
-                            cancel="#video-div" // disable dragging on video div
-                            disabled={true}
-                            onDrag={onDrag}
-                            onStart={onStartDrag}
-                            onStop={onEndDrag}
-                        >
-                            <div className={styles.modalContainer}>
-                                <div className={cardClass}>
-                                    <LessonHeader
-                                        expanded={true}
-                                        lessonTitle={this.state.modal.title}
-                                        onCloseLessons={this.onCloseModal}
-                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                    />
-                                    {this.state.modal.content === "lesson-start-modal-content" && <LessonStartModalContent
-                                        {...this.props}
-                                        onCloseModal={this.onCloseModal}
-                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                        onAccessibilityClick={this.onAccessibilityClick} />
-                                    }
-                                    {this.state.modal.content === "checkpoint-modal-content" && <CheckpointModalContent
-                                        question={steps[step].question}
-                                        questionType={steps[step].questionType}
-                                        possibleAnswers={steps[step].possibleAnswers}
-                                        correctAnswers={steps[step].correctAnswers}
-                                        answerExplanations={steps[step].answerExplanations}
-                                        isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                        onAccessibilityClick={this.onAccessibilityClick}
-                                        onCloseModal={this.onCloseModal}
-                                        onExpandImage={this.setExpandedImage}
-                                    />}
-                                    {this.state.modal.content === "extension-projects-modal-content" &&
-                                        steps[step].extensionProjects && <ExtensionProjectsModal
-                                            extensionProjectIds={steps[step].extensionProjects}
-                                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
-                                            onAccessibilityClick={this.onAccessibilityClick}
-                                            onCloseModal={this.onCloseModal} />
-                                    }
-                                    {this.state.modal.content === "hint-modal-content" && <HintModalContent
-                                        hint={steps[step].hint}
+                        <div className={styles.modalContainer}>
+                            <div className={cardClass}>
+                                <LessonHeader
+                                    expanded={true}
+                                    lessonTitle={this.state.modal.title}
+                                    onCloseLessons={this.onCloseModal}
+                                    isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                />
+                                {this.state.modal.content === "lesson-start-modal-content" && <LessonStartModalContent
+                                    {...this.props}
+                                    onCloseModal={this.onCloseModal}
+                                    isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                    onAccessibilityClick={this.onAccessibilityClick} />
+                                }
+                                {this.state.modal.content === "checkpoint-modal-content" && <CheckpointModalContent
+                                    question={steps[step].question}
+                                    questionType={steps[step].questionType}
+                                    possibleAnswers={steps[step].possibleAnswers}
+                                    correctAnswers={steps[step].correctAnswers}
+                                    answerExplanations={steps[step].answerExplanations}
+                                    isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                    onAccessibilityClick={this.onAccessibilityClick}
+                                    onCloseModal={this.onCloseModal}
+                                    onExpandImage={this.setExpandedImage}
+                                />}
+                                {this.state.modal.content === "extension-projects-modal-content" &&
+                                    steps[step].extensionProjects && <ExtensionProjectsModal
+                                        extensionProjectIds={steps[step].extensionProjects}
                                         isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                         onAccessibilityClick={this.onAccessibilityClick}
-                                        onCloseModal={this.onCloseModal}
-                                        onExpandImage={this.setExpandedImage}
-                                        onExpandVideo={this.setExpandedVideo}
-                                    />}
-                                </div>
+                                        onCloseModal={this.onCloseModal} />
+                                }
+                                {this.state.modal.content === "hint-modal-content" && <HintModalContent
+                                    hint={steps[step].hint}
+                                    isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                    onAccessibilityClick={this.onAccessibilityClick}
+                                    onCloseModal={this.onCloseModal}
+                                    onExpandImage={this.setExpandedImage}
+                                    onExpandVideo={this.setExpandedVideo}
+                                />}
                             </div>
-                        </Draggable>
+                        </div>
                     </div>
                 }
-                {/* <Draggable
-                    bounds="parent"
-                    cancel="#video-div" // disable dragging on video div
-                    // top right
-                    position={{
-                        x: window.innerWidth + 50, // the + is the difference the styles.cardContainer width has from 400. Currently is set at 350 so 400 - 350 = 50
-                        y: menuBarHeight
-                    }}
-                    disabled={true}
-                    onDrag={onDrag}
-                    onStart={onStartDrag}
-                    onStop={onEndDrag}
-                > */}
-                <div className={styles.cardContainer} style={{
-                    // height: `calc(100% - ${menuBarHeight}px)`
-                }}>
+                <div className={styles.cardContainer}>
                     <div className={cardClass} style={{
                         height: expanded ? '100%' : 'auto'
                     }}>
@@ -453,7 +409,6 @@ class Lessons extends React.Component {
                         />
                     </div>
                 </div>
-                {/* </Draggable> */}
             </div>
         );
     }
@@ -473,29 +428,19 @@ Lessons.propTypes = {
             }))
         })
     }),
-    dragging: PropTypes.bool.isRequired,
     expanded: PropTypes.bool.isRequired,
     isRtl: PropTypes.bool.isRequired,
-    locale: PropTypes.string.isRequired,
     onCloseLessons: PropTypes.func.isRequired,
-    onDrag: PropTypes.func,
-    onEndDrag: PropTypes.func,
     onNextStep: PropTypes.func.isRequired,
     onPrevStep: PropTypes.func.isRequired,
     onShrinkExpandLessons: PropTypes.func.isRequired,
-    onStartDrag: PropTypes.func,
     step: PropTypes.number.isRequired,
     x: PropTypes.number,
     y: PropTypes.number
 };
 
-Lessons.defaultProps = {
-    showVideos: true
-};
-
 export {
     Lessons as default,
-    // Others exported for testability
     ImageStep,
     VideoStep
 };

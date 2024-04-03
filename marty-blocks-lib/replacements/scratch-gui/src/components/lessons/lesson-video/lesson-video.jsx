@@ -1,6 +1,5 @@
 import styles from './lesson-video.css';
 import React from 'react';
-import PropTypes from 'prop-types';
 
 class VideoStep extends React.Component {
 
@@ -18,9 +17,5 @@ class VideoStep extends React.Component {
         );
     }
 }
-
-VideoStep.propTypes = {
-    video: PropTypes.string.isRequired
-};
 
 export default VideoStep;

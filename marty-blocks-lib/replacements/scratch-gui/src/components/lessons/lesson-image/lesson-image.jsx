@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './lesson-image.css';
-import PropTypes from 'prop-types';
 
 class LessonImage extends React.Component {
     constructor() {
@@ -28,10 +27,5 @@ class LessonImage extends React.Component {
         )
     };
 }
-
-LessonImage.propTypes = {
-    image: PropTypes.string.isRequired,
-    title: PropTypes.node
-};
 
 export default LessonImage;
