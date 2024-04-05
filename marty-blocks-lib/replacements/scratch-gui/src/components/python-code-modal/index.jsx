@@ -63,7 +63,7 @@ class PythonCodeModal extends React.Component {
                             src={IconCopy}
                         /></button>
                     </Box>
-                    <Box style={{ height: "100%" }}>
+                    <Box className={styles.codeContainer}>
                         <pre style={{ "userSelect": "text" }}>
                             <code ref={this.setRef} className="language-python" style={{ "userSelect": "text" }}>
                                 {this.props.code.trim()}
