@@ -14,10 +14,10 @@ import Spinner from '../spinner/spinner.jsx';
 import spinnerStyles from '../spinner/spinner.css';
 import { connect } from "react-redux";
 import { activateDeck } from "../../reducers/cards.js";
+import { openTipsLibrary } from '../../reducers/modals';
 
 const STUDENT_OR_TEACHER_SUBSCRIPTION = "studentOrTeacherChanged";
 const IS_USER_LOGGED_IN_SUBSCRIPTION = "isUserLoggedInChanged";
-
 
 const messages = defineMessages({
   tutorials: {
@@ -141,7 +141,7 @@ class MartyCodeAssess extends React.Component {
           {
             title: intl.formatMessage(messages.tutorials),
             img: helpIcon,
-            onClick: () => this.props.showTutorialCard(),
+            onClick: () => this.props.openTipsLibrary(),
           },
         ]}
         items={classesAssets}
@@ -164,12 +164,18 @@ MartyCodeAssess.propTypes = {
   showTutorialCard: PropTypes.func,
 };
 
-
 const mapDispatchToProps = (dispatch) => ({
   showTutorialCard: () => {
-      dispatch(activateDeck("code-assess-welcome"));
+    const cardName = "code-assess-welcome";
+    const hasThisTutorialBeenShown = localStorage.getItem("mb-tutorials-" + cardName);
+    if (!hasThisTutorialBeenShown) {
+      localStorage.setItem("mb-tutorials-" + cardName, true);
+      dispatch(activateDeck(cardName));
+    }
+  },
+  openTipsLibrary: () => {
+    dispatch(openTipsLibrary());
   }
 });
 
-
-export default injectIntl(connect(null, mapDispatchToProps)(MartyCodeAssess))
+export default injectIntl(connect(null, mapDispatchToProps)(MartyCodeAssess));

@@ -43,6 +43,13 @@ class AssessmentOverTimeLineGraph extends React.Component {
             dataAsArray = [dataAsArray];
         }
 
+        // changing scores from 0 - 1 to 0 - 100
+        dataAsArray.forEach(trace => {
+            if (!trace) return;
+            if (!trace.y) return;
+            trace.y = trace.y.map(score => Math.round(score * 100));
+        });
+
         // Use Plotly.react to update the plot data and layout
         Plotly.react(this.plotRef, dataAsArray, {
             ...currentLayout,

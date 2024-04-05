@@ -57,6 +57,15 @@ class AssessmentSpiderGraph extends React.Component {
                 trace.line.color = this.props.colour;
             });
         }
+
+        // convert the data from 0-1 to 0-100
+        dataAsArray.forEach(trace => {
+            if (!trace) return;
+            if (trace.type === "scatterpolar") {
+                trace.r = trace.r.map(val => Math.round(val * 100));
+            }
+        });
+
         // Use Plotly.react to update the plot data and layout
         Plotly.react(this.plotRef, dataAsArray, {
             ...currentLayout,
@@ -81,7 +90,7 @@ class AssessmentSpiderGraph extends React.Component {
                 radialaxis: {
                     ...currentLayout.polar?.radialaxis,
                     visible: !isStudentPreview,
-                    range: [0, 1],
+                    range: [0, 100],
                 },
                 angularaxis: {
                     ...currentLayout.polar?.angularaxis,
