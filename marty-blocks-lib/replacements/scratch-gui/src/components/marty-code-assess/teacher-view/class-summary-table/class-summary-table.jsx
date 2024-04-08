@@ -169,11 +169,7 @@ ClassSummaryTable.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
     showTutorialCard: (tutorialTitle) => {
-        const hasThisTutorialBeenShown = localStorage.getItem("mb-tutorials-" + tutorialTitle);
-        if (!hasThisTutorialBeenShown) {
-            localStorage.setItem("mb-tutorials-" + tutorialTitle, true);
-            dispatch(activateDeck(tutorialTitle));
-        }
+        dispatch(activateDeck(tutorialTitle));
     }
 });
 

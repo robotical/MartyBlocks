@@ -11,6 +11,8 @@ export NODE_OPTIONS="--max-old-space-size=5120"
 alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
 export PATH=$(pyenv root)/shims:$PATH
+
+nvm use v16.20.1
 ## install python 2 and add it to path
 ## install Java Runtime Environment (JRE)
 

@@ -58,6 +58,12 @@ class AssessmentSpiderGraph extends React.Component {
             });
         }
 
+        const config = {
+            displayModeBar: false,
+            displaylogo: false,
+            responsive: false
+        };
+
         // convert the data from 0-1 to 0-100
         dataAsArray.forEach(trace => {
             if (!trace) return;
@@ -105,7 +111,7 @@ class AssessmentSpiderGraph extends React.Component {
                 },
                 showLegend: false
             },
-        });
+        }, config);
     }
 
     render() {
