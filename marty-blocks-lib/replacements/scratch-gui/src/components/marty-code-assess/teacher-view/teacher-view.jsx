@@ -9,6 +9,7 @@ import spinnerStyles from '../../spinner/spinner.css';
 import PropTypes from "prop-types";
 import ClassOverview from "./class-overview/class-overview.jsx";
 import AccountButton from "../account/account-button/account-button.jsx";
+import ClassNotesTab from "./class-notes/class-notes-tab.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -23,7 +24,7 @@ class TeacherView extends React.Component {
         super(props);
         this.state = {
             selectedClassStudents: [],
-            selectedTab: "Overview", // Overview, Students, Class Announcements
+            selectedTab: "Overview", // Overview, Students, Class Announcements // Class Notes
             isLoading: false,
         };
         bindAll(this, [
@@ -69,6 +70,7 @@ class TeacherView extends React.Component {
                     <div onClick={() => this.onSelectTab("Overview")} className={[styles.tab, (this.state.selectedTab === "Overview" ? styles.selectedTab : "")].join(" ")}>Overview</div>
                     <div onClick={() => this.onSelectTab("Students")} className={[styles.tab, (this.state.selectedTab === "Students" ? styles.selectedTab : "")].join(" ")}>Students</div>
                     <div onClick={() => this.onSelectTab("Class Announcements")} className={[styles.tab, (this.state.selectedTab === "Class Announcements" ? styles.selectedTab : "")].join(" ")}>Class Announcements</div>
+                    <div onClick={() => this.onSelectTab("Class Notes")} className={[styles.tab, (this.state.selectedTab === "Class Notes" ? styles.selectedTab : "")].join(" ")}>Class Notes</div>
                     <div className={styles.headerAccountButtonDiv}>
                         <AccountButton class={this.props.selectedClass} students={this.state.selectedClassStudents || []} />
                     </div>
@@ -84,8 +86,10 @@ class TeacherView extends React.Component {
                             } */}
                             {this.state.selectedTab === "Class Announcements" && <div className={styles.classAnnouncementsContainer}>
                                 <ClassAnnouncementsTab selectedClass={this.props.selectedClass} students={this.state.selectedClassStudents || []} />
-                            </div>
-                            }
+                            </div>}
+                            {this.state.selectedTab === "Class Notes" && <div className={styles.classNotesContainer}>
+                                <ClassNotesTab selectedClass={this.props.selectedClass} />
+                            </div>}
                         </>
                     )}
                 </div>

@@ -1,0 +1,47 @@
+.makeNewNoteModal {
+  background-color: #f9f9f9; 
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px; 
+  margin: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.makeNewNoteModal section {
+  margin-bottom: 20px;
+}
+
+.makeNewNoteModal h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.makeNewNoteModal textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  height: 100px; /* Adjust height as needed */
+  resize: vertical; /* Allows the user to resize the textarea vertically */
+}
+
+.makeNewNoteModal button {
+  background-color: #4caf50; /* Button background color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px; /* Space between buttons */
+}
+
+.makeNewNoteModal button:hover {
+  background-color: #45a049; /* Darker shade for hover effect */
+}
+
+.makeNewNoteModalContent {
+  max-height: 60vh;
+  overflow-y: auto;
+}

@@ -1,0 +1,55 @@
+.noteModal {
+  padding: 20px;
+}
+
+.noteModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.noteModalText {
+  margin: 10px 0;
+}
+
+.noteModalTimestamp {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.noteModalBody {
+  margin-top: 20px;
+}
+
+.noteModalResponses {
+  margin-top: 20px;
+}
+
+.noteModalResponsesTitle {
+  margin-bottom: 10px;
+}
+
+.noteModalResponsesSpan {
+  margin-right: 5px;
+}
+
+.noteModalResponse {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.noteModalResponseText {
+  margin: 0;
+}
+
+.noteModalResponseText {
+  margin: 0;
+}
+
+.noteIsActive {
+  color: rgb(12, 223, 132);
+  text-decoration: underline;
+  cursor: pointer;
+}
