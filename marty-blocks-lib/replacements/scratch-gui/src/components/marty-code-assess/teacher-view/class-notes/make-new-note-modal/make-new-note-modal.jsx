@@ -85,6 +85,7 @@ class MakeNewNoteModal extends React.Component {
     async submitNewNote() {
         if (this.state.imagesProgressBar.totalSize !== this.state.imagesProgressBar.loadedSize) return;
         this.setState({ isLoading: true });
+        // TODO: this currently fails because we can't store images in firestore. There is a TODO in the codeAssess lib to fix this.
         await codeAssess.teacher.makeNoteForClass(this.props.selectedClass.id, this.state.newNoteTitle, this.state.newNoteText, this.state.newNoteImages);
         this.props.handleRefreshAfterNoteCreation();
         this.props.onClose();
