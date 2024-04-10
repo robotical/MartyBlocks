@@ -1,7 +1,10 @@
 import React from "react";
 import styles from "./user-login.css";
 import { defineMessages, intlShape, injectIntl } from "react-intl";
-import googleLoginIcon from "./icon--google-login.png";
+import roboticalIcon from "../../gui/icon--robotical-logo-white.png";
+import googleIcon from "./icon--google.png";
+import microsoftIcon from "./icon--microsoft.png";
+import mailIcon from "./icon--mail.svg";
 import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 
@@ -28,7 +31,9 @@ class UserLogin extends React.Component {
         this.onLogin = this.onLogin.bind(this);
     }
 
-    async onLogin() {
+
+    async onLogin(provider) {
+        if (provider !== 'google') return alert('Not implemented yet');
         this.setState({ isLoading: true });
         try {
             await codeAssess.logUserIn();
@@ -43,10 +48,32 @@ class UserLogin extends React.Component {
         const { intl } = this.props;
         return (
             <div className={styles.userLogin}>
-                {this.state.isLoading ?
-                    <Spinner level='warn' large className={spinnerStyles.primary} /> :
-                    <img className={styles.googleLoginIcon} src={googleLoginIcon} onClick={this.onLogin} />
-                }
+                <div className={styles.loginInner}>
+                    <div className={styles.logoContainer}>
+                        <img className={styles.logo} src={roboticalIcon} />
+                    </div>
+                    <div className={styles.titleContainer}>
+                        <h3>Login</h3>
+                    </div>
+                    {this.state.isLoading && <Spinner level='warn' large className={spinnerStyles.primary} />}
+                    <div className={styles.buttonsContainer} style={{ visibility: this.state.isLoading ? 'hidden' : 'visible' }}>
+                        <div className={styles.button} onClick={() => this.onLogin("google")} >
+                            <img className={styles.googleLoginIcon} src={googleIcon} />
+                            <span className={styles.buttonText}>Continue with Google</span>
+                        </div>
+                        <div className={styles.button} onClick={() => this.onLogin("microsoft")} >
+                            <img className={styles.microsoftLoginIcon} src={microsoftIcon} />
+                            <span className={styles.buttonText}>Continue with Microsoft</span>
+                        </div>
+                        <div className={styles.orSeparator}>
+                            <span className={styles.orText}>or</span>
+                        </div>
+                        <div className={styles.button} onClick={() => this.onLogin("mail")} >
+                            <img className={styles.mailLoginIcon} src={mailIcon} />
+                            <span className={styles.buttonText}>Continue with Email</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
