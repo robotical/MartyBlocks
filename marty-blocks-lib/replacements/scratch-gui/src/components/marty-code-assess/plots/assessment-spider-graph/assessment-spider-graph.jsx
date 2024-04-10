@@ -7,6 +7,14 @@ import Plotly from "plotly.js"
 import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
 
+const labelsAbbrMap = {
+    "Algorithms": "Alg",
+    "Generalisation and Abstraction": "GA",
+    "Analysis": "Ana",
+    "Decomposition": "Dec",
+    "Pattern Recognition and Data Representation": "PR",
+};
+
 class AssessmentSpiderGraph extends React.Component {
     constructor(props) {
         super(props);
@@ -72,17 +80,32 @@ class AssessmentSpiderGraph extends React.Component {
             }
         });
 
+        // if this is a studentPreview, abbreviate the labels
+        if (isStudentPreview) {
+            dataAsArray.forEach(trace => {
+                if (!trace) return;
+                if (trace.type === "scatterpolar") {
+                    trace.text = [...trace.theta];
+                    trace.theta = trace.theta.map(label => {
+                        return labelsAbbrMap[label] || label;
+                    });
+                }
+            });
+        }
+
         // Use Plotly.react to update the plot data and layout
         Plotly.react(this.plotRef, dataAsArray, {
             ...currentLayout,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
             margin: {
                 ...currentLayout.margin,
-                l: isStudentPreview ? 50 : 80,
-                r: isStudentPreview ? 50 : 80,
-                b: isStudentPreview ? 50 : 80,
-                t: isStudentPreview ? 50 : 80,
+                l: isStudentPreview ? 30 : 80,
+                r: isStudentPreview ? 30 : 80,
+                b: isStudentPreview ? 30 : 80,
+                t: isStudentPreview ? 0 : 80,
             },
-            title: this.props.plotTitle,
+            // title: this.props.plotTitle,
             titlefont: {
                 color: this.props.colour || "black"
             },
@@ -93,6 +116,7 @@ class AssessmentSpiderGraph extends React.Component {
                 ...currentLayout.yaxis,
             },
             polar: {
+                bgcolor: 'rgba(0,0,0,0)',
                 radialaxis: {
                     ...currentLayout.polar?.radialaxis,
                     visible: !isStudentPreview,
@@ -102,12 +126,15 @@ class AssessmentSpiderGraph extends React.Component {
                     ...currentLayout.polar?.angularaxis,
                     visible: true,
                     // showticklabels: !isStudentPreview,
-                    ticks: isStudentPreview ? "inside" : "outside",
-                    tickcolor: this.props.colour || "black",
+                    ticks: isStudentPreview ? "" : "outside",
+                    // tickcolor: this.props.colour || "black",
                     tickfont: {
                         size: isStudentPreview ? 8 : 12,
-                        color: this.props.colour || "black",
+                        color: "black",
                     },
+                    linecolor: this.props.colour || "black",
+                    linewidth: 5,
+                    gridcolor: "#35abc7",
                 },
                 showLegend: false
             },
@@ -122,12 +149,15 @@ class AssessmentSpiderGraph extends React.Component {
         }
         return (
             <>
-            {!hasData && <Spinner level='warn' large className={spinnerStyles.primary} />}
-                <div ref={this.setPlotRef} className={styles.assessmentSpiderGraph} style={{
-                    width: isStudentPreview ? "200px" : "100%",
-                    height: isStudentPreview ? "200px" : "100%",
-                    display: !hasData ? "none" : "block",
-                }} />
+                {!hasData && <Spinner level='warn' large className={spinnerStyles.primary} />}
+                <div className={styles.plotContainer}>
+                    <h3 className={styles.plotTitle}>{this.props.plotTitle}</h3>
+                    <div ref={this.setPlotRef} className={styles.assessmentSpiderGraph} style={{
+                        width: isStudentPreview ? "160px" : "100%",
+                        height: isStudentPreview ? "160px" : "100%",
+                        display: !hasData ? "none" : "block",
+                    }} />
+                </div>
             </>
         );
     }
