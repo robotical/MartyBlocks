@@ -6,6 +6,9 @@ class TextExtractor extends React.Component {
     container = null;
 
     componentDidMount() {
+        if (!this.props.component) {
+            return;
+        }
         this.container = document.createElement('div');
         this.container.style.display = 'none'; // Hide the container
         document.body.appendChild(this.container);
@@ -20,11 +23,17 @@ class TextExtractor extends React.Component {
     }
 
     componentWillUnmount() {
+        if (!this.props.component) {
+            return;
+        }
         ReactDOM.unmountComponentAtNode(this.container);
         document.body.removeChild(this.container);
     }
 
     renderOffscreen = () => {
+        if (!this.props.component) {
+            return;
+        }
         ReactDOM.render(
             <IntlProvider locale="en">
                 {this.props.component}

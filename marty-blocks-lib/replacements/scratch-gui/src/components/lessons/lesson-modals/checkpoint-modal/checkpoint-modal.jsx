@@ -4,6 +4,7 @@ import MultipleChoice from './multiple-choice/multiple-choice.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
 import classNames from 'classnames';
 import { getDefaultMessageOrText } from '../../lessons.jsx';
+import ReadOutLoudTextExtractor from '../../utils/extract-intl-text.jsx';
 
 class CheckpointModalContent extends React.Component {
     constructor() {
@@ -11,13 +12,19 @@ class CheckpointModalContent extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.tryAgainHandler = this.tryAgainHandler.bind(this);
         this.handleOptionChange = this.handleOptionChange.bind(this);
+        this.handleTextExtracted = this.handleTextExtracted.bind(this);
 
         this.state = {
             answers: [],
             showing: "question", // question, result,
             results: null, // correct, incorrect, null
             idxOfGivenAnswer: null, // only relevant to 'single' question type
+            extractedText: "",
         };
+    }
+
+    handleTextExtracted(extractedText) {
+        this.setState({ extractedText });
     }
 
     onSubmit() {
@@ -77,19 +84,47 @@ class CheckpointModalContent extends React.Component {
     render() {
         const { onCloseModal, question, possibleAnswers, questionType, answerExplanations, isAccessibilityEnabled, onAccessibilityClick, onExpandImage } = this.props;
         if (this.state.showing === "question") {
-            return <QuestionSection
-                question={question}
-                possibleAnswers={possibleAnswers}
-                questionType={questionType}
-                setAnswer={(answer) => this.setState({ answers: [answer] })}
-                answers={this.state.answers}
-                handleOptionChange={this.handleOptionChange}
-                onSubmit={this.onSubmit}
-                isAccessibilityEnabled={isAccessibilityEnabled}
-                onAccessibilityClick={onAccessibilityClick}
-                onExpandImage={onExpandImage}
-            />;
+            const textToReadOutLoud = this.state.extractedText + ".\n\n" + (possibleAnswers || []).map(answer => answer.textOption || answer.text).join("?\n\n");
+            return <>
+                <ReadOutLoudTextExtractor
+                    component={question}
+                    onExtracted={this.handleTextExtracted}
+                />
+                <QuestionSection
+                    question={question}
+                    possibleAnswers={possibleAnswers}
+                    questionType={questionType}
+                    setAnswer={(answer) => this.setState({ answers: [answer] })}
+                    answers={this.state.answers}
+                    handleOptionChange={this.handleOptionChange}
+                    onSubmit={this.onSubmit}
+                    isAccessibilityEnabled={isAccessibilityEnabled}
+                    onAccessibilityClick={onAccessibilityClick}
+                    onExpandImage={onExpandImage}
+                    textToReadOutLoud={textToReadOutLoud}
+                /></>
         } else if (this.state.showing === "result") {
+            let textToReadOutLoud;
+            let answerExplanations_ = this.props.answerExplanations;
+            let resultExplanationJSX;
+            if (questionType === "text" || questionType === "multiple") {
+                if (!answerExplanations_) {
+                    // if there is no answerExplanations, we use default values
+                    answerExplanations_.correctAnswer = "That's correct!"
+                    answerExplanations_.incorrectAnswer = "That's not correct -- try again!"
+                }
+                resultExplanationJSX = this.state.results === "correct" ? answerExplanations_.correctAnswer : answerExplanations_.incorrectAnswer;
+                textToReadOutLoud = this.state.results + ". " + getDefaultMessageOrText(this.state.results === "correct" ? answerExplanations_.correctAnswer : answerExplanations_.incorrectAnswer);
+            } else {
+                if (!answerExplanations_) {
+                    // if there is no answerExplanations, we use default values 
+                    resultExplanationJSX = this.state.results === "correct" ? "That's correct!" : "That's not correct -- try again!";
+                    textToReadOutLoud = this.state.results + ". " + resultExplanationJSX;
+                } else {
+                    resultExplanationJSX = answerExplanations[idxOfGivenAnswer];
+                    textToReadOutLoud = this.state.results + ". " + getDefaultMessageOrText(answerExplanations[idxOfGivenAnswer]);
+                }
+            }
             return <ResultSection
                 onCloseModal={onCloseModal}
                 results={this.state.results}
@@ -101,6 +136,7 @@ class CheckpointModalContent extends React.Component {
                 questionType={questionType}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
+                textToReadOutLoud={textToReadOutLoud}
             />
         }
     }
@@ -109,7 +145,19 @@ class CheckpointModalContent extends React.Component {
 export default CheckpointModalContent;
 
 function QuestionSection(props) {
-    const { question, possibleAnswers, questionType, setAnswer, answers, handleOptionChange, onSubmit, isAccessibilityEnabled, onAccessibilityClick, onExpandImage } = props;
+    const {
+        question,
+        possibleAnswers,
+        questionType,
+        setAnswer,
+        answers,
+        handleOptionChange,
+        onSubmit,
+        isAccessibilityEnabled,
+        onAccessibilityClick,
+        onExpandImage,
+        textToReadOutLoud
+    } = props;
     let answerFieldJSX;
     if (questionType === "text") {
         answerFieldJSX = <input type="text" onChange={(e) => setAnswer(e.target.value)} value={answers[0] || ""} />;
@@ -146,14 +194,25 @@ function QuestionSection(props) {
                 closeModalButtonTitle={"Submit"}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
-                textToReadOutLoud={getDefaultMessageOrText(question) + ".\n\n" + (possibleAnswers || []).map(answer => answer.text).join("?\n\n")}
+                textToReadOutLoud={textToReadOutLoud}
             />
         </>
     );
 }
 
 function ResultSection(props) {
-    const { onCloseModal, results, question, tryAgainHandler, answers, idxOfGivenAnswer, questionType, isAccessibilityEnabled, onAccessibilityClick } = props;
+    const { 
+        onCloseModal, 
+        results, 
+        question, 
+        tryAgainHandler, 
+        answers, 
+        idxOfGivenAnswer, 
+        questionType, 
+        isAccessibilityEnabled, 
+        onAccessibilityClick,
+        textToReadOutLoud
+    } = props;
     let answerExplanations = props.answerExplanations;
     let resultExplanationJSX;
     if (questionType === "text" || questionType === "multiple") {
@@ -212,7 +271,7 @@ function ResultSection(props) {
                 closeModalButtonTitle={results === "correct" ? "Close" : "Try Again"}
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
-                textToReadOutLoud={results + ". " + getDefaultMessageOrText(resultExplanationJSX)}
+                textToReadOutLoud={textToReadOutLoud}
             />
         </>
     );

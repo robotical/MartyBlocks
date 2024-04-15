@@ -3,7 +3,7 @@ import styles from "./start-modal.css";
 import ImageStep from '../../lesson-image/lesson-image.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
 import classNames from 'classnames';
-import TextExtractor from '../../utils/extract-intl-text.jsx';
+import ReadOutLoudTextExtractor from '../../utils/extract-intl-text.jsx';
 
 class LessonStartModalContent extends React.Component {
 
@@ -44,7 +44,7 @@ class LessonStartModalContent extends React.Component {
                         isAccessibilityEnabled={isAccessibilityEnabled}
                     />
                 </div>
-                <TextExtractor
+                <ReadOutLoudTextExtractor
                     component={description}
                     onExtracted={this.handleTextExtracted}
                 />

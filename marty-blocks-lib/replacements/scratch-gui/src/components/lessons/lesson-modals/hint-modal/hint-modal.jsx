@@ -4,10 +4,19 @@ import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bott
 import classNames from 'classnames';
 import ImageStep from '../../lesson-image/lesson-image.jsx';
 import VideoStep from '../../lesson-video/lesson-video.jsx';
+import TextExtractor from '../../utils/extract-intl-text.jsx';
 
 class HintModal extends React.Component {
     constructor() {
         super();
+        this.handleTextExtracted = this.handleTextExtracted.bind(this);
+        this.state = {
+            extractedText: "",
+        }
+    }
+
+    handleTextExtracted(text) {
+        this.setState({ extractedText: text });
     }
 
     onOpenProject(projectId) {
@@ -49,10 +58,14 @@ class HintModal extends React.Component {
                     /></div>}
                 </div>
             </div>
+            <TextExtractor
+                component={description}
+                onExtracted={this.handleTextExtracted}
+            />
             <ModalBottomButtons
                 isAccessibilityEnabled={isAccessibilityEnabled}
                 onAccessibilityClick={onAccessibilityClick}
-                textToReadOutLoud={description}
+                textToReadOutLoud={this.state.extractedText}
             />
         </>
     }

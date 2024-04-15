@@ -13,7 +13,7 @@ import LessonHeader from "./lesson-header/lesson-header.jsx";
 import VideoStep from './lesson-video/lesson-video.jsx';
 import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
-import TextExtractor from './utils/extract-intl-text.jsx';
+import ReadOutLoudTextExtractor from './utils/extract-intl-text.jsx';
 
 export const getDefaultMessageOrText = (componentOrText) => {
     /* Helper function that gets the default message from a FormattedMessage component or returns the plain text if there is no component */
@@ -49,7 +49,6 @@ class Lessons extends React.Component {
     }
 
     handleTextExtracted = (text) => {
-        console.log("text", text)
         this.setState({ extractedText: text });
     }
 
@@ -410,7 +409,7 @@ class Lessons extends React.Component {
                                 </>
                             }
                         </div>
-                        <TextExtractor
+                        <ReadOutLoudTextExtractor
                             component={steps[step].description}
                             onExtracted={this.handleTextExtracted}
                         />
