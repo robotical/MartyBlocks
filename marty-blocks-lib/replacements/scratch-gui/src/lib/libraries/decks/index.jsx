@@ -10,6 +10,7 @@ import mlLesson1 from "./ML-lessons/lesson1";
 import mlLesson2 from "./ML-lessons/lesson2";
 import MCH01 from './ML-lessons/MCH01-HappyOrSad';
 import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
+import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 
 export default {
 
@@ -411,6 +412,7 @@ export default {
     ...mlLesson1,
     ...mlLesson2,
     ...MCH01,
-    ...MCH02
+    ...MCH02,
+    ...MCH03,
 
 };

@@ -643,7 +643,7 @@ const STEP_23_DESCRIPTION = <FormattedMessage
 
 // End Step
 const END_STEP_TYPE = "end";
-const END_STEP_IMAGE = `${BUCKET_URL}Final Solution.png`;
+const END_STEP_IMAGE = `${BUCKET_URL}Final+Solution.png`;
 const END_STEP_DESCRIPTION = <FormattedMessage
     defaultMessage={`{em1} {linebreak}{linebreak}
 
