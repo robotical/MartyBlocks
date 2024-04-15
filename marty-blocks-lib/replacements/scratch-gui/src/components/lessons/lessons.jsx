@@ -13,6 +13,7 @@ import LessonHeader from "./lesson-header/lesson-header.jsx";
 import VideoStep from './lesson-video/lesson-video.jsx';
 import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
+import TextExtractor from './utils/extract-intl-text.jsx';
 
 export const getDefaultMessageOrText = (componentOrText) => {
     /* Helper function that gets the default message from a FormattedMessage component or returns the plain text if there is no component */
@@ -33,7 +34,7 @@ class Lessons extends React.Component {
         this.onHintClick = this.onHintClick.bind(this);
         this.setExpandedImage = this.setExpandedImage.bind(this);
         this.setExpandedVideo = this.setExpandedVideo.bind(this);
-
+        this.handleTextExtracted = this.handleTextExtracted.bind(this);
         this.state = {
             expandedImage: '',
             expandedVideo: '',
@@ -43,7 +44,13 @@ class Lessons extends React.Component {
             },
             isAccessibilityEnabled: false,
             isReadingOutLoud: false,
+            extractedText: "",
         };
+    }
+
+    handleTextExtracted = (text) => {
+        console.log("text", text)
+        this.setState({ extractedText: text });
     }
 
     componentDidMount() {
@@ -94,9 +101,8 @@ class Lessons extends React.Component {
         }
         this.setState({ isReadingOutLoud: true });
         const steps = this.props.content[this.props.activeDeckId].steps;
-        const step = steps[this.props.step];
         const currentStepUtterance = "Step " + (this.props.step + 1) + " of " + steps.length + ". "
-        const utterance = new SpeechSynthesisUtterance(currentStepUtterance + getDefaultMessageOrText(step.description));
+        const utterance = new SpeechSynthesisUtterance(currentStepUtterance + this.state.extractedText);
         utterance.rate = 1;
         utterance.pitch = 1.4;
         utterance.onend = () => {
@@ -404,6 +410,10 @@ class Lessons extends React.Component {
                                 </>
                             }
                         </div>
+                        <TextExtractor
+                            component={steps[step].description}
+                            onExtracted={this.handleTextExtracted}
+                        />
                         <NextPrevButtons
                             expanded={expanded}
                             isRtl={isRtl}

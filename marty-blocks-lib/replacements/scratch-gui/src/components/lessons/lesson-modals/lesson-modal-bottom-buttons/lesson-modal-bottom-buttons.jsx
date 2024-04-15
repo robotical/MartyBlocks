@@ -12,10 +12,16 @@ class ModalBottomButtons extends React.Component {
     constructor() {
         super();
         this.onReadOutLoudClick = this.onReadOutLoudClick.bind(this);
-
+        this.setReadOutLoudRef = this.setReadOutLoudRef.bind(this);
         this.state = {
             isReadingOutLoud: false
         }
+
+        this.readOutLoudDivRef = null;
+    }
+
+    setReadOutLoudRef = (element) => {
+        this.readOutLoudDivRef = element;
     }
 
     onReadOutLoudClick() {
@@ -25,7 +31,7 @@ class ModalBottomButtons extends React.Component {
             return;
         }
         this.setState({ isReadingOutLoud: true });
-        const utterance = new SpeechSynthesisUtterance(this.props.textToReadOutLoud);
+        const utterance = new SpeechSynthesisUtterance(this.readOutLoudDivRef.innerText);
         utterance.rate = 0.7;
         utterance.pitch = 1.4;
         utterance.onend = () => {
@@ -61,6 +67,9 @@ class ModalBottomButtons extends React.Component {
                     <img draggable={false} src={accessibilityIcon} />
                 </button>
                 <button className={audioButtonClass} onClick={this.onReadOutLoudClick} title="Read out loud">
+                    <div ref={this.setReadOutLoudRef} style={{display: "none"}}>
+                        {this.props.textToReadOutLoud}
+                    </div>
                     <img draggable={false} src={audioIcon} />
                 </button>
 

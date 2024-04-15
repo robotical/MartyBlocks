@@ -3,40 +3,61 @@ import styles from "./start-modal.css";
 import ImageStep from '../../lesson-image/lesson-image.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
 import classNames from 'classnames';
-import { getDefaultMessageOrText } from '../../lessons.jsx';
+import TextExtractor from '../../utils/extract-intl-text.jsx';
 
-const LessonStartModalContent = ({ content, activeDeckId, onCloseModal, isAccessibilityEnabled, onAccessibilityClick }) => {
-    const { img, description } = content[activeDeckId];
+class LessonStartModalContent extends React.Component {
 
-    const stepBodyClass = classNames(styles.stepBody, {
-        [styles.stepBodyAccessibility]: isAccessibilityEnabled
-    });
+    constructor() {
+        super();
+        this.handleTextExtracted = this.handleTextExtracted.bind(this);
+        this.state = {
+            extractedText: "",
+        }
+    }
+    
+    handleTextExtracted(text) {
+        this.setState({ extractedText: text });
+    }
 
-    const stepDescriptionClass = classNames(styles.stepDescription, {
-        [styles.stepDescriptionAccessibility]: isAccessibilityEnabled
-    });
+    render() {
 
-    return (
-        <>
-            <div className={stepBodyClass}>
-                <div className={stepDescriptionClass}>
-                    {description}
+        const { content, activeDeckId, onCloseModal, isAccessibilityEnabled, onAccessibilityClick } = this.props;
+        const { img, description } = content[activeDeckId];
+
+        const stepBodyClass = classNames(styles.stepBody, {
+            [styles.stepBodyAccessibility]: isAccessibilityEnabled
+        });
+
+        const stepDescriptionClass = classNames(styles.stepDescription, {
+            [styles.stepDescriptionAccessibility]: isAccessibilityEnabled
+        });
+
+        return (
+            <>
+                <div className={stepBodyClass}>
+                    <div className={stepDescriptionClass}>
+                        {description}
+                    </div>
+                    <ImageStep
+                        image={img}
+                        title={""}
+                        isAccessibilityEnabled={isAccessibilityEnabled}
+                    />
                 </div>
-                <ImageStep
-                    image={img}
-                    title={""}
-                    isAccessibilityEnabled={isAccessibilityEnabled}
+                <TextExtractor
+                    component={description}
+                    onExtracted={this.handleTextExtracted}
                 />
-            </div>
-            <ModalBottomButtons
-                onCTAClick={onCloseModal}
-                closeModalButtonTitle={"Start"}
-                isAccessibilityEnabled={isAccessibilityEnabled}
-                onAccessibilityClick={onAccessibilityClick}
-                textToReadOutLoud={getDefaultMessageOrText(description)}
-            />
-        </>
-    );
-};
+                <ModalBottomButtons
+                    onCTAClick={onCloseModal}
+                    closeModalButtonTitle={"Start"}
+                    isAccessibilityEnabled={isAccessibilityEnabled}
+                    onAccessibilityClick={onAccessibilityClick}
+                    textToReadOutLoud={this.state.extractedText}
+                />
+            </>
+        );
+    };
+}
 
 export default LessonStartModalContent;
