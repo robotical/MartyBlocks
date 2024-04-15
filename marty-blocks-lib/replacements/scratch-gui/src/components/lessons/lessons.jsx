@@ -214,6 +214,7 @@ class Lessons extends React.Component {
         return (
             <div className={styles.cardContainerOverlay} style={{ height: expanded ? "100%" : 'auto' }}>
                 {
+                    // EXPANDED IMAGE MODAL
                     this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}>
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
@@ -239,6 +240,7 @@ class Lessons extends React.Component {
                     </div>
                 }
                 {
+                    // EXPANDED VIDEO MODAL
                     this.state.expandedVideo && <div className={styles.modalContainerOverlayExpandedImage}>
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
@@ -266,6 +268,7 @@ class Lessons extends React.Component {
                     </div>
                 }
                 {
+                    // MODALS such as Start Lesson, Checkpoint, Extension Projects, Hint
                     this.state.modal.content && this.state.modal.title && <div
                         className={styles.modalContainerOverlay}
                     >
@@ -388,6 +391,13 @@ class Lessons extends React.Component {
                                     <div className={checkpointStepTitleClass}>
                                         <span>End of Lesson!</span>
                                     </div>
+                                    {steps[step].image && (
+                                        <ImageStep
+                                            onImageClick={(e) => this.setExpandedImage(e, steps[step].image)}
+                                            image={steps[step].image}
+                                            isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                        />
+                                    )}
                                     <div className={stepDescriptionClass}>
                                         {steps[step].description}
                                     </div>

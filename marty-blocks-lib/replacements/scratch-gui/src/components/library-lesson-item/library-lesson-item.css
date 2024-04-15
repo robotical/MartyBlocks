@@ -143,6 +143,23 @@
     line-height: 1.375rem;
     padding-top: .3125rem;
     padding-bottom: .25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4.5em; 
+    line-height: 1.5em; 
+}
+
+.featured-description span{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4.5em; 
+    line-height: 1.5em; 
 }
 
 .featured-extension-metadata {

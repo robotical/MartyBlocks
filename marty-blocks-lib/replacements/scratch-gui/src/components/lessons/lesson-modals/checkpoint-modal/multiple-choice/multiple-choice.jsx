@@ -62,9 +62,14 @@ class MultipleChoiceCheckbox extends React.Component {
         const choiceLabelClass = classNames(styles.choiceLabel, {
             [styles.choiceLabelAccessibility]: isAccessibilityEnabled
         });
+
         return (
             <div className={choiceContainerClass} onClick={this.toggleInput}>
-                <img onClick={(e) => onExpandImage(e, answer.image)} className={choiceImageClass} src={answer.image} alt={`Option ${answer}`} />
+                {
+                    answer.image ?
+                        <img onClick={(e) => onExpandImage(e, answer.image)} className={choiceImageClass} src={answer.image} alt={`Option ${answer}`} /> :
+                        <p className={choiceTextClass}>{answer.textOption || ""}</p>
+                }
                 <div className={choiceCheckboxClass} onClick={this.toggleInput}><input
                     ref={this.setInputRef}
                     className={styles.choiceInput}

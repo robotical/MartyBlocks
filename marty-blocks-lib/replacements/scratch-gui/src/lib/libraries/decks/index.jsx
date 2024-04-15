@@ -8,6 +8,8 @@ import { FormattedMessage } from 'react-intl';
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
 import mlLesson1 from "./ML-lessons/lesson1";
 import mlLesson2 from "./ML-lessons/lesson2";
+import MCH01 from './ML-lessons/MCH01-HappyOrSad';
+import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
 
 export default {
 
@@ -407,6 +409,8 @@ export default {
     },
 
     ...mlLesson1,
-    ...mlLesson2
+    ...mlLesson2,
+    ...MCH01,
+    ...MCH02
 
 };

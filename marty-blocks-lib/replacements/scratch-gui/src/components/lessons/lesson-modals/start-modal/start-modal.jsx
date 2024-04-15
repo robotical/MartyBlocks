@@ -12,12 +12,19 @@ const LessonStartModalContent = ({ content, activeDeckId, onCloseModal, isAccess
         [styles.stepBodyAccessibility]: isAccessibilityEnabled
     });
 
+    const stepDescriptionClass = classNames(styles.stepDescription, {
+        [styles.stepDescriptionAccessibility]: isAccessibilityEnabled
+    });
+
     return (
         <>
             <div className={stepBodyClass}>
+                <div className={stepDescriptionClass}>
+                    {description}
+                </div>
                 <ImageStep
                     image={img}
-                    title={description}
+                    title={""}
                     isAccessibilityEnabled={isAccessibilityEnabled}
                 />
             </div>

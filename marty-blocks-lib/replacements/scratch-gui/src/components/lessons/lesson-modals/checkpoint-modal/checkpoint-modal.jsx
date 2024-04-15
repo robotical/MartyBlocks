@@ -153,12 +153,23 @@ function QuestionSection(props) {
 }
 
 function ResultSection(props) {
-    const { onCloseModal, results, question, tryAgainHandler, answers, answerExplanations, idxOfGivenAnswer, questionType, isAccessibilityEnabled, onAccessibilityClick } = props;
+    const { onCloseModal, results, question, tryAgainHandler, answers, idxOfGivenAnswer, questionType, isAccessibilityEnabled, onAccessibilityClick } = props;
+    let answerExplanations = props.answerExplanations;
     let resultExplanationJSX;
     if (questionType === "text" || questionType === "multiple") {
+        if (!answerExplanations) {
+            // if there is no answerExplanations, we use default values
+            answerExplanations.correctAnswer = "That's correct!"
+            answerExplanations.incorrectAnswer = "That's not correct -- try again!"
+        }
         resultExplanationJSX = results === "correct" ? answerExplanations.correctAnswer : answerExplanations.incorrectAnswer;
     } else {
-        resultExplanationJSX = answerExplanations[idxOfGivenAnswer];
+        if (!answerExplanations) {
+            // if there is no answerExplanations, we use default values 
+            resultExplanationJSX = results === "correct" ? "That's correct!" : "That's not correct -- try again!";
+        } else {
+            resultExplanationJSX = answerExplanations[idxOfGivenAnswer];
+        }
     }
     const stepBodyClass = classNames(styles.stepBody, {
         [styles.stepBodyAccessibility]: isAccessibilityEnabled
