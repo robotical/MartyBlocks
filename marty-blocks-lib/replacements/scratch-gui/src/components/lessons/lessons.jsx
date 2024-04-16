@@ -90,6 +90,10 @@ class Lessons extends React.Component {
                 content: '',
             }
         });
+        // go to the next step if the modal was a checkpoint
+        if (this.props.content[this.props.activeDeckId].steps[this.props.step].type === "checkpoint") {
+            this.props.onNextStep();
+        }
     }
 
     onReadOutLoudClick() {
@@ -217,10 +221,11 @@ class Lessons extends React.Component {
         });
 
         return (
-            <div className={styles.cardContainerOverlay} style={{ height: expanded ? "100%" : 'auto' }}>
+            <div className={styles.cardContainerOverlay} style={{ height: expanded ? "92%" : 'auto' }}>
                 {
                     // EXPANDED IMAGE MODAL
-                    this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}>
+                    this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}
+                        onClick={e => e.stopPropagation()}>
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
                                 <LessonHeader
@@ -246,7 +251,9 @@ class Lessons extends React.Component {
                 }
                 {
                     // EXPANDED VIDEO MODAL
-                    this.state.expandedVideo && <div className={styles.modalContainerOverlayExpandedImage}>
+                    this.state.expandedVideo && <div className={styles.modalContainerOverlayExpandedImage}
+                        onClick={e => e.stopPropagation()}
+                    >
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
                                 <LessonHeader
@@ -276,13 +283,14 @@ class Lessons extends React.Component {
                     // MODALS such as Start Lesson, Checkpoint, Extension Projects, Hint
                     this.state.modal.content && this.state.modal.title && <div
                         className={styles.modalContainerOverlay}
+                        onClick={e => e.stopPropagation()}
                     >
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
                                 <LessonHeader
                                     expanded={true}
                                     lessonTitle={this.state.modal.title}
-                                    onCloseLessons={this.onCloseModal}
+                                    onCloseLessons={this.state.modal.content === "checkpoint-modal-content" ? undefined : this.onCloseModal}
                                     isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                 />
                                 {this.state.modal.content === "lesson-start-modal-content" && <LessonStartModalContent
@@ -332,7 +340,8 @@ class Lessons extends React.Component {
                             step={step}
                             lessonTitle={content[activeDeckId].name}
                             onCloseLessons={() => {
-                                if (stepType === "end") {
+                                // if it's the last step, close the lesson. Otherwise, confirm if the user wants to exit the lesson.
+                                if (step === steps.length - 1) {
                                     onCloseLessons();
                                 } else {
                                     confirm('Are you sure you want to exit the lesson? All progress will be lost.') && onCloseLessons();
@@ -394,7 +403,7 @@ class Lessons extends React.Component {
                             {
                                 stepType === "end" && <>
                                     <div className={checkpointStepTitleClass}>
-                                        <span>End of Lesson!</span>
+                                        <span>End of Activity!</span>
                                     </div>
                                     {steps[step].image && (
                                         <ImageStep

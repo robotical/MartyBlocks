@@ -14,8 +14,7 @@ const LESSON_TYPE = "lesson";
 const LESSON_DESCRIPTION = <FormattedMessage
     defaultMessage={`{bold1} {linebreak}{linebreak}
     {boldRequirements} Marty the Robot and a computer or tablet that has access to a camera/webcam. {linebreak}{linebreak}
-    {boldTargetAudience} 10-14 years / Intermediate. {linebreak}{linebreak}
-    {boldEstimatedTime} 40-50 minutes.`}
+    `}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.description`}
     values={{
@@ -110,14 +109,14 @@ const STEP_3_DESCRIPTION = <FormattedMessage
     💡 {em1}`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step3.description`}
-    values={{ 
-        linebreak: <br />, 
+    values={{
+        linebreak: <br />,
         boldBlueRecording: <b>blue recording</b>,
         boldHappy: <b>Happy</b>,
         boldStopButton: <b>stop button</b>,
         boldDeleteButton: <b>delete button</b>,
         em1: <em>Have you captured enough images of someone looking happy? We recommend that you have at least 30 images.</em>
-        }}
+    }}
 />;
 const STEP_3_IMAGE = `${BUCKET_URL}Step3.png`;
 const STEP_3_HINT = {
@@ -141,11 +140,11 @@ const STEP_4_DESCRIPTION = <FormattedMessage
     Now repeat what we did in the last step to record images of someone who looks sad.`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step4.description`}
-    values={{ 
+    values={{
         linebreak: <br />,
         boldSad: <b>Sad</b>,
         boldBluePlusButton: <b>blue + button</b>,
-         }}
+    }}
 />;
 const STEP_4_IMAGE = `${BUCKET_URL}Step4.png`;
 const STEP_4_HINT = {
@@ -212,10 +211,10 @@ const STEP_6_DESCRIPTION = <FormattedMessage
     Click on the {boldTrain} button to begin the training process – be patient as this may take a few minutes!`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step6.description`}
-    values={{ 
-        linebreak: <br />, 
+    values={{
+        linebreak: <br />,
         boldTrain: <b>Train</b>,
-        }}
+    }}
 />;
 const STEP_6_IMAGE = `${BUCKET_URL}Step5.png`;
 
@@ -230,11 +229,11 @@ const STEP_7_DESCRIPTION = <FormattedMessage
     💡 {em1}`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step7.description`}
-    values={{ 
-        linebreak: <br />, 
+    values={{
+        linebreak: <br />,
         boldRun: <b>Run</b>,
         em1: <em>Don’t worry if your model is not very accurate, you will have a chance to make changes to it in the next step!</em>
-        }}
+    }}
 />;
 const STEP_7_IMAGE = `${BUCKET_URL}Step6.png`;
 
@@ -378,8 +377,8 @@ const STEP_13_DESCRIPTION = <FormattedMessage
         boldConfThresh: <b>set confidence threshold</b>,
         boldPointEight: <b>0.8</b>,
         boldGreenFlag: <b>green flag</b>,
-        em1: <em>The confidence threshold means that the model must be at least 80% sure of the prediction of whether someone is happy or sad before it will tell us this prediction. 
-        This will stop any predictions being sent to our program that might not be very accurate.</em>
+        em1: <em>The confidence threshold means that the model must be at least 80% sure of the prediction of whether someone is happy or sad before it will tell us this prediction.
+            This will stop any predictions being sent to our program that might not be very accurate.</em>
     }}
 />;
 const STEP_13_HINT = {
@@ -547,8 +546,8 @@ const STEP_19_DESCRIPTION = <FormattedMessage
     values={{
         linebreak: <br />,
         boldGreenFlag: <b>green flag</b>,
-        em1: <em>Click on the checkbox beside the image label block to see the live predictions being used in your program, this might help 
-        you with debugging your code to make sure it is working correctly!</em>
+        em1: <em>Click on the checkbox beside the image label block to see the live predictions being used in your program, this might help
+            you with debugging your code to make sure it is working correctly!</em>
     }}
 />;
 const STEP_19_IMAGE = `${BUCKET_URL}Step15.png`;
@@ -564,7 +563,9 @@ const STEP_20_DESCRIPTION = <FormattedMessage
     was only trained using images of your face! {linebreak}{linebreak}
 
     ⚡️ If you’re ready for something a little more challenging, try creating a {boldNewData} to identify {boldSignLanguage}
-    that is being used and change your program so that Marty can respond to sign language.  `}
+    that is being used and change your program so that Marty can respond to sign language.{linebreak}{linebreak}
+    
+    💡 {bEm1} {ndcsLink}`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step20.description`}
     values={{
@@ -572,6 +573,9 @@ const STEP_20_DESCRIPTION = <FormattedMessage
         bold1: <b>Great job! You have made a machine learning model that predicts when someone looks happy or sad!</b>,
         boldNewData: <b>new data model</b>,
         boldSignLanguage: <b>sign language</b>,
+        bEm1: <b><em>If you are looking for resources to support you with extending this activity to use sign language, there are many
+            resources online that have flashcards that can be used to learn sign language such as </em></b>,
+        ndcsLink: <b><em><a href="https://www.ndcs.org.uk/documents-and-resources/lets-sign-flashcards-for-emotions-routines-and-senses/" target="_blank">this one from the National Deaf Children’s Society</a></em></b>
     }}
 />;
 const STEP_20_HINT = {
@@ -596,19 +600,14 @@ const STEP_20_HINT = {
 const END_STEP_TYPE = "end";
 const END_STEP_IMAGE = `${BUCKET_URL}Final Solution.png`;
 const END_STEP_DESCRIPTION = <FormattedMessage
-    defaultMessage={`{em1} {linebreak}{linebreak}
-
-    {bEm1} {ndcsLink}`}
+    defaultMessage={`{em1}`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step_end.description`}
     values={{
         linebreak: <br />,
-        em1: <em>There should be three sections to the final program. The first setting up the program so that when the green 
-        flag is clicked Marty gets ready and the data model is set up to label new images coming from the camera. 
-        The final two sections tell Marty how to respond when the image is labelled as happy or sad.</em>,
-        bEm1:<b><em>If you are looking for resources to support you with extending this activity to use sign language, there are many 
-        resources online that have flashcards that can be used to learn sign language such as </em></b>,
-        ndcsLink: <b><em><a href="https://www.ndcs.org.uk/documents-and-resources/lets-sign-flashcards-for-emotions-routines-and-senses/" target="_blank">this one from the National Deaf Children’s Society</a></em></b>
+        em1: <em>There should be three sections to the final program. The first setting up the program so that when the green
+            flag is clicked Marty gets ready and the data model is set up to label new images coming from the camera.
+            The final two sections tell Marty how to respond when the image is labelled as happy or sad.</em>,
     }}
 />;
 
@@ -732,15 +731,15 @@ export default {
                 image: STEP_19_IMAGE,
             },
             {
-                type: STEP_20_TYPE,
-                description: STEP_20_DESCRIPTION,
-                hint: STEP_20_HINT,
-            },
-            {
                 type: END_STEP_TYPE,
                 description: END_STEP_DESCRIPTION,
                 image: END_STEP_IMAGE,
                 // extensionProjects: END_STEP_EXTENSION_PROJECTS
+            },
+            {
+                type: STEP_20_TYPE,
+                description: STEP_20_DESCRIPTION,
+                hint: STEP_20_HINT,
             },
         ],
     },

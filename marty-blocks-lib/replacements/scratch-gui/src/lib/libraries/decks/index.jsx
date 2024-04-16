@@ -409,8 +409,6 @@ export default {
         ],
     },
 
-    ...mlLesson1,
-    ...mlLesson2,
     ...MCH01,
     ...MCH02,
     ...MCH03,

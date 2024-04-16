@@ -14,8 +14,7 @@ const LESSON_TYPE = "lesson";
 const LESSON_DESCRIPTION = <FormattedMessage
     defaultMessage={`{bold1} {linebreak}{linebreak}
     {boldRequirements} Marty the Robot, a computer or tablet that has access to a camera/webcam, some paper and colouring in pens/pencils. {linebreak}{linebreak}
-    {boldTargetAudience} 10-14 years / Intermediate. {linebreak}{linebreak}
-    {boldEstimatedTime} 50-60 minutes.`}
+    `}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-farming-robots.description`}
     values={{
@@ -909,14 +908,14 @@ export default {
                 image: STEP_24_IMAGE,
             },
             {
-                type: STEP_25_TYPE,
-                description: STEP_25_DESCRIPTION,
-                image: STEP_25_IMAGE,
-            },
-            {
                 type: END_STEP_TYPE,
                 description: END_STEP_DESCRIPTION,
                 image: END_STEP_IMAGE,
+            },
+            {
+                type: STEP_25_TYPE,
+                description: STEP_25_DESCRIPTION,
+                image: STEP_25_IMAGE,
             },
         ]
     },

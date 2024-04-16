@@ -77,7 +77,7 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step
                         />
                     }
                 </div>}
-                <div
+                {onCloseLessons && <div
                     className={removeButtonClass}
                     onClick={onCloseLessons}
                 >
@@ -90,7 +90,7 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step
                         description="Title for button to close how-to lesson"
                         id="gui.lessons.close"
                     />
-                </div>
+                </div>}
             </div>
         </div>
     )

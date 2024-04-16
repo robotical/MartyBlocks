@@ -121,8 +121,8 @@ class CheckpointModalContent extends React.Component {
                     resultExplanationJSX = this.state.results === "correct" ? "That's correct!" : "That's not correct -- try again!";
                     textToReadOutLoud = this.state.results + ". " + resultExplanationJSX;
                 } else {
-                    resultExplanationJSX = answerExplanations[idxOfGivenAnswer];
-                    textToReadOutLoud = this.state.results + ". " + getDefaultMessageOrText(answerExplanations[idxOfGivenAnswer]);
+                    resultExplanationJSX = answerExplanations[this.state.idxOfGivenAnswer];
+                    textToReadOutLoud = this.state.results + ". " + getDefaultMessageOrText(answerExplanations[this.state.idxOfGivenAnswer]);
                 }
             }
             return <ResultSection

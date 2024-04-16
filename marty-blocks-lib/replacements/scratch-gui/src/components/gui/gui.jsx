@@ -278,7 +278,9 @@ const GUIComponent = props => {
                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                 onSelect={onActivateTab}
               >
-
+                {lessonsVisible ? (
+                  <Lessons />
+                ) : null}
                 <TabList className={tabClassNames.tabList}>
                   <Tab className={tabClassNames.tab}>
                     <img
@@ -355,9 +357,6 @@ const GUIComponent = props => {
                   </Box>
                 </TabList>
                 <TabPanel className={tabClassNames.tabPanel}>
-                  {lessonsVisible ? (
-                    <Lessons />
-                  ) : null}
                   <Box className={styles.blocksWrapper}>
                     <Blocks
                       key={`${blocksId}/${theme}`}

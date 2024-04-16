@@ -13,9 +13,7 @@ const LESSON_KEY = "type-lesson-ml-captains-orders"; // The key needs to start w
 const LESSON_TYPE = "lesson";
 const LESSON_DESCRIPTION = <FormattedMessage
     defaultMessage={`{bold1} {linebreak}{linebreak}
-    {boldRequirements} Marty the Robot and a computer or tablet that has access to a microphone. {linebreak}{linebreak}
-    {boldTargetAudience} 10-14 years / Intermediate. {linebreak}{linebreak}
-    {boldEstimatedTime} 40-50 minutes.`}
+    {boldRequirements} Marty the Robot and a computer or tablet that has access to a microphone. {linebreak}{linebreak}`}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-captains-orders.description`}
     values={{
@@ -795,14 +793,15 @@ export default {
                 hint: STEP_22_HINT
             },
             {
-                type: STEP_23_TYPE,
-                description: STEP_23_DESCRIPTION,
-            },
-            {
                 type: END_STEP_TYPE,
                 image: END_STEP_IMAGE,
                 description: END_STEP_DESCRIPTION,
-            }
+            },
+            {
+                type: STEP_23_TYPE,
+                description: STEP_23_DESCRIPTION,
+            },
+
         ]
     },
 }
