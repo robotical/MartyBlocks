@@ -66,7 +66,12 @@ class Lessons extends React.Component {
             const steps = this.props.content[this.props.activeDeckId].steps;
             const stepId = this.props.step;
             if (steps[stepId].type === "checkpoint") {
-                this.showCheckpointModal();
+                // first check if we are coming from a "previous" button click
+                if (this.props.step < prevProps.step) {
+                    // if we are coming from a previous button click, we don't want to show the checkpoint modal
+                } else {
+                    this.showCheckpointModal();
+                }
             }
         }
         if (this.props.activeDeckId !== prevProps.activeDeckId) {
@@ -395,7 +400,7 @@ class Lessons extends React.Component {
                                     }
                                     {
                                         <div className={checkpointTryAgainDivClass}>
-                                            <button onClick={this.showCheckpointModal}>Try Again</button>
+                                            <button onClick={this.showCheckpointModal}>Start</button>
                                         </div>
                                     }
                                 </>
