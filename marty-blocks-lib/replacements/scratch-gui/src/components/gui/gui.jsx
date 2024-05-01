@@ -15,6 +15,8 @@ import CostumeTab from '../../containers/costume-tab.jsx';
 import TargetPane from '../../containers/target-pane.jsx';
 import SoundTab from '../../containers/sound-tab.jsx';
 import MartyMachineTab from "../../containers/marty-machine-tab.jsx";
+import CodeAssessTab from "../../containers/code-assess-tab.jsx";
+import codeAssessIcon from "./icon--code-assess.svg";
 import SaveLoadTab from "../../containers/save-load-tab.jsx";
 import StageWrapper from '../../containers/stage-wrapper.jsx';
 import Loader from '../loader/loader.jsx';
@@ -118,6 +120,7 @@ const GUIComponent = props => {
     onActivateSaveLoadTab,
     onActivateSoundsTab,
     onActivateMartyMachineTab,
+    onActivateCodeAssessTab,
     onActivateTab,
     onClickLogo,
     onExtensionButtonClick,
@@ -134,6 +137,7 @@ const GUIComponent = props => {
     onTelemetryModalOptOut,
     saveLoadTabVisible,
     martyMachineTabVisible,
+    codeAssessTabVisible,
     showComingSoon,
     soundsTabVisible,
     stageSizeForSensors,
@@ -342,6 +346,17 @@ const GUIComponent = props => {
                   </Tab>
                   <Tab
                     className={tabClassNames.tab}
+                    onClick={onActivateCodeAssessTab}
+                  >
+                    <img draggable={false} src={codeAssessIcon} />
+                    <FormattedMessage
+                      defaultMessage="Code Review"
+                      description="Button to toggle Code Review tab"
+                      id="gui.gui.toggleCodeAssessTab"
+                    />
+                  </Tab>
+                  <Tab
+                    className={tabClassNames.tab}
                     onClick={onActivateSaveLoadTab}
                   >
                     <img draggable={false} src={saveIcon} />
@@ -403,6 +418,9 @@ const GUIComponent = props => {
                 </TabPanel>
                 <TabPanel className={tabClassNames.tabPanel}>
                   {martyMachineTabVisible ? <MartyMachineTab vm={vm} /> : null}
+                </TabPanel>
+                <TabPanel className={tabClassNames.tabPanel}>
+                  {codeAssessTabVisible ? <CodeAssessTab vm={vm} /> : null}
                 </TabPanel>
                 <TabPanel
                   className={[

@@ -1,6 +1,7 @@
 const Mv2Interface = require("./Mv2Interface");
 const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");
+const CodeAssess = require("./CodeAssess");
 const lamejs = require("./lame-all");
 const { default: isVersionGreater } = require("./versionChecker");
 const Cast = require("./util/cast");
@@ -10,6 +11,7 @@ const { Project } = require("@robotical/scratch-to-python-transpiler");
 
 
 mv2Interface = new Mv2Interface();
+codeAssess = new CodeAssess();
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine();
 pythonTranspiler = Project;
