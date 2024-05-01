@@ -102,7 +102,10 @@ class MartyMachineTab extends React.Component {
 
     componentDidMount() {
         mv2Interface.startMLSession();
-        this.shouldShowTutorialsCard();
+        // if there is a lesson open, don't show the tut card.
+        if (!this.props.lessonsVisible) {
+            this.shouldShowTutorialsCard();
+        }
         const sprite = vm.editingTarget.sprite;
         const areThereSavedModels = sprite.models && sprite.models.length > 0;
         if (areThereSavedModels) {
@@ -446,6 +449,7 @@ MartyMachineTab.propTypes = {
 
 const mapStateToProps = (state) => ({
     scratchGui: state.scratchGui,
+    lessonsVisible: state.scratchGui.lessons.visible,
     editingTarget: state.scratchGui.targets.editingTarget,
     isRtl: state.locales.isRtl,
     sprites: state.scratchGui.targets.sprites,

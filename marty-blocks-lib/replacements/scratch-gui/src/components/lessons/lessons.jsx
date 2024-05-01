@@ -226,7 +226,7 @@ class Lessons extends React.Component {
         });
 
         return (
-            <div className={styles.cardContainerOverlay} style={{ height: expanded ? "92%" : 'auto' }}>
+            <div className={styles.cardContainerOverlay} style={{ height: expanded ? "calc(100% - 44px)" : 'auto' }}>
                 {
                     // EXPANDED IMAGE MODAL
                     this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}

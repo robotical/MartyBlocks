@@ -61,7 +61,7 @@
 
 .left-card,
 .right-card {
-  height: 90%;
+  height: calc(100% - 44px);
   position: absolute;
   top: 5%;
   background: $ui-white;
@@ -165,7 +165,6 @@
   align-items: center;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: 100%;
-  max-height: 90vh;
 }
 
 .step-title {
@@ -191,7 +190,7 @@
   border: 1px solid $ui-tertiary;
   width: 100%;
   text-align: left;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   padding: 0.5rem;
   color: black;
 }
@@ -326,7 +325,7 @@
 
 .progress-bar-remaining-steps {
   color: black;
-  font-size: 12px;
+  font-size: 13px;
   align-self: center;
 }
 
