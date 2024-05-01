@@ -634,7 +634,7 @@ const STEP_21_HINT = {
 /* Step 22 */
 const STEP_22_TYPE = "info";
 const STEP_22_DESCRIPTION = <FormattedMessage
-    defaultMessage={`Use the coding blocks from the {boldMotion} category to complete the if statement and program.{linebreak}.{linebreak} 
+    defaultMessage={`Use the coding blocks from the {boldMotion} category to complete the if statement and program.{linebreak}{linebreak} 
 
     If the crops have been detected by our model, then Marty should {boldWaveLeftArm} and {boldSlide} 
     to get out of the way of the crop after watering it. Else, 
