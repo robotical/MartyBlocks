@@ -1,6 +1,16 @@
+import ScratchBlocks from 'scratch-blocks';
+
 import analytics from '../lib/analytics.js';
 
 import decks from '../lib/libraries/decks/index.jsx';
+
+const updateZoomControlsPosition = (newMargin) => {
+    console.log('updateZoomControlsPosition', newMargin);
+    const workspace = Blockly.getMainWorkspace();
+    if (workspace && workspace.zoomControls_) {
+        workspace.zoomControls_.setMarginSide(newMargin);
+    }
+}
 
 const CLOSE_LESSONS = 'scratch-gui/lessons/CLOSE_LESSONS';
 const SHRINK_EXPAND_LESSONS = 'scratch-gui/lessons/SHRINK_EXPAND_LESSONS';
@@ -26,63 +36,67 @@ const initialState = {
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case CLOSE_LESSONS:
-        return Object.assign({}, state, {
-            visible: false
-        });
-    case SHRINK_EXPAND_LESSONS:
-        return Object.assign({}, state, {
-            expanded: !state.expanded
-        });
-    case VIEW_LESSONS:
-        return Object.assign({}, state, {
-            visible: true
-        });
-    case ACTIVATE_DECK:
-        return Object.assign({}, state, {
-            activeDeckId: action.activeDeckId,
-            step: 0,
-            x: 0,
-            y: 0,
-            expanded: true,
-            visible: true
-        });
-    case NEXT_STEP:
-        if (state.activeDeckId !== null) {
-            analytics.event({
-                category: 'how-to',
-                action: 'next step',
-                label: `${state.activeDeckId} - ${state.step}`
-            });
+        case CLOSE_LESSONS:
+            updateZoomControlsPosition(12);
             return Object.assign({}, state, {
-                step: state.step + 1
+                visible: false
             });
-        }
-        return state;
-    case PREV_STEP:
-        if (state.activeDeckId !== null) {
-            if (state.step > 0) {
+        case SHRINK_EXPAND_LESSONS:
+            updateZoomControlsPosition(!state.expanded ? 350 : 12)
+            return Object.assign({}, state, {
+                expanded: !state.expanded
+            });
+        case VIEW_LESSONS:
+            updateZoomControlsPosition(350);
+            return Object.assign({}, state, {
+                visible: true
+            });
+        case ACTIVATE_DECK:
+            updateZoomControlsPosition(350);
+            return Object.assign({}, state, {
+                activeDeckId: action.activeDeckId,
+                step: 0,
+                x: 0,
+                y: 0,
+                expanded: true,
+                visible: true
+            });
+        case NEXT_STEP:
+            if (state.activeDeckId !== null) {
+                analytics.event({
+                    category: 'how-to',
+                    action: 'next step',
+                    label: `${state.activeDeckId} - ${state.step}`
+                });
                 return Object.assign({}, state, {
-                    step: state.step - 1
+                    step: state.step + 1
                 });
             }
-        }
-        return state;
-    case DRAG_LESSON:
-        return Object.assign({}, state, {
-            x: action.x,
-            y: action.y
-        });
-    case START_DRAG:
-        return Object.assign({}, state, {
-            dragging: true
-        });
-    case END_DRAG:
-        return Object.assign({}, state, {
-            dragging: false
-        });
-    default:
-        return state;
+            return state;
+        case PREV_STEP:
+            if (state.activeDeckId !== null) {
+                if (state.step > 0) {
+                    return Object.assign({}, state, {
+                        step: state.step - 1
+                    });
+                }
+            }
+            return state;
+        case DRAG_LESSON:
+            return Object.assign({}, state, {
+                x: action.x,
+                y: action.y
+            });
+        case START_DRAG:
+            return Object.assign({}, state, {
+                dragging: true
+            });
+        case END_DRAG:
+            return Object.assign({}, state, {
+                dragging: false
+            });
+        default:
+            return state;
     }
 };
 
@@ -94,35 +108,35 @@ const activateDeck = function (activeDeckId) {
 };
 
 const viewLessons = function () {
-    return {type: VIEW_LESSONS};
+    return { type: VIEW_LESSONS };
 };
 
 const closeLessons = function () {
-    return {type: CLOSE_LESSONS};
+    return { type: CLOSE_LESSONS };
 };
 
 const shrinkExpandLessons = function () {
-    return {type: SHRINK_EXPAND_LESSONS};
+    return { type: SHRINK_EXPAND_LESSONS };
 };
 
 const nextStep = function () {
-    return {type: NEXT_STEP};
+    return { type: NEXT_STEP };
 };
 
 const prevStep = function () {
-    return {type: PREV_STEP};
+    return { type: PREV_STEP };
 };
 
 const dragLesson = function (x, y) {
-    return {type: DRAG_LESSON, x, y};
+    return { type: DRAG_LESSON, x, y };
 };
 
 const startDrag = function () {
-    return {type: START_DRAG};
+    return { type: START_DRAG };
 };
 
 const endDrag = function () {
-    return {type: END_DRAG};
+    return { type: END_DRAG };
 };
 
 export {
