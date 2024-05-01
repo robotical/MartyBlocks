@@ -291,7 +291,7 @@ const STEP_10_TYPE = "info";
 const STEP_10_DESCRIPTION = <FormattedMessage
     defaultMessage={`When you are happy with your data model, it’s time to save it so that we can begin coding. {linebreak}{linebreak}
 
-    Click on the {boldSave} button.
+    Click on the {boldSave} button.{linebreak}{linebreak}
     
     💡 {em1}`}
     description=""
