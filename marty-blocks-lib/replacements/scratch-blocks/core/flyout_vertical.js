@@ -86,7 +86,7 @@ Blockly.VerticalFlyout.prototype.DEFAULT_WIDTH = 300;
  * @type {number}
  * @const
  */
-Blockly.VerticalFlyout.prototype.CHECKBOX_SIZE = 15;
+Blockly.VerticalFlyout.prototype.CHECKBOX_SIZE = 20;
 
 /**
  * Amount of touchable padding around reporter checkboxes.
