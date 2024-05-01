@@ -1,0 +1,124 @@
+@import "../../../../../css/units.css";
+@import "../../../../../css/colors.css";
+@import "../../../../../css/z-index.css";
+
+.exportDataModal {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 400px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+.header {
+  background-color: #b5d0ee;
+  border: 1px solid $ui-black-transparent;
+  padding: calc(2 * $space) 0;
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  align-items: center;
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.tabsContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.tab {
+  background-color: #608dc9;
+  outline: none;
+  border-radius: 2rem;
+  border: 1px solid $ui-black-transparent;
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
+  margin: 0px;
+  padding: 0 2rem;
+  height: 3rem;
+  display: grid;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  align-items: center;
+
+  color: $ui-white;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+  align-self: end;
+}
+
+.selectedTab {
+  background-color: #f18921;
+}
+
+.content {
+  display: flex;
+  min-height: 200px;
+  justify-content: center;
+  align-items: center;
+}
+
+.content.active {
+  display: block;
+}
+
+.exportDataButtonsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.exportDataButton {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.exportDataButton:hover {
+  background-color: #f9f9f9;
+}
+
+.exportStudentDataContainer {
+  width: 100%;
+  align-self: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 200px;
+
+}
+
+.studentSelectorContainer {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  align-self: flex-start;
+  padding: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.studentItem {
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+
+.studentItem:hover {
+  background-color: gray;
+  color: white;
+}
+
+.selectedStudent {
+  background-color: gray;
+  color: white;
+}

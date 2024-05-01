@@ -12,6 +12,13 @@ import spinnerStyles from '../spinner/spinner.css';
 import { connect } from "react-redux";
 import { activateDeck } from "../../reducers/cards.js";
 import { openTipsLibrary } from '../../reducers/modals';
+import UserLogin from "./user-login/user-login.jsx";
+import TeacherView from "./views/teacher-view/teacher-view.jsx";
+
+const StudentOrTeacherEnum = window.codeAssess.codeAssessLib.StudentOrTeacherEnum;
+const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
+
+const CLASS_SELECTED_SUBSCRIPTION_2 = "CLASS_SELECTED_SUBSCRIPTION_2";
 
 const messages = defineMessages({
   tutorials: {
@@ -32,21 +39,43 @@ class MartyCodeAssess extends React.Component {
   }
 
   componentDidMount() {
+    this.props.codeAssessClientFacade.subscribe(CLASS_SELECTED_SUBSCRIPTION_2, PublishedEventsEnum.CLASS_SELECTED, () => this.setState({ isLoading: false }));
 
   }
 
   componentWillUnmount() {
+    this.props.codeAssessClientFacade.unsubscribe(CLASS_SELECTED_SUBSCRIPTION_2);
 
   }
 
-
-
-  async componentDidUpdate(prevProps, prevState) {
-
+  handleClassSelect = (index, classesAssets) => {
+    const classId = classesAssets[index].id;
+    this.props.onClassSelect(classId, index);
+    this.setState({ isLoading: true });
   }
 
   render() {
-    const { intl } = this.props;
+    const {
+      intl,
+      codeAssessClientFacade,
+      userProfile,
+      classes,
+      selectedClassroom,
+      studentOrTeacher,
+      activeSession,
+      selectedClassroomIdx
+    } = this.props;
+
+    const jsx = jsxDecider(userProfile, classes, selectedClassroom, studentOrTeacher);
+
+    const classesAssets = classes?.map((cls) => {
+      return ({
+        url: classroomIcon,
+        name: cls.title,
+        details: cls.section || "",
+        id: cls.id,
+      })
+    }) || [];
 
     return (
       <AssetPanel
@@ -57,14 +86,14 @@ class MartyCodeAssess extends React.Component {
             onClick: () => this.props.openTipsLibrary(),
           },
         ]}
-        items={[]}
-        selectedItemIndex={0}
-        onItemClick={()=>{}}
+        items={classesAssets}
+        selectedItemIndex={selectedClassroomIdx}
+        onItemClick={(index) => this.handleClassSelect(index, classesAssets)}
         onDrop={() => { }}
         externalStylesClass={styles.assetPanel}
       >
         <div className={styles.outerContainer}>
-          {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : null}
+          {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : jsx}
         </div>
       </AssetPanel >
     );
@@ -77,10 +106,39 @@ MartyCodeAssess.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
- 
+
   openTipsLibrary: () => {
     dispatch(openTipsLibrary());
   }
 });
 
 export default injectIntl(connect(null, mapDispatchToProps)(MartyCodeAssess));
+
+function jsxDecider(userProfile, classes, selectedClassroom, studentOrTeacher) {
+  const isUserLoggedIn = !!userProfile;
+
+  if (!isUserLoggedIn) {
+    return <UserLogin />;
+  }
+
+  const areThereClasses = classes && classes.length > 0;
+  const isThereAClassSelected = !!selectedClassroom;
+
+  if (!areThereClasses) {
+    return <div>Create/Join a Class</div>;
+  }
+
+  if (!isThereAClassSelected) {
+    return <div>Select a Class</div>;
+  }
+
+  if (studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
+    return <div>Student View</div>;
+  }
+
+  if (studentOrTeacher === StudentOrTeacherEnum.TEACHER) {
+    return <TeacherView />;
+  }
+
+  return <div>Default View</div>;
+}

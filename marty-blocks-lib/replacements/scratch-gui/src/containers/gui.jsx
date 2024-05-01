@@ -17,7 +17,8 @@ import {
     COSTUMES_TAB_INDEX,
     SOUNDS_TAB_INDEX,
     MARTY_MACHINE_TAB_INDEX,
-    SAVE_LOAD_TAB_INDEX
+    SAVE_LOAD_TAB_INDEX,
+    CODE_ASSESS_TAB_INDEX
 } from '../reducers/editor-tab';
 
 import {
@@ -167,6 +168,7 @@ const mapStateToProps = state => {
         projectId: state.scratchGui.projectState.projectId,
         saveLoadTabVisible: state.scratchGui.editorTab.activeTabIndex === SAVE_LOAD_TAB_INDEX,
         martyMachineTabVisible: state.scratchGui.editorTab.activeTabIndex === MARTY_MACHINE_TAB_INDEX,
+        codeAssessTabVisible: state.scratchGui.editorTab.activeTabIndex === CODE_ASSESS_TAB_INDEX,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
         targetIsStage: (
             state.scratchGui.targets.stage &&
