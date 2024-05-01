@@ -230,7 +230,10 @@ class Lessons extends React.Component {
                 {
                     // EXPANDED IMAGE MODAL
                     this.state.expandedImage && <div className={styles.modalContainerOverlayExpandedImage}
-                        onClick={e => e.stopPropagation()}>
+                        onClick={e => {
+                            e.stopPropagation();
+                            this.setState({ expandedImage: false });
+                        }}>
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
                                 <LessonHeader
@@ -257,7 +260,10 @@ class Lessons extends React.Component {
                 {
                     // EXPANDED VIDEO MODAL
                     this.state.expandedVideo && <div className={styles.modalContainerOverlayExpandedImage}
-                        onClick={e => e.stopPropagation()}
+                        onClick={e => {
+                            e.stopPropagation()
+                            this.setState({ expandedVideo: false })
+                        }}
                     >
                         <div className={styles.modalContainer}>
                             <div className={cardClass}>
