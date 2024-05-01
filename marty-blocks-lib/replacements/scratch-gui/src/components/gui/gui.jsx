@@ -28,6 +28,7 @@ import Watermark from '../../containers/watermark.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
 import Cards from '../../containers/cards.jsx';
+import Lessons from '../../containers/lessons.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
@@ -79,6 +80,7 @@ const GUIComponent = props => {
     blocksId,
     blocksTabVisible,
     cardsVisible,
+    lessonsVisible,
     canChangeLanguage,
     canChangeTheme,
     canCreateNew,
@@ -276,6 +278,9 @@ const GUIComponent = props => {
                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                 onSelect={onActivateTab}
               >
+                {lessonsVisible ? (
+                  <Lessons />
+                ) : null}
                 <TabList className={tabClassNames.tabList}>
                   <Tab className={tabClassNames.tab}>
                     <img
@@ -414,16 +419,16 @@ const GUIComponent = props => {
             </Box>
 
             <Box
-                  className={classNames(
-                    styles.stageAndTargetWrapper,
-                    styles[stageSize]
-                  )}
-                  style={
-                    stageSize === STAGE_SIZE_MODES.small
-                      ? ""
-                      : { display: "none" }
-                  }
-                >
+              className={classNames(
+                styles.stageAndTargetWrapper,
+                styles[stageSize]
+              )}
+              style={
+                stageSize === STAGE_SIZE_MODES.small
+                  ? ""
+                  : { display: "none" }
+              }
+            >
               <StageWrapper
                 isFullScreen={isFullScreen}
                 isRendererSupported={isRendererSupported}
@@ -469,6 +474,7 @@ GUIComponent.propTypes = {
   canShare: PropTypes.bool,
   canUseCloud: PropTypes.bool,
   cardsVisible: PropTypes.bool,
+  lessonsVisible: PropTypes.bool,
   children: PropTypes.node,
   costumeLibraryVisible: PropTypes.bool,
   costumesTabVisible: PropTypes.bool,

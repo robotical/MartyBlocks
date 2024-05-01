@@ -1,0 +1,398 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+@import "../../css/z-index.css";
+
+.modal-container-overlay,
+.modal-container-overlay-expanded-image {
+  position: fixed;
+  z-index: 510;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(55, 171, 200, 0.5);
+}
+
+.modal-container-overlay-expanded-image {
+  z-index: 511;
+}
+
+.card-container-overlay {
+  position: absolute;
+  z-index: 509;
+
+  top: 44px;  /* 44px is the height of the menu bar */
+  right: 0;
+  height: 100%;
+  width: 350px;
+}
+
+.card-container {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 509;
+  width: 350px;
+  background: white;
+  height: 100%;
+}
+
+.modal-container {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 510;
+  max-width: 70%;
+  min-width: 300px;
+  min-height: 300px;
+}
+
+.lesson-title-container {
+  margin-left: 0.5rem;
+}
+
+.lesson-title {
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: white;
+  margin: 0.5rem 0;
+}
+
+.left-card,
+.right-card {
+  height: calc(100% - 44px);
+  position: absolute;
+  top: 5%;
+  background: $ui-white;
+  border: 1px solid $ui-tertiary;
+  width: 0.75rem;
+  z-index: 10;
+  opacity: 0.9;
+  overflow: hidden;
+}
+
+.left-card {
+  left: -0.75rem;
+  border-right: 0;
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.right-card {
+  right: -0.75rem;
+  border-left: 0;
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+.left-card::after,
+.right-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2.5rem;
+  width: 100%;
+  background: rgb(55, 171, 200);
+}
+
+.disabled-button {
+  visibility: hidden;
+}
+
+.middle-button {
+  z-index: 20;
+  user-select: none;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 0 0 2px rgb(55, 171, 200);
+  height: 34px;
+  width: 34px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.middle-button img {
+  width: 1.5rem;
+}
+
+.middle-button span {
+  font-size: 25px;
+  color: rgb(55, 171, 200);
+}
+
+.left-button,
+.right-button,
+.start-lesson-button {
+  z-index: 20;
+  user-select: none;
+  cursor: pointer;
+  background: rgb(55, 171, 200);
+  box-shadow: 0 0 0 4px $extensions-transparent;
+  height: 44px;
+  width: 44px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.left-button:hover,
+.right-button:hover {
+  box-shadow: 0 0 0 6px $extensions-transparent;
+  transform: scale(1.125);
+}
+
+.left-button img,
+.right-button img {
+  width: 1.75rem;
+}
+
+.card {
+  border: 2px solid black;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  cursor: move;
+  z-index: 20;
+  overflow: hidden;
+  box-shadow: 0px 5px 25px 5px $ui-black-transparent;
+  align-items: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
+}
+
+.step-title {
+  font-size: 0.9rem;
+  margin: 0.9rem;
+  text-align: center;
+  font-weight: bold;
+  color: $text-primary;
+}
+
+.step-image-expanded {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  cursor: default;
+}
+
+.step-image-expanded::-webkit-media-controls-fullscreen-button {
+  display: none;
+}
+
+.step-description {
+  border: 1px solid $ui-tertiary;
+  width: 100%;
+  text-align: left;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  color: black;
+}
+
+.step-body {
+  height: 100%;
+  background: $ui-white;
+  display: flex;
+  flex-grow: 1;
+  row-gap: 1.5rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  text-align: center;
+
+  /* Min height prevents layout changing when images change */
+  min-height: 256px;
+
+  /* max-height: 350px; */
+  overflow: auto;
+
+  cursor: default;
+  padding: 0.5rem;
+}
+
+.decks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 1rem 0.5rem;
+}
+
+.deck {
+  display: flex;
+  flex-direction: column;
+  margin: 0 8px 8px;
+  cursor: pointer;
+  border: 1px solid $ui-black-transparent;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.deck-image {
+  width: 200px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.deck-name {
+  color: $looks-secondary;
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin: 0.625rem 0px;
+  text-align: center;
+  font-weight: bold;
+  text-align: center;
+  max-width: 200px;
+}
+
+.help-icon {
+  height: 1.25rem;
+}
+
+[dir="ltr"] .help-icon {
+  margin-right: 0.25rem;
+}
+
+[dir="rtl"] .help-icon {
+  margin-left: 0.25rem;
+}
+
+.see-all {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.see-all-button {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: $looks-secondary;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  color: $ui-white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 1rem;
+  text-align: center;
+}
+
+[dir="ltr"] .see-all-button img {
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .see-all-button img {
+  margin-right: 0.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.progress-bar-outer-container {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  display: flex;
+  column-gap: 4px;
+}
+
+.progress-bar-container {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: rgb(55, 171, 200);
+  border-radius: 6px 0 0 6px;
+}
+
+.progress-bar-remaining-steps {
+  color: black;
+  font-size: 13px;
+  align-self: center;
+}
+
+.checkpoint-try-again-div {
+}
+
+.checkpoint-try-again-div button {
+  user-select: none;
+  cursor: pointer;
+  background: rgb(55, 171, 200);
+  box-shadow: 0 0 0 4px $extensions-transparent;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: white;
+  padding: 3px 4px;
+  outline: none;
+}
+
+// Accessibility
+.stepBodyAccessibility {
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none; 
+    transition: none;
+  }
+}
+
+.cardAccesibility {}
+
+.progressBarOuterContainerAccessibility {
+}
+
+.progressBarContainerAccessibility {
+  filter: invert(1);
+}
+
+.progressBarAccessibility {
+  height: 100%;
+  /* background-color: rgb(55, 171, 200);  */
+  border-radius: 6px 0 0 6px;
+}
+.progressBarAccessibility:focus-visible {
+  outline: 2px solid blue; 
+}
+
+.progressBarRemainingStepsAccessibility {
+  /* color: black;  */
+  font-size: 14px; 
+
+}
+
+.stepDescriptionAccessibility {
+  border: 1px solid black;
+  font-size: 1rem;
+}
+
+.checkpointStepTitleAccessibility {
+  font-size: 1.5rem;
+}
+
+.checkpointTryAgainDivAccessibility button {
+  filter: invert(1);
+}
+
