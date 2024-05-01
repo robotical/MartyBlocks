@@ -5,7 +5,6 @@ import analytics from '../lib/analytics.js';
 import decks from '../lib/libraries/decks/index.jsx';
 
 const updateZoomControlsPosition = (newMargin) => {
-    console.log('updateZoomControlsPosition', newMargin);
     const workspace = Blockly.getMainWorkspace();
     if (workspace && workspace.zoomControls_) {
         workspace.zoomControls_.setMarginSide(newMargin);
