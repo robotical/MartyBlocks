@@ -5,8 +5,6 @@ import { defineMessages, intlShape, injectIntl } from "react-intl";
 import PropTypes from 'prop-types';
 import { activateDeck } from "../../../../../reducers/cards.js";
 import { connect } from "react-redux";
-import iconPlay from "../../../icon--play.svg";
-import iconStop from "../../../icon--stop.svg";
 import StudentsGrid from "./students-grid/students-grid.jsx";
 import SortByStudents from "../../../sort-by's/sortby-students/sortby-students.jsx";
 import NotesAnnouncementsBox from "../../../notes-announcements-box/notes-announcements-box.jsx";
@@ -28,7 +26,7 @@ class ClassDashboard extends React.Component {
 
         this.state = {
             sessionStarted: false,
-            sessionTitle: codeAssessClientFacade.activeSession?.title || ""
+            sessionTitle: this.props.activeSession?.title || "",
         };
         bindAll(this, [
         ]);
@@ -42,7 +40,11 @@ class ClassDashboard extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-
+        // update session title if it has changed
+        console.log("prevProps.activeSession?.title", prevProps.activeSession?.title);
+        if (prevProps.activeSession && prevProps.activeSession.title !== this.props.activeSession?.title) {
+            this.setState({ sessionTitle: this.props.activeSession?.title || "" });
+        }
     }
 
     async onToggleSession() {
@@ -73,6 +75,7 @@ class ClassDashboard extends React.Component {
 
     render() {
         const { intl, activeSession, selectedClassroom } = this.props;
+
         if (!selectedClassroom.students) {
             return null;
         }
