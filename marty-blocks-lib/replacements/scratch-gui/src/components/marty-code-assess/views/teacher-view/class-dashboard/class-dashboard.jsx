@@ -8,6 +8,10 @@ import { connect } from "react-redux";
 import iconPlay from "../../../icon--play.svg";
 import iconStop from "../../../icon--stop.svg";
 import StudentsGrid from "./students-grid/students-grid.jsx";
+import SortByStudents from "../../../sort-by's/sortby-students/sortby-students.jsx";
+import NotesAnnouncementsBox from "../../../notes-announcements-box/notes-announcements-box.jsx";
+
+const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 
 const messages = defineMessages({
     tutorials: {
@@ -20,8 +24,11 @@ const messages = defineMessages({
 class ClassDashboard extends React.Component {
     constructor(props) {
         super(props);
+        this.handleSessionTitleUpdate = this.handleSessionTitleUpdate.bind(this);
+
         this.state = {
             sessionStarted: false,
+            sessionTitle: codeAssessClientFacade.activeSession?.title || ""
         };
         bindAll(this, [
         ]);
@@ -41,35 +48,70 @@ class ClassDashboard extends React.Component {
     async onToggleSession() {
     }
 
+    async handleAddNewSessionNote(note, noteFile) {
+        if (!note) {
+            return;
+        }
+        return await codeAssessClientFacade.addSessionNote(note, noteFile);
+    }
+
+    async handleAddNewSessionAnnouncement(announcement, announcementFile) {
+        if (!announcement) {
+            return;
+        }
+        codeAssessClientFacade.addSessionAnnouncement(announcement, announcementFile);
+    }
+
+    handleSessionTitleUpdate(e) {
+        e.preventDefault();
+        if (!this.state.sessionTitle) {
+            return;
+        }
+        codeAssessClientFacade.updateSessionTitle(this.state.sessionTitle);
+        alert("Session title updated!");
+    }
+
     render() {
-        if (!this.props.students) {
+        const { intl, activeSession, selectedClassroom } = this.props;
+        if (!selectedClassroom.students) {
             return null;
         }
-        const sessionStatus = "stopped"
+        const isThereAnActiveSession = !!activeSession;
 
         return (
             <div className={styles.dashboardContainer}>
                 <div className={styles.header}>
-                    <div className={styles.startStopSessionContainer}>
-                        <div className={[styles.startStopSessionButtonContainer, sessionStatus === "started" ? styles.stopSessionButtonContainer : styles.startSessionButtonContainer].join(" ")} onClick={this.onToggleSession} >
-                            <img src={sessionStatus === "started" ? iconStop : iconPlay} className={[styles.startStopSessionImg].join(" ")} />
-                        </div>
-                        <div className={styles.startStopSessionText}>{sessionStatus === "started" ? "Stop Session" : "Start Session"}</div>
+                    <div className={styles.className}>{selectedClassroom?.title}</div>
+                    <div className={styles.classSection}>{selectedClassroom?.section}</div>
+                    <div className={styles.classSessionName} style={{ visibility: isThereAnActiveSession ? "visible" : "hidden" }}>
+                        {isThereAnActiveSession &&
+                            <form onSubmit={this.handleSessionTitleUpdate}>
+                                <input type="text" placeholder='"Session Name"' value={this.state.sessionTitle} onChange={(e) => this.setState({ sessionTitle: e.target.value })} />
+                            </form>
+                        }
                     </div>
-                    <div className={styles.className}>{this.props.class?.name}</div>
-                    <div className={styles.classSection}>{this.props.class?.section}</div>
-                    {/* <div className={styles.classSubject}>{this.props.class?.subject}</div> */}
-                    <div className={styles.classSessionName} style={{visibility: sessionStatus === "started" ? "visible" : "hidden"}}>
-                        {sessionStatus === "started" && <input type="text" placeholder="Session Name" />}
-                    </div>
-                    <div className={styles.classEnrolledStudents}>Enrolled Students: {this.props.students.length}</div>
-                    <div className={styles.sortByContainer}>Sort by</div>
+                    <div className={styles.classEnrolledStudents}>Enrolled Students: {selectedClassroom.students.length}</div>
+                    <div className={styles.sortByContainer}><SortByStudents /></div>
                 </div>
                 <div className={styles.studentsContainer}>
-                    <StudentsGrid class={this.props.class} students={this.props.students} classId={this.props.classId} />
+                    <StudentsGrid selectedClassroom={selectedClassroom} />
                 </div>
-                <div className={styles.notesContainer}></div>
-                <div className={styles.announcementsContainer}></div>
+                <div className={styles.notesContainer}>
+                    <NotesAnnouncementsBox
+                        title="Session Notes"
+                        items={activeSession?.notes || []}
+                        onAddNewItem={(note, noteFile) => this.handleAddNewSessionNote(note, noteFile)}
+                        disabled={!isThereAnActiveSession}
+                    />
+                </div>
+                <div className={styles.announcementsContainer}>
+                    <NotesAnnouncementsBox
+                        title="Session Announcements"
+                        items={activeSession?.announcements || []}
+                        onAddNewItem={(announcement, announcementFile) => this.handleAddNewSessionAnnouncement(announcement, announcementFile)}
+                        disabled={!isThereAnActiveSession}
+                    />
+                </div>
             </div>
         )
     }

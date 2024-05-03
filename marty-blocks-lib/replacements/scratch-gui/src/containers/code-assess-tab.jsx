@@ -28,6 +28,7 @@ const CODE_SUBMISSION_UPDATED_SUBSCRIPTION = "CODE_SUBMISSION_UPDATED";
 const CODE_SUBMISSION_REMOVED_SUBSCRIPTION = "CODE_SUBMISSION_REMOVED";
 const SESSION_ANNOUNCEMENT_REMOVED_SUBSCRIPTION = "SESSION_ANNOUNCEMENT_REMOVED_SUBSCRIPTION";
 const CLASS_ANNOUNCEMENT_REMOVED_SUBSCRIPTION = "CLASS_ANNOUNCEMENT_REMOVED_SUBSCRIPTION";
+const SESSION_TITLE_UPDATED_SUBSCRIPTION = "SESSION_TITLE_UPDATED_SUBSCRIPTION";
 
 class CodeAssessTab extends React.Component {
     constructor(props) {
@@ -57,6 +58,7 @@ class CodeAssessTab extends React.Component {
         this.onCodeSubmissionRemoved = this.onCodeSubmissionRemoved.bind(this);
         this.onClassAnnouncementRemoved = this.onClassAnnouncementRemoved.bind(this);
         this.onSessionAnnouncementRemoved = this.onSessionAnnouncementRemoved.bind(this);
+        this.onSessionTitleUpdated = this.onSessionTitleUpdated.bind(this);
 
         this.state = {
             userProfile: codeAssessClientFacade.userProfile || null,
@@ -93,6 +95,7 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.subscribe(CODE_SUBMISSION_REMOVED_SUBSCRIPTION, PublishedEventsEnum.CODE_SUBMISSION_REMOVED, this.onCodeSubmissionRemoved);
         codeAssessClientFacade.subscribe(CLASS_ANNOUNCEMENT_REMOVED_SUBSCRIPTION, PublishedEventsEnum.CLASS_ANNOUNCEMENT_REMOVED, this.onClassAnnouncementRemoved);
         codeAssessClientFacade.subscribe(SESSION_ANNOUNCEMENT_REMOVED_SUBSCRIPTION, PublishedEventsEnum.SESSION_ANNOUNCEMENT_REMOVED, this.onSessionAnnouncementRemoved);
+        codeAssessClientFacade.subscribe(SESSION_TITLE_UPDATED_SUBSCRIPTION, PublishedEventsEnum.SESSION_TITLE_UPDATED, this.onSessionTitleUpdated);
     }
 
     componentWillUnmount() {
@@ -118,6 +121,7 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.unsubscribe(CODE_SUBMISSION_REMOVED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(CLASS_ANNOUNCEMENT_REMOVED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(SESSION_ANNOUNCEMENT_REMOVED_SUBSCRIPTION);
+        codeAssessClientFacade.unsubscribe(SESSION_TITLE_UPDATED_SUBSCRIPTION);
     }
 
     onClassAnnouncementRemoved(updatedClass) {
@@ -215,6 +219,10 @@ class CodeAssessTab extends React.Component {
 
     onClassListReceived(classes) {
         this.setState({ classes });
+    }
+
+    onSessionTitleUpdated(updatedSession) {
+        this.setState({ activeSession: updatedSession });
     }
 
     async loginHandler() {

@@ -1,13 +1,16 @@
 .dashboardContainer {
   padding: 20px;
+  height: 100%;
   overflow-y: auto;
   display: grid;
   grid-template-columns: 0.7fr 0.3fr;
   grid-template-rows: min-content 1fr 1fr;
   grid-template-areas:
-    "header ."
+    "header notes"
     "students notes"
     "students announcements";
+  row-gap: 10px;
+  column-gap: 10px;
 }
 
 /* HEADER */
@@ -20,39 +23,6 @@
     "startstop classenrolledstudents classenrolledstudents classSessionName classSessionName sortby";
 }
 
-.startStopSessionContainer {
-  grid-area: startstop;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-right: 2px solid #35abc7;
-  padding-right: .6rem;
-  margin-right: .5rem;
-}
-.startStopSessionButtonContainer {
-  width: 37px;
-  height: 37px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.startSessionButtonContainer {
-  background-color: #4caf50;
-}
-.stopSessionButtonContainer {
-  background-color: #f44336;
-}
-
-.startStopSessionImg {
-  width: 25px;
-  height: 25px;
-}
-.startStopSessionText {
-  font-size: 6px;
-  text-align: center;
-}
 .sortByContainer {
   grid-area: sortby;
   justify-self: end;
@@ -62,8 +32,8 @@
   font-size: 20px;
   font-weight: 500;
   border-right: 2px solid black;
-  padding-right: .3rem;
-  margin-right: .3rem;
+  padding-right: 0.3rem;
+  margin-right: 0.3rem;
   align-self: flex-end;
 }
 .classSection {
@@ -71,22 +41,38 @@
   font-size: 14px;
   font-weight: bold;
   /* border-right: 2px solid black; */
-  padding-right: .3rem;
-  margin-right: .3rem;
+  padding-right: 0.3rem;
+  margin-right: 0.3rem;
   align-self: flex-end;
 }
 .classSessionName {
   grid-area: classSessionName;
   align-self: center;
   justify-self: center;
+  border-radius: 10px;
+  border: 2px solid #b5d0ee;
+  padding: 5px 15px;
+  background: white;
 }
+.classSessionName input {
+  background: white;
+  outline: none;
+  border: none;
+  text-align: center;
+}
+.classSessionName input::placeholder {
+  font-size: 14px;
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+}
+
 .classEnrolledStudents {
   grid-area: classenrolledstudents;
   font-size: 14px;
   font-weight: 300;
 }
 /* HEADER END */
-
 
 /* STUDENTS */
 .studentsContainer {
@@ -97,15 +83,12 @@
 /* NOTES */
 .notesContainer {
   grid-area: notes;
-  background: blue;
+  margin-top: 26px;
 }
 /* NOTES END */
-
 
 /* ANNOUNCEMENTS */
 .announcementsContainer {
   grid-area: announcements;
-  background: green;
 }
 /* ANNOUNCEMENTS END */
-

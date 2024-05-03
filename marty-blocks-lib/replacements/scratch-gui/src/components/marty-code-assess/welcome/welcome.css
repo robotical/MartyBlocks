@@ -1,0 +1,33 @@
+.welcomeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+.welcomeTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.subtitle {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background-color: #35abc7;
+    border-radius: 50%;
+    padding: 38px 40px;
+}
+.logo {
+    width: 50px;
+    height: 40px;
+}

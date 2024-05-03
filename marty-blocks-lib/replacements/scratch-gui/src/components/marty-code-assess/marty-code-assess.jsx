@@ -14,6 +14,7 @@ import { activateDeck } from "../../reducers/cards.js";
 import { openTipsLibrary } from '../../reducers/modals';
 import UserLogin from "./user-login/user-login.jsx";
 import TeacherView from "./views/teacher-view/teacher-view.jsx";
+import Welcome from "./welcome/welcome.jsx";
 
 const StudentOrTeacherEnum = window.codeAssess.codeAssessLib.StudentOrTeacherEnum;
 const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
@@ -33,6 +34,7 @@ class MartyCodeAssess extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
+      provider: null,
     };
     bindAll(this, [
     ]);
@@ -65,8 +67,15 @@ class MartyCodeAssess extends React.Component {
       activeSession,
       selectedClassroomIdx
     } = this.props;
-
-    const jsx = jsxDecider(userProfile, classes, selectedClassroom, studentOrTeacher);
+    const jsx = jsxDecider(
+      userProfile,
+      classes,
+      selectedClassroom,
+      studentOrTeacher,
+      this.state.provider,
+      (provider) => this.setState({ provider }),
+      activeSession
+    );
 
     const classesAssets = classes?.map((cls) => {
       return ({
@@ -114,30 +123,40 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default injectIntl(connect(null, mapDispatchToProps)(MartyCodeAssess));
 
-function jsxDecider(userProfile, classes, selectedClassroom, studentOrTeacher) {
+function jsxDecider(
+  userProfile,
+  classes,
+  selectedClassroom,
+  studentOrTeacher,
+  provider,
+  setProvider,
+  activeSession
+) {
   const isUserLoggedIn = !!userProfile;
 
   if (!isUserLoggedIn) {
-    return <UserLogin />;
+    return <UserLogin setProvider={setProvider} />;
   }
 
   const areThereClasses = classes && classes.length > 0;
   const isThereAClassSelected = !!selectedClassroom;
 
-  if (!areThereClasses) {
-    return <div>Create/Join a Class</div>;
-  }
-
-  if (!isThereAClassSelected) {
-    return <div>Select a Class</div>;
+  if (!areThereClasses || !isThereAClassSelected) {
+    return <Welcome
+      areThereAnyClasses={areThereClasses}
+      isThereAClassSelected={isThereAClassSelected}
+      provider={provider}
+    />
   }
 
   if (studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
     return <div>Student View</div>;
   }
-
   if (studentOrTeacher === StudentOrTeacherEnum.TEACHER) {
-    return <TeacherView />;
+    return <TeacherView
+      activeSession={activeSession}
+      selectedClassroom={selectedClassroom}
+    />;
   }
 
   return <div>Default View</div>;

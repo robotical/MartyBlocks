@@ -3,9 +3,6 @@
 @import "../../../../css/z-index.css";
 @import "../../../../css/typography.css";
 
-.assetPanel {
-  height: 100%;
-}
 .outerContainer {
   background-color: $ui-white;
   border: 1px solid $ui-black-transparent;
@@ -16,61 +13,17 @@
   width: 100%;
 }
 
-.header {
-  background-color: #b5d0ee;
-  border: 1px solid $ui-black-transparent;
-  padding: calc(2 * $space);
-  display: flex;
-  flex-direction: row;
-  column-gap: 2rem;
-  align-items: center;
+.headerSeparator {
+  height: 100%;
+  width: 2px;
+  background-color: white;
 }
 
-.classNameTitle {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.tabsContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.tab {
-  background-color: #608dc9;
-  outline: none;
-  border-radius: 2rem;
-  border: 1px solid $ui-black-transparent;
-  cursor: pointer;
-  transition: 0.2s;
-  user-select: none;
-  margin: 0px;
-  padding: 0 2rem;
-  height: 3rem;
-  display: grid;
-  grid-template-rows: 1fr;
-  justify-items: center;
-  align-items: center;
-
-  color: $ui-white;
-  font-size: 0.85rem;
-  text-align: center;
-  margin: 0;
-  align-self: end;
-}
-
-.selectedTab {
-  background-color: #f18921;
+.headerAccountButtonDiv {
+  margin-left: auto;
 }
 
 .selectedTabContentContainer {
   background-color: $ui-primary;
   overflow-y: auto;
-}
-
-.headerAccountButtonDiv {
-  margin-left: auto;
 }

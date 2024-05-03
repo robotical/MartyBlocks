@@ -1,0 +1,14 @@
+@import "../../../css/units.css";
+@import "../../../css/colors.css";
+@import "../../../css/z-index.css";
+@import "../../../css/typography.css";
+
+.header {
+  background-color: #b5d0ee;
+  border: 1px solid $ui-black-transparent;
+  padding: calc(2 * $space);
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  align-items: center;
+}
