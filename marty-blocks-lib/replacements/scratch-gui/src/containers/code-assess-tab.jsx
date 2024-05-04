@@ -65,7 +65,6 @@ class CodeAssessTab extends React.Component {
             classes: codeAssessClientFacade.classes || [],
             selectedClassroom: codeAssessClientFacade.selectedClassroom || null,
             studentOrTeacher: codeAssessClientFacade.studentOrTeacher || null,
-            activeSession: codeAssessClientFacade.activeSession || null,
             selectedClassroomIdx: getSelectedClassroomIdx(codeAssessClientFacade.classes, codeAssessClientFacade.selectedClassroom),
         };
     }
@@ -128,36 +127,36 @@ class CodeAssessTab extends React.Component {
         this.setState({ selectedClassroom: updatedClass });
     }
 
-    onSessionAnnouncementRemoved(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onSessionAnnouncementRemoved(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onCodeSubmissionRemoved(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onCodeSubmissionRemoved(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onCodeSubmissionCreated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onCodeSubmissionCreated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onCodeSubmissionUpdated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onCodeSubmissionUpdated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
     onClassAnnouncementSeen(updatedClass) {
         this.setState({ selectedClassroom: updatedClass });
     }
 
-    onSessionAnnouncementSeen(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onSessionAnnouncementSeen(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    async onAnswerUpdated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    async onAnswerUpdated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    async onAnswerCreated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    async onAnswerCreated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
     async loginAsTeacher(teacherNumber) {
@@ -169,40 +168,40 @@ class CodeAssessTab extends React.Component {
     }
 
 
-    onQuestionAdded(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onQuestionAdded(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onSessionAnnouncementAdded(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onSessionAnnouncementAdded(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
     onClassAnnouncementAdded(updatedClass) {
         this.setState({ selectedClassroom: updatedClass });
     }
 
-    onStudentExitedSession(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onStudentExitedSession(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onStudentDeactivated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onStudentDeactivated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onStudentActivated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onStudentActivated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onStudentJoinedSession(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onStudentJoinedSession(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onSessionStopped() {
-        this.setState({ activeSession: null });
+    onSessionStopped(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
-    onSessionCreated(activeSession) {
-        this.setState({ activeSession });
+    onSessionCreated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
     studentOrTeacherChanged(studentOrTeacher) {
@@ -221,8 +220,8 @@ class CodeAssessTab extends React.Component {
         this.setState({ classes });
     }
 
-    onSessionTitleUpdated(updatedSession) {
-        this.setState({ activeSession: updatedSession });
+    onSessionTitleUpdated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
     async loginHandler() {
@@ -251,7 +250,6 @@ class CodeAssessTab extends React.Component {
                 selectedClassroom={this.state.selectedClassroom}
                 onClassSelect={this.handleClassSelect}
                 studentOrTeacher={this.state.studentOrTeacher}
-                activeSession={this.state.activeSession}
                 codeAssessClientFacade={codeAssessClientFacade}
                 selectedClassroomIdx={this.state.selectedClassroomIdx}
             />

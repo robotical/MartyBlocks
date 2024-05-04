@@ -64,9 +64,9 @@ class MartyCodeAssess extends React.Component {
       classes,
       selectedClassroom,
       studentOrTeacher,
-      activeSession,
       selectedClassroomIdx
     } = this.props;
+
     const jsx = jsxDecider(
       userProfile,
       classes,
@@ -74,7 +74,6 @@ class MartyCodeAssess extends React.Component {
       studentOrTeacher,
       this.state.provider,
       (provider) => this.setState({ provider }),
-      activeSession
     );
 
     const classesAssets = classes?.map((cls) => {
@@ -130,7 +129,6 @@ function jsxDecider(
   studentOrTeacher,
   provider,
   setProvider,
-  activeSession
 ) {
   const isUserLoggedIn = !!userProfile;
 
@@ -154,7 +152,6 @@ function jsxDecider(
   }
   if (studentOrTeacher === StudentOrTeacherEnum.TEACHER) {
     return <TeacherView
-      activeSession={activeSession}
       selectedClassroom={selectedClassroom}
     />;
   }

@@ -73,10 +73,43 @@ class NotesAnnouncementsBox extends React.Component {
             disabled
         } = this.props;
 
+        const reverseItems = [...items].reverse();
+
+        const itemsJsx = reverseItems.map((item, idx) => {
+            const words = item.text.split(" ");
+            // Map over words and convert each word into either a link or a text node
+            const itemWithUrls = words.map((word, wordIndex) => {
+                // Assuming isWordALink is a function that determines if a word is a URL
+                if (isWordALink(word)) {
+                    const urlWithProtocol = ensureHttpPrefix(word);
+                    return <a key={wordIndex} href={urlWithProtocol} target="_blank" rel="noopener noreferrer">{word}</a>;
+                }
+                return <span key={wordIndex}>{word}</span>;
+            });
+
+            // Use React Fragments to avoid unnecessary divs and directly insert spaces
+            const content = itemWithUrls.reduce((acc, elem, index) => {
+                return index === 0 ? [elem] : [...acc, ' ', elem]; // Insert spaces between elements
+            }, []);
+
+            return (
+                <li key={item.id + idx} className={styles.item}>
+                    {content}
+                    {item.imageUrl && (
+                        <>
+                            <br />
+                            <ExpandableImage imageUrl={item.imageUrl} />
+                        </>
+                    )}
+                </li>
+            );
+        });
+
         if (disabled) {
             return <div className={styles.itemsBoxContainer}>
                 <div className={styles.itemsContainer}>
                     <div className={[styles.itemsTitle, styles.itemsTitleDisabled].join(" ")}>{title}</div>
+                    {itemsJsx}
                 </div>
             </div>
         }
@@ -90,7 +123,6 @@ class NotesAnnouncementsBox extends React.Component {
             </div>
         }
 
-        const reverseItems = [...items].reverse();
 
         return (
             <div className={styles.itemsBoxContainer}>
@@ -108,35 +140,7 @@ class NotesAnnouncementsBox extends React.Component {
                         </div>
                     ) : (
                         <ul className={styles.itemsContent}>
-                            {reverseItems.map((item, idx) => {
-                                const words = item.text.split(" ");
-                                // Map over words and convert each word into either a link or a text node
-                                const itemWithUrls = words.map((word, wordIndex) => {
-                                    // Assuming isWordALink is a function that determines if a word is a URL
-                                    if (isWordALink(word)) {
-                                        const urlWithProtocol = ensureHttpPrefix(word);
-                                        return <a key={wordIndex} href={urlWithProtocol} target="_blank" rel="noopener noreferrer">{word}</a>;
-                                    }
-                                    return <span key={wordIndex}>{word}</span>;
-                                });
-
-                                // Use React Fragments to avoid unnecessary divs and directly insert spaces
-                                const content = itemWithUrls.reduce((acc, elem, index) => {
-                                    return index === 0 ? [elem] : [...acc, ' ', elem]; // Insert spaces between elements
-                                }, []);
-
-                                return (
-                                    <li key={item.id + idx} className={styles.item}>
-                                        {content}
-                                        {item.imageUrl && (
-                                            <>
-                                                <br />
-                                                <ExpandableImage imageUrl={item.imageUrl} />
-                                            </>
-                                        )}
-                                    </li>
-                                );
-                            })}
+                            {itemsJsx}
                         </ul>
                     )}
                 </div>

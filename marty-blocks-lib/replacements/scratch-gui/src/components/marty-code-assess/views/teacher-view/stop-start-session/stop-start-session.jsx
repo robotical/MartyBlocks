@@ -34,8 +34,8 @@ class StopStartSession extends React.Component {
 
     onToggleSession() {
         this.setState({ isLoading: true });
-        const { activeSession } = this.props;
-        const isThereAnActiveSession = !!activeSession;
+        const { selectedClassroom } = this.props;
+        const isThereAnActiveSession = !!selectedClassroom.activeSession;
 
         if (isThereAnActiveSession) {
             codeAssessClientFacade.stopSession();
@@ -45,8 +45,8 @@ class StopStartSession extends React.Component {
     }
 
     render() {
-        const { activeSession } = this.props;
-        const isThereAnActiveSession = !!activeSession;
+        const { selectedClassroom } = this.props;
+        const isThereAnActiveSession = !!selectedClassroom.activeSession;
 
         return (
             <div className={styles.startStopSessionContainer}>

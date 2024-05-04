@@ -7,6 +7,7 @@ import ClassDashboard from "./class-dashboard/class-dashboard.jsx";
 import StopStartSession from "./stop-start-session/stop-start-session.jsx";
 import CodeAssessHeader from "../../header/header.jsx";
 import CodeAssessHeaderButton from "../../header/header-button/header-button.jsx";
+import ClassOverview from "./class-overview/class-overview.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -36,7 +37,7 @@ class TeacherView extends React.Component {
     }
 
     render() {
-        const { intl, activeSession, selectedClassroom } = this.props;
+        const { intl, selectedClassroom } = this.props;
 
         return (
             <div className={styles.outerContainer} >
@@ -45,17 +46,16 @@ class TeacherView extends React.Component {
                     <CodeAssessHeaderButton onClick={this.onSelectTab} selectedTab={this.state.selectedTab} tabName="Overview" />
                     <CodeAssessHeaderButton onClick={this.onSelectTab} selectedTab={this.state.selectedTab} tabName="Students" />
                     <div className={styles.headerSeparator}></div>
-                    <StopStartSession activeSession={activeSession} />
+                    <StopStartSession selectedClassroom={selectedClassroom} />
                     <div className={styles.headerAccountButtonDiv}>
                         <AccountButton class={selectedClassroom} students={selectedClassroom.students || []} />
                     </div>
                 </CodeAssessHeader>
                 <div className={styles.selectedTabContentContainer}>
                     {this.state.selectedTab === "Dashboard" && <ClassDashboard
-                        activeSession={activeSession}
                         selectedClassroom={selectedClassroom}
                     />}
-                    {this.state.selectedTab === "Overview" && <div> overview</div>}
+                    {this.state.selectedTab === "Overview" && <ClassOverview selectedClassroom={selectedClassroom} />}
                     {this.state.selectedTab === "Students" && <div> students</div>}
                 </div>
             </div>

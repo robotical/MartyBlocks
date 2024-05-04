@@ -1,0 +1,70 @@
+.sessionTimeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  justify-content: center;
+}
+
+.line {
+  position: absolute;
+  width: 100%;
+  background: rgb(55, 171, 200);
+  height: 1px;
+  top: 60%;
+}
+
+.timelinePoint {
+  display: grid;
+  justify-content: center;
+  text-align: center;
+  justify-self: start;
+  cursor: pointer;
+}
+
+.firstTimelineBubble {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #b5d0ee;
+  border: 1px solid rgb(55, 171, 200);
+  z-index: 1;
+  margin-top: 10px;
+  cursor: pointer;
+
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.selectedFirstBubble {
+  border: 2px solid #f18921;
+}
+
+.firstTimelineTitle {
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.timelineTitle {
+  text-align: center;
+  font-size: 10px;
+  align-self: end;
+  justify-self: center;
+}
+
+.timelineBubble {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #b5d0ee;
+  border: 1px solid rgb(55, 171, 200);
+  z-index: 1;
+  justify-self: center;
+}
+
+.selectedBubble {
+  background: #f18921;
+}

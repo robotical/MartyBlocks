@@ -1,0 +1,902 @@
+====== Getting Started ====== ----
+<html>
+  <head>
+    <style>
+      @font-face {
+        font-family: "BigNoodleTitling Regular";
+        font-style: normal;
+        font-weight: normal;
+        src: local("BigNoodleTitling Regular"),
+          url("https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/fonts/big_noodle_titling.ttf")
+            format("woff");
+      }
+
+      @font-face {
+        font-family: "BigNoodleTitling Oblique";
+        font-style: normal;
+        font-weight: normal;
+        src: local("BigNoodleTitling Oblique"),
+          url("https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/fonts/big_noodle_titling_oblique.ttf")
+            format("woff");
+      }
+
+      @font-face {
+        font-family: "Lato Regular";
+        font-weight: normal;
+        src: url("https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/fonts/Lato-Bold.ttf")
+          format("woff");
+      }
+
+      @font-face {
+        font-family: "Lato Bold";
+        font-weight: bold;
+        src: url("https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/fonts/Lato-Bold.ttf")
+          format("truetype");
+      }
+
+      #page-main {
+        grid-template-columns: initial;
+      }
+
+      p {
+        font-family: "Lato Regular";
+      }
+      .steps div:nth-child(even) .step-p {
+        margin-bottom: 0;
+      }
+
+      .steps div:nth-child(odd) .step-p {
+        margin-top: -90px;
+      }
+
+      .steps {
+        margin-top: 90px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .steps .progress-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      .steps div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 8%;
+        z-index: 2;
+        position: relative; /* This is essential for the z-index of children */
+      }
+      .step-p {
+        /* This defines what 1rem is: 1rem = 10px; 10/16 = 62.5 */
+        font-size: 85%;
+        overflow: hidden;
+        margin-top: 5px;
+        text-align: center;
+        color: rgb(85, 85, 85);
+      }
+
+      #get_started_btn {
+        font-family: "BigNoodleTitling Regular";
+        background-color: #ffda61;
+        width: 250px;
+        height: 80px;
+        border: none;
+        color: #222222;
+        padding: 4px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 40px;
+        border-radius: 16px;
+        cursor: pointer;
+      }
+      #get_started_btn:hover {
+        background-color: #37abc8;
+        color: #ffffff;
+      }
+
+      .navigation-btns-container {
+        position: sticky;
+        bottom: 0;
+
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 20px;
+        padding-bottom: 30px;
+      }
+
+      .navigation-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background-color: #37abc8;
+        width: 150px;
+        height: 50px;
+        border: none;
+        color: white;
+        padding: 4px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 30px;
+        border-radius: 25px;
+        cursor: pointer;
+        text-transform: none;
+        font-family: "BigNoodleTitling Regular";
+      }
+      .navigation-btn:hover {
+        background-color: #133c46;
+        color: #ffffff;
+      }
+
+      .getting-started-step-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+        border-radius: 16px;
+        padding: 4px 24px;
+        background-color: #ffda61;
+        font-family: "BigNoodleTitling Regular";
+        color: #222222;
+        font-size: 30px;
+      }
+
+      .step-content.active#step-4 {
+        display: flex;
+        flex-direction: column;
+        row-gap: 3rem;
+      }
+
+      @media only screen and (max-width: 1200px) {
+        .step-p {
+          font-size: 65% !important;
+        }
+      }
+      @media only screen and (max-width: 1000px) {
+        .step-p {
+          font-size: 60% !important;
+        }
+      }
+      @media only screen and (max-width: 800px) {
+        .step-p {
+          font-size: 55% !important;
+        }
+      }
+      @media only screen and (max-width: 600px) {
+        .step-p {
+          font-size: 50% !important;
+        }
+      }
+      .steps span {
+        box-sizing: border-box;
+        margin: 0px auto 10px;
+        width: 16px;
+        height: 16px;
+        background: white;
+        border: 2px solid rgb(85, 85, 85);
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 3; /* Increased to ensure spans are above the lines */
+        position: relative;
+      }
+
+      .steps span .guide-line-positive {
+        transform-origin: top left;
+        margin-top: 0 !important;
+        position: absolute;
+        left: 120%; /* Positioning it to the left of the node */
+        bottom: 50%;
+        height: 2px; /* Line thickness */
+        width: 0px; /* Line length */
+        background-color: lightgray; /* Line color */
+        transform: rotate(15deg); /* Negative angle */
+        z-index: 1; /* Set the z-index to match the span */
+      }
+
+      .steps span .guide-line-negative {
+        transform-origin: top left;
+        margin-top: 0 !important;
+        position: absolute;
+        left: 120%; /* Positioning it to the left of the node */
+        bottom: 50%;
+        height: 2px; /* Line thickness */
+        width: 0px; /* Line length */
+        background-color: lightgray; /* Line color */
+        transform: rotate(-15deg); /* Negative angle */
+        z-index: 1; /* Set the z-index to match the span */
+      }
+
+      .steps span.active {
+        margin: 0px auto 10px;
+        width: 16px;
+        height: 16px;
+        background: rgb(0, 144, 245);
+        border-radius: 8px;
+      }
+      .steps span.completed {
+        margin: 0px auto 10px;
+        width: 16px;
+        height: 16px;
+        background: rgb(0, 144, 245);
+        border-radius: 8px;
+      }
+      .steps div:nth-child(odd) {
+        margin-top: 20px;
+      }
+      .steps div:nth-child(even) {
+        margin-bottom: 20px;
+      }
+      #guide-line {
+        position: absolute;
+        top: 7px;
+        height: 2px;
+        background: lightgray;
+        width: 100%;
+        left: 0;
+        z-index: 1;
+      }
+      #progress-line {
+        position: absolute;
+        top: 7px;
+        height: 2px;
+        background: rgb(0, 144, 245);
+        width: 0;
+        left: 5%;
+        z-index: 1;
+        transition: width 0.3s ease-in-out;
+      }
+      .step-content {
+        display: none;
+        position: relative;
+        padding-bottom: 100px;
+      }
+      .step-content.active {
+        display: grid;
+        text-align: center;
+        align-items: center;
+        justify-items: center;
+      }
+      /* upate */
+      .update-options {
+        background: #37abc8;
+        width: 500px;
+        height: 200px;
+        border-radius: 60px;
+        padding: 4px;
+        font-family: "Lato Regular";
+        color: #222222;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .update-options-list {
+        list-style-type: none;
+        text-align: left;
+      }
+
+      .update-options-list-item {
+        color: #222222;
+        text-decoration: none;
+        font-weight: 600;
+        position: relative;
+        padding-left: 1.5em;
+      }
+
+      .update-options-list-item:before {
+        content: "-"; /* Unicode bullet point */
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5em;
+        line-height: 1;
+        color: #222222;
+      }
+
+      /* end of update */
+      /* Step 6: The App */
+      .app-downloads {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        font-family: Arial, sans-serif;
+      }
+      .app-downloads h2 {
+        margin-bottom: 15px;
+      }
+      .app-option {
+        /* display: flex; */
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+      }
+      .app-option img {
+        height: 30px;
+      }
+      .app-option h4 {
+        margin: 0;
+      }
+      .app-option a {
+        color: #3366cc;
+        text-decoration: none;
+      }
+      .app-option a:hover {
+        text-decoration: underline;
+      }
+
+      /* End of step 6 */
+
+      /* Step 12: Support */
+      .help-support {
+        margin-top: 20px;
+        width: 100%;
+      }
+      .help-support h2 {
+        color: #333;
+      }
+      .help-support ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .help-support ul li {
+        margin-bottom: 10px;
+      }
+      .help-support a {
+        color: #3366cc;
+        text-decoration: none;
+      }
+      .help-support a:hover {
+        text-decoration: underline;
+      }
+      /* End of step 12 */
+    </style>
+  </head>
+  <body>
+    <section id="section">
+      <div class="steps">
+        <div>
+          <span class="active" onclick="navigateTo(0)"
+            ><div class="guide-line-negative"></div
+          ></span>
+          <p class="step-p">1. Welcome!</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(1)">
+            <div class="guide-line-positive"></div>
+          </span>
+          <p class="step-p">2. What’s in the box?</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(2)"
+            ><div class="guide-line-negative"></div
+          ></span>
+          <p class="step-p">3. Battery placement</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(3)"
+            ><div class="guide-line-positive"></div
+          ></span>
+          <p class="step-p">4. Turning Marty On!</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(4)"
+            ><div class="guide-line-negative"></div
+          ></span>
+          <p class="step-p">5. Updating Marty!</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(5)"
+            ><div class="guide-line-positive"></div
+          ></span>
+          <p class="step-p">6. Unplugged</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(6)"
+            ><div class="guide-line-negative"></div
+          ></span>
+          <p class="step-p">7. The App</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(7)"
+            ><div class="guide-line-positive"></div
+          ></span>
+          <p class="step-p">8. Connecting to the App</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(8)"
+            ><div class="guide-line-negative"></div
+          ></span>
+          <p class="step-p">9. Remote Controller</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(9)"
+            ><div class="guide-line-positive"></div
+          ></span>
+          <p class="step-p">10. MartyBlocks Jr</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(10)"
+            ><div class="guide-line-negative"></div
+          ></span>
+          <p class="step-p">11. MartyBlocks</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(11)"
+            ><div class="guide-line-positive"></div
+          ></span>
+          <p class="step-p">12. Learning Portal</p>
+        </div>
+        <div>
+          <span onclick="navigateTo(12)"></span>
+          <p class="step-p">13. Support</p>
+        </div>
+      </div>
+
+      <div id="step-0" class="step-content active">
+        <button id="get_started_btn" onclick="navigateTo(1)">
+          &#9654; Get Started
+        </button>
+
+        <img
+          src="https://userguides.robotical.io/_media/martyv2/get-started-step-1.jpg"
+          alt="Step 1"
+          width="280"
+        />
+        <p>
+          Over the next few screen, I'll introduce you to my features and how to
+          get started.
+        </p>
+      </div>
+      <div id="step-1" class="step-content">
+        <h2 class="getting-started-step-title">What's in the box?</h2>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(0)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(2)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-2" class="step-content">
+        <h2 class="getting-started-step-title">Putting the battery in</h2>
+        <h4>Charging</h4>
+        <img
+          src="https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/marty-charging.png"
+          alt="Step 3"
+          width="700"
+        />
+        <h4>Placing the battery</h4>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(1)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(3)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-3" class="step-content">
+        <h2 class="getting-started-step-title">
+          Switching Marty On & LED indicators
+        </h2>
+        <h4>LED Indicators</h4>
+        <img
+          src="https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/LED.jpg"
+          alt="Step 4"
+          width="700"
+        />
+        <h4>Switching Marty On</h4>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(2)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(4)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-4" class="step-content">
+        <h2 class="getting-started-step-title">
+          Upgrade Marty for an Enhanced Experience
+        </h2>
+        <p style="max-width: 700px; margin: 0 auto; text-align: left">
+          To fully take advantage of Marty's capabilities, make sure you're
+          running the latest version. Updating gives you immediate access to new
+          features, as well as vital performance enhancements.
+        </p>
+        <div class="update-options">
+          <p>Choose from two simple ways to update:</p>
+          <ul class="update-options-list">
+            <li class="update-options-list-item">
+              Directly via our
+              <a
+                href="https://updates.robotical.io/"
+                target="_blank"
+                style="color: #222222; text-decoration: underline !important"
+                >web-updater</a
+              >
+            </li>
+            <li class="update-options-list-item">
+              Through the Tablet app on the configuration screen
+            </li>
+          </ul>
+          <a
+            href="https://userguides.robotical.io/martyv2/userguides/updating"
+            target="_blank"
+            style="color: #222222; text-decoration: underline !important"
+            >Find out more on the Knowledge Base
+          </a>
+        </div>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(3)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(5)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-5" class="step-content">
+        <h2 class="getting-started-step-title">Unplugged</h2>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(4)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(6)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-6" class="step-content">
+        <div class="app-downloads">
+          <h2 class="getting-started-step-title">
+            Marty the Robot V2 Application
+          </h2>
+
+          <div class="app-option">
+            <div>
+              <img
+                src="https://userguides.robotical.io/_media/martyv2/apple-store.png"
+                alt="App Store Icon"
+              />
+              <!-- <h4>iOS</h4> -->
+              <p>
+                Download the app from the
+                <a href="https://apps.apple.com/us/app/id1501371495"
+                  >App Store</a
+                >
+              </p>
+            </div>
+          </div>
+
+          <div class="app-option">
+            <div>
+              <!-- <h4>Android</h4> -->
+              <img
+                src="https://userguides.robotical.io/_media/martyv2/play-store.png"
+                alt="Play Store Icon"
+              />
+              <p>
+                Download the app from the
+                <a
+                  href="httpss://play.google.com/store/apps/details?id=io.robotical.martytherobot&pli=1"
+                  >Play Store</a
+                >
+              </p>
+            </div>
+          </div>
+
+          <div class="app-option">
+            <div>
+              <!-- <h4>Web App</h4> -->
+              <img
+                src="https://userguides.robotical.io/_media/martyv2/browser.png"
+                alt="Web Browser Icon"
+              />
+              <p>
+                Open the web app in your
+                <a href="https://app.robotical.io">browser</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(5)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(7)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+
+      <div id="step-7" class="step-content">
+        <h2 class="getting-started-step-title">Connecting to the App</h2>
+
+        <p style="font-size: 18px; color: rgb(237, 82, 82); margin-top: 10px">
+          Make sure you have Bluetooth enabled!
+        </p>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(6)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(8)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-8" class="step-content">
+        <h2 class="getting-started-step-title">Remote Controller</h2>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(7)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(9)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-9" class="step-content">
+        <h2 class="getting-started-step-title">MartyBlocks Jr</h2>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(8)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(10)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-10" class="step-content">
+        <h2 class="getting-started-step-title">MartyBlocks</h2>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(9)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(11)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-11" class="step-content">
+        <h2 class="getting-started-step-title">Learning Portal</h2>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/YXHb5-yc8b4?rel=0"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(10)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(12)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+      <div id="step-12" class="step-content">
+        <div class="help-support">
+          <h2 class="getting-started-step-title">Help & Support</h2>
+          <p>Head to Knowledge Base for:</p>
+          <ul>
+            <li><a href="/martyv2/support_faqs/">Support & FAQs</a></li>
+            <li><a href="/martyv2/userguides/">User Guides</a></li>
+          </ul>
+          <p>
+            Email
+            <a href="mailto:support@robotical.io">support@robotical.io</a> with
+            any questions
+          </p>
+          <p>We hope you enjoy your Marty!</p>
+        </div>
+        <div class="video-div"></div>
+        <div class="navigation-btns-container">
+          <button class="navigation-btn" onclick="navigateTo(11)">
+            &#8592; Back
+          </button>
+          <button class="navigation-btn" onclick="navigateTo(13)">
+            &#8594; Next
+          </button>
+        </div>
+      </div>
+
+      <script>
+        let videos = [
+          null, // For step 0 as there's no video
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-2.mp4",
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-3.mp4",
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-4.mp4",
+          null,
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-5.mp4",
+          null, // For step 5 as there's no video
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-7.mp4",
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-8.mp4",
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-9.mp4",
+          "https://roboticalpublic.s3.eu-west-1.amazonaws.com/getting-started-v2-guide/get-started-step-10.mp4",
+          null, // For step 10 as there's no video
+          null, // For step 11 as there's no video
+        ];
+        let activeStep = 0;
+
+        function navigateTo(step) {
+          // Get all video elements, pause them and stop them from buffering
+          document.querySelectorAll("video").forEach((video) => {
+            video.pause();
+            if (video.readyState != 0) {
+              let videoParentNode = video.parentNode;
+              videoParentNode.removeChild(video);
+            }
+          });
+
+          // Get the div for the current step
+          let stepDiv = document.getElementById(`step-${step}`);
+          let videoDiv = stepDiv.querySelector(".video-div");
+          // Check if the video has already been loaded
+          if (videos[step] && !videoDiv.querySelector("video")) {
+            // Create the video and source elements
+            let video = document.createElement("video");
+            video.width = 700;
+            video.height = 400;
+            video.controls = true;
+            video.autoplay = true;
+
+            let source = document.createElement("source");
+            source.src = videos[step];
+            source.type = "video/mp4";
+
+            video.appendChild(source);
+
+            // Listen for the video to end, then navigate to the next step
+            video.addEventListener("ended", function () {
+              if (activeStep < videos.length - 1) {
+                // Ensure there's a next step
+                navigateTo(activeStep + 1);
+              }
+            });
+
+            videoDiv.appendChild(video);
+          }
+
+          document
+            .querySelector("#step-" + activeStep)
+            .classList.remove("active");
+          document.querySelector("#step-" + step).classList.add("active");
+          document
+            .querySelectorAll(".steps div span")
+            [activeStep].classList.remove("active");
+          document
+            .querySelectorAll(".steps div span")
+            [step].classList.add("active");
+          activeStep = step;
+
+          //   add completed class to the previous steps
+          for (let i = 0; i < step; i++) {
+            document
+              .querySelectorAll(".steps div span")
+              [i].classList.add("completed");
+          }
+          // remove completed class from the next steps
+          for (let i = step; i < 12; i++) {
+            document
+              .querySelectorAll(".steps div span")
+              [i].classList.remove("completed");
+          }
+
+          // paint the guide lines up until the active step
+          const guideLineNegative = document.querySelectorAll(
+            ".steps span .guide-line-negative"
+          );
+          const guideLinePositive = document.querySelectorAll(
+            ".steps span .guide-line-positive"
+          );
+          for (let i = 0; i < guideLineNegative.length; i++) {
+            if (i < activeStep / 2) {
+              guideLineNegative[i].style.backgroundColor = "rgb(0, 144, 245)";
+            } else {
+              guideLineNegative[i].style.backgroundColor = "lightgray";
+            }
+          }
+
+          for (let i = 0; i < guideLinePositive.length; i++) {
+            if (i + 1 <= activeStep / 2) {
+              guideLinePositive[i].style.backgroundColor = "rgb(0, 144, 245)";
+            } else {
+              guideLinePositive[i].style.backgroundColor = "lightgray";
+            }
+          }
+        }
+
+        const updateGuideLineNegative = () => {
+          // get .steps span .guide-line-negative
+          const guideLineNegative = document.querySelectorAll(
+            ".steps span .guide-line-negative"
+          );
+          // get the section
+          const section = document.querySelector("#section");
+
+          // change width and transform: rotate based on the width of the section
+          guideLineNegative.forEach((line) => {
+            line.style.width = section.offsetWidth * 0.07 + "px";
+            // it should rotate based on the width of the section.
+            // the smaller the width, the BIGGER the angle
+            const angle = -calculateAngle(section.offsetWidth);
+            line.style.transform = `rotate(${5 + angle}deg)`;
+          });
+        };
+
+        const updateGuideLinePositive = () => {
+          // get .steps span .guide-line-positive
+          const guideLinePositive = document.querySelectorAll(
+            ".steps span .guide-line-positive"
+          );
+          // get the section
+          const section = document.querySelector("#section");
+
+          // change width and transform: rotate based on the width of the section
+          guideLinePositive.forEach((line) => {
+            line.style.width = section.offsetWidth * 0.07 + "px";
+            // it should rotate based on the width of the section.
+            // the smaller the width, the BIGGER the angle
+            // const angle = 15 + section.offsetWidth * 0.0001;
+            const angle = calculateAngle(section.offsetWidth);
+            line.style.transform = `rotate(${angle - 5}deg)`;
+          });
+        };
+
+        function calculateAngle(sectionWidth) {
+          const someScalingFactor = 0.9;
+          return 50 - Math.sqrt(sectionWidth) * someScalingFactor;
+        }
+
+        // function calculateAngle(sectionWidth) {
+        //   const someScalingFactor = 1;
+        //     return 50 - Math.log(sectionWidth + 1) * someScalingFactor;
+        // }
+
+        // function calculateAngle(sectionWidth) {
+        //   return 50 - (50 * sectionWidth) / 2500;
+        // }
+
+        window.addEventListener("resize", function () {
+          updateGuideLinePositive();
+          updateGuideLineNegative();
+        });
+
+        window.onload = function () {
+          updateGuideLinePositive();
+          updateGuideLineNegative();
+        };
+      </script>
+    </section>
+  </body>
+</html>

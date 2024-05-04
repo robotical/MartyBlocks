@@ -1,8 +1,7 @@
 import React from "react";
 import styles from "./class-dashboard.css";
 import bindAll from 'lodash.bindall';
-import { defineMessages, intlShape, injectIntl } from "react-intl";
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from "react-intl";
 import { activateDeck } from "../../../../../reducers/cards.js";
 import { connect } from "react-redux";
 import StudentsGrid from "./students-grid/students-grid.jsx";
@@ -26,7 +25,7 @@ class ClassDashboard extends React.Component {
 
         this.state = {
             sessionStarted: false,
-            sessionTitle: this.props.activeSession?.title || "",
+            sessionTitle: this.props.selectedClassroom.activeSession?.title || "",
         };
         bindAll(this, [
         ]);
@@ -35,15 +34,13 @@ class ClassDashboard extends React.Component {
     componentDidMount() {
     }
 
-
     componentWillUnmount() {
     }
 
     componentDidUpdate(prevProps, prevState) {
         // update session title if it has changed
-        console.log("prevProps.activeSession?.title", prevProps.activeSession?.title);
-        if (prevProps.activeSession && prevProps.activeSession.title !== this.props.activeSession?.title) {
-            this.setState({ sessionTitle: this.props.activeSession?.title || "" });
+        if (prevProps.selectedClassroom.activeSession && prevProps.selectedClassroom.activeSession.title !== this.props.selectedClassroom.activeSession?.title) {
+            this.setState({ sessionTitle: this.props.selectedClassroom.activeSession?.title || "" });
         }
     }
 
@@ -74,12 +71,12 @@ class ClassDashboard extends React.Component {
     }
 
     render() {
-        const { intl, activeSession, selectedClassroom } = this.props;
+        const { intl, selectedClassroom } = this.props;
 
         if (!selectedClassroom.students) {
             return null;
         }
-        const isThereAnActiveSession = !!activeSession;
+        const isThereAnActiveSession = !!selectedClassroom.activeSession;
 
         return (
             <div className={styles.dashboardContainer}>
@@ -102,7 +99,7 @@ class ClassDashboard extends React.Component {
                 <div className={styles.notesContainer}>
                     <NotesAnnouncementsBox
                         title="Session Notes"
-                        items={activeSession?.notes || []}
+                        items={selectedClassroom.activeSession?.notes || []}
                         onAddNewItem={(note, noteFile) => this.handleAddNewSessionNote(note, noteFile)}
                         disabled={!isThereAnActiveSession}
                     />
@@ -110,7 +107,7 @@ class ClassDashboard extends React.Component {
                 <div className={styles.announcementsContainer}>
                     <NotesAnnouncementsBox
                         title="Session Announcements"
-                        items={activeSession?.announcements || []}
+                        items={selectedClassroom.activeSession?.announcements || []}
                         onAddNewItem={(announcement, announcementFile) => this.handleAddNewSessionAnnouncement(announcement, announcementFile)}
                         disabled={!isThereAnActiveSession}
                     />
@@ -120,13 +117,6 @@ class ClassDashboard extends React.Component {
     }
 }
 
-ClassDashboard.propTypes = {
-    class: PropTypes.object,
-    students: PropTypes.arrayOf(PropTypes.object),
-    classId: PropTypes.string,
-    intl: intlShape.isRequired,
-    showTutorialCard: PropTypes.func
-};
 
 const mapDispatchToProps = (dispatch) => ({
     showTutorialCard: (tutorialTitle) => {
