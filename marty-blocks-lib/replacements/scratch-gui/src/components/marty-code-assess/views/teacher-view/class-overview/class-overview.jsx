@@ -30,7 +30,8 @@ class ClassOverview extends React.Component {
         bindAll(this, [
             "handleSessionSelect",
             "handleAddNewSessionNote",
-            "handleAddNewSessionAnnouncement"
+            "handleAddNewSessionAnnouncement",
+            "reselectSession"
         ]);
     }
 
@@ -38,7 +39,22 @@ class ClassOverview extends React.Component {
 
     componentWillUnmount() { }
 
-    componentDidUpdate(prevProps, prevState) { }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.selectedClassroom !== this.props.selectedClassroom) {
+            this.reselectSession();
+        }
+    }
+    
+    reselectSession() {
+        /**
+         * After updating the notes/announcements, we need to reselect the session because the state.session doesn't have the updated
+         * data of the props.classrooms.sessions. We call this function when componentDidUpdate and the classroom has been updated
+         */
+        if (this.state.selectedSession && this.state.selectedSession.id && this.props.selectedClassroom) {
+            const selectedSession = this.props.selectedClassroom.sessions.find(s => s.id === this.state.selectedSession.id);
+            this.setState({ selectedSession });
+        }
+    }
 
     async handleSessionSelect(session) {
         this.setState({ isLoading: true });
@@ -69,17 +85,17 @@ class ClassOverview extends React.Component {
     }
 
     async handleAddNewSessionNote(note, noteFile) {
-        if (!note || !selectedSession?.id) {
+        if (!note || !this.state.selectedSession?.id) {
             return;
         }
-        return await codeAssessClientFacade.addSessionNote(note, noteFile, selectedSession.id);
+        return codeAssessClientFacade.addSessionNote(note, noteFile, this.state.selectedSession.id);
     }
 
     async handleAddNewSessionAnnouncement(announcement, announcementFile) {
-        if (!announcement, !selectedSession?.id) {
+        if (!announcement, !this.state.selectedSession?.id) {
             return;
         }
-        codeAssessClientFacade.addSessionAnnouncement(announcement, announcementFile, selectedSession.id);
+        codeAssessClientFacade.addSessionAnnouncement(announcement, announcementFile, this.state.selectedSession.id);
     }
 
     render() {
@@ -107,7 +123,7 @@ class ClassOverview extends React.Component {
                                 title="Session Notes"
                                 items={this.state.selectedSession?.notes || []}
                                 onAddNewItem={(note, noteFile) => this.handleAddNewSessionNote(note, noteFile)}
-                                disabled={!this.state.selectedSession?.id}
+                                disabled={this.state.selectedSession?.title === "All__Time" || !this.state.selectedSession}
                             />
                         </div>
                         <div className={styles.announcementsContainer}>
@@ -115,7 +131,7 @@ class ClassOverview extends React.Component {
                                 title="Session Announcements"
                                 items={this.state.selectedSession?.announcements || []}
                                 onAddNewItem={(announcement, announcementFile) => this.handleAddNewSessionAnnouncement(announcement, announcementFile)}
-                                disabled={!this.state.selectedSession?.id}
+                                disabled={this.state.selectedSession?.title === "All__Time" || !this.state.selectedSession}
                             />
                         </div>
                     </>

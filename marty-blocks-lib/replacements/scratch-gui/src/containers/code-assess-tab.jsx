@@ -9,6 +9,7 @@ const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
 const USER_LOGGED_IN_SUBSCRIPTION = "USER_LOGGED_IN_SUBSCRIPTION";
 const CLASS_LIST_RECEIVED_SUBSCRIPTION = "CLASS_LIST_RECEIVED_SUBSCRIPTION";
 const CLASS_SELECTED_SUBSCRIPTION = "CLASS_SELECTED_SUBSCRIPTION";
+const CLASS_UPDATED_SUBSCRIPTION = "CLASS_UPDATED_SUBSCRIPTION";
 const STUDENT_OR_TEACHER_CHANGED_SUBSCRIPTION = "STUDENT_OR_TEACHER_CHANGED_SUBSCRIPTION";
 const SESSION_CREATED_SUBSCRIPTION = "SESSION_CREATED_SUBSCRIPTION";
 const SESSION_STOPPED_SUBSCRIPTION = "SESSION_STOPPED_SUBSCRIPTION";
@@ -38,6 +39,7 @@ class CodeAssessTab extends React.Component {
         this.onUserLoggedIn = this.onUserLoggedIn.bind(this);
         this.onClassListReceived = this.onClassListReceived.bind(this);
         this.handleClassSelect = this.handleClassSelect.bind(this);
+        this.onClassUpdated = this.onClassUpdated.bind(this);
         this.classSelected = this.classSelected.bind(this);
         this.studentOrTeacherChanged = this.studentOrTeacherChanged.bind(this);
         this.onSessionCreated = this.onSessionCreated.bind(this);
@@ -75,6 +77,7 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.subscribe(USER_LOGGED_IN_SUBSCRIPTION, PublishedEventsEnum.USER_LOGGED_IN, this.onUserLoggedIn);
         codeAssessClientFacade.subscribe(CLASS_LIST_RECEIVED_SUBSCRIPTION, PublishedEventsEnum.CLASS_LIST_RECEIVED, this.onClassListReceived);
         codeAssessClientFacade.subscribe(CLASS_SELECTED_SUBSCRIPTION, PublishedEventsEnum.CLASS_SELECTED, this.classSelected);
+        codeAssessClientFacade.subscribe(CLASS_UPDATED_SUBSCRIPTION, PublishedEventsEnum.CLASS_UPDATED, this.onClassUpdated);
         codeAssessClientFacade.subscribe(STUDENT_OR_TEACHER_CHANGED_SUBSCRIPTION, PublishedEventsEnum.STUDENT_OR_TEACHER_CHANGED, this.studentOrTeacherChanged);
         codeAssessClientFacade.subscribe(SESSION_CREATED_SUBSCRIPTION, PublishedEventsEnum.SESSION_CREATED, this.onSessionCreated);
         codeAssessClientFacade.subscribe(SESSION_STOPPED_SUBSCRIPTION, PublishedEventsEnum.SESSION_STOPPED, this.onSessionStopped);
@@ -101,6 +104,7 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.unsubscribe(USER_LOGGED_IN_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(CLASS_LIST_RECEIVED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(CLASS_SELECTED_SUBSCRIPTION);
+        codeAssessClientFacade.unsubscribe(CLASS_UPDATED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(STUDENT_OR_TEACHER_CHANGED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(SESSION_CREATED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(SESSION_STOPPED_SUBSCRIPTION);
@@ -121,6 +125,10 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.unsubscribe(CLASS_ANNOUNCEMENT_REMOVED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(SESSION_ANNOUNCEMENT_REMOVED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(SESSION_TITLE_UPDATED_SUBSCRIPTION);
+    }
+
+    onClassUpdated(updatedClass) {
+        this.setState({ selectedClassroom: updatedClass });
     }
 
     onClassAnnouncementRemoved(updatedClass) {
