@@ -8,6 +8,9 @@ import NotesAnnouncementsBox from "../../../notes-announcements-box/notes-announ
 import TimelineSessions from "./timeline-sessions/timeline-sessions.jsx";
 import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
+import StudentSupportOverview from "../student-support-overview/student-support-overview.jsx";
+import ClassAverageSpider from "../class-average-spider/class-average-spider.jsx";
+import ClassAverageOverTime from "../class-average-over-time/class-average-over-time.jsx";
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 
@@ -114,10 +117,15 @@ class ClassOverview extends React.Component {
                 {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                     <>
                         <div className={styles.spiderGraphContainer}>
+                            <ClassAverageSpider />
                         </div>
-                        <div className={styles.supportChampionsContainer}></div>
+                        <div className={styles.supportChampionsContainer}>
+                            <StudentSupportOverview />
+                        </div>
                         <div className={styles.separator}></div>
-                        <div className={styles.progressOverTimeContainer}></div>
+                        <div className={styles.progressOverTimeContainer}>
+                            <ClassAverageOverTime />
+                        </div>
                         <div className={styles.notesContainer}>
                             <NotesAnnouncementsBox
                                 title="Session Notes"
