@@ -20,10 +20,8 @@ class StudentsGrid extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
-            isAnyStudentDataModalVisible: false
         };
         bindAll(this, [
-            'setIsAnyStudentDataModalVisible',
         ]);
     }
 
@@ -31,14 +29,9 @@ class StudentsGrid extends React.Component {
 
     }
 
-    setIsAnyStudentDataModalVisible(isAnyStudentDataModalVisible) {
-        this.setState({ isAnyStudentDataModalVisible });
-    }
-
-
     render() {
-        const { selectedClassroom } = this.props;
-        const students = selectedClassroom.students;
+        const { selectedClassroom, sortedStudents } = this.props;
+        const students = sortedStudents;
         if (!students) {
             return null;
         }
@@ -51,8 +44,6 @@ class StudentsGrid extends React.Component {
                         key={student.id}
                         student={student}
                         selectedClassroom={selectedClassroom}
-                        setIsAnyStudentDataModalVisible={this.setIsAnyStudentDataModalVisible}
-                        isAnyStudentDataModalVisible={this.state.isAnyStudentDataModalVisible}
                     />
                 })}
             </div>

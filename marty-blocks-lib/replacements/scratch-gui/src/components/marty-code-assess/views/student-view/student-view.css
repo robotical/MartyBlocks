@@ -1,0 +1,33 @@
+@import "../../../../css/units.css";
+@import "../../../../css/colors.css";
+@import "../../../../css/z-index.css";
+@import "../../../../css/typography.css";
+
+.outerContainer {
+  background-color: $ui-white;
+  border: 1px solid $ui-black-transparent;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.headerSeparator {
+  height: 100%;
+  width: 2px;
+  background-color: white;
+}
+
+.headerAccountButtonDiv {
+  margin-left: auto;
+}
+
+.joinClassButtonContainer {
+  
+}
+
+.selectedTabContentContainer {
+  background-color: $ui-primary;
+  overflow-y: auto;
+}

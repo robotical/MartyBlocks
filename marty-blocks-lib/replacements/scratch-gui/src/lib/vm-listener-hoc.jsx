@@ -52,6 +52,7 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
             // debounce the auto save function so we aren't continuously saving if there are lots of changes happening
             this.autoSaveProject = debounce(this.autoSaveProject.bind(this), 1000);
+            this.assessStudent = debounce(this.assessStudent.bind(this), 10000);
         }
         componentDidMount() {
             if (this.props.attachKeyboardEvents) {
@@ -88,6 +89,7 @@ const vmListenerHOC = function (WrappedComponent) {
             }
             this.autoSaveProject();
             this.updatePythonModalCode();
+            this.assessStudent();
         }
         autoSaveProject() {
             // eslint-disable-next-line no-console
@@ -148,8 +150,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 let charKeyCode = e.keyCode || e.which;
                 let charKey = e.key;
                 if (charKeyCode == 0 || charKeyCode == 229) {
-                    charKeyCode = inputValue.charCodeAt(inputValue.length-1);
-                    charKey = inputValue.charAt(inputValue.length-1);
+                    charKeyCode = inputValue.charCodeAt(inputValue.length - 1);
+                    charKey = inputValue.charAt(inputValue.length - 1);
                 }
                 if (charKeyCode == 13) {
                     charKey = 'Enter';
@@ -171,6 +173,19 @@ const vmListenerHOC = function (WrappedComponent) {
                 e.preventDefault();
             }
         }
+
+        async assessStudent() {
+            const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
+            const codeAssessmentLib = window.codeAssess.assessmentLib;
+            try {
+                const assessment = codeAssessmentLib.assess(vm.runtime.targets);
+                await codeAssessClientFacade.updateStudentSessionDataScores(assessment);
+            } catch (error) {
+                console.warn("Could not assess student -- probably not in a class");
+                console.warn(error);
+            }
+        }
+
         render() {
             const {
                 /* eslint-disable no-unused-vars */

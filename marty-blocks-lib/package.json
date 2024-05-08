@@ -11,6 +11,7 @@
   "author": "Rob Dobson",
   "license": "Apache-2.0",
   "dependencies": {
+    "@robotical/automatic-assessments": "^1.0.17",
     "@robotical/marty-machine-lib": "^1.0.7",
     "@robotical/scratch-to-python-transpiler": "^1.0.12",
     "semver": "^7.3.7"

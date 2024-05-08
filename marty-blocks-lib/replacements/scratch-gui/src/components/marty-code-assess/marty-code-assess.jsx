@@ -15,6 +15,7 @@ import { openTipsLibrary } from '../../reducers/modals';
 import UserLogin from "./user-login/user-login.jsx";
 import TeacherView from "./views/teacher-view/teacher-view.jsx";
 import Welcome from "./welcome/welcome.jsx";
+import StudentView from "./views/student-view/student-view.jsx";
 
 const StudentOrTeacherEnum = window.codeAssess.codeAssessLib.StudentOrTeacherEnum;
 const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
@@ -148,12 +149,10 @@ function jsxDecider(
   }
 
   if (studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
-    return <div>Student View</div>;
+    return <StudentView selectedClassroom={selectedClassroom} student={userProfile} />;
   }
   if (studentOrTeacher === StudentOrTeacherEnum.TEACHER) {
-    return <TeacherView
-      selectedClassroom={selectedClassroom}
-    />;
+    return <TeacherView selectedClassroom={selectedClassroom} />;
   }
 
   return <div>Default View</div>;

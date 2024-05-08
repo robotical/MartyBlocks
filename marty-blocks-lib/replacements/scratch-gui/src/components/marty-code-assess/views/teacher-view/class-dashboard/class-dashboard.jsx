@@ -26,8 +26,10 @@ class ClassDashboard extends React.Component {
         this.state = {
             sessionStarted: false,
             sessionTitle: this.props.selectedClassroom.activeSession?.title || "",
+            sortedStudents: this.props.selectedClassroom.students || []
         };
         bindAll(this, [
+            "onStudentsSorted"
         ]);
     }
 
@@ -44,7 +46,8 @@ class ClassDashboard extends React.Component {
         }
     }
 
-    async onToggleSession() {
+    onStudentsSorted(sortedStudents) {
+        this.setState({ sortedStudents });
     }
 
     async handleAddNewSessionNote(note, noteFile) {
@@ -91,10 +94,10 @@ class ClassDashboard extends React.Component {
                         }
                     </div>
                     <div className={styles.classEnrolledStudents}>Enrolled Students: {selectedClassroom.students.length}</div>
-                    <div className={styles.sortByContainer}><SortByStudents /></div>
+                    <div className={styles.sortByContainer}><SortByStudents students={selectedClassroom.students} onStudentsSorted={this.onStudentsSorted} /></div>
                 </div>
                 <div className={styles.studentsContainer}>
-                    <StudentsGrid selectedClassroom={selectedClassroom} />
+                    <StudentsGrid selectedClassroom={selectedClassroom} sortedStudents={this.state.sortedStudents}/>
                 </div>
                 <div className={styles.notesContainer}>
                     <NotesAnnouncementsBox

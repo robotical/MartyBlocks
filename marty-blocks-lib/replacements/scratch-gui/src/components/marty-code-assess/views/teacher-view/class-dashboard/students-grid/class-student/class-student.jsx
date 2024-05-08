@@ -2,13 +2,13 @@ import React from "react";
 import styles from "./class-student.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, injectIntl } from "react-intl";
-import Modal from "../../../../../../../containers/modal.jsx";
-// import StudentDataModal from "../../../../student-data-modal/student-data-modal.jsx";
 import AssessmentSpiderGraph from "../../../../../plots/assessment-spider-graph/assessment-spider-graph.jsx";
 import educationIconGreen from "../../../../../../../lib/assets/icon--education-green.svg";
 import educationIconRed from "../../../../../../../lib/assets/icon--education-red.svg";
 
 const Preprocessor = window.codeAssess.codeAssessLib.Preprocessor;
+const StudentStatusEnum = window.codeAssess.codeAssessLib.StudentStatusEnum;
+const unminifyScoresOverTime = window.codeAssess.codeAssessLib.unminifyScoresOverTime;
 
 const messages = defineMessages({
     tutorials: {
@@ -18,25 +18,21 @@ const messages = defineMessages({
     }
 });
 
-
 const STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP = {
-    "offline": "#FF0000",
-    "active": "#00FF00",
-    "inactive": "#ffa200"
+    [StudentStatusEnum.OFFLINE]: "#FF0000",
+    [StudentStatusEnum.ACTIVE]: "#00FF00",
+    [StudentStatusEnum.INACTIVE]: "#ffa200"
 };
 
 class ClassStudent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentActivityStatus: "offline",// offline, active, inactive
+            studentActivityStatus: StudentStatusEnum.OFFLINE,
             fetchedStudentData: null,
-            studentDataModalVisible: false
         };
         bindAll(this, [
-            "modalToggle",
         ]);
-        this.heartBeatInterval = null;
     }
 
     componentDidMount() {
@@ -46,20 +42,16 @@ class ClassStudent extends React.Component {
     componentWillUnmount() {
     }
 
-    handleSessionStatusChange = ({ status, classId }) => {
-        this.forceUpdate();
-    }
-
-    modalToggle() {
-        this.setState({ studentDataModalVisible: !this.state.studentDataModalVisible });
-        this.props.setIsAnyStudentDataModalVisible(!this.state.studentDataModalVisible);
-    }
-
     render() {
         const { intl, student, selectedClassroom } = this.props;
         const isThereAnActiveSession = !!selectedClassroom.activeSession;
+        const studentActivityStatus = student.activityStatus;
+        const studentSessionData = student.studentSessionData.filter(sessionData => sessionData.sessionId === selectedClassroom.activeSession?.id)[0] || {};
+        const scoresOverTime = studentSessionData?.scoresOverTime || {};
+        const unminifiedStudentData = unminifyScoresOverTime(scoresOverTime);
+        console.log("unminifiedStudentData", unminifiedStudentData)
 
-        const preprocessor = new Preprocessor({});
+        const preprocessor = new Preprocessor(unminifiedStudentData);
         const transformedData = preprocessor
             .sortData()
             .calculateAverageGivenTimeWindow(10, 5, "minutes")
@@ -91,7 +83,7 @@ class ClassStudent extends React.Component {
 
         let studentJsx = null;
         if (transformedData) {
-            const colour = isThereAnActiveSession ? STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP[this.state.studentActivityStatus] : "#6d6d6d";
+            const colour = isThereAnActiveSession ? STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP[studentActivityStatus] : "#6d6d6d";
             studentJsx = <AssessmentSpiderGraph
                 data={transformedData}
                 plotTitle={student.firstName + " " + student.lastName}
@@ -99,26 +91,11 @@ class ClassStudent extends React.Component {
                 colour={colour}
             />;
         } else {
-            studentJsx = <img className={styles.classStudentImg} src={this.state.studentActivityStatus === "active" ? educationIconGreen : educationIconRed} />;
+            studentJsx = <img className={styles.classStudentImg} src={studentActivityStatus === StudentStatusEnum.ACTIVE ? educationIconGreen : educationIconRed} />;
         }
 
         return (
             <>
-                {this.state.studentDataModalVisible &&
-                    <Modal
-                        onRequestClose={this.modalToggle}
-                        fullScreen
-                        id="studentDataModal"
-                        contentLabel={`${student.name} Progress`}
-                    >
-                        {/* <StudentDataModal
-                            onClose={this.modalToggle}
-                            studentData={this.state.fetchedStudentData}
-                            student={student}
-                            classId={this.props.classId}
-                        /> */}
-                    </Modal>
-                }
                 <div className={styles.classStudent} onClick={this.modalToggle}>
                     <div className={styles.classStudentPltContainer}>
                         {studentJsx}
