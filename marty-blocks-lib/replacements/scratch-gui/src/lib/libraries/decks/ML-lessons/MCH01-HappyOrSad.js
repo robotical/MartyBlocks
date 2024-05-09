@@ -43,7 +43,7 @@ const STEP_1_DESCRIPTION = <FormattedMessage
         boldEvents: <b>Events</b>,
         boldMotion: <b>Motion</b>,
         boldGetReady: <b>get ready</b>,
-        em1: <em>Test your program by clicking on the green flag in Scratch, Marty should then stand to attention by straightening their arms and legs, ready for the next instruction! If Marty does not move, then please check you have correctly connected your robot.</em>,
+        em1: <em>Test your program by clicking on the green flag in MartyBlocks, Marty should then stand to attention by straightening their arms and legs, ready for the next instruction! If Marty does not move, then please check you have correctly connected your robot.</em>,
     }}
 />;
 const STEP_1_HINT = {
@@ -342,7 +342,7 @@ const STEP_12_DESCRIPTION = <FormattedMessage
 />;
 const STEP_12_HINT = {
     description: <FormattedMessage
-        defaultMessage={`On the left-hand side are all the different types of coding blocks that you can use with Marty in Scratch. 
+        defaultMessage={`On the left-hand side are all the different types of coding blocks that you can use with Marty in MartyBlocks. 
         Near the bottom of the list is one called {boldML} with a pair of Marty eyes as the icon. 
         Click on this button to see the machine learning coding blocks. `}
         description=""
@@ -582,7 +582,7 @@ const STEP_20_HINT = {
     description: <FormattedMessage
         defaultMessage={`To create a new data model, return to the {boldML} tab and hover over the + sign in the bottom left corner. 
         Click on the {boldImageIcon} to create a new data model using images and begin creating your classes for different types of sign 
-        language to train your model to identify. Then update your code in Scratch so Marty responds correctly depending on the sign language detected.`}
+        language to train your model to identify. Then update your code in MartyBlocks so Marty responds correctly depending on the sign language detected.`}
         description=""
         id={`gui.howtos.lessons.type-lesson-ml-happy-or-sad.step18.hint.description`}
         values={{

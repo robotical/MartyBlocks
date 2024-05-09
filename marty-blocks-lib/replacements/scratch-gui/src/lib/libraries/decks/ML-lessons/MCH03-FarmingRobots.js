@@ -44,7 +44,7 @@ const STEP_1_DESCRIPTION = <FormattedMessage
         boldEvents: <b>Events</b>,
         boldMotion: <b>Motion</b>,
         boldGetReady: <b>get ready</b>,
-        em1: <em>Test your program by clicking on the green flag in Scratch, Marty should then stand to attention by straightening their arms and legs, ready for the next instruction! If Marty does not move, then please check you have correctly connected your robot.</em>,
+        em1: <em>Test your program by clicking on the green flag in MartyBlocks, Marty should then stand to attention by straightening their arms and legs, ready for the next instruction! If Marty does not move, then please check you have correctly connected your robot.</em>,
     }}
 />;
 const STEP_1_HINT = {
@@ -383,7 +383,7 @@ const STEP_14_DESCRIPTION = <FormattedMessage
 const STEP_14_HINT = {
     description: <FormattedMessage
         defaultMessage={`On the left-hand side are all the different types of coding 
-        blocks that you can use with Marty in Scratch. Near the bottom of the list 
+        blocks that you can use with Marty in MartyBlocks. Near the bottom of the list 
         is one called {boldML} with a pair of Marty eyes as the icon. Click on this button to 
         see the machine learning coding blocks.`}
         description=""
@@ -528,7 +528,7 @@ const STEP_18_DESCRIPTION = <FormattedMessage
 />;
 const STEP_18_HINT = {
     // description: <FormattedMessage
-    //     defaultMessage={`On the left-hand side are all the different types of coding blocks that you can use with Marty in Scratch. 
+    //     defaultMessage={`On the left-hand side are all the different types of coding blocks that you can use with Marty in MartyBlocks. 
     //     Near the bottom of the list is one called ML with a pair of Marty eyes as the icon. Click on this button to see the machine learning coding blocks.`}
     //     description=""
     //     id={`gui.howtos.lessons.type-lesson-ml-farming-robots.step18.hint.description`}

@@ -25,6 +25,9 @@ class ModalBottomButtons extends React.Component {
     }
 
     onReadOutLoudClick() {
+        if (!!window.speechSynthesis || !window.speechSynthesis.speak || !SpeechSynthesisUtterance) {
+            return alert("Your browser does not support text-to-speech");
+        }
         if (this.state.isReadingOutLoud) {
             window.speechSynthesis.cancel();
             this.setState({ isReadingOutLoud: false });

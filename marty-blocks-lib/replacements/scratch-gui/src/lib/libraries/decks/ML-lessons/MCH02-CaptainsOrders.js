@@ -42,7 +42,7 @@ const STEP_1_DESCRIPTION = <FormattedMessage
         boldEvents: <b>Events</b>,
         boldMotion: <b>Motion</b>,
         boldGetReady: <b>get ready</b>,
-        em1: <em>Test your program by clicking on the green flag in Scratch, Marty should then stand to attention by straightening their arms and legs, ready for the next instruction! If Marty does not move, then please check you have correctly connected your robot.</em>,
+        em1: <em>Test your program by clicking on the green flag in MartyBlocks, Marty should then stand to attention by straightening their arms and legs, ready for the next instruction! If Marty does not move, then please check you have correctly connected your robot.</em>,
     }}
 />;
 const STEP_1_HINT = {
@@ -65,7 +65,7 @@ const STEP_2_DESCRIPTION = <FormattedMessage
     Hover over the {boldBluePlusButton} on the bottom left to create a new model and click on the {boldIconOfSound}. 
     Then click {boldContinue} if a popup appears asking you to check for any unsaved changes.{linebreak}{linebreak}
 
-    You may also be asked if Scratch can have access to your microphone, when this appears click on {boldAllow}. 
+    you may also be asked if MartyBlocks can have access to your microphone, when this appears click on {boldAllow}. 
 `}
     description=""
     id={`gui.howtos.lessons.type-lesson-ml-captains-orders.step2.description`}
@@ -411,7 +411,7 @@ const STEP_16_DESCRIPTION = <FormattedMessage
 />;
 const STEP_16_HINT = {
     description: <FormattedMessage
-        defaultMessage={`On the left-hand side are all the different types of coding blocks that you can use with Marty in Scratch. 
+        defaultMessage={`On the left-hand side are all the different types of coding blocks that you can use with Marty in MartyBlocks. 
         Near the bottom of the list is one called ML with a pair of Marty eyes as the icon. Click on this button to see the machine learning coding blocks.`}
         description=""
         id={`gui.howtos.lessons.type-lesson-ml-captains-orders.step16.hint.description`}
