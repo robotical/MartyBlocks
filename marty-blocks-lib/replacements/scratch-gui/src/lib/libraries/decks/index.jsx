@@ -49,7 +49,7 @@ export default {
                         description="Label for link to User Guide for more info"
                         id="gui.howtos.marty-machine-create-audio-model.step_visit-user-guide"
                     />
-                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning/start'
             }
         }],
     },
@@ -136,7 +136,7 @@ export default {
                         description="Label for link to User Guide for more info"
                         id="gui.howtos.marty-machine-create-audio-model.step_visit-user-guide"
                     />
-                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning/start'
             }
         },
         ],
@@ -225,7 +225,7 @@ export default {
                         description="Label for link to User Guide for more info"
                         id="gui.howtos.marty-machine-create-audio-model.step_visit-user-guide"
                     />
-                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning/start'
             }
         },
         ],
@@ -265,7 +265,7 @@ export default {
                         description="Label for link to User Guide for more info"
                         id="gui.howtos.marty-machine-create-audio-model.step_visit-user-guide"
                     />
-                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning/start'
             }
         },
         ],
@@ -334,7 +334,7 @@ export default {
                         description="Label for link to User Guide for more info"
                         id="gui.howtos.marty-machine-create-audio-model.step_visit-user-guide"
                     />
-                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning/start'
             }
         },
         ],
@@ -403,7 +403,7 @@ export default {
                         description="Label for link to User Guide for more info"
                         id="gui.howtos.marty-machine-create-audio-model.step_visit-user-guide"
                     />
-                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning'
+                ), url: 'https://userguides.robotical.io/martyv2/userguides/martyblocks/machinelearning/start'
             }
         },
         ],

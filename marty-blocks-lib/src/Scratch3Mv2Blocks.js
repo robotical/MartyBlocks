@@ -1241,7 +1241,7 @@ class Scratch3Mv2Blocks {
 
   batteryLevel(args, util) {
     //console.log('Report the battery percentage!');
-    return mv2Interface.battRemainCapacityPercent;
+    return Math.round(mv2Interface.battRemainCapacityPercent);
   }
 
   getObstacle(addon) {
