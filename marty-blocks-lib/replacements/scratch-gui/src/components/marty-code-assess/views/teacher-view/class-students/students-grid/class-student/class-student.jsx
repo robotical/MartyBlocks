@@ -3,12 +3,9 @@ import styles from "./class-student.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, injectIntl } from "react-intl";
 import AssessmentSpiderGraph from "../../../../../plots/assessment-spider-graph/assessment-spider-graph.jsx";
-import educationIconGreen from "../../../../../../../lib/assets/icon--education-green.svg";
-import educationIconRed from "../../../../../../../lib/assets/icon--education-red.svg";
 
 const Preprocessor = window.codeAssess.codeAssessLib.Preprocessor;
 const StudentStatusEnum = window.codeAssess.codeAssessLib.StudentStatusEnum;
-const unminifyScoresOverTime = window.codeAssess.codeAssessLib.unminifyScoresOverTime;
 
 const messages = defineMessages({
     tutorials: {
@@ -66,24 +63,7 @@ class ClassStudent extends React.Component {
                 "Analysis Composite Score",
                 "Decomposition Composite Score",
                 "Pattern Recognition and Data Representation Composite Score",
-
-                // "Comments",
-                // "Conditionals",
-                // "Data Types",
-                // "Debugging",
-                // "Function Reuse",
-                // "Functions",
-                // "Functions with Arguments",
-                // "Loops",
-                // "Naming",
-                // "Operators",
-                // "Parallelism",
-                // "Sequencing",
-                // "Synchronization and Messages",
-                // "Variables Instead of Literals",
-                // "Variables and Data Structures"
             ]);
-
 
         let studentJsx = null;
         if (transformedData) {
@@ -94,10 +74,7 @@ class ClassStudent extends React.Component {
                 isStudentPreview={true}
                 colour={colour}
             />;
-        } else {
-            studentJsx = <img className={styles.classStudentImg} src={studentActivityStatus === StudentStatusEnum.ACTIVE ? educationIconGreen : educationIconRed} />;
         }
-
         return (
             <>
                 <div className={styles.classStudent} onClick={this.modalToggle}>

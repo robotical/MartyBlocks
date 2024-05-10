@@ -17,6 +17,7 @@
 
 .spiderGraphContainer {
   grid-area: spiderGraph;
+  justify-self: center;
 }
 
 .supportChampionsContainer {

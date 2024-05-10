@@ -69,7 +69,10 @@ class AssessmentSpiderGraph extends React.Component {
         const config = {
             displayModeBar: false,
             displaylogo: false,
-            responsive: false
+            responsive: false,
+            showLink: false,
+            // showlegend: false,
+            // staticPlot: true,
         };
 
         // convert the data from 0-1 to 0-100
@@ -115,6 +118,7 @@ class AssessmentSpiderGraph extends React.Component {
             yaxis: {
                 ...currentLayout.yaxis,
             },
+            showlegend: false,
             polar: {
                 bgcolor: 'rgba(0,0,0,0)',
                 radialaxis: {
@@ -136,7 +140,6 @@ class AssessmentSpiderGraph extends React.Component {
                     linewidth: 5,
                     gridcolor: "#35abc7",
                 },
-                showLegend: false
             },
         }, config);
     }

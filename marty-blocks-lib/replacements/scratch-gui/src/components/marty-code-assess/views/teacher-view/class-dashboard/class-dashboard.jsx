@@ -97,7 +97,7 @@ class ClassDashboard extends React.Component {
                     <div className={styles.sortByContainer}><SortByStudents students={selectedClassroom.students} onStudentsSorted={this.onStudentsSorted} /></div>
                 </div>
                 <div className={styles.studentsContainer}>
-                    <StudentsGrid selectedClassroom={selectedClassroom} sortedStudents={this.state.sortedStudents}/>
+                    <StudentsGrid selectedClassroom={selectedClassroom} students={this.state.sortedStudents}/>
                 </div>
                 <div className={styles.notesContainer}>
                     <NotesAnnouncementsBox

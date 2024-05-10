@@ -14,6 +14,9 @@ import ClassAverageOverTime from "../class-average-over-time/class-average-over-
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 
+const Preprocessor = window.codeAssess.codeAssessLib.Preprocessor;
+const XAxisLabelEnum = window.codeAssess.codeAssessLib.XAxisLabelEnum;
+
 const messages = defineMessages({
     tutorials: {
         defaultMessage: "adf",
@@ -28,7 +31,8 @@ class ClassOverview extends React.Component {
 
         this.state = {
             selectedSession: null,
-            isLoading: false
+            sessionsArr: [],
+            isLoading: false,
         };
         bindAll(this, [
             "handleSessionSelect",
@@ -38,7 +42,9 @@ class ClassOverview extends React.Component {
         ]);
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+        this.handleSessionSelect({ title: "All__Time" });
+    }
 
     componentWillUnmount() { }
 
@@ -47,7 +53,7 @@ class ClassOverview extends React.Component {
             this.reselectSession();
         }
     }
-    
+
     reselectSession() {
         /**
          * After updating the notes/announcements, we need to reselect the session because the state.session doesn't have the updated
@@ -55,7 +61,7 @@ class ClassOverview extends React.Component {
          */
         if (this.state.selectedSession && this.state.selectedSession.id && this.props.selectedClassroom) {
             const selectedSession = this.props.selectedClassroom.sessions.find(s => s.id === this.state.selectedSession.id);
-            this.setState({ selectedSession });
+            this.setState({ selectedSession, sessionsArr: [selectedSession] });
         }
     }
 
@@ -73,18 +79,19 @@ class ClassOverview extends React.Component {
             const allSession = {
                 id: "All__Time",
                 title: "All__Time",
+                createdAt: "All__Time",
                 notes: allNotes,
                 announcements: allAnnouncements,
                 questions: allQuestions,
                 students: allStudents,
                 studentSessionData: allStudentSessionData
             };
-            this.setState({ selectedSession: allSession, isLoading: false });
-            return;
+            this.setState({ sessionsArr: allSessions, selectedSession: allSession, isLoading: false });
+        } else { // specific session
+            const updatedClassroom = await codeAssessClientFacade.fetchSessionData(session.id);
+            const fetchedSession = updatedClassroom.sessions.find(s => s.id === session.id);
+            this.setState({ sessionsArr: [fetchedSession], selectedSession: fetchedSession, isLoading: false });
         }
-        const updatedClassroom = await codeAssessClientFacade.fetchSessionData(session.id);
-        const fetchedSession = updatedClassroom.sessions.find(s => s.id === session.id);
-        this.setState({ selectedSession: fetchedSession, isLoading: false });
     }
 
     async handleAddNewSessionNote(note, noteFile) {
@@ -117,14 +124,19 @@ class ClassOverview extends React.Component {
                 {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                     <>
                         <div className={styles.spiderGraphContainer}>
-                            <ClassAverageSpider />
+                            <ClassAverageSpider
+                                data={convertRawDataToSpiderGraphData(this.state.sessionsArr)}
+                                isMinimised={true}
+                            />
                         </div>
                         <div className={styles.supportChampionsContainer}>
                             <StudentSupportOverview />
                         </div>
                         <div className={styles.separator}></div>
                         <div className={styles.progressOverTimeContainer}>
-                            <ClassAverageOverTime />
+                            <ClassAverageOverTime
+                                data={convertRawDataToLineGraphData(this.state.sessionsArr, this.state.selectedSession?.title !== "All__Time")}
+                            />
                         </div>
                         <div className={styles.notesContainer}>
                             <NotesAnnouncementsBox
@@ -159,4 +171,64 @@ const mapDispatchToProps = (dispatch) => ({
     }
 });
 
-export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview))
+export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview));
+
+
+/**
+ * Converts raw student session data to spider graph data.
+ */
+function convertRawDataToSpiderGraphData(sessionsArr) {
+    const preprocessor = new Preprocessor(sessionsArr);
+    const transformedData = preprocessor
+        .sortData()
+        .calculateAverageGivenTimeWindow(10, 5, "minutes")
+        .normaliseScores()
+        .exportToSpiderGraphData([
+            "Algorithms Composite Score",
+            "Generalisation and Abstraction Composite Score",
+            "Analysis Composite Score",
+            "Decomposition Composite Score",
+            "Pattern Recognition and Data Representation Composite Score",
+
+            // "Comments",
+            // "Conditionals",
+            // "Data Types",
+            // "Debugging",
+            // "Function Reuse",
+            // "Functions",
+            // "Functions with Arguments",
+            // "Loops",
+            // "Naming",
+            // "Operators",
+            // "Parallelism",
+            // "Sequencing",
+            // "Synchronization and Messages",
+            // "Variables Instead of Literals",
+            // "Variables and Data Structures"
+        ], "scores", true);
+
+    return transformedData;
+}
+
+
+/**
+ * Converts raw data to line graph data.
+ */
+function convertRawDataToLineGraphData(sessionsArr, isSpecificSession) {
+    const processor = new Preprocessor(sessionsArr);
+    let linegraphData = processor
+        .sortData()
+        .calculateCompositeScoreOverTime()
+        .normaliseScores();
+    if (isSpecificSession) {
+        linegraphData.calculateMovingMaxBasedOnDates(.9, "minutes");
+    } else {
+        linegraphData.calculateMovingMaxBasedOnSessions(XAxisLabelEnum.TITLES);
+    }
+    linegraphData = linegraphData.calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
+        .exportToLeakyIntegratorData([
+            "Composite"
+        ]);
+
+    return linegraphData;
+}

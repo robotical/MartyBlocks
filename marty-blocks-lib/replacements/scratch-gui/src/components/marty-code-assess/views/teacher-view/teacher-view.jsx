@@ -8,6 +8,7 @@ import StopStartSession from "./stop-start-session/stop-start-session.jsx";
 import CodeAssessHeader from "../../header/header.jsx";
 import CodeAssessHeaderButton from "../../header/header-button/header-button.jsx";
 import ClassOverview from "./class-overview/class-overview.jsx";
+import ClassStudents from "./class-students/class-students.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -56,7 +57,7 @@ class TeacherView extends React.Component {
                         selectedClassroom={selectedClassroom}
                     />}
                     {this.state.selectedTab === "Overview" && <ClassOverview selectedClassroom={selectedClassroom} />}
-                    {this.state.selectedTab === "Students" && <div> students</div>}
+                    {this.state.selectedTab === "Students" && <ClassStudents selectedClassroom={selectedClassroom} />}
                 </div>
             </div>
         );

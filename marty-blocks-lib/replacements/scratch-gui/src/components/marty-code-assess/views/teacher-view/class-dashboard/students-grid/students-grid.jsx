@@ -30,8 +30,7 @@ class StudentsGrid extends React.Component {
     }
 
     render() {
-        const { selectedClassroom, sortedStudents } = this.props;
-        const students = sortedStudents;
+        const { selectedClassroom, students } = this.props;
         if (!students) {
             return null;
         }
