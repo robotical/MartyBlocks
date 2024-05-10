@@ -6,14 +6,14 @@ import { FormattedMessage } from 'react-intl';
 
 // Text to Speech
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
-import mlLesson1 from "./ML-lessons/lesson1";
-import mlLesson2 from "./ML-lessons/lesson2";
 import MCH01 from './ML-lessons/MCH01-HappyOrSad';
 import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
 import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 
 export default {
-
+    ...MCH01,
+    ...MCH02,
+    ...MCH03,
     "mm-create-model": {
         name: (
             <FormattedMessage
@@ -407,10 +407,6 @@ export default {
             }
         },
         ],
-    },
-
-    ...MCH01,
-    ...MCH02,
-    ...MCH03,
+    }
 
 };

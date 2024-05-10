@@ -43,7 +43,7 @@
   position: absolute;
   pointer-events: auto;
   z-index: 510;
-  max-width: 70%;
+  max-width: 90vw;
   min-width: 300px;
   min-height: 300px;
 }

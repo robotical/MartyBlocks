@@ -25,7 +25,7 @@ const LESSON_DESCRIPTION = <FormattedMessage
         boldEstimatedTime: <b>Estimated time to complete:</b>
     }}
 />;
-const LESSON_TAGS = ['Machine Learning', 'Image Modelling', 'Emotions', 'Training', 'Dataset', 'Prediction', 'Accuracy'];
+const LESSON_TAGS = ['machineLearningLesson', 'Image Modelling', 'Emotions', 'Training', 'Dataset', 'Prediction', 'Accuracy'];
 
 /* Step 1 */
 const STEP_1_TYPE = "info";

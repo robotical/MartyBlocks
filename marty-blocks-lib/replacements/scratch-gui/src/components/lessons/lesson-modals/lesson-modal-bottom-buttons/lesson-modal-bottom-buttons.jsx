@@ -25,8 +25,8 @@ class ModalBottomButtons extends React.Component {
     }
 
     onReadOutLoudClick() {
-        if (!!window.speechSynthesis || !window.speechSynthesis.speak || !SpeechSynthesisUtterance) {
-            return alert("Your browser does not support text-to-speech");
+        if (!window.speechSynthesis || !window.speechSynthesis?.speak || !SpeechSynthesisUtterance) {
+            return;
         }
         if (this.state.isReadingOutLoud) {
             window.speechSynthesis.cancel();
@@ -46,6 +46,7 @@ class ModalBottomButtons extends React.Component {
     render() {
         const { onCTAClick, isAccessibilityEnabled, onAccessibilityClick, closeModalButtonTitle = "Start", textToReadOutLoud } = this.props;
 
+        const isReadOutLoudNotSupported = !window.speechSynthesis || !window.speechSynthesis?.speak || !SpeechSynthesisUtterance;
         const startLessonButtonClass = classNames({
             [styles.startLessonButton]: !!onCTAClick,
             [styles.startLessonButtonAccessibility]: isAccessibilityEnabled
@@ -60,8 +61,9 @@ class ModalBottomButtons extends React.Component {
             [styles.middleButton]: true,
             [styles.middleButtonAccessibility]: isAccessibilityEnabled,
             [styles.readingOutLoudButton]: this.state.isReadingOutLoud,
-            [styles.hidden]: !textToReadOutLoud
+            [styles.hidden]: !textToReadOutLoud || isReadOutLoudNotSupported
         });
+
 
         return (
             <div className={styles.lessonStartModalButtonsContainer}>

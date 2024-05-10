@@ -64,6 +64,8 @@ class NextPrevButtons extends React.Component {
             hint,
         } = this.props;
 
+        const isReadOutLoudNotSupported = !window.speechSynthesis || !window.speechSynthesis?.speak || !SpeechSynthesisUtterance;
+
         const nextPrevButtonsContainerClass = classNames({
             [styles.nextPrevButtonsContainer]: expanded,
             [styles.hidden]: !expanded,
@@ -84,11 +86,12 @@ class NextPrevButtons extends React.Component {
 
         const audioButtonClass = classNames({
             [styles.middleButton]: expanded,
-            [styles.hidden]: !expanded,
+            [styles.hidden]: !expanded || isReadOutLoudNotSupported,
             [styles.accessibilityEnabled]: expanded && isAccessibilityEnabled,
             [styles.readingOutLoudButton]: isReadingOutLoud,
-        });
 
+        });
+        
         const hintButtonClass = classNames({
             [styles.middleButton]: expanded,
             [styles.hidden]: !expanded,

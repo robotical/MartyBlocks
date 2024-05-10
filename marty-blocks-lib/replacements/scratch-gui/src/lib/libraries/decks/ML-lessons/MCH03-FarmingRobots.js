@@ -26,7 +26,7 @@ const LESSON_DESCRIPTION = <FormattedMessage
     }}
 />;
 //Machine Learning, Image Modelling, Agri-Tech, Training, Dataset, Conditions
-const LESSON_TAGS = ['Machine Learning', 'Image Modelling', 'Agri-Tech', 'Training', 'Dataset', 'Conditions']
+const LESSON_TAGS = ['machineLearningLesson', 'Image Modelling', 'Agri-Tech', 'Training', 'Dataset', 'Conditions']
 
 /* Step 1 */
 const STEP_1_TYPE = "info";
