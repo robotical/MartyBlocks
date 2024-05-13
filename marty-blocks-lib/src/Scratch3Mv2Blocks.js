@@ -1775,7 +1775,7 @@ class Scratch3Mv2Blocks {
         Scratch3Mv2Blocks._addVolumeEffect(
           audioContext,
           playerNew,
-          target.volume / 100
+          (target.volume * .6) / 100 // decrease volume by 40% to make it sound similar to the text-to-speech volume
         );
       } else {
         mv2Interface.send_REST("notification/warn-message/Something went wrong. Please try again.");
