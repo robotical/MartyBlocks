@@ -1,0 +1,50 @@
+.plotContainer {
+  padding: 10px;
+}
+
+.modal {
+  width: max-content;
+}
+
+.legendList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legendItem {
+  font-size: 12px;
+}
+
+.legendAna:before,
+.legendDec:before,
+.legendPat:before,
+.legendGen:before,
+.legendAlg:before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
+
+.legendAna:before {
+  background-color: #4caf50;
+}
+
+.legendDec:before {
+  background-color: #f44336;
+}
+
+.legendPat:before {
+  background-color: #2196f3;
+}
+
+.legendGen:before {
+  background-color: #ff9800;
+}
+
+.legendAlg:before {
+  background-color: #9c27b0;
+}

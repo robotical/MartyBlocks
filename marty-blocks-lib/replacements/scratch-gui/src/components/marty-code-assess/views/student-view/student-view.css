@@ -30,4 +30,5 @@
 .selectedTabContentContainer {
   background-color: $ui-primary;
   overflow-y: auto;
+  padding: 5px;
 }

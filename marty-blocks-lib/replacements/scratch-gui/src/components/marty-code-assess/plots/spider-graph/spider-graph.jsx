@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import styles from "./assessment-spider-graph.css";
+import styles from "./spider-graph.css";
 import bindAll from 'lodash.bindall';
 import { intlShape, injectIntl } from "react-intl";
 import Plotly from "plotly.js"
@@ -13,9 +13,98 @@ const labelsAbbrMap = {
     "Analysis": "Ana",
     "Decomposition": "Dec",
     "Pattern Recognition and Data Representation": "PR",
+    "Algorithms Composite Score": "Alg",
+    "Generalisation and Abstraction Composite Score": "GA",
+    "Analysis Composite Score": "Ana",
+    "Decomposition Composite Score": "Dec",
+    "Pattern Recognition and Data Representation Composite Score": "PR",
 };
 
-class AssessmentSpiderGraph extends React.Component {
+const colorsToLabelsMap = {
+    // averageCompositeScore: "Average",
+    "Algorithms": "algorithmsCompoScore",
+    "Analysis": "analysisCompoScore",
+    "Decomposition": "decompositionCompoScore",
+    "Generalisation and Abstraction": "generalisationAndAbstrCompoScore",
+    "Pattern Recognition and Data Representation": "patternRecAndDataRepCompoScore"
+};
+
+const sizesMap = {
+    small: {
+        margin: {
+            l: 20,
+            r: 20,
+            b: 20,
+            t: 0,
+        },
+        angularaxis: {
+            ticks: "",
+            tickfont: {
+                size: 6,
+            },
+        },
+        radialaxis: {
+            visible: false,
+        },
+        plot: {
+            width: "110px",
+            height: "110px",
+            title: {
+                fontSize: "10px"
+            }
+        }
+    },
+    medium: {
+        margin: {
+            l: 30,
+            r: 30,
+            b: 30,
+            t: 0,
+        },
+        angularaxis: {
+            ticks: "",
+            tickfont: {
+                size: 8,
+            },
+        },
+        radialaxis: {
+            visible: false,
+        },
+        plot: {
+            width: "160px",
+            height: "160px",
+            title: {
+                fontSize: "14px"
+            }
+        }
+    },
+    large: {
+        margin: {
+            l: 80,
+            r: 80,
+            b: 80,
+            t: 80,
+        },
+        angularaxis: {
+            ticks: "outside",
+            tickfont: {
+                size: 12,
+            },
+        },
+        radialaxis: {
+            visible: true,
+        },
+        plot: {
+            width: "100%",
+            height: "100%",
+            title: {
+                fontSize: "16px"
+            }
+        }
+    }
+}
+
+class SpiderGraph extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,16 +142,20 @@ class AssessmentSpiderGraph extends React.Component {
         if (!Array.isArray(dataAsArray)) {
             dataAsArray = [dataAsArray];
         }
-        const isStudentPreview = this.props.isStudentPreview;
+        const size = this.props.size;
 
-        // if there is a colour given, change the colour of the trace
-        if (this.props.colour) {
+        // if there is a colors given, change the colors of the trace
+        console.log("graphdata", this.props.data)
+        console.log("colors", this.props.colors)
+        if (this.props.colors) {
             dataAsArray.forEach(trace => {
                 if (!trace) return;
                 if (!trace.line) {
                     trace.line = {};
                 }
-                trace.line.color = this.props.colour;
+                if (this.props.colors[colorsToLabelsMap[trace.name]]) {
+                    trace.line.color = this.props.colors[colorsToLabelsMap[trace.name]];
+                }
             });
         }
 
@@ -83,12 +176,12 @@ class AssessmentSpiderGraph extends React.Component {
             }
         });
 
-        // if this is a studentPreview, abbreviate the labels
-        if (isStudentPreview) {
+        // if this is a small or medium size, abbreviate the labels
+        if (size === "small" || size === "medium") {
             dataAsArray.forEach(trace => {
                 if (!trace) return;
                 if (trace.type === "scatterpolar") {
-                    trace.text = [...trace.theta];
+                    trace.text = [...trace.theta.map(label => label.replace("Composite Score", ""))];
                     trace.theta = trace.theta.map(label => {
                         return labelsAbbrMap[label] || label;
                     });
@@ -103,14 +196,11 @@ class AssessmentSpiderGraph extends React.Component {
             plot_bgcolor: 'rgba(0,0,0,0)',
             margin: {
                 ...currentLayout.margin,
-                l: isStudentPreview ? 30 : 80,
-                r: isStudentPreview ? 30 : 80,
-                b: isStudentPreview ? 30 : 80,
-                t: isStudentPreview ? 0 : 80,
+                ...sizesMap[size].margin,
             },
             // title: this.props.plotTitle,
             titlefont: {
-                color: this.props.colour || "black"
+                color: this.props.colors["averageCompositeScore"] || "black"
             },
             xaxis: {
                 ...currentLayout.xaxis,
@@ -123,20 +213,18 @@ class AssessmentSpiderGraph extends React.Component {
                 bgcolor: 'rgba(0,0,0,0)',
                 radialaxis: {
                     ...currentLayout.polar?.radialaxis,
-                    visible: !isStudentPreview,
+                    visible: sizesMap[size].radialaxis.visible,
                     range: [0, 100],
                 },
                 angularaxis: {
                     ...currentLayout.polar?.angularaxis,
                     visible: true,
-                    // showticklabels: !isStudentPreview,
-                    ticks: isStudentPreview ? "" : "outside",
-                    // tickcolor: this.props.colour || "black",
+                    ticks: sizesMap[size].angularaxis.ticks,
                     tickfont: {
-                        size: isStudentPreview ? 8 : 12,
+                        size: sizesMap[size].angularaxis.tickfont.size,
                         color: "black",
                     },
-                    linecolor: this.props.colour || "black",
+                    linecolor: this.props.colors["averageCompositeScore"] || "black",
                     linewidth: 5,
                     gridcolor: "#35abc7",
                 },
@@ -145,7 +233,6 @@ class AssessmentSpiderGraph extends React.Component {
     }
 
     render() {
-        const isStudentPreview = this.props.isStudentPreview;
         let hasData = !!this.props.data;
         if (Array.isArray(this.props.data)) {
             hasData = this.props.data.length > 0;
@@ -154,28 +241,30 @@ class AssessmentSpiderGraph extends React.Component {
             <>
                 {!hasData && <Spinner level='warn' large className={spinnerStyles.primary} />}
                 <div className={styles.plotContainer}>
-                    <h3 className={styles.plotTitle}>{this.props.plotTitle}</h3>
-                    <div ref={this.setPlotRef} className={styles.assessmentSpiderGraph} style={{
-                        width: isStudentPreview ? "160px" : "100%",
-                        height: isStudentPreview ? "160px" : "100%",
+                    <h3 className={styles.plotTitle}
+                        style={{
+                            fontSize: sizesMap[this.props.size].plot.title.fontSize,
+                        }}
+                    >{this.props.plotTitle}</h3>
+                    <div ref={this.setPlotRef} className={styles.SpiderGraph} style={{
+                        width: sizesMap[this.props.size].plot.width,
+                        height: sizesMap[this.props.size].plot.height,
                         display: !hasData ? "none" : "block",
                     }} />
                 </div>
             </>
         );
     }
-
 }
 
-AssessmentSpiderGraph.propTypes = {
+SpiderGraph.propTypes = {
     intl: intlShape.isRequired,
     data: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.object,
     ]).isRequired,
     plotTitle: PropTypes.string.isRequired,
-    isStudentPreview: PropTypes.bool, // when true, the plot is rendered smaller and without labels (studen preview is used in the class view with all students in the class)
-    colour: PropTypes.string, // the colour of the plot. usefull for displaying the student's status in the class view (red for not logged in, green for logged in, orange for logged in but inactive)
+    colors: PropTypes.object.isRequired,
 };
 
-export default injectIntl(AssessmentSpiderGraph);
+export default injectIntl(SpiderGraph);

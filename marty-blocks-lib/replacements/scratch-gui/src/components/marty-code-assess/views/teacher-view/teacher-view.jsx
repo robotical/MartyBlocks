@@ -23,9 +23,11 @@ class TeacherView extends React.Component {
         super(props);
         this.state = {
             selectedTab: "Dashboard", // Dashboard, Overview, Students
+            selectedTabProps: {}
         };
         bindAll(this, [
             'onSelectTab',
+            'handleGoToStudentsTab'
         ]);
     }
 
@@ -35,6 +37,10 @@ class TeacherView extends React.Component {
 
     onSelectTab(tab) {
         this.setState({ selectedTab: tab });
+    }
+
+    handleGoToStudentsTab(selectedSession, sessionsArr) {
+        this.setState({ selectedTab: "Students", selectedTabProps: { selectedSession, sessionsArr } });
     }
 
     render() {
@@ -54,10 +60,18 @@ class TeacherView extends React.Component {
                 </CodeAssessHeader>
                 <div className={styles.selectedTabContentContainer}>
                     {this.state.selectedTab === "Dashboard" && <ClassDashboard
+                        {...this.state.selectedTabProps}
                         selectedClassroom={selectedClassroom}
                     />}
-                    {this.state.selectedTab === "Overview" && <ClassOverview selectedClassroom={selectedClassroom} />}
-                    {this.state.selectedTab === "Students" && <ClassStudents selectedClassroom={selectedClassroom} />}
+                    {this.state.selectedTab === "Overview" && <ClassOverview
+                        {...this.state.selectedTabProps}
+                        selectedClassroom={selectedClassroom}
+                        handleGoToStudentsTab={this.handleGoToStudentsTab}
+                    />}
+                    {this.state.selectedTab === "Students" && <ClassStudents
+                        {...this.state.selectedTabProps}
+                        selectedClassroom={selectedClassroom}
+                    />}
                 </div>
             </div>
         );

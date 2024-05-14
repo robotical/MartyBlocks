@@ -1,13 +1,13 @@
 .studentSupportOverviewContainer {
     display: grid;
-    grid-template-columns: min-content repeat(4, minmax(40px, 1fr));
+    grid-template-columns: min-content repeat(4, .6fr);
     grid-template-rows: repeat(2, 1fr);
     border: 1px solid #b5d0ee;
     border-radius: 20px;
     height: 100%;
     position: relative;
+    background-color: white;
 }
-
 
 .championsTitle,
 .supportTitle {

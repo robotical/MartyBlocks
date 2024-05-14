@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./class-average-over-time.css";
+import styles from "./class-average-over-time-expanded.css";
 import bindAll from 'lodash.bindall';
 import { injectIntl } from "react-intl";
 import Plotly from "plotly.js"
@@ -26,13 +26,13 @@ class ClassAverageOverTime extends React.Component {
         }
     }
 
-    componentWillUnmount() {}
+    componentWillUnmount() { }
 
     setPlotRef(plotRef) {
         this.plotRef = plotRef;
     }
 
-    
+
     renderPlot() {
         if (!this.plotRef) return;
         const currentLayout = this.plotRef.layout || {};
@@ -49,6 +49,14 @@ class ClassAverageOverTime extends React.Component {
             trace.y = trace.y.map(score => Math.round(score * 100));
         });
 
+        // decrease bins size of the barchart traces
+        dataAsArray.forEach(trace => {
+            if (!trace) return;
+            if (!trace.type) return;
+            if (trace.type !== "bar") return;
+            trace.width = 0.3;
+        });
+
         const config = {
             displayModeBar: false,
             displaylogo: false,
@@ -57,52 +65,53 @@ class ClassAverageOverTime extends React.Component {
             // staticPlot: true,
         };
 
-        // Use Plotly.react to update the plot data and layout
         Plotly.react(this.plotRef, dataAsArray, {
             ...currentLayout,
-            title: this.props.plotTitle || "",
+            margin: {
+                ...currentLayout.margin,
+                l: 40,
+                r: 20,
+                b: 40,
+                t: 20,
+                pad: 1
+            },
             xaxis: {
-                ...currentLayout.xaxis, // Maintain current xaxis settings
-                // type: 'date',
-                title: 'Session',
-                // rangeselector: {
-                //     buttons: [
-                //         {
-                //             count: 10,
-                //             label: '10m',
-                //             step: 'minute',
-                //             stepmode: 'backward'
-                //         },
-                //         {
-                //             count: 20,
-                //             label: '20m',
-                //             step: 'minute',
-                //             stepmode: 'backward'
-                //         },
-                //         {
-                //             count: 30,
-                //             label: '30m',
-                //             step: 'minute',
-                //             stepmode: 'backward'
-                //         },
-                //         { step: 'all' }
-                //     ]
-                // },
-                // rangeslider: {},
+                ...currentLayout.xaxis,
+                showgrid: false,
+                tickfont: {
+                    size: 10
+                }
             },
             yaxis: {
-                ...currentLayout.yaxis, // Maintain current yaxis settings
+                ...currentLayout.yaxis,
                 title: "Score",
                 autorange: true,
-                type: 'linear'
+                type: 'linear',
+                showgrid: false,
+                tickfont: {
+                    size: 10
+                }
             },
             showlegend: false,
         }, config);
     }
 
     render() {
+        const { intl, plotTitle } = this.props;
         return (
-            <div ref={this.setPlotRef} className={styles.ClassAverageOverTime} />
+            <>
+                <h3 style={{
+                    margin: 0,
+                    marginTop: "10px",
+                    fontSize: "14px"
+                }}>{plotTitle.replace("Composite Score", "")}</h3>
+                <div className={styles.outerContainer}>
+                    <div ref={this.setPlotRef} className={styles.plotDiv} style={{
+                        width: "100%",
+                        height: "200px",
+                    }} />
+                </div>
+            </>
         );
     }
 

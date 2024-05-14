@@ -1,0 +1,37 @@
+
+.outerContainer {
+  background-color: white;
+  border: 1px solid #b5d0ee;
+  border-radius: 20px;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.plotDiv {
+  padding: 5px;
+  height: 100%;
+}
+
+.showAllButtonContainer {
+  position: absolute;
+  right: -8px;
+  top: -10px;
+  z-index: 1;
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  border-radius: 50%;
+  border: 3px solid hsla(215, 100%, 95%, 1);
+  box-sizing: content-box;
+  cursor: pointer;
+}
+
+.showAllButtonIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+}

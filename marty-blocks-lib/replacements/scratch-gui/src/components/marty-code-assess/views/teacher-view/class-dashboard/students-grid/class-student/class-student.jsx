@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./class-student.css";
 import bindAll from 'lodash.bindall';
 import { defineMessages, injectIntl } from "react-intl";
-import AssessmentSpiderGraph from "../../../../../plots/assessment-spider-graph/assessment-spider-graph.jsx";
+import SpiderGraph from "../../../../../plots/spider-graph/spider-graph.jsx";
 import educationIconGreen from "../../../../../../../lib/assets/icon--education-green.svg";
 import educationIconRed from "../../../../../../../lib/assets/icon--education-red.svg";
 
@@ -88,11 +88,11 @@ class ClassStudent extends React.Component {
         let studentJsx = null;
         if (transformedData) {
             const colour = isThereAnActiveSession ? STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP[studentActivityStatus] : "#6d6d6d";
-            studentJsx = <AssessmentSpiderGraph
+            studentJsx = <SpiderGraph
                 data={transformedData}
                 plotTitle={student.firstName + " " + student.lastName}
-                isStudentPreview={true}
-                colour={colour}
+                size="medium"
+                colors={{ "averageCompositeScore": colour }}
             />;
         } else {
             studentJsx = <img className={styles.classStudentImg} src={studentActivityStatus === StudentStatusEnum.ACTIVE ? educationIconGreen : educationIconRed} />;

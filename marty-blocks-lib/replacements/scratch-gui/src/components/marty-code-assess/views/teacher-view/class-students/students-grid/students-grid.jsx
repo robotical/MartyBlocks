@@ -15,53 +15,46 @@ const messages = defineMessages({
     }
 });
 
-const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const Preprocessor = window.codeAssess.codeAssessLib.Preprocessor;
+const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
 
 class StudentsGrid extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoading: false,
+            sessionDataGroupedByStudent: {},
         };
         bindAll(this, [
         ]);
     }
 
     componentDidMount() {
-        const asyncFunc = async () => {
-            this.setState({ isLoading: true });
-            // fetch all student data for all sessions
-            const updatedClassroom = await codeAssessClientFacade.fetchAllSessionData();
-            const allSessions = updatedClassroom.sessions;
-            const allStudentSessionData = allSessions.map(s => s.studentSessionData).flat();
-            console.log("allSessions", allSessions);
-            const sessionsByStudent = {};
-
-            
-
-            this.setState({ isLoading: false });
-        }
-        // this should update the main classroom object and so we should have all data available
-        // the data must be analysed on this level so we can compare them with each other
-        // the colour is decided on this level
-        asyncFunc();
     }
 
+    onStudentClick(studentId) {
+        this.props.onStudentClick(studentId);
+    }
+
+
     render() {
-        const { selectedClassroom, students } = this.props;
+        const { students, sessionsArr } = this.props;
         if (!students) {
             return null;
         }
 
+        const sessionDataGroupedByStudent = DataTransformations.getGraphDataWithColorsForStudents(this.props.sessionsArr);
         return (
             this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <div className={styles.classStudents}>
                 {students.length === 0 && <div className={styles.noStudents}>There are no students in this class</div>}
                 {students.map((student) => {
+                    const studentData = sessionDataGroupedByStudent[student.id];
                     return <ClassStudent
                         key={student.id}
                         student={student}
-                        selectedClassroom={selectedClassroom}
+                        studentGraphData={studentData?.graphData || {}}
+                        colors={studentData?.colors || {}}
+                        onClick={() => {}}
                     />
                 })}
             </div>

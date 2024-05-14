@@ -9,13 +9,11 @@ import TimelineSessions from "./timeline-sessions/timeline-sessions.jsx";
 import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
 import StudentSupportOverview from "../student-support-overview/student-support-overview.jsx";
-import ClassAverageSpider from "../class-average-spider/class-average-spider.jsx";
-import ClassAverageOverTime from "../class-average-over-time/class-average-over-time.jsx";
+import ClassAverageSpider from "../../../plots/class-average-spider/class-average-spider.jsx";
+import ClassAverageOverTime from "../../../plots/class-average-over-time/class-average-over-time.jsx";
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
-
-const Preprocessor = window.codeAssess.codeAssessLib.Preprocessor;
-const XAxisLabelEnum = window.codeAssess.codeAssessLib.XAxisLabelEnum;
+const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
 
 const messages = defineMessages({
     tutorials: {
@@ -38,7 +36,8 @@ class ClassOverview extends React.Component {
             "handleSessionSelect",
             "handleAddNewSessionNote",
             "handleAddNewSessionAnnouncement",
-            "reselectSession"
+            "reselectSession",
+            "onShowAllSupportChampionsClick"
         ]);
     }
 
@@ -108,6 +107,10 @@ class ClassOverview extends React.Component {
         codeAssessClientFacade.addSessionAnnouncement(announcement, announcementFile, this.state.selectedSession.id);
     }
 
+    onShowAllSupportChampionsClick() {
+        this.props.handleGoToStudentsTab(this.state.selectedSession, this.state.sessionsArr);
+    }
+
     render() {
         const { intl, selectedClassroom } = this.props;
 
@@ -125,17 +128,24 @@ class ClassOverview extends React.Component {
                     <>
                         <div className={styles.spiderGraphContainer}>
                             <ClassAverageSpider
-                                data={convertRawDataToSpiderGraphData(this.state.sessionsArr)}
+                                data={DataTransformations.convertSessionsToSpiderGraphData(this.state.sessionsArr, true)}
+                                rawSessionData={this.state.sessionsArr}
                                 isMinimised={true}
                             />
                         </div>
                         <div className={styles.supportChampionsContainer}>
-                            <StudentSupportOverview />
+                            <StudentSupportOverview
+                                allSessions={this.state.sessionsArr}
+                                students={selectedClassroom.students}
+                                onShowAllClick={this.onShowAllSupportChampionsClick}
+                            />
                         </div>
                         <div className={styles.separator}></div>
                         <div className={styles.progressOverTimeContainer}>
                             <ClassAverageOverTime
-                                data={convertRawDataToLineGraphData(this.state.sessionsArr, this.state.selectedSession?.title !== "All__Time")}
+                                data={DataTransformations.convertSessionsToLineGraphData(this.state.sessionsArr, this.state.selectedSession?.title !== "All__Time")}
+                                rawSessionData={this.state.sessionsArr}
+                                isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                             />
                         </div>
                         <div className={styles.notesContainer}>
@@ -172,63 +182,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview));
-
-
-/**
- * Converts raw student session data to spider graph data.
- */
-function convertRawDataToSpiderGraphData(sessionsArr) {
-    const preprocessor = new Preprocessor(sessionsArr);
-    const transformedData = preprocessor
-        .sortData()
-        .calculateAverageGivenTimeWindow(10, 5, "minutes")
-        .normaliseScores()
-        .exportToSpiderGraphData([
-            "Algorithms Composite Score",
-            "Generalisation and Abstraction Composite Score",
-            "Analysis Composite Score",
-            "Decomposition Composite Score",
-            "Pattern Recognition and Data Representation Composite Score",
-
-            // "Comments",
-            // "Conditionals",
-            // "Data Types",
-            // "Debugging",
-            // "Function Reuse",
-            // "Functions",
-            // "Functions with Arguments",
-            // "Loops",
-            // "Naming",
-            // "Operators",
-            // "Parallelism",
-            // "Sequencing",
-            // "Synchronization and Messages",
-            // "Variables Instead of Literals",
-            // "Variables and Data Structures"
-        ], "scores", true);
-
-    return transformedData;
-}
-
-
-/**
- * Converts raw data to line graph data.
- */
-function convertRawDataToLineGraphData(sessionsArr, isSpecificSession) {
-    const processor = new Preprocessor(sessionsArr);
-    let linegraphData = processor
-        .sortData()
-        .calculateCompositeScoreOverTime()
-        .normaliseScores();
-    if (isSpecificSession) {
-        linegraphData.calculateMovingMaxBasedOnDates(.9, "minutes");
-    } else {
-        linegraphData.calculateMovingMaxBasedOnSessions(XAxisLabelEnum.TITLES);
-    }
-    linegraphData = linegraphData.calculateLeakyIntegrator(.1, .5, 0.01, 0.1, 0.01, 1)
-        .exportToLeakyIntegratorData([
-            "Composite"
-        ]);
-
-    return linegraphData;
-}

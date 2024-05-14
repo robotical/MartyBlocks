@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import styles from "./assessment-over-time-line-graph.css";
+import styles from "./leaky-line-graph.css";
 import bindAll from 'lodash.bindall';
 import { intlShape, injectIntl } from "react-intl";
 import Plotly from "plotly.js"
 
-class AssessmentOverTimeLineGraph extends React.Component {
+class LeakyLineGraph extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -94,13 +94,13 @@ class AssessmentOverTimeLineGraph extends React.Component {
 
     render() {
         return (
-            <div ref={this.setPlotRef} className={styles.assessmentOverTimeLineGraph} />
+            <div ref={this.setPlotRef} className={styles.LeakyLineGraph} />
         );
     }
 
 }
 
-AssessmentOverTimeLineGraph.propTypes = {
+LeakyLineGraph.propTypes = {
     intl: intlShape.isRequired,
     data: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
@@ -109,4 +109,4 @@ AssessmentOverTimeLineGraph.propTypes = {
     plotTitle: PropTypes.string.isRequired,
 };
 
-export default injectIntl(AssessmentOverTimeLineGraph);
+export default injectIntl(LeakyLineGraph);

@@ -1,0 +1,16 @@
+.plotContainer {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-rows: min-content max-content;
+  height: min-content;
+  width: min-content;
+}
+
+.plotTitle {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
