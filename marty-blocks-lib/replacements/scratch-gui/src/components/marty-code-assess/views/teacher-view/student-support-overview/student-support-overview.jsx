@@ -99,6 +99,7 @@ class StudentSupportOverview extends React.Component {
                 const student = this.state.championStudents[studentIdx];
                 if (!student) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}></div>;
                 const studentObj = students.find(s => s.id === student.studentId);
+                if (!studentObj) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}></div>;
                 const studentName = studentObj.firstName[0] + studentObj.lastName[0];
                 return <div key={student.studentId} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}>
                     <StudentPieChart

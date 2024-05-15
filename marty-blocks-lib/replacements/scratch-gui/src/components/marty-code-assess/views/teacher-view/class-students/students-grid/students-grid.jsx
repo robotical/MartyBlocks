@@ -54,7 +54,7 @@ class StudentsGrid extends React.Component {
                         student={student}
                         studentGraphData={studentData?.graphData || {}}
                         colors={studentData?.colors || {}}
-                        onClick={() => {}}
+                        onClick={() => this.props.onStudentClick(student.id)}
                     />
                 })}
             </div>

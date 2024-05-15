@@ -6,8 +6,10 @@ import StudentsColorCoding from './students-color-coding/students-color-coding.j
 import TimelineSessions from '../class-overview/timeline-sessions/timeline-sessions.jsx';
 import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
+import StudentOverview from './student-overview/student-overview.jsx';
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
+const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
 
 export default class ClassStudents extends React.Component {
     constructor(props) {
@@ -17,12 +19,17 @@ export default class ClassStudents extends React.Component {
             sortedStudents: this.props.selectedClassroom?.students || [],
             selectedSession: this.props.selectedSession || null,
             sessionsArr: this.props.sessionsArr || [],
+            studentSessionsArr: [],
             isLoading: false,
+            currentContent: "grid", // "grid" || "studentProfile"
+            selectedStudentId: null,
+            selectedStudentName: null
         }
 
         bindAll(this, [
             "handleSessionSelect",
-            "reselectSession"
+            "reselectSession",
+            "onStudentClick",
         ]);
     }
 
@@ -47,7 +54,6 @@ export default class ClassStudents extends React.Component {
          * data of the props.classrooms.sessions. We call this function when componentDidUpdate and the classroom has been updated
          */
         if (this.state.selectedSession && this.state.selectedSession.id && this.props.selectedClassroom) {
-            console.log("reselectSession");
             const selectedSession = this.props.selectedClassroom.sessions.find(s => s.id === this.state.selectedSession.id);
             this.setState({ selectedSession, sessionsArr: [selectedSession] });
         }
@@ -82,6 +88,22 @@ export default class ClassStudents extends React.Component {
         }
     }
 
+    onStudentClick(studentId) {
+        const groupedDataByStudent = DataTransformations.groupSessionsByStudents(this.state.sessionsArr);
+        const studentData = groupedDataByStudent[studentId];
+        const student = this.state.sortedStudents.find(s => s.id === studentId)
+        let studentName = "Student";
+        if (student) {
+            studentName = student?.firstName + " " + student?.lastName;
+        }
+        this.setState({
+            currentContent: "studentProfile",
+            studentSessionsArr: studentData,
+            selectedStudentId: studentId,
+            selectedStudentName: studentName
+        });
+    }
+
     render() {
         const { selectedClassroom } = this.props;
 
@@ -91,9 +113,6 @@ export default class ClassStudents extends React.Component {
 
         const sessions = selectedClassroom.sessions;
 
-        console.log("this.state.selectedSession", this.state.selectedSession);
-        console.log("this.state.sessionsArr", this.state.sessionsArr);
-        console.log("this.state.sortedStudents", this.state.sortedStudents);
         return <div className={styles.classStudentsContainer}>
             <div className={styles.sessionTimelineContainer}>
                 <TimelineSessions
@@ -102,16 +121,28 @@ export default class ClassStudents extends React.Component {
                     selectedSession={this.state.selectedSession}
                 />
             </div>
-            <div className={styles.studentsGridContainer}>
-                <h3 className={styles.studentsGridTitle}>Student Competency Levels</h3>
-                <StudentsColorCoding />
-                {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> :
-                    <StudentsGrid
-                        sessionsArr={this.state.sessionsArr}
-                        students={this.state.sortedStudents}
-                        onStudentClick={() => { }}
-                    />}
-            </div>
+            {this.state.currentContent === "grid" ?
+                <div className={styles.studentsGridContainer}>
+                    <h3 className={styles.studentsGridTitle}>Student Competency Levels</h3>
+                    <StudentsColorCoding />
+                    {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> :
+                        <StudentsGrid
+                            sessionsArr={this.state.sessionsArr}
+                            students={this.state.sortedStudents}
+                            onStudentClick={this.onStudentClick}
+                        />
+                    }
+                </div> : <div className={styles.studentProfileContainer}>
+                    {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> :
+                        <StudentOverview
+                            studentSessionsArr={this.state.studentSessionsArr}
+                            isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
+                            selectedClassroom={selectedClassroom}
+                            selectedStudentId={this.state.selectedStudentId}
+                            selectedStudentName={this.state.selectedStudentName}
+                        />
+                    }
+                </div>}
         </div>
     }
 }

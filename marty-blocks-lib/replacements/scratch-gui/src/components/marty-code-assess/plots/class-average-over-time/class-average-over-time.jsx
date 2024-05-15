@@ -86,7 +86,7 @@ class ClassAverageOverTime extends React.Component {
             title: this.props.plotTitle || "",
             xaxis: {
                 ...currentLayout.xaxis,
-                title: 'Session',
+                // title: 'Session',
                 showgrid: false,
                 tickfont: {
                     size: 10

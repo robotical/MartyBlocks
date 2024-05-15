@@ -57,7 +57,7 @@ class LeakyLineGraph extends React.Component {
             xaxis: {
                 ...currentLayout.xaxis, // Maintain current xaxis settings
                 // type: 'date',
-                title: 'Session',
+                // title: 'Session',
                 // rangeselector: {
                 //     buttons: [
                 //         {

@@ -1,18 +1,13 @@
 .overviewContainer {
   display: grid;
   grid-template-areas:
-    "sessionsTimeline sessionsTimeline sessionsTimeline sessionsTimeline"
     "spiderGraph supportChampions separator notes"
-    "progressOverTime progressOverTime separator announcements";
+    "progressOverTime progressOverTime separator notes";
   grid-template-columns: min-content min-content 1px 1fr;
-  grid-template-rows: min-content 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   row-gap: 10px;
   column-gap: 10px;
   height: 100%;
-}
-
-.sessionTimelineContainer {
-  grid-area: sessionsTimeline;
 }
 
 .spiderGraphContainer {
@@ -34,8 +29,4 @@
 
 .notesContainer {
   grid-area: notes;
-}
-
-.announcementsContainer {
-  grid-area: announcements;
 }
