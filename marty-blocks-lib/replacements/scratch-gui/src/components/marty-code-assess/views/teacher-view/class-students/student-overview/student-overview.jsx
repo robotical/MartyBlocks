@@ -4,12 +4,12 @@ import bindAll from 'lodash.bindall';
 import { defineMessages, injectIntl } from "react-intl";
 import { activateDeck } from "../../../../../../reducers/cards.js";
 import { connect } from "react-redux";
-import NotesAnnouncementsBox from "../../../../notes-announcements-box/notes-announcements-box.jsx";
 import Spinner from '../../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../../spinner/spinner.css';
 import ClassAverageSpider from "../../../../plots/class-average-spider/class-average-spider.jsx";
 import ClassAverageOverTime from "../../../../plots/class-average-over-time/class-average-over-time.jsx";
 import StudentBadges from "../../../../student-badges/student-badges.jsx";
+import CodeSubmissionBox from "./code-submission-box/code-submission-box.jsx";
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
@@ -33,11 +33,22 @@ class ClassOverview extends React.Component {
         ]);
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        const { isSpecificSession, selectedStudentId } = this.props;
+        // fetch code submissions of selected student
+        const asyncFunc = async () => {
+            const updatedClassroom = await codeAssessClientFacade.fetchStudentCodeSubmissions(selectedStudentId);
+            const codeSubmissions = [];
+
+            console.log("updatedClassroom", updatedClassroom)
+        }
+
+        asyncFunc();
+    }
 
     componentWillUnmount() { }
 
-    componentDidUpdate(prevProps, prevState) {}
+    componentDidUpdate(prevProps, prevState) { }
 
 
     render() {
@@ -74,11 +85,9 @@ class ClassOverview extends React.Component {
                             />
                         </div>
                         <div className={styles.notesContainer}>
-                            <NotesAnnouncementsBox
+                            <CodeSubmissionBox
                                 title="Code Submissions"
                                 items={this.state.selectedSession?.notes || []}
-                                onAddNewItem={(note, noteFile) => { }}
-                                disabled={true}
                             />
                         </div>
                     </>
