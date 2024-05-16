@@ -32,7 +32,9 @@ export default class CodeSubmissionModal extends React.Component {
         const { codeSubmission } = this.props;
 
         return <div className={styles.codeSubmissionModalContainer}>
-            <div className={styles.codeArea}></div>
+            <div className={styles.codeArea}>
+
+            </div>
             <div className={styles.explanationArea}>
                 <span className={styles.explanationTitle}>{codeSubmission.title}</span>
                 <div className={styles.explanationText}>{codeSubmission.explanation} - Explanation</div>
