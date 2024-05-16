@@ -396,10 +396,10 @@ const doneCreatingProject = (id, loadingState) => {
 };
 
 
-window.addEventListener('message', (event) => {
+window.addEventListener('message', async (event) => {
     if (event.data && event.data.codeSubmissionData) {
-        console.log("message received with codeSubmissionData", event.data.codeSubmissionData)
-        onFetchedProjectData(event.data.data, LoadingState.FETCHING_NEW_DEFAULT);
+        console.log("received codeSumbission data")
+        vm.loadProject(event.data.codeSubmissionData);
     }
 });
 
