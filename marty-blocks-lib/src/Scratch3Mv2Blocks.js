@@ -13,7 +13,7 @@ const { Project } = require("@robotical/scratch-to-python-transpiler");
 mv2Interface = new Mv2Interface();
 codeAssess = new CodeAssess();
 mstTesting = new MSTTesting(mv2Interface);
-martyMachine = new MartyMachine();
+// martyMachine = new MartyMachine();
 pythonTranspiler = Project;
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality

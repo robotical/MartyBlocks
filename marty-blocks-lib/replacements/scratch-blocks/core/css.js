@@ -848,6 +848,7 @@
  
    /* Category tree in Toolbox. */
    '.blocklyToolboxDiv {',
+     'display: none;',
      'background-color: $colour_toolbox;',
      'color: $colour_toolboxText;',
      'overflow-x: visible;',

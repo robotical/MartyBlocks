@@ -184,6 +184,12 @@ cpToDist () {
     cp -r $gui_original/build/* ./dist
 }
 
+cpToPublic() {
+    cdhome
+    rm -rf public/*
+    cp -r $gui_original/build/* ./public
+}
+
 buildBlocks() {
     local NODE_ENV="${1:-development}"
     cd $blocks_original && ln -s $(npm root)/google-closure-library ../closure-library; NODE_ENV=$NODE_ENV npm run prepublish

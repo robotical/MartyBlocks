@@ -1,0 +1,1 @@
+To deploy build the project and copy the files from gui to public (use cpToPublic). Then firebase deploy. The site is

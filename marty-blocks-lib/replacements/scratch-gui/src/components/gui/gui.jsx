@@ -238,39 +238,7 @@ const GUIComponent = props => {
           />
         ) : null}
         <KeyboardCaller />
-        <MenuBar
-          accountNavOpen={accountNavOpen}
-          authorId={authorId}
-          authorThumbnailUrl={authorThumbnailUrl}
-          authorUsername={authorUsername}
-          canChangeLanguage={canChangeLanguage}
-          canChangeTheme={canChangeTheme}
-          canCreateCopy={canCreateCopy}
-          canCreateNew={canCreateNew}
-          canEditTitle={canEditTitle}
-          canManageFiles={canManageFiles}
-          canRemix={canRemix}
-          canSave={canSave}
-          canShare={canShare}
-          className={styles.menuBarPosition}
-          enableCommunity={enableCommunity}
-          isShared={isShared}
-          isTotallyNormal={isTotallyNormal}
-          logo={logo}
-          renderLogin={renderLogin}
-          showComingSoon={showComingSoon}
-          onClickAbout={onClickAbout}
-          onClickAccountNav={onClickAccountNav}
-          onClickLogo={onClickLogo}
-          onCloseAccountNav={onCloseAccountNav}
-          onLogOut={onLogOut}
-          onOpenRegistration={onOpenRegistration}
-          onProjectTelemetryEvent={onProjectTelemetryEvent}
-          onSeeCommunity={onSeeCommunity}
-          onShare={onShare}
-          onStartSelectingFileUpload={onStartSelectingFileUpload}
-          onToggleLoginOpen={onToggleLoginOpen}
-        />
+       
         <Box className={styles.bodyWrapper}>
           <Box className={styles.flexWrapper}>
             <Box className={styles.editorWrapper}>
@@ -282,10 +250,8 @@ const GUIComponent = props => {
                 selectedTabPanelClassName={tabClassNames.tabPanelSelected}
                 onSelect={onActivateTab}
               >
-                {lessonsVisible ? (
-                  <Lessons />
-                ) : null}
-                <TabList className={tabClassNames.tabList}>
+                
+                {/* <TabList className={tabClassNames.tabList}>
                   <Tab className={tabClassNames.tab}>
                     <img
                       draggable={false}
@@ -370,7 +336,7 @@ const GUIComponent = props => {
                     <Controls vm={vm} />
                     <StageHeader stageSize={stageSize} vm={vm} />
                   </Box>
-                </TabList>
+                </TabList> */}
                 <TabPanel className={tabClassNames.tabPanel}>
                   <Box className={styles.blocksWrapper}>
                     <Blocks
@@ -386,7 +352,7 @@ const GUIComponent = props => {
                       vm={vm}
                     />
                   </Box>
-                  <Box className={styles.extensionButtonContainer}>
+                  {/* <Box className={styles.extensionButtonContainer}>
                     <button
                       className={styles.extensionButton}
                       title={intl.formatMessage(messages.addExtension)}
@@ -398,7 +364,7 @@ const GUIComponent = props => {
                         src={addExtensionIcon}
                       />
                     </button>
-                  </Box>
+                  </Box> */}
                   {/* below box is perfect for sensor display */}
                   <Box className={styles.monitorWrapper}>
                     <MonitorList
@@ -410,7 +376,7 @@ const GUIComponent = props => {
                     <Watermark />
                   </Box>
                 </TabPanel>
-                <TabPanel className={tabClassNames.tabPanel}>
+                {/* <TabPanel className={tabClassNames.tabPanel}>
                   {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
                 </TabPanel>
                 <TabPanel className={tabClassNames.tabPanel}>
@@ -421,15 +387,15 @@ const GUIComponent = props => {
                 </TabPanel>
                 <TabPanel className={tabClassNames.tabPanel}>
                   {codeAssessTabVisible ? <CodeAssessTab vm={vm} /> : null}
-                </TabPanel>
-                <TabPanel
+                </TabPanel> */}
+                {/* <TabPanel
                   className={[
                     tabClassNames.tabPanel,
                     styles["tab-panel-height-100"],
                   ].join(" ")}
                 >
                   {saveLoadTabVisible ? <SaveLoadTab vm={vm} /> : null}
-                </TabPanel>
+                </TabPanel> */}
               </Tabs>
               {/* {backpackVisible ? (
                                 <Backpack host={backpackHost} />

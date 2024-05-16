@@ -89,7 +89,7 @@ Blockly.Toolbox = function(workspace) {
  * This is the sum of the width of the flyout (300) and the category menu (60).
  * @type {number}
  */
-Blockly.Toolbox.prototype.width = 360;
+Blockly.Toolbox.prototype.width = 0;
 
 /**
  * Height of the toolbox, which changes only in horizontal layout.
