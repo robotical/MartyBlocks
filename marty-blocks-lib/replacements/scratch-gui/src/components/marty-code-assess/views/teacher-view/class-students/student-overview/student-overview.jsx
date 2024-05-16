@@ -9,7 +9,7 @@ import spinnerStyles from '../../../../../spinner/spinner.css';
 import ClassAverageSpider from "../../../../plots/class-average-spider/class-average-spider.jsx";
 import ClassAverageOverTime from "../../../../plots/class-average-over-time/class-average-over-time.jsx";
 import StudentBadges from "../../../../student-badges/student-badges.jsx";
-import CodeSubmissionBox from "./code-submission-box/code-submission-box.jsx";
+import CodeSubmissionBox from "./code-submissions-box/code-submission-box.jsx";
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
@@ -28,6 +28,7 @@ class ClassOverview extends React.Component {
 
         this.state = {
             isLoading: false,
+            codeSubmissions: []
         };
         bindAll(this, [
         ]);
@@ -38,9 +39,11 @@ class ClassOverview extends React.Component {
         // fetch code submissions of selected student
         const asyncFunc = async () => {
             const updatedClassroom = await codeAssessClientFacade.fetchStudentCodeSubmissions(selectedStudentId);
-            const codeSubmissions = [];
-
+            const selectedStudent = updatedClassroom.students.find(s => s.id === selectedStudentId);
             console.log("updatedClassroom", updatedClassroom)
+            console.log("selectedStudent", selectedStudent)
+            if (!selectedStudent) return;
+            this.setState({ codeSubmissions: selectedStudent.studentCodeSubmissions })
         }
 
         asyncFunc();
@@ -87,7 +90,8 @@ class ClassOverview extends React.Component {
                         <div className={styles.notesContainer}>
                             <CodeSubmissionBox
                                 title="Code Submissions"
-                                items={this.state.selectedSession?.notes || []}
+                                items={this.state.codeSubmissions}
+                                studentName={selectedStudentName}
                             />
                         </div>
                     </>

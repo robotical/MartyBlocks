@@ -1,0 +1,30 @@
+.codeSubmissionModalContainer {
+    display: grid;
+    grid-template-areas: "code explanation";
+    column-gap: 10px;
+    background: hsla(215, 100%, 95%, 1);
+}
+
+.codeArea,
+.explanationArea {
+    border: 1px solid #b5d0ee;
+    border-radius: 20px;
+    padding: 15px;
+    background: white;
+}
+
+.codeArea {
+    grid-area: code;
+}
+
+.explanationArea {
+    grid-area: explanation;
+}
+
+.explanationTitle {
+
+}
+
+.explanationText {
+
+}
