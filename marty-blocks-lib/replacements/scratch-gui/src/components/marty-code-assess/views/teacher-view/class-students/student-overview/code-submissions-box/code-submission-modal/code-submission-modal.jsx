@@ -39,6 +39,7 @@ export default class CodeSubmissionModal extends React.Component {
     }
 
     async onIframeLoad() {
+        console.log("iframe loaded, sending message")
         // send the project data down to iframe
         const projectIdInDB = "AdditionWithMarty";
         const dbUrl =
@@ -50,7 +51,7 @@ export default class CodeSubmissionModal extends React.Component {
         }
         const blob = await fetch(projectBase64String.data);
         const arrayBuffer = await blob.arrayBuffer();
-        this.iframeRef.contentWindow.postMessage({ data: arrayBuffer });
+        this.iframeRef.contentWindow.postMessage({ codeSubmissionData: arrayBuffer }, 'https://code-assess-playground.web.app/');
     }
 
 
