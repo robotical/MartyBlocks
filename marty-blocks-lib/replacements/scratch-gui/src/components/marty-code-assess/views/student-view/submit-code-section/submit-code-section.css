@@ -1,0 +1,14 @@
+.submitCodeSectionContainer {
+    position: relative;
+    height: 100%;
+}
+
+.iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.spinner {
+    border-color: hsla(215, 100%, 65%, 1) !important;
+}

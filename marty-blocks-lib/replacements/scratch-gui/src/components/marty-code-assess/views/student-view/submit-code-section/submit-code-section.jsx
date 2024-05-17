@@ -2,28 +2,59 @@ import React from "react";
 import styles from "./submit-code-section.css";
 import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
+import bindAll from "lodash.bindall";
+import { blobToBase64 } from '../../../../../lib/save-load-utils.js';
 
 export default class SubmitCodeSection extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isLoading: false,
+            isLoading: true,
         }
+
+        bindAll(this, [
+            "onIframeLoad",
+            "setIframeRef",
+        ]);
+
     }
 
     componentDidMount() {
-        // load project from autosave
-        const asyncFunc = async () => {
+    }
 
-            const data = await mv2Interface.loadScratchFile("__autosave");
+    setIframeRef(iframeRef) {
+        this.iframeRef = iframeRef;
+    }
+
+    async onIframeLoad() {
+        console.log("iframe loaded, sending message")
+        const sb3Content = await vm.saveProjectSb3();
+        const dataContents = await blobToBase64(sb3Content);
+        const data = { contents: dataContents }
+        // const data = await mv2Interface.loadScratchFile("__autosave");
+        if (data && data.contents) {
+            const blob = await fetch(data.contents);
+            const arrayBuffer = await blob.arrayBuffer();
+            // wait a few more seconds to make sure the UI is loaded
+            await new Promise(resolve => setTimeout(resolve, 8000))
+            this.iframeRef.contentWindow.postMessage({ codeSubmissionData: arrayBuffer }, 'https://code-assess-playground.web.app/');
+            this.setState({ isLoading: false });
+        } else {
+            this.setState({ isLoading: false });
         }
-
-
-        asyncFunc();
     }
 
     render() {
-        return <div className={styles.submitCodeSectionContainer}> </div>
+        return <div className={styles.submitCodeSectionContainer}>
+            {this.state.isLoading && <Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} />}
+            <iframe
+                ref={this.setIframeRef}
+                src='https://code-assess-playground.web.app'
+                onLoad={this.onIframeLoad}
+                style={{ visibility: this.state.isLoading ? "hidden" : "visible" }}
+                className={styles.iframe}
+            />
+        </div>
     }
 }

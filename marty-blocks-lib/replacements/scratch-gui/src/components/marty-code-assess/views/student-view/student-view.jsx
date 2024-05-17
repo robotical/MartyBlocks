@@ -6,6 +6,7 @@ import AccountButton from "../../account/account-button/account-button.jsx";
 import CodeAssessHeader from "../../header/header.jsx";
 import CodeAssessHeaderButton from "../../header/header-button/header-button.jsx";
 import JoinSessionButton from "./join-session-button/join-session-button.jsx";
+import SubmitCodeSection from "./submit-code-section/submit-code-section.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -52,7 +53,7 @@ class StudentView extends React.Component {
                 </CodeAssessHeader>
                 <div className={styles.selectedTabContentContainer}>
                     {this.state.selectedTab === "Class Hub" && <div>Class Hub</div>}
-                    {this.state.selectedTab === "Submit Code" && <div>Submit Code</div>}
+                    {this.state.selectedTab === "Submit Code" && <SubmitCodeSection />}
                 </div>
             </div>
         );

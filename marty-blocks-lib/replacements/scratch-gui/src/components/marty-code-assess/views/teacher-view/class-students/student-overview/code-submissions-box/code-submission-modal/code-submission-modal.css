@@ -18,6 +18,7 @@
     grid-area: code;
     padding: 0;
     overflow: hidden;
+    position: relative;
 }
 
 .explanationArea {
@@ -36,4 +37,8 @@
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.spinner {
+    border-color: hsla(215, 100%, 65%, 1) !important;
 }
