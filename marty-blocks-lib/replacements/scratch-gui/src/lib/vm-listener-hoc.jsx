@@ -55,16 +55,16 @@ const vmListenerHOC = function (WrappedComponent) {
             this.assessStudent = debounce(this.assessStudent.bind(this), 10000);
         }
         componentDidMount() {
-            if (this.props.attachKeyboardEvents) {
-                document.addEventListener('keydown', this.handleKeyDown);
-                document.addEventListener('keyup', this.handleKeyUp);
-            }
-            this.props.vm.postIOData('userData', { username: this.props.username });
+            // if (this.props.attachKeyboardEvents) {
+            //     document.addEventListener('keydown', this.handleKeyDown);
+            //     document.addEventListener('keyup', this.handleKeyUp);
+            // }
+            // this.props.vm.postIOData('userData', { username: this.props.username });
         }
         componentDidUpdate(prevProps) {
-            if (prevProps.username !== this.props.username) {
-                this.props.vm.postIOData('userData', { username: this.props.username });
-            }
+            // if (prevProps.username !== this.props.username) {
+            //     this.props.vm.postIOData('userData', { username: this.props.username });
+            // }
 
             // Re-request a targets update when the shouldUpdateTargets state changes to true
             // i.e. when the editor transitions out of fullscreen/player only modes
@@ -74,10 +74,10 @@ const vmListenerHOC = function (WrappedComponent) {
         }
         componentWillUnmount() {
             this.props.vm.removeListener('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
-            if (this.props.attachKeyboardEvents) {
-                document.removeEventListener('keydown', this.handleKeyDown);
-                document.removeEventListener('keyup', this.handleKeyUp);
-            }
+            // if (this.props.attachKeyboardEvents) {
+            //     document.removeEventListener('keydown', this.handleKeyDown);
+            //     document.removeEventListener('keyup', this.handleKeyUp);
+            // }
         }
         handleProjectRunStart() {
             // eslint-disable-next-line no-undef
@@ -87,9 +87,9 @@ const vmListenerHOC = function (WrappedComponent) {
             if (this.props.shouldUpdateProjectChanged && !this.props.projectChanged) {
                 this.props.onProjectChanged();
             }
-            this.autoSaveProject();
-            this.updatePythonModalCode();
-            this.assessStudent();
+            // this.autoSaveProject();
+            // this.updatePythonModalCode();
+            // this.assessStudent();
         }
         autoSaveProject() {
             // eslint-disable-next-line no-console

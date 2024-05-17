@@ -185,11 +185,16 @@ Blockly.ZoomControls.prototype.position = function() {
       this.left_ -= metrics.flyoutWidth;
     }
   }
-  this.top_ = metrics.viewHeight + metrics.absoluteTop -
-      this.HEIGHT_ - this.bottom_;
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
-    this.top_ -= metrics.flyoutHeight;
-  }
+  console.log("metrics.viewHeight", metrics.viewHeight);
+  console.log("metrics.absoluteTop", metrics.absoluteTop);
+  console.log("this.HEIGHT_", this.HEIGHT_);
+  console.log("this.bottom_", this.bottom_);
+  console.log("metrics.flyoutHeight", metrics.flyoutHeight);
+  this.top_ = 0// metrics.viewHeight //+ metrics.absoluteTop -
+      // this.HEIGHT_ //- this.bottom_;
+  // if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+  //   this.top_ -= metrics.flyoutHeight;
+  // }
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
 };

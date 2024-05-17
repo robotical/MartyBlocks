@@ -372,9 +372,9 @@ const GUIComponent = props => {
                       stageSize={stageDimensions}
                     />
                   </Box>
-                  <Box className={styles.watermark}>
+                  {/* <Box className={styles.watermark}>
                     <Watermark />
-                  </Box>
+                  </Box> */}
                 </TabPanel>
                 {/* <TabPanel className={tabClassNames.tabPanel}>
                   {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
