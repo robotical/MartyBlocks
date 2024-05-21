@@ -1,6 +1,27 @@
 .submitCodeSectionContainer {
     position: relative;
     height: 100%;
+    display: grid;
+    grid-template-areas: "code explanation";
+    grid-template-columns: 1.5fr 1fr;
+    gap: 10px;
+    background: hsla(215, 100%, 95%, 1);
+}
+
+
+.codeArea,
+.explanationArea {
+    border: 1px solid #b5d0ee;
+    border-radius: 20px;
+    padding: 15px;
+    background: white;
+}
+
+.codeArea {
+    grid-area: code;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
 }
 
 .iframe {
@@ -11,4 +32,10 @@
 
 .spinner {
     border-color: hsla(215, 100%, 65%, 1) !important;
+}
+
+/* explanation area */
+.explanationArea {
+    grid-area: explanation;
+    position: relative;
 }

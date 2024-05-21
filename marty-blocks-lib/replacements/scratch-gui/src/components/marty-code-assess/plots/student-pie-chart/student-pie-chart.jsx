@@ -178,9 +178,7 @@ class StudentPieChart extends React.Component {
             dataAsArray.forEach(trace => {
                 if (!trace) return;
                 if (trace.labels) {
-                    console.log("trace.labels", trace.labels)
                     trace.labels = trace.labels.map(label => labelsAbbrMap[label]);
-                    console.log("trace.labels", trace.labels)
                 }
             });
         }

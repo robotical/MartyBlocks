@@ -1,0 +1,38 @@
+.submissionsList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.submission {
+    display: flex;
+    align-items: center;
+}
+
+.fileIcon {
+    width: 25px;
+    height: 25px;
+    margin-right: -11px;
+    z-index: 2;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}
+
+.submissionName {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 3px 5px 5px 10px;
+    background-color: #4caf50;
+    border-radius: 15px;
+    font-size: 10px;
+    color: white;
+
+    display: flex;
+    align-items: center;
+}
+
+.spinner {
+    border-color: black !important;
+}

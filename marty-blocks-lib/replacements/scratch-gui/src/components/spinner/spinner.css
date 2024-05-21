@@ -13,7 +13,7 @@
     border-width: .1875rem;
     border-style: solid;
     border-color: $ui-white-transparent;
-    box-sizing: content-box;
+    box-sizing: content-box !important;
 }
 
 .spinner::before, .spinner::after {
@@ -44,8 +44,8 @@
 }
 
 .large {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 .large::before, .large::after {
@@ -87,6 +87,7 @@
 }
 
 .spinner.primary {
+    box-sizing: content-box;
     /* border-color: $motion-transparent; */
 }
 .spinner.primary::after {

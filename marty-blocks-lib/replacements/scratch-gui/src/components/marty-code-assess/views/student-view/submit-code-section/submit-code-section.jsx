@@ -4,6 +4,7 @@ import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
 import bindAll from "lodash.bindall";
 import { blobToBase64 } from '../../../../../lib/save-load-utils.js';
+import ExplanationArea from "./explanation-area/explanation-area.jsx";
 
 export default class SubmitCodeSection extends React.Component {
     constructor(props) {
@@ -11,6 +12,7 @@ export default class SubmitCodeSection extends React.Component {
 
         this.state = {
             isLoading: true,
+            projectDataContents: null,
         }
 
         bindAll(this, [
@@ -34,6 +36,7 @@ export default class SubmitCodeSection extends React.Component {
         const data = { contents: dataContents }
         // const data = await mv2Interface.loadScratchFile("__autosave");
         if (data && data.contents) {
+            this.setState({ projectDataContents: data.contents });
             const blob = await fetch(data.contents);
             const arrayBuffer = await blob.arrayBuffer();
             // wait a few more seconds to make sure the UI is loaded
@@ -46,15 +49,26 @@ export default class SubmitCodeSection extends React.Component {
     }
 
     render() {
+        const { selectedClassroom, student } = this.props;
+
         return <div className={styles.submitCodeSectionContainer}>
-            {this.state.isLoading && <Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} />}
-            <iframe
-                ref={this.setIframeRef}
-                src='https://code-assess-playground.web.app'
-                onLoad={this.onIframeLoad}
-                style={{ visibility: this.state.isLoading ? "hidden" : "visible" }}
-                className={styles.iframe}
-            />
+            <div className={styles.codeArea}>
+                {this.state.isLoading && <Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} />}
+                <iframe
+                    ref={this.setIframeRef}
+                    src='https://code-assess-playground.web.app'
+                    onLoad={this.onIframeLoad}
+                    style={{ visibility: this.state.isLoading ? "hidden" : "visible" }}
+                    className={styles.iframe}
+                />
+            </div>
+            <div className={styles.explanationArea}>
+                <ExplanationArea
+                    selectedClassroom={selectedClassroom}
+                    student={student}
+                    projectDataContents={this.state.projectDataContents}
+                />
+            </div>
         </div>
     }
 }

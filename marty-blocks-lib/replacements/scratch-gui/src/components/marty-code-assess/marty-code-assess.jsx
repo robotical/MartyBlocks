@@ -10,7 +10,6 @@ import classroomIcon from "../../lib/assets/icon--classroom.svg";
 import Spinner from '../spinner/spinner.jsx';
 import spinnerStyles from '../spinner/spinner.css';
 import { connect } from "react-redux";
-import { activateDeck } from "../../reducers/cards.js";
 import { openTipsLibrary } from '../../reducers/modals';
 import UserLogin from "./user-login/user-login.jsx";
 import TeacherView from "./views/teacher-view/teacher-view.jsx";

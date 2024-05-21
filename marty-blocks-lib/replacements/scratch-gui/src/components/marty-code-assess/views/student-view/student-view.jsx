@@ -53,7 +53,11 @@ class StudentView extends React.Component {
                 </CodeAssessHeader>
                 <div className={styles.selectedTabContentContainer}>
                     {this.state.selectedTab === "Class Hub" && <div>Class Hub</div>}
-                    {this.state.selectedTab === "Submit Code" && <SubmitCodeSection />}
+                    {this.state.selectedTab === "Submit Code" && <SubmitCodeSection
+                        selectedClassroom={selectedClassroom}
+                        student={student}
+                    />
+                    }
                 </div>
             </div>
         );
