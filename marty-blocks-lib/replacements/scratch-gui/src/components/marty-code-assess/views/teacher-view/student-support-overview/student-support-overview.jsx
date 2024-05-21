@@ -44,7 +44,7 @@ class StudentSupportOverview extends React.Component {
                 ...dataWithColors[studentId]
             }
         });
-        dataWithColorsArr.sort((a, b) => a.compositeScores.studentScore.averageCompositeScore - b.compositeScores.studentScore.averageCompositeScore);
+        dataWithColorsArr.sort((a, b) => a.compositeScores.averageCompositeScore - b.compositeScores.averageCompositeScore);
 
         let supportStudents = dataWithColorsArr.slice(0, 5);
         const championStudents = dataWithColorsArr.slice(dataWithColorsArr.length - 5, dataWithColorsArr.length);

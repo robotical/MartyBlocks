@@ -53,19 +53,17 @@ class SortByStudents extends React.Component {
 
         // if the selected sort by is "performance", and the performance of a student changes, we need to sort the students again
         if (this.state.selectedSortBy === SORT_BY_ENUM.PERFORMANCE) {
-            const prevStudents = prevProps.students || [];
-            const students = this.props.students || [];
-            let shouldSort = false;
-            for (const student of students) {
-                const studentId = student.id;
-                const prevStudent = prevStudents.find((student) => student.id === studentId);
-                if (!prevStudent || prevStudent.performance !== student.performance) {
-                    shouldSort = true;
+            const activeSession = this.props.selectedClassroom.activeSession;
+            if (!activeSession) return;
+            // make sure that all students have a studentSessionData array
+            const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([activeSession]);
+            const prevStudentsSorted = sortStudentsByPerformance(dataWithColors, prevProps.students);
+            const studentsSorted = sortStudentsByPerformance(dataWithColors, this.props.students);
+            for (let i = 0; i < studentsSorted.length; i++) {
+                if (studentsSorted[i].id !== prevStudentsSorted[i].id) {
+                    this.props.onStudentsSorted(studentsSorted);
                     break;
                 }
-            }
-            if (shouldSort) {
-                this.sortByPerformance();
             }
         }
     }
@@ -86,10 +84,9 @@ class SortByStudents extends React.Component {
     sortByPerformance() {
         const activeSession = this.props.selectedClassroom.activeSession;
         if (!activeSession) return;
-        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents(allSessions);
-        console.log("dataWithColors", dataWithColors);
-        const sortedStudents = sortStudentsByPerformance(dataWithColors);
-        console.log("sortedStudents", sortedStudents)
+        // make sure that all students have a studentSessionData array
+        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([activeSession]);
+        const sortedStudents = sortStudentsByPerformance(dataWithColors, this.props.students);
         this.props.onStudentsSorted(sortedStudents);
     }
 
@@ -140,14 +137,29 @@ class SortByStudents extends React.Component {
 export default SortByStudents;
 
 
-const sortStudentsByPerformance = (dataWithColors) => {
+const sortStudentsByPerformance = (dataWithColors, students) => {
     const dataWithColorsArr = Object.keys(dataWithColors).map(studentId => {
         return {
             studentId,
             ...dataWithColors[studentId]
         }
     });
-    dataWithColorsArr.sort((a, b) => a.compositeScores.studentScore.averageCompositeScore - b.compositeScores.studentScore.averageCompositeScore);
+    dataWithColorsArr.sort((a, b) => a.compositeScores.averageCompositeScore - b.compositeScores.averageCompositeScore);
+    const sortedStudents = [];
+    for (const studentDataWithColours of dataWithColorsArr) {
+        const studentId = studentDataWithColours.studentId;
+        const student = students.find(student => student.id === studentId);
+        if (student) {
+            sortedStudents.push(student);
+        }
+    }
 
-    return dataWithColorsArr;
+    // go through all the students and add the ones that are not in the sortedStudents array
+    for (const student of students) {
+        if (!sortedStudents.find(sortedStudent => sortedStudent.id === student.id)) {
+            sortedStudents.push(student);
+        }
+    }
+
+    return sortedStudents;
 }
