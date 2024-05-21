@@ -145,8 +145,6 @@ class SpiderGraph extends React.Component {
         const size = this.props.size;
 
         // if there is a colors given, change the colors of the trace
-        console.log("graphdata", this.props.data)
-        console.log("colors", this.props.colors)
         if (this.props.colors) {
             dataAsArray.forEach(trace => {
                 if (!trace) return;

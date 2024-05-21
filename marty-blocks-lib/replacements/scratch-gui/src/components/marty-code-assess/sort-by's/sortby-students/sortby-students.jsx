@@ -7,8 +7,9 @@ const SORT_BY_ENUM = {
     ACTIVITY_STATUS: SORT_BY_OPTIONS[1],
     PERFORMANCE: SORT_BY_OPTIONS[2]
 }
-const StudentStatusEnum = window.codeAssess.codeAssessLib.StudentStatusEnum;
 
+const StudentStatusEnum = window.codeAssess.codeAssessLib.StudentStatusEnum;
+const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
 
 class SortByStudents extends React.Component {
     constructor(props) {
@@ -26,6 +27,49 @@ class SortByStudents extends React.Component {
     componentWillUnmount() {
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        // when the students change we need to sort them again
+        if (prevProps.students !== this.props.students) {
+            this.onSortByChange(this.state.selectedSortBy);
+        }
+
+        // if the selected sort by is "activity status", and the activity status of a student changes, we need to sort the students again
+        if (this.state.selectedSortBy === SORT_BY_ENUM.ACTIVITY_STATUS) {
+            const prevStudents = prevProps.students || [];
+            const students = this.props.students || [];
+            let shouldSort = false;
+            for (const student of students) {
+                const studentId = student.id;
+                const prevStudent = prevStudents.find((student) => student.id === studentId);
+                if (!prevStudent || prevStudent.activityStatus !== student.activityStatus) {
+                    shouldSort = true;
+                    break;
+                }
+            }
+            if (shouldSort) {
+                this.sortByActivityStatus();
+            }
+        }
+
+        // if the selected sort by is "performance", and the performance of a student changes, we need to sort the students again
+        if (this.state.selectedSortBy === SORT_BY_ENUM.PERFORMANCE) {
+            const prevStudents = prevProps.students || [];
+            const students = this.props.students || [];
+            let shouldSort = false;
+            for (const student of students) {
+                const studentId = student.id;
+                const prevStudent = prevStudents.find((student) => student.id === studentId);
+                if (!prevStudent || prevStudent.performance !== student.performance) {
+                    shouldSort = true;
+                    break;
+                }
+            }
+            if (shouldSort) {
+                this.sortByPerformance();
+            }
+        }
+    }
+
     sortByAlphabetical() {
         const students = this.props.students || [];
         const sortedStudents = students.sort((a, b) => {
@@ -39,24 +83,15 @@ class SortByStudents extends React.Component {
         this.props.onStudentsSorted(sortedStudents);
     }
 
-    // sortByPerformance() {
-    //     const students = this.props.students || [];
-    //     // we first need to fetch all student data for these students
-    //     this.setState({ isLoading: true });
-    //     Promise.all(students.map((student) => student.fetchStudentData(this.props.classId)))
-    //         .then((fetchedStudentData) => {
-    //             // now we can sort the students by performance
-    //             console.log("compop", students[0].getCompositeScore(fetchedStudentData[0]));
-    //             const sortedStudents = students.sort((a, b) => {
-    //                 const aStudentData = fetchedStudentData.find((studentData) => studentData.studentId === a.id);
-    //                 const bStudentData = fetchedStudentData.find((studentData) => studentData.studentId === b.id);
-    //                 const aPerformance = a.getCompositeScore(aStudentData);
-    //                 const bPerformance = b.getCompositeScore(bStudentData);
-    //                 return bPerformance - aPerformance;
-    //             });
-    //             this.setState({ sortedStudents, isLoading: false });
-    //         }).catch((err) => console.log(err)).finally(() => this.setState({ isLoading: false }));
-    // }
+    sortByPerformance() {
+        const activeSession = this.props.selectedClassroom.activeSession;
+        if (!activeSession) return;
+        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents(allSessions);
+        console.log("dataWithColors", dataWithColors);
+        const sortedStudents = sortStudentsByPerformance(dataWithColors);
+        console.log("sortedStudents", sortedStudents)
+        this.props.onStudentsSorted(sortedStudents);
+    }
 
     sortByActivityStatus() {
         const students = this.props.students || [];
@@ -86,7 +121,6 @@ class SortByStudents extends React.Component {
     }
 
     render() {
-
         return (
             <div className={styles.sortByStudentsContainer}>
                 <select className={styles.sortBySelect} onChange={(e) => this.onSortByChange(e.target.value)} value={this.state.selectedSortBy}>
@@ -104,3 +138,16 @@ class SortByStudents extends React.Component {
 }
 
 export default SortByStudents;
+
+
+const sortStudentsByPerformance = (dataWithColors) => {
+    const dataWithColorsArr = Object.keys(dataWithColors).map(studentId => {
+        return {
+            studentId,
+            ...dataWithColors[studentId]
+        }
+    });
+    dataWithColorsArr.sort((a, b) => a.compositeScores.studentScore.averageCompositeScore - b.compositeScores.studentScore.averageCompositeScore);
+
+    return dataWithColorsArr;
+}

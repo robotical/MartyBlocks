@@ -28,8 +28,6 @@ class ClassStudent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentActivityStatus: StudentStatusEnum.OFFLINE,
-            fetchedStudentData: null,
         };
         bindAll(this, [
         ]);
@@ -46,10 +44,10 @@ class ClassStudent extends React.Component {
         const { intl, student, selectedClassroom } = this.props;
         const isThereAnActiveSession = !!selectedClassroom.activeSession;
         const studentActivityStatus = student.activityStatus;
-        const studentSessionData = student.studentSessionData.filter(sessionData => sessionData.sessionId === selectedClassroom.activeSession?.id)[0] || [];
+        const studentSessionData = student.studentSessionData.filter(sessionData => sessionData.sessionId === selectedClassroom.activeSession?.id) || [];
         let sessionsArr = [{}];
         if (selectedClassroom.activeSession) {
-            sessionsArr = [{ // this is how the Processor expects the data input
+            sessionsArr = [{ 
                 ...selectedClassroom.activeSession,
                 studentSessionData: studentSessionData,
             }];

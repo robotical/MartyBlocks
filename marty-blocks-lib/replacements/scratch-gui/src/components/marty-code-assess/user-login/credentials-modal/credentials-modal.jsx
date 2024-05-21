@@ -23,12 +23,22 @@ export default class CredentialsModal extends React.Component {
         this.loginWithCredentials = this.loginWithCredentials.bind(this);
     }
 
+    componentDidMount() {
+        const credentials = getCredentialsFromLocalStorage();
+        if (credentials) {
+            console.log("credentials", credentials)
+            this.setState({ credentials: { ...credentials } });
+        }
+    }
+
     async loginWithCredentials() {
         this.setState({ isLoading: true });
         if (this.state.credentials.email && this.state.credentials.pw) {
             const wasUserLoggedIn = await codeAssessClientFacade.logUserIn(ProvidersEnum.MAIL, this.state.credentials.email, this.state.credentials.pw);
             if (!wasUserLoggedIn) {
                 this.setState({ wrongCredentials: true });
+            } else {
+                saveCredentialsToLocalStorage(this.state.credentials.email, this.state.credentials.pw);
             }
         }
         this.setState({ isLoading: false });
@@ -45,6 +55,7 @@ export default class CredentialsModal extends React.Component {
                     className={styles.emailInput}
                     type="text"
                     placeholder="Email"
+                    value={this.state.credentials.email}
                     onChange={(event) => {
                         this.setState({
                             credentials: {
@@ -57,6 +68,7 @@ export default class CredentialsModal extends React.Component {
                 />
                 <input
                     className={styles.passwordInput}
+                    value={this.state.credentials.pw}
                     type="password"
                     placeholder="Password"
                     onChange={(event) => {
@@ -75,4 +87,18 @@ export default class CredentialsModal extends React.Component {
             </div>
         )
     }
+}
+
+
+const saveCredentialsToLocalStorage = (email, pw) => {
+    localStorage.setItem("mb-credentials", JSON.stringify({ email, pw }));
+}
+
+const getCredentialsFromLocalStorage = () => {
+    const credentials = localStorage.getItem("mb-credentials");
+    return credentials ? JSON.parse(credentials) : null;
+}
+
+export const removeCredentialsFromLocalStorage = () => {
+    localStorage.removeItem("mb-credentials");
 }

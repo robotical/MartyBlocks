@@ -7,6 +7,7 @@ import accountIcon from "./icon--account.svg";
 import Modal from "../../../../containers/modal.jsx";
 import ExportDataModalTeacher from '../export-data-modal/teacher/export-data-modal__teacher.jsx';
 import RemoveAccountModal from '../remove-account-modal/remove-account-modal.jsx';
+import { removeCredentialsFromLocalStorage } from '../../user-login/credentials-modal/credentials-modal.jsx';
 
 
 class AccountButton extends React.Component {
@@ -59,6 +60,7 @@ class AccountButton extends React.Component {
     dropdownItemClicked(event, item) {
         event.stopPropagation();
         if (item === 'logout') {
+            removeCredentialsFromLocalStorage();
             codeAssess.logUserOut();
         } else if (item === 'export-data') {
             this.onSetModal(<ExportDataModalTeacher
