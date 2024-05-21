@@ -60,7 +60,9 @@ class ClassOverview extends React.Component {
          */
         if (this.state.selectedSession && this.state.selectedSession.id && this.props.selectedClassroom) {
             const selectedSession = this.props.selectedClassroom.sessions.find(s => s.id === this.state.selectedSession.id);
-            this.setState({ selectedSession, sessionsArr: [selectedSession] });
+            if (selectedSession) {
+                this.setState({ selectedSession, sessionsArr: [selectedSession] });
+            }
         }
     }
 

@@ -13,6 +13,23 @@
   column-gap: 10px;
 }
 
+@media (max-width: 768px) {
+  .dashboardContainer {
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr 1fr 1fr;
+    grid-template-areas:
+      "header"
+      "students"
+      "notes"
+      "announcements";
+  }
+
+  .notesContainer,
+  .announcementsContainer {
+    min-height: 200px;
+  }
+}
+
 /* HEADER */
 .header {
   display: grid;

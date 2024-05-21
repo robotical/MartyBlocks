@@ -1,8 +1,63 @@
 .sessionTimeline {
   position: relative;
-  display: grid;
+  /* display: grid;
   grid-template-columns: minmax(50px, 1fr) repeat(auto-fill, minmax(100px, 1fr));
-  justify-content: center;
+  justify-content: center; */
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+
+}
+
+.disabledArrow {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+  user-select: none;
+  background: #232b2b !important;
+}
+
+.leftArrow,
+.rightArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-30%);
+  cursor: pointer;
+  border: 1px solid rgb(55, 171, 200);
+  padding-left: 4px;
+  padding-right: 2px;
+  padding-bottom: 2px;
+  user-select: none;
+  background: #b5d0ee;
+  color: #232b2b;
+}
+
+.leftArrow {
+  left: -20px;
+}
+
+.rightArrow {
+  right: -20px;
+}
+
+.threeDotsLeft {
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  background: hsla(215, 100%, 95%, 1);
+  padding: 5px;
+}
+.threeDotsRight {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  background: hsla(215, 100%, 95%, 1);
+  padding: 5px;
 }
 
 .line {
@@ -68,3 +123,4 @@
 .selectedBubble {
   background: #f18921;
 }
+

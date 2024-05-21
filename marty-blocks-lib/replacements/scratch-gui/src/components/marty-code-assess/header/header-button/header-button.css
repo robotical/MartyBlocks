@@ -29,3 +29,12 @@
 .selectedTab {
   background-color: #f18921;
 }
+
+
+@media screen and (max-width: 768px) {
+  .tab {
+    padding: 0 1rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+}

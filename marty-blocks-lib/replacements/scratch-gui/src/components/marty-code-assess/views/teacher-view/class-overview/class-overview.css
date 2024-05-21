@@ -1,5 +1,6 @@
 .overviewContainer {
   display: grid;
+  padding: 20px;
   grid-template-areas:
     "sessionsTimeline sessionsTimeline sessionsTimeline sessionsTimeline"
     "spiderGraph supportChampions separator notes"
@@ -9,6 +10,31 @@
   row-gap: 10px;
   column-gap: 10px;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .overviewContainer {
+    grid-template-areas:
+      "sessionsTimeline"
+      "spiderGraph"
+      "supportChampions"
+      "progressOverTime"
+      "notes"
+      "announcements";
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .notesContainer,
+  .announcementsContainer {
+    min-height: 200px;
+  }
+
+
 }
 
 .sessionTimelineContainer {
