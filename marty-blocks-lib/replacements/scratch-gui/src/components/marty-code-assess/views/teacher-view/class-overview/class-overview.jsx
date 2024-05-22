@@ -119,37 +119,52 @@ class ClassOverview extends React.Component {
         if (!selectedClassroom.students) {
             return null;
         }
-        const sessions = selectedClassroom.sessions;
 
+        const sessions = selectedClassroom.sessions;
+        const allStudentSessionDataEmpty = areAllStudentSessionDataEmpty(this.state.sessionsArr);
+
+        let overviewContainerStylesForNoData = {};
+        if (allStudentSessionDataEmpty) {
+            overviewContainerStylesForNoData = {
+                gridTemplateAreas: '"sessionsTimeline sessionsTimeline" "nodata nodata" "notes announcements"',
+                gridTemplateColumns: "1fr 1fr",
+                gridTemplateRows: "1fr 1fr",
+            };
+        }
         return (
-            <div className={styles.overviewContainer}>
+            <div className={styles.overviewContainer} style={overviewContainerStylesForNoData}>
                 <div className={styles.sessionTimelineContainer}>
                     <TimelineSessions sessions={sessions} onSessionSelect={this.handleSessionSelect} selectedSession={this.state.selectedSession} />
                 </div>
                 {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                     <>
-                        <div className={styles.spiderGraphContainer}>
+                        {allStudentSessionDataEmpty && <div className={styles.noData}>
+                            <p className={styles.noDataTitle}>No data yet!</p>
+                            <p className={styles.noDataSubtitle}>Either this session has no data, or the students have not started coding yet.</p>
+                        </div>
+                        }
+                        {!allStudentSessionDataEmpty && <div className={styles.spiderGraphContainer}>
                             <ClassAverageSpider
                                 data={DataTransformations.convertSessionsToSpiderGraphData(this.state.sessionsArr, true)}
                                 rawSessionData={this.state.sessionsArr}
                                 isMinimised={true}
                             />
-                        </div>
-                        <div className={styles.supportChampionsContainer}>
+                        </div>}
+                        {!allStudentSessionDataEmpty && <div className={styles.supportChampionsContainer}>
                             <StudentSupportOverview
                                 allSessions={this.state.sessionsArr}
                                 students={selectedClassroom.students}
                                 onShowAllClick={this.onShowAllSupportChampionsClick}
                             />
-                        </div>
+                        </div>}
                         <div className={styles.separator}></div>
-                        <div className={styles.progressOverTimeContainer}>
+                        {!allStudentSessionDataEmpty && <div className={styles.progressOverTimeContainer}>
                             <ClassAverageOverTime
                                 data={DataTransformations.convertSessionsToLineGraphData(this.state.sessionsArr, this.state.selectedSession?.title !== "All__Time")}
                                 rawSessionData={this.state.sessionsArr}
                                 isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                             />
-                        </div>
+                        </div>}
                         <div className={styles.notesContainer}>
                             <NotesAnnouncementsBox
                                 title="Session Notes"
@@ -184,3 +199,17 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview));
+
+
+const areAllStudentSessionDataEmpty = (sessions) => {
+    if (!sessions) return true;
+    if (!Array.isArray(sessions)) return true;
+    if (sessions.length === 0) return true;
+    let allEmpty = true;
+    sessions.forEach(session => {
+        if (session.studentSessionData && session.studentSessionData.length > 0) {
+            allEmpty = false;
+        }
+    });
+    return allEmpty;
+}

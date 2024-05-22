@@ -80,3 +80,21 @@
 .announcementsContainer {
   grid-area: announcements;
 }
+
+.noData {
+  grid-area: nodata;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+}
+
+.noDataTitle {
+  font-size: 20px;
+  color: #7b8fa5;
+  font-weight: bold;
+}
+
+.noDataSubtitle  {
+  font-size: 16px;
+  color: #7b8fa5;
+}

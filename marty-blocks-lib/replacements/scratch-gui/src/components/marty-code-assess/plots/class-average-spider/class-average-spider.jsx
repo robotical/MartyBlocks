@@ -172,6 +172,11 @@ class ClassAverageSpider extends React.Component {
             hasData = this.props.data.length > 0;
         }
 
+        if (hasData && areAllTracesZero(this.props.data)) {
+            return <div className={styles.noData}>No data yet!</div>;
+        }
+
+
         return (
             <>
                 {this.state.modalVisible &&
@@ -206,3 +211,10 @@ class ClassAverageSpider extends React.Component {
 }
 
 export default injectIntl(ClassAverageSpider);
+
+
+const areAllTracesZero = (data) => {
+    return data.every(trace => {
+        return trace.r.every(val => val === 0);
+    });
+}

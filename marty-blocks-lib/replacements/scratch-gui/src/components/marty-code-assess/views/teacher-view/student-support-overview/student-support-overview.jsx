@@ -66,7 +66,13 @@ class StudentSupportOverview extends React.Component {
     }
 
     render() {
-        const { intl, students } = this.props;
+        const { intl, students, allSessions } = this.props;
+
+        if (areAllStudentSessionDataEmpty(allSessions)) {
+            return <div className={styles.noData}>No data yet!</div>;
+        }
+                
+
         if (this.state.isLoading) {
             return <div className={styles.studentSupportOverviewContainer}>
                 <div className={styles.supportTitle}>Support</div>
@@ -120,3 +126,16 @@ class StudentSupportOverview extends React.Component {
 
 
 export default injectIntl(StudentSupportOverview);
+
+const areAllStudentSessionDataEmpty = (sessions) => {
+    if (!sessions) return true;
+    if (!Array.isArray(sessions)) return true;
+    if (sessions.length === 0) return true;
+    let allEmpty = true;
+    sessions.forEach(session => {
+        if (session.studentSessionData && session.studentSessionData.length > 0) {
+            allEmpty = false;
+        }
+    });
+    return allEmpty;
+}

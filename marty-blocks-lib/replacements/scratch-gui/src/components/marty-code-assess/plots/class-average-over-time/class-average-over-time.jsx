@@ -132,6 +132,11 @@ class ClassAverageOverTime extends React.Component {
             }
         }
 
+
+        if (areAllTracesZero(this.props.data)) {
+            return <div className={styles.noData}>No data yet!</div>;
+        }
+
         return (
             <div className={styles.outerContainer}>
                 {this.state.modalVisible &&
@@ -164,3 +169,16 @@ class ClassAverageOverTime extends React.Component {
 }
 
 export default injectIntl(ClassAverageOverTime);
+
+const areAllTracesZero = (data) => {
+    if (!data) return true;
+    if (!Array.isArray(data)) return true;
+    if (data.length === 0) return true;
+    let allZero = true;
+    data.forEach(trace => {
+        if (trace && trace.x && trace.x.length > 0) {
+            allZero = false;
+        }
+    });
+    return allZero;
+}
