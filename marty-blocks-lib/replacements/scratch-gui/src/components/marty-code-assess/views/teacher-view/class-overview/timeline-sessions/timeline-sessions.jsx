@@ -98,30 +98,33 @@ class TimelineSessions extends React.Component {
 
 
         return (
-            <div className={styles.sessionTimeline} ref={this.setContainerRef}>
-                <div className={[styles.leftArrow, isLeftArrowDisabled ? styles.disabledArrow : ""].join(" ")} onClick={this.handleLeftArrowClick}>{"<"}</div>
-                <div className={[styles.rightArrow, isRightArrowDisabled ? styles.disabledArrow : ""].join(" ")} onClick={this.handleRightArrowClick}>{">"}</div>
-                {this.state.hasMoreToLeft && <div className={styles.threeDotsLeft}>...</div>}
-                {this.state.hasMoreToRight && <div className={styles.threeDotsRight}>...</div>}
-                <div className={styles.line}></div>
-                <div style={{
-                    marginRight: isLeftArrowDisabled ? "0" : "50px"
-                }}
-                    className={[styles.firstTimelineBubble, selectedSession?.title === "All__Time" ? styles.selectedFirstBubble : ""].join(" ")} onClick={() => onSessionSelect({ title: "All__Time" })}>
-                    <span className={styles.firstTimelineTitle}>All Time</span>
-                </div>
-                {this.state.visibleSessions.map((session, sessionIdx) => {
-                    const isLast = sessionIdx === this.state.visibleSessions.length - 1;
-                    return <div
-                        style={{
-                            marginRight: isLast && !isRightArrowDisabled ? "50px" : "0"
-                        }}
-                        className={styles.timelinePoint} onClick={() => onSessionSelect(session)} key={session.id}>
-                        <span className={styles.timelineTitle} key={session.id + sessionIdx}>{trancateTitle(session.title, 15)}</span>
-                        <div className={[styles.timelineBubble, selectedSession?.id === session?.id ? styles.selectedBubble : ""].join(" ")} />
+            <>
+                <h3 className={styles.selectedSessionTitle}>{selectedSession?.title}</h3>
+                <div className={styles.sessionTimeline} ref={this.setContainerRef}>
+                    <div className={[styles.leftArrow, isLeftArrowDisabled ? styles.disabledArrow : ""].join(" ")} onClick={this.handleLeftArrowClick}>{"<"}</div>
+                    <div className={[styles.rightArrow, isRightArrowDisabled ? styles.disabledArrow : ""].join(" ")} onClick={this.handleRightArrowClick}>{">"}</div>
+                    {this.state.hasMoreToLeft && <div className={styles.threeDotsLeft}>...</div>}
+                    {this.state.hasMoreToRight && <div className={styles.threeDotsRight}>...</div>}
+                    <div className={styles.line}></div>
+                    <div style={{
+                        marginRight: isLeftArrowDisabled ? "0" : "50px"
+                    }}
+                        className={[styles.firstTimelineBubble, selectedSession?.title === "All__Time" ? styles.selectedFirstBubble : ""].join(" ")} onClick={() => onSessionSelect({ title: "All__Time" })}>
+                        <span className={styles.firstTimelineTitle}>All Time</span>
                     </div>
-                })}
-            </div>
+                    {this.state.visibleSessions.map((session, sessionIdx) => {
+                        const isLast = sessionIdx === this.state.visibleSessions.length - 1;
+                        return <div
+                            style={{
+                                marginRight: isLast && !isRightArrowDisabled ? "50px" : "0"
+                            }}
+                            className={styles.timelinePoint} onClick={() => onSessionSelect(session)} key={session.id}>
+                            <span className={styles.timelineTitle} key={session.id + sessionIdx}>{trancateTitle(session.title, 15)}</span>
+                            <div className={[styles.timelineBubble, selectedSession?.id === session?.id ? styles.selectedBubble : ""].join(" ")} />
+                        </div>
+                    })}
+                </div>
+            </>
         )
     }
 }

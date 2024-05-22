@@ -63,6 +63,7 @@ class ClassOverview extends React.Component {
 
         return (
             <div className={styles.overviewContainer}>
+                <h3 className={styles.studentName}>{selectedStudentName}</h3>
                 {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
                     <>
                         <div className={styles.spiderGraphContainer}>

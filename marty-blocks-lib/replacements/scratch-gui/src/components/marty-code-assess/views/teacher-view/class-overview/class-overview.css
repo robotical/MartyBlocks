@@ -9,19 +9,34 @@
   grid-template-rows: min-content 1fr 1fr;
   row-gap: 10px;
   column-gap: 10px;
-  height: 100%;
+  /* height: 100%; */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1124px) {
   .overviewContainer {
     grid-template-areas:
-      "sessionsTimeline"
-      "spiderGraph"
-      "supportChampions"
-      "progressOverTime"
-      "notes"
-      "announcements";
-    grid-template-columns: 1fr;
+      "sessionsTimeline sessionsTimeline"
+      "spiderGraph supportChampions"
+      "progressOverTime progressOverTime"
+      "notes announcements";
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: min-content 1fr 1fr 1fr;
+  }
+
+  .separator {
+    display: none;
+  }
+}
+
+@media (max-width: 868px) {
+  .overviewContainer {
+    grid-template-areas:
+      "sessionsTimeline sessionsTimeline"
+      "spiderGraph spiderGraph"
+      "supportChampions supportChampions"
+      "progressOverTime progressOverTime"
+      "notes announcements";
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: min-content 1fr 1fr 1fr 1fr 1fr;
   }
 
@@ -33,8 +48,6 @@
   .announcementsContainer {
     min-height: 200px;
   }
-
-
 }
 
 .sessionTimelineContainer {
@@ -52,10 +65,12 @@
 
 .progressOverTimeContainer {
   grid-area: progressOverTime;
+  min-height: 200px;
 }
 
 .separator {
   grid-area: separator;
+  background-color: #b5d0ee;
 }
 
 .notesContainer {

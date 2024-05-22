@@ -1,4 +1,10 @@
 .outerContainer {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  height: 100%;
+}
+
+.container {
   background-color: white;
   border: 1px solid #b5d0ee;
   border-radius: 20px;

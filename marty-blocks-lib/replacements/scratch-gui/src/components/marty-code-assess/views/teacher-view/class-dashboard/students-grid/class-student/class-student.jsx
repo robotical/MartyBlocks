@@ -8,7 +8,6 @@ import educationIconRed from "../../../../../../../lib/assets/icon--education-re
 
 const Preprocessor = window.codeAssess.codeAssessLib.Preprocessor;
 const StudentStatusEnum = window.codeAssess.codeAssessLib.StudentStatusEnum;
-const unminifyScoresOverTime = window.codeAssess.codeAssessLib.unminifyScoresOverTime;
 
 const messages = defineMessages({
     tutorials: {
@@ -47,7 +46,7 @@ class ClassStudent extends React.Component {
         const studentSessionData = student.studentSessionData.filter(sessionData => sessionData.sessionId === selectedClassroom.activeSession?.id) || [];
         let sessionsArr = [{}];
         if (selectedClassroom.activeSession) {
-            sessionsArr = [{ 
+            sessionsArr = [{
                 ...selectedClassroom.activeSession,
                 studentSessionData: studentSessionData,
             }];
@@ -83,6 +82,7 @@ class ClassStudent extends React.Component {
             ]);
 
 
+
         let studentJsx = null;
         if (transformedData) {
             const colour = isThereAnActiveSession ? STUDENT_ACTIVITY_STATUS_TO_COLOUR_MAP[studentActivityStatus] : "#6d6d6d";
@@ -108,6 +108,5 @@ class ClassStudent extends React.Component {
     }
 
 }
-
 
 export default injectIntl(ClassStudent);

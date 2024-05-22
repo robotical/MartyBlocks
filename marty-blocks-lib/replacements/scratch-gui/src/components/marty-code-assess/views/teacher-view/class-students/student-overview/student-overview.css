@@ -1,13 +1,21 @@
 .overviewContainer {
   display: grid;
   grid-template-areas:
+    "studentName studentName studentName studentName"
     "spiderGraph supportChampions separator notes"
     "progressOverTime progressOverTime separator notes";
   grid-template-columns: min-content min-content 1px 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: min-content 1fr 1fr;
   row-gap: 10px;
   column-gap: 10px;
   height: 100%;
+  margin-top: 30px;
+}
+
+.studentName {
+  grid-area: studentName;
+  font-size: 20px;
+  margin-bottom: 0;
 }
 
 .spiderGraphContainer {

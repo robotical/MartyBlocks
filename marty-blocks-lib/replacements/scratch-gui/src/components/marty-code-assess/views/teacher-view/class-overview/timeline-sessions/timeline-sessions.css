@@ -1,3 +1,7 @@
+.selectedSessionTitle {
+  text-align: center;
+  width: 100%;
+}
 .sessionTimeline {
   position: relative;
   /* display: grid;
@@ -10,10 +14,7 @@
 }
 
 .disabledArrow {
-  cursor: not-allowed !important;
-  opacity: 0.5;
-  user-select: none;
-  background: #232b2b !important;
+  display: none !important;
 }
 
 .leftArrow,

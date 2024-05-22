@@ -13,7 +13,7 @@
   column-gap: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   .dashboardContainer {
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr 1fr 1fr;

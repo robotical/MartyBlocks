@@ -98,7 +98,7 @@ export default class ClassStudents extends React.Component {
         }
         this.setState({
             currentContent: "studentProfile",
-            studentSessionsArr: studentData,
+            studentSessionsArr: studentData || [],
             selectedStudentId: studentId,
             selectedStudentName: studentName
         });
@@ -114,6 +114,7 @@ export default class ClassStudents extends React.Component {
         const sessions = selectedClassroom.sessions;
 
         return <div className={styles.classStudentsContainer}>
+            {this.state.currentContent === "studentProfile" && <button className={styles.backToGridButton} onClick={() => this.setState({ currentContent: "grid" })}>Back to Grid {">"}</button>}
             <div className={styles.sessionTimelineContainer}>
                 <TimelineSessions
                     sessions={sessions}

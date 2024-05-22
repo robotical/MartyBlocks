@@ -133,7 +133,7 @@ class ClassAverageOverTime extends React.Component {
         }
 
         return (
-            <>
+            <div className={styles.outerContainer}>
                 {this.state.modalVisible &&
                     <Modal
                         onRequestClose={this.onCloseModal}
@@ -148,7 +148,7 @@ class ClassAverageOverTime extends React.Component {
                     </Modal>
                 }
                 <h3 style={{ margin: "2px" }}>Progress Over Time</h3>
-                <div className={styles.outerContainer}>
+                <div className={styles.container}>
                     <div ref={this.setPlotRef} className={styles.plotDiv} style={{
                         width: "100%",
                         height: "100%",
@@ -157,7 +157,7 @@ class ClassAverageOverTime extends React.Component {
                         <img src={PlusIcon} className={styles.showAllButtonIcon} alt="show all" />
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
 

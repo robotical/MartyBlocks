@@ -1,4 +1,5 @@
 .studentSupportOverviewContainer {
+    min-width: 460px;
     display: grid;
     grid-template-columns: min-content repeat(4, .6fr);
     grid-template-rows: repeat(2, 1fr);
@@ -35,10 +36,14 @@
 
 .studentSpiderTop {
     border-bottom: 1px solid #b5d0ee;
+    display: grid;
+    align-items: center;
 }
 
 .studentSpiderBottom {
     border-top: 1px solid #b5d0ee;
+    display: grid;
+    align-items: center;
 }
 
 .showAllButtonContainer {

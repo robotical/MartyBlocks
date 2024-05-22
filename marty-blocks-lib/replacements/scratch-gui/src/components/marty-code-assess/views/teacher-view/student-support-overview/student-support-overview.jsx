@@ -81,11 +81,11 @@ class StudentSupportOverview extends React.Component {
 
         return <div className={styles.studentSupportOverviewContainer}>
             <div className={styles.supportTitle}>Support</div>
-            {[0,1,2,3].map(studentIdx => {
+            {[0, 1, 2, 3].map(studentIdx => {
                 const student = this.state.supportStudents[studentIdx];
                 if (!student) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderTop].join(" ")}></div>;
                 const studentObj = students.find(s => s.id === student.studentId);
-                const studentName = studentObj.firstName[0] + studentObj.lastName[0];
+                const studentName = studentObj.firstName + " " + studentObj.lastName;
                 return <div key={student.studentId} className={[styles.studentSpiderContainer, styles.studentSpiderTop].join(" ")}>
                     <StudentPieChart
                         plotTitle={studentName}
@@ -95,12 +95,12 @@ class StudentSupportOverview extends React.Component {
                 </div>
             })}
             <div className={styles.championsTitle}>Champions</div>
-            {[0,1,2,3].map(studentIdx => {
+            {[0, 1, 2, 3].map(studentIdx => {
                 const student = this.state.championStudents[studentIdx];
                 if (!student) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}></div>;
                 const studentObj = students.find(s => s.id === student.studentId);
                 if (!studentObj) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}></div>;
-                const studentName = studentObj.firstName[0] + studentObj.lastName[0];
+                const studentName = studentObj.firstName + " " + studentObj.lastName;
                 return <div key={student.studentId} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}>
                     <StudentPieChart
                         plotTitle={studentName}

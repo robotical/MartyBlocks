@@ -40,7 +40,7 @@ const sizesMap = {
         margin: {
             l: 20,
             r: 20,
-            b: 20,
+            b: 0,
             t: 0,
         },
         plot: {
@@ -63,7 +63,7 @@ const sizesMap = {
         margin: {
             l: 30,
             r: 30,
-            b: 30,
+            b: 0,
             t: 0,
         },
         plot: {
@@ -218,7 +218,7 @@ class StudentPieChart extends React.Component {
                             fontSize: sizesMap[this.props.size].plot.title.fontSize,
                         }}
                     >{this.props.plotTitle}</h3>
-                    <div ref={this.setPlotRef} className={styles.SpiderGraph} style={{
+                    <div ref={this.setPlotRef} className={styles.graphContainer} style={{
                         width: sizesMap[this.props.size].plot.width,
                         height: sizesMap[this.props.size].plot.height,
                         display: !hasData ? "none" : "block",
