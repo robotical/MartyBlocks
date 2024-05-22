@@ -32,7 +32,6 @@ class ClassStudent extends React.Component {
     render() {
         const { intl, student, studentGraphData, colors } = this.props;
 
-        
         let studentJsx = null;
         if (studentGraphData) {
             studentJsx = <StudentPieChart
@@ -44,7 +43,7 @@ class ClassStudent extends React.Component {
 
         return (
             <>
-                <div className={styles.classStudent} onClick={this.modalToggle}>
+                <div className={styles.classStudent}>
                     <div className={styles.classStudentPltContainer} onClick={this.props.onClick}>
                         {studentJsx}
                     </div>

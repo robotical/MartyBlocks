@@ -80,11 +80,23 @@ export default class ClassStudents extends React.Component {
                 students: allStudents,
                 studentSessionData: allStudentSessionData
             };
-            this.setState({ sessionsArr: allSessions, selectedSession: allSession, isLoading: false });
+            if (this.state.selectedStudentId) {
+                const groupedDataByStudent = DataTransformations.groupSessionsByStudents(allSessions);
+                const studentData = groupedDataByStudent[this.state.selectedStudentId];
+                this.setState({ studentSessionsArr: studentData || [], sessionsArr: allSessions, selectedSession: allSession, isLoading: false });
+            } else {
+                this.setState({ sessionsArr: allSessions, selectedSession: allSession, isLoading: false });
+            }
         } else { // specific session
             const updatedClassroom = await codeAssessClientFacade.fetchSessionData(session.id);
             const fetchedSession = updatedClassroom.sessions.find(s => s.id === session.id);
-            this.setState({ sessionsArr: [fetchedSession], selectedSession: fetchedSession, isLoading: false });
+            if (this.state.selectedStudentId) {
+                const groupedDataByStudent = DataTransformations.groupSessionsByStudents([fetchedSession]);
+                const studentData = groupedDataByStudent[this.state.selectedStudentId];
+                this.setState({ studentSessionsArr: studentData || [], sessionsArr: [fetchedSession], selectedSession: fetchedSession, isLoading: false });
+            } else {
+                this.setState({ sessionsArr: [fetchedSession], selectedSession: fetchedSession, isLoading: false });
+            }
         }
     }
 
@@ -114,7 +126,11 @@ export default class ClassStudents extends React.Component {
         const sessions = selectedClassroom.sessions;
 
         return <div className={styles.classStudentsContainer}>
-            {this.state.currentContent === "studentProfile" && <button className={styles.backToGridButton} onClick={() => this.setState({ currentContent: "grid" })}>Back to Grid {">"}</button>}
+            {this.state.currentContent === "studentProfile" && <button
+                className={styles.backToGridButton}
+                onClick={() => this.setState({ currentContent: "grid" })}>
+                All Students {">"}
+            </button>}
             <div className={styles.sessionTimelineContainer}>
                 <TimelineSessions
                     sessions={sessions}
@@ -126,7 +142,7 @@ export default class ClassStudents extends React.Component {
                 <div className={styles.studentsGridContainer}>
                     <h3 className={styles.studentsGridTitle}>Student Competency Levels</h3>
                     <StudentsColorCoding />
-                    {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> :
+                    {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> :
                         <StudentsGrid
                             sessionsArr={this.state.sessionsArr}
                             students={this.state.sortedStudents}
@@ -134,7 +150,7 @@ export default class ClassStudents extends React.Component {
                         />
                     }
                 </div> : <div className={styles.studentProfileContainer}>
-                    {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> :
+                    {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> :
                         <StudentOverview
                             studentSessionsArr={this.state.studentSessionsArr}
                             isSpecificSession={this.state.selectedSession?.title !== "All__Time"}

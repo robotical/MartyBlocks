@@ -40,8 +40,6 @@ class ClassOverview extends React.Component {
         const asyncFunc = async () => {
             const updatedClassroom = await codeAssessClientFacade.fetchStudentCodeSubmissions(selectedStudentId);
             const selectedStudent = updatedClassroom.students.find(s => s.id === selectedStudentId);
-            console.log("updatedClassroom", updatedClassroom)
-            console.log("selectedStudent", selectedStudent)
             if (!selectedStudent) return;
             this.setState({ codeSubmissions: selectedStudent.studentCodeSubmissions })
         }
@@ -61,17 +59,19 @@ class ClassOverview extends React.Component {
             return null;
         }
 
+        const allStudentSessionDataEmpty = areAllStudentSessionDataEmpty(studentSessionsArr);
+
         return (
             <div className={styles.overviewContainer}>
                 <h3 className={styles.studentName}>{selectedStudentName}</h3>
-                {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : (
+                {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> : (
                     <>
                         <div className={styles.spiderGraphContainer}>
-                            <ClassAverageSpider
+                            {!allStudentSessionDataEmpty && <ClassAverageSpider
                                 data={DataTransformations.convertSessionsToSpiderGraphData(studentSessionsArr, true)}
                                 rawSessionData={studentSessionsArr}
                                 isMinimised={true}
-                            />
+                            />}
                         </div>
                         <div className={styles.supportChampionsContainer}>
                             <StudentBadges
@@ -82,11 +82,11 @@ class ClassOverview extends React.Component {
                         </div>
                         <div className={styles.separator}></div>
                         <div className={styles.progressOverTimeContainer}>
-                            <ClassAverageOverTime
+                            {!allStudentSessionDataEmpty && <ClassAverageOverTime
                                 data={DataTransformations.convertSessionsToLineGraphData(studentSessionsArr, isSpecificSession)}
                                 rawSessionData={studentSessionsArr}
                                 isSpecificSession={isSpecificSession}
-                            />
+                            />}
                         </div>
                         <div className={styles.notesContainer}>
                             <CodeSubmissionBox
@@ -113,3 +113,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default injectIntl(connect(null, mapDispatchToProps)(ClassOverview));
+
+const areAllStudentSessionDataEmpty = (sessions) => {
+    if (!sessions) return true;
+    if (!Array.isArray(sessions)) return true;
+    if (sessions.length === 0) return true;
+    let allEmpty = true;
+    sessions.forEach(session => {
+        if (session.studentSessionData && session.studentSessionData.length > 0) {
+            allEmpty = false;
+        }
+    });
+    return allEmpty;
+}

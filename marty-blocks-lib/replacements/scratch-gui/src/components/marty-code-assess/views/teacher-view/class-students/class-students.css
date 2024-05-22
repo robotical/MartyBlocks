@@ -2,7 +2,6 @@
     display: grid;
     grid-template-rows: min-content 1fr;
     width: 100%;
-    height: 100%;
     padding: 20px;
     position: relative;
 }
@@ -22,4 +21,19 @@
     right: 20px;
     cursor: pointer;
     color: #232b2b;
+
+    outline: none;
+    border: none;
+    
+    background: #b5d0ee; 
+    border-radius: 5px;
+    padding: 5px 10px;
+    
+}
+
+.spinner {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: auto;
 }
