@@ -134,7 +134,7 @@ export default TimelineSessions;
 
 const trancateTitle = (title, length) => {
     if (title.length > length) {
-        return title.slice(0, 4) + ".." + title.slice(-4);
+        return title.slice(0, 5) + ".." + title.slice(-4);
     }
     return title;
 }

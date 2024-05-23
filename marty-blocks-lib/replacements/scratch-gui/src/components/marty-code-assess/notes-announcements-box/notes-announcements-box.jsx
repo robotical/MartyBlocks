@@ -98,7 +98,7 @@ class NotesAnnouncementsBox extends React.Component {
                     {item.imageUrl && (
                         <>
                             <br />
-                            <ExpandableImage imageUrl={item.imageUrl} />
+                            <ExpandableImage imageUrl={item.imageUrl} imageThumbnailSize='large' />
                         </>
                     )}
                 </li>

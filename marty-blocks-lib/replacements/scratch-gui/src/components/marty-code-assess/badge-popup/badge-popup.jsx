@@ -4,7 +4,7 @@ import ReactModal from 'react-modal';
 import bindAll from 'lodash.bindall';
 
 import styles from './badge-popup.css';
-import svgs from '../student-badges/svg-wrapper.jsx';
+import SVGWrapper from '../student-badges/svg-wrapper.jsx';
 import svgs from '../student-badges/svgs.jsx';
 
 import Confetti from './confetti/confetti.jsx';

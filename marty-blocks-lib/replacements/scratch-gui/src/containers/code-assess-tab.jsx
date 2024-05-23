@@ -4,12 +4,13 @@ import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import MartyCodeAssess from '../components/marty-code-assess/marty-code-assess.jsx';
 import { connect } from 'react-redux';
 import {
-   openCodeAssessAnnouncement 
+    openCodeAssessAnnouncement
 } from '../reducers/modals.js';
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
 const StudentOrTeacherEnum = window.codeAssess.codeAssessLib.StudentOrTeacherEnum;
+const BadgesManager = window.codeAssess.assessmentLib.BadgesManager;
 
 const USER_LOGGED_IN_SUBSCRIPTION = "USER_LOGGED_IN_SUBSCRIPTION";
 const CLASS_LIST_RECEIVED_SUBSCRIPTION = "CLASS_LIST_RECEIVED_SUBSCRIPTION";
@@ -235,6 +236,15 @@ class CodeAssessTab extends React.Component {
     }
 
     classSelected(selectedClassroom) {
+        console.log("in class Selected")
+        if (this.state.studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
+            const thisStudent = selectedClassroom.students.find((student) => student.id === this.state.userProfile?.id);
+            console.log("thisStudent", thisStudent)
+            if (thisStudent) {
+                console.log("Initialised Student Badges")
+                BadgesManager.initialiseBadgeCounts(thisStudent.studentBadges.scores || new BadgesCounts());
+            }
+        }
         this.setState({ selectedClassroom });
     }
 

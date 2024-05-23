@@ -55,6 +55,7 @@ import MonitorList from "../../containers/monitor-list.jsx";
 import KeyboardCaller from "../keyboard-caller/keyboard-caller.jsx";
 
 import CodeAssessAnnouncementModal from '../marty-code-assess/announcement-modal/announcement-modal.jsx';
+import BadgePopup from '../marty-code-assess/badge-popup/badge-popup.jsx';
 
 
 const messages = defineMessages({
@@ -81,6 +82,7 @@ const GUIComponent = props => {
     backdropLibraryVisible,
     // backpackHost,
     // backpackVisible,
+    badgePopupProps,
     blocksId,
     blocksTabVisible,
     cardsVisible,
@@ -96,6 +98,7 @@ const GUIComponent = props => {
     canShare,
     canUseCloud,
     children,
+    codeAssessBadgeAchievementsPopupVisible,
     codeAssessAnnouncementModalVisible,
     connectionModalVisible,
     costumeLibraryVisible,
@@ -129,6 +132,7 @@ const GUIComponent = props => {
     onExtensionButtonClick,
     onProjectTelemetryEvent,
     onRequestCloseBackdropLibrary,
+    onRequestCloseBadgePopup,
     onRequestCloseCostumeLibrary,
     onRequestCloseTelemetryModal,
     onSeeCommunity,
@@ -220,6 +224,7 @@ const GUIComponent = props => {
           <Cards />
         ) : null}
         {draggableModalVisible ? <DraggableModal /> : null}
+        {codeAssessBadgeAchievementsPopupVisible ? <BadgePopup onRequestClose={onRequestCloseBadgePopup} {...badgePopupProps} /> : null}
         {alertsVisible ? (
           <Alerts className={styles.alertsContainer} />
         ) : null}
@@ -482,6 +487,7 @@ GUIComponent.propTypes = {
   backdropLibraryVisible: PropTypes.bool,
   // backpackHost: PropTypes.string,
   // backpackVisible: PropTypes.bool,
+  badgePopupProps: PropTypes.object,
   basePath: PropTypes.string,
   blocksTabVisible: PropTypes.bool,
   blocksId: PropTypes.string,
@@ -498,6 +504,7 @@ GUIComponent.propTypes = {
   cardsVisible: PropTypes.bool,
   lessonsVisible: PropTypes.bool,
   children: PropTypes.node,
+  codeAssessBadgeAchievementsPopupVisible: PropTypes.bool,
   costumeLibraryVisible: PropTypes.bool,
   costumesTabVisible: PropTypes.bool,
   draggableModalVisible: PropTypes.bool,
@@ -523,6 +530,7 @@ GUIComponent.propTypes = {
   onLogOut: PropTypes.func,
   onOpenRegistration: PropTypes.func,
   onRequestCloseBackdropLibrary: PropTypes.func,
+  onRequestCloseBadgePopup: PropTypes.func,
   onRequestCloseCostumeLibrary: PropTypes.func,
   onRequestCloseTelemetryModal: PropTypes.func,
   onSeeCommunity: PropTypes.func,

@@ -24,6 +24,7 @@
 
 .studentBadgesContainer {
     grid-area: studentBadgesContainer;
+    justify-self: center;
 }
 
 .separator {
@@ -33,4 +34,5 @@
 
 .announcementsContainer {
     grid-area: announcements;
+    justify-self: center;
 }
