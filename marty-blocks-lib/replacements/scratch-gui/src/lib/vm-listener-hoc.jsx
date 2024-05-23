@@ -15,6 +15,7 @@ import { setRunningState, setTurboState, setStartedState } from '../reducers/vm-
 import { showExtensionAlert } from '../reducers/alerts';
 import { updateMicIndicator } from '../reducers/mic-indicator';
 import { blobToBase64 } from './save-load-utils';
+import { openPopupBadge } from '../reducers/code-assess-badges-achievement-popup';
 
 /*
  * Higher Order Component to manage events emitted by the VM
@@ -60,6 +61,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 document.addEventListener('keyup', this.handleKeyUp);
             }
             this.props.vm.postIOData('userData', { username: this.props.username });
+            const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
+            codeAssessClientFacade.onRequestOpenBadgePopup = this.props.onRequestOpenBadgePopup;
         }
         componentDidUpdate(prevProps) {
             if (prevProps.username !== this.props.username) {
@@ -174,6 +177,7 @@ const vmListenerHOC = function (WrappedComponent) {
 
         async assessStudent() {
             const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
+            /* Scores Over Time */
             const codeAssessmentLib = window.codeAssess.assessmentLib;
             try {
                 const assessment = codeAssessmentLib.assess(vm.runtime.targets);
@@ -181,6 +185,19 @@ const vmListenerHOC = function (WrappedComponent) {
             } catch (error) {
                 console.warn("Could not assess student -- probably not in a class");
                 console.warn(error);
+            }
+
+            /* Student Badges */
+            const badgesResults = window.codeAssess.assessBadges(vm.runtime.targets);
+            console.debug("badgesResults.hasCountChanged", badgesResults.hasCountChanged);
+            if (badgesResults.hasCountChanged) {
+                await codeAssessClientFacade.updateStudentBadges(badgesResults.badgesCount);
+                const hasStarAchievedResults = window.codeAssess.hasStarAchieved(badgesResults.badgesCount);
+                console.debug("hasStarAchievedResults", hasStarAchievedResults);
+                if (hasStarAchievedResults.anyStarAchieved) {
+                    console.debug("requesting open badge popup");
+                    this.props.onRequestOpenBadgePopup({ achievedStars: hasStarAchievedResults.achievedStars });
+                }
             }
         }
 
@@ -265,6 +282,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onProjectRunStop: () => dispatch(setRunningState(false)),
         onProjectChanged: () => dispatch(setProjectChanged()),
         onProjectSaved: () => dispatch(setProjectUnchanged()),
+        onRequestOpenBadgePopup: (popupProps) => dispatch(openPopupBadge(popupProps)),
         onRuntimeStarted: () => dispatch(setStartedState(true)),
         onTurboModeOn: () => dispatch(setTurboState(true)),
         onTurboModeOff: () => dispatch(setTurboState(false)),
