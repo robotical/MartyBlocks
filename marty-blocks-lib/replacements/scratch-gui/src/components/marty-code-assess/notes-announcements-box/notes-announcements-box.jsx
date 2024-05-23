@@ -125,7 +125,6 @@ class NotesAnnouncementsBox extends React.Component {
             </div>
         }
 
-
         return (
             <div className={styles.itemsBoxContainer}>
                 <div className={styles.itemsContainer}>

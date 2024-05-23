@@ -16,7 +16,13 @@ class ExpandableImage extends React.Component {
   }
 
   render() {
-    const { imageUrl } = this.props;
+    const { imageUrl, imageThumbnailSize } = this.props;
+
+    let imageThumbnailSize_ = imageThumbnailSize;
+    if (!imageThumbnailSize) {
+      imageThumbnailSize_ = 'small';
+    }
+
     const { showModal } = this.state;
 
     return (
@@ -25,6 +31,9 @@ class ExpandableImage extends React.Component {
           src={imageUrl}
           alt="Expand"
           className={styles.imageTrigger}
+          style={{
+            width: imageThumbnailSize_ === 'small' ? '50px' : '100%',
+          }}
           onClick={this.toggleModal}
         />
 

@@ -24,7 +24,8 @@ const initialState = {
     [MODAL_SOUND_RECORDER]: false,
     [MODAL_CONNECTION]: false,
     [MODAL_TIPS_LIBRARY]: false,
-    [MODAL_CODE_ASSESS_ANNOUNCEMENT]: false
+    [MODAL_CODE_ASSESS_ANNOUNCEMENT]: false,
+    modalProps: {}
 };
 
 const reducer = function (state, action) {
@@ -32,30 +33,34 @@ const reducer = function (state, action) {
     switch (action.type) {
     case OPEN_MODAL:
         return Object.assign({}, state, {
-            [action.modal]: true
+            [action.modal]: true,
+            modalProps: action.modalProps
         });
     case CLOSE_MODAL:
         return Object.assign({}, state, {
-            [action.modal]: false
+            [action.modal]: false,
+            modalProps: {}
         });
     default:
         return state;
     }
 };
-const openModal = function (modal) {
+const openModal = function (modal, modalProps) {
     return {
         type: OPEN_MODAL,
-        modal: modal
+        modal: modal,
+        modalProps: modalProps
     };
 };
 const closeModal = function (modal) {
     return {
         type: CLOSE_MODAL,
-        modal: modal
+        modal: modal,
+        modalProps: {}
     };
 };
-const openCodeAssessAnnouncement = function () {
-    return openModal(MODAL_CODE_ASSESS_ANNOUNCEMENT);
+const openCodeAssessAnnouncement = function (modalProps) {
+    return openModal(MODAL_CODE_ASSESS_ANNOUNCEMENT, modalProps);
 };
 const openBackdropLibrary = function () {
     return openModal(MODAL_BACKDROP_LIBRARY);

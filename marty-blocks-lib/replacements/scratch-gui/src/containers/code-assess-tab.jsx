@@ -2,9 +2,14 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import MartyCodeAssess from '../components/marty-code-assess/marty-code-assess.jsx';
+import { connect } from 'react-redux';
+import {
+   openCodeAssessAnnouncement 
+} from '../reducers/modals.js';
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
+const StudentOrTeacherEnum = window.codeAssess.codeAssessLib.StudentOrTeacherEnum;
 
 const USER_LOGGED_IN_SUBSCRIPTION = "USER_LOGGED_IN_SUBSCRIPTION";
 const CLASS_LIST_RECEIVED_SUBSCRIPTION = "CLASS_LIST_RECEIVED_SUBSCRIPTION";
@@ -88,6 +93,7 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.subscribe(STUDENT_DEACTIVATED_SUBSCRIPTION, PublishedEventsEnum.STUDENT_DEACTIVATED, this.onStudentDeactivated);
         codeAssessClientFacade.subscribe(STUDENT_EXITED_SESSION_SUBSCRIPTION, PublishedEventsEnum.STUDENT_EXITED_SESSION, this.onStudentExitedSession);
         codeAssessClientFacade.subscribe(CLASS_ANNOUNCEMENT_ADDED_SUBSCRIPTION, PublishedEventsEnum.CLASS_ANNOUNCEMENT_ADDED, this.onClassAnnouncementAdded);
+        codeAssessClientFacade.unsubscribe(SESSION_ANNOUNCEMENT_ADDED_SUBSCRIPTION);  // we won't be unsubscribing from this one when we unmount so we unsubscribe here in case it was already subscribed
         codeAssessClientFacade.subscribe(SESSION_ANNOUNCEMENT_ADDED_SUBSCRIPTION, PublishedEventsEnum.SESSION_ANNOUNCEMENT_ADDED, this.onSessionAnnouncementAdded);
         codeAssessClientFacade.subscribe(QUESTION_ADDED_SUBSCRIPTION, PublishedEventsEnum.QUESTION_ADDED, this.onQuestionAdded);
         codeAssessClientFacade.subscribe(ANSWER_CREATED_SUBSCRIPTION, PublishedEventsEnum.ANSWER_CREATED, this.onAnswerCreated);
@@ -116,7 +122,7 @@ class CodeAssessTab extends React.Component {
         codeAssessClientFacade.unsubscribe(STUDENT_DEACTIVATED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(STUDENT_EXITED_SESSION_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(CLASS_ANNOUNCEMENT_ADDED_SUBSCRIPTION);
-        codeAssessClientFacade.unsubscribe(SESSION_ANNOUNCEMENT_ADDED_SUBSCRIPTION);
+        // codeAssessClientFacade.unsubscribe(SESSION_ANNOUNCEMENT_ADDED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(QUESTION_ADDED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(ANSWER_CREATED_SUBSCRIPTION);
         codeAssessClientFacade.unsubscribe(ANSWER_UPDATED_SUBSCRIPTION);
@@ -134,7 +140,7 @@ class CodeAssessTab extends React.Component {
     onStudentSessionDataUpdated(updatedClass) {
         this.setState({ selectedClassroom: updatedClass });
     }
-    
+
     onClassUpdated(updatedClass) {
         this.setState({ selectedClassroom: updatedClass });
     }
@@ -191,7 +197,7 @@ class CodeAssessTab extends React.Component {
     onSessionAnnouncementAdded(updatedClass) {
         // if this user is a student, show the announcement
         if (this.state.studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
-            
+            this.props.showStudentAnnouncementModal(updatedClass);
         }
         this.setState({ selectedClassroom: updatedClass });
     }
@@ -281,8 +287,15 @@ class CodeAssessTab extends React.Component {
 CodeAssessTab.propTypes = {
 };
 
+const mapDispatchToProps = dispatch => ({
+    showStudentAnnouncementModal: (classroom) => dispatch(openCodeAssessAnnouncement({ classroom })),
+});
+
 export default errorBoundaryHOC('CodeAssess')(
-    injectIntl(CodeAssessTab)
+    injectIntl(connect(
+        null,
+        mapDispatchToProps
+    )(CodeAssessTab))
 );
 
 
