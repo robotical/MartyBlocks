@@ -9,6 +9,7 @@ import ExportDataModalTeacher from '../export-data-modal/teacher/export-data-mod
 import RemoveAccountModal from '../remove-account-modal/remove-account-modal.jsx';
 import { removeCredentialsFromLocalStorage } from '../../user-login/credentials-modal/credentials-modal.jsx';
 
+const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 
 class AccountButton extends React.Component {
 
@@ -57,11 +58,12 @@ class AccountButton extends React.Component {
         }
     }
 
-    dropdownItemClicked(event, item) {
+    async dropdownItemClicked(event, item) {
         event.stopPropagation();
         if (item === 'logout') {
-            removeCredentialsFromLocalStorage();
-            codeAssess.logUserOut();
+            // removeCredentialsFromLocalStorage();
+            await codeAssessClientFacade.logUserOut();
+            window.location.reload();
         } else if (item === 'export-data') {
             this.onSetModal(<ExportDataModalTeacher
                 students={this.props.students}
@@ -108,9 +110,9 @@ class AccountButton extends React.Component {
                 </div>
                 <div className={styles.dropdownContainer}>
                     {this.state.dropdownOpen && <div className={styles.dropdown} ref={this.setDropdownRef}>
-                        <div className={styles.dropdownItem} onClick={(event) => this.dropdownItemClicked(event, 'export-data')}>
+                        {/* <div className={styles.dropdownItem} onClick={(event) => this.dropdownItemClicked(event, 'export-data')}>
                             <div className={styles.dropdownItemText}>Export Data</div>
-                        </div>
+                        </div> */}
                         <div className={styles.dropdownItem}>
                             <div className={styles.dropdownItemText} onClick={(event) => this.dropdownItemClicked(event, 'logout')}>Sign Out</div>
                         </div>

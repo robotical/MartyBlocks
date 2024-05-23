@@ -3,9 +3,16 @@
     height: 100%;
     display: grid;
     grid-template-areas: "code explanation";
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1.5fr max-content;
     gap: 10px;
     background: hsla(215, 100%, 95%, 1);
+}
+
+@media (max-width: 868px) {
+    .submitCodeSectionContainer {
+        grid-template-areas: "code" "explanation";
+        grid-template-columns: 1fr;
+    }
 }
 
 

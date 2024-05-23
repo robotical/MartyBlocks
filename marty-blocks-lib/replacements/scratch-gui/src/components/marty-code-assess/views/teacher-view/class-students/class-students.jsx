@@ -7,6 +7,7 @@ import TimelineSessions from '../class-overview/timeline-sessions/timeline-sessi
 import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
 import StudentOverview from './student-overview/student-overview.jsx';
+import SortByStudents from '../../../sort-by\'s/sortby-students/sortby-students.jsx';
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
@@ -30,6 +31,7 @@ export default class ClassStudents extends React.Component {
             "handleSessionSelect",
             "reselectSession",
             "onStudentClick",
+            "onStudentsSorted"
         ]);
     }
 
@@ -116,6 +118,10 @@ export default class ClassStudents extends React.Component {
         });
     }
 
+    onStudentsSorted(sortedStudents) {
+        this.setState({ sortedStudents: [...sortedStudents] });
+    }
+
     render() {
         const { selectedClassroom } = this.props;
 
@@ -139,15 +145,27 @@ export default class ClassStudents extends React.Component {
                 />
             </div>
             {this.state.currentContent === "grid" ?
-                <div className={styles.studentsGridContainer}>
-                    <h3 className={styles.studentsGridTitle}>Student Competency Levels</h3>
-                    <StudentsColorCoding />
-                    {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> :
-                        <StudentsGrid
-                            sessionsArr={this.state.sessionsArr}
-                            students={this.state.sortedStudents}
-                            onStudentClick={this.onStudentClick}
+                <div className={styles.studentsGridOuterContainer}>
+                    <div className={styles.studentsColorCodingContainer}>
+                        <h3 className={styles.studentsGridTitle}>Student Competency Levels</h3>
+                        <StudentsColorCoding />
+                    </div>
+                    <div className={styles.sortByContainer}>
+                        <SortByStudents
+                            selectedSession={this.state.selectedSession}
+                            students={selectedClassroom.students}
+                            onStudentsSorted={this.onStudentsSorted}
+                            selectedClassroom={selectedClassroom}
                         />
+                    </div>
+                    {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> :
+                        <div className={styles.studentsGridContainer}>
+                            <StudentsGrid
+                                sessionsArr={this.state.sessionsArr}
+                                students={this.state.sortedStudents}
+                                onStudentClick={this.onStudentClick}
+                            />
+                        </div>
                     }
                 </div> : <div className={styles.studentProfileContainer}>
                     {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> :

@@ -54,9 +54,10 @@ class SortByStudents extends React.Component {
         // if the selected sort by is "performance", and the performance of a student changes, we need to sort the students again
         if (this.state.selectedSortBy === SORT_BY_ENUM.PERFORMANCE) {
             const activeSession = this.props.selectedClassroom.activeSession;
-            if (!activeSession) return;
+            const session = this.props.selectedSession || activeSession;
+            if (!session) return;
             // make sure that all students have a studentSessionData array
-            const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([activeSession]);
+            const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([session]);
             const prevStudentsSorted = sortStudentsByPerformance(dataWithColors, prevProps.students);
             const studentsSorted = sortStudentsByPerformance(dataWithColors, this.props.students);
             for (let i = 0; i < studentsSorted.length; i++) {
@@ -83,9 +84,10 @@ class SortByStudents extends React.Component {
 
     sortByPerformance() {
         const activeSession = this.props.selectedClassroom.activeSession;
-        if (!activeSession) return;
+        const session = this.props.selectedSession || activeSession;
+        if (!session) return;
         // make sure that all students have a studentSessionData array
-        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([activeSession]);
+        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([session]);
         const sortedStudents = sortStudentsByPerformance(dataWithColors, this.props.students);
         this.props.onStudentsSorted(sortedStudents);
     }
@@ -118,11 +120,16 @@ class SortByStudents extends React.Component {
     }
 
     render() {
+        const { selectedSession } = this.props; // if there is a selected session then we are in the Students tab, otherwise we are in the Dashboard. In the Students tab we don't show the activity status option in the sort by dropdown and the performance is not calculated by looking at the active session
+
         return (
             <div className={styles.sortByStudentsContainer}>
                 <select className={styles.sortBySelect} onChange={(e) => this.onSortByChange(e.target.value)} value={this.state.selectedSortBy}>
                     <option value="Sort by" disabled selected>Sort by</option>
-                    {SORT_BY_OPTIONS.map((option) => {
+                    {SORT_BY_OPTIONS.filter(option => { // filtering out the activity status option if the withActivityStatusOption is false
+                        if (option === SORT_BY_ENUM.ACTIVITY_STATUS && !!selectedSession) return false;
+                        return true;
+                    }).map((option) => {
                         return (
                             <option key={option} value={option}>{option}</option>
                         )

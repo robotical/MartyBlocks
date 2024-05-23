@@ -14,6 +14,8 @@ const messages = defineMessages({
     }
 });
 
+const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
+
 class RemoveAccountModal extends React.Component {
     constructor(props) {
         super(props);
@@ -31,19 +33,19 @@ class RemoveAccountModal extends React.Component {
     componentWillUnmount() {
     }
 
-    onRemoveAccount() {
+    async onRemoveAccount() {
         this.setState({ isLoading: true });
         // send request to remove account
-        codeAssess.logUserOut();
+        await codeAssessClientFacade.logUserOut();
         this.props.onClose();
         alert("Your account has been deactivated. You can reactivate it by logging in within 30 days.");
         this.setState({ isLoading: false });
+        window.location.reload();
     }
 
 
     render() {
         const { intl } = this.props;
-
 
         return (
             <div className={styles.removeAccountModal}>

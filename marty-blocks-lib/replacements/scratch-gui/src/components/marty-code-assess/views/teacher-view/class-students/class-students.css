@@ -10,10 +10,35 @@
 
 }
 
-.studentsGridContainer{}
+.sortByContainer {
+
+}
+
+.studentsGridOuterContainer{}
 .studentsGridTitle{
     margin-bottom: 0;
 }
+
+.studentsGridOuterContainer {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-areas: 'studentsColorCodingContainer sortByContainer' 'studentsGridContainer studentsGridContainer';
+}
+
+.studentsColorCodingContainer {
+    grid-area: studentsColorCodingContainer;
+}
+
+.sortByContainer {
+    grid-area: sortByContainer;
+    justify-self: end;
+    align-self: end;
+}
+
+.studentsGridContainer {
+    grid-area: studentsGridContainer;
+}
+
 
 .backToGridButton {
     position: absolute;

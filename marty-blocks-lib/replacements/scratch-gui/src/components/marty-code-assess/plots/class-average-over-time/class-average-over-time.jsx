@@ -117,6 +117,7 @@ class ClassAverageOverTime extends React.Component {
 
 
     render() {
+        const { modalContentLabel } = this.props;
 
         let expandedPlots = [];
         if (this.state.modalVisible) {
@@ -145,7 +146,7 @@ class ClassAverageOverTime extends React.Component {
                         fullScreen={false}
                         className={styles.modal}
                         id="classAverageOverTimeModal"
-                        contentLabel="Class Progress over time"
+                        contentLabel={modalContentLabel || "Class Progress over time"}
                     >
                         <div className={styles.modalContent}>
                             {expandedPlots}

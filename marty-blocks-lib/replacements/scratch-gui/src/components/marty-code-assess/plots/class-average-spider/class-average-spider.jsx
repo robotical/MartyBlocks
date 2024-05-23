@@ -166,6 +166,8 @@ class ClassAverageSpider extends React.Component {
     }
 
     render() {
+        const { modalContentLabel } = this.props;
+
         const isMinimised = this.props.isMinimised;
         let hasData = !!this.props.data;
         if (Array.isArray(this.props.data)) {
@@ -185,7 +187,7 @@ class ClassAverageSpider extends React.Component {
                         fullScreen={false}
                         className={styles.modal}
                         id="classAverageSpiderModal"
-                        contentLabel="Class Competency Levels (Average)"
+                        contentLabel={modalContentLabel || "Class Competency Levels (Average)"}
                     >
                         <div className={styles.modalContent}>
                             <ClassAverageSpiderEnlarged

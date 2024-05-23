@@ -92,8 +92,6 @@ const vmListenerHOC = function (WrappedComponent) {
             this.assessStudent();
         }
         autoSaveProject() {
-            // eslint-disable-next-line no-console
-            console.log('Saving project to "__autosave"');
             this.props.vm.saveProjectSb3().then(sb3Content => {
                 blobToBase64(sb3Content).then(base64sb3 => {
                     try {

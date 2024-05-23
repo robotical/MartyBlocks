@@ -7,6 +7,7 @@ import CodeAssessHeader from "../../header/header.jsx";
 import CodeAssessHeaderButton from "../../header/header-button/header-button.jsx";
 import JoinSessionButton from "./join-session-button/join-session-button.jsx";
 import SubmitCodeSection from "./submit-code-section/submit-code-section.jsx";
+import ClassHub from "./class-hub-section/class-hub.jsx";
 
 const messages = defineMessages({
     placeholder: {
@@ -52,12 +53,15 @@ class StudentView extends React.Component {
                     </div>
                 </CodeAssessHeader>
                 <div className={styles.selectedTabContentContainer}>
-                    {this.state.selectedTab === "Class Hub" && <div>Class Hub</div>}
+                    {this.state.selectedTab === "Class Hub" && <ClassHub
+                        selectedClassroom={selectedClassroom}
+                        studentId={student.id}
+                        studentName={student.name}
+                    />}
                     {this.state.selectedTab === "Submit Code" && <SubmitCodeSection
                         selectedClassroom={selectedClassroom}
                         student={student}
-                    />
-                    }
+                    />}
                 </div>
             </div>
         );

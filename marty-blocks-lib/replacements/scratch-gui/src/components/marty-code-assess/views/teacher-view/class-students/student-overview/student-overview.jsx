@@ -71,6 +71,7 @@ class ClassOverview extends React.Component {
                                 data={DataTransformations.convertSessionsToSpiderGraphData(studentSessionsArr, true)}
                                 rawSessionData={studentSessionsArr}
                                 isMinimised={true}
+                                modalContentLabel={`Competency levels for ${selectedStudentName}`}
                             />}
                         </div>
                         <div className={styles.supportChampionsContainer}>
@@ -86,6 +87,7 @@ class ClassOverview extends React.Component {
                                 data={DataTransformations.convertSessionsToLineGraphData(studentSessionsArr, isSpecificSession)}
                                 rawSessionData={studentSessionsArr}
                                 isSpecificSession={isSpecificSession}
+                                modalContentLabel={`Progress over time for ${selectedStudentName}`}
                             />}
                         </div>
                         <div className={styles.notesContainer}>

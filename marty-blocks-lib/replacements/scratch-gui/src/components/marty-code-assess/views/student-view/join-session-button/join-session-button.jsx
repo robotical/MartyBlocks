@@ -29,7 +29,7 @@ class JoinSessionButton extends React.Component {
         if (isThereActiveSession && !haveIJoinedSession) {
             buttonJSX = (
                 <button
-                    className={styles.joinSessionButton}
+                    className={[styles.joinSessionButton, styles.active].join(" ")}
                     onClick={this.onJoinSession}
                 >
                     Join Session
@@ -38,7 +38,7 @@ class JoinSessionButton extends React.Component {
         } else if (isThereActiveSession && haveIJoinedSession) {
             buttonJSX = (
                 <button
-                    className={styles.joinSessionButton}
+                    className={[styles.joinSessionButton, styles.leaveSessionButton].join(" ")}
                     onClick={this.onLeaveSession}
                 >
                     Leave Session
@@ -48,7 +48,7 @@ class JoinSessionButton extends React.Component {
             // No active session
             buttonJSX = (
                 <button
-                    className={styles.joinSessionButton}
+                    className={[styles.joinSessionButton, styles.disabled].join(" ")}
                     disabled
                 >
                     No Active Session
@@ -56,11 +56,7 @@ class JoinSessionButton extends React.Component {
             );
         }
 
-        return (
-            <div className={styles.joinSessionButton}>
-                {buttonJSX}
-            </div>
-        );
+        return buttonJSX;
     }
 
 }
