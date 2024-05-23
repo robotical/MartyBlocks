@@ -54,6 +54,8 @@ import MonitorList from "../../containers/monitor-list.jsx";
 
 import KeyboardCaller from "../keyboard-caller/keyboard-caller.jsx";
 
+import CodeAssessAnnouncementModal from '../marty-code-assess/announcement-modal/announcement-modal.jsx';
+
 
 const messages = defineMessages({
   addExtension: {
@@ -94,6 +96,7 @@ const GUIComponent = props => {
     canShare,
     canUseCloud,
     children,
+    codeAssessAnnouncementModalVisible,
     connectionModalVisible,
     costumeLibraryVisible,
     costumesTabVisible,
@@ -220,6 +223,7 @@ const GUIComponent = props => {
         {alertsVisible ? (
           <Alerts className={styles.alertsContainer} />
         ) : null}
+        {codeAssessAnnouncementModalVisible ? <CodeAssessAnnouncementModal /> : null}
         {connectionModalVisible ? (
           <ConnectionModal
             vm={vm}

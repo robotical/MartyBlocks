@@ -189,6 +189,10 @@ class CodeAssessTab extends React.Component {
     }
 
     onSessionAnnouncementAdded(updatedClass) {
+        // if this user is a student, show the announcement
+        if (this.state.studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
+            
+        }
         this.setState({ selectedClassroom: updatedClass });
     }
 
