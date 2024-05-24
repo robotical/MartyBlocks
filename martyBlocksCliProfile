@@ -60,8 +60,8 @@ removeNodeModules() {
 # Step 2: Install scratch
 installScratch() {
     cd $blocks_original && npm install 
-    cd $vm_original && npm install && npm install soundtouchjs@0.1.30
-    cd $gui_original && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs && npm i plotly.js react-plotly.js
+    cd $vm_original && npm install && npm install soundtouchjs@0.1.30 && npm i uglifyjs-webpack-plugin@2.2.0 --sev-dev
+    cd $gui_original && npm install && npm i uglifyjs-webpack-plugin@2.2.0 --sev-dev && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs && npm i plotly.js react-plotly.js
 }
 
 # Step 3: Install marty blocks library
@@ -73,7 +73,7 @@ installMBLib() {
 # Step 4: Link repositories
 npmlinkAll() {
     # local type="${1:-all"}
-    cd $mblib && npm link && npm link ../../code-assess/code-assess-lib # ../../scratch-automatic-assessment # && npm link ../../marty-machine-lib
+    cd $mblib && npm link #&& npm link ../../code-assess/code-assess-lib # ../../scratch-automatic-assessment # && npm link ../../marty-machine-lib
     cd $blocks_original && npm link && npm link marty-blocks-lib
     cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
     cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
