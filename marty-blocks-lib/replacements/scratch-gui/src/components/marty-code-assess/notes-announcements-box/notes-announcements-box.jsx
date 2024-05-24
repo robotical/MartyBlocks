@@ -109,7 +109,7 @@ class NotesAnnouncementsBox extends React.Component {
             return <div className={styles.itemsBoxContainer}>
                 <div className={styles.itemsContainer}>
                     <div className={[styles.itemsTitle, styles.itemsTitleDisabled].join(" ")}>{title}</div>
-                    <div>
+                    <div className={styles.itemsContent}>
                         {itemsJsx}
                     </div>
                 </div>
