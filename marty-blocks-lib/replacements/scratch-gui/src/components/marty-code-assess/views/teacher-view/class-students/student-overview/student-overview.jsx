@@ -35,13 +35,19 @@ class ClassOverview extends React.Component {
     }
 
     componentDidMount() {
-        const { isSpecificSession, selectedStudentId } = this.props;
+        const { isSpecificSession, selectedStudentId, selectedSessionId } = this.props;
         // fetch code submissions of selected student
         const asyncFunc = async () => {
             const updatedClassroom = await codeAssessClientFacade.fetchStudentCodeSubmissions(selectedStudentId);
             const selectedStudent = updatedClassroom.students.find(s => s.id === selectedStudentId);
             if (!selectedStudent) return;
-            this.setState({ codeSubmissions: selectedStudent.studentCodeSubmissions })
+
+            if (isSpecificSession) {
+                const thisSessionSubmissions = selectedStudent.studentCodeSubmissions.filter(submission => submission.sessionId === selectedSessionId);
+                this.setState({ codeSubmissions: thisSessionSubmissions });
+            } else {
+                this.setState({ codeSubmissions: selectedStudent.studentCodeSubmissions })
+            }
         }
 
         asyncFunc();

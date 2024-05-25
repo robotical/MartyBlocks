@@ -1,5 +1,8 @@
 /* #4caf50
 #f44336 */
+.joinSessionButtonContainer {
+  position: relative;
+}
 
 .joinSessionButton {
   outline: none;
@@ -21,7 +24,6 @@
   text-align: center;
   margin: 0;
   align-self: end;
-
 }
 
 .active {

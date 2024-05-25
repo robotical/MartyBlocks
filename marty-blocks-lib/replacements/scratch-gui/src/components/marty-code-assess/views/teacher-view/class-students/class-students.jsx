@@ -175,6 +175,7 @@ export default class ClassStudents extends React.Component {
                             selectedClassroom={selectedClassroom}
                             selectedStudentId={this.state.selectedStudentId}
                             selectedStudentName={this.state.selectedStudentName}
+                            selectedSessionId={this.state.selectedSession?.id}
                         />
                     }
                 </div>}

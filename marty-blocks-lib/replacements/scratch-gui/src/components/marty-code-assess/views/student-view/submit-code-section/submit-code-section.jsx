@@ -53,7 +53,7 @@ export default class SubmitCodeSection extends React.Component {
 
         return <div className={styles.submitCodeSectionContainer}>
             <div className={styles.codeArea}>
-                {this.state.isLoading && <Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} />}
+                {this.state.isLoading && <><p>This might take a while, please wait...</p><Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} /></>}
                 <iframe
                     ref={this.setIframeRef}
                     src='https://code-assess-playground.web.app'

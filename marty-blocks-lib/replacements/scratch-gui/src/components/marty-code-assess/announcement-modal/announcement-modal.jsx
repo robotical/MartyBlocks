@@ -24,8 +24,9 @@ class CodeAssessAnnouncementModal extends React.Component {
         this.props.onCancel();
     }
 
-    render() {this.props.externalProps.classroom;
+    render() {
         const { classroom } = this.props.externalProps;
+        console.log("classroom", classroom)
         const sortedAnnouncements = getLatestAnnouncement(classroom);
         if (!sortedAnnouncements || sortedAnnouncements.length === 0) {
             this.onCloseModal();
@@ -33,7 +34,7 @@ class CodeAssessAnnouncementModal extends React.Component {
         }
 
         const latestAnnouncement = sortedAnnouncements[0];
-
+        console.log("latestAnnouncement", latestAnnouncement)
         return (
             <Modal
                 className={styles.modalContent}
@@ -48,8 +49,8 @@ class CodeAssessAnnouncementModal extends React.Component {
                     <Box className={styles.announcementText}>
                         {latestAnnouncement.text}
                         <div className={styles.separator}></div>
-                        {latestAnnouncement.imageUrl && <ExpandableImage 
-                            imageUrl={latestAnnouncement.imageUrl} 
+                        {latestAnnouncement.imageUrl && <ExpandableImage
+                            imageUrl={latestAnnouncement.imageUrl}
                             imageThumbnailSize="large"
                         />}
                     </Box>
@@ -74,7 +75,8 @@ export default connect(
 
 const getLatestAnnouncement = function (classroom) {
     const activeSessionAnnouncements = classroom.activeSession?.announcements || [];
-    return activeSessionAnnouncements.sort((a, b) => {
+    const activeSessionAnnouncementsCopy = [...activeSessionAnnouncements];
+    return activeSessionAnnouncementsCopy.sort((a, b) => {
         // timestamp: "23/05/2024, 15:19:32"
         try {
             return parseDateString(b.timestamp) - parseDateString(a.timestamp);

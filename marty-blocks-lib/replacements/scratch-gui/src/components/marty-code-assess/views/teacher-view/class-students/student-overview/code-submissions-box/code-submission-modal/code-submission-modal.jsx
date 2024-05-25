@@ -33,6 +33,7 @@ export default class CodeSubmissionModal extends React.Component {
         const codeUrl = this.props.codeSubmission.codeUrl;
         if (!codeUrl) {
             console.log("no code url provided");
+            this.setState({ isLoading: false });
             return;
         }
 
@@ -40,7 +41,6 @@ export default class CodeSubmissionModal extends React.Component {
         const code = await res.text();
         const blob = await fetch(code);
         
-
         // send the project data down to iframe
         // const projectIdInDB = "AdditionWithMarty";
         // const dbUrl =
