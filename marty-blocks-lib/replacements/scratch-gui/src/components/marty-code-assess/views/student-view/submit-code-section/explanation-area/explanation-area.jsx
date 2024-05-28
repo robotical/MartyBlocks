@@ -21,6 +21,7 @@ export default class ExplanationArea extends React.Component {
             previousSubmissions: [],
             codeExplanation: "",
             isLoading: false,
+            uploadProgress: 0,
         }
 
         bindAll(this, [
@@ -28,7 +29,8 @@ export default class ExplanationArea extends React.Component {
             "handleCodeExplanationChange",
             "handleSaveCode",
             "fetchPreviousSubmissions",
-            "onCodeSubmissionCreated"
+            "onCodeSubmissionCreated",
+            "onUploadProgress"
         ]);
     }
 
@@ -44,6 +46,11 @@ export default class ExplanationArea extends React.Component {
     onCodeSubmissionCreated() {
         this.setState({ isLoading: false });
         this.fetchPreviousSubmissions();
+    }
+
+    onUploadProgress(progressEvent) {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        this.setState({ uploadProgress: progress });
     }
 
 
@@ -76,7 +83,7 @@ export default class ExplanationArea extends React.Component {
             const dataContents = await blobToBase64(sb3Content);
             if (dataContents) {
                 console.log("submitting code")
-                await codeAssessClientFacade.submitCode(this.state.submissionName, dataContents, this.state.codeExplanation);
+                await codeAssessClientFacade.submitCode(this.state.submissionName, dataContents, this.state.codeExplanation, this.onUploadProgress);
             } else {
                 alert("There's no code in the editor. Please add some code before submitting!");
                 this.setState({ isLoading: false });
@@ -93,7 +100,10 @@ export default class ExplanationArea extends React.Component {
 
         const canSubmitCode = selectedClassroom.activeSession && this.state.submissionName && this.state.codeExplanation && this.props.projectDataContents;
 
-        return this.state.isLoading ? <Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} /> :
+        return this.state.isLoading ? <>
+            <Spinner className={[spinnerStyles.spinner, styles.spinner].join(" ")} />
+            {this.state.uploadProgress > 0 && <div className={styles.uploadProgress}>{this.state.uploadProgress}%</div>}
+        </> :
             <div className={styles.explanationAreaContainer}>
                 <div className={styles.submissionNameInputContainer}>
                     <input

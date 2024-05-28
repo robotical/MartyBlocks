@@ -31,7 +31,8 @@ export default class CredentialsModal extends React.Component {
         }
     }
 
-    async loginWithCredentials() {
+    async loginWithCredentials(e) {
+        e.preventDefault();
         this.setState({ isLoading: true });
         if (this.state.credentials.email && this.state.credentials.pw) {
             const wasUserLoggedIn = await codeAssessClientFacade.logUserIn(ProvidersEnum.MAIL, this.state.credentials.email, this.state.credentials.pw);
@@ -51,39 +52,41 @@ export default class CredentialsModal extends React.Component {
                     <img className={styles.logo} src={roboticalIcon} />
                 </div>
                 {this.state.wrongCredentials && <div className={styles.wrongCredentials}>Wrong email or password</div>}
-                <input
-                    className={styles.emailInput}
-                    type="text"
-                    placeholder="Email"
-                    value={this.state.credentials.email}
-                    onChange={(event) => {
-                        this.setState({
-                            credentials: {
-                                ...this.state.credentials,
-                                email: event.target.value
-                            }
-                        });
-                    }
-                    }
-                />
-                <input
-                    className={styles.passwordInput}
-                    value={this.state.credentials.pw}
-                    type="password"
-                    placeholder="Password"
-                    onChange={(event) => {
-                        this.setState({
-                            credentials: {
-                                ...this.state.credentials,
-                                pw: event.target.value
-                            }
-                        });
-                    }
-                    }
-                />
-                <div className={styles.loginButtonContainer}>
-                    {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <button className={styles.loginButton} onClick={this.loginWithCredentials} >Login</button>}
-                </div>
+                <form className={styles.form} onSubmit={this.loginWithCredentials}>
+                    <input
+                        className={styles.emailInput}
+                        type="text"
+                        placeholder="Email"
+                        value={this.state.credentials.email}
+                        onChange={(event) => {
+                            this.setState({
+                                credentials: {
+                                    ...this.state.credentials,
+                                    email: event.target.value
+                                }
+                            });
+                        }
+                        }
+                    />
+                    <input
+                        className={styles.passwordInput}
+                        value={this.state.credentials.pw}
+                        type="password"
+                        placeholder="Password"
+                        onChange={(event) => {
+                            this.setState({
+                                credentials: {
+                                    ...this.state.credentials,
+                                    pw: event.target.value
+                                }
+                            });
+                        }
+                        }
+                    />
+                    <div className={styles.loginButtonContainer}>
+                        {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <button className={styles.loginButton} type='submit' >Login</button>}
+                    </div>
+                </form>
             </div>
         )
     }

@@ -29,8 +29,13 @@ class ClassDashboard extends React.Component {
             sortedStudents: this.props.selectedClassroom.students || []
         };
         bindAll(this, [
-            "onStudentsSorted"
+            "onStudentsSorted",
+            "handleAddNewSessionNote",
+            "handleAddNewSessionAnnouncement",
+            "handleSessionNameChange",
+            "handleSessionTitleUpdate"
         ]);
+        this.sessionNameChangeTimeoutId = null;
     }
 
     componentDidMount() {
@@ -50,27 +55,38 @@ class ClassDashboard extends React.Component {
         this.setState({ sortedStudents: [...sortedStudents] });
     }
 
-    async handleAddNewSessionNote(note, noteFile) {
+    async handleAddNewSessionNote(note, noteFile, onUploadProgress) {
         if (!note) {
             return;
         }
-        return await codeAssessClientFacade.addSessionNote(note, noteFile);
+        return await codeAssessClientFacade.addSessionNote(note, noteFile, undefined, onUploadProgress);
     }
 
-    async handleAddNewSessionAnnouncement(announcement, announcementFile) {
+    async handleAddNewSessionAnnouncement(announcement, announcementFile, onUploadProgress) {
         if (!announcement) {
             return;
         }
-        codeAssessClientFacade.addSessionAnnouncement(announcement, announcementFile);
+        codeAssessClientFacade.addSessionAnnouncement(announcement, announcementFile, undefined, onUploadProgress);
     }
 
     handleSessionTitleUpdate(e) {
-        e.preventDefault();
+        e && e.preventDefault();
         if (!this.state.sessionTitle) {
             return;
         }
         codeAssessClientFacade.updateSessionTitle(this.state.sessionTitle);
         alert("Session title updated!");
+    }
+
+    handleSessionNameChange(e) {
+        this.setState({ sessionTitle: e.target.value }, () => {
+            if (this.sessionNameChangeTimeoutId) {
+                clearTimeout(this.sessionNameChangeTimeoutId);
+            }
+            this.sessionNameChangeTimeoutId = setTimeout(() => {
+                this.handleSessionTitleUpdate();
+            }, 1000);
+        });
     }
 
     render() {
@@ -89,7 +105,12 @@ class ClassDashboard extends React.Component {
                     <div className={styles.classSessionName} style={{ visibility: isThereAnActiveSession ? "visible" : "hidden" }}>
                         {isThereAnActiveSession &&
                             <form onSubmit={this.handleSessionTitleUpdate}>
-                                <input type="text" placeholder='"Session Name"' value={this.state.sessionTitle} onChange={(e) => this.setState({ sessionTitle: e.target.value })} />
+                                <input
+                                    type="text"
+                                    placeholder='"Session Name"'
+                                    value={this.state.sessionTitle}
+                                    onChange={(e) => this.handleSessionNameChange(e)}
+                                />
                             </form>
                         }
                     </div>
@@ -112,7 +133,7 @@ class ClassDashboard extends React.Component {
                     <NotesAnnouncementsBox
                         title="Session Notes"
                         items={selectedClassroom.activeSession?.notes || []}
-                        onAddNewItem={(note, noteFile) => this.handleAddNewSessionNote(note, noteFile)}
+                        onAddNewItem={(note, noteFile, onUploadProgress) => this.handleAddNewSessionNote(note, noteFile, onUploadProgress)}
                         disabled={!isThereAnActiveSession}
                     />
                 </div>
@@ -120,7 +141,7 @@ class ClassDashboard extends React.Component {
                     <NotesAnnouncementsBox
                         title="Session Announcements"
                         items={selectedClassroom.activeSession?.announcements || []}
-                        onAddNewItem={(announcement, announcementFile) => this.handleAddNewSessionAnnouncement(announcement, announcementFile)}
+                        onAddNewItem={(announcement, announcementFile, onUploadProgress) => this.handleAddNewSessionAnnouncement(announcement, announcementFile, onUploadProgress)}
                         disabled={!isThereAnActiveSession}
                     />
                 </div>

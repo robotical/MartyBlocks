@@ -158,12 +158,15 @@ class SpiderGraph extends React.Component {
         }
 
         const config = {
-            displayModeBar: false,
-            displaylogo: false,
-            responsive: false,
-            showLink: false,
-            // showlegend: false,
-            // staticPlot: true,
+            staticPlot: false, // ensure this is false or not set
+            displayModeBar: false, // hide the modebar
+            scrollZoom: false, // prevent zooming
+            doubleClick: false, // prevent zoom reset on double click
+            dragMode: false, // prevent panning or any drag interaction
+            editable: false, // prevent editing
+            showLink: false, // remove the link to edit on plotly
+            displaylogo: false, // remove the plotly logo,
+            responsive: false, // prevent resizing
         };
 
         // convert the data from 0-1 to 0-100
@@ -238,7 +241,7 @@ class SpiderGraph extends React.Component {
         return (
             <>
                 {!hasData && <Spinner level='warn' large className={spinnerStyles.primary} />}
-                <div className={styles.plotContainer}>
+                <div className={styles.plotContainer} onClick={(e) => e.stopPropagation()}>
                     <h3 className={styles.plotTitle}
                         style={{
                             fontSize: sizesMap[this.props.size].plot.title.fontSize,

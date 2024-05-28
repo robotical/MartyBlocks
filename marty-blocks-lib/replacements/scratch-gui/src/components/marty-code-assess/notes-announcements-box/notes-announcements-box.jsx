@@ -19,6 +19,7 @@ class NotesAnnouncementsBox extends React.Component {
         this.setFileInputRef = this.setFileInputRef.bind(this);
         this.triggerFileInput = this.triggerFileInput.bind(this);
         this.handleAddNewItem = this.handleAddNewItem.bind(this);
+        this.onUploadProgress = this.onUploadProgress.bind(this);
 
         this.state = {
             items: [],
@@ -26,6 +27,7 @@ class NotesAnnouncementsBox extends React.Component {
             itemFile: null,
             itemText: "",
             isLoading: false,
+            uploadProgress: 0
         };
 
         this.fileInputRef = null;
@@ -52,12 +54,17 @@ class NotesAnnouncementsBox extends React.Component {
         this.fileInputRef.click();
     }
 
+    onUploadProgress(progressEvent) {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        this.setState({ uploadProgress: progress });
+    }
+
     async handleAddNewItem() {
         this.setState({ isLoading: true });
         if (!this.state.itemText) {
             return;
         }
-        const wasAdded = await this.props.onAddNewItem(this.state.itemText, this.state.itemFile);
+        const wasAdded = await this.props.onAddNewItem(this.state.itemText, this.state.itemFile, this.onUploadProgress);
         if (wasAdded) {
             this.setState({ isLoading: false });
         }
@@ -121,6 +128,7 @@ class NotesAnnouncementsBox extends React.Component {
                 <div className={styles.itemsContainer}>
                     <div className={styles.itemsTitle}>{title}</div>
                     <Spinner level='warn' large className={spinnerStyles.primary} />
+                    {(!!this.state.uploadProgress) && <div className={styles.uploadProgress}>{this.state.uploadProgress}%</div>}
                 </div>
             </div>
         }

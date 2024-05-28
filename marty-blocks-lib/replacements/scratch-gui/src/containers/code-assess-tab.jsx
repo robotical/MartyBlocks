@@ -239,7 +239,6 @@ class CodeAssessTab extends React.Component {
         console.log("in class Selected")
         if (this.state.studentOrTeacher === StudentOrTeacherEnum.STUDENT) {
             const thisStudent = selectedClassroom.students.find((student) => student.id === this.state.userProfile?.id);
-            console.log("thisStudent", thisStudent)
             if (thisStudent) {
                 console.log("Initialised Student Badges")
                 BadgesManager.initialiseBadgeCounts(thisStudent.studentBadges.scores || new BadgesCounts());
