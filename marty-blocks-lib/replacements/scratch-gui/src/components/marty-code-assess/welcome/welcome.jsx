@@ -1,6 +1,8 @@
 import React from "react"
 import styles from "./welcome.css"
 import roboticalIcon from "../../gui/icon--robotical-logo-white.png";
+import CodeAssessHeader from "../header/header.jsx";
+import AccountButton from "../account/account-button/account-button.jsx";
 
 const ProvidersEnum = window.codeAssess.codeAssessLib.ProvidersEnum;
 
@@ -27,6 +29,9 @@ class Welcome extends React.Component {
 
         return (
             <div className={styles.welcomeContainer}>
+                <div className={styles.headerAccountButtonDiv}>
+                    <AccountButton class={null} students={[]} />
+                </div>
                 <div className={styles.logoContainer}>
                     <img className={styles.logo} src={roboticalIcon} />
                 </div>

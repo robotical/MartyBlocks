@@ -39,6 +39,10 @@ class UserLogin extends React.Component {
         this.onShowModal = this.onShowModal.bind(this);
     }
 
+    componentDidMount() {
+        codeAssessClientFacade.checkAuthSessionAndLogin();
+    }
+
     async onLogin(provider, email, password) {
         if (provider === ProvidersEnum.MICROSOFT) return alert('Not implemented yet');
         this.setState({ isLoading: true });

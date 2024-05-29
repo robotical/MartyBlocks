@@ -6,7 +6,20 @@
     height: 100%;
     width: 100%;
     padding: 20px;
+    position: relative;
 }
+
+
+.headerAccountButtonDiv {
+    margin-left: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+
 .welcomeTitle {
     font-size: 24px;
     font-weight: bold;
@@ -14,7 +27,7 @@
 }
 .subtitle {
     font-size: 16px;
-    margin-bottom: 20px;
+    margin: 0px;
 }
 
 .logoContainer {
@@ -31,3 +44,4 @@
     width: 50px;
     height: 40px;
 }
+
