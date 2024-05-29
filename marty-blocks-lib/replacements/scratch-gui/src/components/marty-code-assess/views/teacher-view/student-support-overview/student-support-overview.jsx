@@ -6,6 +6,7 @@ import RarrowIcon from "../../../icon--rarrow.svg";
 import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
 import StudentPieChart from "../../../plots/student-pie-chart/student-pie-chart.jsx";
+import MoreInfoButton from "../../../../more-info-button-v2/more-info-button.jsx";
 
 const messages = defineMessages({
     tutorials: {
@@ -69,9 +70,9 @@ class StudentSupportOverview extends React.Component {
         const { intl, students, allSessions } = this.props;
 
         if (areAllStudentSessionDataEmpty(allSessions)) {
-            return <div className={styles.noData}>No data yet!</div>;
+            // return <div className={styles.noData}>No data yet!</div>;
         }
-                
+
 
         if (this.state.isLoading) {
             return <div className={styles.studentSupportOverviewContainer}>
@@ -86,7 +87,9 @@ class StudentSupportOverview extends React.Component {
         }
 
         return <div className={styles.studentSupportOverviewContainer}>
-            <div className={styles.supportTitle}>Support</div>
+            <div className={styles.supportTitle}>Support<MoreInfoButton modalTitle="Support">
+                Students who might need support
+            </MoreInfoButton></div>
             {[0, 1, 2, 3].map(studentIdx => {
                 const student = this.state.supportStudents[studentIdx];
                 if (!student) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderTop].join(" ")}></div>;
@@ -100,7 +103,9 @@ class StudentSupportOverview extends React.Component {
                     />
                 </div>
             })}
-            <div className={styles.championsTitle}>Champions</div>
+            <div className={styles.championsTitle}>Champions<MoreInfoButton modalTitle="Champions">
+                Students who are doing well and probably don't need support
+            </MoreInfoButton></div>
             {[0, 1, 2, 3].map(studentIdx => {
                 const student = this.state.championStudents[studentIdx];
                 if (!student) return <div key={studentIdx} className={[styles.studentSpiderContainer, styles.studentSpiderBottom].join(" ")}></div>;

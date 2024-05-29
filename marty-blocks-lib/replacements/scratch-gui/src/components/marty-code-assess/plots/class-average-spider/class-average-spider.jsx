@@ -175,7 +175,7 @@ class ClassAverageSpider extends React.Component {
         }
 
         if (hasData && areAllTracesZero(this.props.data)) {
-            return <div className={styles.noData}>No data yet!</div>;
+            // return <div className={styles.noData}>No data yet!</div>;
         }
 
 

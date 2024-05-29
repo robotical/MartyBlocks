@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./timeline-sessions.css";
 import bindAll from 'lodash.bindall';
+import MoreInfoButton from "../../../../../more-info-button-v2/more-info-button.jsx";
 
 class TimelineSessions extends React.Component {
     constructor(props) {
@@ -99,7 +100,9 @@ class TimelineSessions extends React.Component {
 
         return (
             <>
-                <h3 className={styles.selectedSessionTitle}>{selectedSession?.title}</h3>
+                <h3 className={styles.selectedSessionTitle}>{selectedSession?.title}<MoreInfoButton modalTitle="Session Timeline">
+                    You can select a specific session to access more detailed information, or choose the “All Time” option to view details about all sessions.
+                </MoreInfoButton></h3>
                 <div className={styles.sessionTimeline} ref={this.setContainerRef}>
                     <div className={[styles.leftArrow, isLeftArrowDisabled ? styles.disabledArrow : ""].join(" ")} onClick={this.handleLeftArrowClick}>{"<"}</div>
                     <div className={[styles.rightArrow, isRightArrowDisabled ? styles.disabledArrow : ""].join(" ")} onClick={this.handleRightArrowClick}>{">"}</div>

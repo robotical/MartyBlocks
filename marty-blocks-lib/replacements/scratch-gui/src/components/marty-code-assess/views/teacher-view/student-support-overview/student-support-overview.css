@@ -1,70 +1,70 @@
 .studentSupportOverviewContainer {
-    min-width: 460px;
-    display: grid;
-    grid-template-columns: min-content repeat(4, .6fr);
-    grid-template-rows: repeat(2, 1fr);
-    border: 1px solid #b5d0ee;
-    border-radius: 20px;
-    height: 100%;
-    position: relative;
-    background-color: white;
+  min-width: 460px;
+  display: grid;
+  grid-template-columns: min-content repeat(4, 0.6fr);
+  grid-template-rows: repeat(2, 1fr);
+  border: 1px solid #b5d0ee;
+  border-radius: 20px;
+  height: 100%;
+  position: relative;
+  background-color: white;
 }
 
 .championsTitle,
 .supportTitle {
-    writing-mode: vertical-lr;
-    transform: rotate(180deg);
-    border: 1px solid #b5d0ee;
-    padding: 0 5px;
-    color: #808080;
-    text-align: center;
-    font-size: 13px;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  border: 1px solid #b5d0ee;
+  padding: 0 5px;
+  color: #808080;
+  text-align: center;
+  font-size: 13px;
 }
 
 .supportTitle {
-    border-bottom-right-radius: 20px;
-    margin-top: -1px;
+  border-bottom-right-radius: 20px;
+  margin-top: -1px;
 }
 
 .championsTitle {
-    border-top-right-radius: 20px;
-    margin-bottom: -1px;
+  border-top-right-radius: 20px;
+  margin-bottom: -1px;
 }
 
 .studentSpiderContainer {
 }
 
 .studentSpiderTop {
-    border-bottom: 1px solid #b5d0ee;
-    display: grid;
-    align-items: center;
+  border-bottom: 1px solid #b5d0ee;
+  display: grid;
+  align-items: center;
 }
 
 .studentSpiderBottom {
-    border-top: 1px solid #b5d0ee;
-    display: grid;
-    align-items: center;
+  border-top: 1px solid #b5d0ee;
+  display: grid;
+  align-items: center;
 }
 
 .showAllButtonContainer {
-    position: absolute;
-    right: -8px;
-    bottom: -10px;
-    z-index: 1;
-    width: 25px;
-    height: 25px;
-    background: #4caf50;
-    border-radius: 50%;
-    border: 3px solid hsla(215, 100%, 95%, 1);
-    box-sizing: content-box;
-    cursor: pointer;
+  position: absolute;
+  right: -8px;
+  bottom: -10px;
+  z-index: 1;
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  border-radius: 50%;
+  border: 3px solid hsla(215, 100%, 95%, 1);
+  box-sizing: content-box;
+  cursor: pointer;
 }
 
 .showAllButtonIcon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 10px;
-    height: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
 }

@@ -8,6 +8,7 @@ import Spinner from '../../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../../spinner/spinner.css';
 import StudentOverview from './student-overview/student-overview.jsx';
 import SortByStudents from '../../../sort-by\'s/sortby-students/sortby-students.jsx';
+import MoreInfoButton from '../../../../more-info-button-v2/more-info-button.jsx';
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
@@ -147,7 +148,12 @@ export default class ClassStudents extends React.Component {
             {this.state.currentContent === "grid" ?
                 <div className={styles.studentsGridOuterContainer}>
                     <div className={styles.studentsColorCodingContainer}>
-                        <h3 className={styles.studentsGridTitle}>Student Competency Levels</h3>
+                        <h3 className={styles.studentsGridTitle}>Student Competency Levels <MoreInfoButton modalTitle="Student Competency Levels">
+                                This color coding shows the competency levels of students based on their assessment performance compared to the class average.
+                                <br />
+                                <br />
+                                Underachieving and intermediate levels have lower scores than the class average, while adept and champion levels have higher scores.
+                        </MoreInfoButton></h3>
                         <StudentsColorCoding />
                     </div>
                     <div className={styles.sortByContainer}>

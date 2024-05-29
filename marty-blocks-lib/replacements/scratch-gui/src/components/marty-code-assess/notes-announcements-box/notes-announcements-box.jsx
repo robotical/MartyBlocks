@@ -5,6 +5,7 @@ import iconImage from "./icon--image.svg";
 import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 import ExpandableImage from "../expandable-image/expandable-image.jsx";
+import MoreInfoButton from "../../more-info-button-v2/more-info-button.jsx";
 
 const PublishedEventsEnum = window.codeAssess.codeAssessLib.PublishedEventsEnum;
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
@@ -136,7 +137,15 @@ class NotesAnnouncementsBox extends React.Component {
         return (
             <div className={styles.itemsBoxContainer}>
                 <div className={styles.itemsContainer}>
-                    <div className={styles.itemsTitle}>{title}</div>
+                    <div className={styles.itemsTitle}>{title}<MoreInfoButton modalTitle={title}>
+                        {title.includes("Notes") ? `
+                            The session notes are a great way to keep track of important information, such as key takeaways, questions, and more.
+                            They are not visible to students.
+                        ` : `
+                            The session announcements are a great way to communicate important information to students, such as upcoming deadlines, changes to the schedule, and more.
+                            Once created, the students get notified about the announcement.
+                        `}
+                    </MoreInfoButton></div>
                     {this.state.isAddinNewItem ? (
                         <div className={styles.addNewItemContainer}>
                             <input type="text" className={styles.addNewItemInput} placeholder={`Add new item`} onChange={(e) => this.setState({ itemText: e.target.value })} value={this.state.itemText} />

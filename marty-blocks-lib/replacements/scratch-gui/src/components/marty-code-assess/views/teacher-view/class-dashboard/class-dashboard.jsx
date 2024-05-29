@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import StudentsGrid from "./students-grid/students-grid.jsx";
 import SortByStudents from "../../../sort-by's/sortby-students/sortby-students.jsx";
 import NotesAnnouncementsBox from "../../../notes-announcements-box/notes-announcements-box.jsx";
+import MoreInfoButton from "../../../../more-info-button-v2/more-info-button.jsx";
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 
@@ -100,7 +101,9 @@ class ClassDashboard extends React.Component {
         return (
             <div className={styles.dashboardContainer}>
                 <div className={styles.header}>
-                    <div className={styles.className}>{selectedClassroom?.title}</div>
+                    <div className={styles.className}>{selectedClassroom?.title}<MoreInfoButton modalTitle="Class Dashboard">
+                        The Class Dashboard provides a quick overview of the active session for the selected classroom, displaying data in real-time.
+                    </MoreInfoButton></div>
                     <div className={styles.classSection}>{selectedClassroom?.section}</div>
                     <div className={styles.classSessionName} style={{ visibility: isThereAnActiveSession ? "visible" : "hidden" }}>
                         {isThereAnActiveSession &&

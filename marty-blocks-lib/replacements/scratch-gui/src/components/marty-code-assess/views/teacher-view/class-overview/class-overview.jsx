@@ -126,7 +126,7 @@ class ClassOverview extends React.Component {
         let overviewContainerStylesForNoData = {};
         if (allStudentSessionDataEmpty) {
             overviewContainerStylesForNoData = {
-                gridTemplateAreas: '"sessionsTimeline sessionsTimeline" "nodata nodata" "notes announcements"',
+                gridTemplateAreas: '"sessionsTimeline sessionsTimeline" "nodata nodata" "notesAnnouncements notesAnnouncements"',
                 gridTemplateColumns: "1fr 1fr",
                 gridTemplateRows: "1fr 1fr",
             };
@@ -165,21 +165,23 @@ class ClassOverview extends React.Component {
                                 isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                             />
                         </div>}
-                        <div className={styles.notesContainer}>
-                            <NotesAnnouncementsBox
-                                title="Session Notes"
-                                items={this.state.selectedSession?.notes || []}
-                                onAddNewItem={(note, noteFile) => this.handleAddNewSessionNote(note, noteFile)}
-                                disabled={this.state.selectedSession?.title === "All__Time" || !this.state.selectedSession}
-                            />
-                        </div>
-                        <div className={styles.announcementsContainer}>
-                            <NotesAnnouncementsBox
-                                title="Session Announcements"
-                                items={this.state.selectedSession?.announcements || []}
-                                onAddNewItem={(announcement, announcementFile) => this.handleAddNewSessionAnnouncement(announcement, announcementFile)}
-                                disabled={this.state.selectedSession?.title === "All__Time" || !this.state.selectedSession}
-                            />
+                        <div className={styles.notesAnnouncementsContainer}>
+                            <div className={styles.notesContainer}>
+                                <NotesAnnouncementsBox
+                                    title="Session Notes"
+                                    items={this.state.selectedSession?.notes || []}
+                                    onAddNewItem={(note, noteFile) => this.handleAddNewSessionNote(note, noteFile)}
+                                    disabled={this.state.selectedSession?.title === "All__Time" || !this.state.selectedSession}
+                                />
+                            </div>
+                            <div className={styles.announcementsContainer}>
+                                <NotesAnnouncementsBox
+                                    title="Session Announcements"
+                                    items={this.state.selectedSession?.announcements || []}
+                                    onAddNewItem={(announcement, announcementFile) => this.handleAddNewSessionAnnouncement(announcement, announcementFile)}
+                                    disabled={this.state.selectedSession?.title === "All__Time" || !this.state.selectedSession}
+                                />
+                            </div>
                         </div>
                     </>
                 )}

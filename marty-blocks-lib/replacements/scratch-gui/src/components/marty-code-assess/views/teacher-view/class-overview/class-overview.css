@@ -3,8 +3,8 @@
   padding: 20px;
   grid-template-areas:
     "sessionsTimeline sessionsTimeline sessionsTimeline sessionsTimeline"
-    "spiderGraph supportChampions separator notes"
-    "progressOverTime progressOverTime separator announcements";
+    "spiderGraph supportChampions separator notesAnnouncements"
+    "progressOverTime progressOverTime separator notesAnnouncements";
   grid-template-columns: min-content min-content 1px 1fr;
   grid-template-rows: min-content 1fr 1fr;
   row-gap: 10px;
@@ -12,42 +12,15 @@
   /* height: 100%; */
 }
 
-@media (max-width: 1124px) {
-  .overviewContainer {
-    grid-template-areas:
-      "sessionsTimeline sessionsTimeline"
-      "spiderGraph supportChampions"
-      "progressOverTime progressOverTime"
-      "notes announcements";
-    grid-template-columns: min-content 1fr;
-    grid-template-rows: min-content 1fr 1fr 1fr;
-  }
-
-  .separator {
-    display: none;
-  }
-}
-
-@media (max-width: 868px) {
-  .overviewContainer {
-    grid-template-areas:
-      "sessionsTimeline sessionsTimeline"
-      "spiderGraph spiderGraph"
-      "supportChampions supportChampions"
-      "progressOverTime progressOverTime"
-      "notes announcements";
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: min-content 1fr 1fr 1fr 1fr 1fr;
-  }
-
-  .separator {
-    display: none;
-  }
-
-  .notesContainer,
-  .announcementsContainer {
-    min-height: 200px;
-  }
+.notesAnnouncementsContainer {
+  grid-area: notesAnnouncements;
+  display: grid;
+  grid-template-areas:
+    "notes"
+    "announcements";
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  row-gap: 10px;
 }
 
 .sessionTimelineContainer {
@@ -94,7 +67,59 @@
   font-weight: bold;
 }
 
-.noDataSubtitle  {
+.noDataSubtitle {
   font-size: 16px;
   color: #7b8fa5;
+}
+
+@media (max-width: 1124px) {
+  .overviewContainer {
+    grid-template-areas:
+      "sessionsTimeline sessionsTimeline"
+      "spiderGraph supportChampions"
+      "progressOverTime progressOverTime"
+      "notesAnnouncements notesAnnouncements";
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: min-content 1fr 1fr 1fr;
+  }
+
+  .notesAnnouncementsContainer {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "notes . announcements";
+    column-gap: 5px;
+  }
+
+  .separator {
+    display: none;
+  }
+}
+
+@media (max-width: 868px) {
+  .overviewContainer {
+    grid-template-areas:
+      "sessionsTimeline sessionsTimeline"
+      "spiderGraph spiderGraph"
+      "supportChampions supportChampions"
+      "progressOverTime progressOverTime"
+      "notesAnnouncements notesAnnouncements";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .notesAnnouncementsContainer {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "notes . announcements";
+    column-gap: 5px;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .notesContainer,
+  .announcementsContainer {
+    min-height: 200px;
+  }
 }

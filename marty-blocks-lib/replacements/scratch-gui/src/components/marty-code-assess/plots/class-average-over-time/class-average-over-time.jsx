@@ -6,6 +6,7 @@ import Plotly from "plotly.js"
 import PlusIcon from "../../icon--plus.svg";
 import Modal from "../../../../containers/modal.jsx";
 import ClassAverageOverTimeExpanded from "./class-average-over-time-expanded/class-average-over-time-expanded.jsx";
+import MoreInfoButton from "../../../more-info-button-v2/more-info-button.jsx";
 
 const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
 
@@ -135,7 +136,7 @@ class ClassAverageOverTime extends React.Component {
 
 
         if (areAllTracesZero(this.props.data)) {
-            return <div className={styles.noData}>No data yet!</div>;
+            // return <div className={styles.noData}>No data yet!</div>;
         }
 
         return (
@@ -153,7 +154,10 @@ class ClassAverageOverTime extends React.Component {
                         </div>
                     </Modal>
                 }
-                <h3 style={{ margin: "2px" }}>Progress Over Time</h3>
+                <h3 style={{ margin: "2px" }}>Progress Over Time<MoreInfoButton modalTitle="Progress Over Time">
+                    This graph shows the average score over time. The y-axis represents the average score.
+                    If 'All Sessions' is selected, the x-axis represents the sessions. If a specific session is selected, the x-axis represents the time intervals in that session.
+                </MoreInfoButton></h3>
                 <div className={styles.container}>
                     <div ref={this.setPlotRef} className={styles.plotDiv} style={{
                         width: "100%",
