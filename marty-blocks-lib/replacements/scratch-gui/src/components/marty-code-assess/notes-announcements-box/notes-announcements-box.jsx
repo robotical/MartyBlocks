@@ -60,10 +60,10 @@ class NotesAnnouncementsBox extends React.Component {
     }
 
     async handleAddNewItem() {
-        this.setState({ isLoading: true });
         if (!this.state.itemText) {
             return;
         }
+        this.setState({ isLoading: true });
         const wasAdded = await this.props.onAddNewItem(this.state.itemText, this.state.itemFile, this.onUploadProgress);
         if (wasAdded) {
             this.setState({ isLoading: false });

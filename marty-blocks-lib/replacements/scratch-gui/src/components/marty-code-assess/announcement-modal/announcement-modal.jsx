@@ -77,18 +77,7 @@ const getLatestAnnouncement = function (classroom) {
     const activeSessionAnnouncements = classroom.activeSession?.announcements || [];
     const activeSessionAnnouncementsCopy = [...activeSessionAnnouncements];
     return activeSessionAnnouncementsCopy.sort((a, b) => {
-        // timestamp: "23/05/2024, 15:19:32"
-        try {
-            return parseDateString(b.timestamp) - parseDateString(a.timestamp);
-        } catch (e) {
-            console.error("error sorting announcements by timestamp:", e);
-        }
+        // timestamp: "2024-05-29T08:31:03.644Z"
+        return new Date(b.timestamp) - new Date(a.timestamp);
     });
-}
-
-const parseDateString = (dateString) => {
-    const parts = dateString.split(', ');
-    const date = parts[0].split('/');
-    const time = parts[1].split(':');
-    return new Date(date[2], date[1] - 1, date[0], time[0], time[1], time[2]);
 }
