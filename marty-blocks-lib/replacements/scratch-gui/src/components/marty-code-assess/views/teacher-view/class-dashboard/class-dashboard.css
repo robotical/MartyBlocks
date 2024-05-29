@@ -6,22 +6,39 @@
   grid-template-columns: 0.7fr 0.3fr;
   grid-template-rows: min-content 1fr 1fr;
   grid-template-areas:
-    "header notes"
-    "students notes"
-    "students announcements";
+    "header notesAnnouncements"
+    "students notesAnnouncements"
+    "students notesAnnouncements";
   row-gap: 10px;
   column-gap: 10px;
+}
+
+.notesAnnouncementsContainer {
+  grid-area: notesAnnouncements;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "notes"
+    "announcements";
+  row-gap: 10px;
 }
 
 @media (max-width: 868px) {
   .dashboardContainer {
     grid-template-columns: 1fr;
-    grid-template-rows: min-content 1fr 1fr 1fr;
+    grid-template-rows: min-content 1fr 1fr;
     grid-template-areas:
       "header"
       "students"
-      "notes"
-      "announcements";
+      "notesAnnouncements";
+  }
+
+  .notesAnnouncementsContainer {
+    grid-area: notesAnnouncements;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "notes . announcements";
   }
 
   .notesContainer,
@@ -100,7 +117,6 @@
 /* NOTES */
 .notesContainer {
   grid-area: notes;
-  margin-top: 26px;
 }
 /* NOTES END */
 

@@ -129,21 +129,23 @@ class ClassDashboard extends React.Component {
                         students={this.state.sortedStudents}
                     />
                 </div>
-                <div className={styles.notesContainer}>
-                    <NotesAnnouncementsBox
-                        title="Session Notes"
-                        items={selectedClassroom.activeSession?.notes || []}
-                        onAddNewItem={(note, noteFile, onUploadProgress) => this.handleAddNewSessionNote(note, noteFile, onUploadProgress)}
-                        disabled={!isThereAnActiveSession}
-                    />
-                </div>
-                <div className={styles.announcementsContainer}>
-                    <NotesAnnouncementsBox
-                        title="Session Announcements"
-                        items={selectedClassroom.activeSession?.announcements || []}
-                        onAddNewItem={(announcement, announcementFile, onUploadProgress) => this.handleAddNewSessionAnnouncement(announcement, announcementFile, onUploadProgress)}
-                        disabled={!isThereAnActiveSession}
-                    />
+                <div className={styles.notesAnnouncementsContainer}>
+                    <div className={styles.notesContainer}>
+                        <NotesAnnouncementsBox
+                            title="Session Notes"
+                            items={selectedClassroom.activeSession?.notes || []}
+                            onAddNewItem={(note, noteFile, onUploadProgress) => this.handleAddNewSessionNote(note, noteFile, onUploadProgress)}
+                            disabled={!isThereAnActiveSession}
+                        />
+                    </div>
+                    <div className={styles.announcementsContainer}>
+                        <NotesAnnouncementsBox
+                            title="Session Announcements"
+                            items={selectedClassroom.activeSession?.announcements || []}
+                            onAddNewItem={(announcement, announcementFile, onUploadProgress) => this.handleAddNewSessionAnnouncement(announcement, announcementFile, onUploadProgress)}
+                            disabled={!isThereAnActiveSession}
+                        />
+                    </div>
                 </div>
             </div>
         )
