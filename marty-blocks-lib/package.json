@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@robotical/automatic-assessments": "^1.0.17",
-    "@robotical/code-assess-lib": "^2.0.10",
+    "@robotical/code-assess-lib": "^2.0.11",
     "@robotical/marty-machine-lib": "^1.0.7",
     "@robotical/scratch-to-python-transpiler": "^1.0.12",
     "semver": "^7.3.7"
