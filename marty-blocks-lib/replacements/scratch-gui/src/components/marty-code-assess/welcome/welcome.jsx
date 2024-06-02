@@ -13,14 +13,15 @@ class Welcome extends React.Component {
         if (isThereAClassSelected) {
             return null;
         }
-
+        console.log("areThereAnyClasses", areThereAnyClasses)
+        console.log("isThereAClassSelected", isThereAClassSelected)
         let jsx = null;
         if (!areThereAnyClasses) {
             // there are no classes on the left, the user needs to create a class from the classroom API
             if (provider === ProvidersEnum.GOOGLE) {
-                jsx = <p className={styles.subtitle}>Your Google Classroom account doesn't have any classes with 'Robotics' section</p>
+                jsx = <p className={styles.subtitle}>Your Google Classroom account doesn't have any classes with 'MartyBlocks' section</p>
             } else if (provider === ProvidersEnum.MICROSOFT) {
-                jsx = <p className={styles.subtitle}>Your Microsoft Classroom account doesn't have any classes with 'Robotics' section</p>
+                jsx = <p className={styles.subtitle}>Your Microsoft Classroom account doesn't have any classes with 'MartyBlocks' section</p>
             }
         } else if (!isThereAClassSelected) {
             // there are classes on the left, but none are selected

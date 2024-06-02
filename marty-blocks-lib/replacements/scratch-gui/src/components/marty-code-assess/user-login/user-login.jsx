@@ -48,6 +48,7 @@ class UserLogin extends React.Component {
         this.setState({ isLoading: true });
         try {
             await codeAssessClientFacade.logUserIn(provider, email, password);
+            this.props.setProvider(provider);
         } catch (e) {
             console.error("Error logging in using google", e);
         } finally {
