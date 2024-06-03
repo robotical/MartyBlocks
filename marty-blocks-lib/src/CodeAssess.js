@@ -24,17 +24,17 @@ class CodeAssess {
     setIsProjectLoaded(isLoaded) {
         // only allowing badges scoring if the project is not loaded to avoid students loading the project multiple times/loading others' projects
 
-        setTimeout(() => {
-            // perhaps we want to wisen this up by checking if the loaded project has more than say 10 blocks, as sometimes students may load a project with a few blocks 
-            try {
-                const blocksLength = vm.runtime.targets.reduce((acc, target) => acc + Object.keys(target.blocks._blocks).length, 0);
-                if (blocksLength < 10) {
-                    this.isProjectLoaded = false;
-                }
-            } catch (e) {
-                this.isProjectLoaded = isLoaded;
-            }
-        }, 5000);
+        // setTimeout(() => {
+        //     // perhaps we want to wisen this up by checking if the loaded project has more than say 10 blocks, as sometimes students may load a project with a few blocks 
+        //     try {
+        //         const blocksLength = vm.runtime.targets.reduce((acc, target) => acc + Object.keys(target.blocks._blocks).length, 0);
+        //         if (blocksLength < 10) {
+        //             this.isProjectLoaded = false;
+        //         }
+        //     } catch (e) {
+        //         this.isProjectLoaded = isLoaded;
+        //     }
+        // }, 5000);
         this.isProjectLoaded = isLoaded;
     }
 
