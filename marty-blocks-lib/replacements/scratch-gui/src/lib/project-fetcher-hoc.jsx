@@ -83,10 +83,11 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         const res = await fetch(dbUrl + projectIdInDB + ".json");
         const projectBase64String = await res.json();
         if (!projectBase64String || !projectBase64String.data) {
-            throw new Error("Invalid project id");
+          throw new Error("Invalid project id");
         }
         const blob = await fetch(projectBase64String.data);
         const arrayBuffer = await blob.arrayBuffer();
+        window.codeAssess.setIsProjectLoaded(true);
         return this.props.onFetchedProjectData(arrayBuffer, loadingState);
       } catch (e) {
         console.log("Couldn't load project from db:", e);
@@ -109,6 +110,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         console.log("Using autosave file"); //, data.contents);
         const blob = await fetch(data.contents);
         const arrayBuffer = await blob.arrayBuffer();
+        window.codeAssess.setIsProjectLoaded(true);
         return this.props.onFetchedProjectData(arrayBuffer, loadingState);
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -121,6 +123,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         projectId,
         storage.DataFormat.JSON
       );
+      window.codeAssess.setIsProjectLoaded(false);
       return this.props.onFetchedProjectData(projectAsset.data, loadingState);
     }
     render() {

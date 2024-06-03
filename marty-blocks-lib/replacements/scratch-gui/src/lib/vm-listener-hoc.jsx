@@ -176,6 +176,7 @@ const vmListenerHOC = function (WrappedComponent) {
         }
 
         async assessStudent() {
+            if (window.codeAssess.isProjectLoaded) return; // not assessing student if this is a loaded project
             const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
             /* Scores Over Time */
             const codeAssessmentLib = window.codeAssess.assessmentLib;
