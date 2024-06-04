@@ -125,6 +125,9 @@ class ClassAverageSpiderEnlarged extends React.Component {
                 },
             },
         }, config);
+
+        // disable mouse events on the plot
+        disableMouseEventsRecursive(this.plotRef);
     }
 
     render() {
@@ -161,3 +164,16 @@ class ClassAverageSpiderEnlarged extends React.Component {
 }
 
 export default injectIntl(ClassAverageSpiderEnlarged);
+
+const disableMouseEventsRecursive = (element) => {
+    if (!element) return;
+    // element.style.pointerEvents = "none";
+    element.onmousedown = (e) => { };
+    element.onmouseup = (e) => { };
+    element.style.cursor = "pointer";
+    if (element.children && element.children.length) {
+        for (let i = 0; i < element.children.length; i++) {
+            disableMouseEventsRecursive(element.children[i]);
+        }
+    }
+}

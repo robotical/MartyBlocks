@@ -211,7 +211,6 @@ class StudentPieChart extends React.Component {
 
         const isDataEmpty = Object.keys(this.props.colors).length === 0;
 
-
         return (
             <>
                 {!hasData && <Spinner level='warn' large className={spinnerStyles.primary} />}
@@ -219,14 +218,14 @@ class StudentPieChart extends React.Component {
                     <h3 className={styles.plotTitle}
                         style={{
                             fontSize: sizesMap[this.props.size].plot.title.fontSize,
-                            marginBottom: isDataEmpty ? "0" : "-15px",
+                            marginBottom: (isDataEmpty || !this.props.hasEnoughData) ? "0" : "15px",
                         }}
                     >{this.props.plotTitle}</h3>
-                    {!isDataEmpty ? <div ref={this.setPlotRef} className={styles.graphContainer} style={{
+                    {(!isDataEmpty && this.props.hasEnoughData) ? <div ref={this.setPlotRef} className={styles.graphContainer} style={{
                         width: sizesMap[this.props.size].plot.width,
                         height: sizesMap[this.props.size].plot.height,
                         display: !hasData ? "none" : "block",
-                    }} /> : <div className={styles.noData}>No data</div>}
+                    }} /> : <div className={styles.noData}>Not enough data</div>}
                 </div>
             </>
         );

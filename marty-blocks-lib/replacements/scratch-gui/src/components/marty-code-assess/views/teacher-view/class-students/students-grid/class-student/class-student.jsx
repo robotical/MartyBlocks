@@ -31,13 +31,14 @@ class ClassStudent extends React.Component {
 
     render() {
         const { intl, student, studentGraphData, colors } = this.props;
-
+        console.log("studentGraphData", studentGraphData);
         let studentJsx = null;
         if (studentGraphData) {
             studentJsx = <StudentPieChart
                 plotTitle={student.firstName + " " + student.lastName}
                 size="medium"
                 colors={colors}
+                hasEnoughData={!areAllTracesZero(studentGraphData)}
             />;
         }
 
@@ -56,3 +57,14 @@ class ClassStudent extends React.Component {
 
 
 export default injectIntl(ClassStudent);
+
+const areAllTracesZero = (data) => {
+    if (!data) return true;
+    try {
+        return data.every(trace => {
+            return trace.r.every(val => val === 0);
+        });
+    } catch {
+        return true;
+    }
+}

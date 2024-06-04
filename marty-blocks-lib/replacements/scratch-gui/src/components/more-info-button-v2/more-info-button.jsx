@@ -24,7 +24,8 @@ class MoreInfoButton extends React.Component {
     componentDidMount() {
     }
 
-    clickHandler() {
+    clickHandler(e) {
+        e.stopPropagation();
         const Content = () => <div className={styles.modalBody}>{this.props.children}</div>;
         const modalTitle = this.props.modalTitle;
         const onHelp = this.props.onHelp;

@@ -6,6 +6,7 @@ import { intlShape, injectIntl } from "react-intl";
 import Plotly from "plotly.js"
 import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
+import { disableMouseEventsRecursive } from "../class-average-spider/class-average-spider.jsx";
 
 const labelsAbbrMap = {
     "Algorithms": "Alg",
@@ -231,6 +232,9 @@ class SpiderGraph extends React.Component {
                 },
             },
         }, config);
+
+        // disable mouse events on the plot
+        disableMouseEventsRecursive(this.plotRef);
     }
 
     render() {

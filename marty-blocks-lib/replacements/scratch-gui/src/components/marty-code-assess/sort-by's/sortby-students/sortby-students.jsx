@@ -57,7 +57,7 @@ class SortByStudents extends React.Component {
             const session = this.props.selectedSession || activeSession;
             if (!session) return;
             // make sure that all students have a studentSessionData array
-            const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([session]);
+            const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([session], this.props.isSpecificSession);
             const prevStudentsSorted = sortStudentsByPerformance(dataWithColors, prevProps.students);
             const studentsSorted = sortStudentsByPerformance(dataWithColors, this.props.students);
             for (let i = 0; i < studentsSorted.length; i++) {
@@ -87,7 +87,7 @@ class SortByStudents extends React.Component {
         const session = this.props.selectedSession || activeSession;
         if (!session) return;
         // make sure that all students have a studentSessionData array
-        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([session]);
+        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents([session], this.props.isSpecificSession);
         const sortedStudents = sortStudentsByPerformance(dataWithColors, this.props.students);
         this.props.onStudentsSorted(sortedStudents);
     }

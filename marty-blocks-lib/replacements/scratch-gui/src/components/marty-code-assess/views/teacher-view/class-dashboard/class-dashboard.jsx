@@ -123,6 +123,7 @@ class ClassDashboard extends React.Component {
                             students={selectedClassroom.students}
                             onStudentsSorted={this.onStudentsSorted}
                             selectedClassroom={selectedClassroom}
+                            isSpecificSession={true}
                         />
                     </div>
                 </div>

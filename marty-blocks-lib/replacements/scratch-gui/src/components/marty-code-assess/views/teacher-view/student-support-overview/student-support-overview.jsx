@@ -31,22 +31,25 @@ class StudentSupportOverview extends React.Component {
 
     componentDidMount() {
         const { allSessions } = this.props;
-        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents(allSessions);
+        const dataWithColors = DataTransformations.getGraphDataWithColorsForStudents(allSessions, this.props.isSpecificSession);
         const { supportStudents, championStudents } = this.getStudentCategories(dataWithColors);
         this.setState({ isLoading: false, supportStudents, championStudents });
     }
 
     getStudentCategories(dataWithColors) {
         // get the 5 students with the lowest average score
+
         // data with colors is an object with studentId as key and compositeScores as value
         const dataWithColorsArr = Object.keys(dataWithColors).map(studentId => {
             return {
                 studentId,
                 ...dataWithColors[studentId]
             }
-        });
-        dataWithColorsArr.sort((a, b) => a.compositeScores.averageCompositeScore - b.compositeScores.averageCompositeScore);
+        })
+            // ignore the students who have all composite scores as 0
+            .filter(student => !areAllCompoScoresZero(student));
 
+        dataWithColorsArr.sort((a, b) => a.compositeScores.averageCompositeScore - b.compositeScores.averageCompositeScore);
         let supportStudents = dataWithColorsArr.slice(0, 5);
         const championStudents = dataWithColorsArr.slice(dataWithColorsArr.length - 5, dataWithColorsArr.length);
 
@@ -100,6 +103,7 @@ class StudentSupportOverview extends React.Component {
                         plotTitle={studentName}
                         size="small"
                         colors={student.colors || {}}
+                        hasEnoughData={true}
                     />
                 </div>
             })}
@@ -117,6 +121,7 @@ class StudentSupportOverview extends React.Component {
                         plotTitle={studentName}
                         size="small"
                         colors={student.colors || {}}
+                        hasEnoughData={true}
                     />
                 </div>
             })}
@@ -143,4 +148,10 @@ const areAllStudentSessionDataEmpty = (sessions) => {
         }
     });
     return allEmpty;
+}
+
+const areAllCompoScoresZero = (student) => {
+    if (!student.compositeScores) return true;
+    if (!student.compositeScores.averageCompositeScore) return true;
+    return false;
 }

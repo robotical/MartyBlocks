@@ -2,6 +2,7 @@
   display: grid;
   grid-template-rows: min-content 1fr;
   height: 100%;
+  position: relative;
 }
 
 .container {
@@ -54,4 +55,20 @@
   padding: 10px;
   display: grid;
   row-gap: 10px;
+}
+
+
+.notEnoughData {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 1;
+  font-weight: bold;
+  white-space: nowrap;
 }

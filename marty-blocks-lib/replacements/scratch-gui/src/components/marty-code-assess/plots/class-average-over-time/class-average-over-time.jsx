@@ -7,6 +7,7 @@ import PlusIcon from "../../icon--plus.svg";
 import Modal from "../../../../containers/modal.jsx";
 import ClassAverageOverTimeExpanded from "./class-average-over-time-expanded/class-average-over-time-expanded.jsx";
 import MoreInfoButton from "../../../more-info-button-v2/more-info-button.jsx";
+import { disableMouseEventsRecursive } from "../class-average-spider/class-average-spider.jsx";
 
 const DataTransformations = window.codeAssess.codeAssessLib.DataTransformations;
 
@@ -105,6 +106,9 @@ class ClassAverageOverTime extends React.Component {
             },
             showlegend: false,
         }, config);
+
+        // disable mouse events on the plot
+        disableMouseEventsRecursive(this.plotRef);
     }
 
     onCloseModal() {
@@ -139,6 +143,8 @@ class ClassAverageOverTime extends React.Component {
             // return <div className={styles.noData}>No data yet!</div>;
         }
 
+        console.log("class average over time data", this.props.data)
+
         return (
             <div className={styles.outerContainer}>
                 {this.state.modalVisible &&
@@ -158,6 +164,9 @@ class ClassAverageOverTime extends React.Component {
                     This graph shows the average score over time. The y-axis represents the average score.
                     If 'All Sessions' is selected, the x-axis represents the sessions. If a specific session is selected, the x-axis represents the time intervals in that session.
                 </MoreInfoButton></h3>
+                {areAllTracesZero(this.props.data) && <div className={styles.notEnoughData}>Not enough data yet!<MoreInfoButton modalTitle="Not enough data">
+                    It looks like there isn’t enough data to display the graph properly. The graph needs more than one session.
+                </MoreInfoButton></div>}
                 <div className={styles.container}>
                     <div ref={this.setPlotRef} className={styles.plotDiv} style={{
                         width: "100%",
@@ -181,8 +190,11 @@ const areAllTracesZero = (data) => {
     if (data.length === 0) return true;
     let allZero = true;
     data.forEach(trace => {
-        if (trace && trace.x && trace.x.length > 0) {
-            allZero = false;
+        if (trace && trace.type === "scatter" && trace.legendgroup === "Composite" && trace.y && trace.y.length > 0) {
+            const allYZero = trace.y.every(val => val === 0);
+            if (!allYZero) {
+                allZero = false;
+            }
         }
     });
     return allZero;

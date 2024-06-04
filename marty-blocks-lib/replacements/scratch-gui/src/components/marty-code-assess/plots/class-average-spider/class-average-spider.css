@@ -1,4 +1,5 @@
 .plotContainer {
+    position: relative;
     cursor: pointer;
 }
 
@@ -13,4 +14,19 @@
     background-color: white;
     max-height: 500px;
     overflow-y: auto;
+}
+
+.notEnoughData {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5em;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 1;
+    font-weight: bold;
+    white-space: nowrap;
 }

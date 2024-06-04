@@ -43,7 +43,7 @@ class StudentsGrid extends React.Component {
             return null;
         }
 
-        const sessionDataGroupedByStudent = DataTransformations.getGraphDataWithColorsForStudents(this.props.sessionsArr);
+        const sessionDataGroupedByStudent = DataTransformations.getGraphDataWithColorsForStudents(this.props.sessionsArr, this.props.isSpecificSession);
         return (
             this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <div className={styles.classStudents}>
                 {students.length === 0 && <div className={styles.noStudents}>There are no students in this class</div>}

@@ -145,8 +145,9 @@ class ClassOverview extends React.Component {
                         }
                         {!allStudentSessionDataEmpty && <div className={styles.spiderGraphContainer}>
                             <ClassAverageSpider
-                                data={DataTransformations.convertSessionsToSpiderGraphData(this.state.sessionsArr, true)}
+                                data={DataTransformations.convertSessionsToSpiderGraphData_LeakyIntegrator(this.state.sessionsArr, this.state.selectedSession?.title !== "All__Time", false)}
                                 rawSessionData={this.state.sessionsArr}
+                                isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                                 isMinimised={true}
                             />
                         </div>}
@@ -155,6 +156,7 @@ class ClassOverview extends React.Component {
                                 allSessions={this.state.sessionsArr}
                                 students={selectedClassroom.students}
                                 onShowAllClick={this.onShowAllSupportChampionsClick}
+                                isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                             />
                         </div>}
                         <div className={styles.separator}></div>

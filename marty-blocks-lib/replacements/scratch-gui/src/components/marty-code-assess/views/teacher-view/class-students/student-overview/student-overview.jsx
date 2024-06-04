@@ -74,8 +74,9 @@ class ClassOverview extends React.Component {
                     <>
                         <div className={styles.spiderGraphContainer}>
                             {!allStudentSessionDataEmpty && <ClassAverageSpider
-                                data={DataTransformations.convertSessionsToSpiderGraphData(studentSessionsArr, true)}
+                                data={DataTransformations.convertSessionsToSpiderGraphData_LeakyIntegrator(studentSessionsArr, isSpecificSession, false)}
                                 rawSessionData={studentSessionsArr}
+                                isSpecificSession={isSpecificSession}
                                 isMinimised={true}
                                 modalContentLabel={`Competency levels for ${selectedStudentName}`}
                             />}

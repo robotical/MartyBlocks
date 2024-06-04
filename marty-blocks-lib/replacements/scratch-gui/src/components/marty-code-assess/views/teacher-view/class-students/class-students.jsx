@@ -162,6 +162,7 @@ export default class ClassStudents extends React.Component {
                             students={selectedClassroom.students}
                             onStudentsSorted={this.onStudentsSorted}
                             selectedClassroom={selectedClassroom}
+                            isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                         />
                     </div>
                     {this.state.isLoading ? <Spinner level='warn' large className={[spinnerStyles.primary, styles.spinner].join(" ")} /> :
@@ -170,6 +171,7 @@ export default class ClassStudents extends React.Component {
                                 sessionsArr={this.state.sessionsArr}
                                 students={this.state.sortedStudents}
                                 onStudentClick={this.onStudentClick}
+                                isSpecificSession={this.state.selectedSession?.title !== "All__Time"}
                             />
                         </div>
                     }

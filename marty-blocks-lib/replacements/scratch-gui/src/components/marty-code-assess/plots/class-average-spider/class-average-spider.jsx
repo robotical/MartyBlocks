@@ -7,6 +7,7 @@ import Spinner from '../../../spinner/spinner.jsx';
 import spinnerStyles from '../../../spinner/spinner.css';
 import Modal from "../../../../containers/modal.jsx";
 import ClassAverageSpiderEnlarged from "./class-average-spider-enlarged/class-average-spider-enlarged.jsx";
+import MoreInfoButton from "../../../more-info-button-v2/more-info-button.jsx";
 
 const traceColorMap = {
     "Algorithms": "#9c27b0",
@@ -67,6 +68,9 @@ class ClassAverageSpider extends React.Component {
             responsive: false,
             showLink: false,
             showlegend: false,
+            scrollZoom: false,
+            scrollzoom: false,
+            dragmode: false
             // staticPlot: true,
         };
 
@@ -147,13 +151,8 @@ class ClassAverageSpider extends React.Component {
             },
         }, config);
 
-        const cursorElements = document.getElementsByClassName("cursor-crosshair");
-        if (cursorElements && cursorElements.length) {
-            for (let i = 0; i < cursorElements.length; i++) {
-                cursorElements[i].style.cursor = "pointer";
-            }
-
-        }
+        // disable mouse events on the plot
+        disableMouseEventsRecursive(this.plotRef);
     }
 
     onCloseModal() {
@@ -162,6 +161,7 @@ class ClassAverageSpider extends React.Component {
 
     expandModal(e) {
         e.stopPropagation();
+        e.preventDefault();
         this.setState({ modalVisible: true });
     }
 
@@ -191,7 +191,7 @@ class ClassAverageSpider extends React.Component {
                     >
                         <div className={styles.modalContent}>
                             <ClassAverageSpiderEnlarged
-                                data={DataTransformations.convertSessionsToSpiderGraphData(this.props.rawSessionData, true)}
+                                data={DataTransformations.convertSessionsToSpiderGraphData_LeakyIntegrator(this.props.rawSessionData, this.props.isSpecificSession, true)}
                                 plotTitle={""}
                             />
                         </div>
@@ -200,6 +200,9 @@ class ClassAverageSpider extends React.Component {
                 {!hasData && <Spinner level='warn' large className={spinnerStyles.primary} />}
                 <div className={styles.plotContainer} onClick={this.expandModal}>
                     <h3 className={styles.plotTitle}>{this.props.plotTitle}</h3>
+                    {areAllTracesZero(this.props.data) && <div className={styles.notEnoughData}>Not enough data yet!<MoreInfoButton modalTitle="Not enough data">
+                        It looks like there isn’t enough data to display the graph properly. The graph needs more than one session.
+                    </MoreInfoButton></div>}
                     <div ref={this.setPlotRef} className={styles.ClassAverageSpider} style={{
                         width: isMinimised ? "250px" : "100%",
                         height: isMinimised ? "250px" : "100%",
@@ -220,3 +223,18 @@ const areAllTracesZero = (data) => {
         return trace.r.every(val => val === 0);
     });
 }
+
+
+export const disableMouseEventsRecursive = (element) => {
+    if (!element) return;
+    // element.style.pointerEvents = "none";
+    element.onmousedown = (e) => { };
+    element.onmouseup = (e) => { };
+    element.style.cursor = "pointer";
+    if (element.children && element.children.length) {
+        for (let i = 0; i < element.children.length; i++) {
+            disableMouseEventsRecursive(element.children[i]);
+        }
+    }
+}
+
