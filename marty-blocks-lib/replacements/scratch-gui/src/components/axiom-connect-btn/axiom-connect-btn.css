@@ -1,0 +1,116 @@
+.btn {
+  margin-bottom: 3px;
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  border-radius: 4px;
+  color: hsla(225, 15%, 40%, 0.75);
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  height: 36px;
+  line-height: 27px;
+  min-width: 54px;
+  padding: 0 16px;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: pre;
+}
+
+.btn:hover {
+  border-color: #dadce0;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
+  color: #202124;
+}
+
+.btn:focus,
+.btn:visited {
+  outline: none;
+}
+
+.marty-connect-btn-container {
+  display: grid;
+  align-items: center;
+  height: 100%;
+  border-radius: 4px;
+  /* margin: 1px; */
+}
+
+.battery-signal-container {
+  background-color: #94cddc;
+  display: grid;
+  border-radius: 4px;
+  align-items: end;
+  grid-auto-flow: column;
+}
+
+.disconnect-btn-container {
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  margin: 3px 0;
+  padding-left: 5px;
+  padding-right: 2px;
+  cursor: pointer;
+}
+
+/* modal */
+
+.modal {
+  width: fit-content;
+}
+
+.modalContainer {
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: fit-content;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+  background-color: white;
+}
+
+.modalHeader {
+  text-align: center;
+}
+
+.modalContent {
+  display: grid;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.modalImageContainer {
+  text-align: center;
+}
+
+.modalBtnContainer {
+  display: grid;
+  justify-content: center;
+  grid-auto-flow: column;
+  padding-top: 20px;
+}
+
+.modalBtn {
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  border-radius: 4px;
+  color: hsla(225, 15%, 40%, 0.75);
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  height: 36px;
+  line-height: 27px;
+  min-width: 54px;
+  padding: 0 16px;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: pre;
+}

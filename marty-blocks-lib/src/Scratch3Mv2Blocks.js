@@ -1,4 +1,5 @@
 const Mv2Interface = require("./Mv2Interface");
+const AxiomInterface = require("./axiom/AxiomInterface");
 const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");
 const lamejs = require("./lame-all");
@@ -7,9 +8,12 @@ const Cast = require("./util/cast");
 const Color = require("./util/color");
 // const meSpeak = require("./util/mespeak"); // for text to speech locally -- removed as we don't use it anymore
 const { Project } = require("@robotical/scratch-to-python-transpiler");
+const AxiomBlocks = require("./axiom/AxiomBlocks");
 
 
 mv2Interface = new Mv2Interface();
+axiomInterface = new AxiomInterface();
+axiomBlocks = new AxiomBlocks(axiomInterface);
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine();
 pythonTranspiler = Project;

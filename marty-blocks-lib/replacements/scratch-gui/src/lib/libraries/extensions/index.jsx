@@ -22,6 +22,9 @@ import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 import tm2scratchIconURL from './tm2scratch/tm2scratch.png';
 import tm2scratchInsetIconURL from './tm2scratch/tm2scratch-small.png';
 
+import axiomIconUrl from './axiom/axiom.png';
+import axiomInsetIconUrl from './axiom/axiom-small.png';
+
 import microbitIconURL from './microbit/microbit.png';
 import microbitInsetIconURL from './microbit/microbit-small.svg';
 import microbitConnectionIconURL from './microbit/microbit-illustration.svg';
@@ -50,6 +53,36 @@ import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
+    {
+        name: 'Axiom',
+        extensionId: 'axiom',
+        collaborator: 'robotical',
+        iconURL: axiomIconUrl,
+        insetIconURL: axiomInsetIconUrl,
+        description: (
+            <FormattedMessage
+                defaultMessage="Blocks used to control Axiom"
+                description="Description for the 'Axiom' extension"
+                id="gui.extension.axiom.description"
+            />
+        ),
+        featured: true
+    },
+    {
+        name: 'Machine Learning',
+        extensionId: 'martymachine',
+        collaborator: 'robotical',
+        iconURL: tm2scratchIconURL,
+        insetIconURL: tm2scratchInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Use Machine Learning to build AI models into MartyBlocks"
+                description="Description for the 'Machine Learning' extension"
+                id="gui.extension.martymachine.description"
+            />
+        ),
+        featured: true
+    },
     {
         name: (
             <FormattedMessage
@@ -199,21 +232,7 @@ export default [
     //     ),
     //     featured: true
     // },
-    {
-        name: 'Machine Learning',
-        extensionId: 'martymachine',
-        collaborator: 'robotical',
-        iconURL: tm2scratchIconURL,
-        insetIconURL: tm2scratchInsetIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="Use Machine Learning to build AI models into MartyBlocks"
-                description="Description for the 'Machine Learning' extension"
-                id="gui.extension.martymachine.description"
-            />
-        ),
-        featured: true
-    },
+    
     {
         name: 'micro:bit',
         extensionId: 'microbit',

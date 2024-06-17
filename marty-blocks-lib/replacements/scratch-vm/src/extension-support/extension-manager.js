@@ -26,6 +26,7 @@ const builtinExtensions = {
     gdxfor: () => require('../extensions/scratch3_gdx_for'),
     // tm2scratch: () => require('../extensions/scratch3_tm2scratch'),
     martymachine: () => require('../extensions/marty_martymachine'),
+    axiom: () => require('../extensions/axiom'),
     // tmpose2scratch: () => require('../extensions/scratch3_tmpose2scratch'),
 };
 
