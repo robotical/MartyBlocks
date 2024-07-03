@@ -15,7 +15,7 @@ import {
   projectError,
   setProjectId,
 } from "../reducers/project-state";
-import { activateTab, BLOCKS_TAB_INDEX } from "../reducers/editor-tab";
+import { activateTab, BLOCKS_TAB_INDEX, CODE_ASSESS_TAB_INDEX } from "../reducers/editor-tab";
 
 import storage from "./storage";
 
@@ -70,6 +70,20 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         (prevProps.isLoadingProject || prevProps.isCreatingNew)
       ) {
         this.props.onActivateTab(BLOCKS_TAB_INDEX);
+      }
+      // if there is a code and a scope parameters then this is a redirect from google sign in. 
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      if (code) {
+        const codeAssess = window.codeAssess.codeAssessLib.default.getInstance();
+        const googleProvider = window.codeAssess.codeAssessLib.ProvidersEnum.GOOGLE;
+        codeAssess.logUserIn_redirect(googleProvider, code).then(wasUserLoggedIn => {
+          if (wasUserLoggedIn) {
+            this.props.onActivateTab(CODE_ASSESS_TAB_INDEX);
+          }
+          // remove the parameters from the url
+          window.history.replaceState({}, document.title, window.location.pathname);
+        })
       }
     }
 

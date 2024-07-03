@@ -62,7 +62,8 @@ class AccountButton extends React.Component {
         event.stopPropagation();
         if (item === 'logout') {
             // removeCredentialsFromLocalStorage();
-            await codeAssessClientFacade.logUserOut();
+            const didLogOut = await codeAssessClientFacade.logUserOut();
+            console.log("didLogOut", didLogOut);
             window.location.reload();
         } else if (item === 'export-data') {
             this.onSetModal(<ExportDataModalTeacher
