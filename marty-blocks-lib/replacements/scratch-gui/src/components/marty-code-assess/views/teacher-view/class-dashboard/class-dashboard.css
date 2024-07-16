@@ -125,3 +125,19 @@
   grid-area: announcements;
 }
 /* ANNOUNCEMENTS END */
+
+.invitationCodeContainer {
+  font-size: 13px;
+}
+
+.regenerateCodeButton {
+  outline: none;
+  border: none;
+  background: none;
+  color: #35abc7;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: underline;
+  padding: 0;
+}

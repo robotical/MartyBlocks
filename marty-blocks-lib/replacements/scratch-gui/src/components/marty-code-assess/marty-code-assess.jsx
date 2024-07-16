@@ -37,6 +37,7 @@ class MartyCodeAssess extends React.Component {
       provider: null,
     };
     bindAll(this, [
+      "deselectClass"
     ]);
   }
 
@@ -54,6 +55,10 @@ class MartyCodeAssess extends React.Component {
     const classId = classesAssets[index].id;
     this.props.onClassSelect(classId, index);
     this.setState({ isLoading: true });
+  }
+
+  deselectClass() {
+    this.props.onClassSelect(null, null);
   }
 
   render() {
@@ -97,6 +102,7 @@ class MartyCodeAssess extends React.Component {
         items={classesAssets}
         selectedItemIndex={selectedClassroomIdx}
         onItemClick={(index) => this.handleClassSelect(index, classesAssets)}
+        onEmptyAreaClick={this.deselectClass}
         onDrop={() => { }}
         externalStylesClass={styles.assetPanel}
       >
@@ -131,7 +137,7 @@ function jsxDecider(
   setProvider,
 ) {
   const isUserLoggedIn = !!userProfile;
-
+  console.log("selectedClassroom", selectedClassroom)
   if (!isUserLoggedIn) {
     return <UserLogin setProvider={setProvider} />;
   }

@@ -8,8 +8,11 @@ import StudentsGrid from "./students-grid/students-grid.jsx";
 import SortByStudents from "../../../sort-by's/sortby-students/sortby-students.jsx";
 import NotesAnnouncementsBox from "../../../notes-announcements-box/notes-announcements-box.jsx";
 import MoreInfoButton from "../../../../more-info-button-v2/more-info-button.jsx";
+import Spinner from '../../../../spinner/spinner.jsx';
+import spinnerStyles from '../../../../spinner/spinner.css';
 
 const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
+const ProvidersEnum = window.codeAssess.codeAssessLib.ProvidersEnum;
 
 const messages = defineMessages({
     tutorials: {
@@ -27,19 +30,28 @@ class ClassDashboard extends React.Component {
         this.state = {
             sessionStarted: false,
             sessionTitle: this.props.selectedClassroom.activeSession?.title || "",
-            sortedStudents: this.props.selectedClassroom.students || []
+            sortedStudents: this.props.selectedClassroom.students || [],
+            classCodeObject: null,
+            isLoading: false
         };
         bindAll(this, [
             "onStudentsSorted",
             "handleAddNewSessionNote",
             "handleAddNewSessionAnnouncement",
             "handleSessionNameChange",
-            "handleSessionTitleUpdate"
+            "handleSessionTitleUpdate",
+            "handleCodeRegeneration",
+            "handleCodeGeneration"
         ]);
         this.sessionNameChangeTimeoutId = null;
     }
 
     componentDidMount() {
+        codeAssessClientFacade.getClassCodeInviteByClassId(this.props.selectedClassroom.id).then((classCodeInvite) => {
+            if (classCodeInvite) {
+                this.setState({ classCodeObject: classCodeInvite });
+            }
+        }).catch((e) => console.log("error getting invitation code:", e));
     }
 
     componentWillUnmount() {
@@ -49,6 +61,14 @@ class ClassDashboard extends React.Component {
         // update session title if it has changed
         if (prevProps.selectedClassroom.activeSession && prevProps.selectedClassroom.activeSession.title !== this.props.selectedClassroom.activeSession?.title) {
             this.setState({ sessionTitle: this.props.selectedClassroom.activeSession?.title || "" });
+        }
+        // if the class was updated
+        if (prevProps.selectedClassroom.id !== this.props.selectedClassroom.id) {
+            codeAssessClientFacade.getClassCodeInviteByClassId(this.props.selectedClassroom.id).then((classCodeInvite) => {
+                if (classCodeInvite) {
+                    this.setState({ classCodeObject: classCodeInvite });
+                }
+            }).catch((e) => console.log("error getting invitation code:", e));
         }
     }
 
@@ -90,6 +110,34 @@ class ClassDashboard extends React.Component {
         });
     }
 
+    async handleCodeRegeneration() {
+        this.setState({ isLoading: true });
+        try {
+            const newClassCodeInvite = await codeAssessClientFacade.regenerateClassCodeInvite(this.state.classCodeObject.id);
+            if (newClassCodeInvite) {
+                this.setState({ classCodeObject: newClassCodeInvite });
+            }
+        } catch (e) {
+            console.log("error regenerating code", e);
+        } finally {
+            this.setState({ isLoading: false });
+        }
+    }
+
+    async handleCodeGeneration() {
+        this.setState({ isLoading: true });
+        try {
+            const newClassCodeInvite = await codeAssessClientFacade.createClassCodeInvite(this.props.selectedClassroom.id);
+            if (newClassCodeInvite) {
+                this.setState({ classCodeObject: newClassCodeInvite });
+            }
+        } catch (e) {
+            console.log("error regenerating code", e);
+        } finally {
+            this.setState({ isLoading: false });
+        }
+    }
+
     render() {
         const { intl, selectedClassroom } = this.props;
 
@@ -117,7 +165,23 @@ class ClassDashboard extends React.Component {
                             </form>
                         }
                     </div>
-                    <div className={styles.classEnrolledStudents}>Enrolled Students: {selectedClassroom.students.length}</div>
+                    <div className={styles.classEnrolledStudents}>
+                        Enrolled Students: {selectedClassroom.students.length}
+                        {
+                            codeAssessClientFacade.provider === ProvidersEnum.MAIL && <div className={styles.invitationCodeContainer}>
+                                {
+                                    this.state.classCodeObject?.code ?
+                                        <>
+                                            Invitation Code: {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : this.state.classCodeObject?.code}
+                                            <br />
+                                            <button className={styles.regenerateCodeButton} onClick={this.handleCodeRegeneration}>regenerate code 🔄</button>
+                                        </>
+                                        :
+                                        this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <button className={styles.regenerateCodeButton} onClick={this.handleCodeGeneration}>Generate Code</button>
+                                }
+                            </div>
+                        }
+                    </div>
                     <div className={styles.sortByContainer}>
                         <SortByStudents
                             students={selectedClassroom.students}
@@ -151,7 +215,7 @@ class ClassDashboard extends React.Component {
                         />
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 }

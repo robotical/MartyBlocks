@@ -1,48 +1,20 @@
 import React from 'react';
 import styles from "./credentials-modal.css";
 import roboticalIcon from "../../../gui/icon--robotical-logo-white.png";
-import Spinner from '../../../spinner/spinner.jsx';
-import spinnerStyles from '../../../spinner/spinner.css';
-
-const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
-const ProvidersEnum = window.codeAssess.codeAssessLib.ProvidersEnum;
+import Login from './login/login.jsx';
+import Register from './register/register.jsx';
 
 export default class CredentialsModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            credentials: {
-                email: '',
-                pw: ''
-            },
-            wrongCredentials: false,
-            isLoading: false
+            content: 'login', // login, register
         }
 
-        this.loginWithCredentials = this.loginWithCredentials.bind(this);
     }
 
     componentDidMount() {
-        const credentials = getCredentialsFromLocalStorage();
-        if (credentials) {
-            console.log("credentials", credentials)
-            this.setState({ credentials: { ...credentials } });
-        }
-    }
-
-    async loginWithCredentials(e) {
-        e.preventDefault();
-        this.setState({ isLoading: true });
-        if (this.state.credentials.email && this.state.credentials.pw) {
-            const wasUserLoggedIn = await codeAssessClientFacade.logUserIn(ProvidersEnum.MAIL, this.state.credentials.email, this.state.credentials.pw);
-            if (!wasUserLoggedIn) {
-                this.setState({ wrongCredentials: true });
-            } else {
-                saveCredentialsToLocalStorage(this.state.credentials.email, this.state.credentials.pw);
-            }
-        }
-        this.setState({ isLoading: false });
     }
 
     render() {
@@ -51,57 +23,13 @@ export default class CredentialsModal extends React.Component {
                 <div className={styles.logoContainer}>
                     <img className={styles.logo} src={roboticalIcon} />
                 </div>
-                {this.state.wrongCredentials && <div className={styles.wrongCredentials}>Wrong email or password</div>}
-                <form className={styles.form} onSubmit={this.loginWithCredentials}>
-                    <input
-                        className={styles.emailInput}
-                        type="text"
-                        placeholder="Email"
-                        value={this.state.credentials.email}
-                        onChange={(event) => {
-                            this.setState({
-                                credentials: {
-                                    ...this.state.credentials,
-                                    email: event.target.value
-                                }
-                            });
-                        }
-                        }
-                    />
-                    <input
-                        className={styles.passwordInput}
-                        value={this.state.credentials.pw}
-                        type="password"
-                        placeholder="Password"
-                        onChange={(event) => {
-                            this.setState({
-                                credentials: {
-                                    ...this.state.credentials,
-                                    pw: event.target.value
-                                }
-                            });
-                        }
-                        }
-                    />
-                    <div className={styles.loginButtonContainer}>
-                        {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <button className={styles.loginButton} type='submit' >Login</button>}
-                    </div>
-                </form>
+                {
+                    this.state.content === "login" ?
+                        <Login onSwitchToRegister={() => this.setState({ content: 'register' })} setProvider={this.props.setProvider} />
+                        :
+                        <Register onSwitchToLogin={() => this.setState({ content: 'login' })} setProvider={this.props.setProvider} />
+                }
             </div>
         )
     }
-}
-
-
-const saveCredentialsToLocalStorage = (email, pw) => {
-    localStorage.setItem("mb-credentials", JSON.stringify({ email, pw }));
-}
-
-const getCredentialsFromLocalStorage = () => {
-    const credentials = localStorage.getItem("mb-credentials");
-    return credentials ? JSON.parse(credentials) : null;
-}
-
-export const removeCredentialsFromLocalStorage = () => {
-    localStorage.removeItem("mb-credentials");
 }

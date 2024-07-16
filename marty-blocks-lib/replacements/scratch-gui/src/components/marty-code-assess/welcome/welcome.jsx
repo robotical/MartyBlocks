@@ -1,15 +1,16 @@
 import React from "react"
 import styles from "./welcome.css"
 import roboticalIcon from "../../gui/icon--robotical-logo-white.png";
-import CodeAssessHeader from "../header/header.jsx";
 import AccountButton from "../account/account-button/account-button.jsx";
+import CreateOrJoinClass from "./create-or-join-class/create-or-join-class.jsx";
 
 const ProvidersEnum = window.codeAssess.codeAssessLib.ProvidersEnum;
+const codeAssessClientFacade = window.codeAssess.codeAssessLib.default.getInstance();
 
 class Welcome extends React.Component {
     render() {
         const { areThereAnyClasses, isThereAClassSelected, provider } = this.props;
-
+        const provider_ = provider || codeAssessClientFacade.provider;
         if (isThereAClassSelected) {
             return null;
         }
@@ -18,14 +19,24 @@ class Welcome extends React.Component {
         let jsx = null;
         if (!areThereAnyClasses) {
             // there are no classes on the left, the user needs to create a class from the classroom API
-            if (provider === ProvidersEnum.GOOGLE) {
+            if (provider_ === ProvidersEnum.GOOGLE) {
                 jsx = <p className={styles.subtitle}>Your Google Classroom account doesn't have any classes with 'MartyBlocks' section</p>
-            } else if (provider === ProvidersEnum.MICROSOFT) {
+            } else if (provider_ === ProvidersEnum.MICROSOFT) {
                 jsx = <p className={styles.subtitle}>Your Microsoft Classroom account doesn't have any classes with 'MartyBlocks' section</p>
+            } else if (provider_ === ProvidersEnum.MAIL) {
+                jsx = <CreateOrJoinClass />
             }
         } else if (!isThereAClassSelected) {
             // there are classes on the left, but none are selected
-            jsx = <p className={styles.subtitle}>Click on a class on the left to get started!</p>
+            if (provider_ === ProvidersEnum.MAIL) {
+                jsx = <div>
+                    <p className={styles.subtitle}>Click on a class on the left to get started!</p>
+                    <p className={styles.subtitleOR}>OR</p>
+                    <CreateOrJoinClass />
+                </div>
+            } else {
+                jsx = <p className={styles.subtitle}>Click on a class on the left to get started!</p>
+            }
         }
 
         return (
@@ -36,7 +47,7 @@ class Welcome extends React.Component {
                 <div className={styles.logoContainer}>
                     <img className={styles.logo} src={roboticalIcon} />
                 </div>
-                <h1 className={styles.welcomeTitle}>Welcome to Marty Code Assess</h1>
+                <h1 className={styles.welcomeTitle}>Welcome to Robotical code.assess</h1>
                 {jsx}
             </div>
         )

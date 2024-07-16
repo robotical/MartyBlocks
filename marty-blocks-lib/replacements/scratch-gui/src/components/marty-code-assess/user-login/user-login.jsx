@@ -46,13 +46,15 @@ class UserLogin extends React.Component {
     async onLogin(provider, email, password) {
         if (provider === ProvidersEnum.MICROSOFT) return alert('Not implemented yet');
         this.setState({ isLoading: true });
+        let wasLoggedIn = false;
         try {
-            await codeAssessClientFacade.logUserIn(provider, email, password);
+            wasLoggedIn = await codeAssessClientFacade.logUserIn(provider, email, password);
             this.props.setProvider(provider);
         } catch (e) {
             console.error("Error logging in using google", e);
         } finally {
             this.setState({ isLoading: false });
+            return wasLoggedIn;
         }
     }
 
@@ -79,7 +81,7 @@ class UserLogin extends React.Component {
                         contentLabel="Enter your credentials"
                     >
                         <div className={styles.modalContent}>
-                            <CredentialsModal />
+                            <CredentialsModal setProvider={this.props.setProvider} />
                         </div>
                     </Modal>
                 }

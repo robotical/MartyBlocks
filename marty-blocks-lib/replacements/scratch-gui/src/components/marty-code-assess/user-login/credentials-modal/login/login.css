@@ -1,0 +1,49 @@
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 10px;
+}
+
+.emailInput,
+.passwordInput {
+  outline: none;
+  width: 100%;
+  height: 40px;
+  border: 2px solid #35abc7;
+  border-radius: 20px;
+  padding: 8px 20px;
+}
+
+.loginButtonContainer {
+    position: relative;
+    height: 50px;
+}
+
+.loginButton {
+  width: 100%;
+  height: 40px;
+  border: 2px solid #35abc7;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px 20px;
+}
+
+.wrongCredentials {
+    color: red;
+    font-size: 20px;
+}
+
+.registerLink {
+  color: #35abc7;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.lostCredentialsP {
+  font-size: 10px;
+  margin: 0;
+}
