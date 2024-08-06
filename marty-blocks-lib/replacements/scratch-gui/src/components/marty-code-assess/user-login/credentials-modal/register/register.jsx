@@ -22,7 +22,8 @@ export default class Register extends React.Component {
                 email: '',
                 confirmEmail: '',
                 pw: '',
-                confirmPw: ''
+                confirmPw: '',
+                acceptTermsAndConditions: false
             },
             wrongInputErrorMessages: [],
             isLoading: false
@@ -51,6 +52,7 @@ export default class Register extends React.Component {
         if (!isEmailValid) errors.push("Email is not valid");
         if (!isEmailConfirmed) errors.push("Emails do not match");
         if (!isPwConfirmed) errors.push("Passwords do not match");
+        if (!this.state.credentials.acceptTermsAndConditions) errors.push("You must accept the terms and conditions");
         this.setState({ wrongInputErrorMessages: errors });
         if (errors.length === 0) {
             const resp = await codeAssessClientFacade.registerCredUser(this.state.credentials.email, this.state.credentials.firstName, this.state.credentials.lastName, this.state.credentials.pw);
@@ -190,13 +192,33 @@ export default class Register extends React.Component {
                             }
                         />
                     </div>
+                    <div className={styles.row}>
+                        <div className={styles.termsDiv}>
+                            <input
+                                className={styles.termsCheckbox}
+                                type="checkbox"
+                                required
+                                checked={this.state.credentials.acceptTermsAndConditions}
+                                onChange={(event) => {
+                                    this.setState({
+                                        credentials: {
+                                            ...this.state.credentials,
+                                            acceptTermsAndConditions: event.target.checked
+                                        }
+                                    });
+                                }
+                                }
+                            />
+                            <p className={styles.termsText}>By clicking Register, you agree to our <a className={styles.termsLink} href="https://codemarty.com/code-assess-terms" target="_blank">Terms and Conditions</a> and <a className={styles.termsLink} href="https://codemarty.com/privacy-policy#code-assess" target="_blank">Privacy Policy</a>.</p>
+                        </div>
+                    </div>
                     <div>
                         {this.state.wrongInputErrorMessages.map((message, index) => <p key={index} className={styles.wrongInputError}>{message}</p>)}
                     </div>
                     <div className={styles.registerButtonContainer}>
                         {this.state.isLoading ? <Spinner level='warn' large className={spinnerStyles.primary} /> : <button className={styles.registerButton} type='submit' >Register</button>}
                     </div>
-                </form>
+                </form >
                 <p>Already have an account? <span className={styles.loginLink} onClick={this.props.onSwitchToLogin}>Press here to login</span></p>
             </>
         )

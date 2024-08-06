@@ -64,3 +64,29 @@
   font-size: 12px;
   margin: 0px;
 }
+
+.termsDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  row-gap: 10px;
+}
+
+.termsCheckbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.termsText {
+  font-size: 12px;
+}
+
+.termsLink {
+  color: #35abc7;
+  font-size: 12px;
+  cursor: pointer;
+}
