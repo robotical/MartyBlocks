@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./axiom-signal-strength.css";
+import styles from "./cog-signal-strength.css";
 
-class AxiomSignalStrength extends React.Component {
+class CogSignalStrength extends React.Component {
   constructor(props) {
     super(props);
     this.state = { rssi: 200 };
@@ -73,4 +73,4 @@ class AxiomSignalStrength extends React.Component {
   }
 }
 
-export default AxiomSignalStrength;
+export default CogSignalStrength;

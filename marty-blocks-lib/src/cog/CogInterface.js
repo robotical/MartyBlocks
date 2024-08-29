@@ -1,9 +1,9 @@
 const { RaftConnEvent, RaftPublishEvent, RaftLog } = require("@robdobsn/raftjs");
-// import UIConnectAxiom from "../editor/ui/ConnectAxiom";
-const { Observable } = require("../util/Observable");
+// import UIConnectCog from "../editor/ui/ConnectCog";
+const { Observable } = require("../util/Observable.js");
 const { ConnManager } = require("@robotical/roboticaljs");
-const publishedDataAnalyser = require("./PublishedDataAnalyser");
-const AxiomInterfaceEvents = require("./AxiomEventEnum.js");
+const publishedDataAnalyser = require("./PublishedDataAnalyser.js");
+const CogInterfaceEvents = require("./CogEventEnum.js");
 
 const ledLcdColours = [
     { led: "#202000", lcd: "#FFFF00" },
@@ -12,7 +12,7 @@ const ledLcdColours = [
     { led: "#004000", lcd: "#00FF00" },
 ];
 
-class AxiomInterface extends Observable {
+class CogInterface extends Observable {
 
     constructor() {
         super();
@@ -24,16 +24,16 @@ class AxiomInterface extends Observable {
         RaftLog.debug("this is a debug");
         RaftLog.verbose("this is a trace");
 
-        this.isAxiomConnected = false;
-        this.axiomPublishedEvents = AxiomInterfaceEvents;
+        this.isCogConnected = false;
+        this.cogPublishedEvents = CogInterfaceEvents;
     }
 
     setConnected(connected) {
-        this.isAxiomConnected = connected;
+        this.isCogConnected = connected;
         if (connected) {
-            this.publish(AxiomInterfaceEvents.CONNECTED);
+            this.publish(CogInterfaceEvents.CONNECTED);
         } else {
-            this.publish(AxiomInterfaceEvents.DISCONNECTED);
+            this.publish(CogInterfaceEvents.DISCONNECTED);
         }
     }
 
@@ -43,8 +43,8 @@ class AxiomInterface extends Observable {
         // get name of the device
         console.log("setting the ui with the name")
         const sysInfo = await connManager.getConnector().getRaftSystemUtils().getSystemInfo();
-        setDeviceNameOnUi(sysInfo.Friendly || 'axiom');
-        // UIConnectAxiom.init(sysInfo.Friendly);
+        setDeviceNameOnUi(sysInfo.Friendly || 'cog');
+        // UIConnectCog.init(sysInfo.Friendly);
 
         // send command to start the verification process (set the lights)
         const msgHandler = connManager.getConnector().getRaftSystemUtils().getMsgHandler();
@@ -59,21 +59,21 @@ class AxiomInterface extends Observable {
         );
 
         if (!didVerificationStart) {
-            console.error("AxiomInterface.connect", "verification failed");
+            console.error("CogInterface.connect", "verification failed");
             return;
         }
 
         // // set the lights in the modal and wait for confirmation or cancel
-        // const modalResults = await UIConnectAxiom.setLights(lights);
+        // const modalResults = await UIConnectCog.setLights(lights);
 
         // // if cancel, stop the connection process and return
         // if (!modalResults) {
-        //     console.log("AxiomInterface.connect", "not connected");
+        //     console.log("CogInterface.connect", "not connected");
         //     return;
         // }
 
         // // if confirm, connect to the device
-        // console.log("AxiomInterface.connect", "connected");
+        // console.log("CogInterface.connect", "connected");
         // this.setConnected(true);
     }
 
@@ -158,23 +158,23 @@ class AxiomInterface extends Observable {
                 if (eventEnum === RaftPublishEvent.PUBLISH_EVENT_DATA) {
                     const systemType = connManager.getConnector().getSystemType();
                     if (systemType) {
-                        if (this.isAxiomConnected) {
-                            // const newState = systemType.getStateInfo();
-                            const accelData = systemType.getRICStateInfo().imuData.accel;
-                            const newState = {
-                                "Light": {
-                                    "irVals": [1103, 341, randomNumber(0, 1400)],
-                                },
-                                "LSM6DS": {
-                                    "gx": randomNumber(-1, 1),
-                                    "gy": randomNumber(-1, 1),
-                                    "gz": randomNumber(-1, 1),
-                                    "ax": accelData.x,
-                                    "ay": accelData.y,
-                                    "az": accelData.z,
-                                    "tsMs": 19848
-                                }, "_deviceLastTs": { "LSM6DS": { "lastMs": 19848, "offsetMs": 0 } }
-                            }
+                        if (this.isCogConnected) {
+                            const newState = systemType.getStateInfo();
+                            // const accelData = systemType.getRICStateInfo().imuData.accel;
+                            // const newState = {
+                            //     "Light": {
+                            //         "irVals": [1103, 341, randomNumber(0, 1400)],
+                            //     },
+                            //     "LSM6DS": {
+                            //         "gx": randomNumber(-1, 1),
+                            //         "gy": randomNumber(-1, 1),
+                            //         "gz": randomNumber(-1, 1),
+                            //         "ax": accelData.x,
+                            //         "ay": accelData.y,
+                            //         "az": accelData.z,
+                            //         "tsMs": 19848
+                            //     }, "_deviceLastTs": { "LSM6DS": { "lastMs": 19848, "offsetMs": 0 } }
+                            // }
                             this.onPublishDataCallback(newState);
                         }
                     }
@@ -187,7 +187,7 @@ class AxiomInterface extends Observable {
 
         const wasConnected = await connManager.connect("WebBLE");
         if (!wasConnected) {
-            console.error("AxiomInterface.connect", "not connected");
+            console.error("CogInterface.connect", "not connected");
             return;
         }
         showModal();
@@ -221,4 +221,4 @@ const randomNumber = (min, max) => {
     return Math.random() * (max - min) + min;
 }
 
-module.exports = AxiomInterface;
+module.exports = CogInterface;

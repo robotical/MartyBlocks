@@ -22,8 +22,8 @@ import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 import tm2scratchIconURL from './tm2scratch/tm2scratch.png';
 import tm2scratchInsetIconURL from './tm2scratch/tm2scratch-small.png';
 
-import axiomIconUrl from './axiom/axiom.png';
-import axiomInsetIconUrl from './axiom/axiom-small.png';
+import cogIconUrl from './cog/cog.png';
+import cogInsetIconUrl from './cog/cog-small.png';
 
 import microbitIconURL from './microbit/microbit.png';
 import microbitInsetIconURL from './microbit/microbit-small.svg';
@@ -54,16 +54,16 @@ import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
     {
-        name: 'Axiom',
-        extensionId: 'axiom',
+        name: 'Cog',
+        extensionId: 'cog',
         collaborator: 'robotical',
-        iconURL: axiomIconUrl,
-        insetIconURL: axiomInsetIconUrl,
+        iconURL: cogIconUrl,
+        insetIconURL: cogInsetIconUrl,
         description: (
             <FormattedMessage
-                defaultMessage="Blocks used to control Axiom"
-                description="Description for the 'Axiom' extension"
-                id="gui.extension.axiom.description"
+                defaultMessage="Blocks used to control Cog"
+                description="Description for the 'Cog' extension"
+                id="gui.extension.cog.description"
             />
         ),
         featured: true

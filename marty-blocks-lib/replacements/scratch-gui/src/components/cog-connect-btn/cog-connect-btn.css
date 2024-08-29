@@ -90,7 +90,7 @@
 
 .modalBtnContainer {
   display: grid;
-  justify-content: center;
+  justify-content: space-between;
   grid-auto-flow: column;
   padding-top: 20px;
 }

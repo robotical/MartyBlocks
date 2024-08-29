@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./axiom-battery-level.css";
+import styles from "./cog-battery-level.css";
 
 
 const roundBatteryPerc = (battLevel) => {
@@ -11,7 +11,7 @@ const roundBatteryPerc = (battLevel) => {
   return roundedBattery;
 };
 
-class AxiomBatteryLevel extends React.Component {
+class CogBatteryLevel extends React.Component {
   constructor(props) {
     super(props);
     this.state = { batteryPercent: 99 };
@@ -87,4 +87,4 @@ class AxiomBatteryLevel extends React.Component {
   }
 }
 
-export default AxiomBatteryLevel;
+export default CogBatteryLevel;

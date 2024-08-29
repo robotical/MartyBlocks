@@ -1,4 +1,4 @@
-const AxiomVmEvents = require("./AxiomEventEnum");
+const CogVmEvents = require("./CogEventEnum");
 
 
 
@@ -15,44 +15,60 @@ class PublishedDataAnalyser {
         this.detectRotation(data, isMoving);
         this.detectButtonClick(data);
         this.detectObjectSense(data);
+        this.detectIRMessage(data);
     }
 
     detectTilt(data, isMoving) {
         tiltDetection.detectTilt(data, {
-            onTiltLeft: () => this.publisher(AxiomVmEvents.TILE_LEFT),
-            onTiltRight: () => this.publisher(AxiomVmEvents.TILT_RIGHT),
-            onTiltForward: () => this.publisher(AxiomVmEvents.TILT_FORWARD),
-            onTiltBackward: () => this.publisher(AxiomVmEvents.TILT_BACKWARD),
-            onNoTilt: () => this.publisher(AxiomVmEvents.NO_TILT)
+            onTiltLeft: () => this.publisher(CogVmEvents.TILT_LEFT),
+            onTiltRight: () => this.publisher(CogVmEvents.TILT_RIGHT),
+            onTiltForward: () => this.publisher(CogVmEvents.TILT_FORWARD),
+            onTiltBackward: () => this.publisher(CogVmEvents.TILT_BACKWARD),
+            onNoTilt: () => this.publisher(CogVmEvents.NO_TILT)
         }, isMoving)
     }
 
     detectMovement(data) {
-        return shakeDetector.detectShake(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, Date.now(), () => this.publisher(AxiomVmEvents.ON_SHAKE), () => this.publisher(AxiomVmEvents.ON_MOVE));
+        return shakeDetector.detectShake(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, Date.now(),
+            () => this.publisher(CogVmEvents.SHAKE),
+            () => this.publisher(CogVmEvents.NO_SHAKE),
+            () => this.publisher(CogVmEvents.MOVE),
+            () => this.publisher(CogVmEvents.NO_MOVE)
+        );
     }
 
     detectRotation(data, isMoving) {
         rotationDetection.detectRotation(data,
-            () => this.publisher(AxiomVmEvents.ON_ROTATE_CLOCKWISE),
-            () => this.publisher(AxiomVmEvents.ON_ROTATE_COUNTER_CLOCKWISE),
-            () => this.publisher(AxiomVmEvents.ON_NO_ROTATE),
+            () => this.publisher(CogVmEvents.ON_ROTATE_CLOCKWISE),
+            () => this.publisher(CogVmEvents.ON_ROTATE_COUNTER_CLOCKWISE),
+            () => this.publisher(CogVmEvents.ON_NO_ROTATE),
             isMoving);
     }
 
     detectButtonClick(data) {
 
         buttonClickDetection.detectButtonClick(data.Light.irVals[2],
-            () => this.publisher(AxiomVmEvents.ON_BUTTON_CLICK),
-            () => this.publisher(AxiomVmEvents.ON_NO_BUTTON_CLICK)
+            () => this.publisher(CogVmEvents.BUTTON_CLICK),
+            () => this.publisher(CogVmEvents.NO_BUTTON_CLICK)
         );
     }
 
     detectObjectSense(data) {
-        const objectSenseValue = data.Light.irVals[0];
-        objectSenseDetection.detectObjectSense(objectSenseValue,
-            () => this.publisher(AxiomVmEvents.OBJECT_SENSE_1),
-            () => this.publisher(AxiomVmEvents.OBJECT_SENSE_2),
-            () => this.publisher(AxiomVmEvents.NO_OBJECT_SENSE)
+        const objectSenseValueArray = data.Light.irVals;
+        objectSenseDetection.detectObjectSense(objectSenseValueArray,
+            () => this.publisher(CogVmEvents.OBJECT_SENSE_0),
+            () => this.publisher(CogVmEvents.OBJECT_SENSE_1),
+            () => this.publisher(CogVmEvents.OBJECT_SENSE_2),
+            () => this.publisher(CogVmEvents.NO_OBJECT_SENSE)
+        );
+    }
+
+    detectIRMessage(data) {
+        const irMessageData = data;
+        irMessageDetection.detectIRMessage(irMessageData,
+            () => this.publisher(CogVmEvents.IR_MESSAGE_0),
+            () => this.publisher(CogVmEvents.IR_MESSAGE_1),
+            () => this.publisher(CogVmEvents.NO_IR_MESSAGE)
         );
     }
 }
@@ -85,7 +101,7 @@ class TiltDetection {
     detectTilt(data, { onTiltLeft, onTiltRight, onTiltForward, onTiltBackward, onNoTilt }, isMoving = false) {
         if (isMoving) return;
 
-        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || -30);
+        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || 30);
         const pitch = Math.atan2(x, this.distance(y, z));
         const roll = Math.atan2(y, this.distance(x, z));
         const yaw = Math.atan2(z, this.distance(x, y));
@@ -201,7 +217,9 @@ class RotationDetection {
 class ShakeDetector {
     constructor() {
         this.shakeCallback;
+        this.noShakeCallback;
         this.moveCallback;
+        this.noMoveCallback;
         this.thresholdAccelerationMove = 0.3;
         this.thresholdAcceleration = 1; // how much acceleration is needed to consider shaking
         this.thresholdShakeNumber = 1; // how many shakes are needed
@@ -217,7 +235,7 @@ class ShakeDetector {
         this.moveInProgress = false;
     }
 
-    detectShake(xAcc, yAcc, zAcc, timestamp, shakeCallback, moveCallback) {
+    detectShake(xAcc, yAcc, zAcc, timestamp, shakeCallback, noShakeCallback, moveCallback, noMoveCallback) {
         this.thresholdAcceleration = window.shake_thr_acc || this.thresholdAcceleration;
         this.thresholdAccelerationMove = window.move_thr_acc || this.thresholdAccelerationMove;
         this.thresholdShakeNumber = window.shake_thr_num || this.thresholdShakeNumber;
@@ -226,7 +244,9 @@ class ShakeDetector {
         this.coolOffPeriod = window.shake_cool_off || this.coolOffPeriod;
 
         this.shakeCallback = shakeCallback;
+        this.noShakeCallback = noShakeCallback;
         this.moveCallback = moveCallback;
+        this.noMoveCallback = noMoveCallback;
 
         const magAcc = Math.sqrt(xAcc * xAcc + yAcc * yAcc + zAcc * zAcc);
         if (magAcc > 0.9 && magAcc < 1.1) {
@@ -235,6 +255,8 @@ class ShakeDetector {
             if (this.moveInProgress) {
                 // console.log("move detected");
                 this.moveCallback();
+            } else {
+                this.noMoveCallback();
             }
             this.moveInProgress = false;
             this.shakeInProgress = false;
@@ -268,6 +290,7 @@ class ShakeDetector {
                             this.shakeCallback();
                         }
                     }
+                    this.noMoveCallback();
                 } else {
                     if (!this.sensorBundles.length || (timestamp - this.sensorBundles[this.sensorBundles.length - 1].timestamp) > this.interval) {
                         this.shakeInProgress = false;
@@ -276,8 +299,9 @@ class ShakeDetector {
                         // fire move detector
                         this.moveCallback();
                     }
+                    this.noShakeCallback(); 
                 }
-            }
+            } 
 
             return this.moveInProgress;
             /*
@@ -343,45 +367,71 @@ class ButtonClickDetection {
     so that the event is triggered only once. 
     */
     constructor() {
-        this.clickThreshold = 1300;
-        this.releaseThreshold = 1100;
+        this.clickThreshold = 1600;
+        this.releaseThreshold = 1500;
         this.lastTime = 0;
         this.buttonClicked = false;
-        this.buttonClickCallback;
     }
 
     detectButtonClick(buttonValue, buttonClickCallback, buttonReleaseCallback) {
         this.clickThreshold = window.button_click_threshold || this.clickThreshold;
         this.releaseThreshold = window.button_release_threshold || this.releaseThreshold;
         this.buttonClickCallback = buttonClickCallback;
+        this.buttonReleaseCallback = buttonReleaseCallback;
         const currentTime = Date.now();
         if (buttonValue > this.clickThreshold && !this.buttonClicked) {
             // console.log("Button clicked", buttonValue);
             this.buttonClicked = true;
             this.lastTime = currentTime;
+            this.buttonClickCallback();
         } else if (buttonValue < this.releaseThreshold && this.buttonClicked) {
             // console.log("Button released", buttonValue);
             this.buttonClicked = false;
-            this.buttonClickCallback();
-        } else {
-            this.buttonClicked = false;
+            this.buttonReleaseCallback();
         }
+        // } else {
+        //     this.buttonClicked = false;
+        //     this.buttonReleaseCallback();
+        // }
     }
 
 }
 
 class ObjectSenseDetection {
     constructor() {
+        this.objectSensed0Threshold = 1150; // right of the arrow
+        this.objectSensed1Threshold = 1450; // left of the arrow
+        this.objectSensed2Threshold = 1500; // button
     }
 
-    detectObjectSense(objectSenseValue, objectSense1Callback, objectSense2Callback, noObjectSenseCallback) {
+    detectObjectSense(objectSenseValue, objectSense0Callback, objectSense1Callback, objectSense2Callback, noObjectSenseCallback) {
 
-        if (objectSenseValue === 'placeholder') {
+        if (objectSenseValue[0] > this.objectSensed0Threshold) {
+            objectSense0Callback();
+        } else if (objectSenseValue[1] > this.objectSensed1Threshold) {
             objectSense1Callback();
-        } else if (objectSenseValue === 'placeholder') {
+        } else if (objectSenseValue[2] > this.objectSensed2Threshold) {
             objectSense2Callback();
         } else {
             noObjectSenseCallback();
+        }
+    }
+}
+
+class IRMessageDetection {
+    constructor() {
+        this.irMessage0Threshold = 0;
+        this.irMessage1Threshold = 0;
+    }
+
+    detectIRMessage(irMessageValue, irMessage0Callback, irMessage1Callback, noIRMessageCallback) {
+        // placeholder for now
+        if (irMessageValue[0] > this.irMessage0Threshold) {
+            irMessage0Callback();
+        } else if (irMessageValue[1] > this.irMessage1Threshold) {
+            irMessage1Callback();
+        } else {
+            noIRMessageCallback();
         }
     }
 }
@@ -395,3 +445,4 @@ const shakeDetector = new ShakeDetector();
 const buttonClickDetection = new ButtonClickDetection();
 const tiltDetection = new TiltDetection();
 const objectSenseDetection = new ObjectSenseDetection();
+const irMessageDetection = new IRMessageDetection();
