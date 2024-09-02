@@ -151,9 +151,9 @@ class Scratch3Mv2Blocks {
           this.LEDEyesColour_SpecificLED.bind(this, args, utils)
         ),
       mv2_RGBOperator: (args, utils) =>
-        this._martyIsConnectedWrapper(this.RGBOperator.bind(this, args, utils)),
+        this.RGBOperator.bind(this, args, utils),
       mv2_HSLOperator: (args, utils) =>
-        this._martyIsConnectedWrapper(this.HSLOperator.bind(this, args, utils)),
+        this.HSLOperator.bind(this, args, utils),
       mv2_discoChangeBlockPattern: (args, utils) =>
         this._martyIsConnectedWrapper(
           this.discoChangeBlockPattern.bind(this, args, utils)

@@ -229,6 +229,71 @@ class CogBlocks {
                         }
                     }
                 },
+                {
+                    opcode: 'setAllRingLEDs',
+                    text: 'set all ring LEDs to [COLOR]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        COLOR: {
+                            type: ArgumentType.COLOR,
+                            defaultValue: '#ff0000'
+                        }
+                    }
+                },
+                {
+                    opcode: 'setLEDToColour',
+                    text: 'set LED [LED_ID] to [COLOR]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LED_ID: {
+                            type: ArgumentType.STRING,
+                            menu: 'led_menu',
+                            defaultValue: '1'
+                        },
+                        COLOR: {
+                            type: ArgumentType.COLOR,
+                            defaultValue: '#ff0000'
+                        }
+                    }
+                },
+                {
+                    opcode: 'setLEDPattern',
+                    text: 'set LED pattern [PATTERN]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        PATTERN: {
+                            type: ArgumentType.STRING,
+                            menu: 'led_pattern_menu',
+                            defaultValue: 'Flash'
+                        },
+                    }
+                },
+                {
+                    opcode: 'setMiddleLED',
+                    text: 'set middle LED to [COLOR]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        COLOR: {
+                            type: ArgumentType.COLOR,
+                            defaultValue: '#ff0000'
+                        }
+                    }
+                },
+                {
+                    opcode: 'turnOffLEDs',
+                    text: 'turn off LEDs',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                },
                 '---',
                 {
                     opcode: 'playSound',
@@ -259,24 +324,7 @@ class CogBlocks {
                         }
                     }
                 },
-                {
-                    opcode: 'setLEDToColour',
-                    text: 'set LED [LED_ID] to [COLOUR]',
-                    blockType: BlockType.COMMAND,
-                    colour: "#5ba591",
-                    colourSecondary: "#5ba591",
-                    arguments: {
-                        LED_ID: {
-                            type: ArgumentType.STRING,
-                            menu: 'led_menu',
-                            defaultValue: '1'
-                        },
-                        COLOUR: {
-                            type: ArgumentType.COLOR,
-                            defaultValue: '#ff0000'
-                        }
-                    }
-                }
+
             ],
             menus: {
                 tilt_direction_menu: {
@@ -409,25 +457,24 @@ class CogBlocks {
                 },
                 led_menu: {
                     acceptReporters: true,
+                    items: Array.from({ length: 12 }, (_, i) => ({
+                        text: (i + 1).toString(),
+                        value: (i + 1).toString()
+                    }))
+                },
+                led_pattern_menu: {
+                    acceptReporters: true,
                     items: [
                         {
-                            text: '1',
-                            value: '1'
+                            text: 'Flash',
+                            value: 'Flash'
                         },
-                        {
-                            text: '2',
-                            value: '2'
-                        },
-                        {
-                            text: '3',
-                            value: '3'
-                        },
-                        {
-                            text: '4',
-                            value: '4'
-                        }
+                        ...Array.from({ length: 8 }, (_, i) => ({
+                            text: "Spin" + (i + 1).toString(),
+                            value: "Spin" + (i + 1).toString()
+                        }))
                     ]
-                }
+                },
             },
         };
     }
@@ -560,9 +607,10 @@ class CogBlocks {
         Looks blocks
      */
     setLEDToColour(args, util) {
-        const ledId = args.LED_ID;
-        const colour = args.COLOUR;
-        cogBlocks.setLEDToColour(ledId, colour);
+        const idxOffset = window.idxOffset || 4;
+        const ledId = (+args.LED_ID + idxOffset) % 12;
+        const color = this._getColourFromOperator(args.COLOR);
+        cogBlocks.setLEDToColour(ledId, color);
     }
 
     setLEDColourPicker(args, util) {
@@ -572,6 +620,38 @@ class CogBlocks {
             colours = [colour, colour, colour, colour, colour, colour, colour, colour, colour, colour, colour, colour];
         }
         cogBlocks.setAllLEDsToColours_colourPicker(colours);
+    }
+
+    setAllRingLEDs(args, util) {
+        console.log("setAllRingLEDs", args);
+        const colour = this._getColourFromOperator(args.COLOR);
+        cogBlocks.setAllLEDsToColour(colour);
+    }
+
+    _getColourFromOperator(argumentValue) {
+        if (typeof argumentValue === 'function') {
+            return argumentValue();
+        }
+        return argumentValue;
+    }
+
+    setLEDPattern(args, util) {
+        let patternName = args.PATTERN;
+        const lastChar = patternName.charAt(patternName.length - 1);
+        if (!isNaN(lastChar)) {
+            patternName = patternName.slice(0, -1);
+        }
+        const mod = parseInt(lastChar, 10);
+        cogBlocks.setLEDPattern(patternName, mod);
+    }
+
+    setMiddleLED(args, util) {
+        const color = this._getColourFromOperator(args.COLOR);
+        cogBlocks.setLEDToColour(12, color);
+    }
+
+    turnOffLEDs(args, util) {
+        cogBlocks.turnOffLEDs();
     }
 
     /**

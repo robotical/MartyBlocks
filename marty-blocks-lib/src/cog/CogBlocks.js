@@ -236,8 +236,8 @@ class CogBlocks {
 
     // Looks blocks
     setLEDToColour(ledId, colour) {
-        console.log("ledId", ledId, "colour", colour);
         const command = `led//setled/${ledId}/${colour}`;
+        console.log("command", command);
         this.cogInterface.sendRICRESTMsg(command);
     }
     
@@ -257,12 +257,29 @@ class CogBlocks {
 
     setAllLEDsToColours_colourPicker(colours) {
         const command = this._LEDColourPickerApiCommandBuilder(colours);
+        console.log("command", command);
         this.cogInterface.sendRICRESTMsg(command);
     }
 
-    setAllLEDsToColours(ledIdMapped, colours) {
-        console.log("ledIdxs", ledIdxs, "colours", colours);
-        const command = `led//setled/${ledIdMapped}/${colours}`
+    setAllLEDsToColour(colour) {
+        this.currentColour = colour;
+        const command = `led//color/${colour}`
+        console.log("command", command);
+        this.cogInterface.sendRICRESTMsg(command);
+    }
+
+    setLEDPattern(patternName, mod) {
+        let colour = this.currentColour || "#00FF00";
+        colour = colour.replace("#", "");
+        const patternCommand = `led//pattern/${patternName}?c=${colour}${mod ? `&mod=${mod}` : ''}`;
+        console.log("patternCommand", patternCommand);
+        this.cogInterface.sendRICRESTMsg(patternCommand);
+    }
+
+    turnOffLEDs() {
+        const command = `led//off`
+        console.log("command", command);
+        this.currentColour = "#000000";
         this.cogInterface.sendRICRESTMsg(command);
     }
 
