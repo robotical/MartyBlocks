@@ -162,18 +162,18 @@ class CogInterface extends Observable {
                             const newState = systemType.getStateInfo();
                             // const accelData = systemType.getRICStateInfo().imuData.accel;
                             // const newState = {
-                            //     "Light": {
-                            //         "irVals": [1103, 341, randomNumber(0, 1400)],
-                            //     },
-                            //     "LSM6DS": {
-                            //         "gx": randomNumber(-1, 1),
-                            //         "gy": randomNumber(-1, 1),
-                            //         "gz": randomNumber(-1, 1),
-                            //         "ax": accelData.x,
-                            //         "ay": accelData.y,
-                            //         "az": accelData.z,
-                            //         "tsMs": 19848
-                            //     }, "_deviceLastTs": { "LSM6DS": { "lastMs": 19848, "offsetMs": 0 } }
+                                // "Light": {
+                                //     "irVals": [1103, 341, randomNumber(0, 1400)],
+                                // },
+                                // "LSM6DS": {
+                                //     "gx": randomNumber(-1, 1),
+                                //     "gy": randomNumber(-1, 1),
+                                //     "gz": randomNumber(-1, 1),
+                                //     "ax": accelData.x,
+                                //     "ay": accelData.y,
+                                //     "az": accelData.z,
+                                //     "tsMs": 19848
+                                // }, "_deviceLastTs": { "LSM6DS": { "lastMs": 19848, "offsetMs": 0 } }
                             // }
                             this.onPublishDataCallback(newState);
                         }

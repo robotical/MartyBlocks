@@ -9,7 +9,7 @@ const blockIconURI =
 
 const dynamicBlocks = {
     dummyBlock: {
-    opcode: 'dummy',
+        opcode: 'dummy',
         text: 'dummy',
         colour: "#5ba591",
         colourSecondary: "#5ba591",
@@ -217,6 +217,20 @@ class CogBlocks {
                 },
                 '---',
                 {
+                    opcode: 'setLEDColourPicker',
+                    text: 'set LEDs using colour picker [COG_COLOR]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        COG_COLOR: {
+                            type: ArgumentType.COG_COLOR,
+                            defaultValue: '#ff0000',
+                        }
+                    }
+                },
+                '---',
+                {
                     opcode: 'playSound',
                     text: 'play sound [SOUNDS]',
                     blockType: BlockType.COMMAND,
@@ -414,7 +428,7 @@ class CogBlocks {
                         }
                     ]
                 }
-            }
+            },
         };
     }
 
@@ -549,6 +563,15 @@ class CogBlocks {
         const ledId = args.LED_ID;
         const colour = args.COLOUR;
         cogBlocks.setLEDToColour(ledId, colour);
+    }
+
+    setLEDColourPicker(args, util) {
+        let colours = args.COG_COLOR;
+        if (!Array.isArray(colours)) {
+            const colour = colours;
+            colours = [colour, colour, colour, colour, colour, colour, colour, colour, colour, colour, colour, colour];
+        }
+        cogBlocks.setAllLEDsToColours_colourPicker(colours);
     }
 
     /**

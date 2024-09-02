@@ -209,7 +209,7 @@ class CogBlocks {
         return this.p2State.isButtonPushed;
     }
 
-    getObstacleSensed(side)  {
+    getObstacleSensed(side) {
         if (side === 'left') {
             return this.p2State.objectSense === OBJECT_SENSE.OBJECT_SENSE_0;
         } else if (side === 'right') {
@@ -220,7 +220,7 @@ class CogBlocks {
     }
 
     getIsMoving() {
-        return this.p2State.moveType === MOVE_TYPES.MOVE;   
+        return this.p2State.moveType === MOVE_TYPES.MOVE;
     }
 
     getIsShaking() {
@@ -238,6 +238,31 @@ class CogBlocks {
     setLEDToColour(ledId, colour) {
         console.log("ledId", ledId, "colour", colour);
         const command = `led//setled/${ledId}/${colour}`;
+        this.cogInterface.sendRICRESTMsg(command);
+    }
+    
+    _LEDColourPickerApiCommandBuilder(colorsArray) {
+        let command = `indicator/set?`;
+        for (let i = 0; i < colorsArray.length; i++) {
+          let color = colorsArray[i].replace("#", "");
+          if (color === "5ba591") color = "000000"; // that's our "off" colour
+          const idxOffset = 8;
+          const ledIdMapped = (i + idxOffset) % colorsArray.length;
+          let end = "&";
+          if (i === colorsArray.length) end = "";
+          command += `c${ledIdMapped}=${color}${end}`;
+        }
+        return command;
+      }
+
+    setAllLEDsToColours_colourPicker(colours) {
+        const command = this._LEDColourPickerApiCommandBuilder(colours);
+        this.cogInterface.sendRICRESTMsg(command);
+    }
+
+    setAllLEDsToColours(ledIdMapped, colours) {
+        console.log("ledIdxs", ledIdxs, "colours", colours);
+        const command = `led//setled/${ledIdMapped}/${colours}`
         this.cogInterface.sendRICRESTMsg(command);
     }
 

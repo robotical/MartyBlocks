@@ -70,6 +70,12 @@ const ArgumentTypeMap = (() => {
             fieldName: 'COLOUR'
         }
     };
+    map[ArgumentType.COG_COLOR] = {
+        shadow: {
+            type: 'colour_picker_LED_eyes',
+            fieldName: 'COLOUR'
+        }
+    };
     map[ArgumentType.NUMBER] = {
         shadow: {
             type: 'math_number',
@@ -1205,7 +1211,6 @@ class Runtime extends EventEmitter {
         const mutation = blockInfo.isDynamic ? `<mutation blockInfo="${xmlEscape(JSON.stringify(blockInfo))}"/>` : '';
         const inputs = context.inputList.join('');
         const blockXML = `<block type="${extendedOpcode}">${mutation}${inputs}</block>`;
-
         if (BlockType.HIDDEN === blockInfo.blockType) {
             return {
                 info: context.blockInfo,
@@ -1296,7 +1301,6 @@ class Runtime extends EventEmitter {
         // Determine whether the argument type is one of the known standard field types
         const argInfo = context.blockInfo.arguments[placeholder] || {};
         let argTypeInfo = ArgumentTypeMap[argInfo.type] || {};
-
         // Field type not a standard field type, see if extension has registered custom field type
         if (!ArgumentTypeMap[argInfo.type] && context.categoryInfo.customFieldTypes[argInfo.type]) {
             argTypeInfo = context.categoryInfo.customFieldTypes[argInfo.type].argumentTypeInfo;
@@ -1383,7 +1387,6 @@ class Runtime extends EventEmitter {
         if (argJSON) blockArgs.push(argJSON);
         const argNum = blockArgs.length;
         context.argsMap[placeholder] = argNum;
-
         return `%${argNum}`;
     }
 
