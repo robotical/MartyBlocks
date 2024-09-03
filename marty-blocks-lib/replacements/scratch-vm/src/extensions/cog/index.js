@@ -181,22 +181,29 @@ class CogBlocks {
                     colourSecondary: "#5ba591",
                 },
                 {
+                    opcode: 'getIsLightSensed',
+                    text: 'is light sensed',
+                    blockType: BlockType.REPORTER,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                },
+                {
                     opcode: 'getIRSensor0',
-                    text: 'IR sensor 0',
+                    text: 'IR sensor right',
                     blockType: BlockType.REPORTER,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
                 },
                 {
                     opcode: 'getIRSensor1',
-                    text: 'IR sensor 1',
+                    text: 'IR sensor left',
                     blockType: BlockType.REPORTER,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
                 },
                 {
                     opcode: 'getIRSensor2',
-                    text: 'IR sensor 2',
+                    text: 'button force',
                     blockType: BlockType.REPORTER,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
@@ -211,6 +218,20 @@ class CogBlocks {
                 {
                     opcode: 'getIsShaking',
                     text: 'is shaking',
+                    blockType: BlockType.REPORTER,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                },
+                {
+                    opcode: 'getTiltDirection',
+                    text: 'tilt direction',
+                    blockType: BlockType.REPORTER,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                },
+                {
+                    opcode: 'getAmbientLightValue',
+                    text: 'ambient light value',
                     blockType: BlockType.REPORTER,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
@@ -296,16 +317,49 @@ class CogBlocks {
                 },
                 '---',
                 {
-                    opcode: 'playSound',
-                    text: 'play sound [SOUNDS]',
+                    opcode: 'playRtttlTune',
+                    text: 'play tune [TUNE]',
                     blockType: BlockType.COMMAND,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
                     arguments: {
-                        SOUNDS: {
+                        TUNE: {
                             type: ArgumentType.STRING,
-                            menu: 'sound_menu',
-                            defaultValue: ''
+                            menu: 'rtttl_menu',
+                            defaultValue: 'disbelief'
+                        }
+                    }
+                },
+                {
+                    opcode: 'playNoteForTime',
+                    text: 'play note [NOTES] for [TIME] seconds',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        NOTES: {
+                            type: ArgumentType.STRING,
+                            menu: 'notes_menu',
+                            defaultValue: 'C'
+                        },
+                        TIME: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0.5
+                        }
+                    }
+                },
+                {
+                    opcode: 'setPitch',
+                    text: 'set pitch to [PITCH]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        PITCH: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 440,
+                            minValue: 0,
+                            maxValue: 2000
                         }
                     }
                 },
@@ -324,7 +378,13 @@ class CogBlocks {
                         }
                     }
                 },
-
+                {
+                    opcode: 'stopSounds',
+                    text: 'stop sounds',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                },
             ],
             menus: {
                 tilt_direction_menu: {
@@ -455,6 +515,20 @@ class CogBlocks {
                     acceptReporters: true,
                     items: '_getSoundsMenu'
                 },
+                rtttl_menu: {
+                    acceptReporters: true,
+                    items: ["disbelief", "confusion", "excitement", "noway", "no", "whistle"].map(tune => ({
+                        text: tune,
+                        value: tune
+                    }))
+                },
+                notes_menu: {
+                    acceptReporters: true,
+                    items: ['notec', 'notecsharp', 'noted', 'notedsharp', 'notee', 'notef', 'notefsharp', 'noteg', 'notegsharp', 'notea', 'noteasharp', 'noteb'].map(note => ({
+                        text: note.replace('note', '').toUpperCase(),
+                        value: note
+                    }))
+                },
                 led_menu: {
                     acceptReporters: true,
                     items: Array.from({ length: 12 }, (_, i) => ({
@@ -565,6 +639,10 @@ class CogBlocks {
         return cogBlocks.getObstacleSensed('left').toString();
     }
 
+    getIsLightSensed() {
+        return cogBlocks.getLightSensed().toString();
+    }
+
     getIRSensor0() {
         return cogBlocks.getIRSensor('0');
     }
@@ -577,6 +655,10 @@ class CogBlocks {
         return cogBlocks.getIRSensor('2');
     }
 
+    getAmbientLightValue() {
+        return cogBlocks.getAmbientLightValue();
+    }
+
     getIsMoving() {
         return cogBlocks.getIsMoving().toString();
     }
@@ -585,23 +667,22 @@ class CogBlocks {
         return cogBlocks.getIsShaking().toString();
     }
 
+    getTiltDirection() {
+        return cogBlocks.getTiltDirection();
+    }
+
     /**
      * Need to implement the sound conversion logic used in Scratch2MV2Blocks.js
      * The speak block resides in the text2speech extension 
      */
-    playSound(args, util) {
-        const soundIndex = this._getSoundIndex(args.SOUNDS, util);
-        if (soundIndex === -1) {
-            return;
-        }
-        const sound = util.target.sprite.sounds[soundIndex];
-        console.log("playSound", sound);
-    }
-
-    setVolume(args, util) {
-        const volume = Cast.toNumber(args.VOLUME);
-        cogBlocks.setVolume(volume);
-    }
+    // playSound(args, util) {
+    //     const soundIndex = this._getSoundIndex(args.SOUNDS, util);
+    //     if (soundIndex === -1) {
+    //         return;
+    //     }
+    //     const sound = util.target.sprite.sounds[soundIndex];
+    //     console.log("playSound", sound);
+    // }
 
     /**
         Looks blocks
@@ -652,6 +733,36 @@ class CogBlocks {
 
     turnOffLEDs(args, util) {
         cogBlocks.turnOffLEDs();
+    }
+
+
+    /**
+     * Sound Blocks
+     */
+
+    playRtttlTune(args, util) {
+        const tune = args.TUNE;
+        return cogBlocks.playRtttlTune(tune);
+    }
+
+    setVolume(args, util) {
+        const volume = Cast.toNumber(args.VOLUME);
+        cogBlocks.setVolume(volume);
+    }
+
+    async playNoteForTime(args, util) {
+        const note = args.NOTES;
+        const time = args.TIME;
+        await cogBlocks.playNoteForTime(note, time);
+    }
+
+    setPitch(args, util) {
+        const pitch = args.PITCH;
+        cogBlocks.setPitch(pitch);
+    }
+
+    stopSounds(args, util) {
+        cogBlocks.stopSounds();
     }
 
     /**

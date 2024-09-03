@@ -22,6 +22,9 @@ const Cog_EVENT_SUBSCRIPTIONS = {
     OBJECT_SENSE_2: 'objectsense2_sub',
     NO_OBJECT_SENSE: 'noobjectsense_sub',
 
+    LIGHT_SENSE: 'lightsense_sub',
+    NO_LIGHT_SENSE: 'nolightsense_sub',
+
     IR_MESSAGE_0: 'irmessage0_sub',
     IR_MESSAGE_1: 'irmessage1_sub',
     NO_IR_MESSAGE: 'noirmessage_sub'
@@ -32,6 +35,11 @@ const OBJECT_SENSE = {
     OBJECT_SENSE_1: 'object-sense-1',
     OBJECT_SENSE_2: 'object-sense-2',
     NO_OBJECT_SENSE: 'no-object-sense'
+}
+
+const LIGHT_SENSE = {
+    LIGHT_SENSE: 'light-sense',
+    NO_LIGHT_SENSE: 'no-light-sense'
 }
 
 const IR_MESSAGE = {
@@ -77,6 +85,8 @@ class CogBlocks {
         this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.OBJECT_SENSE_1, this.cogInterface.cogPublishedEvents.OBJECT_SENSE_1, this.onObjectSense1.bind(this));
         this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.OBJECT_SENSE_2, this.cogInterface.cogPublishedEvents.OBJECT_SENSE_2, this.onObjectSense2.bind(this));
         this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.NO_OBJECT_SENSE, this.cogInterface.cogPublishedEvents.NO_OBJECT_SENSE, this.onNoObjectSense.bind(this));
+        this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.LIGHT_SENSE, this.cogInterface.cogPublishedEvents.LIGHT_SENSE, this.onLightSense.bind(this));
+        this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.NO_LIGHT_SENSE, this.cogInterface.cogPublishedEvents.NO_LIGHT_SENSE, this.onNoLightSense.bind(this));
         this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.IR_MESSAGE_0, this.cogInterface.cogPublishedEvents.IR_MESSAGE_0, this.onIRMessage0.bind(this));
         this.cogInterface.subscribe(Cog_EVENT_SUBSCRIPTIONS.IR_MESSAGE_1, this.cogInterface.cogPublishedEvents.IR_MESSAGE_1, this.onIRMessage1.bind(this));
 
@@ -91,6 +101,7 @@ class CogBlocks {
         this.p2State.moveType = '';
         this.p2State.isButtonPushed = false;
         this.p2State.objectSense = '';
+        this.p2State.lightSensed = '';
     }
 
     dance() {
@@ -162,6 +173,14 @@ class CogBlocks {
         this.p2State.objectSense = OBJECT_SENSE.OBJECT_SENSE_2;
     }
 
+    onLightSense() {
+        this.p2State.lightSensed = LIGHT_SENSE.LIGHT_SENSE;
+    }
+
+    onNoLightSense() {
+        this.p2State.lightSensed = LIGHT_SENSE.NO_LIGHT_SENSE;
+    }
+
     onIRMessage0() {
         this.p2State.IRMessage = IR_MESSAGE.IR_MESSAGE_0;
     }
@@ -205,18 +224,32 @@ class CogBlocks {
         }
     }
 
+    getAmbientLightValue() {
+        try {
+            const stateInfo = this.cogInterface.getStateInfo();
+            const ambientData = stateInfo.Light.ambientVals;
+            return ambientData[0];
+        } catch (error) {
+            return -1;
+        }
+    }
+
     getButtonState() {
         return this.p2State.isButtonPushed;
     }
 
     getObstacleSensed(side) {
-        if (side === 'left') {
+        if (side === 'right') {
             return this.p2State.objectSense === OBJECT_SENSE.OBJECT_SENSE_0;
-        } else if (side === 'right') {
+        } else if (side === 'left') {
             return this.p2State.objectSense === OBJECT_SENSE.OBJECT_SENSE_1;
         } else {
             return this.p2State.objectSense === OBJECT_SENSE.OBJECT_SENSE_2;
         }
+    }
+
+    getLightSensed() {
+        return this.p2State.lightSensed === LIGHT_SENSE.LIGHT_SENSE;
     }
 
     getIsMoving() {
@@ -227,11 +260,119 @@ class CogBlocks {
         return this.p2State.moveType === MOVE_TYPES.SHAKE;
     }
 
+    getTiltDirection() {
+        return this.p2State.tiltDirection;
+    }
+
 
     // Sound Blocks
+    async playNoteForTime(note, time) {
+        let bpm, d, command;
+        d = 4;
+        switch (note) {
+            case "notec":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteC:d=${d},o=5,b=${bpm}:c`;
+                break;
+            case "notecsharp":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteCSharp:d=${d},o=5,b=${bpm}:c#`;
+                break;
+            case "noted":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteD:d=${d},o=5,b=${bpm}:d`;
+                break;
+            case "notedsharp":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteDSharp:d=${d},o=5,b=${bpm}:d#`;
+                break;
+            case "notee":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteE:d=${d},o=5,b=${bpm}:e`;
+                break;
+            case "notef":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteF:d=${d},o=5,b=${bpm}:f`;
+                break;
+            case "notefsharp":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteFSharp:d=${d},o=5,b=${bpm}:f#`;
+                break;
+            case "noteg":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteG:d=${d},o=5,b=${bpm}:g`;
+                break;
+            case "notegsharp":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteGSharp:d=${d},o=5,b=${bpm}:g#`;
+                break;
+            case "notea":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteA:d=${d},o=5,b=${bpm}:a`;
+                break;
+            case "noteasharp":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteASharp:d=${d},o=5,b=${bpm}:a#`;
+                break;
+            case "noteb":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteB:d=${d},o=5,b=${bpm}:b`;
+                break;
+            default:
+                break;
+        }
+        console.log("command", command);
+        this.cogInterface.sendRICRESTMsg(command);
+        await new Promise(resolve => setTimeout(resolve, time * 1000));
+    }
+
+    async playRtttlTune(tune) {
+        let durationInMs, command;
+        switch (tune) {
+            case "disbelief":
+                durationInMs = 6000;
+                command = 'audio/rtttl/Disbelief:d=4,o=5,b=120:g,8d#,8e,8f,8f#,8g,8a,8b,8c6,8p,8c6,8b,8a,8g,8f#,8e,8f,8d#,8p,8g';
+                break;
+            case "confusion":
+                durationInMs = 10000;
+                command = 'audio/rtttl/Confused:d=4,o=5,b=120:c,e,g,c6,e6,g6,c,e,g,c6,e6,g6,c,e,g,a,a,b,b,c6';
+                break;
+            case "excitement":
+                durationInMs = 5000;
+                command = 'audio/rtttl/Excitement:d=4,o=5,b=180:c,e,g,8c6,16p,8c6,16p,8c6,16p,c,e,g,8c6,16p,8c6,16p,8c6,16p,c,e,g,8c6';
+                break;
+            case "noway":
+                durationInMs = 6000;
+                command = 'audio/rtttl/NoWay:d=4,o=5,b=120:p,8g,8p,8c6,8p,8g,8p,8a,8p,8f,8p,8e,8p,8d,8p,8c,8p,8g,8p,8c6,8p,8g';
+                break;
+            case "no":
+                durationInMs = 3000;
+                command = 'audio/rtttl/No:d=4,o=5,b=100:p,8c,8p,8c,8p,8c,8p,8c';
+                break;
+            case "whistle":
+                durationInMs = 3000;
+                command = 'audio/rtttl/Whistle:d=4,o=6,b=140:16b5,16p,16b5,16p,16b5,16p,16g,16p,16e,16p,16g,16p,16c7,16p,16c7,16p,16c7,16p,16a,16p,16f,16p,16a,16p,16d7';
+                break;
+            default:
+                break;
+        }
+        console.log("command", command);
+        this.cogInterface.sendRICRESTMsg(command);
+        await new Promise(resolve => setTimeout(resolve, durationInMs));
+    }
     setVolume(volume) {
         // set volume
         console.log("volume", volume)
+    }
+
+    setPitch(pitch) {
+        // set pitch
+        console.log("pitch", pitch)
+    }
+
+    stopSounds() {
+        // stop sounds
+        console.log("stop sounds")
     }
 
     // Looks blocks
@@ -240,20 +381,20 @@ class CogBlocks {
         console.log("command", command);
         this.cogInterface.sendRICRESTMsg(command);
     }
-    
+
     _LEDColourPickerApiCommandBuilder(colorsArray) {
         let command = `indicator/set?`;
         for (let i = 0; i < colorsArray.length; i++) {
-          let color = colorsArray[i].replace("#", "");
-          if (color === "5ba591") color = "000000"; // that's our "off" colour
-          const idxOffset = 8;
-          const ledIdMapped = (i + idxOffset) % colorsArray.length;
-          let end = "&";
-          if (i === colorsArray.length) end = "";
-          command += `c${ledIdMapped}=${color}${end}`;
+            let color = colorsArray[i].replace("#", "");
+            if (color === "5ba591") color = "000000"; // that's our "off" colour
+            const idxOffset = 8;
+            const ledIdMapped = (i + idxOffset) % colorsArray.length;
+            let end = "&";
+            if (i === colorsArray.length) end = "";
+            command += `c${ledIdMapped}=${color}${end}`;
         }
         return command;
-      }
+    }
 
     setAllLEDsToColours_colourPicker(colours) {
         const command = this._LEDColourPickerApiCommandBuilder(colours);
@@ -286,3 +427,13 @@ class CogBlocks {
 }
 
 module.exports = CogBlocks;
+
+function calculateBPM(seconds, d = 4) {
+    // Calculate the BPM based on the fixed d value and the given duration in seconds
+    let bpm = 240 / (seconds * d);
+
+    // Round BPM to a whole number (since BPM is typically an integer)
+    bpm = Math.round(bpm);
+
+    return bpm;
+}

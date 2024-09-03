@@ -15,6 +15,7 @@ class PublishedDataAnalyser {
         this.detectRotation(data, isMoving);
         this.detectButtonClick(data);
         this.detectObjectSense(data);
+        this.detectLightSense(data);
         this.detectIRMessage(data);
     }
 
@@ -31,7 +32,6 @@ class PublishedDataAnalyser {
     detectMovement(data) {
         return shakeDetector.detectShake(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, Date.now(),
             () => this.publisher(CogVmEvents.SHAKE),
-            () => this.publisher(CogVmEvents.NO_SHAKE),
             () => this.publisher(CogVmEvents.MOVE),
             () => this.publisher(CogVmEvents.NO_MOVE)
         );
@@ -60,6 +60,14 @@ class PublishedDataAnalyser {
             () => this.publisher(CogVmEvents.OBJECT_SENSE_1),
             () => this.publisher(CogVmEvents.OBJECT_SENSE_2),
             () => this.publisher(CogVmEvents.NO_OBJECT_SENSE)
+        );
+    }
+
+    detectLightSense(data) {
+        const lightSenseValue = data.Light.ambientVals[0];
+        lightSenseDetection.detectLightSense(lightSenseValue,
+            () => this.publisher(CogVmEvents.LIGHT_SENSE),
+            () => this.publisher(CogVmEvents.NO_LIGHT_SENSE)
         );
     }
 
@@ -235,7 +243,7 @@ class ShakeDetector {
         this.moveInProgress = false;
     }
 
-    detectShake(xAcc, yAcc, zAcc, timestamp, shakeCallback, noShakeCallback, moveCallback, noMoveCallback) {
+    detectShake(xAcc, yAcc, zAcc, timestamp, shakeCallback, moveCallback, noMoveCallback) {
         this.thresholdAcceleration = window.shake_thr_acc || this.thresholdAcceleration;
         this.thresholdAccelerationMove = window.move_thr_acc || this.thresholdAccelerationMove;
         this.thresholdShakeNumber = window.shake_thr_num || this.thresholdShakeNumber;
@@ -244,7 +252,6 @@ class ShakeDetector {
         this.coolOffPeriod = window.shake_cool_off || this.coolOffPeriod;
 
         this.shakeCallback = shakeCallback;
-        this.noShakeCallback = noShakeCallback;
         this.moveCallback = moveCallback;
         this.noMoveCallback = noMoveCallback;
 
@@ -256,6 +263,7 @@ class ShakeDetector {
                 // console.log("move detected");
                 this.moveCallback();
             } else {
+                // console.log("no move detected");
                 this.noMoveCallback();
             }
             this.moveInProgress = false;
@@ -288,9 +296,9 @@ class ShakeDetector {
                             this.sensorBundles = [];
                             this.shakeInProgress = false;
                             this.shakeCallback();
-                        }
+                        } 
                     }
-                    this.noMoveCallback();
+                    // this.noMoveCallback();
                 } else {
                     if (!this.sensorBundles.length || (timestamp - this.sensorBundles[this.sensorBundles.length - 1].timestamp) > this.interval) {
                         this.shakeInProgress = false;
@@ -299,9 +307,8 @@ class ShakeDetector {
                         // fire move detector
                         this.moveCallback();
                     }
-                    this.noShakeCallback(); 
                 }
-            } 
+            }
 
             return this.moveInProgress;
             /*
@@ -418,6 +425,20 @@ class ObjectSenseDetection {
     }
 }
 
+class LightSenseDetection {
+    constructor() {
+        this.lightSenseThreshold = 450;
+    }
+
+    detectLightSense(lightSenseValue, lightSenseCallback, noLightSenseCallback) {
+        if (lightSenseValue > this.lightSenseThreshold) {
+            lightSenseCallback();
+        } else {
+            noLightSenseCallback();
+        }
+    }
+}
+
 class IRMessageDetection {
     constructor() {
         this.irMessage0Threshold = 0;
@@ -445,4 +466,5 @@ const shakeDetector = new ShakeDetector();
 const buttonClickDetection = new ButtonClickDetection();
 const tiltDetection = new TiltDetection();
 const objectSenseDetection = new ObjectSenseDetection();
+const lightSenseDetection = new LightSenseDetection();
 const irMessageDetection = new IRMessageDetection();
