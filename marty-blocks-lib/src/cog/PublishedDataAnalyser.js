@@ -94,13 +94,15 @@ class TiltDetection {
         let rotatedY = y;
         let rotatedZ = 0 - z;
 
+        const initialRotatedX = rotatedX; 
+
         // Calculate cosine and sine of the rotation angle
         const cosTheta = Math.cos(radians);
         const sinTheta = Math.sin(radians);
 
         // Rotate around the z-axis
-        rotatedX = rotatedX * cosTheta - rotatedY * sinTheta;
-        rotatedY = rotatedX * sinTheta + rotatedY * cosTheta;
+        rotatedX = initialRotatedX * cosTheta - rotatedY * sinTheta;
+        rotatedY = initialRotatedX * sinTheta + rotatedY * cosTheta;
         rotatedZ = rotatedZ;  // z remains unchanged as the rotation is around the z-axis
 
         return { x: rotatedX, y: rotatedY, z: rotatedZ };
@@ -109,7 +111,7 @@ class TiltDetection {
     detectTilt(data, { onTiltLeft, onTiltRight, onTiltForward, onTiltBackward, onNoTilt }, isMoving = false) {
         if (isMoving) return;
 
-        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || 30);
+        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || 90);
         const pitch = Math.atan2(x, this.distance(y, z));
         const roll = Math.atan2(y, this.distance(x, z));
         const yaw = Math.atan2(z, this.distance(x, y));
