@@ -110,7 +110,6 @@ class CogInterface extends Observable {
     }
 
     async onPublishDataCallback(data) {
-
         // decide data analyser
         publishedDataAnalyser.analyse(data, this);
     }

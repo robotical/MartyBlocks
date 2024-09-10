@@ -531,7 +531,7 @@ class CogBlocks {
                 },
                 led_menu: {
                     acceptReporters: true,
-                    items: Array.from({ length: 12 }, (_, i) => ({
+                    items: Array.from({ length: 13 }, (_, i) => ({
                         text: (i + 1).toString(),
                         value: (i + 1).toString()
                     }))
@@ -689,7 +689,10 @@ class CogBlocks {
      */
     setLEDToColour(args, util) {
         const idxOffset = window.idxOffset || 4;
-        const ledId = (+args.LED_ID + idxOffset) % 12;
+        let ledId = (+args.LED_ID + idxOffset) % 12;
+        if (args.LED_ID === '13') {
+            ledId = 12;
+        }
         const color = this._getColourFromOperator(args.COLOR);
         cogBlocks.setLEDToColour(ledId, color);
     }
