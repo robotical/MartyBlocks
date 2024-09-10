@@ -1,5 +1,5 @@
 const CogVmEvents = require("./CogEventEnum");
-
+const { isVersionGreater_errorCatching } = require("../versionChecker");
 
 
 class PublishedDataAnalyser {
@@ -94,7 +94,7 @@ class TiltDetection {
         let rotatedY = y;
         let rotatedZ = 0 - z;
 
-        const initialRotatedX = rotatedX; 
+        const initialRotatedX = rotatedX;
 
         // Calculate cosine and sine of the rotation angle
         const cosTheta = Math.cos(radians);
@@ -111,7 +111,17 @@ class TiltDetection {
     detectTilt(data, { onTiltLeft, onTiltRight, onTiltForward, onTiltBackward, onNoTilt }, isMoving = false) {
         if (isMoving) return;
 
-        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || 90);
+
+        const tiltCorrectionForOlderCog = 30;
+        const tiltCorrectionForNewerCog = 90;
+        const correctionCutOffVersion = "1.2.0";
+        let tiltCorrection = tiltCorrectionForOlderCog;
+
+        if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
+            tiltCorrection = tiltCorrectionForNewerCog;
+        }
+
+        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || tiltCorrection);
         const pitch = Math.atan2(x, this.distance(y, z));
         const roll = Math.atan2(y, this.distance(x, z));
         const yaw = Math.atan2(z, this.distance(x, y));
@@ -298,7 +308,7 @@ class ShakeDetector {
                             this.sensorBundles = [];
                             this.shakeInProgress = false;
                             this.shakeCallback();
-                        } 
+                        }
                     }
                     // this.noMoveCallback();
                 } else {
@@ -383,8 +393,18 @@ class ButtonClickDetection {
     }
 
     detectButtonClick(buttonValue, buttonClickCallback, buttonReleaseCallback) {
-        this.clickThreshold = window.button_click_threshold || this.clickThreshold;
-        this.releaseThreshold = window.button_release_threshold || this.releaseThreshold;
+        const correctionCutOffVersion = "1.2.0";
+        let clickThreshold = 1600;
+        if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
+            clickThreshold = 2400;
+        }
+        let releaseThreshold = 1500;
+        if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
+            releaseThreshold = 2100;
+        }
+        this.clickThreshold = window.button_click_threshold || clickThreshold;
+        this.releaseThreshold = window.button_release_threshold || releaseThreshold;
+        
         this.buttonClickCallback = buttonClickCallback;
         this.buttonReleaseCallback = buttonReleaseCallback;
         const currentTime = Date.now();

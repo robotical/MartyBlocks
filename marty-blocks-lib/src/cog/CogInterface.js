@@ -13,7 +13,6 @@ const ledLcdColours = [
 ];
 
 class CogInterface extends Observable {
-
     constructor() {
         super();
         console.log("setting the log level")
@@ -23,9 +22,10 @@ class CogInterface extends Observable {
         RaftLog.info("this is an info");
         RaftLog.debug("this is a debug");
         RaftLog.verbose("this is a trace");
-
+        
         this.isCogConnected = false;
         this.cogPublishedEvents = CogInterfaceEvents;
+        this.sysInfo = {};
     }
 
     setConnected(connected) {
@@ -43,6 +43,7 @@ class CogInterface extends Observable {
         // get name of the device
         console.log("setting the ui with the name")
         const sysInfo = await connManager.getConnector().getRaftSystemUtils().getSystemInfo();
+        this.sysInfo = sysInfo;
         setDeviceNameOnUi(sysInfo.Friendly || 'cog');
         // UIConnectCog.init(sysInfo.Friendly);
 
