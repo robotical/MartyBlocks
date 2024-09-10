@@ -340,7 +340,7 @@ class CogBlocks {
                         NOTES: {
                             type: ArgumentType.STRING,
                             menu: 'notes_menu',
-                            defaultValue: 'C'
+                            defaultValue: 'notec'
                         },
                         TIME: {
                             type: ArgumentType.NUMBER,
