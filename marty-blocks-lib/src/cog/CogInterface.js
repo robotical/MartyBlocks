@@ -2,7 +2,7 @@ const { RaftConnEvent, RaftPublishEvent, RaftLog } = require("@robdobsn/raftjs")
 // import UIConnectCog from "../editor/ui/ConnectCog";
 const { Observable } = require("../util/Observable.js");
 const { ConnManager } = require("@robotical/roboticaljs");
-const publishedDataAnalyser = require("./PublishedDataAnalyser.js");
+const { publishedDataAnalyser } = require("./PublishedDataAnalyser.js");
 const CogInterfaceEvents = require("./CogEventEnum.js");
 
 const ledLcdColours = [
@@ -22,7 +22,7 @@ class CogInterface extends Observable {
         RaftLog.info("this is an info");
         RaftLog.debug("this is a debug");
         RaftLog.verbose("this is a trace");
-        
+
         this.isCogConnected = false;
         this.cogPublishedEvents = CogInterfaceEvents;
         this.sysInfo = {};
@@ -162,18 +162,18 @@ class CogInterface extends Observable {
                             const newState = systemType.getStateInfo();
                             // const accelData = systemType.getRICStateInfo().imuData.accel;
                             // const newState = {
-                                // "Light": {
-                                //     "irVals": [1103, 341, randomNumber(0, 1400)],
-                                // },
-                                // "LSM6DS": {
-                                //     "gx": randomNumber(-1, 1),
-                                //     "gy": randomNumber(-1, 1),
-                                //     "gz": randomNumber(-1, 1),
-                                //     "ax": accelData.x,
-                                //     "ay": accelData.y,
-                                //     "az": accelData.z,
-                                //     "tsMs": 19848
-                                // }, "_deviceLastTs": { "LSM6DS": { "lastMs": 19848, "offsetMs": 0 } }
+                            // "Light": {
+                            //     "irVals": [1103, 341, randomNumber(0, 1400)],
+                            // },
+                            // "LSM6DS": {
+                            //     "gx": randomNumber(-1, 1),
+                            //     "gy": randomNumber(-1, 1),
+                            //     "gz": randomNumber(-1, 1),
+                            //     "ax": accelData.x,
+                            //     "ay": accelData.y,
+                            //     "az": accelData.z,
+                            //     "tsMs": 19848
+                            // }, "_deviceLastTs": { "LSM6DS": { "lastMs": 19848, "offsetMs": 0 } }
                             // }
                             this.onPublishDataCallback(newState);
                         }

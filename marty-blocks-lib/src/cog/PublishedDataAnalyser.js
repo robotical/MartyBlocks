@@ -85,7 +85,7 @@ class TiltDetection {
     distance(a, b) { return Math.sqrt((Math.pow(a, 2) + Math.pow(b, 2))) }
 
 
-    rotateAccelData(x, y, z, degrees) {
+    static rotateAccelData(x, y, z, degrees) {
         // Convert degrees to radians
         const radians = degrees * (Math.PI / 180);
 
@@ -113,7 +113,7 @@ class TiltDetection {
 
 
         const tiltCorrectionForOlderCog = 30;
-        const tiltCorrectionForNewerCog = 90;
+        const tiltCorrectionForNewerCog = -90;
         const correctionCutOffVersion = "1.2.0";
         let tiltCorrection = tiltCorrectionForOlderCog;
 
@@ -121,7 +121,7 @@ class TiltDetection {
             tiltCorrection = tiltCorrectionForNewerCog;
         }
 
-        const { x, y, z } = this.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || tiltCorrection);
+        const { x, y, z } = TiltDetection.rotateAccelData(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, window.tilt_rotate_z_deg || tiltCorrection);
         const pitch = Math.atan2(x, this.distance(y, z));
         const roll = Math.atan2(y, this.distance(x, z));
         const yaw = Math.atan2(z, this.distance(x, y));
@@ -396,7 +396,7 @@ class ButtonClickDetection {
         const correctionCutOffVersion = "1.2.0";
         let clickThreshold = 1600;
         if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
-            clickThreshold = 2400;
+            clickThreshold = 2300;
         }
         let releaseThreshold = 1500;
         if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
@@ -481,7 +481,10 @@ class IRMessageDetection {
 
 
 const publishedDataAnalyser = new PublishedDataAnalyser();
-module.exports = publishedDataAnalyser;
+module.exports = {
+    TiltDetection, 
+    publishedDataAnalyser  
+};
 
 const rotationDetection = new RotationDetection();
 const shakeDetector = new ShakeDetector();

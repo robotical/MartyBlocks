@@ -1,3 +1,5 @@
+const { isVersionGreater_errorCatching } = require("../versionChecker.js");
+const { TiltDetection } = require("./PublishedDataAnalyser.js");
 
 const Cog_EVENT_SUBSCRIPTIONS = {
     TILT_BACKWARD: 'tiltbackward_sub',
@@ -198,7 +200,24 @@ class CogBlocks {
         try {
             const stateInfo = this.cogInterface.getStateInfo();
             const accelData = stateInfo.LSM6DS;
-            return accelData['a' + axis];
+
+            const xRaw = accelData.ax;
+            const yRaw = accelData.ay;
+            const zRaw = accelData.az;
+
+            const tiltCorrectionForOlderCog = 30;
+            const tiltCorrectionForNewerCog = -90;
+            const correctionCutOffVersion = "1.2.0";
+            let tiltCorrection = tiltCorrectionForOlderCog;
+
+            if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
+                tiltCorrection = tiltCorrectionForNewerCog;
+            }
+
+            const { x, y, z } = TiltDetection.rotateAccelData(xRaw, yRaw, zRaw, window.tilt_rotate_z_deg || tiltCorrection);
+            if (axis === 'x') return x;
+            if (axis === 'y') return y;
+            if (axis === 'z') return z;
         } catch (error) {
             return -1;
         }
