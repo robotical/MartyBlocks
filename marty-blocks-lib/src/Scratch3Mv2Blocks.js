@@ -15,8 +15,9 @@ mv2Interface = new Mv2Interface();
 cogInterface = new CogInterface();
 cogBlocks = new CogBlocks(cogInterface);
 mstTesting = new MSTTesting(mv2Interface);
-martyMachine = new MartyMachine();
+martyMachine = new MartyMachine(); 
 isVersionGreater_errorCatching = isVersionGreater_errorCatching_;
+window.isVersionGreater_errorCatching = isVersionGreater_errorCatching_;
 pythonTranspiler = Project;
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality

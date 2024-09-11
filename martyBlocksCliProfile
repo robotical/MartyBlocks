@@ -127,6 +127,16 @@ buildAllAndCpToPhoneApp() {
     cpToPhoneApp
 }
 
+buildAllAndCpToPublic() {
+    local type="${1:-all}"
+    local NODE_ENV="${2:-development}"
+    # setDevelopment
+    cpReplacements
+    removeUnusedAssets
+    buildScratch $type $NODE_ENV
+    cpToPublic
+}
+
 setProduction () {
     cd $mblib
     npx node ./set-production.js
