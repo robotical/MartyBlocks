@@ -289,53 +289,200 @@ class CogBlocks {
         let bpm, d, command;
         d = 4;
         switch (note) {
-            case "notec":
+            case "notec4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteC:d=${d},o=4,b=${bpm}:c`;
+                break;
+            case "notecsharp4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteCSharp:d=${d},o=4,b=${bpm}:c#`;
+                break;
+            case "noted4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteD:d=${d},o=4,b=${bpm}:d`;
+                break;
+            case "notedsharp4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteDSharp:d=${d},o=4,b=${bpm}:d#`;
+                break;
+            case "notee4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteE:d=${d},o=4,b=${bpm}:e`;
+                break;
+            case "notef4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteF:d=${d},o=4,b=${bpm}:f`;
+                break;
+            case "notefsharp4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteFSharp:d=${d},o=4,b=${bpm}:f#`;
+                break;
+            case "noteg4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteG:d=${d},o=4,b=${bpm}:g`;
+                break;
+            case "notegsharp4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteGSharp:d=${d},o=4,b=${bpm}:g#`;
+                break;
+            case "notea4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteA:d=${d},o=4,b=${bpm}:a`;
+                break;
+            case "noteasharp4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteASharp:d=${d},o=4,b=${bpm}:a#`;
+                break;
+            case "noteb4":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteB:d=${d},o=4,b=${bpm}:b`;
+                break;
+
+            case "notec5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteC:d=${d},o=5,b=${bpm}:c`;
                 break;
-            case "notecsharp":
+            case "notecsharp5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteCSharp:d=${d},o=5,b=${bpm}:c#`;
                 break;
-            case "noted":
+            case "noted5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteD:d=${d},o=5,b=${bpm}:d`;
                 break;
-            case "notedsharp":
+            case "notedsharp5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteDSharp:d=${d},o=5,b=${bpm}:d#`;
                 break;
-            case "notee":
+            case "notee5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteE:d=${d},o=5,b=${bpm}:e`;
                 break;
-            case "notef":
+            case "notef5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteF:d=${d},o=5,b=${bpm}:f`;
                 break;
-            case "notefsharp":
+            case "notefsharp5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteFSharp:d=${d},o=5,b=${bpm}:f#`;
                 break;
-            case "noteg":
+            case "noteg5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteG:d=${d},o=5,b=${bpm}:g`;
                 break;
-            case "notegsharp":
+            case "notegsharp5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteGSharp:d=${d},o=5,b=${bpm}:g#`;
                 break;
-            case "notea":
+            case "notea5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteA:d=${d},o=5,b=${bpm}:a`;
                 break;
-            case "noteasharp":
+            case "noteasharp5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteASharp:d=${d},o=5,b=${bpm}:a#`;
                 break;
-            case "noteb":
+            case "noteb5":
                 bpm = calculateBPM(time);
                 command = `audio/rtttl/NoteB:d=${d},o=5,b=${bpm}:b`;
+                break;
+
+            case "notec6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteC:d=${d},o=6,b=${bpm}:c`;
+                break;
+            case "notecsharp6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteCSharp:d=${d},o=6,b=${bpm}:c#`;
+                break;
+            case "noted6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteD:d=${d},o=6,b=${bpm}:d`;
+                break;
+            case "notedsharp6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteDSharp:d=${d},o=6,b=${bpm}:d#`;
+                break;
+            case "notee6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteE:d=${d},o=6,b=${bpm}:e`;
+                break;
+            case "notef6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteF:d=${d},o=6,b=${bpm}:f`;
+                break;
+            case "notefsharp6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteFSharp:d=${d},o=6,b=${bpm}:f#`;
+                break;
+            case "noteg6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteG:d=${d},o=6,b=${bpm}:g`;
+                break;
+            case "notegsharp6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteGSharp:d=${d},o=6,b=${bpm}:g#`;
+                break;
+            case "notea6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteA:d=${d},o=6,b=${bpm}:a`;
+                break;
+            case "noteasharp6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteASharp:d=${d},o=6,b=${bpm}:a#`;
+                break;
+            case "noteb6":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteB:d=${d},o=6,b=${bpm}:b`;
+                break;
+
+            case "notec7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteC:d=${d},o=7,b=${bpm}:c`;
+                break;
+            case "notecsharp7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteCSharp:d=${d},o=7,b=${bpm}:c#`;
+                break;
+            case "noted7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteD:d=${d},o=7,b=${bpm}:d`;
+                break;
+            case "notedsharp7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteDSharp:d=${d},o=7,b=${bpm}:d#`;
+                break;
+            case "notee7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteE:d=${d},o=7,b=${bpm}:e`;
+                break;
+            case "notef7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteF:d=${d},o=7,b=${bpm}:f`;
+                break;
+            case "notefsharp7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteFSharp:d=${d},o=7,b=${bpm}:f#`;
+                break;
+            case "noteg7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteG:d=${d},o=7,b=${bpm}:g`;
+                break;
+            case "notegsharp7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteGSharp:d=${d},o=7,b=${bpm}:g#`;
+                break;
+            case "notea7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteA:d=${d},o=7,b=${bpm}:a`;
+                break;
+            case "noteasharp7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteASharp:d=${d},o=7,b=${bpm}:a#`;
+                break;
+            case "noteb7":
+                bpm = calculateBPM(time);
+                command = `audio/rtttl/NoteB:d=${d},o=7,b=${bpm}:b`;
                 break;
             default:
                 break;

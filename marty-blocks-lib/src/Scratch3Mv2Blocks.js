@@ -3,7 +3,7 @@ const CogInterface = require("./cog/CogInterface");
 const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");
 const lamejs = require("./lame-all");
-const { default: isVersionGreater } = require("./versionChecker");
+const { default: isVersionGreater, isVersionGreater_errorCatching: isVersionGreater_errorCatching_  } = require("./versionChecker");
 const Cast = require("./util/cast");
 const Color = require("./util/color");
 // const meSpeak = require("./util/mespeak"); // for text to speech locally -- removed as we don't use it anymore
@@ -16,6 +16,7 @@ cogInterface = new CogInterface();
 cogBlocks = new CogBlocks(cogInterface);
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine();
+isVersionGreater_errorCatching = isVersionGreater_errorCatching_;
 pythonTranspiler = Project;
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality

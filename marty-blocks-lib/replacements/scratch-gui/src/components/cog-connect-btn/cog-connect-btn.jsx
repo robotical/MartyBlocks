@@ -139,7 +139,18 @@ export default CogConnectBtn;
 
 const cogSvg = (lights) => {
   // pushing the index by 5 for all of them, to align the lights with the correct orientation of p3
-  const lightsReIndexed = lights.map((light, index) => lights[(index + 5) % 12]);
+  // pushing the index by 5 for all of them, to align the lights with the correct orientation of p3
+  const correctedIdxFactorForOlderP3 = 5;
+  const correctedIdxFactorForNewerP3 = 12;
+  const LEDAndAccelerometerVersionCutOff = "1.2.0";
+  let correctedIdxFactor = correctedIdxFactorForOlderP3;
+
+  if (window.isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, LEDAndAccelerometerVersionCutOff)) {
+    correctedIdxFactor = correctedIdxFactorForNewerP3;
+  }
+
+  const lightsReIndexed = lights.map((light, index) => lights[(index + (window.correctedIdxFactor || correctedIdxFactor)) % 12]);
+
   return `
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 66">

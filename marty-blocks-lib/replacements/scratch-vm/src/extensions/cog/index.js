@@ -340,7 +340,7 @@ class CogBlocks {
                         NOTES: {
                             type: ArgumentType.STRING,
                             menu: 'notes_menu',
-                            defaultValue: 'notec'
+                            defaultValue: 'notec4'
                         },
                         TIME: {
                             type: ArgumentType.NUMBER,
@@ -524,10 +524,58 @@ class CogBlocks {
                 },
                 notes_menu: {
                     acceptReporters: true,
-                    items: ['notec', 'notecsharp', 'noted', 'notedsharp', 'notee', 'notef', 'notefsharp', 'noteg', 'notegsharp', 'notea', 'noteasharp', 'noteb'].map(note => ({
-                        text: note.replace('note', '').toUpperCase(),
-                        value: note
-                    }))
+                    items: [
+                        "notec4",
+                        "notecsharp4",
+                        "noted4",
+                        "notedsharp4",
+                        "notee4",
+                        "notef4",
+                        "notefsharp4",
+                        "noteg4",
+                        "notegsharp4",
+                        "notea4",
+                        "noteasharp4",
+                        "noteb4",
+                        "notec5",
+                        "notecsharp5",
+                        "noted5",
+                        "notedsharp5",
+                        "notee5",
+                        "notef5",
+                        "notefsharp5",
+                        "noteg5",
+                        "notegsharp5",
+                        "notea5",
+                        "noteasharp5",
+                        "noteb5",
+                        "notec6",
+                        "notecsharp6",
+                        "noted6",
+                        "notedsharp6",
+                        "notee6",
+                        "notef6",
+                        "notefsharp6",
+                        "noteg6",
+                        "notegsharp6",
+                        "notea6",
+                        "noteasharp6",
+                        "noteb6",
+                        "notec7",
+                        "notecsharp7",
+                        "noted7",
+                        "notedsharp7",
+                        "notee7",
+                        "notef7",
+                        "notefsharp7",
+                        "noteg7",
+                        "notegsharp7",
+                        "notea7",
+                        "noteasharp7",
+                        "noteb7"].map(note => ({
+                            text: note.replace('note', '').toUpperCase(),
+                            value: note
+                        }))
                 },
                 led_menu: {
                     acceptReporters: true,
