@@ -4,7 +4,7 @@ export function MartyBlocksToolbox_motion() {
 
     <block type="mv2_getReady" />
 
-    <block type="mv2_circle" >
+    <block type="mv2_circle">
         <value name="MOVETIME">
             <shadow type="math_number">
                 <field name="NUM">2</field>
@@ -17,7 +17,7 @@ export function MartyBlocksToolbox_motion() {
 
     <block type="mv2_dance" />
 
-    <block type="mv2_eyes" >
+    <block type="mv2_eyes">
         <value>
             <field name="COMMAND"></field>
         </value>
@@ -273,42 +273,6 @@ export function MartyBlocksToolbox_disco() {
 
     <block type="mv2_turnAllLEDsOff" />
 
-    <block type="mv2_RGBOperator">
-      <value name="NUM_R">
-        <shadow type="math_number">
-          <field name="NUM">255</field>
-        </shadow>
-      </value>
-      <value name="NUM_G">
-        <shadow type="math_number">
-          <field name="NUM">255</field>
-        </shadow>
-      </value>
-      <value name="NUM_B">
-        <shadow type="math_number">
-          <field name="NUM">255</field>
-        </shadow>
-      </value>
-    </block>
-
-    <block type="mv2_HSLOperator">
-      <value name="NUM_H">
-        <shadow type="math_number">
-          <field name="NUM">360</field>
-        </shadow>
-      </value>
-      <value name="NUM_S">
-        <shadow type="math_number">
-          <field name="NUM">100</field>
-        </shadow>
-      </value>
-      <value name="NUM_L">
-        <shadow type="math_number">
-          <field name="NUM">100</field>
-        </shadow>
-      </value>
-    </block>
-
     <block type="mv2_discoChangeBackColour" >
         <value name="COLOR">
             <shadow type="colour_picker"/>
@@ -424,12 +388,6 @@ export function MartyBlocksToolbox_sound(soundName) {
 }
 
 export function MartyBlocksToolbox_sensing() {
-    /*
-        <block type="XAxisMagnetometer" />
-    <block type="YAxisMagnetometer" />
-    <block type="ZAxisMagnetometer" />
-
-    */
     return `
     <block type="XAxisMovement" />
     <block type="YAxisMovement" />

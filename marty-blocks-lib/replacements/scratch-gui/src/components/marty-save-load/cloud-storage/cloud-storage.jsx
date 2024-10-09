@@ -55,7 +55,7 @@ class SaveLoad extends React.Component {
       alert(`Successfully saved project!`);
     } catch (error) {
       // eslint-disable-next-line no-alert
-      alert(`Failed to save project: ${error.message}`);
+      alert(`Failed to save project`);
     }
     this.setState((oldState) => {
       return { ...oldState, isLoading: false };
@@ -91,7 +91,7 @@ class SaveLoad extends React.Component {
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
       // eslint-disable-next-line no-alert
-      alert(`Failed to load project: ${error.message}`);
+      alert(`Failed to load project`);
     }
     this.setState((oldState) => {
       return { ...oldState, isLoading: false };

@@ -1,4 +1,6 @@
 import ScratchBlocks from 'scratch-blocks';
+import targetTypes from "./target-types-enum.js";
+
 const martyblockslib = require('marty-blocks-lib');
 
 const categorySeparator = '<sep gap="36"/>';
@@ -6,20 +8,17 @@ const categorySeparator = '<sep gap="36"/>';
 const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 
 /* eslint-disable no-unused-vars */
-const motion = function (isInitialSetup, isStage, targetId) {
+const motion = function (isInitialSetup, targetType, targetId, raftType) {
     const stageSelected = ScratchBlocks.ScratchMsgs.translate(
         'MOTION_STAGE_SELECTED',
         'Stage selected: no motion blocks'
     );
-    return `
-    <category name="%{BKY_CATEGORY_MOTION}" id="motion" colour="#4C97FF" secondaryColour="#3373CC">
-        ${isStage ? `
-        <label text="${stageSelected}"></label>
-        ` : martyblockslib.MartyBlocksToolbox_motion() + `
 
-        ${blockSeparator}
-
-        <block type="motion_movesteps">
+    const stageMotionBlocks = targetType === targetTypes.stage ? `<label text="${stageSelected}"></label>` : '';
+    const martyMotionBlocks = (targetType === targetTypes.device && raftType === "Marty") ? martyblockslib.MartyBlocksToolbox_motion() : '';
+    const cogMotionBlocks = (targetType === targetTypes.device && raftType === "Cog") ? martyblockslib.CogBlocksToolbox_motion() : '';
+    const spriteMotionBlocks = targetType === targetTypes.sprite ? `
+    <block type="motion_movesteps">
             <value name="STEPS">
                 <shadow type="math_number">
                     <field name="NUM">10</field>
@@ -137,7 +136,16 @@ const motion = function (isInitialSetup, isStage, targetId) {
         ${blockSeparator}
         <block id="${targetId}_xposition" type="motion_xposition"/>
         <block id="${targetId}_yposition" type="motion_yposition"/>
-        <block id="${targetId}_direction" type="motion_direction"/>`}
+        <block id="${targetId}_direction" type="motion_direction"/>
+` : '';
+
+    return `
+    <category name="%{BKY_CATEGORY_MOTION}" id="motion" colour="#4C97FF" secondaryColour="#3373CC">
+        ${stageMotionBlocks}
+        ${martyMotionBlocks}
+        ${cogMotionBlocks}
+        ${blockSeparator}
+        ${spriteMotionBlocks}
         ${categorySeparator}
     </category>
     `;
@@ -155,15 +163,47 @@ const xmlEscape = function (unsafe) {
     });
 };
 
-const looks = function (isInitialSetup, isStage, targetId, costumeName, backdropName) {
+const looks = function (isInitialSetup, targetType, targetId, costumeName, backdropName, raftType) {
     const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
     const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
-    return `
-    <category name="%{BKY_CATEGORY_LOOKS}" id="looks" colour="#9966FF" secondaryColour="#774DCB">
-    ` + martyblockslib.MartyBlocksToolbox_disco() + `
 
-        ${isStage ? '' : `
-        <block type="looks_sayforsecs">
+
+    const stageLooksBlocks = targetType === targetTypes.stage ? `
+    <block type="looks_switchbackdropto">
+                <value name="BACKDROP">
+                    <shadow type="looks_backdrops">
+                        <field name="BACKDROP">${backdropName}</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="looks_switchbackdroptoandwait">
+                <value name="BACKDROP">
+                    <shadow type="looks_backdrops">
+                        <field name="BACKDROP">${backdropName}</field>
+                    </shadow>
+                </value>
+            </block>
+    <block type="looks_nextbackdrop"/>
+    ${blockSeparator}
+    <block id="backdropnumbername" type="looks_backdropnumbername"/>
+    <block type="looks_changeeffectby">
+            <value name="CHANGE">
+                <shadow type="math_number">
+                    <field name="NUM">25</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="looks_seteffectto">
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="looks_cleargraphiceffects"/>
+    ` : '';
+    const spriteLooksBlocks = targetType === targetTypes.sprite ? `
+    <block type="looks_sayforsecs">
             <value name="MESSAGE">
                 <shadow type="text">
                     <field name="TEXT">${hello}</field>
@@ -202,25 +242,7 @@ const looks = function (isInitialSetup, isStage, targetId, costumeName, backdrop
             </value>
         </block>
         ${blockSeparator}
-        `}
-        ${isStage ? `
-            <block type="looks_switchbackdropto">
-                <value name="BACKDROP">
-                    <shadow type="looks_backdrops">
-                        <field name="BACKDROP">${backdropName}</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="looks_switchbackdroptoandwait">
-                <value name="BACKDROP">
-                    <shadow type="looks_backdrops">
-                        <field name="BACKDROP">${backdropName}</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="looks_nextbackdrop"/>
-        ` : `
-            <block id="${targetId}_switchcostumeto" type="looks_switchcostumeto">
+        <block id="${targetId}_switchcostumeto" type="looks_switchcostumeto">
                 <value name="COSTUME">
                     <shadow type="looks_costume">
                         <field name="COSTUME">${costumeName}</field>
@@ -250,10 +272,24 @@ const looks = function (isInitialSetup, isStage, targetId, costumeName, backdrop
                         <field name="NUM">100</field>
                     </shadow>
                 </value>
-            </block>
-        `}
+    </block>
         ${blockSeparator}
-        <block type="looks_changeeffectby">
+            <block type="looks_show"/>
+            <block type="looks_hide"/>
+        ${blockSeparator}
+            <block type="looks_gotofrontback"/>
+            <block type="looks_goforwardbackwardlayers">
+                <value name="NUM">
+                    <shadow type="math_integer">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
+            ${blockSeparator}
+            <block id="${targetId}_costumenumbername" type="looks_costumenumbername"/>
+            <block id="backdropnumbername" type="looks_backdropnumbername"/>
+            <block id="${targetId}_size" type="looks_size"/>
+            <block type="looks_changeeffectby">
             <value name="CHANGE">
                 <shadow type="math_number">
                     <field name="NUM">25</field>
@@ -268,42 +304,23 @@ const looks = function (isInitialSetup, isStage, targetId, costumeName, backdrop
             </value>
         </block>
         <block type="looks_cleargraphiceffects"/>
-        ${blockSeparator}
-        ${isStage ? '' : `
-            <block type="looks_show"/>
-            <block type="looks_hide"/>
-        ${blockSeparator}
-            <block type="looks_gotofrontback"/>
-            <block type="looks_goforwardbackwardlayers">
-                <value name="NUM">
-                    <shadow type="math_integer">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-            </block>
-        `}
-        ${isStage ? `
-            <block id="backdropnumbername" type="looks_backdropnumbername"/>
-        ` : `
-            <block id="${targetId}_costumenumbername" type="looks_costumenumbername"/>
-            <block id="backdropnumbername" type="looks_backdropnumbername"/>
-            <block id="${targetId}_size" type="looks_size"/>
-        `}
-        ${categorySeparator}
+    ` : '';
+    const martyLooksBlocks = (targetType === targetTypes.device && raftType === "Marty") ? martyblockslib.MartyBlocksToolbox_disco() : '';
+    const cogLooksBlocks = (targetType === targetTypes.device && raftType === "Cog") ? martyblockslib.CogBlocksToolbox_looks() : '';
+    return `
+    <category name="%{BKY_CATEGORY_LOOKS}" id="looks" colour="#9966FF" secondaryColour="#774DCB">
+    ${stageLooksBlocks}
+    ${martyLooksBlocks}
+    ${cogLooksBlocks}
+    ${spriteLooksBlocks}
+    ${categorySeparator}
     </category>
     `;
 };
 
-const sound = function (isInitialSetup, isStage, targetId, soundName) {
-    return `
-    <category name="%{BKY_CATEGORY_SOUND}" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
-    ` + martyblockslib.MartyBlocksToolbox_sound(soundName) +
-        `
-        ${blockSeparator}
-
-        <!--Default blocks-->
-
-        <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
+const sound = function (isInitialSetup, targetType, targetId, soundName, raftType) {
+    const spriteSoundBlocks = targetType === targetTypes.sprite ? `
+            <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
                     <field name="SOUND_MENU">${soundName}</field>
@@ -350,18 +367,78 @@ const sound = function (isInitialSetup, isStage, targetId, soundName) {
             </value>
         </block>
         <block id="${targetId}_volume" type="sound_volume"/>
+        ` : '';
+    const stageSoundBlocks = targetType === targetTypes.stage ? `
+    <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
+            <value name="SOUND_MENU">
+                <shadow type="sound_sounds_menu">
+                    <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
+        <block id="${targetId}_sound_play" type="sound_play">
+            <value name="SOUND_MENU">
+                <shadow type="sound_sounds_menu">
+                    <field name="SOUND_MENU">${soundName}</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="sound_stopallsounds"/>
+        ${blockSeparator}
+        <block type="sound_changeeffectby">
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="sound_seteffectto">
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="sound_cleareffects"/>
+        ${blockSeparator}
+        <block type="sound_changevolumeby">
+            <value name="VOLUME">
+                <shadow type="math_number">
+                    <field name="NUM">-10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="sound_setvolumeto">
+            <value name="VOLUME">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+        <block id="${targetId}_volume" type="sound_volume"/>
+    ` : '';
+    const martySoundBlocks = (targetType === targetTypes.device && raftType === "Marty") ? martyblockslib.MartyBlocksToolbox_sound(soundName) : '';
+    const cogSoundBlocks = (targetType === targetTypes.device && raftType === "Cog") ? martyblockslib.CogBlocksToolbox_sound() : '';
+    return `
+    <category name="%{BKY_CATEGORY_SOUND}" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
+        ${martySoundBlocks}
+        ${cogSoundBlocks}
+        ${blockSeparator}
+        ${stageSoundBlocks}
+        ${spriteSoundBlocks}
         ${categorySeparator}
     </category>
     `;
 };
 
-const events = function (isInitialSetup, isStage) {
+const events = function (isInitialSetup, targetType, raftType) {
+    const cogBlocksEvents = (targetType === targetTypes.device && raftType === "Cog") ? martyblockslib.CogBlocksToolbox_events() : '';
     return `
     <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
         <block type="event_whenflagclicked"/>
         <block type="event_whenkeypressed">
         </block>
-        ${isStage ? `
+        ${targetType === targetTypes.stage ? `
             <block type="event_whenstageclicked"/>
         ` : `
             <block type="event_whenthisspriteclicked"/>
@@ -389,12 +466,14 @@ const events = function (isInitialSetup, isStage) {
               <shadow type="event_broadcast_menu"></shadow>
             </value>
         </block>
+        ${blockSeparator}
+        ${cogBlocksEvents}
         ${categorySeparator}
     </category>
     `;
 };
 
-const control = function (isInitialSetup, isStage) {
+const control = function (isInitialSetup, targetType, raftType) {
     return `
     <category name="%{BKY_CATEGORY_CONTROL}" id="control" colour="#FFAB19" secondaryColour="#CF8B17">
         <block type="control_wait">
@@ -421,7 +500,7 @@ const control = function (isInitialSetup, isStage) {
         ${blockSeparator}
         <block type="control_stop"/>
         ${blockSeparator}
-        ${isStage ? `
+        ${targetType === targetTypes.stage ? `
             <block type="control_create_clone_of">
                 <value name="CLONE_OPTION">
                     <shadow type="control_create_clone_of_menu"/>
@@ -441,76 +520,51 @@ const control = function (isInitialSetup, isStage) {
     `;
 };
 
-const sensing = function (isInitialSetup, isStage) {
+const sensing = function (isInitialSetup, targetType, targetId, raftType) {
     const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
-    /*
-    <block type="XAxisMagnetometer" />
-            <block type="YAxisMagnetometer" />
-            <block type="ZAxisMagnetometer" />
-     */
-    return `
-    <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
-        ${isStage ? '' : `
 
-            <block type="XAxisMovement" />
-            <block type="YAxisMovement" />
-            <block type="ZAxisMovement" />
-
-            
-
-            <block type="BatteryPercentage" />
-
-            <block type="ServoCurrent" >
-                <value>
-                    <field name="SERVOCHOICE"></field>
-                </value>
-            </block>
-
-            <block type="ServoPosition" >
-                <value>
-                    <field name="SERVOCHOICE"></field>
-                </value>
-            </block>
-
-            <block type="mv2_obstaclesense" />
-
-            <block type="mv2_groundsense" />
-
-            <block type="mv2_coloursense" />
-
-            <block type="mv2_coloursense_hex" />
-
-            <block type="mv2_coloursenseraw" />
-
-            <block type="mv2_distancesense" />
-
-            <block type="mv2_lightsense" />
-
-            <block type="mv2_noisesense" />
-
-            <!--<block type="mv2_current" />-->
-
-            <!--<block type="mv2_accelerometer" />-->
-
-            <!--<block type="mv2_proximity" />-->
-
-            <!--<block type="mv2_demo_sensor" />-->
-
-            <!--<block type="mv2_set_demo_sensor" >
-                <value name="SENSORVAL">
-                    <shadow type="math_number">
-                        <field name="NUM">42</field>
+    const stageSensingBlocks = targetType === targetTypes.stage ? `
+     ${isInitialSetup ? '' : `
+            <block id="askandwait" type="sensing_askandwait">
+                <value name="QUESTION">
+                    <shadow type="text">
+                        <field name="TEXT">${name}</field>
                     </shadow>
                 </value>
-            </block>-->
+            </block>
+        `}
 
+<block id="answer" type="sensing_answer" />
+${blockSeparator}
+<block type="sensing_keypressed">
+    <value name="KEY_OPTION">
+        <shadow type="sensing_keyoptions"/>
+    </value>
+</block>
+<block type="sensing_mousedown"/>
+<block type="sensing_mousex"/>
+<block type="sensing_mousey"/>
 
-
-            ${blockSeparator}
-
-            <!-- SCRATCH DEFAULT BLOCKS -->
-
-            <block type="sensing_touchingobject">
+${blockSeparator}
+  
+<block id="loudness" type="sensing_loudness" />
+${blockSeparator}
+<block id="timer" type="sensing_timer"/>
+<block type="sensing_resettimer"/>
+${blockSeparator}
+<block id="of" type="sensing_of">
+<value name="OBJECT">
+<shadow id="sensing_of_object_menu" type="sensing_of_object_menu" />
+</value>
+</block>
+${blockSeparator}
+<block id="current" type="sensing_current"/>
+<block type="sensing_dayssince2000"/>
+${blockSeparator}
+<block type="sensing_username" />
+    ` : ``;
+    const spriteSensingBlocks = targetType === targetTypes.sprite ? `
+    <block type="sensing_touchingobject">
                 <value name="TOUCHINGOBJECTMENU">
                     <shadow type="sensing_touchingobjectmenu"/>
                 </value>
@@ -533,9 +587,9 @@ const sensing = function (isInitialSetup, isStage) {
                     <shadow type="sensing_distancetomenu"/>
                 </value>
             </block>
+            <block type="sensing_setdragmode" id="sensing_setdragmode"></block>
             ${blockSeparator}
-        `}
-        ${isInitialSetup ? '' : `
+             ${isInitialSetup ? '' : `
             <block id="askandwait" type="sensing_askandwait">
                 <value name="QUESTION">
                     <shadow type="text">
@@ -544,39 +598,47 @@ const sensing = function (isInitialSetup, isStage) {
                 </value>
             </block>
         `}
-        <block id="answer" type="sensing_answer"/>
-        ${blockSeparator}
-        <block type="sensing_keypressed">
-            <value name="KEY_OPTION">
-                <shadow type="sensing_keyoptions"/>
-            </value>
-        </block>
-        <block type="sensing_mousedown"/>
-        <block type="sensing_mousex"/>
-        <block type="sensing_mousey"/>
-        ${isStage ? '' : `
+
+<block id="answer" type="sensing_answer" />
+${blockSeparator}
+<block type="sensing_keypressed">
+    <value name="KEY_OPTION">
+        <shadow type="sensing_keyoptions"/>
+    </value>
+</block>
+<block type="sensing_mousedown"/>
+<block type="sensing_mousex"/>
+<block type="sensing_mousey"/>
+
+${blockSeparator}
+  
+<block id="loudness" type="sensing_loudness" />
+${blockSeparator}
+<block id="timer" type="sensing_timer"/>
+<block type="sensing_resettimer"/>
+${blockSeparator}
+<block id="of" type="sensing_of">
+<value name="OBJECT">
+<shadow id="sensing_of_object_menu" type="sensing_of_object_menu" />
+</value>
+</block>
+${blockSeparator}
+<block id="current" type="sensing_current"/>
+<block type="sensing_dayssince2000"/>
+${blockSeparator}
+<block type="sensing_username" />
+    ` : ``;
+    const martySensingBlocks = (targetType === targetTypes.device && raftType === "Marty") ? martyblockslib.MartyBlocksToolbox_sensing() : ``;
+    const cogSensingBlocks = (targetType === targetTypes.device && raftType === "Cog") ? martyblockslib.CogBlocksToolbox_sensing() : ``;
+    return `
+    <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
+            ${stageSensingBlocks}
+            ${martySensingBlocks}
+            ${cogSensingBlocks}
             ${blockSeparator}
-            '<block type="sensing_setdragmode" id="sensing_setdragmode"></block>'+
-            ${blockSeparator}
-        `}
-        ${blockSeparator}
-        <block id="loudness" type="sensing_loudness"/>
-        ${blockSeparator}
-        <block id="timer" type="sensing_timer"/>
-        <block type="sensing_resettimer"/>
-        ${blockSeparator}
-        <block id="of" type="sensing_of">
-            <value name="OBJECT">
-                <shadow id="sensing_of_object_menu" type="sensing_of_object_menu"/>
-            </value>
-        </block>
-        ${blockSeparator}
-        <block id="current" type="sensing_current"/>
-        <block type="sensing_dayssince2000"/>
-        ${blockSeparator}
-        <block type="sensing_username"/>
-        ${categorySeparator}
-    </category>
+            ${spriteSensingBlocks}
+            ${categorySeparator}
+    </category >
     `;
 };
 
@@ -586,6 +648,44 @@ const operators = function (isInitialSetup) {
     const letter = ScratchBlocks.ScratchMsgs.translate('OPERATORS_LETTEROF_APPLE', 'a');
     return `
     <category name="%{BKY_CATEGORY_OPERATORS}" id="operators" colour="#40BF4A" secondaryColour="#389438">
+
+        <block type="mv2_RGBOperator">
+        <value name="NUM_R">
+            <shadow type="math_number">
+            <field name="NUM">255</field>
+            </shadow>
+        </value>
+        <value name="NUM_G">
+            <shadow type="math_number">
+            <field name="NUM">255</field>
+            </shadow>
+        </value>
+        <value name="NUM_B">
+            <shadow type="math_number">
+            <field name="NUM">255</field>
+            </shadow>
+        </value>
+        </block>
+
+        <block type="mv2_HSLOperator">
+        <value name="NUM_H">
+            <shadow type="math_number">
+            <field name="NUM">360</field>
+            </shadow>
+        </value>
+        <value name="NUM_S">
+            <shadow type="math_number">
+            <field name="NUM">100</field>
+            </shadow>
+        </value>
+        <value name="NUM_L">
+            <shadow type="math_number">
+            <field name="NUM">100</field>
+            </shadow>
+        </value>
+        </block>
+
+
         <block type="operator_add">
             <value name="NUM1">
                 <shadow type="math_number">
@@ -635,18 +735,18 @@ const operators = function (isInitialSetup) {
             </value>
         </block>
         ${blockSeparator}
-        <block type="operator_random">
-            <value name="FROM">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="TO">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
+<block type="operator_random">
+    <value name="FROM">
+        <shadow type="math_number">
+            <field name="NUM">1</field>
+        </shadow>
+    </value>
+    <value name="TO">
+        <shadow type="math_number">
+            <field name="NUM">10</field>
+        </shadow>
+    </value>
+</block>
         ${blockSeparator}
         <block type="operator_gt">
             <value name="OPERAND1">
@@ -755,39 +855,29 @@ const operators = function (isInitialSetup) {
             </value>
         </block>
         ${blockSeparator}
-        <block type="operator_mathop">
-            <value name="NUM">
-                <shadow type="math_number">
-                    <field name="NUM"/>
-                </shadow>
-            </value>
-        </block>
+<block type="operator_mathop">
+    <value name="NUM">
+        <shadow type="math_number">
+            <field name="NUM" />
+        </shadow>
+    </value>
+</block>
         ${categorySeparator}
-    </category>
+    </category >
     `;
 };
 
 const variables = function () {
     return `
-    <category
-        name="%{BKY_CATEGORY_VARIABLES}"
-        id="variables"
-        colour="#FF8C1A"
-        secondaryColour="#DB6E00"
-        custom="VARIABLE">
+    <category name="%{BKY_CATEGORY_VARIABLES}" id="variables" colour="#FF8C1A" secondaryColour="#DB6E00" custom="VARIABLE">
     </category>
     `;
 };
 
 const myBlocks = function () {
     return `
-    <category
-        name="%{BKY_CATEGORY_MYBLOCKS}"
-        id="myBlocks"
-        colour="#FF6680"
-        secondaryColour="#FF4D6A"
-        custom="PROCEDURE">
-    </category>
+ <category name="%{BKY_CATEGORY_MYBLOCKS}" id="myBlocks" colour="#FF6680" secondaryColour="#FF4D6A" custom="PROCEDURE">
+ </category>
     `;
 };
 /* eslint-enable no-unused-vars */
@@ -798,66 +888,74 @@ const xmlClose = '</xml>';
 /**
  * @param {!boolean} isInitialSetup - Whether the toolbox is for initial setup. If the mode is "initial setup",
  * blocks with localized default parameters (e.g. ask and wait) should not be loaded. (LLK/scratch-gui#5445)
- * @param {?boolean} isStage - Whether the toolbox is for a stage-type target. This is always set to true
+ * @param {?boolean} targetType - Whether the toolbox is for a stage-type target. This is always set to true
  * when isInitialSetup is true.
  * @param {?string} targetId - The current editing target
- * @param {?Array.<object>} categoriesXML - optional array of `{id,xml}` for categories. This can include both core
+ * @param {?Array.<object>} categoriesXML - optional array of `{ id, xml } ` for categories. This can include both core
  * and other extensions: core extensions will be placed in the normal Scratch order; others will go at the bottom.
  * @property {string} id - the extension / category ID.
- * @property {string} xml - the `<category>...</category>` XML for this extension / category.
+ * @property {string} xml - the `< category >...</category > ` XML for this extension / category.
  * @param {?string} costumeName - The name of the default selected costume dropdown.
  * @param {?string} backdropName - The name of the default selected backdrop dropdown.
  * @param {?string} soundName -  The name of the default selected sound dropdown.
  * @returns {string} - a ScratchBlocks-style XML document for the contents of the toolbox.
  */
-const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categoriesXML = [],
-    costumeName = '', backdropName = '', soundName = '') {
-    isStage = isInitialSetup || isStage;
-    const gap = [categorySeparator];
+const makeToolboxXML = function (isInitialSetup, targetType = true, targetId, categoriesXML = [],
+    costumeName = '', backdropName = '', soundName = '', raftType = '') {
+    try {
 
-    costumeName = xmlEscape(costumeName);
-    backdropName = xmlEscape(backdropName);
-    soundName = xmlEscape(soundName);
+        targetType = isInitialSetup || targetType;
+        const gap = [categorySeparator];
 
-    categoriesXML = categoriesXML.slice();
-    const moveCategory = categoryId => {
-        const index = categoriesXML.findIndex(categoryInfo => categoryInfo.id === categoryId);
-        if (index >= 0) {
-            // remove the category from categoriesXML and return its XML
-            const [categoryInfo] = categoriesXML.splice(index, 1);
-            return categoryInfo.xml;
+        costumeName = xmlEscape(costumeName);
+        backdropName = xmlEscape(backdropName);
+        soundName = xmlEscape(soundName);
+
+        categoriesXML = categoriesXML.slice();
+        const moveCategory = categoryId => {
+            const index = categoriesXML.findIndex(categoryInfo => categoryInfo.id === categoryId);
+            if (index >= 0) {
+                // remove the category from categoriesXML and return its XML
+                const [categoryInfo] = categoriesXML.splice(index, 1);
+                return categoryInfo.xml;
+            }
+            // return `undefined`
+        };
+
+        const motionXML = moveCategory('motion') || motion(isInitialSetup, targetType, targetId, raftType);
+        const looksXML = moveCategory('looks') || looks(isInitialSetup, targetType, targetId, costumeName, backdropName, raftType);
+        const soundXML = moveCategory('sound') || sound(isInitialSetup, targetType, targetId, soundName, raftType);
+        const eventsXML = moveCategory('event') || events(isInitialSetup, targetType, raftType);
+        const controlXML = moveCategory('control') || control(isInitialSetup, targetType, raftType);
+        const sensingXML = moveCategory('sensing') || sensing(isInitialSetup, targetType, targetId, raftType);
+        const operatorsXML = moveCategory('operators') || operators(isInitialSetup);
+        const variablesXML = moveCategory('data') || variables();
+        const myBlocksXML = moveCategory('procedures') || myBlocks();
+
+        const everything = [
+            xmlOpen,
+            motionXML, gap,
+            looksXML, gap,
+            soundXML, gap,
+            eventsXML, gap,
+            controlXML, gap,
+            sensingXML, gap,
+            operatorsXML, gap,
+            variablesXML, gap,
+            myBlocksXML
+        ];
+
+        for (const extensionCategory of categoriesXML) {
+            everything.push(gap, extensionCategory.xml);
         }
-        // return `undefined`
-    };
-    const motionXML = moveCategory('motion') || motion(isInitialSetup, isStage, targetId);
-    const looksXML = moveCategory('looks') || looks(isInitialSetup, isStage, targetId, costumeName, backdropName);
-    const soundXML = moveCategory('sound') || sound(isInitialSetup, isStage, targetId, soundName);
-    const eventsXML = moveCategory('event') || events(isInitialSetup, isStage, targetId);
-    const controlXML = moveCategory('control') || control(isInitialSetup, isStage, targetId);
-    const sensingXML = moveCategory('sensing') || sensing(isInitialSetup, isStage, targetId);
-    const operatorsXML = moveCategory('operators') || operators(isInitialSetup, isStage, targetId);
-    const variablesXML = moveCategory('data') || variables(isInitialSetup, isStage, targetId);
-    const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
 
-    const everything = [
-        xmlOpen,
-        motionXML, gap,
-        looksXML, gap,
-        soundXML, gap,
-        eventsXML, gap,
-        controlXML, gap,
-        sensingXML, gap,
-        operatorsXML, gap,
-        variablesXML, gap,
-        myBlocksXML
-    ];
-
-    for (const extensionCategory of categoriesXML) {
-        everything.push(gap, extensionCategory.xml);
+        everything.push(xmlClose);
+        return everything.join('\n');
     }
-
-    everything.push(xmlClose);
-    return everything.join('\n');
+    catch (e) {
+        console.error("Error in makeToolboxXML", e);
+        throw e;
+    }
 };
 
 export default makeToolboxXML;

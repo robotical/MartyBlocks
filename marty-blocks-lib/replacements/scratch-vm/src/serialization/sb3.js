@@ -56,7 +56,8 @@ const CORE_EXTENSIONS = [
     'procedures',
     'sensing',
     'sound',
-    'mv2'
+    'mv2',
+    'cog'
 ];
 
 // Constants referring to 'primitive' blocks that are usually shadows,
@@ -484,6 +485,7 @@ const serializeTarget = function (target, extensions) {
     if (target.hasOwnProperty('volume')) obj.volume = target.volume;
     if (target.hasOwnProperty('layerOrder')) obj.layerOrder = target.layerOrder;
     if (target.hasOwnProperty('targetType')) obj.targetType = target.targetType;
+    if (target.hasOwnProperty('raftType')) obj.raftType = target.raftType;
     if (obj.isStage) { // Only the stage should have these properties
         if (target.hasOwnProperty('tempo')) obj.tempo = target.tempo;
         if (target.hasOwnProperty('videoTransparency')) obj.videoTransparency = target.videoTransparency;
@@ -1025,6 +1027,9 @@ const parseScratchObject = function (object, runtime, extensions, zip, assets) {
     }
     if (object.hasOwnProperty('targetType')) {
         target.targetType = object.targetType;
+    }
+    if (object.hasOwnProperty('raftType')) {
+        target.raftType = object.raftType;
     }
     if (object.hasOwnProperty('volume')) {
         target.volume = object.volume;

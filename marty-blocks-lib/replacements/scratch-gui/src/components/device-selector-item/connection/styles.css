@@ -1,0 +1,14 @@
+.disconnectButton,
+.connectButton {
+    position: absolute;
+    top: -.425rem;
+    left: 0;
+    z-index: auto;
+    font-size: 0.425rem;
+    font-weight: bold;
+    border: 1px solid gray;
+    border-radius: 0.25rem;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+}

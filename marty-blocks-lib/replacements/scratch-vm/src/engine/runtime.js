@@ -40,7 +40,9 @@ const defaultBlockPackages = {
     scratch3_sensing: require('../blocks/scratch3_sensing'),
     scratch3_data: require('../blocks/scratch3_data'),
     scratch3_procedures: require('../blocks/scratch3_procedures'),
-    scratch3_mv2: require('marty-blocks-lib/src/Scratch3Mv2Blocks')
+    scratch3_mv2: require('marty-blocks-lib/src/Scratch3Mv2Blocks'),
+    scratch3_cog: require('marty-blocks-lib/src/Scratch3CogBlocks'),
+
 };
 
 const defaultExtensionColors = ['#0FBD8C', '#0DA57A', '#0B8E69'];
@@ -819,7 +821,7 @@ class Runtime extends EventEmitter {
         const context = {};
         target = target || this.getEditingTarget() || this.getTargetForStage();
         if (target) {
-            context.targetType = (target.isStage ? TargetType.STAGE : TargetType.SPRITE);
+            context.targetType = target.targetType;
         }
     }
 
@@ -917,6 +919,10 @@ class Runtime extends EventEmitter {
         }
 
         for (const blockInfo of extensionInfo.blocks) {
+            // if the 'raftType' of the block is defined, filter out the block if it is not the same as the current target type
+            if ((blockInfo && blockInfo.raftType && this._editingTarget) && blockInfo.raftType !== this._editingTarget.raftType) {
+                continue;
+            }
             try {
                 const convertedBlock = this._convertForScratchBlocks(blockInfo, categoryInfo);
                 categoryInfo.blocks.push(convertedBlock);
@@ -1407,7 +1413,7 @@ class Runtime extends EventEmitter {
                 // If the block info doesn't include a `filter` property, always include it
                 if (target && block.info.filter) {
                     blockFilterIncludesTarget = block.info.filter.includes(
-                        target.isStage ? TargetType.STAGE : TargetType.SPRITE
+                        target.targetType
                     );
                 }
                 // If the block info's `hideFromPalette` is true, then filter out this block

@@ -177,11 +177,15 @@ buildScratchStart () {
 }
 
 cpToWebapp () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     rm -rf $WebappHome/public/MartyBlocks/*
     cp -r $gui_original/build/* $WebappHome/public/MartyBlocks
 }
 
 cpToPhoneApp () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     rm -rf $PhoneAppHome/assets/www/scratch-build/*
     rm -rf $PhoneAppHome/node_modules/@robotical/martyblocks/dist/*
     cp -r $gui_original/build/* $PhoneAppHome/assets/www/scratch-build/
@@ -189,12 +193,16 @@ cpToPhoneApp () {
 }
 
 cpToDist () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     cdhome
     rm -rf dist/*
     cp -r $gui_original/build/* ./dist
 }
 
 cpToPublic () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     rm -rf $MBHome/public/*
     cp -r $gui_original/build/* $MBHome/public
 }

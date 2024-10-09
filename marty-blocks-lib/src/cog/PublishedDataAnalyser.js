@@ -1,15 +1,37 @@
 const CogVmEvents = require("./CogEventEnum");
 const { isVersionGreater_errorCatching } = require("../versionChecker");
+const { raftPubSubscriptionHelper } = require("../util/raft-subscription-helpers");
 
 
 class PublishedDataAnalyser {
 
-    constructor() {
-        this.publisher = null;
+    constructor(cog) {
+        this.cog = cog;
+        this.cogState = {
+            tilt: false,
+            movementType: false,
+            rotation: false,
+            buttonClick: false,
+            objectSense: false,
+            lightSense: false,
+            irMessage: false
+        };
+        this.pubSub = null;
+        this.subscribeToPublishedData();
     }
 
-    analyse(data, p3vm) {
-        this.publisher = p3vm.publish.bind(p3vm);
+    subscribeToPublishedData() {
+        this.pubSub = raftPubSubscriptionHelper(this.cog);
+        this.pubSub.subscribe((data) => {
+            this.analyse(data.stateInfo);
+        });
+    }
+
+    unsubscribeFromPublishedData() {
+        this.pubSub.unsubscribe();
+    }
+
+    analyse(data) {
         const isMoving = this.detectMovement(data);
         this.detectTilt(data, isMoving);
         this.detectRotation(data, isMoving);
@@ -20,70 +42,39 @@ class PublishedDataAnalyser {
     }
 
     detectTilt(data, isMoving) {
-        tiltDetection.detectTilt(data, {
-            onTiltLeft: () => this.publisher(CogVmEvents.TILT_LEFT),
-            onTiltRight: () => this.publisher(CogVmEvents.TILT_RIGHT),
-            onTiltForward: () => this.publisher(CogVmEvents.TILT_FORWARD),
-            onTiltBackward: () => this.publisher(CogVmEvents.TILT_BACKWARD),
-            onNoTilt: () => this.publisher(CogVmEvents.NO_TILT)
-        }, isMoving)
+        tiltDetection.detectTilt(data, isMoving, this.cogState, this.cog.getRaftVersion())
     }
 
     detectMovement(data) {
-        return shakeDetector.detectShake(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, Date.now(),
-            () => this.publisher(CogVmEvents.SHAKE),
-            () => this.publisher(CogVmEvents.MOVE),
-            () => this.publisher(CogVmEvents.NO_MOVE)
-        );
+        return shakeDetector.detectShake(data.LSM6DS.ax, data.LSM6DS.ay, data.LSM6DS.az, Date.now(), this.cogState);
     }
 
     detectRotation(data, isMoving) {
-        rotationDetection.detectRotation(data,
-            () => this.publisher(CogVmEvents.ON_ROTATE_CLOCKWISE),
-            () => this.publisher(CogVmEvents.ON_ROTATE_COUNTER_CLOCKWISE),
-            () => this.publisher(CogVmEvents.ON_NO_ROTATE),
-            isMoving);
+        rotationDetection.detectRotation(data, isMoving, this.cogState);
     }
 
     detectButtonClick(data) {
-
-        buttonClickDetection.detectButtonClick(data.Light.irVals[2],
-            () => this.publisher(CogVmEvents.BUTTON_CLICK),
-            () => this.publisher(CogVmEvents.NO_BUTTON_CLICK)
-        );
+        buttonClickDetection.detectButtonClick(data.Light.irVals[2], this.cogState, this.cog.getRaftVersion())
     }
 
     detectObjectSense(data) {
         const objectSenseValueArray = data.Light.irVals;
-        objectSenseDetection.detectObjectSense(objectSenseValueArray,
-            () => this.publisher(CogVmEvents.OBJECT_SENSE_0),
-            () => this.publisher(CogVmEvents.OBJECT_SENSE_1),
-            () => this.publisher(CogVmEvents.OBJECT_SENSE_2),
-            () => this.publisher(CogVmEvents.NO_OBJECT_SENSE)
-        );
+        objectSenseDetection.detectObjectSense(objectSenseValueArray, this.cogState);
     }
 
     detectLightSense(data) {
         const lightSenseValue = data.Light.ambientVals[0];
-        lightSenseDetection.detectLightSense(lightSenseValue,
-            () => this.publisher(CogVmEvents.LIGHT_SENSE),
-            () => this.publisher(CogVmEvents.NO_LIGHT_SENSE)
-        );
+        lightSenseDetection.detectLightSense(lightSenseValue, this.cogState);
     }
 
     detectIRMessage(data) {
         const irMessageData = data;
-        irMessageDetection.detectIRMessage(irMessageData,
-            () => this.publisher(CogVmEvents.IR_MESSAGE_0),
-            () => this.publisher(CogVmEvents.IR_MESSAGE_1),
-            () => this.publisher(CogVmEvents.NO_IR_MESSAGE)
-        );
+        irMessageDetection.detectIRMessage(irMessageData, this.cogState);
     }
 }
 
 class TiltDetection {
     distance(a, b) { return Math.sqrt((Math.pow(a, 2) + Math.pow(b, 2))) }
-
 
     static rotateAccelData(x, y, z, degrees) {
         // Convert degrees to radians
@@ -108,7 +99,7 @@ class TiltDetection {
         return { x: rotatedX, y: rotatedY, z: rotatedZ };
     }
 
-    detectTilt(data, { onTiltLeft, onTiltRight, onTiltForward, onTiltBackward, onNoTilt }, isMoving = false) {
+    detectTilt(data, isMoving = false, cogState, cogVersion) {
         if (isMoving) return;
 
 
@@ -117,7 +108,7 @@ class TiltDetection {
         const correctionCutOffVersion = "1.2.0";
         let tiltCorrection = tiltCorrectionForOlderCog;
 
-        if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
+        if (isVersionGreater_errorCatching(cogVersion, correctionCutOffVersion)) {
             tiltCorrection = tiltCorrectionForNewerCog;
         }
 
@@ -135,30 +126,20 @@ class TiltDetection {
         const leftRightThreshold = window.tilt_left_right || 20 * (Math.PI / 180); // threshold for left and right tilt
         const upDownThreshold = window.tilt_up_down || 0.5; // threshold for up and down tilt
 
-        let tiltDirection = "";
+        let tiltDirection = false;
         if (pitch < -forwardBackwardThreshold) {// && Math.abs(yaw) < upDownThreshold) {
             tiltDirection = "forward";
-            onTiltForward();
         }
         if (pitch > forwardBackwardThreshold) {// && Math.abs(yaw) < upDownThreshold) {
             tiltDirection = "backward";
-            onTiltBackward();
         }
         if (roll < -leftRightThreshold) {// && Math.abs(yaw) < upDownThreshold) {
             tiltDirection = "left";
-            onTiltLeft();
         }
         if (roll > leftRightThreshold) {// && Math.abs(yaw) < upDownThreshold) {
             tiltDirection = "right";
-            onTiltRight();
         }
-        if (tiltDirection !== "") {
-            // console.log("Tilt direction: ", tiltDirection);
-            // console.log("pitch: ", pitch, "roll: ", roll, "yaw: ", yaw);
-        }
-        if (tiltDirection === "") {
-            onNoTilt();
-        }
+        cogState.tilt = tiltDirection;
     }
 }
 
@@ -182,10 +163,8 @@ class RotationDetection {
 
     detectRotation(
         data,
-        onClockRotationDetected,
-        onCounterClockRotationDetected,
-        onNoRotationDetected,
-        isMoving = false
+        isMoving = false,
+        cogState,
     ) {
         this.bufferSize = window.rotation_buffer_size || this.bufferSize;
         this.DELAY_FOR_ROTATION = window.rotation_delay || this.DELAY_FOR_ROTATION;
@@ -209,14 +188,13 @@ class RotationDetection {
             this.dataBuffer = [];
             if (metric > this.ROTATION_THRESHOLD) {
                 // console.log("Clockwise rotation detected:", metric);
-                onClockRotationDetected();
+                cogState.rotation = "clockwise";
             } else if (metric < -this.ROTATION_THRESHOLD) {
                 // console.log("Counter-clockwise rotation detected:", metric);
-                onCounterClockRotationDetected();
-            } else {
-                // console.log("No rotation detected:", metric);
-                onNoRotationDetected();
+                cogState.rotation = "counter-clockwise";
             }
+        } else {
+            cogState.rotation = false;
         }
     }
 
@@ -236,10 +214,6 @@ class RotationDetection {
 
 class ShakeDetector {
     constructor() {
-        this.shakeCallback;
-        this.noShakeCallback;
-        this.moveCallback;
-        this.noMoveCallback;
         this.thresholdAccelerationMove = 0.3;
         this.thresholdAcceleration = 1; // how much acceleration is needed to consider shaking
         this.thresholdShakeNumber = 1; // how many shakes are needed
@@ -255,7 +229,7 @@ class ShakeDetector {
         this.moveInProgress = false;
     }
 
-    detectShake(xAcc, yAcc, zAcc, timestamp, shakeCallback, moveCallback, noMoveCallback) {
+    detectShake(xAcc, yAcc, zAcc, timestamp, cogState) {
         this.thresholdAcceleration = window.shake_thr_acc || this.thresholdAcceleration;
         this.thresholdAccelerationMove = window.move_thr_acc || this.thresholdAccelerationMove;
         this.thresholdShakeNumber = window.shake_thr_num || this.thresholdShakeNumber;
@@ -263,20 +237,16 @@ class ShakeDetector {
         this.maxShakeDuration = window.shake_max_duration || this.maxShakeDuration;
         this.coolOffPeriod = window.shake_cool_off || this.coolOffPeriod;
 
-        this.shakeCallback = shakeCallback;
-        this.moveCallback = moveCallback;
-        this.noMoveCallback = noMoveCallback;
-
         const magAcc = Math.sqrt(xAcc * xAcc + yAcc * yAcc + zAcc * zAcc);
         if (magAcc > 0.9 && magAcc < 1.1) {
             // device is stationary-ish, log direction of acc values to get a rough reading on where down is
             this.gravityVector = [xAcc, yAcc, zAcc];
             if (this.moveInProgress) {
                 // console.log("move detected");
-                this.moveCallback();
+                cogState.movementType = "move";
             } else {
                 // console.log("no move detected");
-                this.noMoveCallback();
+                cogState.movementType = false;
             }
             this.moveInProgress = false;
             this.shakeInProgress = false;
@@ -307,7 +277,7 @@ class ShakeDetector {
                             // console.log("Shake detected!");
                             this.sensorBundles = [];
                             this.shakeInProgress = false;
-                            this.shakeCallback();
+                            cogState.movementType = "shake";
                         }
                     }
                     // this.noMoveCallback();
@@ -317,7 +287,7 @@ class ShakeDetector {
                         this.sensorBundles = [];
                         // console.log("resetting shake detector. Move detected");
                         // fire move detector
-                        this.moveCallback();
+                        cogState.movementType = "move";
                     }
                 }
             }
@@ -337,7 +307,7 @@ class ShakeDetector {
         }
     }
 
-    performCheck() {
+    performCheck(cogState) {
         const matrix = [
             [0, 0], // X axis positive and negative
             [0, 0], // Y axis positive and negative
@@ -363,7 +333,7 @@ class ShakeDetector {
             this.lastTimeShakeDetected = Date.now();
 
             // console.log("Shake detected!", JSON.stringify(matrix));
-            this.shakeCallback();
+            cogState.movementType = "shake";
             this.sensorBundles = [];
         }
     }
@@ -387,36 +357,34 @@ class ButtonClickDetection {
     */
     constructor() {
         this.clickThreshold = 1600;
-        this.releaseThreshold = 1500;
+        this.releaseThreshold = 1590;
         this.lastTime = 0;
         this.buttonClicked = false;
     }
 
-    detectButtonClick(buttonValue, buttonClickCallback, buttonReleaseCallback) {
+    detectButtonClick(buttonValue, cogState, cogVersion) {
         const correctionCutOffVersion = "1.2.0";
         let clickThreshold = 1600;
-        if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
+        if (isVersionGreater_errorCatching(cogVersion, correctionCutOffVersion)) {
             clickThreshold = 2300;
         }
-        let releaseThreshold = 1500;
-        if (isVersionGreater_errorCatching(window.cogInterface.sysInfo.SystemVersion, correctionCutOffVersion)) {
-            releaseThreshold = 2100;
+        let releaseThreshold = 1590;
+        if (isVersionGreater_errorCatching(cogVersion, correctionCutOffVersion)) {
+            releaseThreshold = 2290;
         }
         this.clickThreshold = window.button_click_threshold || clickThreshold;
         this.releaseThreshold = window.button_release_threshold || releaseThreshold;
-        
-        this.buttonClickCallback = buttonClickCallback;
-        this.buttonReleaseCallback = buttonReleaseCallback;
+
         const currentTime = Date.now();
         if (buttonValue > this.clickThreshold && !this.buttonClicked) {
             // console.log("Button clicked", buttonValue);
             this.buttonClicked = true;
             this.lastTime = currentTime;
-            this.buttonClickCallback();
+            cogState.buttonClick = true;
         } else if (buttonValue < this.releaseThreshold && this.buttonClicked) {
             // console.log("Button released", buttonValue);
             this.buttonClicked = false;
-            this.buttonReleaseCallback();
+            cogState.buttonClick = false;
         }
         // } else {
         //     this.buttonClicked = false;
@@ -425,7 +393,6 @@ class ButtonClickDetection {
     }
 
 }
-
 class ObjectSenseDetection {
     constructor() {
         this.objectSensed0Threshold = 1150; // right of the arrow
@@ -433,16 +400,14 @@ class ObjectSenseDetection {
         this.objectSensed2Threshold = 1500; // button
     }
 
-    detectObjectSense(objectSenseValue, objectSense0Callback, objectSense1Callback, objectSense2Callback, noObjectSenseCallback) {
+    detectObjectSense(objectSenseValue, cogState) {
 
         if (objectSenseValue[0] > this.objectSensed0Threshold) {
-            objectSense0Callback();
+            cogState.objectSense = "right";
         } else if (objectSenseValue[1] > this.objectSensed1Threshold) {
-            objectSense1Callback();
-        } else if (objectSenseValue[2] > this.objectSensed2Threshold) {
-            objectSense2Callback();
+            cogState.objectSense = "left";
         } else {
-            noObjectSenseCallback();
+            cogState.objectSense = false;
         }
     }
 }
@@ -452,11 +417,11 @@ class LightSenseDetection {
         this.lightSenseThreshold = 450;
     }
 
-    detectLightSense(lightSenseValue, lightSenseCallback, noLightSenseCallback) {
+    detectLightSense(lightSenseValue, cogState) {
         if (lightSenseValue > this.lightSenseThreshold) {
-            lightSenseCallback();
+            cogState.lightSense = true;
         } else {
-            noLightSenseCallback();
+            cogState.lightSense = false;
         }
     }
 }
@@ -467,24 +432,18 @@ class IRMessageDetection {
         this.irMessage1Threshold = 0;
     }
 
-    detectIRMessage(irMessageValue, irMessage0Callback, irMessage1Callback, noIRMessageCallback) {
+    detectIRMessage(irMessageValue, cogState) {
         // placeholder for now
         if (irMessageValue[0] > this.irMessage0Threshold) {
-            irMessage0Callback();
+            cogState.irMessage = "left"
         } else if (irMessageValue[1] > this.irMessage1Threshold) {
-            irMessage1Callback();
+            cogState.irMessage = "right"
         } else {
-            noIRMessageCallback();
+            cogState.irMessage = false;
         }
     }
 }
 
-
-const publishedDataAnalyser = new PublishedDataAnalyser();
-module.exports = {
-    TiltDetection, 
-    publishedDataAnalyser  
-};
 
 const rotationDetection = new RotationDetection();
 const shakeDetector = new ShakeDetector();
@@ -493,3 +452,8 @@ const tiltDetection = new TiltDetection();
 const objectSenseDetection = new ObjectSenseDetection();
 const lightSenseDetection = new LightSenseDetection();
 const irMessageDetection = new IRMessageDetection();
+
+module.exports = {
+    default: PublishedDataAnalyser,
+    TiltDetection,
+};

@@ -45,7 +45,7 @@ class SaveLoad extends React.Component {
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
       // eslint-disable-next-line no-alert
-      alert(`Failed to load project: ${error.message}`);
+      alert(`Failed to load project`);
     }
   }
 

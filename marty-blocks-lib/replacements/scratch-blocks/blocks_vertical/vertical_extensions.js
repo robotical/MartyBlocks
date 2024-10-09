@@ -239,6 +239,7 @@ Blockly.ScratchBlocks.VerticalExtensions.registerAll = function () {
     "operators",
     "more",
     "mv2",
+    "cog"
   ];
   // Register functions for all category colours.
   for (var i = 0; i < categoryNames.length; i++) {
@@ -305,16 +306,19 @@ Blockly.Extensions.register(
   function () {
     this.getInput("SERVOCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
+        const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
         var options = [
-          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
-        if (!mv2Interface.isConnected) return options;
-        const servoObj = JSON.parse(mv2Interface.servos);
-        if (!servoObj || !servoObj.hasOwnProperty("smartServos"))
+        const targetId = window.vm.editingTarget.id;
+        const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+        const connectedRaft = window.applicationManager.connectedRafts[raftId];
+        if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.smartServos || !connectedRaft.raftStateInfo.smartServos.hasOwnProperty("smartServos"))
           return options;
+        const servoObj = connectedRaft.raftStateInfo.smartServos;
         const servoIds = Object.keys(servoObj.smartServos);
-        return servoIds.map((servoId) => {
+        return [selectOption, ...servoIds.map((servoId) => {
           const servoIdStr = servoId + "";
           if (servoIdStr === "0")
             return [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, servoIdStr];
@@ -335,7 +339,7 @@ Blockly.Extensions.register(
           if (servoIdStr === "8")
             return [Blockly.Msg.DROPDOWN_OPTION_EYES, servoIdStr];
           return [["Unknown servo", "n/a"]];
-        });
+        })];
       }),
       "SERVOCHOICE"
     );
@@ -347,16 +351,19 @@ Blockly.Extensions.register(
   function () {
     this.getInput("SERVOCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
+        const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
         var options = [
-          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
-        if (!mv2Interface.isConnected) return options;
-        const servoObj = JSON.parse(mv2Interface.servos);
-        if (!servoObj || !servoObj.hasOwnProperty("smartServos"))
+        const targetId = window.vm.editingTarget.id;
+        const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+        const connectedRaft = window.applicationManager.connectedRafts[raftId];
+        if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.smartServos || !connectedRaft.raftStateInfo.smartServos.hasOwnProperty("smartServos"))
           return options;
+        const servoObj = connectedRaft.raftStateInfo.smartServos;
         const servoIds = Object.keys(servoObj.smartServos);
-        return servoIds.map((servoId) => {
+        return [selectOption, ...servoIds.map((servoId) => {
           const servoIdStr = servoId + "";
           if (servoIdStr === "0")
             return [Blockly.Msg.DROPDOWN_OPTION_LEFTHIP, servoIdStr];
@@ -377,7 +384,7 @@ Blockly.Extensions.register(
           if (servoIdStr === "8")
             return [Blockly.Msg.DROPDOWN_OPTION_EYES, servoIdStr];
           return [["Unknown servo", "n/a"]];
-        });
+        })];
       }),
       "SERVOCHOICE"
     );
@@ -389,14 +396,17 @@ Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
   const RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR = "coloursensor";
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
+      const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
       var defaultOptions = [
-        [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+        selectOption,
         [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
-      if (!mv2Interface.isConnected || !mv2Interface.addons)
+      const targetId = window.vm.editingTarget.id;
+      const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+      const connectedRaft = window.applicationManager.connectedRafts[raftId];
+      if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.addOnInfo || !connectedRaft.raftStateInfo.addOnInfo.addons)
         return defaultOptions;
-      const addons = JSON.parse(mv2Interface.addons).addons;
-      if (!addons) return defaultOptions;
+      const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
       const addonOptions = [];
       for (const addon of addons) {
         if (
@@ -406,7 +416,7 @@ Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
           addonOptions.push([addon.name, addon.name]);
         }
       }
-      return addonOptions.length ? addonOptions : defaultOptions;
+      return addonOptions.length ? [selectOption, ...addonOptions] : defaultOptions;
     }),
     "SENSORCHOICE"
   );
@@ -418,21 +428,24 @@ Blockly.Extensions.register(
     const RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR = "coloursensor";
     this.getInput("SENSORCHOICE").appendField(
       new Blockly.FieldDropdown(function () {
+        const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
         var defaultOptions = [
-          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons)
+        const targetId = window.vm.editingTarget.id;
+        const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+        const connectedRaft = window.applicationManager.connectedRafts[raftId];
+        if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.addOnInfo || !connectedRaft.raftStateInfo.addOnInfo.addons)
           return defaultOptions;
-        const addons = JSON.parse(mv2Interface.addons).addons;
-        if (!addons) return defaultOptions;
+        const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
         const addonOptions = [];
         for (const addon of addons) {
           if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
             addonOptions.push([addon.name, addon.name]);
           }
         }
-        return addonOptions.length ? addonOptions : defaultOptions;
+        return addonOptions.length ? [selectOption, ...addonOptions] : defaultOptions;
       }),
       "SENSORCHOICE"
     );
@@ -443,21 +456,24 @@ Blockly.Extensions.register("dynamic_menu_sensor_light_extension", function () {
   const RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT = "lightsensor";
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
+      const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
       var defaultOptions = [
-        [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+        selectOption,
         [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
-      if (!mv2Interface.isConnected || !mv2Interface.addons)
+      const targetId = window.vm.editingTarget.id;
+      const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+      const connectedRaft = window.applicationManager.connectedRafts[raftId];
+      if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.addOnInfo || !connectedRaft.raftStateInfo.addOnInfo.addons)
         return defaultOptions;
-      const addons = JSON.parse(mv2Interface.addons).addons;
-      if (!addons) return defaultOptions;
+      const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
       const addonOptions = [];
       for (const addon of addons) {
         if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_LIGHT) {
           addonOptions.push([addon.name, addon.name]);
         }
       }
-      return addonOptions.length ? addonOptions : defaultOptions;
+      return addonOptions.length ? [selectOption, ...addonOptions] : defaultOptions;
     }),
     "SENSORCHOICE"
   );
@@ -467,21 +483,24 @@ Blockly.Extensions.register("dynamic_menu_sensor_noise_extension", function () {
   const RIC_WHOAMI_TYPE_CODE_ADDON_NOISE = "noisesensor";
   this.getInput("SENSORCHOICE").appendField(
     new Blockly.FieldDropdown(function () {
+      const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
       var defaultOptions = [
-        [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+        selectOption,
         [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
-      if (!mv2Interface.isConnected || !mv2Interface.addons)
+      const targetId = window.vm.editingTarget.id;
+      const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+      const connectedRaft = window.applicationManager.connectedRafts[raftId];
+      if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.addOnInfo || !connectedRaft.raftStateInfo.addOnInfo.addons)
         return defaultOptions;
-      const addons = JSON.parse(mv2Interface.addons).addons;
-      if (!addons) return defaultOptions;
+      const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
       const addonOptions = [];
       for (const addon of addons) {
         if (addon.whoAmI == RIC_WHOAMI_TYPE_CODE_ADDON_NOISE) {
           addonOptions.push([addon.name, addon.name]);
         }
       }
-      return addonOptions.length ? addonOptions : defaultOptions;
+      return addonOptions.length ? [selectOption, ...addonOptions] : defaultOptions;
     }),
     "SENSORCHOICE"
   );
@@ -494,14 +513,17 @@ Blockly.Extensions.register(
     const RIC_WHOAMI_TYPE_CODE_ADDON_LEDEYE = "LEDeye";
     this.getInput("BOARDTYPE").appendField(
       new Blockly.FieldDropdown(function () {
+        const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
         var defaultOptions = [
-          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons)
+        const targetId = window.vm.editingTarget.id;
+        const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+        const connectedRaft = window.applicationManager.connectedRafts[raftId];
+        if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.addOnInfo || !connectedRaft.raftStateInfo.addOnInfo.addons)
           return defaultOptions;
-        const addons = JSON.parse(mv2Interface.addons).addons;
-        if (!addons) return defaultOptions;
+        const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
         const addonOptions = [];
         let armsOptionAdded = false;
         let eyesOptionAdded = false;
@@ -565,7 +587,7 @@ Blockly.Extensions.register(
             ]);
           }
         }
-        return addonOptions.length ? addonOptions : defaultOptions;
+        return addonOptions.length ? [selectOption, ...addonOptions] : defaultOptions;
       }),
       "BOARDTYPE"
     );
@@ -579,14 +601,17 @@ Blockly.Extensions.register(
     const RIC_WHOAMI_TYPE_CODE_ADDON_RIGHTLEDEYE = "RightLEDeye";
     this.getInput("SIDE").appendField(
       new Blockly.FieldDropdown(function () {
+        const selectOption = [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT];
         var defaultOptions = [
-          [Blockly.Msg.DROPDOWN_OPTION_SELECT, Blockly.Msg.DROPDOWN_OPTION_SELECT],
+          selectOption,
           ["No LED eyes found", "No LED eyes found"],
         ];
-        if (!mv2Interface.isConnected || !mv2Interface.addons)
+        const targetId = window.vm.editingTarget.id;
+        const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+        const connectedRaft = window.applicationManager.connectedRafts[raftId];
+        if (!connectedRaft || !connectedRaft.raftStateInfo || !connectedRaft.raftStateInfo.addOnInfo || !connectedRaft.raftStateInfo.addOnInfo.addons)
           return defaultOptions;
-        const addons = JSON.parse(mv2Interface.addons).addons;
-        if (!addons) return defaultOptions;
+        const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
         const addonOptions = [];
         let bothOptionAdded = false;
         for (const addon of addons) {
@@ -605,7 +630,7 @@ Blockly.Extensions.register(
             addonOptions.push([addon.name, addon.name]);
           }
         }
-        return addonOptions.length ? addonOptions : defaultOptions;
+        return addonOptions.length ? [selectOption, ...addonOptions] : defaultOptions;
       }),
       "SIDE"
     );

@@ -73,7 +73,6 @@ class Mv2Interface extends EventDispatcher {
     this.listSavedScratchFiles = this.listSavedScratchFiles.bind(this);
     this.deleteScratchFile = this.deleteScratchFile.bind(this);
     this.setRSSI = this.setRSSI.bind(this);
-    this.setIsStreamStarting = this.setIsStreamStarting.bind(this);
     this.sessionDbs = null;
   }
 
@@ -153,33 +152,15 @@ class Mv2Interface extends EventDispatcher {
     return false;
   }
 
-  streamAudio(audioData, duration, clearExisting) {
-    console.log(`streamAudio ${audioData.length}`);
-    this.sendCommand({
-      command: "audioStreaming",
-      audioData: Array.from(audioData),
-      duration,
-      clearExisting,
-    });
-  }
-
-  setIsStreamStarting(isStreamStarting) {
-    this.isStreamStarting = isStreamStarting;
-  }
-
   /**
    * Save a scratch file on the device
    * @param {string} fileName Filename to save to
    * @param {string} contents Base64 encoded project data
    * @returns {Promise} Promise
    */
-  saveScratchFileOnDevice(fileName, contents) {
-    if (window.ReactNativeWebView) {
-      return this.sendCommand({
-        command: "saveFileOnDevice",
-        fileName,
-        contents,
-      });
+  async saveScratchFileOnDevice(fileName, contents) {
+    if (window.applicationManager && window.applicationManager.isPhoneApp()) {
+      return window.applicationManager.saveFileOnDevice(fileName, contents);
     }
     // not running in react native, save on pc
     const a = document.createElement("a");
@@ -200,12 +181,8 @@ class Mv2Interface extends EventDispatcher {
    * @returns {Promise} Promise
    */
   saveScratchFile(fileName, contents) {
-    if (window.ReactNativeWebView) {
-      return this.sendCommand({
-        command: "saveFile",
-        fileName,
-        contents,
-      });
+    if (window.applicationManager && window.applicationManager.isPhoneApp()) {
+      return window.applicationManager.saveFileOnDeviceLocalStorage('scratch', fileName, contents);
     }
     // not running in react native, fallback to web storage
     window.localStorage.setItem(`scratch_${fileName}`, contents);
@@ -256,9 +233,7 @@ class Mv2Interface extends EventDispatcher {
       this.sendFeedbackToServer({ success: true, fileName: fileName });
     } catch (e) {
       this.sendFeedbackToServer({ success: false, error: e });
-      return mv2Interface.send_REST(
-        "notification/warn-message/To save a file in the cloud internet access is needed."
-      );
+      return window.applicationManager.toaster.warn("To save a file in the cloud internet access is needed.");
     }
     const projectId = await response.json();
     if (projectId && projectId.name) return projectId.name;
@@ -271,11 +246,8 @@ class Mv2Interface extends EventDispatcher {
    * @returns {Promise} Promise
    */
   deleteScratchFile(fileName) {
-    if (window.ReactNativeWebView) {
-      return this.sendCommand({
-        command: "deleteFile",
-        fileName,
-      });
+    if (window.applicationManager && window.applicationManager.isPhoneApp()) {
+      return window.applicationManager.deleteFileFromDeviceLocalStorage('scratch', fileName);
     }
     // not running in react native, fallback to web storage
     window.localStorage.removeItem(`scratch_${fileName}`);
@@ -288,11 +260,8 @@ class Mv2Interface extends EventDispatcher {
    * @returns {Promise} Promise
    */
   loadScratchFile(fileName) {
-    if (window.ReactNativeWebView) {
-      return this.sendCommand({
-        command: "loadFile",
-        fileName,
-      });
+    if (window.applicationManager && window.applicationManager.isPhoneApp()) {
+      return window.applicationManager.loadFileFromDeviceLocalStorage('scratch', fileName);
     }
     // not running in react native, fallback to web storage
     const contents = window.localStorage.getItem(`scratch_${fileName}`);
@@ -313,9 +282,7 @@ class Mv2Interface extends EventDispatcher {
         this.sendFeedbackToServer({ success: true, fileName: fileId });
       } catch (e) {
         this.sendFeedbackToServer({ success: false, error: e });
-        return mv2Interface.send_REST(
-          "notification/warn-message/To load a saved file in the cloud internet access is needed."
-        );
+        return window.applicationManager.toaster.warn("To load a file in the cloud internet access is needed.");
       }
       const projectBase64String = await res.json();
       if (!projectBase64String || !projectBase64String.data) {
@@ -340,9 +307,7 @@ class Mv2Interface extends EventDispatcher {
         res = await fetch(dbUrl);
       } catch (e) {
         this.sendFeedbackToServer({ success: false, error: e });
-        return mv2Interface.send_REST(
-          "notification/warn-message/To load demo projects in the cloud internet access is needed."
-        );
+        return window.applicationManager.toaster.warn("To load demo projects in the cloud internet access is needed.");
       }
       let demoProjectFileNames = await res.json();
       demoProjectFileNames = Object.keys(demoProjectFileNames);
@@ -373,10 +338,8 @@ class Mv2Interface extends EventDispatcher {
    * @returns {Promise} Promise
    */
   listSavedScratchFiles() {
-    if (window.ReactNativeWebView) {
-      return this.sendCommand({
-        command: "listFiles",
-      });
+    if (window.applicationManager && window.applicationManager.isPhoneApp()) {
+      return window.applicationManager.listFilesFromDeviceLocalStorage('scratch');
     }
     // not running in react native, fallback to web storage
     const fileNames = Object.keys(window.localStorage)
@@ -446,7 +409,7 @@ class Mv2Interface extends EventDispatcher {
   toggleSensorsDashboard() {
     this.send_REST("toggle-sensors-dashboard");
   }
- 
+
   /**
    * Save 'usedBlock' in MartyBlocks session
    * @param {string} usedBlock Block name

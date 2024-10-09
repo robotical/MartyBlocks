@@ -1,4 +1,4 @@
-import {defineMessages} from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 export default defineMessages({
     all: {
@@ -130,5 +130,10 @@ export default defineMessages({
         defaultMessage: 'Machine Learning Lessons',
         description: 'Tag for filtering a library for machine learning',
         id: 'gui.libraryTags.machineLearning'
+    },
+    robot: {
+        defaultMessage: 'Robots',
+        description: 'Tag for filtering a library for robots',
+        id: 'gui.libraryTags.robot'
     },
 });

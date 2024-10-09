@@ -61,7 +61,7 @@ Blockly.FieldLEDEyeMatrix = function (matrix) {
   /**
    * Colour representing a cleared node
    */
-  this.clearColour = "#5ba591";
+  this.clearColour = "#9966FF";
 
   /**
    * String for storing current matrix value.
@@ -394,7 +394,7 @@ Blockly.FieldLEDEyeMatrix.prototype.showEditor_ = function () {
   const clearAllButton = document.createElement("div");
   clearAllButton.className = "matrix-clear-all-btn";
   clearAllButton.onclick = this.clearMatrix_.bind(this);
-  clearAllButton.appendChild(this.createButton_("#467569"));
+  clearAllButton.appendChild(this.createButton_("#7a50ce"));
 
   div.appendChild(this.applyToAllButton);
   div.appendChild(clearAllButton);

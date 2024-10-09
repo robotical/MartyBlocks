@@ -353,6 +353,46 @@ Blockly.Msg.NEW_BROADCAST_MESSAGE_TITLE = 'New message name:';
 Blockly.Msg.BROADCAST_MODAL_TITLE = 'New Message';
 Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 
+// ======= COG Messages =======
+// Cog Events
+Blockly.Msg.COG_EVENT_BLOCK_ONTILT = '%1 %2 on tilt %3';
+Blockly.Msg.COG_EVENT_BLOCK_ONROTATE = '%1 %2 on rotate %3';
+Blockly.Msg.COG_EVENT_BLOCK_ONMOVE = '%1 %2 on move %3';
+Blockly.Msg.COG_EVENT_BLOCK_ONBUTTONPUSH = '%1 %2 on button press';
+Blockly.Msg.COG_EVENT_BLOCK_ONOBJECTSENSED = '%1 %2 on object sensed %3';
+Blockly.Msg.COG_EVENT_BLOCK_ONIRMESSAGERECEIVED = '%1 %2 on IR message received %3';
+
+Blockly.Msg.COG_EVENT_BLOCK_ONLIGHTSENSED = '%1 %2 on light sensed';
+
+// Cog Sensing
+Blockly.Msg.COG_ACCELEROMETER = '%1 %2 Accelerometer %3';
+Blockly.Msg.COG_GYROSCOPE = '%1 %2 Gyroscope %3';
+Blockly.Msg.COG_BUTTON_CLICKED = '%1 %2 Button clicked';
+Blockly.Msg.COG_OBSTACLE_SENSED = '%1 %2 Obstacle sensed %3';
+Blockly.Msg.COG_LIGHT_SENSED = '%1 %2 Light sensed';
+Blockly.Msg.COG_IR_SENSOR_VALUE = '%1 %2 IR sensor value %3';
+Blockly.Msg.COG_AMBIENT_LIGHT_VALUE = '%1 %2 Ambient light value';
+Blockly.Msg.COG_MOVEMENT_TYPE = '%1 %2 Movement type';
+Blockly.Msg.COG_TILT_DIRECTION = '%1 %2 Tilt direction';
+
+// Cog Looks
+Blockly.Msg.COG_SET_LED_COLOUR_PICKER = '%1 %2 Set LEDs using the ColorPicker %3';
+Blockly.Msg.COG_SET_ALL_RING_LEDS = '%1 %2 Set all LEDs to %3';
+Blockly.Msg.COG_SET_LED_TO_COLOUR = '%1 %2 Set LED %3 to %4';
+Blockly.Msg.COG_SET_LED_PATTERN = '%1 %2 Set LEDs to pattern %3';
+Blockly.Msg.COG_SET_MIDDLE_LED = '%1 %2 Set middle LED to %3';
+Blockly.Msg.COG_TURN_OFF_LEDS = '%1 %2 Turn off all LEDs';
+Blockly.Msg.COG_PLAY_RTTTL_TUNE = '%1 %2 Play tune %3';
+Blockly.Msg.COG_PLAY_NOTE_FOR_TIME = '%1 %2 Play note %3 for %4 seconds';
+Blockly.Msg.COG_SET_PITCH = '%1 %2 Set pitch to %3';
+Blockly.Msg.COG_SET_VOLUME = '%1 %2 Set volume to %3';
+Blockly.Msg.COG_STOP_SOUNDS = '%1 %2 Stop sounds';
+
+
+
+// ====== End of COG Messages ======
+
+
 // Marty Messages
 
 // Marty new LED eyes blocks
@@ -362,8 +402,8 @@ Blockly.Msg.MV2_TURNOFFALLLEDS = '%1 %2 Turn off all LEDs';
 
 Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK = '%1 %2 Set %3 LED %4 to %5';
 
-Blockly.Msg.MV2_RGBOPERATOR = '%1 %2 red %3 green %4 blue %5';
-Blockly.Msg.MV2_HSLOPERATOR = '%1 %2 hue %3 saturation %4 lightness %5';
+Blockly.Msg.MV2_RGBOPERATOR = 'red %1 green %2 blue %3';
+Blockly.Msg.MV2_HSLOPERATOR = 'hue %1 saturation %2 lightness %3';
 
 // Marty V2 Disco Blocks
 Blockly.Msg.MV2_DISCOCHANGEBLOCKCOLOUR = '%1 %2 Set %3 LEDs to %4';
@@ -374,7 +414,6 @@ Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR = '%1 %2 Turn off function LED';
 
 Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR = '%1 %2 Set region %3 on %4 LEDs to %5';
 Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN = '%1 %2 Set %3 LEDs to pattern %4';
-
 
 
 // MARTY V2 Motion Blocks
@@ -665,6 +704,78 @@ Blockly.Msg.DROPDOWN_OPTION_ZERO = '0';
 Blockly.Msg.DROPDOWN_OPTION_ONE = '1';
 Blockly.Msg.DROPDOWN_OPTION_TWO = '2';
 Blockly.Msg.DROPDOWN_OPTION_THREE = 'off';
+
+Blockly.Msg.DROPDOWN_OPTION_EITHER = 'either';
+Blockly.Msg.DROPDOWN_OPTION_CLOCKWISE = 'clockwise';
+Blockly.Msg.DROPDOWN_OPTION_ANTICLOCKWISE = 'anticlockwise';
+Blockly.Msg.DROPDOWN_OPTION_MOVE = 'move';
+Blockly.Msg.DROPDOWN_OPTION_SHAKE = 'shake';
+Blockly.Msg.DROPDOWN_OPTION_X = 'X';
+Blockly.Msg.DROPDOWN_OPTION_Y = 'Y';
+Blockly.Msg.DROPDOWN_OPTION_Z = 'Z';
+Blockly.Msg.DROPDOWN_OPTION_FLASH = 'Flash';
+Blockly.Msg.DROPDOWN_OPTION_SPIN = 'Spin';
+Blockly.Msg.DROPDOWN_OPTION_SPIN1 = 'Spin1';
+Blockly.Msg.DROPDOWN_OPTION_SPIN2 = 'Spin2';
+Blockly.Msg.DROPDOWN_OPTION_SPIN3 = 'Spin3';
+Blockly.Msg.DROPDOWN_OPTION_SPIN4 = 'Spin4';
+Blockly.Msg.DROPDOWN_OPTION_SPIN5 = 'Spin5';
+Blockly.Msg.DROPDOWN_OPTION_SPIN6 = 'Spin6';
+Blockly.Msg.DROPDOWN_OPTION_SPIN7 = 'Spin7';
+Blockly.Msg.DROPDOWN_OPTION_SPIN8 = 'Spin8';
+
+Blockly.Msg.DROPDOWN_OPTION_NOTEC4 = 'C4';
+Blockly.Msg.DROPDOWN_OPTION_NOTECSHARP4 = 'C#4';
+Blockly.Msg.DROPDOWN_OPTION_NOTED4 = 'D4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEDSHARP4 = 'D#4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEE4 = 'E4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEF4 = 'F4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEFSHARP4 = 'F#4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEG4 = 'G4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEGSHARP4 = 'G#4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEA4 = 'A4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEASHARP4 = 'A#4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEB4 = 'B4';
+Blockly.Msg.DROPDOWN_OPTION_NOTEC5 = 'C5';
+Blockly.Msg.DROPDOWN_OPTION_NOTECSHARP5 = 'C#5';
+Blockly.Msg.DROPDOWN_OPTION_NOTED5 = 'D5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEDSHARP5 = 'D#5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEE5 = 'E5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEF5 = 'F5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEFSHARP5 = 'F#5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEG5 = 'G5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEGSHARP5 = 'G#5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEA5 = 'A5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEASHARP5 = 'A#5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEB5 = 'B5';
+Blockly.Msg.DROPDOWN_OPTION_NOTEC6 = 'C6';
+Blockly.Msg.DROPDOWN_OPTION_NOTECSHARP6 = 'C#6';
+Blockly.Msg.DROPDOWN_OPTION_NOTED6 = 'D6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEDSHARP6 = 'D#6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEE6 = 'E6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEF6 = 'F6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEFSHARP6 = 'F#6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEG6 = 'G6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEGSHARP6 = 'G#6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEA6 = 'A6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEASHARP6 = 'A#6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEB6 = 'B6';
+Blockly.Msg.DROPDOWN_OPTION_NOTEC7 = 'C7';
+Blockly.Msg.DROPDOWN_OPTION_NOTECSHARP7 = 'C#7';
+Blockly.Msg.DROPDOWN_OPTION_NOTED7 = 'D7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEDSHARP7 = 'D#7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEE7 = 'E7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEF7 = 'F7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEFSHARP7 = 'F#7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEG7 = 'G7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEGSHARP7 = 'G#7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEA7 = 'A7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEASHARP7 = 'A#7';
+Blockly.Msg.DROPDOWN_OPTION_NOTEB7 = 'B7';
+
+
+
+
 
 Blockly.Msg.COLOUR_RED = 'Red';
 Blockly.Msg.COLOUR_YELLOW = 'Yellow';

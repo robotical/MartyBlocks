@@ -22,9 +22,6 @@ import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 import tm2scratchIconURL from './tm2scratch/tm2scratch.png';
 import tm2scratchInsetIconURL from './tm2scratch/tm2scratch-small.png';
 
-import cogIconUrl from './cog/cog.png';
-import cogInsetIconUrl from './cog/cog-small.png';
-
 import microbitIconURL from './microbit/microbit.png';
 import microbitInsetIconURL from './microbit/microbit-small.svg';
 import microbitConnectionIconURL from './microbit/microbit-illustration.svg';
@@ -53,21 +50,6 @@ import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
-    {
-        name: 'Cog',
-        extensionId: 'cog',
-        collaborator: 'robotical',
-        iconURL: cogIconUrl,
-        insetIconURL: cogInsetIconUrl,
-        description: (
-            <FormattedMessage
-                defaultMessage="Blocks used to control Cog"
-                description="Description for the 'Cog' extension"
-                id="gui.extension.cog.description"
-            />
-        ),
-        featured: true
-    },
     {
         name: 'Machine Learning',
         extensionId: 'martymachine',

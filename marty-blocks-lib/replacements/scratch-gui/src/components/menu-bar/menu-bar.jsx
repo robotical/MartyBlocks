@@ -19,10 +19,8 @@ import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
 import SettingsMenu from './settings-menu.jsx';
 
 // import MartyConnectBtn from "../marty-connect-btn/marty-connect-btn.jsx";
-import CogConnectBtn from "../cog-connect-btn/cog-connect-btn.jsx";
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 import MartyPythonButton from "../marty-python-btn/index.jsx";
-
 
 import { openTipsLibrary } from '../../reducers/modals';
 import { setPlayer } from '../../reducers/mode';
@@ -673,10 +671,9 @@ class MenuBar extends React.Component {
                             ) : [])}
                             */}
                     </div>
-                    <Divider className={classNames(styles.divider)} />
+                    {/* <Divider className={classNames(styles.divider)} /> */}
                     {/* <MartyConnectBtn />
                     <Divider className={classNames(styles.divider)} /> */}
-                    <CogConnectBtn />
                     <Divider className={classNames(styles.divider)} />
                     <SensorsDashboardBtn />
                     <Divider className={classNames(styles.divider)} />

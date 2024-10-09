@@ -2,12 +2,25 @@
     {
         "name": "Marty",
         "tags": [
-            "marty"
+            "marty",
+            "robot"
         ],
         "assetId": "8e41346f9e386948096815a9b5d6b3e0",
         "bitmapResolution": 1,
         "dataFormat": "svg",
         "rawURL": "https://roboticalpublic.s3.eu-west-1.amazonaws.com/8e41346f9e386948096815a9b5d6b3e0.svg",
+        "rotationCenterX": 48,
+        "rotationCenterY": 50
+    },
+    {
+        "name": "Cog",
+        "tags": [
+            "cog", "robot"
+        ],
+        "assetId": "8e41346f9e386948096815a9b5d6b3e2",
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "rawURL": "https://roboticalpublic.s3.eu-west-1.amazonaws.com/8e41346f9e386948096815a9b5d6b3e2.svg",
         "rotationCenterX": 48,
         "rotationCenterY": 50
     },
