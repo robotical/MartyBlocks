@@ -4,7 +4,6 @@ import styles from "./styles.css";
 import { FormattedMessage } from "react-intl";
 import DisonnectButton from './disconnect-button.jsx';
 
-
 export default class ConnectionButton extends React.Component {
 
     constructor(props) {
@@ -87,8 +86,9 @@ export default class ConnectionButton extends React.Component {
             const raftName = raft.getFriendlyName();
             this.props.onChangeDeviceName(raftName || "Name unknown");
         };
-
-        window.raftManager.connect(connectCallback.bind(this), disconnectCallback.bind(this), this.props.deviceId);
+        // get rafttype of the device
+        const raftType = window.vm.editingTarget.raftType;
+        window.raftManager.connect(connectCallback.bind(this), disconnectCallback.bind(this), this.props.deviceId, raftType);
     };
 
     onDisconnect() {

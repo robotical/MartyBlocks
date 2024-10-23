@@ -167,7 +167,6 @@ const looks = function (isInitialSetup, targetType, targetId, costumeName, backd
     const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
     const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
 
-
     const stageLooksBlocks = targetType === targetTypes.stage ? `
     <block type="looks_switchbackdropto">
                 <value name="BACKDROP">
@@ -313,6 +312,41 @@ const looks = function (isInitialSetup, targetType, targetId, costumeName, backd
     ${martyLooksBlocks}
     ${cogLooksBlocks}
     ${spriteLooksBlocks}
+        <block type="mv2_RGBOperator">
+            <value name="NUM_R">
+                <shadow type="math_number">
+                <field name="NUM">255</field>
+                </shadow>
+            </value>
+            <value name="NUM_G">
+                <shadow type="math_number">
+                <field name="NUM">255</field>
+                </shadow>
+            </value>
+            <value name="NUM_B">
+                <shadow type="math_number">
+                <field name="NUM">255</field>
+                </shadow>
+            </value>
+        </block>
+
+        <block type="mv2_HSLOperator">
+        <value name="NUM_H">
+            <shadow type="math_number">
+            <field name="NUM">360</field>
+            </shadow>
+        </value>
+        <value name="NUM_S">
+            <shadow type="math_number">
+            <field name="NUM">100</field>
+            </shadow>
+        </value>
+        <value name="NUM_L">
+            <shadow type="math_number">
+            <field name="NUM">100</field>
+            </shadow>
+        </value>
+        </block>
     ${categorySeparator}
     </category>
     `;
@@ -426,6 +460,13 @@ const sound = function (isInitialSetup, targetType, targetId, soundName, raftTyp
         ${blockSeparator}
         ${stageSoundBlocks}
         ${spriteSoundBlocks}
+        <block type="nearest_note">
+            <value name="FREQUENCY">
+                <shadow type="math_number">
+                    <field name="NUM">440</field>
+                </shadow>
+            </value>
+        </block>
         ${categorySeparator}
     </category>
     `;
@@ -648,43 +689,6 @@ const operators = function (isInitialSetup) {
     const letter = ScratchBlocks.ScratchMsgs.translate('OPERATORS_LETTEROF_APPLE', 'a');
     return `
     <category name="%{BKY_CATEGORY_OPERATORS}" id="operators" colour="#40BF4A" secondaryColour="#389438">
-
-        <block type="mv2_RGBOperator">
-        <value name="NUM_R">
-            <shadow type="math_number">
-            <field name="NUM">255</field>
-            </shadow>
-        </value>
-        <value name="NUM_G">
-            <shadow type="math_number">
-            <field name="NUM">255</field>
-            </shadow>
-        </value>
-        <value name="NUM_B">
-            <shadow type="math_number">
-            <field name="NUM">255</field>
-            </shadow>
-        </value>
-        </block>
-
-        <block type="mv2_HSLOperator">
-        <value name="NUM_H">
-            <shadow type="math_number">
-            <field name="NUM">360</field>
-            </shadow>
-        </value>
-        <value name="NUM_S">
-            <shadow type="math_number">
-            <field name="NUM">100</field>
-            </shadow>
-        </value>
-        <value name="NUM_L">
-            <shadow type="math_number">
-            <field name="NUM">100</field>
-            </shadow>
-        </value>
-        </block>
-
 
         <block type="operator_add">
             <value name="NUM1">

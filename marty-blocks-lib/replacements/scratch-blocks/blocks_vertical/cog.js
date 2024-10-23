@@ -352,6 +352,34 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getButtonClicke
     });
   }
 };
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getButtonForceValue.type] = {
+  /**
+   * GET BUTTON FORCE VALUE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_BUTTON_FORCE_VALUE,
+      category: Blockly.Categories.sensing,
+      colour: "#4cbfe6",
+      checkboxInFlyout: true,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        }
+      ],
+      extensions: ["colours_sensing", "output_boolean"],
+    });
+  }
+};
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getObstacleSensed.type] = {
   /**
    * GET OBSTACLE SENSED
@@ -570,14 +598,14 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDColourPicke
     });
   }
 };
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setAllRingLEDs.type] = {
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDs.type] = {
   /**
-   * SET ALL RING LEDS
+   * SET ALL LEDS
    * @this Blockly.Block
    */
   init: function () {
     this.jsonInit({
-      message0: Blockly.Msg.COG_SET_ALL_RING_LEDS,
+      message0: Blockly.Msg.COG_SET_ALL_LEDS,
       category: Blockly.Categories.looks,
       colour: "#9966ff",
       args0: [
@@ -593,8 +621,18 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setAllRingLEDs.ty
           type: "field_vertical_separator",
         },
         {
+          type: "field_dropdown",
+          name: martyblockslib.cog_blocks_definitions.looks.cog_setLEDs.values.LED_TYPE.name,
+          options: [
+            [Blockly.Msg.DROPDOWN_OPTION_RING, "ring"],
+            [Blockly.Msg.DROPDOWN_OPTION_BUTTON, "button"],
+            [Blockly.Msg.DROPDOWN_OPTION_INDICATOR, "ind"],
+            [Blockly.Msg.DROPDOWN_OPTION_ALL, "all"],
+          ],
+        },
+        {
           type: "input_value",
-          name: martyblockslib.cog_blocks_definitions.looks.cog_setAllRingLEDs.values.COLOR.name,
+          name: martyblockslib.cog_blocks_definitions.looks.cog_setLEDs.values.COLOR.name,
         },
       ],
       extensions: ["colours_looks", "shape_statement"]
@@ -660,6 +698,16 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.typ
         },
         {
           type: "field_dropdown",
+          name: martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.values.LED_TYPE.name,
+          options: [
+            [Blockly.Msg.DROPDOWN_OPTION_RING, "ring"],
+            [Blockly.Msg.DROPDOWN_OPTION_BUTTON, "button"],
+            [Blockly.Msg.DROPDOWN_OPTION_INDICATOR, "ind"],
+            [Blockly.Msg.DROPDOWN_OPTION_ALL, "all"],
+          ],
+        },
+        {
+          type: "field_dropdown",
           name: martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.values.PATTERN.name,
           options: [
             [Blockly.Msg.DROPDOWN_OPTION_FLASH, "Flash"],
@@ -668,37 +716,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.typ
               "Spin" + (i + 1).toString()
             ]))
           ],
-        },
-      ],
-      extensions: ["colours_looks", "shape_statement"]
-    });
-  }
-};
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setMiddleLED.type] = {
-  /**
-   * SET MIDDLE LED
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_SET_MIDDLE_LED,
-      category: Blockly.Categories.looks,
-      colour: "#9966ff",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40,
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "input_value",
-          name: martyblockslib.cog_blocks_definitions.looks.cog_setMiddleLED.values.COLOR.name,
         },
       ],
       extensions: ["colours_looks", "shape_statement"]
@@ -797,6 +814,68 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.t
           type: "field_vertical_separator",
         },
         {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.values.NOTE.name,
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.values.TIME.name,
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"]
+    });
+  }
+};
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playTone.type] = {
+  /**
+   * PLAY TONE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_PLAY_TONE,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_playTone.values.HZ1.name,
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_playTone.values.HZ2.name,
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_playTone.values.SECONDS.name,
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"]
+    });
+  }
+};
+
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.values.NOTE.shadow.type] = {
+  /**
+   * NOTES MENU
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: "%1",
+      args0: [
+        {
           type: "field_dropdown",
           name: martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.values.NOTE.name,
           options: ["notec4", "notecsharp4", "noted4", "notedsharp4", "notee4", "notef4", "notefsharp4", "noteg4", "notegsharp4", "notea4", "noteasharp4", "noteb4", "notec5", "notecsharp5", "noted5", "notedsharp5", "notee5", "notef5", "notefsharp5", "noteg5", "notegsharp5", "notea5", "noteasharp5", "noteb5", "notec6", "notecsharp6", "noted6", "notedsharp6", "notee6", "notef6", "notefsharp6", "noteg6", "notegsharp6", "notea6", "noteasharp6", "noteb6", "notec7", "notecsharp7", "noted7", "notedsharp7", "notee7", "notef7", "notefsharp7", "noteg7", "notegsharp7", "notea7", "noteasharp7", "noteb7"]
@@ -811,101 +890,9 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.t
               ]
             })
         },
-        {
-          type: "input_value",
-          name: martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.values.TIME.name,
-        },
       ],
-      extensions: ["colours_sounds", "shape_statement"]
-    });
-  }
-};
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_setPitch.type] = {
-  /**
-   * SET PITCH
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_SET_PITCH,
-      category: Blockly.Categories.sound,
-      colour: "#ffab19",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "input_value",
-          name: martyblockslib.cog_blocks_definitions.sound.cog_setPitch.values.PITCH.name,
-        },
-      ],
-      extensions: ["colours_sounds", "shape_statement"]
-    });
-  }
-};
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_setVolume.type] = {
-  /**
-   * SET VOLUME
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_SET_VOLUME,
-      category: Blockly.Categories.sound,
-      colour: "#ffab19",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "input_value",
-          name: martyblockslib.cog_blocks_definitions.sound.cog_setVolume.values.VOLUME.name,
-        },
-      ],
-      extensions: ["colours_sounds", "shape_statement"]
-    });
-  }
-};
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_stopSounds.type] = {
-  /**
-   * STOP SOUNDS
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_STOP_SOUNDS,
-      category: Blockly.Categories.sound,
-      colour: "#ffab19",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40
-        },
-        {
-          type: "field_vertical_separator",
-        }
-      ],
-      extensions: ["colours_sounds", "shape_statement"]
+      colour: Blockly.Colours.sounds.secondary,
+      extensions: ["colours_sounds", "output_string"]
     });
   }
 };

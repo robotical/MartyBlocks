@@ -311,6 +311,7 @@ Blockly.Extensions.register(
           selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
+        if (!window.applicationManager) return options;
         const targetId = window.vm.editingTarget.id;
         const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
         const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -356,6 +357,7 @@ Blockly.Extensions.register(
           selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
+        if (!window.applicationManager) return options;
         const targetId = window.vm.editingTarget.id;
         const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
         const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -401,6 +403,7 @@ Blockly.Extensions.register("dynamic_menu_sensor_IRF_extension", function () {
         selectOption,
         [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
+      if (!window.applicationManager) return defaultOptions;
       const targetId = window.vm.editingTarget.id;
       const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
       const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -433,6 +436,7 @@ Blockly.Extensions.register(
           selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
+        if (!window.applicationManager) return defaultOptions;
         const targetId = window.vm.editingTarget.id;
         const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
         const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -461,6 +465,7 @@ Blockly.Extensions.register("dynamic_menu_sensor_light_extension", function () {
         selectOption,
         [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
+      if (!window.applicationManager) return defaultOptions;
       const targetId = window.vm.editingTarget.id;
       const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
       const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -488,6 +493,7 @@ Blockly.Extensions.register("dynamic_menu_sensor_noise_extension", function () {
         selectOption,
         [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
       ];
+      if (!window.applicationManager) return defaultOptions;
       const targetId = window.vm.editingTarget.id;
       const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
       const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -518,6 +524,7 @@ Blockly.Extensions.register(
           selectOption,
           [Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND, Blockly.Msg.DROPDOWN_OPTION_NO_LED_ADDONS_FOUND],
         ];
+        if (!window.applicationManager) return defaultOptions;
         const targetId = window.vm.editingTarget.id;
         const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
         const connectedRaft = window.applicationManager.connectedRafts[raftId];
@@ -606,6 +613,7 @@ Blockly.Extensions.register(
           selectOption,
           ["No LED eyes found", "No LED eyes found"],
         ];
+        if (!window.applicationManager) return defaultOptions;
         const targetId = window.vm.editingTarget.id;
         const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
         const connectedRaft = window.applicationManager.connectedRafts[raftId];

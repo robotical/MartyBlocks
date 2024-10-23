@@ -1,5 +1,4 @@
 const Mv2Interface = require("./Mv2Interface");
-const CogInterface = require("./cog/CogInterface");
 const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");
 const RaftManager = require("./RaftManager");
@@ -9,11 +8,9 @@ const Cast = require("./util/cast");
 const Color = require("./util/color");
 // const meSpeak = require("./util/mespeak"); // for text to speech locally -- removed as we don't use it anymore
 const { Project } = require("@robotical/scratch-to-python-transpiler");
-const CogBlocks = require("./cog/CogBlocks");
+const { noteFrequencies } = require("./util/note-frequencies");
 
 mv2Interface = new Mv2Interface();
-cogInterface = new CogInterface();
-cogBlocks = new CogBlocks(cogInterface);
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine();
 raftManager = new RaftManager();
@@ -150,10 +147,9 @@ class Scratch3Mv2Blocks {
         this._martyIsConnectedWrapper(args, utils,
           this.LEDEyesColour_SpecificLED.bind(this, args, utils)
         ),
-      mv2_RGBOperator: (args, utils) =>
-        this.RGBOperator.bind(this, args, utils),
-      mv2_HSLOperator: (args, utils) =>
-        this.HSLOperator.bind(this, args, utils),
+      nearest_note: this.nearest_note,
+      mv2_RGBOperator: this.RGBOperator,
+      mv2_HSLOperator: this.HSLOperator,
       mv2_discoChangeBlockPattern: (args, utils) =>
         this._martyIsConnectedWrapper(args, utils,
           this.discoChangeBlockPattern.bind(this, args, utils)
@@ -662,6 +658,12 @@ class Scratch3Mv2Blocks {
     return `#${f(0)}${f(8)}${f(4)}`;
   }
 
+  nearest_note(args, util) {
+    const freq = args.FREQUENCY;
+    const note = getNearestNoteFromFrequency(freq);
+    return note;
+  }
+
   RGBOperator(args, util) {
     const r = args.NUM_R;
     const g = args.NUM_G;
@@ -680,7 +682,8 @@ class Scratch3Mv2Blocks {
       // send toast message instead of alert
       // connectedRaft.sendRestMessage('notification/warn-message/RGB values must be between 0 and 255');
     }
-    return Scratch3Mv2Blocks.rgbToHex(r, g, b);
+    const hexColour = Scratch3Mv2Blocks.rgbToHex(r, g, b);
+    return hexColour;
   }
   HSLOperator(args, util) {
     // const connectedRaft = getRaftUsingTargetId(util.target.id);
@@ -700,7 +703,9 @@ class Scratch3Mv2Blocks {
       // connectedRaft.sendRestMessage('notification/warn-message/Lightness value must be between 0 and 100')
     }
     const rgbColour = Color.hsvToRgb({ h: h, s: s / 100, v: l / 100 });
-    return Scratch3Mv2Blocks.rgbToHex(rgbColour.r, rgbColour.g, rgbColour.b);
+
+    const hexColour = Scratch3Mv2Blocks.rgbToHex(rgbColour.r, rgbColour.g, rgbColour.b);
+    return hexColour;
   }
 
   discoChangeBlockPattern(args, util) {
@@ -2253,5 +2258,21 @@ function isAddonConnected(addonTitle, addons = []) {
   return addons.some(
     (addon) => addon.whoAmI === addonTitle || addon.name === addonTitle
   );
+}
+
+function getNearestNoteFromFrequency(frequency) {
+
+  let closestNote = null;
+  let smallestDifference = Infinity;
+
+  noteFrequencies.forEach((note) => {
+    const difference = Math.abs(frequency - note.freq);
+    if (difference < smallestDifference) {
+      closestNote = note.note;
+      smallestDifference = difference;
+    }
+  });
+
+  return closestNote;
 }
 module.exports = Scratch3Mv2Blocks;

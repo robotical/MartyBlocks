@@ -98,6 +98,9 @@ export const cog_blocks_definitions = {
         cog_getButtonClicked: {
             type: 'cog_getButtonClicked',
         },
+        cog_getButtonForceValue: {
+            type: 'cog_getButtonForceValue',
+        },
         cog_getObstacleSensed: {
             type: 'cog_getObstacleSensed',
             values: {
@@ -150,15 +153,17 @@ export const cog_blocks_definitions = {
                 }
             }
         },
-
         cog_playNoteForTime: {
             type: 'cog_playNoteForTime',
             values: {
                 NOTE: {
                     name: 'NOTE',
-                    field: {
-                        name: 'NOTE',
-                        value: ''
+                    shadow: {
+                        type: 'notesmenu',
+                        field: {
+                            name: 'NOTE',
+                            value: 'notec4',
+                        }
                     }
                 },
                 TIME: {
@@ -173,38 +178,40 @@ export const cog_blocks_definitions = {
                 }
             }
         },
-        cog_setPitch: {
-            type: 'cog_setPitch',
+        cog_playTone: {
+            type: 'cog_playTone',
             values: {
-                PITCH: {
-                    name: 'PITCH',
+                HZ1: {
+                    name: 'HZ1',
                     shadow: {
                         type: 'math_number',
                         field: {
                             name: 'NUM',
-                            value: 1,
+                            value: 200,
                         },
                     }
-                }
-            }
-        },
-        cog_setVolume: {
-            type: 'cog_setVolume',
-            values: {
-                VOLUME: {
-                    name: 'VOLUME',
+                },
+                HZ2: {
+                    name: 'HZ2',
                     shadow: {
                         type: 'math_number',
                         field: {
                             name: 'NUM',
-                            value: 1,
+                            value: 300,
+                        },
+                    }
+                },
+                SECONDS: {
+                    name: 'SECONDS',
+                    shadow: {
+                        type: 'math_number',
+                        field: {
+                            name: 'NUM',
+                            value: 3,
                         },
                     }
                 }
             }
-        },
-        cog_stopSounds: {
-            type: 'cog_stopSounds',
         },
     },
     /* End of Sound Blocks */
@@ -221,9 +228,16 @@ export const cog_blocks_definitions = {
                 }
             }
         },
-        cog_setAllRingLEDs: {
-            type: 'cog_setAllRingLEDs',
+        cog_setLEDs: {
+            type: 'cog_setLEDs',
             values: {
+                LED_TYPE: {
+                    name: 'LED_TYPE',
+                    field: {
+                        name: 'LED_TYPE',
+                        value: ''
+                    }
+                },
                 COLOR: {
                     name: 'COLOR',
                     shadow: {
@@ -256,23 +270,19 @@ export const cog_blocks_definitions = {
         cog_setLEDPattern: {
             type: 'cog_setLEDPattern',
             values: {
+                LED_TYPE: {
+                    name: 'LED_TYPE',
+                    field: {
+                        name: 'LED_TYPE',
+                        value: ''
+                    }
+                },
                 PATTERN: {
                     name: 'PATTERN',
                     field: {
                         name: 'PATTERN',
                         value: ''
                     }
-                }
-            }
-        },
-        cog_setMiddleLED: {
-            type: 'cog_setMiddleLED',
-            values: {
-                COLOR: {
-                    name: 'COLOR',
-                    shadow: {
-                        type: 'colour_picker'
-                    },
                 }
             }
         },
@@ -631,12 +641,12 @@ class CogBlocks {
                 },
                 {
                     opcode: 'playNoteForTime',
-                    text: 'play note [NOTES] for [TIME] seconds',
+                    text: 'play note [NOTE] for [TIME] seconds',
                     blockType: BlockType.COMMAND,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
                     arguments: {
-                        NOTES: {
+                        NOTE: {
                             type: ArgumentType.STRING,
                             menu: 'notes_menu',
                             defaultValue: 'notec4'
@@ -1101,7 +1111,7 @@ class CogBlocks {
     }
 
     async playNoteForTime(args, util) {
-        const note = args.NOTES;
+        const note = args.NOTE;
         const time = args.TIME;
         await cogBlocks.playNoteForTime(note, time);
     }

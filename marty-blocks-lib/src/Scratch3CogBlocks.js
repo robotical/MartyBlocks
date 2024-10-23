@@ -1,8 +1,8 @@
-const { TiltDetection } = require('./cog/PublishedDataAnalyser.js');
 const { cog_blocks_definitions } = require('./CogBlocksToolbox.js');
 const Cast = require("./util/cast");
 const Color = require("./util/color");
 const { isVersionGreater_errorCatching } = require('./versionChecker.js');
+const { noteFrequencies } = require("./util/note-frequencies");
 
 class Scratch3CogBlocks {
   constructor(runtime) {
@@ -44,6 +44,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.getGyroscope.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getButtonClicked.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getButtonClicked.bind(this, args, utils)),
+      [cog_blocks_definitions.sensing.cog_getButtonForceValue.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.getButtonForceValue.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getObstacleSensed.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getObstacleSensed.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getLightSensed.type]: (args, utils) =>
@@ -61,14 +63,12 @@ class Scratch3CogBlocks {
       // LOOKS
       [cog_blocks_definitions.looks.cog_setLEDColourPicker.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.setLEDColourPicker.bind(this, args, utils)),
-      [cog_blocks_definitions.looks.cog_setAllRingLEDs.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.setAllRingLEDs.bind(this, args, utils)),
+      [cog_blocks_definitions.looks.cog_setLEDs.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.setLEDs.bind(this, args, utils)),
       [cog_blocks_definitions.looks.cog_setLEDToColour.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.setLEDToColour.bind(this, args, utils)),
       [cog_blocks_definitions.looks.cog_setLEDPattern.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.setLEDPattern.bind(this, args, utils)),
-      [cog_blocks_definitions.looks.cog_setMiddleLED.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.setMiddleLED.bind(this, args, utils)),
       [cog_blocks_definitions.looks.cog_turnOffLEDs.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.turnOffLEDs.bind(this, args, utils)),
       // END OF LOOKS
@@ -78,12 +78,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.playRtttlTune.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_playNoteForTime.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.playNoteForTime.bind(this, args, utils)),
-      [cog_blocks_definitions.sound.cog_setPitch.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.setPitch.bind(this, args, utils)),
-      [cog_blocks_definitions.sound.cog_setVolume.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.setVolume.bind(this, args, utils)),
-      [cog_blocks_definitions.sound.cog_stopSounds.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.stopSounds.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_playTone.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.playTone.bind(this, args, utils)),
       // END OF SOUND
     };
   }
@@ -152,37 +148,44 @@ class Scratch3CogBlocks {
 
   /* EVENT BLOCKS */
   onTilt(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.tilt === args[cog_blocks_definitions.events.cog_onTilt.values.DIRECTION.name];
   }
   onRotate(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.rotation === args[cog_blocks_definitions.events.cog_onRotate.values.DIRECTION.name];
   }
   onMove(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.movementType === args[cog_blocks_definitions.events.cog_onMove.values.MOVE_TYPE.name];
   }
   onButtonPush(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.buttonClick;
   }
   onObjectSense(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.objectSense === args[cog_blocks_definitions.events.cog_onObjectSense.values.SIDE.name];
   }
   onLightSense(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.lightSense;
   }
   onIRMessageReceived(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.irMessage === args[cog_blocks_definitions.events.cog_onIRMessageReceived.values.SIDE.name];
   }
@@ -192,7 +195,7 @@ class Scratch3CogBlocks {
   getAccelerometer(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.raftStateInfo.LSM6DS;
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getAccelerometerData(connectedRaft.raftStateInfo.deviceManager);
     if (!data) return 0;
 
     try {
@@ -211,7 +214,8 @@ class Scratch3CogBlocks {
         tiltCorrection = tiltCorrectionForNewerCog;
       }
 
-      const { x, y, z } = TiltDetection.rotateAccelData(xRaw, yRaw, zRaw, window.tilt_rotate_z_deg || tiltCorrection);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
+      const { x, y, z } = publishedDataAnalyser.TiltDetection.rotateAccelData(xRaw, yRaw, zRaw, window.tilt_rotate_z_deg || tiltCorrection);
       const axis = args[cog_blocks_definitions.sensing.cog_getAccelerometer.values.AXIS.name];
       if (axis === 'ax') return x;
       if (axis === 'ay') return y;
@@ -223,7 +227,7 @@ class Scratch3CogBlocks {
   getGyroscope(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.raftStateInfo.LSM6DS;
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getGyroscopeData(connectedRaft.raftStateInfo.deviceManager);
     if (!data) return 0;
     const axis = args[cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name];
     const value = data[axis];
@@ -231,6 +235,13 @@ class Scratch3CogBlocks {
   }
   getButtonClicked(args, utils) {
     return this.onButtonPush(args, utils).toString();
+  }
+  getButtonForceValue(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo.deviceManager);
+    if (!data) return 0;
+    return data.ir2;
   }
   getObstacleSensed(args, utils) {
     return this.onObjectSense(args, utils).toString();
@@ -241,25 +252,28 @@ class Scratch3CogBlocks {
   getIRSensorValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.raftStateInfo.Light.irVals;
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo.deviceManager);
     const side = args[cog_blocks_definitions.sensing.cog_getIRSensorValue.values.SIDE.name];
-    if (side === 'right') return data[0];
-    if (side === 'left') return data[1];
+    if (side === 'left') return data.ir0;
+    if (side === 'right') return data.ir1;
     return 0;
   }
   getAmbientLightValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.raftStateInfo.Light.ambientVals[0];
-    return data;
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo.deviceManager);
+    if (!data) return 0;
+    return data.amb0;
   }
   getMovementType(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.movementType.toString();
   }
   getTiltDirection(args, utils) {
-    const publishedDataAnalyser = window.raftManager.raftIdToPublishedDataAnalyserMap[window.raftManager.raftIdAndDeviceIdMap[utils.target.id]];
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.tilt.toString();
   }
@@ -276,24 +290,29 @@ class Scratch3CogBlocks {
     }
     return setAllLEDsToColours_colourPicker(colours, connectedRaft);
   }
-  setAllRingLEDs(args, utils) {
+  setLEDs(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const colour = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setAllRingLEDs.values.COLOR.name]);
+    const colour = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setLEDs.values.COLOR.name]);
     connectedRaft.currentColour = colour;
-    const command = `led//color/${colour}`
-    console.log("command", command);
-    connectedRaft.sendRestMessage(command);
+    const LEDType = args[cog_blocks_definitions.looks.cog_setLEDs.values.LED_TYPE.name]; // all, ring, button, ind
+    if (LEDType === "all") {
+      const ringCommand = `led/ring/color/${colour}`
+      const buttonCommand = `led/button/color/${colour}`
+      const indicatorCommand = `led/ind/color/${colour}`
+      connectedRaft.sendRestMessage(ringCommand);
+      connectedRaft.sendRestMessage(buttonCommand);
+      connectedRaft.sendRestMessage(indicatorCommand);
+    } else {
+      const command = `led/${LEDType}/color/${colour}`;
+      connectedRaft.sendRestMessage(command);
+    }
   }
   setLEDToColour(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const idxOffset = window.idxOffset || 4;
     const ledIdArgValue = args[cog_blocks_definitions.looks.cog_setLEDToColour.values.LED_ID.name];
-    let ledId = (+ledIdArgValue + idxOffset) % 12;
-    if (ledIdArgValue === '13') {
-      ledId = 12;
-    }
+    let ledId = ledIdArgValue;
     const color = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setLEDToColour.values.COLOR.name]);
     const command = `led//setled/${ledId}/${color}`;
     console.log("command", command);
@@ -308,30 +327,34 @@ class Scratch3CogBlocks {
       patternName = patternName.slice(0, -1);
     }
     const mod = parseInt(lastChar, 10);
-    // cogBlocks.setLEDPattern(patternName, mod);
-
+    const LEDType = args[cog_blocks_definitions.looks.cog_setLEDs.values.LED_TYPE.name]; // all, ring, button, indicator
+    if (LEDType === "all") {
+      const ringCommand = `led/ring/pattern/${patternName}?mod=${mod}`;
+      const buttonCommand = `led/button/pattern/${patternName}?mod=${mod}`;
+      const indicatorCommand = `led/ind/pattern/${patternName}?mod=${mod}`;
+      connectedRaft.sendRestMessage(ringCommand);
+      connectedRaft.sendRestMessage(buttonCommand);
+      connectedRaft.sendRestMessage(indicatorCommand);
+    } else {
+      const command = `led/${LEDType}/pattern/${patternName}?mod=${mod}`;
+      connectedRaft.sendRestMessage(command);
+    }
     let colour = connectedRaft.currentColour || "#00FF00";
     colour = colour.replace("#", "");
-    const command = `led//pattern/${patternName}?c=${colour}${mod ? `&mod=${mod}` : ''}`;
-    console.log("command", command);
-    connectedRaft.sendRestMessage(command);
-  }
-  setMiddleLED(args, utils) {
-    const connectedRaft = getRaftUsingTargetId(utils.target.id);
-    if (!connectedRaft) return 0;
-    const color = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setMiddleLED.values.COLOR.name]);
-    const ledId = 12;
-    const command = `led//setled/${ledId}/${color}`;
-    console.log("command", command);
-    connectedRaft.sendRestMessage(command);
   }
   turnOffLEDs(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const command = `led//off`;
-    console.log("command", command);
+    const command1 = `led/ring/color/000000`;
+    const command2 = `led/button/color/000000`;
+    const command3 = `led/ind/color/000000`;
+    console.log("command1", command1);
+    console.log("command2", command2);
+    console.log("command3", command3);
     connectedRaft.currentColour = null;
-    connectedRaft.sendRestMessage(command);
+    connectedRaft.sendRestMessage(command1);
+    connectedRaft.sendRestMessage(command2);
+    connectedRaft.sendRestMessage(command3);
   }
   /* END OF LOOKS BLOCKS */
 
@@ -350,25 +373,36 @@ class Scratch3CogBlocks {
     if (!connectedRaft) return 0;
     const note = args[cog_blocks_definitions.sound.cog_playNoteForTime.values.NOTE.name];
     const duration = args[cog_blocks_definitions.sound.cog_playNoteForTime.values.TIME.name];
+    // COMMENT IN THE FOLLOWING CODE ONCE THE AUDIO/NOTE API IS FIXED
+    // for (const noteObj of noteFrequencies) {
+    //   if (noteObj.note === note) {
+    //     const freq = noteObj.freq;
+    //     const durationInMs = duration * 1000;
+    //     const command = `audio/note/${freq}/${durationInMs}`;
+    //     connectedRaft.sendRestMessage(command);
+    //     console.log("command", command);
+    //     return new Promise(resolve => setTimeout(resolve, durationInMs));
+    //   }
+    // }
+    // console.warn(`Note ${note} not found in noteFrequencies`);
     const { durationInMs, command } = getNoteForTimeCommand(note, duration);
+    console.log("command", command);
     connectedRaft.sendRestMessage(command);
     return new Promise(resolve => setTimeout(resolve, durationInMs));
   }
-  setPitch(args, utils) {
-    // SOUND API NOT IMPLEMENTED IN COG YET
-    alert("Set Pitch not implemented yet");
-    return 0;
+  playTone(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+    const freq1 = args[cog_blocks_definitions.sound.cog_playTone.values.HZ1.name];
+    const freq2 = args[cog_blocks_definitions.sound.cog_playTone.values.HZ2.name];
+    const duration = args[cog_blocks_definitions.sound.cog_playTone.values.SECONDS.name];
+    const durationInMs = duration * 1000;
+    const command = `audio/sweep/${freq1}/${freq2}/${durationInMs}`;
+    console.log("command", command);
+    connectedRaft.sendRestMessage(command);
+    return new Promise(resolve => setTimeout(resolve, durationInMs));
   }
-  setVolume(args, utils) {
-    // SOUND API NOT IMPLEMENTED IN COG YET
-    alert("Set Volume not implemented yet");
-    return 0;
-  }
-  stopSounds(args, utils) {
-    // SOUND API NOT IMPLEMENTED IN COG YET
-    alert("Stop Sounds not implemented yet");
-    return 0;
-  }
+
   /* END OF SOUND BLOCKS */
 }
 module.exports = Scratch3CogBlocks;
@@ -378,23 +412,23 @@ module.exports = Scratch3CogBlocks;
  * Helpers
  */
 function setAllLEDsToColours_colourPicker(colours, cog) {
-  const command = _LEDColourPickerApiCommandBuilder(colours);
-  console.log("command", command);
-  cog.sendRestMessage(command);
+  const commands = _LEDColourPickerApiCommandBuilder(colours);
+  for (const command of commands) {
+    cog.sendRestMessage(command);
+  }
 }
 
 function _LEDColourPickerApiCommandBuilder(colorsArray) {
-  let command = `indicator/set?`;
+  const commands = [];
   for (let i = 0; i < colorsArray.length; i++) {
     let color = colorsArray[i].replace("#", "");
     if (color === "9966FF") color = "000000"; // that's our "off" colour
-    const idxOffset = 8;
-    const ledIdMapped = (i + idxOffset) % colorsArray.length;
-    let end = "&";
-    if (i === colorsArray.length) end = "";
-    command += `c${ledIdMapped}=${color}${end}`;
+    const idOffset = 3;
+    const ledIdMapped = ((i + idOffset) % colorsArray.length);
+    const command = `led//setled/${ledIdMapped + 1}/${color}`;
+    commands.push(command);
   }
-  return command;
+  return commands;
 }
 
 function _getColourFromOperator(argumentValue) {

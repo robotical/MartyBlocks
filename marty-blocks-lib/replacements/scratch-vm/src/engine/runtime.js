@@ -919,8 +919,13 @@ class Runtime extends EventEmitter {
         }
 
         for (const blockInfo of extensionInfo.blocks) {
-            // if the 'raftType' of the block is defined, filter out the block if it is not the same as the current target type
+            // if the 'raftType' of the block is defined, filter out the block if it is not the same as the current raftType
             if ((blockInfo && blockInfo.raftType && this._editingTarget) && blockInfo.raftType !== this._editingTarget.raftType) {
+                continue;
+            }
+
+            // if the targetType of the block is defined, filter out the block if it is not the same as the current targetType
+            if ((blockInfo && blockInfo.targetType && this._editingTarget) && blockInfo.targetType !== this._editingTarget.targetType) {
                 continue;
             }
             try {

@@ -1111,6 +1111,26 @@ Blockly.Blocks["mv2_turnAllLEDsOff"] = {
   },
 };
 
+Blockly.Blocks["nearest_note"] = {
+  /**
+   * Block for getting the nearest note to a given frequency
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.NEAREST_NOTE,
+      category: Blockly.Categories.looks,
+      colour: "#d65cd6",
+      args0: [
+        {
+          type: "input_value",
+          name: "FREQUENCY",
+        },
+      ],
+      extensions: ["output_number"],
+    });
+  },
+};
 Blockly.Blocks["mv2_RGBOperator"] = {
   /**
    * Block for RGB operator.
@@ -1120,7 +1140,7 @@ Blockly.Blocks["mv2_RGBOperator"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_RGBOPERATOR,
       category: Blockly.Categories.looks,
-      colour: "#40BF4A",
+      colour: "#9966ff",
       args0: [
         {
           type: "input_value",
@@ -1147,7 +1167,7 @@ Blockly.Blocks["mv2_HSLOperator"] = {
   init: function () {
     this.jsonInit({
       message0: Blockly.Msg.MV2_HSLOPERATOR,
-      colour: "#40BF4A",
+      colour: "#9966ff",
       args0: [
         {
           type: "input_value",
@@ -1341,12 +1361,12 @@ Blockly.Blocks["mv2_discoChangeRegionColour"] = {
 //           "type": "field_dropdown",
 //           "name": "SOUND",
 //           "options": [
-            // [Blockly.Msg.DROPDOWN_OPTION_CONFUSIONSOUND, 'confused.raw'],
-            // [Blockly.Msg.DROPDOWN_OPTION_DISBELIEFSOUND, 'disbelief.raw'],
-            // [Blockly.Msg.DROPDOWN_OPTION_EXCITEMENTSOUND, 'excited.raw'],
-            // [Blockly.Msg.DROPDOWN_OPTION_NOWAYSOUND, 'no_way.raw'],
-            // [Blockly.Msg.DROPDOWN_OPTION_NOSOUND, 'no.raw'],
-            // [Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND, 'whistle.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_CONFUSIONSOUND, 'confused.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_DISBELIEFSOUND, 'disbelief.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_EXCITEMENTSOUND, 'excited.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_NOWAYSOUND, 'no_way.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_NOSOUND, 'no.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND, 'whistle.raw'],
 //           ]
 //         },
 //       ],

@@ -4,14 +4,12 @@
  */
 
 const { raftVerifiedSubscriptionHelper, raftDisconnectedSubscriptionHelper } = require('./util/raft-subscription-helpers');
-const PublishedDataAnalyser = require('./cog/PublishedDataAnalyser').default;
 
 class RaftManager {
     constructor() {
         this.raftIdAndDeviceIdMap = {};
         this.connectionButtons = {};
         this.subscriptions = {};
-        this.raftIdToPublishedDataAnalyserMap = {};
     }
 
     addSubscription(deviceId, title, subscription) {
@@ -44,22 +42,24 @@ class RaftManager {
         return this.subscriptions[deviceId][title];
     }
 
-    connect(onVerifiedCb, onDisconnectedCb, deviceId) {
+    connect(onVerifiedCb, onDisconnectedCb, deviceId, raftType) {
         const appManager = window.applicationManager;
         if (!appManager) {
             console.warn('appManager not defined');
         }
-        appManager.connectGeneric((raft) => {
+        
+        let connectFunction = appManager.connectGeneric;
+        if (raftType === 'Cog') {
+            connectFunction = appManager.connectGenericCog;
+        } else if (raftType === 'Marty') {
+            connectFunction = appManager.connectGenericMarty;
+        }
+        connectFunction((raft) => {
             // set subscription to raft events so we can update the UI when:
             // - the raft is connected
             // - the raft is disconnected
             this.addSubscription(deviceId || "temporary", 'verified', raftVerifiedSubscriptionHelper(raft)).subscribe(() => {
                 onVerifiedCb(raft);
-
-                if (raft.type === 'Cog') {
-                    const publishedDataAnalyser = new PublishedDataAnalyser(raft);
-                    this.raftIdToPublishedDataAnalyserMap[raft.id] = publishedDataAnalyser;
-                }
 
                 if (deviceId) {
                         this.raftIdAndDeviceIdMap[raft.id] = deviceId;
@@ -72,7 +72,7 @@ class RaftManager {
                     // Set up a subscription to the raft disconnected event
                     this.setupDisconnectSubscription(raft, onDisconnectedCb);
                 })
-        })
+        },)
     }
 
     setupDisconnectSubscription(raft, onDisconnectedCb) {
@@ -80,10 +80,6 @@ class RaftManager {
         this.addSubscription(raft.id, 'disconnected', raftDisconnectedSubscriptionHelper(raft)).subscribe(() => {
             onDisconnectedCb(raft);
             // window.cogManager.removeCog(raft);
-             
-            if (this.raftIdToPublishedDataAnalyserMap[raft.id]) {
-                this.raftIdToPublishedDataAnalyserMap[raft.id].unsubscribeFromPublishedData();
-            }
 
             // Remove the device id to raft id mapping
             const deviceId = this.raftIdAndDeviceIdMap[raft.id];

@@ -37,7 +37,7 @@ const serverTimeoutMs = 10000; // 10 seconds (chosen arbitrarily).
  * @constructor
  */
 class Scratch3TranslateBlocks {
-    constructor () {
+    constructor() {
         /**
          * Language code of the viewer, based on their locale.
          * @type {string}
@@ -88,14 +88,14 @@ class Scratch3TranslateBlocks {
      * The key to load & store a target's translate state.
      * @return {string} The key.
      */
-    static get STATE_KEY () {
+    static get STATE_KEY() {
         return 'Scratch.translate';
     }
 
     /**
      * @returns {object} metadata for this extension and its blocks.
      */
-    getInfo () {
+    getInfo() {
         this._supportedLanguages = this._getSupportedLanguages(this.getViewerLanguageCode());
         this._randomLanguageCode = this._supportedLanguages[
             Math.floor(Math.random() * this._supportedLanguages.length)].value;
@@ -112,6 +112,7 @@ class Scratch3TranslateBlocks {
             blocks: [
                 {
                     opcode: 'getTranslate',
+                    targetType: "SPRITE",
                     text: formatMessage({
                         id: 'translate.translateBlock',
                         default: 'translate [WORDS] to [LANGUAGE]',
@@ -136,6 +137,7 @@ class Scratch3TranslateBlocks {
                 },
                 {
                     opcode: 'getViewerLanguage',
+                    targetType: "SPRITE",
                     text: formatMessage({
                         id: 'translate.viewerLanguage',
                         default: 'language',
@@ -161,9 +163,9 @@ class Scratch3TranslateBlocks {
      *   language code pairs.
      * @private
      */
-    _getSupportedLanguages (code) {
+    _getSupportedLanguages(code) {
         return languageNames.menuMap[code].map(entry => {
-            const obj = {text: entry.name, value: entry.code};
+            const obj = { text: entry.name, value: entry.code };
             return obj;
         });
     }
@@ -171,7 +173,7 @@ class Scratch3TranslateBlocks {
      * Get the human readable language value for the reporter block.
      * @return {string} the language name of the project viewer.
      */
-    getViewerLanguage () {
+    getViewerLanguage() {
         this._viewerLanguageCode = this.getViewerLanguageCode();
         const names = languageNames.menuMap[this._viewerLanguageCode];
         let langNameObj = names.find(obj => obj.code === this._viewerLanguageCode);
@@ -194,7 +196,7 @@ class Scratch3TranslateBlocks {
      * Get the viewer's language code.
      * @return {string} the language code.
      */
-    getViewerLanguageCode () {
+    getViewerLanguageCode() {
         const locale = formatMessage.setup().locale;
         const viewerLanguages = [locale].concat(navigator.languages);
         const languageKeys = Object.keys(languageNames.menuMap);
@@ -219,7 +221,7 @@ class Scratch3TranslateBlocks {
      * @param  {object} arg A block argument.
      * @return {string} A language code.
      */
-    getLanguageCodeFromArg (arg) {
+    getLanguageCodeFromArg(arg) {
         const languageArg = Cast.toString(arg).toLowerCase();
         // Check if the arg matches a language code in the menu.
         if (languageNames.menuMap.hasOwnProperty(languageArg)) {
@@ -246,7 +248,7 @@ class Scratch3TranslateBlocks {
      * @param {object} args - the block arguments.
      * @return {Promise} - a promise that resolves after the response from the translate server.
      */
-    getTranslate (args) {
+    getTranslate(args) {
         // If the text contains only digits 0-9 and nothing else, return it without
         // making a request.
         if (/^\d+$/.test(args.WORDS)) return Promise.resolve(args.WORDS);
@@ -280,7 +282,7 @@ class Scratch3TranslateBlocks {
                 log.warn(`error fetching translate result! ${err}`);
                 mv2Interface.send_REST(
                     "notification/warn-message/Translation requires internet access."
-                  );
+                );
                 return '';
             });
         return translatePromise;

@@ -368,6 +368,7 @@ Blockly.Msg.COG_EVENT_BLOCK_ONLIGHTSENSED = '%1 %2 on light sensed';
 Blockly.Msg.COG_ACCELEROMETER = '%1 %2 Accelerometer %3';
 Blockly.Msg.COG_GYROSCOPE = '%1 %2 Gyroscope %3';
 Blockly.Msg.COG_BUTTON_CLICKED = '%1 %2 Button clicked';
+Blockly.Msg.COG_BUTTON_FORCE_VALUE = '%1 %2 Button force value';
 Blockly.Msg.COG_OBSTACLE_SENSED = '%1 %2 Obstacle sensed %3';
 Blockly.Msg.COG_LIGHT_SENSED = '%1 %2 Light sensed';
 Blockly.Msg.COG_IR_SENSOR_VALUE = '%1 %2 IR sensor value %3';
@@ -377,13 +378,16 @@ Blockly.Msg.COG_TILT_DIRECTION = '%1 %2 Tilt direction';
 
 // Cog Looks
 Blockly.Msg.COG_SET_LED_COLOUR_PICKER = '%1 %2 Set LEDs using the ColorPicker %3';
-Blockly.Msg.COG_SET_ALL_RING_LEDS = '%1 %2 Set all LEDs to %3';
+Blockly.Msg.COG_SET_ALL_LEDS = '%1 %2 Set %3 LEDs to %4';
+Blockly.Msg.COG_SET_ALL_RING_LEDS = '%1 %2 Set all ring LEDs to %3';
+Blockly.Msg.COG_SET_LED = '%1 %2 Set button LED to %3';
 Blockly.Msg.COG_SET_LED_TO_COLOUR = '%1 %2 Set LED %3 to %4';
-Blockly.Msg.COG_SET_LED_PATTERN = '%1 %2 Set LEDs to pattern %3';
+Blockly.Msg.COG_SET_LED_PATTERN = '%1 %2 Set %3 LEDs to pattern %4';
 Blockly.Msg.COG_SET_MIDDLE_LED = '%1 %2 Set middle LED to %3';
 Blockly.Msg.COG_TURN_OFF_LEDS = '%1 %2 Turn off all LEDs';
 Blockly.Msg.COG_PLAY_RTTTL_TUNE = '%1 %2 Play tune %3';
 Blockly.Msg.COG_PLAY_NOTE_FOR_TIME = '%1 %2 Play note %3 for %4 seconds';
+Blockly.Msg.COG_PLAY_TONE = '%1 %2 Play tone from %3 to %4 Hz for %5 seconds';
 Blockly.Msg.COG_SET_PITCH = '%1 %2 Set pitch to %3';
 Blockly.Msg.COG_SET_VOLUME = '%1 %2 Set volume to %3';
 Blockly.Msg.COG_STOP_SOUNDS = '%1 %2 Stop sounds';
@@ -403,6 +407,7 @@ Blockly.Msg.MV2_TURNOFFALLLEDS = '%1 %2 Turn off all LEDs';
 Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK = '%1 %2 Set %3 LED %4 to %5';
 
 Blockly.Msg.MV2_RGBOPERATOR = 'red %1 green %2 blue %3';
+Blockly.Msg.NEAREST_NOTE = 'nearest note to frequency %1';
 Blockly.Msg.MV2_HSLOPERATOR = 'hue %1 saturation %2 lightness %3';
 
 // Marty V2 Disco Blocks
@@ -586,6 +591,10 @@ Blockly.Msg.DROPDOWN_OPTION_LEDEYESLEFT = 'Left eye';
 Blockly.Msg.DROPDOWN_OPTION_LEDEYESRIGHT = 'Right eye';
 Blockly.Msg.DROPDOWN_OPTION_PATTERN_PINWHEEL = 'pinwheel';
 Blockly.Msg.DROPDOWN_OPTION_PATTERN_SHOWOFF = 'show-off';
+
+Blockly.Msg.DROPDOWN_OPTION_RING = 'ring';
+Blockly.Msg.DROPDOWN_OPTION_BUTTON = 'button';
+Blockly.Msg.DROPDOWN_OPTION_INDICATOR = 'indicator';
 
 Blockly.Msg.DROPDOWN_OPTION_LEFT = 'left';
 Blockly.Msg.DROPDOWN_OPTION_RIGHT = 'right';
