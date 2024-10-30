@@ -80,6 +80,12 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.playNoteForTime.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_playTone.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.playTone.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_startNote.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.startNote.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_stopAllSounds.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.stopAllSounds.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_setVolumeToPercentage.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.setVolumeToPercentage.bind(this, args, utils)),
       // END OF SOUND
     };
   }
@@ -169,7 +175,7 @@ class Scratch3CogBlocks {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
-    return publishedDataAnalyser.cogState.buttonClick;
+    return publishedDataAnalyser.cogState.buttonClick === 'click'
   }
   onObjectSense(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
@@ -181,7 +187,7 @@ class Scratch3CogBlocks {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
-    return publishedDataAnalyser.cogState.lightSense;
+    return publishedDataAnalyser.cogState.lightSense === "high"
   }
   onIRMessageReceived(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
@@ -299,10 +305,8 @@ class Scratch3CogBlocks {
     if (LEDType === "all") {
       const ringCommand = `led/ring/color/${colour}`
       const buttonCommand = `led/button/color/${colour}`
-      const indicatorCommand = `led/ind/color/${colour}`
       connectedRaft.sendRestMessage(ringCommand);
       connectedRaft.sendRestMessage(buttonCommand);
-      connectedRaft.sendRestMessage(indicatorCommand);
     } else {
       const command = `led/${LEDType}/color/${colour}`;
       connectedRaft.sendRestMessage(command);
@@ -327,14 +331,12 @@ class Scratch3CogBlocks {
       patternName = patternName.slice(0, -1);
     }
     const mod = parseInt(lastChar, 10);
-    const LEDType = args[cog_blocks_definitions.looks.cog_setLEDs.values.LED_TYPE.name]; // all, ring, button, indicator
+    const LEDType = args[cog_blocks_definitions.looks.cog_setLEDs.values.LED_TYPE.name]; // all, ring, button
     if (LEDType === "all") {
       const ringCommand = `led/ring/pattern/${patternName}?mod=${mod}`;
       const buttonCommand = `led/button/pattern/${patternName}?mod=${mod}`;
-      const indicatorCommand = `led/ind/pattern/${patternName}?mod=${mod}`;
       connectedRaft.sendRestMessage(ringCommand);
       connectedRaft.sendRestMessage(buttonCommand);
-      connectedRaft.sendRestMessage(indicatorCommand);
     } else {
       const command = `led/${LEDType}/pattern/${patternName}?mod=${mod}`;
       connectedRaft.sendRestMessage(command);
@@ -347,14 +349,11 @@ class Scratch3CogBlocks {
     if (!connectedRaft) return 0;
     const command1 = `led/ring/color/000000`;
     const command2 = `led/button/color/000000`;
-    const command3 = `led/ind/color/000000`;
     console.log("command1", command1);
     console.log("command2", command2);
-    console.log("command3", command3);
     connectedRaft.currentColour = null;
     connectedRaft.sendRestMessage(command1);
     connectedRaft.sendRestMessage(command2);
-    connectedRaft.sendRestMessage(command3);
   }
   /* END OF LOOKS BLOCKS */
 
@@ -374,17 +373,17 @@ class Scratch3CogBlocks {
     const note = args[cog_blocks_definitions.sound.cog_playNoteForTime.values.NOTE.name];
     const duration = args[cog_blocks_definitions.sound.cog_playNoteForTime.values.TIME.name];
     // COMMENT IN THE FOLLOWING CODE ONCE THE AUDIO/NOTE API IS FIXED
-    // for (const noteObj of noteFrequencies) {
-    //   if (noteObj.note === note) {
-    //     const freq = noteObj.freq;
-    //     const durationInMs = duration * 1000;
-    //     const command = `audio/note/${freq}/${durationInMs}`;
-    //     connectedRaft.sendRestMessage(command);
-    //     console.log("command", command);
-    //     return new Promise(resolve => setTimeout(resolve, durationInMs));
-    //   }
-    // }
-    // console.warn(`Note ${note} not found in noteFrequencies`);
+    for (const noteObj of noteFrequencies) {
+      if (noteObj.note === note) {
+        const freq = noteObj.freq;
+        const durationInMs = duration * 1000;
+        const command = `audio/note/${freq}/${durationInMs}`;
+        connectedRaft.sendRestMessage(command);
+        console.log("command", command);
+        return new Promise(resolve => setTimeout(resolve, durationInMs));
+      }
+    }
+    console.warn(`Note ${note} not found in noteFrequencies`);
     const { durationInMs, command } = getNoteForTimeCommand(note, duration);
     console.log("command", command);
     connectedRaft.sendRestMessage(command);
@@ -402,7 +401,37 @@ class Scratch3CogBlocks {
     connectedRaft.sendRestMessage(command);
     return new Promise(resolve => setTimeout(resolve, durationInMs));
   }
-
+  startNote(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+    const note = args[cog_blocks_definitions.sound.cog_startNote.values.NOTE.name];
+    for (const noteObj of noteFrequencies) {
+      if (noteObj.note === note) {
+        const freq = noteObj.freq;
+        const command = `audio/note/${freq}/1000`;
+        connectedRaft.sendRestMessage(command);
+        console.log("command", command);
+        return;
+      }
+    }
+    console.warn(`Note ${note} not found in noteFrequencies`);
+  }
+  stopAllSounds(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return;
+    const command = `audio/stop`;
+    console.log("command", command);
+    connectedRaft.sendRestMessage(command);
+  }
+  setVolumeToPercentage(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return;
+    const volume = Cast.toNumber(args[cog_blocks_definitions.sound.cog_setVolumeToPercentage.values.PERCENTAGE.name]);
+    const volumeTransformed = volume / 10;
+    const command = `audio/vol/${volumeTransformed}`;
+    console.log("command", command);
+    connectedRaft.sendRestMessage(command);
+  }
   /* END OF SOUND BLOCKS */
 }
 module.exports = Scratch3CogBlocks;

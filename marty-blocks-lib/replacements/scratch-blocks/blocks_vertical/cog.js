@@ -74,7 +74,7 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onRotate.type] =
           name: martyblockslib.cog_blocks_definitions.events.cog_onRotate.values.DIRECTION.name,
           options: [
             [Blockly.Msg.DROPDOWN_OPTION_CLOCKWISE, "clockwise"],
-            [Blockly.Msg.DROPDOWN_OPTION_ANTICLOCKWISE, "anticlockwise"]
+            [Blockly.Msg.DROPDOWN_OPTION_ANTICLOCKWISE, "counterClockwise"]
           ],
         },
       ],
@@ -626,7 +626,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDs.type] = {
           options: [
             [Blockly.Msg.DROPDOWN_OPTION_RING, "ring"],
             [Blockly.Msg.DROPDOWN_OPTION_BUTTON, "button"],
-            [Blockly.Msg.DROPDOWN_OPTION_INDICATOR, "ind"],
             [Blockly.Msg.DROPDOWN_OPTION_ALL, "all"],
           ],
         },
@@ -702,7 +701,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.typ
           options: [
             [Blockly.Msg.DROPDOWN_OPTION_RING, "ring"],
             [Blockly.Msg.DROPDOWN_OPTION_BUTTON, "button"],
-            [Blockly.Msg.DROPDOWN_OPTION_INDICATOR, "ind"],
             [Blockly.Msg.DROPDOWN_OPTION_ALL, "all"],
           ],
         },
@@ -865,7 +863,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playTone.type] = 
     });
   }
 };
-
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.values.NOTE.shadow.type] = {
   /**
    * NOTES MENU
@@ -893,6 +890,95 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.v
       ],
       colour: Blockly.Colours.sounds.secondary,
       extensions: ["colours_sounds", "output_string"]
+    });
+  }
+};
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_startNote.type] = {
+  /**
+   * START NOTE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_START_NOTE,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_startNote.values.NOTE.name,
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"]
+    });
+  }
+};
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_stopAllSounds.type] = {
+  /**
+   * STOP ALL SOUNDS
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_STOP_SOUNDS,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"]
+    });
+  }
+};
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_setVolumeToPercentage.type] = {
+  /**
+   * SET VOLUME TO PERCENTAGE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_SET_VOLUME_TO_PERCENTAGE,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_setVolumeToPercentage.values.PERCENTAGE.name,
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"]
     });
   }
 };

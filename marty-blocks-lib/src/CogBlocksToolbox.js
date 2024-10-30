@@ -213,6 +213,39 @@ export const cog_blocks_definitions = {
                 }
             }
         },
+        cog_startNote: {
+            type: 'cog_startNote',
+            values: {
+                NOTE: {
+                    name: 'NOTE',
+                    shadow: {
+                        type: 'notesmenu',
+                        field: {
+                            name: 'NOTE',
+                            value: 'notec4',
+                        }
+                    }
+                }
+            }
+        },
+        cog_stopAllSounds: {
+            type: 'cog_stopAllSounds',
+        },
+        cog_setVolumeToPercentage: {
+            type: 'cog_setVolumeToPercentage',
+            values: {
+                PERCENTAGE: {
+                    name: 'PERCENTAGE',
+                    shadow: {
+                        type: 'math_number',
+                        field: {
+                            name: 'NUM',
+                            value: 100,
+                        },
+                    },
+                },
+            },
+        },
     },
     /* End of Sound Blocks */
     /* Looks Blocks */
@@ -313,7 +346,7 @@ export function CogBlocksToolbox_looks() {
 
 export function CogBlocksToolbox_sound(soundName) {
     const xml = buildXML([
-        ...Object.values(cog_blocks_definitions.sound)
+        ...Object.values(cog_blocks_definitions.sound),
     ]);
     return xml;
 }

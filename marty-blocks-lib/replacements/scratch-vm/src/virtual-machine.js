@@ -588,7 +588,6 @@ class VirtualMachine extends EventEmitter {
             // TODO not sure if we need to check that it also isn't a data view
             input = JSON.stringify(input);
         }
-
         const validationPromise = new Promise((resolve, reject) => {
             const validate = require('scratch-parser');
             // The second argument of true below indicates to the parser/validator
@@ -702,6 +701,7 @@ class VirtualMachine extends EventEmitter {
      */
     _addDevice(sprite, zip) {
         // Validate & parse
+        sprite.visible = false; // hide it from the Stage
         const sb3 = require('./serialization/sb3');
         return sb3
             .deserialize(sprite, this.runtime, zip, true)
