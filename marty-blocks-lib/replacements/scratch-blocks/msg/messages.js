@@ -393,6 +393,7 @@ Blockly.Msg.COG_SET_PITCH = '%1 %2 Set pitch to %3';
 Blockly.Msg.COG_SET_VOLUME = '%1 %2 Set volume to %3';
 Blockly.Msg.COG_STOP_SOUNDS = '%1 %2 Stop sounds';
 Blockly.Msg.COG_SET_VOLUME_TO_PERCENTAGE = '%1 %2 Set volume to %3%';
+Blockly.Msg.COG_PLAY_SOUND_AT_FREQUENCY = '%1 %2 Play sound at frequency %3';
 
 
 

@@ -246,6 +246,21 @@ export const cog_blocks_definitions = {
                 },
             },
         },
+        cog_playSoundAtFrequency: {
+            type: 'cog_playSoundAtFrequency',
+            values: {
+                FREQUENCY: {
+                    name: 'FREQUENCY',
+                    shadow: {
+                        type: 'math_number',
+                        field: {
+                            name: 'NUM',
+                            value: 440,
+                        },
+                    },
+                },
+            },
+        },
     },
     /* End of Sound Blocks */
     /* Looks Blocks */

@@ -982,4 +982,35 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_setVolumeToPercen
     });
   }
 };
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playSoundAtFrequency.type] = {
+  /**
+   * PLAY SOUND AT FREQUENCY
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_PLAY_SOUND_AT_FREQUENCY,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_playSoundAtFrequency.values.FREQUENCY.name,
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"],
+    });
+  },
+};
 /* END OF SOUND BLOCKS */

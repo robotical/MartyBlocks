@@ -86,6 +86,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.stopAllSounds.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_setVolumeToPercentage.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.setVolumeToPercentage.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_playSoundAtFrequency.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.playSoundAtFrequency.bind(this, args, utils)),
       // END OF SOUND
     };
   }
@@ -432,10 +434,16 @@ class Scratch3CogBlocks {
     console.log("command", command);
     connectedRaft.sendRestMessage(command);
   }
+  playSoundAtFrequency(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+    const frequency = args[cog_blocks_definitions.sound.cog_playSoundAtFrequency.values.FREQUENCY.name];
+    const command = `audio/note/${frequency}/5000`;
+    connectedRaft.sendRestMessage(command);
+  }
   /* END OF SOUND BLOCKS */
 }
 module.exports = Scratch3CogBlocks;
-
 
 /**
  * Helpers
