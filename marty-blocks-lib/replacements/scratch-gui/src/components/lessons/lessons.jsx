@@ -15,6 +15,8 @@ import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
 import ReadOutLoudTextExtractor from './utils/extract-intl-text.jsx';
 
+import LessonUIHelper from './LessonUIHelper.js';
+
 export const getDefaultMessageOrText = (componentOrText) => {
     /* Helper function that gets the default message from a FormattedMessage component or returns the plain text if there is no component */
     if (componentOrText && componentOrText.props && componentOrText.props.defaultMessage) {
@@ -53,6 +55,7 @@ class Lessons extends React.Component {
     }
 
     componentDidMount() {
+        LessonUIHelper.highlightBlocks([]);
         this.setState({
             modal: {
                 title: this.props.content[this.props.activeDeckId].name,
