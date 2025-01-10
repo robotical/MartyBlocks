@@ -99,7 +99,7 @@ export default class ConnectionButton extends React.Component {
         if (!this.props.isItemSelected) {
             return null;
         }
-        return this.state.isConnected ? <DisonnectButton onClick={this.onDisconnect} /> : <ConnectButton onClick={this.onConnect} />;
+        return (this.state.isConnected || window.isDeviceConnected) ? <DisonnectButton onClick={this.onDisconnect} id={`${this.props.deviceId}-${window.vm.editingTarget.raftType}-disconnect`} /> : <ConnectButton onClick={this.onConnect} id={`${this.props.deviceId}-${window.vm.editingTarget.raftType}-connect`} />;
     }
 
 }

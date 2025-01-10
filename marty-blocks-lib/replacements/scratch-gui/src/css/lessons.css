@@ -1,7 +1,7 @@
 /* Glow effect for highlighted blocks */
 .highlightedElement,
 .highlightedBlock {
-  display: none;
+
 }
 
 :root {

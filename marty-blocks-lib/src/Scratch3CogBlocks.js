@@ -203,7 +203,7 @@ class Scratch3CogBlocks {
   getAccelerometer(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getAccelerometerData(connectedRaft.raftStateInfo.deviceManager);
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getAccelerometerData(connectedRaft.raftStateInfo._deviceManager);
     if (!data) return 0;
 
     try {
@@ -235,7 +235,7 @@ class Scratch3CogBlocks {
   getGyroscope(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getGyroscopeData(connectedRaft.raftStateInfo.deviceManager);
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getGyroscopeData(connectedRaft.raftStateInfo._deviceManager);
     if (!data) return 0;
     const axis = args[cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name];
     const value = data[axis];
@@ -247,7 +247,7 @@ class Scratch3CogBlocks {
   getButtonForceValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo.deviceManager);
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo._deviceManager);
     if (!data) return 0;
     return data.ir2;
   }
@@ -260,7 +260,7 @@ class Scratch3CogBlocks {
   getIRSensorValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo.deviceManager);
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo._deviceManager);
     const side = args[cog_blocks_definitions.sensing.cog_getIRSensorValue.values.SIDE.name];
     if (side === 'left') return data.ir0;
     if (side === 'right') return data.ir1;
@@ -269,7 +269,7 @@ class Scratch3CogBlocks {
   getAmbientLightValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo.deviceManager);
+    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo._deviceManager);
     if (!data) return 0;
     return data.amb0;
   }

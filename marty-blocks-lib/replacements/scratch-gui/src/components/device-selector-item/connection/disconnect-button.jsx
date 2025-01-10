@@ -1,19 +1,16 @@
 import React from 'react';
 import styles from "./styles.css";
-import { FormattedMessage } from "react-intl";
+import BTDisconnectIcon from './icon--bt-disconnect.svg';
 
-export default function DisonnectButton({ onClick }) {
+export default function DisonnectButton({ onClick, id }) {
 
     return (
         <button
             className={styles.disconnectButton}
             onClick={onClick}
+            id={id}
         >
-            <FormattedMessage
-                defaultMessage="Disconnect"
-                description="Button to connect to a device"
-                id="gui.deviceSelector.connect"
-            />
+            <img src={BTDisconnectIcon} />
         </button>
     );
 

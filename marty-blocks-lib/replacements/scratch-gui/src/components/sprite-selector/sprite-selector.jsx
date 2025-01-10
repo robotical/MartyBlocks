@@ -125,7 +125,7 @@ const SpriteSelectorComponent = function (props) {
                 onChangeY={onChangeSpriteY}
             />
             <div className={styles.spritesSection}>
-                <div className={styles.sectionTitle}>Sprites</div>
+                <div className={styles.sectionTitle}>SPRITES</div>
                 <SpriteList
                     editingTarget={editingTarget}
                     hoveredTarget={hoveredTarget}
@@ -139,6 +139,7 @@ const SpriteSelectorComponent = function (props) {
                     onSelectSprite={onSelectSprite}
                 />
                 <ActionMenu
+                    id='sprite-selector-action-menu'
                     className={styles.addButton}
                     img={spriteIcon}
                     moreButtons={[
@@ -172,9 +173,9 @@ const SpriteSelectorComponent = function (props) {
                     onClick={onNewSpriteClick}
                 />
             </div>
-            <hr style={{ height: "1px", width: "100%", backgroundColor: "#d8d8d8"}} />
+            <hr style={{ height: "1px", width: "100%", backgroundColor: "#d8d8d8" }} />
             <div className={styles.deviceSection}>
-                <div className={styles.sectionTitle}>Devices</div>
+                <div className={styles.sectionTitle}>DEVICES</div>
                 <DeviceList
                     editingTarget={editingTarget}
                     hoveredTarget={hoveredTarget}
@@ -189,6 +190,7 @@ const SpriteSelectorComponent = function (props) {
                     onSelectDevice={onSelectSprite}
                 />
                 <ActionMenu
+                    id='device-selector-action-menu'
                     className={styles.addButton}
                     img={deviceIcon}
                     moreButtons={[

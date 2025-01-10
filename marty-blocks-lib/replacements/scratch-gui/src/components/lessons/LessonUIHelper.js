@@ -4,6 +4,13 @@ export default class LessonUIHelper {
 
     static _highlightedElements = [];
 
+
+    /* Clear UI */
+    static clearUI() {
+        LessonUIHelper.unhighlightBlocks();
+        LessonUIHelper.unhighlightElements();
+    }
+
     /* Helper Functions */
     static _newHTML(type, c, p) {
         var e = document.createElement(type);
@@ -54,8 +61,9 @@ export default class LessonUIHelper {
 
                 if (!isTheFirstBlockVisible) {
                     // Ensure the block is in view
+                    const blockInstance = LessonUIHelper._getBlockInstance(allBlocksInFlyout[i].getAttribute('data-id'));
                     const flyout = window.workspace.getFlyout();
-                    flyout.scrollToBlock(allBlocksInFlyout[i]);
+                    flyout.scrollToBlock(blockInstance);
                     isTheFirstBlockVisible = true;
                 }
             }
@@ -83,8 +91,12 @@ export default class LessonUIHelper {
             console.warn('Element not found:', elementID);
             return;
         }
-        console.log("styles.highlightedElement", styles.highlightedElement)
         element.classList.add(styles.highlightedElement);
+        // set position relative if it's not already set as relative (or set as absolute, fixed, etc.)
+        if (window.getComputedStyle(element).position === 'static') {
+            element.style.position = 'relative';
+        }
+
         LessonUIHelper._setHighlightedElementColor(colorRGBA || 'rgba(255, 0, 0, 0.5)');
 
         // store element's initial color

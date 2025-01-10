@@ -926,15 +926,17 @@ const makeToolboxXML = function (isInitialSetup, targetType = true, targetId, ca
             // return `undefined`
         };
 
-        const motionXML = moveCategory('motion') || motion(isInitialSetup, targetType, targetId, raftType);
-        const looksXML = moveCategory('looks') || looks(isInitialSetup, targetType, targetId, costumeName, backdropName, raftType);
-        const soundXML = moveCategory('sound') || sound(isInitialSetup, targetType, targetId, soundName, raftType);
-        const eventsXML = moveCategory('event') || events(isInitialSetup, targetType, raftType);
-        const controlXML = moveCategory('control') || control(isInitialSetup, targetType, raftType);
-        const sensingXML = moveCategory('sensing') || sensing(isInitialSetup, targetType, targetId, raftType);
-        const operatorsXML = moveCategory('operators') || operators(isInitialSetup);
-        const variablesXML = moveCategory('data') || variables();
-        const myBlocksXML = moveCategory('procedures') || myBlocks();
+        let motionXML = moveCategory('motion') || motion(isInitialSetup, targetType, targetId, raftType);
+        let looksXML = moveCategory('looks') || looks(isInitialSetup, targetType, targetId, costumeName, backdropName, raftType);
+        let soundXML = moveCategory('sound') || sound(isInitialSetup, targetType, targetId, soundName, raftType);
+        let eventsXML = moveCategory('event') || events(isInitialSetup, targetType, raftType);
+        let controlXML = moveCategory('control') || control(isInitialSetup, targetType, raftType);
+        let sensingXML = moveCategory('sensing') || sensing(isInitialSetup, targetType, targetId, raftType);
+        let operatorsXML = moveCategory('operators') || operators(isInitialSetup);
+        let variablesXML = moveCategory('data') || variables();
+        let myBlocksXML = moveCategory('procedures') || myBlocks();
+
+        motionXML = (targetType === targetTypes.stage || raftType === "Cog") ? '' : motionXML;
 
         const everything = [
             xmlOpen,
@@ -950,7 +952,28 @@ const makeToolboxXML = function (isInitialSetup, targetType = true, targetId, ca
         ];
 
         for (const extensionCategory of categoriesXML) {
-            everything.push(gap, extensionCategory.xml);
+            if (targetType === targetTypes.stage) {
+                // no extensions for the stage
+                continue;
+            }
+            if (targetType === targetTypes.sprite) {
+                // everything for the sprite
+                everything.push(gap, extensionCategory.xml);
+            }
+            if (raftType === "Cog") {
+                // no text2speech or translate for cog
+                if (
+                    extensionCategory.id === 'text2speech' ||
+                    extensionCategory.id === 'translate'
+                ) {
+                    continue;
+                }
+                everything.push(gap, extensionCategory.xml);
+            }
+            if (raftType === "Marty") {
+                everything.push(gap, extensionCategory.xml);
+            }
+
         }
 
         everything.push(xmlClose);

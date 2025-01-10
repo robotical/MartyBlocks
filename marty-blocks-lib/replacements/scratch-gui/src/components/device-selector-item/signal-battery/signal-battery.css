@@ -1,0 +1,38 @@
+.batteryAndSignal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+.battery {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.batteryIcon {
+  padding: 0.1rem;
+}
+
+.signal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.signalIcon {
+  padding: 0.1rem;
+}
+
+.signalIcon svg {
+  width: 90%;
+}
+
+.batteryIcon svg {
+  width: 90%;
+}
+
+.batteryIconPlug svg {
+    width: 100% !important;
+    padding: 0 !important;
+}

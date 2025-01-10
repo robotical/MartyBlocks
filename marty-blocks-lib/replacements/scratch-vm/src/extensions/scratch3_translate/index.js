@@ -112,7 +112,6 @@ class Scratch3TranslateBlocks {
             blocks: [
                 {
                     opcode: 'getTranslate',
-                    targetType: "SPRITE",
                     text: formatMessage({
                         id: 'translate.translateBlock',
                         default: 'translate [WORDS] to [LANGUAGE]',
@@ -137,7 +136,6 @@ class Scratch3TranslateBlocks {
                 },
                 {
                     opcode: 'getViewerLanguage',
-                    targetType: "SPRITE",
                     text: formatMessage({
                         id: 'translate.viewerLanguage',
                         default: 'language',

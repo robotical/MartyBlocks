@@ -74,22 +74,33 @@ const ProjectFetcherHOC = function (WrappedComponent) {
     }
 
     async fetchProject(projectId, loadingState) {
+      // if we have a tutorial id, we don't need to fetch a project
+      const urlParams = new URLSearchParams(window.location.search);
+      const tutorialId = urlParams.get("tutorial");
+      if (tutorialId) {
+        // falling back to default project
+        const projectAsset = await storage.load(
+          storage.AssetType.Project,
+          projectId,
+          storage.DataFormat.JSON
+        );
+        return this.props.onFetchedProjectData(projectAsset.data, loadingState);
+      }
       // try to fetch project from db
       try {
-        const urlParams = new URLSearchParams(window.location.search);
         const projectIdInDB = urlParams.get('p');
         const dbUrl =
           "https://martyblocks-projects-default-rtdb.europe-west1.firebasedatabase.app/projects/";
         const res = await fetch(dbUrl + projectIdInDB + ".json");
         const projectBase64String = await res.json();
         if (!projectBase64String || !projectBase64String.data) {
-            throw new Error("Invalid project id");
+          throw new Error("Invalid project id");
         }
         const blob = await fetch(projectBase64String.data);
         const arrayBuffer = await blob.arrayBuffer();
         return this.props.onFetchedProjectData(arrayBuffer, loadingState);
       } catch (e) {
-        console.log("Couldn't load project from db:", e);
+        console.log("Couldn't load project from db:", e, "projectId:", projectId);
       }
       // if we don't have a project from the db
       // try and load from the autosave file

@@ -47,7 +47,7 @@ const DeviceList = function (props) {
                 className={styles.itemsWrapper}
             >
                 {items.length === 0 && <div className={styles.noItemsInList}>
-                    Please add a device to start coding!
+                    Add a device
                 </div>}
                 {items.map((device, index) => {
 

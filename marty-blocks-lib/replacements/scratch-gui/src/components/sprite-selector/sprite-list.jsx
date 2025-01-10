@@ -46,7 +46,7 @@ const SpriteList = function (props) {
                 className={styles.itemsWrapper}
             >
                 {items.length === 0 && <div className={styles.noItemsInList}>
-                    No sprites added yet!
+                    No sprites in use
                 </div>}
                 {items.map((sprite, index) => {
 

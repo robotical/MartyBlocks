@@ -110,7 +110,7 @@ class TargetPane extends React.Component {
                     this.props.vm.addDevice(JSON.stringify(deviceToBeConnected)).then(async (res) => {
                         const editingTarget = this.props.editingTarget;
                         window.raftManager.updateDeviceIdRaftIdMap(editingTarget, raft.id);
-                        await new Promise(resolve => setTimeout(resolve, 300)); // making sure the button for that device is rendered
+                        await new Promise(resolve => setTimeout(resolve, 800)); // making sure the button for that device is rendered
                         const deviceId = editingTarget;
                         const connectionButtonState = window.raftManager.getConnectionButtonState(deviceId);
                         window.raftManager.setupDisconnectSubscription(raft, (raft_) => {
@@ -136,7 +136,7 @@ class TargetPane extends React.Component {
                 }
             }
             this.handleActivateBlocksTab();
-        }, 3000);
+        }, 5000);
     }
     componentWillUnmount() {
         window.raftManager.clearAllSubscriptions();

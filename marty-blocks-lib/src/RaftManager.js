@@ -12,6 +12,10 @@ class RaftManager {
         this.subscriptions = {};
     }
 
+    isDeviceConnected(deviceId) {
+        return this.raftIdAndDeviceIdMap[deviceId] !== undefined;
+    }
+
     addSubscription(deviceId, title, subscription) {
         if (!this.subscriptions[deviceId]) {
             this.subscriptions[deviceId] = {};
