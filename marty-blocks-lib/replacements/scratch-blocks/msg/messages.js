@@ -356,7 +356,6 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 // ======= COG Messages =======
 // Cog Events
 Blockly.Msg.COG_EVENT_BLOCK_ONTILT = '%1 %2 on tilt %3';
-Blockly.Msg.COG_EVENT_BLOCK_ONROTATE = '%1 %2 on rotate %3';
 Blockly.Msg.COG_EVENT_BLOCK_ONMOVE = '%1 %2 on move %3';
 Blockly.Msg.COG_EVENT_BLOCK_ONBUTTONPUSH = '%1 %2 on button press';
 Blockly.Msg.COG_EVENT_BLOCK_ONOBJECTSENSED = '%1 %2 on object sensed %3';

@@ -23,8 +23,6 @@ class Scratch3CogBlocks {
       // EVENTS
       [cog_blocks_definitions.events.cog_onTilt.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.onTilt.bind(this, args, utils)),
-      [cog_blocks_definitions.events.cog_onRotate.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.onRotate.bind(this, args, utils)),
       [cog_blocks_definitions.events.cog_onMove.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.onMove.bind(this, args, utils)),
       [cog_blocks_definitions.events.cog_onButtonPush.type]: (args, utils) =>
@@ -33,8 +31,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.onObjectSense.bind(this, args, utils)),
       [cog_blocks_definitions.events.cog_onLightSense.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.onLightSense.bind(this, args, utils)),
-      [cog_blocks_definitions.events.cog_onIRMessageReceived.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.onIRMessageReceived.bind(this, args, utils)),
+      // [cog_blocks_definitions.events.cog_onIRMessageReceived.type]: (args, utils) =>
+      //   this._cogIsConnectedWrapper(args, utils, this.onIRMessageReceived.bind(this, args, utils)),
       // END OF EVENTS
 
       // SENSING
@@ -98,10 +96,6 @@ class Scratch3CogBlocks {
         restartExistingThreads: false,
         edgeActivated: true
       },
-      [cog_blocks_definitions.events.cog_onRotate.type]: {
-        restartExistingThreads: false,
-        edgeActivated: true
-      },
       [cog_blocks_definitions.events.cog_onMove.type]: {
         restartExistingThreads: false,
         edgeActivated: true
@@ -118,10 +112,10 @@ class Scratch3CogBlocks {
         restartExistingThreads: false,
         edgeActivated: true
       },
-      [cog_blocks_definitions.events.cog_onIRMessageReceived.type]: {
-        restartExistingThreads: false,
-        edgeActivated: true
-      },
+      // [cog_blocks_definitions.events.cog_onIRMessageReceived.type]: {
+      //   restartExistingThreads: false,
+      //   edgeActivated: true
+      // },
     }
   }
 
@@ -160,12 +154,6 @@ class Scratch3CogBlocks {
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.tilt === args[cog_blocks_definitions.events.cog_onTilt.values.DIRECTION.name];
-  }
-  onRotate(args, utils) {
-    const connectedRaft = getRaftUsingTargetId(utils.target.id);
-    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
-    if (!publishedDataAnalyser) return false;
-    return publishedDataAnalyser.cogState.rotation === args[cog_blocks_definitions.events.cog_onRotate.values.DIRECTION.name];
   }
   onMove(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);

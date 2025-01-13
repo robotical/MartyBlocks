@@ -47,42 +47,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onTilt.type] = {
   },
 };
 
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onRotate.type] = {
-  /**
-   * ON ROTATE
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_EVENT_BLOCK_ONROTATE,
-      category: Blockly.Categories.events,
-      colour: "#ffbf00",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40,
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "field_dropdown",
-          name: martyblockslib.cog_blocks_definitions.events.cog_onRotate.values.DIRECTION.name,
-          options: [
-            [Blockly.Msg.DROPDOWN_OPTION_CLOCKWISE, "clockwise"],
-            [Blockly.Msg.DROPDOWN_OPTION_ANTICLOCKWISE, "counterClockwise"]
-          ],
-        },
-      ],
-      extensions: ["colours_event", "shape_hat"],
-    });
-  },
-};
-
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onMove.type] = {
   /**
    * ON MOVE
@@ -211,42 +175,42 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onLightSense.typ
   },
 };
 
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onIRMessageReceived.type] = {
-  /**
-   * ON IR MESSAGE RECEIVED
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_EVENT_BLOCK_ONIRMESSAGERECEIVED,
-      category: Blockly.Categories.events,
-      colour: "#ffbf00",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40,
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "field_dropdown",
-          name: martyblockslib.cog_blocks_definitions.events.cog_onIRMessageReceived.values.SIDE.name,
-          options: [
-            [Blockly.Msg.DROPDOWN_OPTION_LEFT, "left"],
-            [Blockly.Msg.DROPDOWN_OPTION_RIGHT, "right"],
-            [Blockly.Msg.DROPDOWN_OPTION_EITHER, "either"],
-          ],
-        },
-      ],
-      extensions: ["colours_event", "shape_hat"],
-    });
-  },
-};
+// Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onIRMessageReceived.type] = {
+//   /**
+//    * ON IR MESSAGE RECEIVED
+//    * @this Blockly.Block
+//    */
+//   init: function () {
+//     this.jsonInit({
+//       message0: Blockly.Msg.COG_EVENT_BLOCK_ONIRMESSAGERECEIVED,
+//       category: Blockly.Categories.events,
+//       colour: "#ffbf00",
+//       args0: [
+//         {
+//           type: "field_image",
+//           src:
+//             Blockly.mainWorkspace.options.pathToMedia +
+//             "extensions/cog-small.svg",
+//           width: 40,
+//           height: 40,
+//         },
+//         {
+//           type: "field_vertical_separator",
+//         },
+//         {
+//           type: "field_dropdown",
+//           name: martyblockslib.cog_blocks_definitions.events.cog_onIRMessageReceived.values.SIDE.name,
+//           options: [
+//             [Blockly.Msg.DROPDOWN_OPTION_LEFT, "left"],
+//             [Blockly.Msg.DROPDOWN_OPTION_RIGHT, "right"],
+//             [Blockly.Msg.DROPDOWN_OPTION_EITHER, "either"],
+//           ],
+//         },
+//       ],
+//       extensions: ["colours_event", "shape_hat"],
+//     });
+//   },
+// };
 /* END OF EVENT BLOCKS */
 
 /* SENSOR BLOCKS */

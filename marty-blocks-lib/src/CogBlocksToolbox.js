@@ -13,18 +13,6 @@ export const cog_blocks_definitions = {
                 }
             }
         },
-        cog_onRotate: {
-            type: 'cog_onRotate',
-            values: {
-                DIRECTION: {
-                    name: 'DIRECTION',
-                    field: {
-                        name: 'DIRECTION',
-                        value: ''
-                    }
-                }
-            }
-        },
         cog_onMove: {
             type: 'cog_onMove',
             values: {
@@ -55,18 +43,18 @@ export const cog_blocks_definitions = {
         cog_onLightSense: {
             type: 'cog_onLightSense',
         },
-        cog_onIRMessageReceived: {
-            type: 'cog_onIRMessageReceived',
-            values: {
-                SIDE: {
-                    name: 'SIDE',
-                    field: {
-                        name: 'SIDE',
-                        value: ''
-                    }
-                }
-            }
-        },
+        // cog_onIRMessageReceived: {
+        //     type: 'cog_onIRMessageReceived',
+        //     values: {
+        //         SIDE: {
+        //             name: 'SIDE',
+        //             field: {
+        //                 name: 'SIDE',
+        //                 value: ''
+        //             }
+        //         }
+        //     }
+        // },
     },
     /* End of Event Blocks */
     /* Sensor Blocks */
@@ -411,20 +399,6 @@ class CogBlocks {
                     }
                 },
                 {
-                    opcode: 'onRotate',
-                    text: 'on rotate [ROTATE_DIRECTION]',
-                    blockType: BlockType.HAT,
-                    colour: "#5ba591",
-                    colourSecondary: "#5ba591",
-                    arguments: {
-                        ROTATE_DIRECTION: {
-                            type: ArgumentType.STRING,
-                            menu: 'rotate_direction_menu',
-                            defaultValue: cogBlocks.rotateDirections.CLOCKWISE
-                        }
-                    }
-                },
-                {
                     opcode: 'onMove',
                     text: 'on [MOVE_TYPE]',
                     blockType: BlockType.HAT,
@@ -459,20 +433,20 @@ class CogBlocks {
                         }
                     }
                 },
-                {
-                    opcode: 'onIRMessageReceived',
-                    text: 'on IR message received [IR_MESSAGE]',
-                    blockType: BlockType.HAT,
-                    colour: "#5ba591",
-                    colourSecondary: "#5ba591",
-                    arguments: {
-                        IR_MESSAGE: {
-                            type: ArgumentType.STRING,
-                            menu: 'IR_message_menu',
-                            defaultValue: cogBlocks.IRMessage.IR_MESSAGE_0
-                        }
-                    }
-                },
+                // {
+                //     opcode: 'onIRMessageReceived',
+                //     text: 'on IR message received [IR_MESSAGE]',
+                //     blockType: BlockType.HAT,
+                //     colour: "#5ba591",
+                //     colourSecondary: "#5ba591",
+                //     arguments: {
+                //         IR_MESSAGE: {
+                //             type: ArgumentType.STRING,
+                //             menu: 'IR_message_menu',
+                //             defaultValue: cogBlocks.IRMessage.IR_MESSAGE_0
+                //         }
+                //     }
+                // },
                 '---',
                 {
                     opcode: 'getAccelerometerX',
@@ -765,19 +739,6 @@ class CogBlocks {
                         },
                     ]
                 },
-                rotate_direction_menu: {
-                    acceptReporters: true,
-                    items: [
-                        {
-                            text: 'clockwise',
-                            value: cogBlocks.rotateDirections.CLOCKWISE
-                        },
-                        {
-                            text: 'counter clockwise',
-                            value: cogBlocks.rotateDirections.COUNTER_CLOCKWISE
-                        }
-                    ]
-                },
                 move_type_menu: {
                     acceptReporters: true,
                     items: [
@@ -973,10 +934,6 @@ class CogBlocks {
         return cogBlocks.p2State.tiltDirection === args.TILT_DIRECTION;
     }
 
-    onRotate(args) {
-        return cogBlocks.p2State.rotateDirection === args.ROTATE_DIRECTION;
-    }
-
     onMove(args) {
         return cogBlocks.p2State.moveType === args.MOVE_TYPE;
     }
@@ -989,12 +946,12 @@ class CogBlocks {
         return cogBlocks.p2State.objectSense === args.OBJECT_SENSE;
     }
 
-    onIRMessageReceived(args) {
-        if (args.IR_MESSAGE === "either") {
-            return cogBlocks.p2State.IRMessage === cogBlocks.IRMessage.IR_MESSAGE_0 || cogBlocks.p2State.IRMessage === cogBlocks.IRMessage.IR_MESSAGE_1;
-        }
-        return cogBlocks.p2State.IRMessage === args.IR_MESSAGE;
-    }
+    // onIRMessageReceived(args) {
+    //     if (args.IR_MESSAGE === "either") {
+    //         return cogBlocks.p2State.IRMessage === cogBlocks.IRMessage.IR_MESSAGE_0 || cogBlocks.p2State.IRMessage === cogBlocks.IRMessage.IR_MESSAGE_1;
+    //     }
+    //     return cogBlocks.p2State.IRMessage === args.IR_MESSAGE;
+    // }
 
     on_light_sense(args) {
         return cogBlocks.p2State.lightSense;
