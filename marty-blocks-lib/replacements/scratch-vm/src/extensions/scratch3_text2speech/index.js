@@ -647,9 +647,7 @@ class Scratch3Text2SpeechBlocks {
           },
         },
         {
-          targetType: "SPRITE",
           opcode: "speakAndWait",
-          targetType: "SPRITE",
           text: formatMessage({
             id: "text2speech.speakAndWaitBlock",
             default: "speak [WORDS]",
@@ -665,7 +663,6 @@ class Scratch3Text2SpeechBlocks {
         },
         {
           opcode: "setVoiceSpeed",
-          targetType: "SPRITE",
           text: formatMessage({
             id: "text2speech.setVoiceSpeedBlock",
             default: "set voice speed to [SPEED]",
@@ -682,7 +679,6 @@ class Scratch3Text2SpeechBlocks {
         },
         {
           opcode: "setVoice",
-          targetType: "SPRITE",
           text: formatMessage({
             id: "text2speech.setVoiceBlock",
             default: "set voice to [VOICE]",
@@ -699,7 +695,6 @@ class Scratch3Text2SpeechBlocks {
         },
         {
           opcode: "setLanguage",
-          targetType: "SPRITE",
           text: formatMessage({
             id: "text2speech.setLanguageBlock",
             default: "set accent to [LANGUAGE]",

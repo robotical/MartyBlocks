@@ -259,9 +259,18 @@ class Mv2Interface extends EventDispatcher {
    * @param {string} fileName File to load
    * @returns {Promise} Promise
    */
-  loadScratchFile(fileName) {
-    if (window.applicationManager && window.applicationManager.isPhoneApp()) {
-      return window.applicationManager.loadFileFromDeviceLocalStorage('scratch', fileName);
+  async loadScratchFile(fileName, numRetries = 5) {
+    if (numRetries <= 0) {
+      return Promise.reject();
+    }
+    if (!window.applicationManager) {
+      // if the app manager is not available, retry in 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return this.loadScratchFile(fileName, numRetries - 1);
+    }
+    if (window.applicationManager.isPhoneApp()) {
+      const contents = await window.applicationManager.loadFileFromDeviceLocalStorage('scratch', fileName);
+      return { contents };
     }
     // not running in react native, fallback to web storage
     const contents = window.localStorage.getItem(`scratch_${fileName}`);
