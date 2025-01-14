@@ -71,7 +71,7 @@ const monitorLabelToSensorWhoAmIMAP = {
 
     // cog blocks
     [martyblockslib.cog_blocks_definitions.sensing.cog_getAccelerometer.type]: (params) => 'Accelerometer' + (params.AXIS ? ' ' + params.AXIS : ''),
-    [martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.type]: (params) => 'Gyroscope' + (params.AXIS ? ' ' + params.AXIS : ''),
+    // [martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.type]: (params) => 'Gyroscope' + (params.AXIS ? ' ' + params.AXIS : ''),
     [martyblockslib.cog_blocks_definitions.sensing.cog_getButtonClicked.type]: (params) => 'Button Clicked?',
     [martyblockslib.cog_blocks_definitions.sensing.cog_getButtonForceValue.type]: (params) => 'Button Force Value',
     [martyblockslib.cog_blocks_definitions.sensing.cog_getObstacleSensed.type]: (params) => 'Obstacle Sensed ' + params.SIDE + '?',

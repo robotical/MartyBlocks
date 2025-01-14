@@ -251,43 +251,43 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getAcceleromete
     });
   },
 };
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.type] = {
-  /**
-   * GET GYROSCOPE
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_GYROSCOPE,
-      category: Blockly.Categories.sensing,
-      colour: "#4cbfe6",
-      checkboxInFlyout: true,
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40,
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "field_dropdown",
-          name: martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name,
-          options: [
-            [Blockly.Msg.DROPDOWN_OPTION_X, "gx"],
-            [Blockly.Msg.DROPDOWN_OPTION_Y, "gy"],
-            [Blockly.Msg.DROPDOWN_OPTION_Z, "gz"],
-          ],
-        },
-      ],
-      extensions: ["colours_sensing", "output_number"],
-    });
-  }
-};
+// Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.type] = {
+//   /**
+//    * GET GYROSCOPE
+//    * @this Blockly.Block
+//    */
+//   init: function () {
+//     this.jsonInit({
+//       message0: Blockly.Msg.COG_GYROSCOPE,
+//       category: Blockly.Categories.sensing,
+//       colour: "#4cbfe6",
+//       checkboxInFlyout: true,
+//       args0: [
+//         {
+//           type: "field_image",
+//           src:
+//             Blockly.mainWorkspace.options.pathToMedia +
+//             "extensions/cog-small.svg",
+//           width: 40,
+//           height: 40,
+//         },
+//         {
+//           type: "field_vertical_separator",
+//         },
+//         {
+//           type: "field_dropdown",
+//           name: martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name,
+//           options: [
+//             [Blockly.Msg.DROPDOWN_OPTION_X, "gx"],
+//             [Blockly.Msg.DROPDOWN_OPTION_Y, "gy"],
+//             [Blockly.Msg.DROPDOWN_OPTION_Z, "gz"],
+//           ],
+//         },
+//       ],
+//       extensions: ["colours_sensing", "output_number"],
+//     });
+//   }
+// };
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getButtonClicked.type] = {
   /**
    * GET BUTTON CLICKED

@@ -38,8 +38,8 @@ class Scratch3CogBlocks {
       // SENSING
       [cog_blocks_definitions.sensing.cog_getAccelerometer.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getAccelerometer.bind(this, args, utils)),
-      [cog_blocks_definitions.sensing.cog_getGyroscope.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.getGyroscope.bind(this, args, utils)),
+      // [cog_blocks_definitions.sensing.cog_getGyroscope.type]: (args, utils) =>
+      //   this._cogIsConnectedWrapper(args, utils, this.getGyroscope.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getButtonClicked.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getButtonClicked.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getButtonForceValue.type]: (args, utils) =>
@@ -220,15 +220,15 @@ class Scratch3CogBlocks {
       return -1;
     }
   }
-  getGyroscope(args, utils) {
-    const connectedRaft = getRaftUsingTargetId(utils.target.id);
-    if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getGyroscopeData(connectedRaft.raftStateInfo._deviceManager);
-    if (!data) return 0;
-    const axis = args[cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name];
-    const value = data[axis];
-    return value;
-  }
+  // getGyroscope(args, utils) {
+  //   const connectedRaft = getRaftUsingTargetId(utils.target.id);
+  //   if (!connectedRaft) return 0;
+  //   const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getGyroscopeData(connectedRaft.raftStateInfo._deviceManager);
+  //   if (!data) return 0;
+  //   const axis = args[cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name];
+  //   const value = data[axis];
+  //   return value;
+  // }
   getButtonClicked(args, utils) {
     return this.onButtonPush(args, utils).toString();
   }

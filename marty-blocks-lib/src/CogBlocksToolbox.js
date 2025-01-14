@@ -71,18 +71,18 @@ export const cog_blocks_definitions = {
                 }
             }
         },
-        cog_getGyroscope: {
-            type: 'cog_getGyroscopeX',
-            values: {
-                AXIS: {
-                    name: 'AXIS',
-                    field: {
-                        name: 'AXIS',
-                        value: ''
-                    }
-                }
-            }
-        },
+        // cog_getGyroscope: {
+        //     type: 'cog_getGyroscopeX',
+        //     values: {
+        //         AXIS: {
+        //             name: 'AXIS',
+        //             field: {
+        //                 name: 'AXIS',
+        //                 value: ''
+        //             }
+        //         }
+        //     }
+        // },
         cog_getButtonClicked: {
             type: 'cog_getButtonClicked',
         },
