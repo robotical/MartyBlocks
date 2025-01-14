@@ -354,7 +354,7 @@ class Mv2Interface extends EventDispatcher {
     const fileNames = Object.keys(window.localStorage)
       .filter((key) => key.startsWith("scratch_"))
       .map((key) => key.replace(/^scratch_/, ""));
-    return Promise.resolve({ fileNames });
+    return Promise.resolve(fileNames || []);
   }
 
   /**
