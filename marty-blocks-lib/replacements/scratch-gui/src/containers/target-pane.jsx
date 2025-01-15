@@ -58,28 +58,38 @@ class TargetPane extends React.Component {
     }
     componentDidMount() {
         this.props.vm.addListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
+        console.log("IN TARGETPANE COMPONENT DID MOUNT");
 
-        setTimeout(() => {
+        const onProjectLoaded = async () => {
+            console.log("IN TARGETPANE COMPONENT onProjectLoaded callback");
             const devicesArray = deviceLibraryContent;
+            console.log("devicesArray", devicesArray);
             const connectedRaftsObject = window.applicationManager?.connectedRafts || {};
+            console.log("connectedRaftsObject", connectedRaftsObject);
+            console.log("going through connected rafts");
+            console.log("============= start connectedRaftsObject loop ============");
             for (const raftId in connectedRaftsObject) {
                 const raft = connectedRaftsObject[raftId];
                 const connectedRaftType = raft.type;
                 const deviceToBeConnected = devicesArray.find(device => device.raftType === connectedRaftType);
                 if (!deviceToBeConnected) {
+                    console.warn("Device not found in device library");
                     return;
                 }
                 // if the device is already connected, dont add it again
                 if (window.raftManager.raftIdAndDeviceIdMap[raftId]) {
-                    return;
+                    console.log(`Device with raftId ${raftId} is already connected to device with deviceId ${window.raftManager.raftIdAndDeviceIdMap[raftId]}`);
+                    continue;
                 }
                 // deviceToBeConnected.name = raft.getFriendlyName();
 
                 // before adding the device, check if there is an already loaded device that's available for connection (i.e. not connected)
                 let wasDeviceAlreadyLoaded = false;
+                console.log("============= start devices loop ============");
                 for (const deviceId in this.props.devices) {
                     const device = this.props.devices[deviceId];
                     if (device.raftType === connectedRaftType && !window.raftManager.raftIdAndDeviceIdMap[raftId]) {
+                        console.log("device already loaded", device);
                         // this type of device is already loaded and is not connected
                         // so we can just assign the connection to it
                         window.raftManager.updateDeviceIdRaftIdMap(deviceId, raft.id);
@@ -105,12 +115,16 @@ class TargetPane extends React.Component {
                         wasDeviceAlreadyLoaded = true;
                     }
                 }
-
+                console.log("============= end devices loop ============");
                 if (!wasDeviceAlreadyLoaded) {
+                    console.log("device not already loaded, adding it", deviceToBeConnected);
                     this.props.vm.addDevice(JSON.stringify(deviceToBeConnected)).then(async (res) => {
+                        console.log("device added")
                         const editingTarget = this.props.editingTarget;
                         window.raftManager.updateDeviceIdRaftIdMap(editingTarget, raft.id);
+                        console.log("waiting for the button to be rendered")
                         await new Promise(resolve => setTimeout(resolve, 800)); // making sure the button for that device is rendered
+                        console.log("after waiting for button")
                         const deviceId = editingTarget;
                         const connectionButtonState = window.raftManager.getConnectionButtonState(deviceId);
                         window.raftManager.setupDisconnectSubscription(raft, (raft_) => {
@@ -135,8 +149,12 @@ class TargetPane extends React.Component {
                     });
                 }
             }
+            console.log("============= end connectedRaftsObject loop ============")
             this.handleActivateBlocksTab();
-        }, 5000);
+        };
+
+        // when the project is loaded, we need to update the UI with the correct devices/buttons
+        window.raftManager.onProjectLoaded = onProjectLoaded;
     }
     componentWillUnmount() {
         window.raftManager.clearAllSubscriptions();

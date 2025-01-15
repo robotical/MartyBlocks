@@ -12,6 +12,10 @@ class RaftManager {
         this.subscriptions = {};
     }
 
+    onProjectLoaded() {
+        console.error("THIS NEEDS TO BE DEFINED IN THE TARGET PANE COMPONENT BEFORE EXECUTED IN THE PROJECT FETCHER HOC");
+    }
+
     isDeviceConnected(deviceId) {
         return this.raftIdAndDeviceIdMap[deviceId] !== undefined;
     }
@@ -51,7 +55,7 @@ class RaftManager {
         if (!appManager) {
             console.warn('appManager not defined');
         }
-        
+
         let connectFunction = appManager.connectGeneric;
         if (raftType === 'Cog') {
             connectFunction = appManager.connectGenericCog;
@@ -66,16 +70,16 @@ class RaftManager {
                 onVerifiedCb(raft);
 
                 if (deviceId) {
-                        this.raftIdAndDeviceIdMap[raft.id] = deviceId;
-                        this.raftIdAndDeviceIdMap[deviceId] = raft.id;
-                    }
+                    this.raftIdAndDeviceIdMap[raft.id] = deviceId;
+                    this.raftIdAndDeviceIdMap[deviceId] = raft.id;
+                }
 
-                    // turn off the verified subscription to avoid memory leaks
-                    this.removeSubscription(deviceId || "temporary", 'verified');
+                // turn off the verified subscription to avoid memory leaks
+                this.removeSubscription(deviceId || "temporary", 'verified');
 
-                    // Set up a subscription to the raft disconnected event
-                    this.setupDisconnectSubscription(raft, onDisconnectedCb);
-                })
+                // Set up a subscription to the raft disconnected event
+                this.setupDisconnectSubscription(raft, onDisconnectedCb);
+            })
         },)
     }
 

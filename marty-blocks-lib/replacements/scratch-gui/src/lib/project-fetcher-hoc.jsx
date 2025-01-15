@@ -57,7 +57,14 @@ const ProjectFetcherHOC = function (WrappedComponent) {
           this.props.loadingState
         ).then(
           // eslint-disable-next-line no-console
-          () => console.log("Fetch project success"),
+          () => {
+            console.log("Fetch project success")
+            // let the raft manager know that the project has been loaded so we can start updating the UI with the correct devices/buttons
+            setTimeout(() => {
+              // give some time so all the buttons/devices are rendered before we start updating the UI
+              window.raftManager.onProjectLoaded();
+            }, 1000)
+          },
           // eslint-disable-next-line no-console
           (error) => console.error("Error fetching project", error.message)
         );
