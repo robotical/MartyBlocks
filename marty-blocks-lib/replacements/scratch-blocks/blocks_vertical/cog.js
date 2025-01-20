@@ -673,6 +673,7 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.typ
           name: martyblockslib.cog_blocks_definitions.looks.cog_setLEDPattern.values.PATTERN.name,
           options: [
             [Blockly.Msg.DROPDOWN_OPTION_FLASH, "Flash"],
+            [Blockly.Msg.DROPDOWN_OPTION_RAINBOW, "RainbowSnake"],
             ...Array.from({ length: 8 }, (_, i) => ([
               Blockly.Msg['DROPDOWN_OPTION_SPIN' + (i + 1).toString()],
               "Spin" + (i + 1).toString()

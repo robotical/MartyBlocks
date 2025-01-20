@@ -909,6 +909,10 @@ class CogBlocks {
                             text: 'Flash',
                             value: 'Flash'
                         },
+                        {
+                            text: 'Rainbow',
+                            value: 'RainbowSnake'
+                        },
                         ...Array.from({ length: 8 }, (_, i) => ({
                             text: "Spin" + (i + 1).toString(),
                             value: "Spin" + (i + 1).toString()

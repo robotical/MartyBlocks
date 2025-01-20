@@ -321,18 +321,19 @@ class Scratch3CogBlocks {
       patternName = patternName.slice(0, -1);
     }
     const mod = parseInt(lastChar, 10);
+    const isThereMod = !isNaN(mod);
     const LEDType = args[cog_blocks_definitions.looks.cog_setLEDs.values.LED_TYPE.name]; // all, ring, button
+    let colour = connectedRaft.currentColour || "#00FF00";
+    colour = colour.replace("#", "");
     if (LEDType === "all") {
-      const ringCommand = `led/ring/pattern/${patternName}?mod=${mod}`;
-      const buttonCommand = `led/button/pattern/${patternName}?mod=${mod}`;
+      const ringCommand = `led/ring/pattern/${patternName}?c=${colour}${isThereMod ? `&mod=${mod}` : ""}`;
+      const buttonCommand = `led/button/pattern/${patternName}?c=${colour}${isThereMod ? `&mod=${mod}` : ""}`;
       connectedRaft.sendRestMessage(ringCommand);
       connectedRaft.sendRestMessage(buttonCommand);
     } else {
-      const command = `led/${LEDType}/pattern/${patternName}?mod=${mod}`;
+      const command = `led/${LEDType}/pattern/${patternName}?c=${colour}${isThereMod ? `&mod=${mod}` : ""}`;
       connectedRaft.sendRestMessage(command);
     }
-    let colour = connectedRaft.currentColour || "#00FF00";
-    colour = colour.replace("#", "");
   }
   turnOffLEDs(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);

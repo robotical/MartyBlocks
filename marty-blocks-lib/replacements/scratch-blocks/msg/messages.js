@@ -725,6 +725,7 @@ Blockly.Msg.DROPDOWN_OPTION_X = 'X';
 Blockly.Msg.DROPDOWN_OPTION_Y = 'Y';
 Blockly.Msg.DROPDOWN_OPTION_Z = 'Z';
 Blockly.Msg.DROPDOWN_OPTION_FLASH = 'Flash';
+Blockly.Msg.DROPDOWN_OPTION_RAINBOW = 'Rainbow';
 Blockly.Msg.DROPDOWN_OPTION_SPIN = 'Spin';
 Blockly.Msg.DROPDOWN_OPTION_SPIN1 = 'Spin1';
 Blockly.Msg.DROPDOWN_OPTION_SPIN2 = 'Spin2';
