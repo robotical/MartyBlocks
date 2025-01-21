@@ -36,7 +36,7 @@ export default class ConnectionButton extends React.Component {
                 isConnected: false
             });
             try {
-                this.props.onChangeDeviceName(raft.type);
+                this.props.onChangeDeviceName(raft.type, this.props.deviceId);
             } catch (e) {
                 console.warn("Device was removed before name could be changed");
             }
@@ -46,7 +46,7 @@ export default class ConnectionButton extends React.Component {
                 isConnected: true
             });
             const raftName = raft.getFriendlyName();
-            this.props.onChangeDeviceName(raftName || "Name unknown");
+            this.props.onChangeDeviceName(raftName || "Name unknown", this.props.deviceId);
         };
         // get rafttype of the device
         const raftType = window.vm.editingTarget.raftType;

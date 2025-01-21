@@ -603,7 +603,10 @@ class VirtualMachine extends EventEmitter {
             .then(validatedInput => {
                 return this._addDevice(validatedInput[0], validatedInput[1]);
             })
-            .then(() => this.runtime.emitProjectChanged())
+            .then((newDeviceId) => {
+                this.runtime.emitProjectChanged()
+                return newDeviceId;
+            })
             .catch(error => {
                 // Intentionally rejecting here (want errors to be handled by caller)
                 if (error.hasOwnProperty('validationError')) {
@@ -699,13 +702,13 @@ class VirtualMachine extends EventEmitter {
      * @param {?ArrayBuffer} zip Optional zip of assets being referenced by target json
      * @returns {Promise} Promise that resolves after the sprite is added
      */
-    _addDevice(sprite, zip) {
+    async _addDevice(sprite, zip) {
         // Validate & parse
         sprite.visible = false; // hide it from the Stage
         const sb3 = require('./serialization/sb3');
-        return sb3
-            .deserialize(sprite, this.runtime, zip, true)
-            .then(({ targets, extensions }) => this.installTargets(targets, extensions, false));
+        const { targets, extensions } = await sb3.deserialize(sprite, this.runtime, zip, true);
+        await this.installTargets(targets, extensions, false);
+        return targets[0].id;
     }
 
     /**

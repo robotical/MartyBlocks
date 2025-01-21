@@ -13,8 +13,8 @@ export const cog_blocks_definitions = {
                 }
             }
         },
-        cog_onMove: {
-            type: 'cog_onMove',
+        cog_onShake: {
+            type: 'cog_onShake',
             values: {
                 MOVE_TYPE: {
                     name: 'MOVE_TYPE',
@@ -119,8 +119,8 @@ export const cog_blocks_definitions = {
         cog_getAmbientLightValue: {
             type: 'cog_getAmbientLightValue',
         },
-        cog_getMovementType: {
-            type: 'cog_getMovementType',
+        cog_getShakeSensed: {
+            type: 'cog_getShakeSensed',
         },
         cog_getTiltDirection: {
             type: 'cog_getTiltDirection',
@@ -399,18 +399,11 @@ class CogBlocks {
                     }
                 },
                 {
-                    opcode: 'onMove',
-                    text: 'on [MOVE_TYPE]',
+                    opcode: 'onShake',
+                    text: 'on shake',
                     blockType: BlockType.HAT,
                     colour: "#5ba591",
                     colourSecondary: "#5ba591",
-                    arguments: {
-                        MOVE_TYPE: {
-                            type: ArgumentType.STRING,
-                            menu: 'move_type_menu',
-                            defaultValue: cogBlocks.moveTypes.MOVE
-                        }
-                    }
                 },
                 {
                     opcode: 'onButtonPush',
@@ -938,7 +931,7 @@ class CogBlocks {
         return cogBlocks.p2State.tiltDirection === args.TILT_DIRECTION;
     }
 
-    onMove(args) {
+    onShake(args) {
         return cogBlocks.p2State.moveType === args.MOVE_TYPE;
     }
 

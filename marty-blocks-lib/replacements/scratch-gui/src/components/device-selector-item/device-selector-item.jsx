@@ -40,7 +40,7 @@ class DeviceSelectorItem extends React.Component {
         batteryLevel:  raft?.getBatteryStrength() ?? -1,
         signalLevel: raft?.getRSSI() || 127
       });
-    }, 400);
+    }, 2000);
   }
 
   componentWillUnmount() {

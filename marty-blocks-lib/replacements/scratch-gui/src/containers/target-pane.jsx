@@ -88,7 +88,10 @@ class TargetPane extends React.Component {
                 console.log("============= start devices loop ============");
                 for (const deviceId in this.props.devices) {
                     const device = this.props.devices[deviceId];
-                    if (device.raftType === connectedRaftType && !window.raftManager.raftIdAndDeviceIdMap[raftId]) {
+                    if (device.raftType === connectedRaftType && // if the device is of the same raft type
+                        !window.raftManager.raftIdAndDeviceIdMap[raftId] && // if the raft is not already connected
+                        !window.raftManager.raftIdAndDeviceIdMap[deviceId] // if the device/button is not already connected
+                    ) {
                         console.log("device already loaded", device);
                         // this type of device is already loaded and is not connected
                         // so we can just assign the connection to it
@@ -100,7 +103,7 @@ class TargetPane extends React.Component {
                                     isConnected: false
                                 });
                                 try {
-                                    connectionButtonState.props.onChangeDeviceName(raft.type);
+                                    connectionButtonState.props.onChangeDeviceName(raft.type, deviceId);
                                 } catch (e) {
                                     console.warn("Device was removed before name could be changed");
                                 }
@@ -110,22 +113,22 @@ class TargetPane extends React.Component {
                             connectionButtonState.setState({
                                 isConnected: true
                             });
-                            connectionButtonState.props.onChangeDeviceName(raft.getFriendlyName() || "Unknown Name");
+                            connectionButtonState.props.onChangeDeviceName(raft.getFriendlyName() || "Unknown Name", deviceId);
                         }
                         wasDeviceAlreadyLoaded = true;
+                        break;
                     }
                 }
                 console.log("============= end devices loop ============");
                 if (!wasDeviceAlreadyLoaded) {
                     console.log("device not already loaded, adding it", deviceToBeConnected);
-                    this.props.vm.addDevice(JSON.stringify(deviceToBeConnected)).then(async (res) => {
-                        console.log("device added")
-                        const editingTarget = this.props.editingTarget;
-                        window.raftManager.updateDeviceIdRaftIdMap(editingTarget, raft.id);
+                    this.props.vm.addDevice(JSON.stringify(deviceToBeConnected)).then(async (newDeviceId) => {
+                        console.log("device added", newDeviceId)
+                        const deviceId = newDeviceId;
+                        window.raftManager.updateDeviceIdRaftIdMap(deviceId, raft.id);
                         console.log("waiting for the button to be rendered")
                         await new Promise(resolve => setTimeout(resolve, 800)); // making sure the button for that device is rendered
                         console.log("after waiting for button")
-                        const deviceId = editingTarget;
                         const connectionButtonState = window.raftManager.getConnectionButtonState(deviceId);
                         window.raftManager.setupDisconnectSubscription(raft, (raft_) => {
                             if (connectionButtonState) {
@@ -133,18 +136,18 @@ class TargetPane extends React.Component {
                                     isConnected: false
                                 });
                                 try {
-                                    connectionButtonState.props.onChangeDeviceName(raft.type);
+                                    connectionButtonState.props.onChangeDeviceName(raft.type, deviceId);
                                 } catch (e) {
                                     console.warn("Device was removed before name could be changed");
                                 }
                             }
                         });
-                        console.log("connectionButtonState", editingTarget);
+                        console.log("connectionButtonState", deviceId);
                         if (connectionButtonState) {
                             connectionButtonState.setState({
                                 isConnected: true
                             });
-                            connectionButtonState.props.onChangeDeviceName(raft.getFriendlyName() || "Unknown Name");
+                            connectionButtonState.props.onChangeDeviceName(raft.getFriendlyName() || "Unknown Name", deviceId);
                         }
                     });
                 }
@@ -166,7 +169,11 @@ class TargetPane extends React.Component {
     handleChangeSpriteRotationStyle(rotationStyle) {
         this.props.vm.postSpriteInfo({ rotationStyle });
     }
-    handleChangeSpriteName(name) {
+    handleChangeSpriteName(name, targetId) {
+        if (targetId) {
+            this.props.vm.renameSprite(targetId, name);
+            return;
+        }
         this.props.vm.renameSprite(this.props.editingTarget, name);
     }
     handleChangeSpriteSize(size) {
@@ -366,13 +373,14 @@ class TargetPane extends React.Component {
                 const devicesArray = deviceLibraryContent;
                 const connectedRaftType = raft.type;
                 const connectedDevice = devicesArray.find(device => device.raftType === connectedRaftType);
-                this.props.vm.addDevice(JSON.stringify(connectedDevice)).then(() => {
-                    window.raftManager.updateDeviceIdRaftIdMap(this.props.editingTarget, raft.id);
+                this.props.vm.addDevice(JSON.stringify(connectedDevice)).then((newDeviceId) => {
+                    const deviceId = newDeviceId;
+                    window.raftManager.updateDeviceIdRaftIdMap(deviceId, raft.id);
                     try {
-                        window.raftManager.getConnectionButtonState(this.props.editingTarget).setState({
+                        window.raftManager.getConnectionButtonState(deviceId).setState({
                             isConnected: true
                         });
-                        window.raftManager.getConnectionButtonState(this.props.editingTarget).props.onChangeDeviceName(raft.getFriendlyName());
+                        window.raftManager.getConnectionButtonState(deviceId).props.onChangeDeviceName(raft.getFriendlyName(), deviceId);
                     } catch (e) {
                         console.warn("Device was removed before name could be changed");
                     }
@@ -381,10 +389,10 @@ class TargetPane extends React.Component {
             },
             (raft) => { // on disconnect cb
                 try {
-                    window.raftManager.getConnectionButtonState(this.props.editingTarget).setState({
+                    window.raftManager.getConnectionButtonState(deviceId).setState({
                         isConnected: false
                     });
-                    window.raftManager.getConnectionButtonState(this.props.editingTarget).props.onChangeDeviceName(raft.type);
+                    window.raftManager.getConnectionButtonState(deviceId).props.onChangeDeviceName(raft.type, deviceId);
                 } catch (e) {
                     console.warn("Device was removed before name could be changed");
                 }

@@ -47,14 +47,14 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onTilt.type] = {
   },
 };
 
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onMove.type] = {
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onShake.type] = {
   /**
-   * ON MOVE
+   * ON SHAKE
    * @this Blockly.Block
    */
   init: function () {
     this.jsonInit({
-      message0: Blockly.Msg.COG_EVENT_BLOCK_ONMOVE,
+      message0: Blockly.Msg.COG_EVENT_BLOCK_ONSHAKE,
       category: Blockly.Categories.events,
       colour: "#ffbf00",
       args0: [
@@ -68,14 +68,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.events.cog_onMove.type] = {
         },
         {
           type: "field_vertical_separator",
-        },
-        {
-          type: "field_dropdown",
-          name: martyblockslib.cog_blocks_definitions.events.cog_onMove.values.MOVE_TYPE.name,
-          options: [
-            [Blockly.Msg.DROPDOWN_OPTION_MOVE, "move"],
-            [Blockly.Msg.DROPDOWN_OPTION_SHAKE, "shake"]
-          ],
         },
       ],
       extensions: ["colours_event", "shape_hat"],
@@ -472,14 +464,14 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getAmbientLight
     });
   }
 };
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getMovementType.type] = {
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getShakeSensed.type] = {
   /**
-   * GET MOVEMENT TYPE
+   * GET SHAKE SENSED
    * @this Blockly.Block
    */
   init: function () {
     this.jsonInit({
-      message0: Blockly.Msg.COG_MOVEMENT_TYPE,
+      message0: Blockly.Msg.COG_SHAKE_SENSED,
       category: Blockly.Categories.sensing,
       colour: "#4cbfe6",
       checkboxInFlyout: true,

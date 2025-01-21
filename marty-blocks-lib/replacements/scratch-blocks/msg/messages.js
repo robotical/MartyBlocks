@@ -356,7 +356,7 @@ Blockly.Msg.DEFAULT_BROADCAST_MESSAGE_NAME = 'message1';
 // ======= COG Messages =======
 // Cog Events
 Blockly.Msg.COG_EVENT_BLOCK_ONTILT = '%1 %2 on tilt %3';
-Blockly.Msg.COG_EVENT_BLOCK_ONMOVE = '%1 %2 on move %3';
+Blockly.Msg.COG_EVENT_BLOCK_ONSHAKE = '%1 %2 on shake';
 Blockly.Msg.COG_EVENT_BLOCK_ONBUTTONPUSH = '%1 %2 on button press';
 Blockly.Msg.COG_EVENT_BLOCK_ONOBJECTSENSED = '%1 %2 on object sensed %3';
 Blockly.Msg.COG_EVENT_BLOCK_ONIRMESSAGERECEIVED = '%1 %2 on IR message received %3';
@@ -372,7 +372,7 @@ Blockly.Msg.COG_OBSTACLE_SENSED = '%1 %2 Obstacle sensed %3';
 Blockly.Msg.COG_LIGHT_SENSED = '%1 %2 Light sensed';
 Blockly.Msg.COG_IR_SENSOR_VALUE = '%1 %2 IR sensor value %3';
 Blockly.Msg.COG_AMBIENT_LIGHT_VALUE = '%1 %2 Ambient light value';
-Blockly.Msg.COG_MOVEMENT_TYPE = '%1 %2 Movement type';
+Blockly.Msg.COG_SHAKE_SENSED = '%1 %2 Shake Sensed';
 Blockly.Msg.COG_TILT_DIRECTION = '%1 %2 Tilt direction';
 
 // Cog Looks

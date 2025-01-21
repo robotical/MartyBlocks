@@ -23,8 +23,8 @@ class Scratch3CogBlocks {
       // EVENTS
       [cog_blocks_definitions.events.cog_onTilt.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.onTilt.bind(this, args, utils)),
-      [cog_blocks_definitions.events.cog_onMove.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.onMove.bind(this, args, utils)),
+      [cog_blocks_definitions.events.cog_onShake.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.onShake.bind(this, args, utils)),
       [cog_blocks_definitions.events.cog_onButtonPush.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.onButtonPush.bind(this, args, utils)),
       [cog_blocks_definitions.events.cog_onObjectSense.type]: (args, utils) =>
@@ -52,8 +52,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.getIRSensorValue.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getAmbientLightValue.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getAmbientLightValue.bind(this, args, utils)),
-      [cog_blocks_definitions.sensing.cog_getMovementType.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.getMovementType.bind(this, args, utils)),
+      [cog_blocks_definitions.sensing.cog_getShakeSensed.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.getShakeSensed.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getTiltDirection.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getTiltDirection.bind(this, args, utils)),
       // END OF SENSING
@@ -96,7 +96,7 @@ class Scratch3CogBlocks {
         restartExistingThreads: false,
         edgeActivated: true
       },
-      [cog_blocks_definitions.events.cog_onMove.type]: {
+      [cog_blocks_definitions.events.cog_onShake.type]: {
         restartExistingThreads: false,
         edgeActivated: true
       },
@@ -155,11 +155,11 @@ class Scratch3CogBlocks {
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.tilt === args[cog_blocks_definitions.events.cog_onTilt.values.DIRECTION.name];
   }
-  onMove(args, utils) {
+  onShake(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
-    return publishedDataAnalyser.cogState.movementType === args[cog_blocks_definitions.events.cog_onMove.values.MOVE_TYPE.name];
+    return publishedDataAnalyser.cogState.movementType === "shake";
   }
   onButtonPush(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
@@ -191,7 +191,7 @@ class Scratch3CogBlocks {
   getAccelerometer(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getAccelerometerData(connectedRaft.raftStateInfo._deviceManager);
+    const data = connectedRaft.raftStateInfo.accelerometer;
     if (!data) return 0;
 
     try {
@@ -223,7 +223,7 @@ class Scratch3CogBlocks {
   // getGyroscope(args, utils) {
   //   const connectedRaft = getRaftUsingTargetId(utils.target.id);
   //   if (!connectedRaft) return 0;
-  //   const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getGyroscopeData(connectedRaft.raftStateInfo._deviceManager);
+  //   const data = connectedRaft.raftStateInfo.gyroscope;
   //   if (!data) return 0;
   //   const axis = args[cog_blocks_definitions.sensing.cog_getGyroscope.values.AXIS.name];
   //   const value = data[axis];
@@ -235,7 +235,7 @@ class Scratch3CogBlocks {
   getButtonForceValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo._deviceManager);
+    const data = connectedRaft.raftStateInfo.light;
     if (!data) return 0;
     return data.ir2;
   }
@@ -248,7 +248,7 @@ class Scratch3CogBlocks {
   getIRSensorValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo._deviceManager);
+    const data = connectedRaft.raftStateInfo.light;
     const side = args[cog_blocks_definitions.sensing.cog_getIRSensorValue.values.SIDE.name];
     if (side === 'left') return data.ir0;
     if (side === 'right') return data.ir1;
@@ -257,15 +257,15 @@ class Scratch3CogBlocks {
   getAmbientLightValue(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const data = connectedRaft.publishedDataAnalyser.PublishedDataGetter.getLightData(connectedRaft.raftStateInfo._deviceManager);
+    const data = connectedRaft.raftStateInfo.light;
     if (!data) return 0;
     return data.amb0;
   }
-  getMovementType(args, utils) {
+  getShakeSensed(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
-    return publishedDataAnalyser.cogState.movementType.toString();
+    return publishedDataAnalyser.cogState.movementType.toString() === "shake";
   }
   getTiltDirection(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);

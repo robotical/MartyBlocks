@@ -78,7 +78,7 @@ const monitorLabelToSensorWhoAmIMAP = {
     [martyblockslib.cog_blocks_definitions.sensing.cog_getLightSensed.type]: (params) => 'Light Sensed?',
     [martyblockslib.cog_blocks_definitions.sensing.cog_getIRSensorValue.type]: (params) => 'IR Sensor Value ' + params.SIDE,
     [martyblockslib.cog_blocks_definitions.sensing.cog_getAmbientLightValue.type]: (params) => 'Ambient Light Value',
-    [martyblockslib.cog_blocks_definitions.sensing.cog_getMovementType.type]: (params) => 'Movement Type',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getShakeSensed.type]: (params) => 'Shake Sensed?',
     [martyblockslib.cog_blocks_definitions.sensing.cog_getTiltDirection.type]: (params) => 'Tilt Direction',
 }
 
