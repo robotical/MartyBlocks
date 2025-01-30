@@ -5,17 +5,30 @@
 
 window.addEventListener("error", function (event) {
   const error = event.error;
-  const errorObj = {
-    message: error.message,
-    name: error.name,
-    stack: error.stack,
-  };
-  const errorString = JSON.stringify(errorObj);
-  console.log("Stringified error:", errorString);
-  try {
-    mv2Interface.sendFeedbackToServer(errorString, true);
-  } catch (e) {
-    console.log("error sending feedback", e);
+  if (error) {
+    const errorObj = {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+    };
+    const errorString = JSON.stringify(errorObj);
+    console.log("Stringified error:", errorString);
+    try {
+      mv2Interface.sendFeedbackToServer(errorString, true);
+    } catch (e) {
+      console.log("error sending feedback", e);
+    }
+  } else {
+    const errorObj = {
+      message: "Error object is not available.",
+    };
+    const errorString = JSON.stringify(errorObj);
+    console.log("Stringified error:", errorString);
+    try {
+      mv2Interface.sendFeedbackToServer(errorString, true);
+    } catch (e) {
+      console.log("error sending feedback", e);
+    }
   }
 });
 

@@ -1,31 +1,35 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {intlShape, injectIntl} from 'react-intl';
+import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {
     openSpriteLibrary,
-    closeSpriteLibrary
+    closeSpriteLibrary,
+    closeDeviceLibrary,
+    openDeviceLibrary
 } from '../reducers/modals';
-import {activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX} from '../reducers/editor-tab';
-import {setReceivedBlocks} from '../reducers/hovered-target';
-import {showStandardAlert, closeAlertWithId} from '../reducers/alerts';
-import {setRestore} from '../reducers/restore-deletion';
+import { activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX } from '../reducers/editor-tab';
+import { setReceivedBlocks } from '../reducers/hovered-target';
+import { showStandardAlert, closeAlertWithId } from '../reducers/alerts';
+import { setRestore } from '../reducers/restore-deletion';
 import DragConstants from '../lib/drag-constants';
 import TargetPaneComponent from '../components/target-pane/target-pane.jsx';
-import {BLOCKS_DEFAULT_SCALE} from '../lib/layout-constants';
+import { BLOCKS_DEFAULT_SCALE } from '../lib/layout-constants';
 import spriteLibraryContent from '../lib/libraries/sprites.json';
-import {handleFileUpload, spriteUpload} from '../lib/file-uploader.js';
+import deviceLibraryContent from '../lib/libraries/devices.json';
+import { handleFileUpload, spriteUpload } from '../lib/file-uploader.js';
 import sharedMessages from '../lib/shared-messages';
-import {emptySprite} from '../lib/empty-assets';
-import {highlightTarget} from '../reducers/targets';
-import {fetchSprite, fetchCode} from '../lib/backpack-api';
+import { emptySprite } from '../lib/empty-assets';
+import { highlightTarget } from '../reducers/targets';
+import { fetchSprite, fetchCode } from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
+import target_types_enum from "../lib/target-types-enum";
 
 class TargetPane extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         bindAll(this, [
             'handleActivateBlocksTab',
@@ -47,38 +51,145 @@ class TargetPane extends React.Component {
             'handlePaintSpriteClick',
             'handleFileUploadClick',
             'handleSpriteUpload',
-            'setFileInput'
+            'setFileInput',
+            'handleNewDeviceByConnection',
+            'handleDeleteDevice'
         ]);
     }
-    componentDidMount () {
+    componentDidMount() {
         this.props.vm.addListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
+        console.log("IN TARGETPANE COMPONENT DID MOUNT");
+
+        const onProjectLoaded = async () => {
+            console.log("IN TARGETPANE COMPONENT onProjectLoaded callback");
+            const devicesArray = deviceLibraryContent;
+            console.log("devicesArray", devicesArray);
+            const connectedRaftsObject = window.applicationManager?.connectedRafts || {};
+            console.log("connectedRaftsObject", connectedRaftsObject);
+            console.log("going through connected rafts");
+            console.log("============= start connectedRaftsObject loop ============");
+            for (const raftId in connectedRaftsObject) {
+                const raft = connectedRaftsObject[raftId];
+                const connectedRaftType = raft.type;
+                const deviceToBeConnected = devicesArray.find(device => device.raftType === connectedRaftType);
+                if (!deviceToBeConnected) {
+                    console.warn("Device not found in device library");
+                    return;
+                }
+                // if the device is already connected, dont add it again
+                if (window.raftManager.raftIdAndDeviceIdMap[raftId]) {
+                    console.log(`Device with raftId ${raftId} is already connected to device with deviceId ${window.raftManager.raftIdAndDeviceIdMap[raftId]}`);
+                    continue;
+                }
+                // deviceToBeConnected.name = raft.getFriendlyName();
+
+                // before adding the device, check if there is an already loaded device that's available for connection (i.e. not connected)
+                let wasDeviceAlreadyLoaded = false;
+                console.log("============= start devices loop ============");
+                for (const deviceId in this.props.devices) {
+                    const device = this.props.devices[deviceId];
+                    if (device.raftType === connectedRaftType && // if the device is of the same raft type
+                        !window.raftManager.raftIdAndDeviceIdMap[raftId] && // if the raft is not already connected
+                        !window.raftManager.raftIdAndDeviceIdMap[deviceId] // if the device/button is not already connected
+                    ) {
+                        console.log("device already loaded", device);
+                        // this type of device is already loaded and is not connected
+                        // so we can just assign the connection to it
+                        window.raftManager.updateDeviceIdRaftIdMap(deviceId, raft.id);
+                        const connectionButtonState = window.raftManager.getConnectionButtonState(deviceId);
+                        window.raftManager.setupDisconnectSubscription(raft, (raft_) => {
+                            if (connectionButtonState) {
+                                connectionButtonState.setState({
+                                    isConnected: false
+                                });
+                                try {
+                                    connectionButtonState.props.onChangeDeviceName(raft.type, deviceId);
+                                } catch (e) {
+                                    console.warn("Device was removed before name could be changed");
+                                }
+                            }
+                        });
+                        if (connectionButtonState) {
+                            connectionButtonState.setState({
+                                isConnected: true
+                            });
+                            connectionButtonState.props.onChangeDeviceName(raft.getFriendlyName() || "Unknown Name", deviceId);
+                        }
+                        wasDeviceAlreadyLoaded = true;
+                        break;
+                    }
+                }
+                console.log("============= end devices loop ============");
+                if (!wasDeviceAlreadyLoaded) {
+                    console.log("device not already loaded, adding it", deviceToBeConnected);
+                    this.props.vm.addDevice(JSON.stringify(deviceToBeConnected)).then(async (newDeviceId) => {
+                        console.log("device added", newDeviceId)
+                        const deviceId = newDeviceId;
+                        window.raftManager.updateDeviceIdRaftIdMap(deviceId, raft.id);
+                        console.log("waiting for the button to be rendered")
+                        await new Promise(resolve => setTimeout(resolve, 800)); // making sure the button for that device is rendered
+                        console.log("after waiting for button")
+                        const connectionButtonState = window.raftManager.getConnectionButtonState(deviceId);
+                        window.raftManager.setupDisconnectSubscription(raft, (raft_) => {
+                            if (connectionButtonState) {
+                                connectionButtonState.setState({
+                                    isConnected: false
+                                });
+                                try {
+                                    connectionButtonState.props.onChangeDeviceName(raft.type, deviceId);
+                                } catch (e) {
+                                    console.warn("Device was removed before name could be changed");
+                                }
+                            }
+                        });
+                        console.log("connectionButtonState", deviceId);
+                        if (connectionButtonState) {
+                            connectionButtonState.setState({
+                                isConnected: true
+                            });
+                            connectionButtonState.props.onChangeDeviceName(raft.getFriendlyName() || "Unknown Name", deviceId);
+                        }
+                    });
+                }
+            }
+            console.log("============= end connectedRaftsObject loop ============")
+            this.handleActivateBlocksTab();
+        };
+
+        // when the project is loaded, we need to update the UI with the correct devices/buttons
+        window.raftManager.onProjectLoaded = onProjectLoaded;
     }
-    componentWillUnmount () {
+    componentWillUnmount() {
+        window.raftManager.clearAllSubscriptions();
         this.props.vm.removeListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
     }
-    handleChangeSpriteDirection (direction) {
-        this.props.vm.postSpriteInfo({direction});
+    handleChangeSpriteDirection(direction) {
+        this.props.vm.postSpriteInfo({ direction });
     }
-    handleChangeSpriteRotationStyle (rotationStyle) {
-        this.props.vm.postSpriteInfo({rotationStyle});
+    handleChangeSpriteRotationStyle(rotationStyle) {
+        this.props.vm.postSpriteInfo({ rotationStyle });
     }
-    handleChangeSpriteName (name) {
+    handleChangeSpriteName(name, targetId) {
+        if (targetId) {
+            this.props.vm.renameSprite(targetId, name);
+            return;
+        }
         this.props.vm.renameSprite(this.props.editingTarget, name);
     }
-    handleChangeSpriteSize (size) {
-        this.props.vm.postSpriteInfo({size});
+    handleChangeSpriteSize(size) {
+        this.props.vm.postSpriteInfo({ size });
     }
-    handleChangeSpriteVisibility (visible) {
-        this.props.vm.postSpriteInfo({visible});
+    handleChangeSpriteVisibility(visible) {
+        this.props.vm.postSpriteInfo({ visible });
     }
-    handleChangeSpriteX (x) {
-        this.props.vm.postSpriteInfo({x});
+    handleChangeSpriteX(x) {
+        this.props.vm.postSpriteInfo({ x });
     }
-    handleChangeSpriteY (y) {
-        this.props.vm.postSpriteInfo({y});
+    handleChangeSpriteY(y) {
+        this.props.vm.postSpriteInfo({ y });
     }
-    handleDeleteSprite (id) {
-        const areTheySure = confirm('If you delete this sprite, all the blocks connected to it will disappear too. Are you sure you want to do that?') 
+    handleDeleteSprite(id) {
+        const areTheySure = confirm('If you delete this sprite, all the blocks connected to it will disappear too. Are you sure you want to do that?')
         if (!areTheySure) return;
         const restoreSprite = this.props.vm.deleteSprite(id);
         const restoreFun = () => restoreSprite().then(this.handleActivateBlocksTab);
@@ -87,12 +198,39 @@ class TargetPane extends React.Component {
             restoreFun: restoreFun,
             deletedItem: 'Sprite'
         });
-
     }
-    handleDuplicateSprite (id) {
+    handleDeleteDevice(id) {
+        const areTheySure = confirm('If you delete this device, all the blocks connected to it will disappear as well, and will get disconnected from the device. Are you sure you want to do that?');
+        if (!areTheySure) return;
+        const restoreDevice = this.props.vm.deleteDevice(id);
+        const restoreFun = () => restoreDevice().then(this.handleActivateBlocksTab);
+
+        this.props.dispatchUpdateRestore({
+            restoreFun: restoreFun,
+            deletedItem: 'Device'
+        });
+        const raftId = window.raftManager.raftIdAndDeviceIdMap[id];
+        if (raftId) {
+            window.applicationManager.disconnectFromRaft(raftId);
+        }
+    }
+    handleDuplicateSprite(id) {
         this.props.vm.duplicateSprite(id);
     }
-    handleExportSprite (id) {
+
+    handleSelectSprite(target) {
+        this.props.vm.setEditingTarget(target.id);
+        // making sure we highlight the target only if it's a sprite
+        if ((this.props.stage && target.id !== this.props.stage.id) && target.targetType !== target_types_enum.device) {
+            this.props.onHighlightTarget(target.id);
+        }
+
+        // if the target is a device, we need to highlight the device visually (send an LED command or something like that)
+        if (target.targetType === target_types_enum.device) {
+            window.raftManager.highlightDevice(target.id);
+        }
+    }
+    handleExportSprite(id) {
         const spriteName = this.props.vm.runtime.getTargetById(id).getName();
         const saveLink = document.createElement('a');
         document.body.appendChild(saveLink);
@@ -101,13 +239,7 @@ class TargetPane extends React.Component {
             downloadBlob(`${spriteName}.sprite3`, content);
         });
     }
-    handleSelectSprite (id) {
-        this.props.vm.setEditingTarget(id);
-        if (this.props.stage && id !== this.props.stage.id) {
-            this.props.onHighlightTarget(id);
-        }
-    }
-    handleSurpriseSpriteClick () {
+    handleSurpriseSpriteClick() {
         const surpriseSprites = spriteLibraryContent.filter(sprite =>
             (sprite.tags.indexOf('letters') === -1) && (sprite.tags.indexOf('numbers') === -1)
         );
@@ -116,12 +248,12 @@ class TargetPane extends React.Component {
         this.props.vm.addSprite(JSON.stringify(item))
             .then(this.handleActivateBlocksTab);
     }
-    handlePaintSpriteClick () {
+    handlePaintSpriteClick() {
         const formatMessage = this.props.intl.formatMessage;
         const emptyItem = emptySprite(
-            formatMessage(sharedMessages.sprite, {index: 1}),
+            formatMessage(sharedMessages.sprite, { index: 1 }),
             formatMessage(sharedMessages.pop),
-            formatMessage(sharedMessages.costume, {index: 1})
+            formatMessage(sharedMessages.costume, { index: 1 })
         );
         this.props.vm.addSprite(JSON.stringify(emptyItem)).then(() => {
             setTimeout(() => { // Wait for targets update to propagate before tab switching
@@ -129,17 +261,17 @@ class TargetPane extends React.Component {
             });
         });
     }
-    handleActivateBlocksTab () {
+    handleActivateBlocksTab() {
         this.props.onActivateTab(BLOCKS_TAB_INDEX);
     }
-    handleNewSprite (spriteJSONString) {
+    handleNewSprite(spriteJSONString) {
         return this.props.vm.addSprite(spriteJSONString)
             .then(this.handleActivateBlocksTab);
     }
-    handleFileUploadClick () {
+    handleFileUploadClick() {
         this.fileInput.click();
     }
-    handleSpriteUpload (e) {
+    handleSpriteUpload(e) {
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
         handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
@@ -154,16 +286,16 @@ class TargetPane extends React.Component {
             }, this.props.onCloseImporting);
         }, this.props.onCloseImporting);
     }
-    setFileInput (input) {
+    setFileInput(input) {
         this.fileInput = input;
     }
-    handleBlockDragEnd (blocks) {
+    handleBlockDragEnd(blocks) {
         if (this.props.hoveredTarget.sprite && this.props.hoveredTarget.sprite !== this.props.editingTarget) {
             this.shareBlocks(blocks, this.props.hoveredTarget.sprite, this.props.editingTarget);
             this.props.onReceivedBlocks(true);
         }
     }
-    shareBlocks (blocks, targetId, optFromTargetId) {
+    shareBlocks(blocks, targetId, optFromTargetId) {
         // Position the top-level block based on the scroll position.
         const topBlock = blocks.find(block => block.topLevel);
         if (topBlock) {
@@ -179,7 +311,7 @@ class TargetPane extends React.Component {
             }
 
             // Determine position of the top-level block based on the target's workspace metrics.
-            const {scrollX, scrollY, scale} = metrics;
+            const { scrollX, scrollY, scale } = metrics;
             const posY = -scrollY + 30;
             let posX;
             if (this.props.isRtl) {
@@ -195,8 +327,8 @@ class TargetPane extends React.Component {
 
         return this.props.vm.shareBlocksToTarget(blocks, targetId, optFromTargetId);
     }
-    handleDrop (dragInfo) {
-        const {sprite: targetId} = this.props.hoveredTarget;
+    handleDrop(dragInfo) {
+        const { sprite: targetId } = this.props.hoveredTarget;
         if (dragInfo.dragType === DragConstants.SPRITE) {
             // Add one to both new and target index because we are not counting/moving the stage
             this.props.vm.reorderTarget(dragInfo.index + 1, dragInfo.newIndex + 1);
@@ -235,7 +367,40 @@ class TargetPane extends React.Component {
             }
         }
     }
-    render () {
+    handleNewDeviceByConnection() {
+        window.raftManager.connect(
+            (raft) => { // on connect cb
+                const devicesArray = deviceLibraryContent;
+                const connectedRaftType = raft.type;
+                const connectedDevice = devicesArray.find(device => device.raftType === connectedRaftType);
+                this.props.vm.addDevice(JSON.stringify(connectedDevice)).then((newDeviceId) => {
+                    const deviceId = newDeviceId;
+                    window.raftManager.updateDeviceIdRaftIdMap(deviceId, raft.id);
+                    try {
+                        window.raftManager.getConnectionButtonState(deviceId).setState({
+                            isConnected: true
+                        });
+                        window.raftManager.getConnectionButtonState(deviceId).props.onChangeDeviceName(raft.getFriendlyName(), deviceId);
+                    } catch (e) {
+                        console.warn("Device was removed before name could be changed");
+                    }
+                    this.handleActivateBlocksTab();
+                });
+            },
+            (raft) => { // on disconnect cb
+                try {
+                    window.raftManager.getConnectionButtonState(deviceId).setState({
+                        isConnected: false
+                    });
+                    window.raftManager.getConnectionButtonState(deviceId).props.onChangeDeviceName(raft.type, deviceId);
+                } catch (e) {
+                    console.warn("Device was removed before name could be changed");
+                }
+                this.handleActivateBlocksTab();
+            },
+        );
+    }
+    render() {
         /* eslint-disable no-unused-vars */
         const {
             dispatchUpdateRestore,
@@ -254,6 +419,7 @@ class TargetPane extends React.Component {
                 {...componentProps}
                 fileInputRef={this.setFileInput}
                 onActivateBlocksTab={this.handleActivateBlocksTab}
+                onAddDeviceByConnecting={this.handleNewDeviceByConnection}
                 onChangeSpriteDirection={this.handleChangeSpriteDirection}
                 onChangeSpriteName={this.handleChangeSpriteName}
                 onChangeSpriteRotationStyle={this.handleChangeSpriteRotationStyle}
@@ -262,6 +428,7 @@ class TargetPane extends React.Component {
                 onChangeSpriteX={this.handleChangeSpriteX}
                 onChangeSpriteY={this.handleChangeSpriteY}
                 onDeleteSprite={this.handleDeleteSprite}
+                onDeleteDevice={this.handleDeleteDevice}
                 onDrop={this.handleDrop}
                 onDuplicateSprite={this.handleDuplicateSprite}
                 onExportSprite={this.handleExportSprite}
@@ -293,7 +460,9 @@ const mapStateToProps = state => ({
     hoveredTarget: state.scratchGui.hoveredTarget,
     isRtl: state.locales.isRtl,
     spriteLibraryVisible: state.scratchGui.modals.spriteLibrary,
+    deviceLibraryVisible: state.scratchGui.modals.deviceLibrary,
     sprites: state.scratchGui.targets.sprites,
+    devices: state.scratchGui.targets.devices,
     stage: state.scratchGui.targets.stage,
     raiseSprites: state.scratchGui.blockDrag,
     workspaceMetrics: state.scratchGui.workspaceMetrics
@@ -304,8 +473,15 @@ const mapDispatchToProps = dispatch => ({
         e.preventDefault();
         dispatch(openSpriteLibrary());
     },
+    onNewDeviceClick: e => {
+        e.preventDefault();
+        dispatch(openDeviceLibrary());
+    },
     onRequestCloseSpriteLibrary: () => {
         dispatch(closeSpriteLibrary());
+    },
+    onRequestCloseDeviceLibrary: () => {
+        dispatch(closeDeviceLibrary());
     },
     onActivateTab: tabIndex => {
         dispatch(activateTab(tabIndex));

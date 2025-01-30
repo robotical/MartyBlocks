@@ -51,6 +51,21 @@ import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
     {
+        name: 'Machine Learning',
+        extensionId: 'martymachine',
+        collaborator: 'robotical',
+        iconURL: tm2scratchIconURL,
+        insetIconURL: tm2scratchInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Use Machine Learning to build AI models into MartyBlocks"
+                description="Description for the 'Machine Learning' extension"
+                id="gui.extension.martymachine.description"
+            />
+        ),
+        featured: true
+    },
+    {
         name: (
             <FormattedMessage
                 defaultMessage="Music"
@@ -199,21 +214,7 @@ export default [
     //     ),
     //     featured: true
     // },
-    {
-        name: 'Machine Learning',
-        extensionId: 'martymachine',
-        collaborator: 'robotical',
-        iconURL: tm2scratchIconURL,
-        insetIconURL: tm2scratchInsetIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="Use Machine Learning to build AI models into MartyBlocks"
-                description="Description for the 'Machine Learning' extension"
-                id="gui.extension.martymachine.description"
-            />
-        ),
-        featured: true
-    },
+    
     {
         name: 'micro:bit',
         extensionId: 'microbit',

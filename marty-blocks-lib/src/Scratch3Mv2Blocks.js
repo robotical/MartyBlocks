@@ -1,23 +1,24 @@
 const Mv2Interface = require("./Mv2Interface");
 const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");
+const RaftManager = require("./RaftManager");
 const lamejs = require("./lame-all");
-const { default: isVersionGreater } = require("./versionChecker");
+const { default: isVersionGreater, isVersionGreater_errorCatching: isVersionGreater_errorCatching_ } = require("./versionChecker");
 const Cast = require("./util/cast");
 const Color = require("./util/color");
 // const meSpeak = require("./util/mespeak"); // for text to speech locally -- removed as we don't use it anymore
 const { Project } = require("@robotical/scratch-to-python-transpiler");
-
+const { noteFrequencies } = require("./util/note-frequencies");
 
 mv2Interface = new Mv2Interface();
 mstTesting = new MSTTesting(mv2Interface);
 martyMachine = new MartyMachine();
+raftManager = new RaftManager();
+isVersionGreater_errorCatching = isVersionGreater_errorCatching_;
+window.isVersionGreater_errorCatching = isVersionGreater_errorCatching_;
 pythonTranspiler = Project;
 
 const LED_EYES_FW_VERSION = "1.2.0"; // greater versions than this support the LED_EYE functionality
-
-// making sure that the magnetometer notification is only shown once
-let hasMagnetometerNotificationBeenShown = false;
 
 // device type IDs for Robotical Standard Add-ons
 const RIC_WHOAMI_TYPE_CODE_ADDON_DISTANCE = "VCNL4200";
@@ -63,103 +64,102 @@ class Scratch3Mv2Blocks {
       // motion commands
 
       mv2_getReady: (args, utils) =>
-        this._martyIsConnectedWrapper(this.getReady.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.getReady.bind(this, args, utils)),
       mv2_walk_fw: (args, utils) =>
-        this._martyIsConnectedWrapper(this.walk_fw.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.walk_fw.bind(this, args, utils)),
       mv2_walk_bw: (args, utils) =>
-        this._martyIsConnectedWrapper(this.walk_bw.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.walk_bw.bind(this, args, utils)),
       mv2_walk: (args, utils) =>
-        this._martyIsConnectedWrapper(this.walk.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.walk.bind(this, args, utils)),
       mv2_turn: (args, utils) =>
-        this._martyIsConnectedWrapper(this.turn.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.turn.bind(this, args, utils)),
       mv2_stop: (args, utils) =>
-        this._martyIsConnectedWrapper(this.stop.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.stop.bind(this, args, utils)),
       mv2_pause: (args, utils) =>
-        this._martyIsConnectedWrapper(this.pause.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.pause.bind(this, args, utils)),
       mv2_resume: (args, utils) =>
-        this._martyIsConnectedWrapper(this.resume.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.resume.bind(this, args, utils)),
       mv2_wiggle: (args, utils) =>
-        this._martyIsConnectedWrapper(this.wiggle.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.wiggle.bind(this, args, utils)),
       mv2_circle: (args, utils) =>
-        this._martyIsConnectedWrapper(this.circle.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.circle.bind(this, args, utils)),
       mv2_kick: (args, utils) =>
-        this._martyIsConnectedWrapper(this.kick.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.kick.bind(this, args, utils)),
       mv2_lean: (args, utils) =>
-        this._martyIsConnectedWrapper(this.lean.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.lean.bind(this, args, utils)),
       mv2_slide: (args, utils) =>
-        this._martyIsConnectedWrapper(this.slide.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.slide.bind(this, args, utils)),
       mv2_slideMsLength: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.slideMsLength.bind(this, args, utils)
         ),
       mv2_eyes: (args, utils) =>
-        this._martyIsConnectedWrapper(this.eyes.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.eyes.bind(this, args, utils)),
       mv2_moveLeg: (args, utils) =>
-        this._martyIsConnectedWrapper(this.moveLeg.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.moveLeg.bind(this, args, utils)),
       mv2_liftFoot: (args, utils) =>
-        this._martyIsConnectedWrapper(this.liftFoot.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.liftFoot.bind(this, args, utils)),
       mv2_lowerFoot: (args, utils) =>
-        this._martyIsConnectedWrapper(this.lowerFoot.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.lowerFoot.bind(this, args, utils)),
       mv2_moveJoint: (args, utils) =>
-        this._martyIsConnectedWrapper(this.moveJoint.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.moveJoint.bind(this, args, utils)),
       mv2_wave: (args, utils) =>
-        this._martyIsConnectedWrapper(this.wave.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.wave.bind(this, args, utils)),
       mv2_dance: (args, utils) =>
-        this._martyIsConnectedWrapper(this.dance.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.dance.bind(this, args, utils)),
       mv2_standStraight: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.standStraight.bind(this, args, utils)
         ),
       mv2_hold: (args, utils) =>
-        this._martyIsConnectedWrapper(this.hold.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.hold.bind(this, args, utils)),
       mv2_gripperArmBasic: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.gripperArmBasic.bind(this, args, utils)
         ),
       mv2_gripperArmTimed: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.gripperArmTimed.bind(this, args, utils)
         ),
 
       // looks
       mv2_discoChangeBackColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.discoChangeBackColour.bind(this, args, utils)
         ),
       mv2_discoSetBreatheBackColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.discoSetBreatheBackColour.bind(this, args, utils)
         ),
       mv2_discoTurnOffBackColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.discoTurnOffBackColour.bind(this, args, utils)
         ),
       mv2_LEDEyesColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.LEDEyesColour.bind(this, args, utils)
         ),
       mv2_LEDEyesColourLEDs: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.LEDEyesColourLEDs.bind(this, args, utils)
         ),
       mv2_LEDEyesColour_SpecificLED: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.LEDEyesColour_SpecificLED.bind(this, args, utils)
         ),
-      mv2_RGBOperator: (args, utils) =>
-        this._martyIsConnectedWrapper(this.RGBOperator.bind(this, args, utils)),
-      mv2_HSLOperator: (args, utils) =>
-        this._martyIsConnectedWrapper(this.HSLOperator.bind(this, args, utils)),
+      nearest_note: this.nearest_note,
+      mv2_RGBOperator: this.RGBOperator,
+      mv2_HSLOperator: this.HSLOperator,
       mv2_discoChangeBlockPattern: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.discoChangeBlockPattern.bind(this, args, utils)
         ),
       mv2_discoChangeRegionColour: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.discoChangeRegionColour.bind(this, args, utils)
         ),
       mv2_turnAllLEDsOff: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.turnAllLEDsOff.bind(this, args, utils)
         ),
 
@@ -204,20 +204,20 @@ class Scratch3Mv2Blocks {
 
       // sound commands
 
-      // mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(this.playSound.bind(this, args, utils)),
+      // mv2_playSound: (args, utils) => this._martyIsConnectedWrapper(args,utils, this.playSound.bind(this, args, utils)),
       mv2_playSound: this.playSound,
 
       mv2_playSoundUntilDone: this.playSoundUntilDone,
 
       mv2_playNote: (args, utils) =>
-        this._martyIsConnectedWrapper(this.playNote.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.playNote.bind(this, args, utils)),
       mv2_playTone: (args, utils) =>
-        this._martyIsConnectedWrapper(this.playTone.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.playTone.bind(this, args, utils)),
       mv2_stopSounds: (args, utils) =>
-        this._martyIsConnectedWrapper(this.stopSounds.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.stopSounds.bind(this, args, utils)),
 
       mv2_changePitchEffect: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           window.vm.runtime._primitives.sound_changeeffectby.bind(
             this,
             args,
@@ -225,7 +225,7 @@ class Scratch3Mv2Blocks {
           )
         ),
       mv2_setPitchEffect: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           window.vm.runtime._primitives.sound_seteffectto.bind(
             this,
             args,
@@ -233,7 +233,7 @@ class Scratch3Mv2Blocks {
           )
         ),
       mv2_clearSoundEffects: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           window.vm.runtime._primitives.sound_cleareffects.bind(
             this,
             args,
@@ -241,7 +241,7 @@ class Scratch3Mv2Blocks {
           )
         ),
       mv2_changeVolume: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           window.vm.runtime._primitives.sound_changevolumeby.bind(
             this,
             args,
@@ -249,7 +249,7 @@ class Scratch3Mv2Blocks {
           )
         ),
       mv2_setVolume: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           window.vm.runtime._primitives.sound_setvolumeto.bind(
             this,
             args,
@@ -260,13 +260,13 @@ class Scratch3Mv2Blocks {
       // misc/debugging commands (including proposed/deprecated blocks)
 
       mv2_demo_sensor: (args, utils) =>
-        this._martyIsConnectedWrapper(this.demo_sensor.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.demo_sensor.bind(this, args, utils)),
       mv2_set_demo_sensor: (args, utils) =>
-        this._martyIsConnectedWrapper(
+        this._martyIsConnectedWrapper(args, utils,
           this.set_demo_sensor.bind(this, args, utils)
         ),
       mv2_set_ip: (args, utils) =>
-        this._martyIsConnectedWrapper(this.set_ip.bind(this, args, utils)),
+        this._martyIsConnectedWrapper(args, utils, this.set_ip.bind(this, args, utils)),
 
       /* mv2_kickLeft: this.kickLeft,
 
@@ -303,12 +303,11 @@ class Scratch3Mv2Blocks {
     }
   }
 
-  _martyIsConnectedWrapper(martyBlock) {
-    if (!mv2Interface.isConnected) {
+  _martyIsConnectedWrapper(args, utils, martyBlock) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) {
       window.vm.runtime.stopAll();
-      return mv2Interface.send_REST(
-        "notification/warn-message/You are not currently connected to a Marty. Please connect."
-      );
+      return window.applicationManager.toaster.warn("You are not currently connected to a Marty. Please connect.");
     }
     return this.errorHandler(martyBlock);
   }
@@ -425,8 +424,8 @@ class Scratch3Mv2Blocks {
   }
 
   // return name of first addon found with a specific whoAmI value
-  addonNameByWhoAmI(whoAmI) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+  addonNameByWhoAmI(connectedRaft, whoAmI) {
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons;
     for (let addon of addons) {
       if (addon.whoAmI == whoAmI) {
         return addon.name;
@@ -438,10 +437,14 @@ class Scratch3Mv2Blocks {
   // MOTION
 
   getReady(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 3000;
     console.log("Ready, set, go!");
-    mv2Interface.send_REST(`traj/getReady/?moveTime=${moveTime}`);
-    return new Promise((resolve) => setTimeout(resolve, moveTime));
+    if (connectedRaft) {
+      connectedRaft.sendRestMessage(`traj/getReady/?moveTime=${moveTime}`);
+      return new Promise((resolve) => setTimeout(resolve, moveTime));
+    }
+    return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
   getAllDiscoBoards(addons) {
@@ -475,7 +478,7 @@ class Scratch3Mv2Blocks {
     let command = `led/${side}/color/persist?`;
     for (let i = 0; i < colorsArray.length; i++) {
       let color = colorsArray[i].replace("#", "");
-      if (color === "5ba591") color = "000000"; // that's our "off" colour
+      if (color === "9966FF") color = "000000"; // that's our "off" colour
       const ledIdMapped = this.ledIdMapping(i, true);
       let end = "&";
       if (i === colorsArray.length) end = "";
@@ -485,24 +488,26 @@ class Scratch3Mv2Blocks {
   }
 
   LEDEyesColourLEDs(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let coloursArray = args.COLOUR_LED_EYES;
     if (typeof coloursArray === "string") {
       coloursArray = new Array(12).fill(coloursArray);
     }
     const side = args.SIDE;
-    this.addonNotConnectedAlert(side);
+    this.addonNotConnectedAlert(side, connectedRaft);
     let martyCmd = this.LEDColourPickerApiCommandBuilder(side, coloursArray);
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      martyCmd = "notification/fw-needs-update";
+      return window.applicationManager.toaster.warn("Your Marty needs a firmware update to use this feature");
     }
     console.log(martyCmd);
-    mv2Interface.send_REST(martyCmd);
+    connectedRaft.sendRestMessage(martyCmd);
     return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
   LEDEyesColour(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let colour = this.colourToHex(args.COLOUR_LED_EYES);
     colour = colour.replace("#", "");
     const boardtypeStr = args.BOARDTYPE;
@@ -512,15 +517,15 @@ class Scratch3Mv2Blocks {
     } catch (e) {
       boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
-    this.addonNotConnectedAlert(boardtypeObj.name);
+    this.addonNotConnectedAlert(boardtypeObj.name, connectedRaft);
     let marty_cmd = `led/${boardtypeObj.name}/color/${colour}`;
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      marty_cmd = "notification/fw-needs-update";
+      return window.applicationManager.toaster.warn("Your Marty needs a firmware update to use this feature");
     }
     console.log(marty_cmd);
-    mv2Interface.send_REST(marty_cmd);
+    connectedRaft.sendRestMessage(marty_cmd);
     return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
@@ -552,6 +557,7 @@ class Scratch3Mv2Blocks {
   }
 
   LEDEyesColour_SpecificLED(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let colour = this.colourToHex(args.COLOUR_LED_EYES);
     colour = colour.replace("#", "");
     const ledID = +args.LED_POSITION;
@@ -565,53 +571,46 @@ class Scratch3Mv2Blocks {
     const boardtypeWhoAmI = boardtypeObj.whoAmI;
     if (boardtypeWhoAmI === "LEDeye") {
       if (ledID < 0 || ledID > 11) {
-        mv2Interface.send_REST(
-          "notification/warn-message/LED id for eyes has to be between 0 and 11"
-        );
-        this.addonNotConnectedAlert(boardtypeObj.whoAmI);
+        window.applicationManager.toaster.warn("LED id for eyes has to be between 0 and 11");
+        this.addonNotConnectedAlert(boardtypeObj.whoAmI, connectedRaft);
         return new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
     if (boardtypeWhoAmI === "LEDarm") {
       if (ledID < 0 || ledID > 25) {
-        mv2Interface.send_REST(
-          "notification/warn-message/LED id for arms has to be between 0 and 25"
-        );
-        this.addonNotConnectedAlert(boardtypeObj.whoAmI);
+        window.applicationManager.toaster.warn("LED id for arms has to be between 0 and 25");
+        this.addonNotConnectedAlert(boardtypeObj.whoAmI, connectedRaft);
         return new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
     if (boardtypeWhoAmI === "LEDfoot") {
       if (ledID < 0 || ledID > 19) {
-        mv2Interface.send_REST(
-          "notification/warn-message/LED id for feet has to be between 0 and 19"
-        );
-        this.addonNotConnectedAlert(boardtypeObj.whoAmI);
+        window.applicationManager.toaster.warn("LED id for feet has to be between 0 and 19");
+        this.addonNotConnectedAlert(boardtypeObj.whoAmI, connectedRaft);
         return new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
 
     const ledIdMapped = this.ledIdMapping(ledID, false, boardtypeWhoAmI);
-    this.addonNotConnectedAlert(boardtypeObj.name);
+    this.addonNotConnectedAlert(boardtypeObj.name, connectedRaft);
     let marty_cmd = `led/${boardtypeObj.name}/setled/${ledIdMapped}/${colour}`;
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      marty_cmd = "notification/fw-needs-update";
+      return window.applicationManager.toaster.warn("Your Marty needs a firmware update to use this feature");
     }
     console.log(marty_cmd);
-    mv2Interface.send_REST(marty_cmd);
+    connectedRaft.sendRestMessage(marty_cmd);
     return new Promise((resolve) => setTimeout(resolve, 200));
   }
 
-  addonNotConnectedAlert(addonTitle) {
-    const isAddonConnected = mv2Interface.isAddonConnected(addonTitle);
-    if (!isAddonConnected) {
-      mv2Interface.send_REST(
-        `notification/warn-message/Oh no! Marty seems to have misplaced the ${addonTitle} add-on. Could you pick a different one from the dropdown?`
-      );
+  addonNotConnectedAlert(addonTitle, connectedRaft) {
+    const raftAddons = connectedRaft.raftStateInfo.addOnInfo.addons;
+    const isAddonConnected_ = isAddonConnected(addonTitle, raftAddons);
+    if (!isAddonConnected_) {
+      window.applicationManager.toaster.warn(`Oh no! Marty seems to have misplaced the ${addonTitle} add-on. Could you pick a different one from the dropdown?`);
     }
-    return isAddonConnected;
+    return isAddonConnected_;
   }
 
   static hexToRgb(hex) {
@@ -659,6 +658,12 @@ class Scratch3Mv2Blocks {
     return `#${f(0)}${f(8)}${f(4)}`;
   }
 
+  nearest_note(args, util) {
+    const freq = args.FREQUENCY;
+    const note = getNearestNoteFromFrequency(freq);
+    return note;
+  }
+
   RGBOperator(args, util) {
     const r = args.NUM_R;
     const g = args.NUM_G;
@@ -673,33 +678,38 @@ class Scratch3Mv2Blocks {
       !b ||
       b > 255 ||
       b < 0
-    )
-      mv2Interface.send_REST(
-        "notification/warn-message/RGB values must be between 0 and 255"
-      );
-    return Scratch3Mv2Blocks.rgbToHex(r, g, b);
+    ) {
+      // send toast message instead of alert
+      // connectedRaft.sendRestMessage('notification/warn-message/RGB values must be between 0 and 255');
+    }
+    const hexColour = Scratch3Mv2Blocks.rgbToHex(r, g, b);
+    return hexColour;
   }
   HSLOperator(args, util) {
+    // const connectedRaft = getRaftUsingTargetId(util.target.id);
     const h = args.NUM_H;
     const s = args.NUM_S;
     const l = args.NUM_L;
-    if (!h || h > 360 || h < 0)
-      mv2Interface.send_REST(
-        "notification/warn-message/Hue value must be between 0 and 360"
-      );
-    if (!s || s > 100 || s < 0)
-      mv2Interface.send_REST(
-        "notification/warn-message/Saturation value must be between 0 and 100"
-      );
-    if (!l || l > 100 || l < 0)
-      mv2Interface.send_REST(
-        "notification/warn-message/Lightness value must be between 0 and 100"
-      );
+    if (!h || h > 360 || h < 0) {
+      // send toast message instead of alert
+      // connectedRaft.sendRestMessage('notification/warn-message/Hue value must be between 0 and 360')
+    }
+    if (!s || s > 100 || s < 0) {
+      // send toast message instead of alert
+      // connectedRaft.sendRestMessage('notification/warn-message/Saturation value must be between 0 and 100')
+    }
+    if (!l || l > 100 || l < 0) {
+      // send toast message instead of alert
+      // connectedRaft.sendRestMessage('notification/warn-message/Lightness value must be between 0 and 100')
+    }
     const rgbColour = Color.hsvToRgb({ h: h, s: s / 100, v: l / 100 });
-    return Scratch3Mv2Blocks.rgbToHex(rgbColour.r, rgbColour.g, rgbColour.b);
+
+    const hexColour = Scratch3Mv2Blocks.rgbToHex(rgbColour.r, rgbColour.g, rgbColour.b);
+    return hexColour;
   }
 
   discoChangeBlockPattern(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     // const addons = JSON.parse(mv2Interface.addons).addons;
     //so if it's set in a forever loop give 0.2s break between each update
     const resolveTime = 200;
@@ -711,14 +721,17 @@ class Scratch3Mv2Blocks {
       boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
     const patternChoice = args.PATTERN;
-    this.addonNotConnectedAlert(boardtypeObj.name);
+    this.addonNotConnectedAlert(boardtypeObj.name, connectedRaft);
+    let martyCmd = '';
     if (patternChoice === "off") {
-      console.log(`led/${boardtypeObj.name}/off`);
-      mv2Interface.send_REST(`led/${boardtypeObj.name}/off`);
+      martyCmd = `led/${boardtypeObj.name}/off`;
+      console.log(martyCmd);
+      connectedRaft.sendRestMessage('led/LEDeye/off');
       return new Promise((resolve) => setTimeout(resolve, resolveTime));
     }
-    console.log(`led/${boardtypeObj.name}/pattern/${patternChoice}`);
-    mv2Interface.send_REST(`led/${boardtypeObj.name}/pattern/${patternChoice}`);
+    martyCmd = `led/${boardtypeObj.name}/pattern/${patternChoice}`;
+    console.log(martyCmd);
+    connectedRaft.sendRestMessage(martyCmd);
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
@@ -726,9 +739,8 @@ class Scratch3Mv2Blocks {
     let colour = this.colourToHex(args.COLOR);
     colour = colour.replace("#", "");
     const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
-    mv2Interface.send_REST(
-      `indicator/set?pixIdx=1;blinkType=on;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=1000`
-    );
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    connectedRaft.sendRestMessage(`indicator/set?pixIdx=1;blinkType=on;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=1000`);
   }
 
   discoSetBreatheBackColour(args, util) {
@@ -736,18 +748,17 @@ class Scratch3Mv2Blocks {
     let colour = this.colourToHex(args.COLOR);
     colour = colour.replace("#", "");
     const hexColour = Scratch3Mv2Blocks.hexToRgb(colour);
-    mv2Interface.send_REST(
-      `indicator/set?pixIdx=1;blinkType=breathe;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=${ms}`
-    );
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    connectedRaft.sendRestMessage(`indicator/set?pixIdx=1;blinkType=breathe;r=${hexColour.r};g=${hexColour.g};b=${hexColour.b};rateMs=${ms}`);
   }
 
   discoTurnOffBackColour(args, util) {
-    mv2Interface.send_REST(
-      `indicator/set?pixIdx=1;blinkType=off;r=0;g=0;b=0;rateMs=1000`
-    );
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    connectedRaft.sendRestMessage(`indicator/set?pixIdx=1;blinkType=off;r=0;g=0;b=0;rateMs=1000`);
   }
 
   discoChangeRegionColour(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const resolveTime = 200;
     let colour = this.colourToHex(args.COLOR);
     colour = colour.replace("#", "");
@@ -759,11 +770,10 @@ class Scratch3Mv2Blocks {
       boardtypeObj = { name: boardtypeStr, whoAmI: boardtypeStr };
     }
     const regionChoice = args.REGION;
-    this.addonNotConnectedAlert(boardtypeObj.name);
+    this.addonNotConnectedAlert(boardtypeObj.name, connectedRaft);
 
-    mv2Interface.send_REST(
-      `led/${boardtypeObj.name}/region/${regionChoice}/${colour}`
-    );
+    connectedRaft.sendRestMessage(`led/${boardtypeObj.name}/region/${regionChoice}/${colour}`);
+
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
@@ -773,60 +783,52 @@ class Scratch3Mv2Blocks {
     const cmdFoot = "led/LEDfoot/off";
     const cmdArm = "led/LEDarm/off";
 
-    mv2Interface.send_REST(cmdEyes);
-    mv2Interface.send_REST(cmdFoot);
-    mv2Interface.send_REST(cmdArm);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    connectedRaft.sendRestMessage(cmdEyes);
+    connectedRaft.sendRestMessage(cmdFoot);
+    connectedRaft.sendRestMessage(cmdArm);
     return new Promise((resolve) => setTimeout(resolve, resolveTime));
   }
 
   walk_fw(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    connectedRaft.sendRestMessage('');
     const moveTime = 1500;
     let steps = parseInt(args.STEPS);
     if (steps === 0 || steps < 0 || steps > 20) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 20!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 20!");
       return Promise.resolve();
     }
     const stepLength = 25;
-    console.log(
-      `traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`
-    );
-    mv2Interface.send_REST(
-      `traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`
-    );
+    connectedRaft.sendRestMessage(`traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 
   walk_bw(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 1500;
     let steps = parseInt(args.STEPS);
     if (steps === 0 || steps < 0 || steps > 20) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 20!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 20!");
       return Promise.resolve();
     }
     const stepLength = -25;
     console.log(
       `traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`
     );
-    mv2Interface.send_REST(
-      `traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`
-    );
+    connectedRaft.sendRestMessage(`traj/step/${steps}/?moveTime=${moveTime}&stepLength=${stepLength}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 
   walk(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let moveTime = parseFloat(args.MOVETIME) * 1000;
     moveTime = Math.min(Math.max(moveTime, 1), 10000);
     let stepLength = parseInt(args.STEPLEN);
     stepLength = Math.min(Math.max(stepLength, -50), 50);
     let steps = parseInt(args.STEPS);
     if (steps === 0 || steps < 0 || steps > 20) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 20!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 20!");
       return Promise.resolve();
     }
     let turn = parseInt(args.TURN);
@@ -834,19 +836,16 @@ class Scratch3Mv2Blocks {
     console.log(
       `traj/step/${steps}/?stepLength=${stepLength}&moveTime=${moveTime}&turn=${turn}`
     );
-    mv2Interface.send_REST(
-      `traj/step/${steps}/?stepLength=${stepLength}&moveTime=${moveTime}&turn=${turn}`
-    );
+    connectedRaft.sendRestMessage(`traj/step/${steps}/?stepLength=${stepLength}&moveTime=${moveTime}&turn=${turn}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 
   turn(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 1500;
     let steps = parseInt(args.STEPS);
     if (steps === 0 || steps < 0 || steps > 20) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 20!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 20!");
       return Promise.resolve();
     }
     let turn = 20;
@@ -857,124 +856,122 @@ class Scratch3Mv2Blocks {
     console.log(
       `traj/step/${steps}/?moveTime=${moveTime}&turn=${turn}&stepLength=1`
     );
-    mv2Interface.send_REST(
-      `traj/step/${steps}/?moveTime=${moveTime}&turn=${turn}&stepLength=1`
-    );
+    connectedRaft.sendRestMessage(`traj/step/${steps}/?moveTime=${moveTime}&turn=${turn}&stepLength=1`);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 
   stop(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const stopType = args.STOP_TYPE; // stop, stopAfterMove
     const moveTime = 500;
     const command = `robot/${stopType}`;
     console.log(command);
-    mv2Interface.send_REST(command);
+    connectedRaft.sendRestMessage(command);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   resume(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 500;
     const command = "robot/resume";
     console.log(command);
-    mv2Interface.send_REST(command);
+    connectedRaft.sendRestMessage(command);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   pause(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 500;
     const command = "robot/pause";
     console.log(command);
-    mv2Interface.send_REST(command);
+    connectedRaft.sendRestMessage(command);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   wiggle(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 4000;
     console.log(`traj/wiggle/1/?moveTime=${moveTime}`);
-    mv2Interface.send_REST(`traj/wiggle/1/?moveTime=${moveTime}`);
+    connectedRaft.sendRestMessage(`traj/wiggle/1/?moveTime=${moveTime}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   circle(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let moveTime = parseFloat(args.MOVETIME) * 1000;
     moveTime = Math.min(Math.max(moveTime, 1), 10000);
     const side = args.SIDE;
     console.log(`traj/circle/1/?moveTime=${moveTime}&side=${side}`);
-    mv2Interface.send_REST(`traj/circle/1/?moveTime=${moveTime}&side=${side}`);
+    connectedRaft.sendRestMessage(`traj/circle/1/?moveTime=${moveTime}&side=${side}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   kick(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 3000;
     const side = args.SIDE;
     console.log(`traj/kick/1/?moveTime=${moveTime}&side=${side}`);
-    mv2Interface.send_REST(`traj/kick/1/?moveTime=${moveTime}&side=${side}`);
+    connectedRaft.sendRestMessage(`traj/kick/1/?moveTime=${moveTime}&side=${side}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   lean(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let moveTime = parseFloat(args.MOVETIME) * 1000;
     moveTime = Math.min(Math.max(moveTime, 1), 10000);
     const side = args.SIDE;
     console.log(`traj/lean/1/?moveTime=${moveTime}&side=${side}`);
-    mv2Interface.send_REST(`traj/lean/1/?moveTime=${moveTime}&side=${side}`);
+    connectedRaft.sendRestMessage(`traj/lean/1/?moveTime=${moveTime}&side=${side}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   slide(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 1000;
     let steps = parseInt(args.STEPS);
     if (steps === 0 || steps < 0 || steps > 20) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 20!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 20!");
       return Promise.resolve();
     }
     const side = args.SIDE;
     console.log(`traj/sidestep/${steps}/?side= ${side}&moveTime=${moveTime}`);
-    mv2Interface.send_REST(
-      `traj/sidestep/${steps}/?side=${side}&moveTime=${moveTime}`
-    );
+    connectedRaft.sendRestMessage(`traj/sidestep/${steps}/?side=${side}&moveTime=${moveTime}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 
   slideMsLength(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const steps = parseInt(args.STEPS);
     const moveTimeInS = parseFloat(args.MOVETIME);
     const moveTime = moveTimeInS * 1000;
     const stepLength = parseInt(args.STEPLEN);
 
     if (moveTimeInS < 0.1 || moveTimeInS > 10) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive number between 0.1 and 10!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive number between 0.1 and 10!");
       return Promise.resolve();
     }
 
     if (stepLength < 1 || stepLength > 100) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 100!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 100!");
       return Promise.resolve();
     }
 
     if (steps === 0 || steps < 0 || steps > 20) {
-      mv2Interface.send_REST(
-        "notification/warn-message/Input must be a positive integer between 1 and 20!"
-      );
+      window.applicationManager.toaster.warn("Input must be a positive integer between 1 and 20!");
       return Promise.resolve();
     }
     const side = args.SIDE;
     const cmd = `traj/sidestep/${steps}/?side=${side}&moveTime=${moveTime}&stepLength=${stepLength}`;
     console.log(cmd);
-    mv2Interface.send_REST(cmd);
+    connectedRaft.sendRestMessage(`traj/sidestep/${steps}/?side=${side}&moveTime=${moveTime}&stepLength=${stepLength}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime * steps));
   }
 
   eyes(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const eyeCommand = args.COMMAND;
     console.log(`traj/${eyeCommand}`);
-    mv2Interface.send_REST(`traj/${eyeCommand}`);
+    connectedRaft.sendRestMessage(`traj/${eyeCommand}`);
     let moveTime = 1000;
     if (eyeCommand === "wiggleEyes") {
       moveTime = 2000;
@@ -983,9 +980,11 @@ class Scratch3Mv2Blocks {
   }
 
   moveLeg(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = 1000;
     const side = args.SIDE;
     const direction = args.DIRECTION;
+    connectedRaft.sendRestMessage(`traj/leg/1/?side=${side}&direction=${direction}&moveTime=${moveTime}`);
     console.log(
       `traj/joint/1/?jointID=${side}&angle=${direction}&moveTime=${moveTime}`
     );
@@ -996,20 +995,23 @@ class Scratch3Mv2Blocks {
   }
 
   liftFoot(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const side = args.SIDE;
     console.log(`traj/liftFoot/1/?side=${side}`);
-    mv2Interface.send_REST(`traj/liftFoot/1/?side=${side}`);
+    connectedRaft.sendRestMessage(`traj/liftFoot/1/?side=${side}`);
     return new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   lowerFoot(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const side = args.SIDE;
     console.log(`traj/lowerFoot/1/?side=${side}`);
-    mv2Interface.send_REST(`traj/lowerFoot/1/?side=${side}`);
+    connectedRaft.sendRestMessage(`traj/lowerFoot/1/?side=${side}`);
     return new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   moveJoint(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     let moveTime = parseFloat(args.MOVETIME) * 1000;
     moveTime = Math.min(Math.max(moveTime, 1), 10000);
     const jointID = args.SERVOCHOICE;
@@ -1017,16 +1019,15 @@ class Scratch3Mv2Blocks {
     console.log(
       `traj/joint/1/?jointID=${jointID}&angle=${angle}&moveTime=${moveTime}`
     );
-    mv2Interface.send_REST(
-      `traj/joint/1/?jointID=${jointID}&angle=${angle}&moveTime=${moveTime}`
-    );
+    connectedRaft.sendRestMessage(`traj/joint/1/?jointID=${jointID}&angle=${angle}&moveTime=${moveTime}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   wave(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const side = args.SIDE;
     console.log(`traj/wave/1/?side=${side}`);
-    mv2Interface.send_REST(`traj/wave/1/?side=${side}`);
+    connectedRaft.sendRestMessage(`traj/wave/1/?side=${side}`);
     return new Promise((resolve) => setTimeout(resolve, 2500));
   }
 
@@ -1038,39 +1039,44 @@ class Scratch3Mv2Blocks {
     } */
 
   dance(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     console.log("Let's dance!");
     const moveTime = 3000;
     let marty_cmd = `traj/dance/1?moveTime=${moveTime}`;
-    mv2Interface.send_REST(marty_cmd);
+    connectedRaft.sendRestMessage(marty_cmd);
     console.log(marty_cmd);
 
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   standStraight(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = parseFloat(args.MOVETIME) * 1000;
     // minimum?
     console.log(`traj/standStraight/?moveTime=${moveTime}`);
-    mv2Interface.send_REST(`traj/standStraight/?moveTime=${moveTime}`);
+    connectedRaft.sendRestMessage(`traj/standStraight/?moveTime=${moveTime}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   hold(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     const moveTime = parseFloat(args.MOVETIME) * 1000;
     console.log(`traj/hold/?moveTime=${moveTime}`);
-    mv2Interface.send_REST(`traj/hold/?moveTime=${moveTime}`);
+    connectedRaft.sendRestMessage(`traj/hold/?moveTime=${moveTime}`);
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
-  gripperArmMove(keypoints, name = null, enable = true) {
+  gripperArmMove(util, keypoints, name = null, enable = true) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return false;
     // keypoints should be array of [angle, time]
     // angle in degrees, time in ms
     if (!name) {
-      name = this.addonNameByWhoAmI(RIC_WHOAMI_TYPE_CODE_ADDON_GRIPSERVO);
-      if (!name)
-        return mv2Interface.send_REST(
-          "notification/warn-message/Gripper arm not found! Please attach a gripper arm to use this block."
-        );
+      name = this.addonNameByWhoAmI(connectedRaft, RIC_WHOAMI_TYPE_CODE_ADDON_GRIPSERVO);
+      if (!name) {
+        window.applicationManager.toaster.warn("Gripper arm not found! Please attach a gripper arm to use this block.");
+      }
+      return;
     }
     const numKeypoints = keypoints.length;
     if (!numKeypoints) return false;
@@ -1085,11 +1091,11 @@ class Scratch3Mv2Blocks {
 
     if (enable) {
       // enable motor
-      mv2Interface.send_REST(`elem/${name}/json?cmd=raw&hexWr=2001`);
+      connectedRaft.sendRestMessage(`elem/${name}/json?cmd=raw&hexWr=2001`);
     }
 
     // send movement command
-    mv2Interface.send_REST(`elem/${name}/json?cmd=raw&hexWr=${cmdStr}`);
+    connectedRaft.sendRestMessage(`elem/${name}/json?cmd=raw&hexWr=${cmdStr}`);
     return true;
   }
 
@@ -1112,13 +1118,12 @@ class Scratch3Mv2Blocks {
       keypoints = [[0, moveTime]];
     }
 
-    if (!this.gripperArmMove(keypoints)) return false;
+    if (!this.gripperArmMove(util, keypoints)) return false;
 
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
 
   gripperArmTimed(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
     var moveTime = parseFloat(args.MOVETIME) * 1000;
     //set upper threshold 65.5s as ffff is 65535
     if (moveTime > 65500) {
@@ -1139,7 +1144,7 @@ class Scratch3Mv2Blocks {
       keypoints = [[0, moveTime]];
     }
 
-    if (!this.gripperArmMove(keypoints)) return false;
+    if (!this.gripperArmMove(util, keypoints)) return false;
 
     return new Promise((resolve) => setTimeout(resolve, moveTime));
   }
@@ -1147,58 +1152,61 @@ class Scratch3Mv2Blocks {
   // SENSORS
 
   position(args, util) {
-    //console.log("Report a servo's current!");
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
     let servoChoice = parseInt(args.SERVOCHOICE);
     if (Number.isNaN(servoChoice) || servoChoice < 0 || servoChoice > 8) {
       servoChoice = 0;
     }
-    const servoObj = JSON.parse(mv2Interface.servos);
+    const servoObj = connectedRaft.raftStateInfo.smartServos;
     return servoObj.smartServos[servoChoice].pos;
   }
 
   current(args, util) {
-    //console.log("Report a servo's current!");
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
     let servoChoice = parseInt(args.SERVOCHOICE);
     if (Number.isNaN(servoChoice) || servoChoice < 0 || servoChoice > 8) {
       servoChoice = 0;
     }
-    const servoObj = JSON.parse(mv2Interface.servos);
+    const servoObj = connectedRaft.raftStateInfo.smartServos;
     if (!servoObj || !servoObj.smartServos || !servoObj.smartServos[servoChoice]) return 0;
     return servoObj.smartServos[servoChoice].current || 0;
   }
 
   accelerometerX(args, util) {
-    //console.log('Report accelerometer reading!');
-    const accelObj = JSON.parse(mv2Interface.accel);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const accelObj = connectedRaft.raftStateInfo.imuData;
     if (!accelObj || !accelObj.accel || !accelObj.accel.x) return 0;
     const xAccel = accelObj.accel.x;
     return xAccel;
   }
 
   accelerometerY(args, util) {
-    //console.log('Report accelerometer reading!');
-    const accelObj = JSON.parse(mv2Interface.accel);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const accelObj = connectedRaft.raftStateInfo.imuData;
     if (!accelObj || !accelObj.accel || !accelObj.accel.y) return 0;
     const yAccel = accelObj.accel.y;
     return yAccel;
   }
 
   accelerometerZ(args, util) {
-    //console.log('Report accelerometer reading!');
-    const accelObj = JSON.parse(mv2Interface.accel);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const accelObj = connectedRaft.raftStateInfo.imuData;
     if (!accelObj || !accelObj.accel || !accelObj.accel.z) return 0;
     const zAccel = accelObj.accel.z;
     return zAccel;
   }
 
   magnetometerX(args, util) {
-    //console.log('Report magnetometer reading!');
-    const magObj = JSON.parse(mv2Interface.magneto);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const magObj = connectedRaft.raftStateInfo.imuData;
     if ((!magObj || !magObj.magneto || !magObj.magneto.x)) {
-      if (!hasMagnetometerNotificationBeenShown) {
-        mv2Interface.send_REST("notification/warn-message/Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
-        hasMagnetometerNotificationBeenShown = true;
-      }
+      window.applicationManager.toaster.warn("Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
       return 0;
     }
     const xMag = magObj.magneto.x;
@@ -1206,13 +1214,11 @@ class Scratch3Mv2Blocks {
   }
 
   magnetometerY(args, util) {
-    //console.log('Report magnetometer reading!');
-    const magObj = JSON.parse(mv2Interface.magneto);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const magObj = connectedRaft.raftStateInfo.imuData;
     if ((!magObj || !magObj.magneto || !magObj.magneto.y)) {
-      if (!hasMagnetometerNotificationBeenShown) {
-        mv2Interface.send_REST("notification/warn-message/Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
-        hasMagnetometerNotificationBeenShown = true;
-      }
+      window.applicationManager.toaster.warn("Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
       return 0;
     }
     const yMag = magObj.magneto.y;
@@ -1220,13 +1226,11 @@ class Scratch3Mv2Blocks {
   }
 
   magnetometerZ(args, util) {
-    //console.log('Report magnetometer reading!');
-    const magObj = JSON.parse(mv2Interface.magneto);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const magObj = connectedRaft.raftStateInfo.imuData;
     if ((!magObj || !magObj.magneto || !magObj.magneto.z)) {
-      if (!hasMagnetometerNotificationBeenShown) {
-        mv2Interface.send_REST("notification/warn-message/Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
-        hasMagnetometerNotificationBeenShown = true;
-      }
+      window.applicationManager.toaster.warn("Magnetometer Unavailable! This feature is supported only by newer Marty models equipped with this sensor.");
       return 0;
     }
     const zMag = magObj.magneto.z;
@@ -1234,14 +1238,14 @@ class Scratch3Mv2Blocks {
   }
 
   proximity(args, util) {
-    //console.log('Report proximity!');
     // TODO: Do we have a proximity sensor yet?
     return;
   }
 
   batteryLevel(args, util) {
-    //console.log('Report the battery percentage!');
-    return Math.round(mv2Interface.battRemainCapacityPercent);
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    return Math.round(connectedRaft.raftStateInfo.power.powerStatus.battRemainCapacityPercent);
   }
 
   getObstacle(addon) {
@@ -1255,58 +1259,62 @@ class Scratch3Mv2Blocks {
   }
 
   obstacleSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     const sensorChoice = args.SENSORCHOICE;
 
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        return this.getObstacle(addon);
+        return this.getObstacle(addon).toString();
       }
     }
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
-        return this.getObstacle(addon);
+        return this.getObstacle(addon).toString();
       }
     }
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
-        return this.getObstacle(addon);
+        return this.getObstacle(addon).toString();
       }
     }
-    return false;
+    return "false";
   }
 
   getGround(addon) {
     for (const addonValKey in addon.vals) {
       const addonVal = addon.vals[addonValKey];
       if (addonValKey.includes("Air")) {
-        return !addonVal;
+        return (!addonVal).toString();
       }
     }
-    return false;
+    return "false";
   }
 
   groundSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    if (!connectedRaft) return 0;
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     const sensorChoice = args.SENSORCHOICE;
 
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
-        return this.getGround(addon);
+        return this.getGround(addon).toString();
       }
     }
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_IRFOOT) {
-        return this.getGround(addon);
+        return this.getGround(addon).toString();
       }
     }
     for (const addon of addons) {
       if (addon.whoAmI === RIC_WHOAMI_TYPE_CODE_ADDON_COLOUR) {
-        return this.getGround(addon);
+        return this.getGround(addon).toString();
       }
     }
-
-    return false;
+    window.applicationManager.toaster.warn("Ground sensor not found! Please attach a ground sensor to use this block.");
+    return "false";
   }
 
   getHueChroma(r, g, b) {
@@ -1412,7 +1420,8 @@ class Scratch3Mv2Blocks {
   }
 
   colourSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     // If the user has specified a sensor, use that
     for (const addon of addons) {
       if (addon.name === args.SENSORCHOICE) {
@@ -1444,7 +1453,8 @@ class Scratch3Mv2Blocks {
   }
 
   colourSenseHEX(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     // If the user has specified a sensor, use that
     for (const addon of addons) {
       if (addon.name === args.SENSORCHOICE) {
@@ -1475,7 +1485,8 @@ class Scratch3Mv2Blocks {
   }
 
   colourSenseRaw(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     const sensorChoice = args.SENSORCHOICE;
     for (const addon of addons) {
       if (addon.name === sensorChoice) {
@@ -1491,7 +1502,8 @@ class Scratch3Mv2Blocks {
   }
 
   distanceSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     let dsVal = null;
     for (let addon of addons) {
       if ("DistanceSensorReading" in addon.vals) {
@@ -1504,7 +1516,8 @@ class Scratch3Mv2Blocks {
       }
     }
     if (dsVal !== null) return dsVal;
-    return false;
+    window.applicationManager.toaster.warn("Distance sensor not found! Please attach a distance sensor to use this block.");
+    return null;
   }
 
   getLight(addon, args) {
@@ -1519,7 +1532,8 @@ class Scratch3Mv2Blocks {
   }
 
   lightSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     const sensorChoice = args.SENSORCHOICE;
 
     for (const addon of addons) {
@@ -1532,6 +1546,8 @@ class Scratch3Mv2Blocks {
         return this.getLight(addon, args);
       }
     }
+
+    window.applicationManager.toaster.warn("Light sensor not found! Please attach a light sensor to use this block.");
     return null;
   }
 
@@ -1547,7 +1563,8 @@ class Scratch3Mv2Blocks {
   }
 
   noiseSense(args, util) {
-    const addons = JSON.parse(mv2Interface.addons).addons;
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    const addons = connectedRaft.raftStateInfo.addOnInfo.addons || [];
     for (let addon of addons) {
       if (addon.name === args.SENSORCHOICE) {
         return this.getNoise(addon);
@@ -1558,6 +1575,7 @@ class Scratch3Mv2Blocks {
         return this.getNoise(addon);
       }
     }
+    window.applicationManager.toaster.warn("Noise sensor not found! Please attach a noise sensor to use this block.");
     return null;
   }
 
@@ -1572,10 +1590,11 @@ class Scratch3Mv2Blocks {
   // }
 
   playNote(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      return mv2Interface.send_REST("notification/fw-needs-update");
+      return window.applicationManager.toaster.warn("Firmware update required to use this block.");
     }
     const soundItem = JSON.parse(args.NOTES_MENU);
     const md5ext = soundItem.md5ext;
@@ -1599,8 +1618,9 @@ class Scratch3Mv2Blocks {
         const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
           mp3SoundBuffers
         );
-        mv2Interface.streamAudio(
+        connectedRaft.streamAudio(
           mp3SoundData,
+          false,
           soundPlayer.buffer.duration * 1000
         );
         soundPlayer.setPlaybackRate(1);
@@ -1618,19 +1638,21 @@ class Scratch3Mv2Blocks {
   }
 
   stopSounds(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      return mv2Interface.send_REST("notification/fw-needs-update");
+      return window.applicationManager.toaster.warn("Firmware update required to use this block.");
     }
-    mv2Interface.streamAudio([0], 0, true);
+    connectedRaft.streamAudio([0], true, 0);
   }
 
   playTone(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      return mv2Interface.send_REST("notification/fw-needs-update");
+      return window.applicationManager.toaster.warn("Firmware update required to use this block.");
     }
     const hz1 = args["HZ1"];
     const hz2 = args["HZ2"];
@@ -1662,20 +1684,21 @@ class Scratch3Mv2Blocks {
       const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
         mp3SoundBuffers
       );
-      mv2Interface.streamAudio(mp3SoundData, renderedBuffer.duration * 1000);
+      connectedRaft.streamAudio(mp3SoundData, false, renderedBuffer.duration * 1000);
     };
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000 + 800));
   }
 
   playSoundUntilDone(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     // if marty is not connected, play sound from device
-    if (!mv2Interface.isConnected) {
+    if (!connectedRaft) {
       return window.vm.runtime._primitives.sound_playuntildone(args, util);
     }
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      return mv2Interface.send_REST("notification/fw-needs-update");
+      return window.applicationManager.toaster.warn("Firmware update required to use this block.");
     }
     // get the duration of the sound
     // add a constant representing the time it'll get
@@ -1707,14 +1730,15 @@ class Scratch3Mv2Blocks {
   }
 
   playSound(args, util) {
+    const connectedRaft = getRaftUsingTargetId(util.target.id);
     // if marty is not connected, play sound from device
-    if (!mv2Interface.isConnected) {
+    if (!connectedRaft) {
       return window.vm.runtime._primitives.sound_play(args, util);
     }
     if (
-      !isVersionGreater(mv2Interface.getMartyFwVersion(), LED_EYES_FW_VERSION)
+      !isVersionGreater(connectedRaft.getRaftVersion(), LED_EYES_FW_VERSION)
     ) {
-      return mv2Interface.send_REST("notification/fw-needs-update");
+      return window.applicationManager.toaster.warn("Firmware update required to use this block.");
     }
     const index = this._getSoundIndex(args.SOUND_MENU, util);
     if (index >= 0) {
@@ -1758,10 +1782,10 @@ class Scratch3Mv2Blocks {
           const mp3SoundData = Scratch3Mv2Blocks.convertMp3BufferToData(
             mp3SoundBuffers
           );
-          mv2Interface.streamAudio(
+          connectedRaft.streamAudio(
             mp3SoundData,
+            true,
             renderedBuffer.duration * 1000,
-            true
           );
           // play the mp3 data on the browser
           // Scratch3Mv2Blocks._testMp3SoundLocally(mp3SoundData);
@@ -1778,7 +1802,7 @@ class Scratch3Mv2Blocks {
           (target.volume * .6) / 100 // decrease volume by 40% to make it sound similar to the text-to-speech volume
         );
       } else {
-        mv2Interface.send_REST("notification/warn-message/Something went wrong. Please try again.");
+        window.applicationManager.toaster.warn("Something went wrong. Please try again.");
       }
       return new Promise((resolve) => {
         async function checkIfStreamingStartFinished() {
@@ -1786,14 +1810,14 @@ class Scratch3Mv2Blocks {
           await new Promise((rslv) => setTimeout(rslv, 50));
           // as long as isStreamStarting() returns true, we keep checking
           // when it's false, we know stream onset has finished and so we resolve
-          if (mv2Interface.isStreamStarting)
-            return checkIfStreamingStartFinished();
+          // if (mv2Interface.isStreamStarting)
+          //   return checkIfStreamingStartFinished();
           return resolve();
         }
         checkIfStreamingStartFinished();
       });
     } else {
-      mv2Interface.send_REST("notification/warn-message/Something went wrong. Please try again.");
+      window.applicationManager.toaster.warn("Something went wrong. Please try again.");
     }
   }
 
@@ -2224,4 +2248,31 @@ class VolumeEffect {
   }
 }
 
+function getRaftUsingTargetId(targetId) {
+  const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+  const raft = window.applicationManager.connectedRafts[raftId];
+  return raft;
+}
+
+function isAddonConnected(addonTitle, addons = []) {
+  return addons.some(
+    (addon) => addon.whoAmI === addonTitle || addon.name === addonTitle
+  );
+}
+
+function getNearestNoteFromFrequency(frequency) {
+
+  let closestNote = null;
+  let smallestDifference = Infinity;
+
+  noteFrequencies.forEach((note) => {
+    const difference = Math.abs(frequency - note.freq);
+    if (difference < smallestDifference) {
+      closestNote = note.note;
+      smallestDifference = difference;
+    }
+  });
+
+  return closestNote;
+}
 module.exports = Scratch3Mv2Blocks;

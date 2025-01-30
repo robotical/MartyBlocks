@@ -110,21 +110,21 @@ class NextPrevButtons extends React.Component {
 
         return (
             <div className={nextPrevButtonsContainerClass}>
-                <button className={prevButtonClass} onClick={onPrevStep} title="Previous">
+                <button className={prevButtonClass} onClick={onPrevStep} title="Previous" id="lesson-prevStep-btn">
                     <img draggable={false} src={isRtl ? rightArrow : leftArrow} />
                 </button>
 
-                <button onClick={onAccessibilityClick} className={accessibilityButtonClass} title="Accessibility">
+                <button onClick={onAccessibilityClick} className={accessibilityButtonClass} title="Accessibility" id="lesson-accessibility-btn">
                     <img draggable={false} src={accessibilityIcon} />
                 </button>
-                <button className={audioButtonClass} onClick={onReadOutLoudClick} title="Read out loud">
+                <button className={audioButtonClass} onClick={onReadOutLoudClick} title="Read out loud" id="lesson-readOutLoud-btn">
                     <img draggable={false} src={audioIcon} />
                 </button>
-                <button className={hintButtonClass} onClick={this.onHintClick} title="Hint">
+                <button className={hintButtonClass} onClick={this.onHintClick} title="Hint" id="lesson-hint-btn">
                     <span>?</span>
                 </button>
 
-                <button className={nextButtonClass} onClick={onNextStep} title={isLastStep ? "More Activities" : "Next"}>
+                <button className={nextButtonClass} onClick={onNextStep} title={isLastStep ? "More Activities" : "Next"} id="lesson-nextStep-btn">
                     <img draggable={false} src={isLastStep ? plusIcon : rightArrow} />
                 </button>
             </div>

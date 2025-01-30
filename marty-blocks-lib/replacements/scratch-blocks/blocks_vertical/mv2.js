@@ -12,14 +12,14 @@ console.log("Setting up Blockly MartyBlocks");
 
 Blockly.Blocks["mv2_getReady"] = {
   /**
-   * Block to make Marty freeze
+   * Block to make Marty get ready
    * @this Blockly.Block
    */
   init: function () {
     this.jsonInit({
       message0: Blockly.Msg.MV2_GETREADY,
       category: Blockly.Categories.control,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -47,7 +47,7 @@ Blockly.Blocks["mv2_walk_fw"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_WALK_FW,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -79,7 +79,7 @@ Blockly.Blocks["mv2_walk_bw"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_WALK_BW,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -111,7 +111,7 @@ Blockly.Blocks["mv2_walk"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_WALK,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -155,7 +155,7 @@ Blockly.Blocks["mv2_turn"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_TURN,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -195,7 +195,7 @@ Blockly.Blocks["mv2_wiggle"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_WIGGLE,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -223,7 +223,7 @@ Blockly.Blocks["mv2_circle"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_CIRCLE,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -263,7 +263,7 @@ Blockly.Blocks["mv2_kick"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_KICK,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -303,7 +303,7 @@ Blockly.Blocks["mv2_slide"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SLIDE,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -343,7 +343,7 @@ Blockly.Blocks["mv2_slideMsLength"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SLIDE_MS_LENGTH,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -391,7 +391,7 @@ Blockly.Blocks["mv2_lean"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_LEAN,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -433,7 +433,7 @@ Blockly.Blocks["mv2_eyes"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_EYES,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -472,7 +472,7 @@ Blockly.Blocks["mv2_moveLeg"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_MOVELEG,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -516,7 +516,7 @@ Blockly.Blocks["mv2_liftFoot"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_LIFTFOOT,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -552,7 +552,7 @@ Blockly.Blocks["mv2_lowerFoot"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_LOWERFOOT,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -588,7 +588,7 @@ Blockly.Blocks["mv2_moveJoint"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_MOVEJOINT,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -639,7 +639,7 @@ Blockly.Blocks["mv2_wave"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_WAVE,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -675,7 +675,7 @@ Blockly.Blocks["mv2_stop"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_STOP,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -711,7 +711,7 @@ Blockly.Blocks["mv2_pause"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_PAUSE,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -739,7 +739,7 @@ Blockly.Blocks["mv2_resume"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_RESUME,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -767,7 +767,7 @@ Blockly.Blocks["mv2_dance"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DANCE,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -795,7 +795,7 @@ Blockly.Blocks["mv2_standStraight"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_STANDSTRAIGHT,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -827,7 +827,7 @@ Blockly.Blocks["mv2_hold"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_HOLD,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -859,7 +859,7 @@ Blockly.Blocks["mv2_gripperArmBasic"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_GRIPPERARMBASIC,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -895,7 +895,7 @@ Blockly.Blocks["mv2_gripperArmTimed"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_GRIPPERARMTIMED,
       category: Blockly.Categories.motion,
-      colour: 164,
+      colour: "#3373cc",
       args0: [
         {
           type: "field_image",
@@ -937,7 +937,7 @@ Blockly.Blocks["mv2_discoChangeBlockPattern"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DISCOCHANGEBLOCKPATTERN,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -979,7 +979,7 @@ Blockly.Blocks["mv2_LEDEyesColour"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_CHANGELEDEYESBLOCK,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1015,7 +1015,7 @@ Blockly.Blocks["mv2_LEDEyesColour_SpecificLED"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_CHANGESPECIFICLEDEYESBLOCK,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1056,7 +1056,7 @@ Blockly.Blocks["mv2_LEDEyesColourLEDs"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_CHANGELEDSEYESBLOCK,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1092,7 +1092,7 @@ Blockly.Blocks["mv2_turnAllLEDsOff"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_TURNOFFALLLEDS,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1111,6 +1111,26 @@ Blockly.Blocks["mv2_turnAllLEDsOff"] = {
   },
 };
 
+Blockly.Blocks["nearest_note"] = {
+  /**
+   * Block for getting the nearest note to a given frequency
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.NEAREST_NOTE,
+      category: Blockly.Categories.looks,
+      colour: "#d65cd6",
+      args0: [
+        {
+          type: "input_value",
+          name: "FREQUENCY",
+        },
+      ],
+      extensions: ["output_number"],
+    });
+  },
+};
 Blockly.Blocks["mv2_RGBOperator"] = {
   /**
    * Block for RGB operator.
@@ -1120,19 +1140,8 @@ Blockly.Blocks["mv2_RGBOperator"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_RGBOPERATOR,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/marty-small.svg",
-          width: 40,
-          height: 40,
-        },
-        {
-          type: "field_vertical_separator",
-        },
         {
           type: "input_value",
           name: "NUM_R",
@@ -1158,19 +1167,8 @@ Blockly.Blocks["mv2_HSLOperator"] = {
   init: function () {
     this.jsonInit({
       message0: Blockly.Msg.MV2_HSLOPERATOR,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/marty-small.svg",
-          width: 40,
-          height: 40,
-        },
-        {
-          type: "field_vertical_separator",
-        },
         {
           type: "input_value",
           name: "NUM_H",
@@ -1200,7 +1198,7 @@ Blockly.Blocks["mv2_discoChangeBackColour"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DISCOCHANGEBACKCOLOUR,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1234,7 +1232,7 @@ Blockly.Blocks["mv2_discoSetBreatheBackColour"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DISCOSETBREATHEBACKCOLOUR,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1271,7 +1269,7 @@ Blockly.Blocks["mv2_discoTurnOffBackColour"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DISCOTURNOFFBACKCOLOUR,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1301,7 +1299,7 @@ Blockly.Blocks["mv2_discoChangeRegionColour"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DISCOCHANGEREGIONCOLOUR,
       category: Blockly.Categories.looks,
-      colour: 164,
+      colour: "#9966ff",
       args0: [
         {
           type: "field_image",
@@ -1363,12 +1361,12 @@ Blockly.Blocks["mv2_discoChangeRegionColour"] = {
 //           "type": "field_dropdown",
 //           "name": "SOUND",
 //           "options": [
-//             [Blockly.Msg.DROPDOWN_OPTION_CONFUSIONSOUND, 'confused.raw'],
-//             [Blockly.Msg.DROPDOWN_OPTION_DISBELIEFSOUND, 'disbelief.raw'],
-//             [Blockly.Msg.DROPDOWN_OPTION_EXCITEMENTSOUND, 'excited.raw'],
-//             [Blockly.Msg.DROPDOWN_OPTION_NOWAYSOUND, 'no_way.raw'],
-//             [Blockly.Msg.DROPDOWN_OPTION_NOSOUND, 'no.raw'],
-//             [Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND, 'whistle.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_CONFUSIONSOUND, 'confused.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_DISBELIEFSOUND, 'disbelief.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_EXCITEMENTSOUND, 'excited.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_NOWAYSOUND, 'no_way.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_NOSOUND, 'no.raw'],
+// [Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND, 'whistle.raw'],
 //           ]
 //         },
 //       ],
@@ -1386,7 +1384,7 @@ Blockly.Blocks["mv2_playSound"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_PLAYSOUND,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -1418,7 +1416,7 @@ Blockly.Blocks["mv2_playSoundUntilDone"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_PLAYSOUNDUNTILDONE,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -1450,7 +1448,7 @@ Blockly.Blocks["mv2_playNote"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_PLAYNOTE,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2294,7 +2292,7 @@ Blockly.Blocks["mv2_playTone"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_PLAYTONE,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2334,7 +2332,7 @@ Blockly.Blocks["mv2_stopSounds"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_STOPSOUNDS,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2362,7 +2360,7 @@ Blockly.Blocks["mv2_changePitchEffect"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SOUND_CHANGEEFFECTBY,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2399,7 +2397,7 @@ Blockly.Blocks["mv2_setPitchEffect"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SOUND_SETEFFECTO,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2436,7 +2434,7 @@ Blockly.Blocks["mv2_clearSoundEffects"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SOUND_CLEAREFFECTS,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2464,7 +2462,7 @@ Blockly.Blocks["mv2_changeVolume"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SOUND_CHANGEVOLUMEBY,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2496,7 +2494,7 @@ Blockly.Blocks["mv2_setVolume"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_SOUND_SETVOLUMETO,
       category: Blockly.Categories.sound,
-      colour: 164,
+      colour: "#d65cd6",
       args0: [
         {
           type: "field_image",
@@ -2530,7 +2528,7 @@ Blockly.Blocks["BatteryPercentage"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_BATTERYLEVEL,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2539,7 +2537,7 @@ Blockly.Blocks["BatteryPercentage"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2559,7 +2557,7 @@ Blockly.Blocks["ServoPosition"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_POSITION,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -2569,7 +2567,7 @@ Blockly.Blocks["ServoPosition"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2594,7 +2592,7 @@ Blockly.Blocks["ServoCurrent"] = {
       message0: Blockly.Msg.MV2_CURRENT,
       category: Blockly.Categories.sensing,
       type: "dynamic_dropdown",
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2603,7 +2601,7 @@ Blockly.Blocks["ServoCurrent"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2627,7 +2625,7 @@ Blockly.Blocks["XAxisMovement"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_ACCELEROMETERX,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2636,7 +2634,7 @@ Blockly.Blocks["XAxisMovement"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2656,7 +2654,7 @@ Blockly.Blocks["YAxisMovement"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_ACCELEROMETERY,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2665,7 +2663,7 @@ Blockly.Blocks["YAxisMovement"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2685,7 +2683,7 @@ Blockly.Blocks["ZAxisMovement"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_ACCELEROMETERZ,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2694,7 +2692,7 @@ Blockly.Blocks["ZAxisMovement"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2714,7 +2712,7 @@ Blockly.Blocks["XAxisMagnetometer"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_MAGNETOMETERX,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2723,7 +2721,7 @@ Blockly.Blocks["XAxisMagnetometer"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2743,7 +2741,7 @@ Blockly.Blocks["YAxisMagnetometer"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_MAGNETOMETERY,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2752,7 +2750,7 @@ Blockly.Blocks["YAxisMagnetometer"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2772,7 +2770,7 @@ Blockly.Blocks["ZAxisMagnetometer"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_MAGNETOMETERZ,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2781,7 +2779,7 @@ Blockly.Blocks["ZAxisMagnetometer"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2801,7 +2799,7 @@ Blockly.Blocks["mv2_obstaclesense"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_OBSTACLE,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -2811,7 +2809,7 @@ Blockly.Blocks["mv2_obstaclesense"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2835,7 +2833,7 @@ Blockly.Blocks["mv2_groundsense"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_GROUND,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -2845,7 +2843,7 @@ Blockly.Blocks["mv2_groundsense"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2869,7 +2867,7 @@ Blockly.Blocks["mv2_coloursense"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_COLOUR,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -2879,7 +2877,7 @@ Blockly.Blocks["mv2_coloursense"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2903,7 +2901,7 @@ Blockly.Blocks["mv2_coloursense_hex"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_COLOUR_HEX,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -2913,7 +2911,7 @@ Blockly.Blocks["mv2_coloursense_hex"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2937,7 +2935,7 @@ Blockly.Blocks["mv2_coloursenseraw"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_COLOUR_RAW,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -2947,7 +2945,7 @@ Blockly.Blocks["mv2_coloursenseraw"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -2981,7 +2979,7 @@ Blockly.Blocks["mv2_distancesense"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_DISTANCE,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -2990,7 +2988,7 @@ Blockly.Blocks["mv2_distancesense"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -3010,7 +3008,7 @@ Blockly.Blocks["mv2_lightsense"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_LIGHT_SENSOR,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -3020,7 +3018,7 @@ Blockly.Blocks["mv2_lightsense"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -3053,7 +3051,7 @@ Blockly.Blocks["mv2_noisesense"] = {
     this.jsonInit({
       message0: Blockly.Msg.MV2_NOISE_SENSOR,
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       type: "dynamic_dropdown",
       checkboxInFlyout: true,
       args0: [
@@ -3063,7 +3061,7 @@ Blockly.Blocks["mv2_noisesense"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -3089,7 +3087,7 @@ Blockly.Blocks["mv2_demo_sensor"] = {
     this.jsonInit({
       message0: "%1 %2 Demo sensor",
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       checkboxInFlyout: true,
       args0: [
         {
@@ -3098,7 +3096,7 @@ Blockly.Blocks["mv2_demo_sensor"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",
@@ -3118,7 +3116,7 @@ Blockly.Blocks["mv2_set_demo_sensor"] = {
     this.jsonInit({
       message0: "%1 %2 Set Demo sensor to %3",
       category: Blockly.Categories.sensing,
-      colour: 164,
+      colour: "#4cbfe6",
       args0: [
         {
           type: "field_image",
@@ -3126,7 +3124,7 @@ Blockly.Blocks["mv2_set_demo_sensor"] = {
             Blockly.mainWorkspace.options.pathToMedia +
             "extensions/marty-small.svg",
           width: 40,
-          height: 40,
+          height: 30,
         },
         {
           type: "field_vertical_separator",

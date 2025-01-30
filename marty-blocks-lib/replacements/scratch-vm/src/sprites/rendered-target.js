@@ -1121,6 +1121,8 @@ class RenderedTarget extends Target {
             id: this.id,
             name: this.getName(),
             isStage: this.isStage,
+            targetType: this.targetType,
+            raftType: this.raftType,
             x: this.x,
             y: this.y,
             size: this.size,

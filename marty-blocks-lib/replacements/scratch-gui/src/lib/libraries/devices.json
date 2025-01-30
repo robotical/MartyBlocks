@@ -1,0 +1,88 @@
+[
+  {
+    "name": "Marty",
+    "tags": ["marty", "robot"],
+    "isStage": false,
+    "targetType": "DEVICE",
+    "raftType": "Marty",
+    "variables": {},
+    "rawURL": "https://roboticalpublic.s3.eu-west-1.amazonaws.com/8e41346f9e386948096815a9b5d6b3e0.svg",
+    "costumes": [
+      {
+        "assetId": "8e41346f9e386948096815a9b5d6b3e0",
+        "name": "Marty",
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "rotationCenterX": 48,
+        "rotationCenterY": 50
+      }
+    ],
+    "sounds": [
+      {
+        "name": "Celebrate",
+        "assetId": "celebrate",
+        "md5ext": "celebrate.wav",
+        "dataFormat": "wav"
+      },
+      {
+        "name": "Confusion",
+        "assetId": "confused",
+        "md5ext": "confused.wav",
+        "dataFormat": "wav"
+      },
+      {
+        "name": "Disbelief",
+        "assetId": "disbelief",
+        "dataFormat": "wav",
+        "md5ext": "disbelief.wav"
+      },
+      {
+        "name": "Excited",
+        "assetId": "excited",
+        "dataFormat": "wav",
+        "md5ext": "excited.wav"
+      },
+      {
+        "name": "No Way!",
+        "assetId": "no_way",
+        "dataFormat": "wav",
+        "md5ext": "no_way.wav"
+      },
+      {
+        "name": "No!",
+        "assetId": "no",
+        "dataFormat": "wav",
+        "md5ext": "no.wav"
+      },
+      {
+        "name": "Whistle",
+        "assetId": "whistle",
+        "dataFormat": "wav",
+        "md5ext": "whistle.wav"
+      }
+    ],
+    "blocks": {}
+  },
+  {
+    "name": "Cog",
+    "tags": ["cog", "robot"],
+    "isStage": false,
+    "targetType": "DEVICE",
+    "raftType": "Cog",
+    "variables": {},
+    "rawURL": "https://roboticalpublic.s3.eu-west-1.amazonaws.com/8e41346f9e386948096815a9b5d6b3e2.svg",
+    "costumes": [
+      {
+        "assetId": "8e41346f9e386948096815a9b5d6b3e2",
+        "name": "Cog",
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "rotationCenterX": 48,
+        "rotationCenterY": 50
+      }
+    ],
+    "sounds": [
+    ],
+    "blocks": {}
+  }
+]

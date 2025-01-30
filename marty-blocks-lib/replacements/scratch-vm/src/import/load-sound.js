@@ -97,7 +97,6 @@ const loadSound = function (sound, runtime, soundBank) {
     )
         .then(soundAsset => {
             sound.asset = soundAsset;
-
             if (!soundAsset) {
                 log.warn('Failed to find sound data: ', sound.md5);
                 return handleSoundLoadError(sound, runtime, soundBank);

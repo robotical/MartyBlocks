@@ -10,10 +10,13 @@ import MCH01 from './ML-lessons/MCH01-HappyOrSad';
 import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
 import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 
+import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
+
 export default {
     ...MCH01,
     ...MCH02,
     ...MCH03,
+    ...cogAndMartyTutorial,
     "mm-create-model": {
         name: (
             <FormattedMessage

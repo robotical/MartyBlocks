@@ -178,7 +178,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.createColourButton_ = function (fill)
     y: "0px",
     height: matrixSize * 1.5,
     width: matrixSize * 1.8,
-    fill: "#5ba591"
+    fill: "#9966ff"
   }, button);
 
   // Calculate the center of the SVG container
@@ -570,7 +570,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.showEditor_ = function () {
   this.brightnessSlider_.render(div);
 
   // Blockly.DropDownDiv.setColour("#ffffff", "#dddddd");
-  Blockly.DropDownDiv.setColour("#5ba591", "#5ba591");
+  Blockly.DropDownDiv.setColour("#9966ff", "#9966ff");
   Blockly.DropDownDiv.setCategory(this.sourceBlock_.parentBlock_.getCategory());
   Blockly.DropDownDiv.showPositionedByBlock(this, this.sourceBlock_);
   outerDiv.appendChild(div);

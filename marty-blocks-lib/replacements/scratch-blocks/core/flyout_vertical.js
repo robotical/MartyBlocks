@@ -417,6 +417,15 @@ Blockly.VerticalFlyout.prototype.scrollTo = function(pos) {
 };
 
 /**
+ * Scroll the flyout to a specific block.
+ * @param {!Blockly.Block} block The block to scroll to.
+ */
+Blockly.VerticalFlyout.prototype.scrollToBlock = function(block) {
+  var blockY = block.getRelativeToSurfaceXY().y;
+  this.scrollTo(blockY);
+};
+
+/**
  * Scroll the flyout.
  * @param {!Event} e Mouse wheel scroll event.
  * @private

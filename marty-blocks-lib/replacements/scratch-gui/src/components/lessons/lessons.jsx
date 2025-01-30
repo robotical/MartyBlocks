@@ -15,6 +15,9 @@ import ImageStep from './lesson-image/lesson-image.jsx';
 import NextPrevButtons from './lesson-next-prev-buttons/lesson-next-prev-buttons.jsx';
 import ReadOutLoudTextExtractor from './utils/extract-intl-text.jsx';
 
+import LessonUIHelper from './LessonUIHelper.js';
+import LessonEngine from './LessonEngine.js';
+
 export const getDefaultMessageOrText = (componentOrText) => {
     /* Helper function that gets the default message from a FormattedMessage component or returns the plain text if there is no component */
     if (componentOrText && componentOrText.props && componentOrText.props.defaultMessage) {
@@ -35,6 +38,7 @@ class Lessons extends React.Component {
         this.setExpandedImage = this.setExpandedImage.bind(this);
         this.setExpandedVideo = this.setExpandedVideo.bind(this);
         this.handleTextExtracted = this.handleTextExtracted.bind(this);
+        this.handleBlockDragUpdate = this.handleBlockDragUpdate.bind(this);
         this.state = {
             expandedImage: '',
             expandedVideo: '',
@@ -53,6 +57,16 @@ class Lessons extends React.Component {
     }
 
     componentDidMount() {
+        const addChangeListenerWhenReady = () => {
+            if (window.workspace) {
+                LessonUIHelper.highlightBlocks([]);
+                window.workspace.addChangeListener(this.handleBlockDragUpdate);
+            } else {
+                setTimeout(addChangeListenerWhenReady, 100); // Retry after 100ms if window.workspace is not ready
+            }
+        };
+        addChangeListenerWhenReady();
+
         this.setState({
             modal: {
                 title: this.props.content[this.props.activeDeckId].name,
@@ -61,10 +75,18 @@ class Lessons extends React.Component {
         });
     }
 
+    componentWillUnmount() {
+        window.workspace.removeChangeListener(this.handleBlockDragUpdate);
+    }
+
     componentDidUpdate(prevProps) {
+        const steps = this.props.content[this.props.activeDeckId].steps;
+        if (this.props.step === 0) {
+            LessonEngine._handleActions(steps[0].nextStepActions, this.props.onNextStep);
+        }
         if (this.props.step !== prevProps.step) {
-            const steps = this.props.content[this.props.activeDeckId].steps;
             const stepId = this.props.step;
+            LessonEngine._handleActions(steps[stepId].nextStepActions, this.props.onNextStep);
             if (steps[stepId].type === "checkpoint") {
                 // first check if we are coming from a "previous" button click
                 if (this.props.step < prevProps.step) {
@@ -84,11 +106,24 @@ class Lessons extends React.Component {
         }
     }
 
+    handleBlockDragUpdate = (event) => {
+        try {
+            const steps = this.props.content[this.props.activeDeckId].steps;
+            const currentStep = steps[this.props.step];
+            LessonEngine.evaluateScriptsArea(currentStep.expectedCode);
+        } catch (error) {
+            console.warn('Warn evaluating scripts area:', error);
+        }
+    }
+
     onAccessibilityClick() {
         this.setState({ isAccessibilityEnabled: !this.state.isAccessibilityEnabled });
     }
 
     onCloseModal() {
+        if (this.state.modal.onCloseModalCb) {
+            this.state.modal.onCloseModalCb();
+        }
         this.setState({
             modal: {
                 title: '',
@@ -145,6 +180,10 @@ class Lessons extends React.Component {
             modal: {
                 title: "Hint",
                 content: "hint-modal-content",
+                onCloseModalCb: () => {
+                    const steps = this.props.content[this.props.activeDeckId].steps;
+                    LessonEngine._handleActions(steps[this.props.step].hint?.hintActions, this.props.onNextStep);
+                }
             }
         });
     }

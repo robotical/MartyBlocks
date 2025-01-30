@@ -46,11 +46,9 @@ class SaveLoad extends React.Component {
     try {
       const fileName = `sb-${randomHashGenerator(5)}.sb3`;
       await mv2Interface.saveScratchFileOnDevice(fileName, base64sb3);
-      mv2Interface.send_REST(
-        `notification/info-message/File ${fileName} Saved!`
-      );
+      window.applicationManager.toaster.success(`File ${fileName} Saved!`);
     } catch (e) {
-      mv2Interface.send_REST(`notification/error-message/Couldn't save file.`);
+      window.applicationManager.toaster.error(`Couldn't save file`);
       console.log("Couldn't save file", e);
     }
     this.setState((oldState) => {
@@ -81,15 +79,11 @@ class SaveLoad extends React.Component {
         arrayBuffer = await file.arrayBuffer();
       }
       vm.loadProject(arrayBuffer);
-      // eslint-disable-next-line no-alert
-      mv2Interface.send_REST(`notification/info-message/Project loaded!`);
+      window.applicationManager.toaster.success(`Project loaded!`);
       // this seems to be required to let the wm load the project
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
-      // eslint-disable-next-line no-alert
-      mv2Interface.send_REST(
-        `notification/error-message/Failed to load project: ${error.message}`
-      );
+      window.applicationManager.toaster.error(`Failed to load project`);
     }
     this.setState((oldState) => {
       return { ...oldState, isLoading: false };

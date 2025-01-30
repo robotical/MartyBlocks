@@ -127,6 +127,16 @@ buildAllAndCpToPhoneApp() {
     cpToPhoneApp
 }
 
+buildAllAndCpToPublic() {
+    local type="${1:-all}"
+    local NODE_ENV="${2:-development}"
+    # setDevelopment
+    cpReplacements
+    removeUnusedAssets
+    buildScratch $type $NODE_ENV
+    cpToPublic
+}
+
 setProduction () {
     cd $mblib
     npx node ./set-production.js
@@ -167,11 +177,15 @@ buildScratchStart () {
 }
 
 cpToWebapp () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     rm -rf $WebappHome/public/MartyBlocks/*
     cp -r $gui_original/build/* $WebappHome/public/MartyBlocks
 }
 
 cpToPhoneApp () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     rm -rf $PhoneAppHome/assets/www/scratch-build/*
     rm -rf $PhoneAppHome/node_modules/@robotical/martyblocks/dist/*
     cp -r $gui_original/build/* $PhoneAppHome/assets/www/scratch-build/
@@ -179,9 +193,18 @@ cpToPhoneApp () {
 }
 
 cpToDist () {
+    setopt rm_star_silent
+    setopt rm_star_wait
     cdhome
     rm -rf dist/*
     cp -r $gui_original/build/* ./dist
+}
+
+cpToPublic () {
+    setopt rm_star_silent
+    setopt rm_star_wait
+    rm -rf $MBHome/public/*
+    cp -r $gui_original/build/* $MBHome/public
 }
 
 buildBlocks() {

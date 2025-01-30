@@ -1,5 +1,6 @@
 import { defineMessages } from "react-intl";
 import sharedMessages from "../shared-messages";
+import targetTypes from "../target-types-enum.js";
 
 let messages = defineMessages({
   meow: {
@@ -30,6 +31,7 @@ const projectData = (translateFunction) => {
     targets: [
       {
         isStage: true,
+        targetType: targetTypes.stage,
         name: "Stage",
         variables: {
           "`jEk@4|i[#Fk?(8x)AV.-my variable": [
@@ -53,78 +55,6 @@ const projectData = (translateFunction) => {
         ],
         sounds: [],
         volume: 100,
-      },
-      {
-        isStage: false,
-        name: "Marty", //translator(messages.sprite, {index: 1}),
-        variables: {},
-        lists: {},
-        broadcasts: {},
-        blocks: {},
-        currentCostume: 0,
-        costumes: [
-          {
-            assetId: "8e41346f9e386948096815a9b5d6b3e0",
-            name: translator(messages.costume, { index: 1 }),
-            bitmapResolution: 1,
-            md5ext: "8e41346f9e386948096815a9b5d6b3e0.svg",
-            dataFormat: "svg",
-            rotationCenterX: 48,
-            rotationCenterY: 50,
-          },
-        ],
-        sounds: [
-          {
-              name: "Celebrate",
-              assetId: "celebrate",
-              md5ext: "celebrate.wav",
-              dataFormat: 'wav',
-          },
-          {
-              name: "Confusion",
-              assetId: "confused",
-              md5ext: "confused.wav",
-              dataFormat: 'wav',
-          },
-          {
-              name: "Disbelief",
-              assetId: "disbelief",
-              dataFormat: "wav",
-              md5ext: "disbelief.wav",
-          },
-          {
-              name: "Excited",
-              assetId: "excited",
-              dataFormat: "wav",
-              md5ext: "excited.wav",
-          },
-          {
-              name: "No Way!",
-              assetId: "no_way",
-              dataFormat: "wav",
-              md5ext: "no_way.wav",
-          },
-          {
-              name: "No!",
-              assetId: "no",
-              dataFormat: "wav",
-              md5ext: "no.wav",
-          },
-          {
-              name: "Whistle",
-              assetId: "whistle",
-              dataFormat: "wav",
-              md5ext: "whistle.wav",
-          },
-        ],
-        volume: 100,
-        visible: true,
-        x: -100,
-        y: 0,
-        size: 100,
-        direction: 90,
-        draggable: false,
-        rotationStyle: "all around",
       },
     ],
     meta: {

@@ -31,6 +31,13 @@ Blockly.Colours = {
     "tertiary": "#FFDA61"
   },
 
+  // Cog colours
+  cog: {
+    "primary": "#ffda61",
+    "secondary": "#133c46",
+    "tertiary": "#37abc8"
+  },
+
   // SVG colours: these must be specificed in #RRGGBB style
   // To add an opacity, this must be specified as a separate property (for SVG fill-opacity)
   "motion": {

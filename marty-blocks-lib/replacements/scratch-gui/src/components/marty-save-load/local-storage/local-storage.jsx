@@ -30,7 +30,7 @@ class SaveLoad extends React.Component {
 
   async getCurrentFiles() {
     const savedScratchFiles = await mv2Interface.listSavedScratchFiles();
-    const fileNames = savedScratchFiles.fileNames
+    const fileNames = savedScratchFiles
       .map((encodedFileName) => decodeURIComponent(encodedFileName))
       .filter((fileName) => fileName !== "__autosave");
     this.setState({ fileNames });
@@ -75,7 +75,7 @@ class SaveLoad extends React.Component {
       this.setState({ fileNames: newFileNames });
     } catch (error) {
       // eslint-disable-next-line no-alert
-      alert(`Failed to save project: ${error.message}`);
+      alert(`Failed to save project`);
     }
   }
 
@@ -98,7 +98,7 @@ class SaveLoad extends React.Component {
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
       // eslint-disable-next-line no-alert
-      alert(`Failed to load project: ${error.message}`);
+      alert(`Failed to load project`);
     }
   }
 
@@ -115,7 +115,7 @@ class SaveLoad extends React.Component {
         this.setState({ fileNames: newFileNames });
       } catch (error) {
         // eslint-disable-next-line no-alert
-        alert(`Failed to delete project: ${error.message}`);
+        alert(`Failed to delete project`);
       }
     }
   }

@@ -1,4 +1,5 @@
 import OpcodeLabels from './opcode-labels.js';
+const martyblockslib = require('marty-blocks-lib');
 
 const isUndefined = a => typeof a === 'undefined';
 
@@ -14,13 +15,13 @@ const isUndefined = a => typeof a === 'undefined';
  * @param {VirtualMachine} block.vm - the VM instance which owns the block
  * @return {object} The adapted monitor with label and category
  */
-export default function ({id, spriteName, opcode, params, value, vm}) {
+export default function ({ id, spriteName, opcode, params, value, vm }) {
     // Extension monitors get their labels from the Runtime through `getLabelForOpcode`.
     // Other monitors' labels are hard-coded in `OpcodeLabels`.
-    let {label, category, labelFn} = (vm && vm.runtime.getLabelForOpcode(opcode)) || OpcodeLabels.getLabel(opcode);
-    if(monitorLabelToSensorWhoAmIMAP[label]) {
+    let { label, category, labelFn } = (vm && vm.runtime.getLabelForOpcode(opcode)) || OpcodeLabels.getLabel(opcode);
+    if (monitorLabelToSensorWhoAmIMAP[label]) {
         label = monitorLabelToSensorWhoAmIMAP[label](params) || label;
-    } 
+    }
 
     // Use labelFn if provided for dynamic labelling (e.g. variables)
     if (!isUndefined(labelFn)) label = labelFn(params);
@@ -45,10 +46,11 @@ export default function ({id, spriteName, opcode, params, value, vm}) {
         value = value.map(item => item.toString());
     }
 
-    return {id, label, category, value};
+    return { id, label, category, value };
 }
 
 const monitorLabelToSensorWhoAmIMAP = {
+    // marty blocks
     XAxisMovement: (params) => 'X Axis Movement',
     YAxisMovement: (params) => 'Y Axis Movement',
     ZAxisMovement: (params) => 'Z Axis Movement',
@@ -66,18 +68,30 @@ const monitorLabelToSensorWhoAmIMAP = {
     mv2_lightsense: (params) => 'Light: ' + params.SENSORCHOICE + ', channel: ' + params.SENSORCHANNEL,
     mv2_noisesense: (params) => 'Noise: ' + params.SENSORCHOICE,
     mv2_coloursenseraw: (params) => 'Color (Raw): ' + params.SENSORCHOICE + ', channel: ' + params.SENSORCHANNEL,
+
+    // cog blocks
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getAccelerometer.type]: (params) => 'Accelerometer' + (params.AXIS ? ' ' + params.AXIS : ''),
+    // [martyblockslib.cog_blocks_definitions.sensing.cog_getGyroscope.type]: (params) => 'Gyroscope' + (params.AXIS ? ' ' + params.AXIS : ''),
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getButtonClicked.type]: (params) => 'Button Clicked?',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getButtonForceValue.type]: (params) => 'Button Force Value',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getObstacleSensed.type]: (params) => 'Obstacle Sensed ' + params.SIDE + '?',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getLightSensed.type]: (params) => 'Light Sensed?',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getIRSensorValue.type]: (params) => 'IR Sensor Value ' + params.SIDE,
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getAmbientLightValue.type]: (params) => 'Ambient Light Value',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getShakeSensed.type]: (params) => 'Shake Sensed?',
+    [martyblockslib.cog_blocks_definitions.sensing.cog_getTiltDirection.type]: (params) => 'Tilt Direction',
 }
 
 const servoChoiceMap = [
-'Left Hip',
-'Left Twist',
-'Left Knee',
-'Right Hip',
-'Right Twist',
-'Right Knee',
-'Left Arm',
-'Right Arm',
-'Eyes'
+    'Left Hip',
+    'Left Twist',
+    'Left Knee',
+    'Right Hip',
+    'Right Twist',
+    'Right Knee',
+    'Left Arm',
+    'Right Arm',
+    'Eyes'
 ];
 
 const servoIdToHumanReadable = (servoId) => {
