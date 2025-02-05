@@ -1,8 +1,8 @@
 name: Build and publish to npm
 
 push:
-    branches:
-      - 'master'
+  branches:
+    - 'master'
 
 jobs:
   build_and_release:
