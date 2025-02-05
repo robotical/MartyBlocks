@@ -13,7 +13,7 @@ on:
 jobs:
   build_and_release:
     runs-on: ubuntu-20.04
-    
+
     env:
       NODE_OPTIONS: "--max-old-space-size=5120" # locally export NODE_OPTIONS=--max-old-space-size=5120
       MBHome: /home/runner/work/MartyBlocks/MartyBlocks
@@ -38,10 +38,10 @@ jobs:
         run: |
           sudo ln -sf /usr/bin/python2.7 /usr/bin/python
           
-      - name: Use Node.js 16.15.0
+      - name: Use Node.js 16.20.1
         uses: actions/setup-node@v3
         with:
-          node-version: 16.15.0
+          node-version: 16.20.1
 
       - name: see node version
         run: node -v
@@ -145,7 +145,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.15.0
+          node-version: 16.20.1
           registry-url: "https://registry.npmjs.org"
       - run: npm publish
         env:
