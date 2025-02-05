@@ -81,6 +81,9 @@ jobs:
       - name: console
         run: npx uglify-js --version
 
+      - name: console 1
+        run: npm ls uglify-js
+
       - name: Build Blocks
         run: |
           cd ${{ env.blocks_original }}
