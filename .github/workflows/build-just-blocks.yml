@@ -1,8 +1,9 @@
 name: Build and publish to npm
 
-push:
-  branches:
-    - 'master'
+on:
+  push:
+    branches:
+      - 'master'
 
 jobs:
   build_and_release:
