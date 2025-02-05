@@ -12,8 +12,8 @@ on:
 
 jobs:
   build_and_release:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-20.04
+    
     env:
       NODE_OPTIONS: "--max-old-space-size=5120" # locally export NODE_OPTIONS=--max-old-space-size=5120
       MBHome: /home/runner/work/MartyBlocks/MartyBlocks
