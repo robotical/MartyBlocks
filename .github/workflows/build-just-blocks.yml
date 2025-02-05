@@ -79,7 +79,9 @@ jobs:
           cp -r ${{ env.REPLACEMENTS }}/* ${{ env.MBHome }}
 
       - name: console
-        run: npx uglify-js --version
+        run: |
+        cd ${{ env.blocks_original }}
+        npx uglify-js --version
 
       - name: console 1
         run: |
