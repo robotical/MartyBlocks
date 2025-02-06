@@ -981,7 +981,6 @@ class Scratch3Text2SpeechBlocks {
   }
 
   async tryAllLanguagesIfUnsupported(gender, words) {
-    const connectedRaft = getRaftUsingTargetId(util.target.id);
     try {
       const pathsObj = [{}];
       for (const languageKey of Object.keys(this.LANGUAGE_INFO)) {
@@ -1029,7 +1028,10 @@ class Scratch3Text2SpeechBlocks {
 
 
   speakHelper(args, util, blockType) {
-    const connectedRaft = getRaftUsingTargetId(util.target.id);
+    let connectedRaft;
+    if (blockType === 'marty') {
+      connectedRaft = getRaftUsingTargetId(util.target.id);
+    }
 
     return new Promise((resolve, reject) => {
       // Cast input to string
