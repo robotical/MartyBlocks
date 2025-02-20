@@ -74,6 +74,16 @@ const Message = {
         'el': 'Ετικέτα εικόνας',
         'pl': 'Etykieta obrazu'
     },
+    accelerometer_label: {
+        'en': 'accelerometer label',
+        'ja': '加速度センサーラベル',
+        'ja-Hira': 'かそくどセンサーラベル',
+        'zh-cn': '加速度传感器标签',
+        'ko': '가속도계 라벨',
+        'zh-tw': '加速度感應器標籤',
+        'el': 'Ετικέτα επιταχυνσιόμετρου',
+        'pl': 'Etykieta akcelerometru'
+    },
     sound_label: {
         'ja': '音声ラベル',
         'ja-Hira': 'おんせいラベル',
@@ -111,6 +121,16 @@ const Message = {
         'el': '[LABEL] ήχου ανιχνεύθηκε',
         'pl': 'Wykryto dźwięk [LABEL]'
     },
+    is_accelerometer_label_detected: {
+        'en': 'accelerometer [LABEL] detected',
+        'ja': '加速度センサー[LABEL]が検出されました',
+        'ja-Hira': 'かそくどセンサー[LABEL]がけんしゅつされました',
+        'zh-cn': '加速度传感器[LABEL]检测到',
+        'ko': '가속도계 [LABEL] 감지됨',
+        'zh-tw': '加速度感應器[LABEL]被偵測？',
+        'el': 'Επιταχυνσιόμετρο [LABEL] ανιχνεύθηκε',
+        'pl': 'Wykryto akcelerometr [LABEL]'
+    },
     image_label_confidence: {
         'ja': '画像ラベル[LABEL]の確度',
         'ja-Hira': 'がぞうラベル[LABEL]のかくど',
@@ -129,6 +149,16 @@ const Message = {
         'el': 'Εμπιστοσύνη του ήχου [LABEL]',
         'pl': 'Pewność dźwięku [LABEL]'
     },
+    accelerometer_label_confidence: {
+        'en': 'confidence of accelerometer [LABEL]',
+        'ja': '加速度センサーラベル[LABEL]の確度',
+        'ja-Hira': 'かそくどセンサーラベル[LABEL]のかくど',
+        'zh-cn': '加速度传感器[LABEL]的置信度',
+        'ko': '가속도계 [LABEL] 신뢰도',
+        'zh-tw': '加速度感應器置信度[LABEL]',
+        'el': 'Εμπιστοσύνη του επιταχυνσιόμετρου [LABEL]',
+        'pl': 'Pewność akcelerometru [LABEL]'
+    },
     when_received_sound_label_block: {
         'ja': '音声ラベル[LABEL]を受け取ったとき',
         'ja-Hira': '音声ラベル[LABEL]をうけとったとき',
@@ -138,6 +168,16 @@ const Message = {
         'zh-tw': '接收到聲音標籤[LABEL]時',
         'el': 'Όταν ληφθεί ετικέτα ήχου: [LABEL]',
         'pl': 'Kiedy otrzymano etykietę dźwięku: [LABEL]'
+    },
+    when_received_accelerometer_label_block: {
+        'en': 'when received accelerometer label:[LABEL]',
+        'ja': '加速度センサーラベル[LABEL]を受け取ったとき',
+        'ja-Hira': 'かそくどセンサーラベル[LABEL]をうけとったとき',
+        'zh-cn': '接收到加速度传感器标签[LABEL]时',
+        'ko': '[LABEL] 가속도 센서 라벨을 받았을 때:',
+        'zh-tw': '接收到加速度感應器標籤[LABEL]時',
+        'el': 'Όταν ληφθεί ετικέτα επιταχυνσιόμετρου: [LABEL]',
+        'pl': 'Kiedy otrzymano etykietę akcelerometru: [LABEL]'
     },
     label_block: {
         'ja': 'ラベル',
@@ -299,6 +339,11 @@ class MartyMachineBlocks {
         this.imageClassifierEnabled = false;
         this.initSoundProbableLabels();
 
+        this.accelerometerMetadata = null;
+        this.accelerometerClassifier = null;
+        this.accelerometerClassifierEnabled = false;
+        this.initAccelerometerProbableLabels();
+
         // this.runtime.ioDevices.video.enableVideo();
 
         let script = document.createElement('script');
@@ -329,6 +374,62 @@ class MartyMachineBlocks {
         requestAnimationFrame(recordFrame);
     }
 
+    recordAccelerometerFrameWrapper() {
+        if (!this.accelerometerClassifierEnabled) {
+            return;
+        }
+
+        const INTERVAL_TIME = 110; // Time between samples (in milliseconds)
+        const BATCH_SAMPLE_SIZE = 10;   // Number of samples in the sliding window
+        let lastCaptureTime = 0;
+        let lastClassifyTime = 0;
+
+        // Pre-fill sliding windows (you could pre-fill with zeros or the first reading)
+        const slidingWindowX = new Array(BATCH_SAMPLE_SIZE).fill(-1000);
+        const slidingWindowY = new Array(BATCH_SAMPLE_SIZE).fill(-1000);
+        const slidingWindowZ = new Array(BATCH_SAMPLE_SIZE).fill(-1000);
+
+        // recordFrame will be called repeatedly using requestAnimationFrame
+        const recordFrame = () => {
+            const timestamp = Date.now();
+            // Only capture if enough time has passed
+            if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
+                if (!this.accelerometerClassifierEnabled) {
+                    return;
+                }
+
+                // Capture current accelerometer data from your connected raft
+                const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                const data = connectedRaft.raftStateInfo.accelerometer;
+
+                // Update the sliding window by shifting out the oldest sample and pushing the new one
+                slidingWindowX.push(data.ax);
+                slidingWindowX.shift();
+
+                slidingWindowY.push(data.ay);
+                slidingWindowY.shift();
+
+                slidingWindowZ.push(data.az);
+                slidingWindowZ.shift();
+
+                // Immediately request a prediction with the current window (no waiting loop)
+                if (!lastClassifyTime || timestamp - lastClassifyTime >= this.interval) {
+                    this.classifyAccelerometer(slidingWindowX, slidingWindowY, slidingWindowZ);
+                    lastClassifyTime = timestamp;
+                }
+
+                // Update last capture time
+                lastCaptureTime = timestamp;
+            }
+
+            // Continue the loop
+            requestAnimationFrame(recordFrame);
+        };
+
+        // Start the loop
+        requestAnimationFrame(recordFrame);
+    }
+
     /**
      * Initialize the result of image classification.
      */
@@ -338,6 +439,10 @@ class MartyMachineBlocks {
 
     initSoundProbableLabels() {
         this.soundProbableLabels = [];
+    }
+
+    initAccelerometerProbableLabels() {
+        this.accelerometerProbableLabels = [];
     }
 
     getInfo() {
@@ -362,6 +467,7 @@ class MartyMachineBlocks {
                         }
                     }
                 },
+                '---',
                 {
                     opcode: 'whenReceived',
                     text: Message.when_received_block[this.locale],
@@ -498,6 +604,57 @@ class MartyMachineBlocks {
                 },
                 '---',
                 {
+                    opcode: 'whenReceivedAccelerometerLabel',
+                    text: Message.when_received_accelerometer_label_block[this.locale],
+                    blockType: BlockType.HAT,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LABEL: {
+                            type: ArgumentType.STRING,
+                            menu: 'received_accelerometer_label_menu',
+                            defaultValue: Message.any[this.locale]
+                        }
+                    }
+                },
+                {
+                    opcode: 'isAccelerometerLabelDetected',
+                    text: Message.is_accelerometer_label_detected[this.locale],
+                    blockType: BlockType.BOOLEAN,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LABEL: {
+                            type: ArgumentType.STRING,
+                            menu: 'accelerometer_labels_menu',
+                            defaultValue: Message.any_without_of[this.locale]
+                        }
+                    }
+                },
+                {
+                    opcode: 'accelerometerLabelConfidence',
+                    text: Message.accelerometer_label_confidence[this.locale],
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        LABEL: {
+                            type: ArgumentType.STRING,
+                            menu: 'accelerometer_labels_without_any_menu',
+                            defaultValue: ''
+                        }
+                    }
+                },
+                {
+                    opcode: 'getAccelerometerLabel',
+                    text: Message.accelerometer_label[this.locale],
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    blockType: BlockType.REPORTER
+                },
+                '---',
+                {
                     opcode: 'toggleClassification',
                     text: Message.toggle_classification[this.locale],
                     blockType: BlockType.COMMAND,
@@ -597,6 +754,18 @@ class MartyMachineBlocks {
                     acceptReporters: true,
                     items: 'getSoundLabelsWithoutAnyMenu'
                 },
+                received_accelerometer_label_menu: {
+                    acceptReporters: true,
+                    items: 'getAccelerometerLabelsMenu'
+                },
+                accelerometer_labels_menu: {
+                    acceptReporters: true,
+                    items: 'getAccelerometerLabelsWithAnyWithoutOfMenu'
+                },
+                accelerometer_labels_without_any_menu: {
+                    acceptReporters: true,
+                    items: 'getAccelerometerLabelsWithoutAnyMenu'
+                },
                 video_menu: this.getVideoMenu(),
                 classification_interval_menu: this.getClassificationIntervalMenu(),
                 classification_menu: this.getClassificationMenu()
@@ -658,6 +827,26 @@ class MartyMachineBlocks {
             log.info(`Loaded sound model: ${model.name}`);
             this.toggleClassification({ CLASSIFICATION_STATE: 'on' });
             return `"${model.name}" Loaded!`;
+        } else if (model?.modelType === "accelerometer") {
+            // check that the currently selected device is a cog or a marty
+            const raftType = window.vm.editingTarget.raftType;
+            if (raftType !== 'Marty' && raftType !== 'Cog') {
+                alert('Oops! Please select a Marty or a Cog device to use the accelerometer model.');
+                return;
+            }
+            // check that the device is connected
+            if (!window.raftManager.isDeviceConnected(window.vm.editingTarget.id)) {
+                alert('Oops! Please connect the device to use the accelerometer model.');
+                return;
+            }
+            this.accelerometerMetadata = this.createAccelerometerModelMetadataFromModelDependencies(model.name, model.dependencies);
+            this.accelerometerClassifier = new AccelerometerClassifier(model);
+            log.info(`Loaded accelerometer model: ${model.name}`);
+            this.toggleClassification({ CLASSIFICATION_STATE: 'on' });
+            return `"${model.name}" Loaded!`;
+        } else {
+            log.warn(`Unknown model type: ${model?.modelType}`);
+            return `"${model.name}" Model type not recognized!`;
         }
     }
 
@@ -669,6 +858,24 @@ class MartyMachineBlocks {
      */
     whenReceived(args) {
         const label = this.getImageLabel();
+        if (args.LABEL === Message.any[this.locale]) {
+            return label !== '';
+        }
+        return label === args.LABEL;
+    }
+
+    /**
+     * Detect change of the selected accelerometer label is the most probable one or not.
+     * @param {object} args - The block's arguments.
+     * @property {string} LABEL - The label to detect.
+     * @return {boolean} - Whether the label is most probable or not.
+     */
+    whenReceivedAccelerometerLabel(args) {
+        if (!this.accelerometerClassifierEnabled) {
+            return;
+        }
+
+        const label = this.getAccelerometerLabel();
         if (args.LABEL === Message.any[this.locale]) {
             return label !== '';
         }
@@ -722,6 +929,20 @@ class MartyMachineBlocks {
     }
 
     /**
+     * Return whether the most probable accelerometer label is the selected one or not.
+     * @param {object} args - The block's arguments.
+     * @property {string} LABEL - The label to detect.
+     * @return {boolean} - Whether the label is most probable or not.
+     */
+    isAccelerometerLabelDetected(args) {
+        const label = this.getAccelerometerLabel();
+        if (args.LABEL === Message.any[this.locale]) {
+            return label !== '';
+        }
+        return label === args.LABEL;
+    }
+
+    /**
      * Return confidence of the image label.
      * @param {object} args - The block's arguments.
      * @property {string} LABEL - Selected label.
@@ -748,6 +969,20 @@ class MartyMachineBlocks {
             return 0;
         }
         const entry = this.soundProbableLabels.find(element => element.label === args.LABEL);
+        return (entry ? entry.confidence : 0);
+    }
+
+    /**
+     * Return confidence of the accelerometer label.
+     * @param {object} args - The block's arguments.
+     * @property {string} LABEL - Selected label.
+     * @return {number} - Confidence of the label.
+     */
+    accelerometerLabelConfidence(args) {
+        if (args.LABEL === '') {
+            return 0;
+        }
+        const entry = this.accelerometerProbableLabels.find(element => element.label === args.LABEL);
         return (entry ? entry.confidence : 0);
     }
 
@@ -871,6 +1106,52 @@ class MartyMachineBlocks {
     }
 
     /**
+     * Return menu items to get properties of the image label.
+     * @return {Array} - Menu items with ''.
+    */
+    getLabelsWithoutAnyMenu() {
+        let items = [''];
+        if (this.imageMetadata) {
+            items = items.concat(this.imageMetadata.labels);
+        }
+        return items;
+    }
+
+    /**
+    * Return menu items to get properties of the accelerometer label.
+    * @return {Array} - Menu items with 'any'.
+    */
+    getAccelerometerLabelsMenu() {
+        let items = [Message.any[this.locale]];
+        if (!this.accelerometerMetadata) return items;
+        items = items.concat(this.accelerometerMetadata.labels);
+        return items;
+    }
+
+    /**
+    * Return menu items to detect label in the accelerometer.
+    * @return {Array} - Menu items with 'any without of'.
+    */
+    getAccelerometerLabelsWithAnyWithoutOfMenu() {
+        let items = [Message.any_without_of[this.locale]];
+        if (!this.accelerometerMetadata) return items;
+        items = items.concat(this.accelerometerMetadata.labels);
+        return items;
+    }
+
+    /**
+     * Return menu items to get properties of the accelerometer label.
+     * @return {Array} - Menu items with 'any'.
+     */
+    getAccelerometerLabelsWithoutAnyMenu() {
+        let items = [''];
+        if (this.accelerometerMetadata) {
+            items = items.concat(this.accelerometerMetadata.labels);
+        }
+        return items;
+    }
+
+    /**
      * Return menu items to detect label in the image.
      * @return {Array} - Menu items with 'any'.
      */
@@ -882,24 +1163,12 @@ class MartyMachineBlocks {
     }
 
     /**
-     * Return menu itmes to get properties of the image label.
-     * @return {Array} - Menu items with ''.
-     */
-    getLabelsWithoutAnyMenu() {
-        let items = [''];
-        if (this.imageMetadata) {
-            items = items.concat(this.imageMetadata.labels);
-        }
-        return items;
-    }
-
-    /**
-     * Return menu itmes to get properties of the sound label.
+     * Return menu items to get properties of the sound label.
      * @return {Array} - Menu items with ''.
      */
     getSoundLabelsWithoutAnyMenu() {
         if (this.soundMetadata) {
-            return this.soundMetadata.wordLabels;
+            return this.accelerometerMetadata.wordLabels;
         } else {
             return [''];
         }
@@ -1024,13 +1293,44 @@ class MartyMachineBlocks {
     }
 
     /**
+     * Classify accelerometer.
+     * @return {Promise} - A Promise that resolves the result of classification.
+     * The result will be empty when another classification was under going.
+     */
+    classifyAccelerometer(x, y, z) {
+        this.accelerometerClassifier.classify(x, y, z, (predictions) => {
+            if (this.accelerometerClassifierEnabled && predictions) {
+                const predictionIdx = predictions.predictionIdx;
+                if (predictionIdx >= 0) {
+                    const actualPredictions = predictions.output;
+                    this.accelerometerProbableLabels = actualPredictions.slice();
+                }
+                setTimeout(() => {
+                    // Initialize probabilities to reset whenReceivedAccelerometerLabel blocks.
+                    this.initAccelerometerProbableLabels();
+                }, this.interval);
+            }
+        });
+    }
+
+    /**
      * Get the most probable label in the image.
-     * Retrun the last classification result or '' when the first classification was not done.
+     * Return the last classification result or '' when the first classification was not done.
      * @return {string} label
     */
     getImageLabel() {
         if (!this.imageProbableLabels || this.imageProbableLabels.length === 0) return '';
         const mostOne = this.getMostProbableOne(this.imageProbableLabels);
+        return (mostOne.confidence >= this.confidenceThreshold) ? mostOne.label : '';
+    }
+
+    /**
+     * Get the most probable label in the accelerometer.
+     * Return the last classification result or '' when the first classification was not done.
+     */
+    getAccelerometerLabel() {
+        if (!this.accelerometerProbableLabels || this.accelerometerProbableLabels.length === 0) return '';
+        const mostOne = this.getMostProbableOne(this.accelerometerProbableLabels);
         return (mostOne.confidence >= this.confidenceThreshold) ? mostOne.label : '';
     }
 
@@ -1071,17 +1371,21 @@ class MartyMachineBlocks {
      * @property {string} CLASSIFICATION_STATE - State to be ['on'|'off'].
      */
     toggleClassification(args) {
+        console.log("toggleClassification");
         const state = args.CLASSIFICATION_STATE;
         this.soundClassifierEnabled = false;
         this.imageClassifierEnabled = false;
+        this.accelerometerClassifierEnabled = false;
         if (state === 'on') {
             this.imageClassifierEnabled = true;
             this.soundClassifierEnabled = true;
-
+            this.accelerometerClassifierEnabled = true;
             if (this.model?.modelType === "image-device") {
                 this.recordFrameWrapper();
             } else if (this.model?.modelType === "audio") {
                 this.recordAudioFrameWrapper();
+            } else if (this.model?.modelType === "accelerometer") {
+                this.recordAccelerometerFrameWrapper();
             }
         }
     }
@@ -1138,6 +1442,15 @@ class MartyMachineBlocks {
         this.soundClassifierEnabled = false;
         this.imageClassifierEnabled = false;
         this.initSoundProbableLabels();
+
+        if (this.accelerometerClassifier) {
+            this.accelerometerClassifier.stop();
+        }
+
+        this.accelerometerMetadata = null;
+        this.accelerometerClassifier = null;
+        this.accelerometerClassifierEnabled = false;
+        this.initAccelerometerProbableLabels();
     }
 
     /**
@@ -1255,6 +1568,19 @@ class MartyMachineBlocks {
         }
     }
 
+    createAccelerometerModelMetadataFromModelDependencies(modelName, modelDependencies) {
+        const modelClasses = modelDependencies[2]?.classes || [];
+        return {
+            labels: modelClasses.map(clsObj => clsObj.name),
+            modelName: modelName,
+            packageName: null,
+            packageVersion: null,
+            timeStamp: new Date().toISOString(),
+            tmVersion: null,
+            getUserMetadata: {}
+        }
+    }
+
     createAudioModelMetadataFromModelDependencies(modelName, modelDependencies) {
         const modelClasses = modelDependencies[2]?.classes || [];
         return {
@@ -1287,6 +1613,30 @@ class ImageClassifier {
         // imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
         const predictions = await this.model.MLModel.runModel(canvas);
         return predictions.output;
+    }
+}
+
+class AccelerometerClassifier {
+    constructor(model) {
+        this.model = model;
+    }
+
+    async classify(x, y, z, predictionCb = null) {
+
+        this.model.MLModel.runAccelerometerModel({ x, y, z });
+
+        if (predictionCb) return this.model.MLModel.setPredictionCallback = predictionCb;
+        return new Promise(async (resolve, reject) => {
+            this.model.MLModel.setPredictionCallback = (predictions) => {
+                const predictionIdx = predictions.predictionIdx;
+                if (predictionIdx >= 0) {
+                    const actualPredictions = predictions.output;
+                    resolve(actualPredictions);
+                } else {
+                    reject();
+                }
+            };
+        });
     }
 }
 
@@ -1325,8 +1675,6 @@ class SoundClassifier {
         this.model.MLModel.stopAudioModel();
     }
 }
-
-
 
 class AudioExtractor {
     constructor(shouldStreamToWebWorker = false, model = null) {
@@ -1398,6 +1746,12 @@ class AudioExtractor {
         }
     }
 
+}
+
+function getRaftUsingTargetId(targetId) {
+    const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+    const raft = window.applicationManager.connectedRafts[raftId];
+    return raft;
 }
 
 

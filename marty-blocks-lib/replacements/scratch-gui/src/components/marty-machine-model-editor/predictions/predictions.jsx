@@ -45,7 +45,7 @@ class MartyMachineModelPredictions extends React.Component {
                                 '--dynamic-width': `calc(${prediction.confidence} * 100%)`,
                                 '--dynamic-content': `"${Math.round(prediction.confidence * 100)}%"`
                             }}
-                        >.</div>
+                        >&nbsp;</div>
                     </div>
                 })}
             </div>

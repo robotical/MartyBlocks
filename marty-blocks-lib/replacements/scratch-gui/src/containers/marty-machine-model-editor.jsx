@@ -1,5 +1,5 @@
 import bindAll from 'lodash.bindall';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
 
@@ -16,6 +16,7 @@ class MartyMachineModelEditor extends React.Component {
             'setRef',
             'setDeviceStreamRef',
             'setAudioCanvasRef',
+            'setAccelerometerCanvasRef',
             'onClassNameChange',
             'onCreateNewClass',
             'setCanvasRef',
@@ -41,6 +42,7 @@ class MartyMachineModelEditor extends React.Component {
         this.ref = null;
         this.deviceStreamRef = null;
         this.audioCanvasRef = null;
+        this.accelerometerCanvasRef = null;
         this.canvasRef = null;
         this.isRecording = false;
         this.isTraining = false;
@@ -125,9 +127,87 @@ class MartyMachineModelEditor extends React.Component {
                 };
                 drawAudioWaves();
                 this.setState({ deviceStream: stream });
+            } else if (this.props.modelType === 'accelerometer') {
+                // get the accelerometer data from the connected device
+                const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+
+                const canvas = this.accelerometerCanvasRef;
+                const canvasCtx = canvas.getContext('2d');
+                canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Set up a buffer to store the last N data points
+                const maxPoints = 100;
+                const dataBuffer = {
+                    x: [],
+                    y: [],
+                    z: []
+                };
+
+
+                let lastDrawTime = 0;
+                const drawInterval = 50;
+                const drawAccelerometerData = () => {
+                    const currentTime = Date.now();
+                    if (currentTime - lastDrawTime >= drawInterval) {
+                        requestAnimationFrame(drawAccelerometerData);
+                        const data = connectedRaft.raftStateInfo.accelerometer;
+                        const x = data.ax;
+                        const y = data.ay;
+                        const z = data.az;
+
+                        // Add new data to our buffers
+                        dataBuffer.x.push(x);
+                        dataBuffer.y.push(y);
+                        dataBuffer.z.push(z);
+
+                        // If we exceed maxPoints, remove the oldest point
+                        if (dataBuffer.x.length > maxPoints) {
+                            dataBuffer.x.shift();
+                            dataBuffer.y.shift();
+                            dataBuffer.z.shift();
+                        }
+
+                        // Clear the canvas for the new frame
+                        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+                        // Draw x, y, and z data in different colors
+                        drawAccelerometerLine(dataBuffer.x, 'rgb(91, 20, 19)', canvasCtx, canvas, maxPoints);
+                        drawAccelerometerLine(dataBuffer.y, 'rgb(3, 125, 60)', canvasCtx, canvas, maxPoints);
+                        drawAccelerometerLine(dataBuffer.z, 'rgb(0, 170, 255)', canvasCtx, canvas, maxPoints);
+
+                        lastDrawTime = currentTime;
+                    } else {
+                        requestAnimationFrame(drawAccelerometerData);
+                    }
+                };
+                drawAccelerometerData();
+                this.setState({ deviceStream: null });
             }
         }
         asyncFunc();
+
+
+        // if this is an accelerometer model
+        // get the connected raft
+        // set an event listener that listens for button clicks and starts recording accelerometer samples
+        // set it in such a way that if the model changes, or the component unmounts, the event listener is removed
+        if (this.props.modelType === 'accelerometer') {
+            this.connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+
+            const cogButtonClickHandler = () => {
+                this.startRecordingAccelerometerSamples('continuous');
+            };
+            this.cogButtonClickHandler = cogButtonClickHandler;
+
+            const pda = this.connectedRaft.publishedDataAnalyser;
+            pda.on(pda.eventsMap.buttonClick.click, cogButtonClickHandler);
+            pda.on(pda.eventsMap.buttonClick.release, this.onStopRecordingSamples.bind(this));
+
+            this.cleanupPdaListeners = () => {
+                pda.removeListener(pda.eventsMap.buttonClick.click, cogButtonClickHandler);
+                pda.removeListener(pda.eventsMap.buttonClick.release, this.onStopRecordingSamples.bind(this));
+            };
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -148,6 +228,10 @@ class MartyMachineModelEditor extends React.Component {
             this.trainingDataReducer = martyMachine.getNewTrainingDataReducer();
             console.log('New model selected');
             this.addBackgroundNoiseClassIF(newProps);
+
+            if (this.cleanupPdaListeners && this.props.modelType !== 'accelerometer') {
+                this.cleanupPdaListeners();
+            }
         }
     }
 
@@ -166,7 +250,12 @@ class MartyMachineModelEditor extends React.Component {
             this.state.deviceStream.getTracks().forEach(track => track.stop());
         }
         this.onStopRunningModel();
+
+        if (this.cleanupPdaListeners) {
+            this.cleanupPdaListeners();
+        }
     }
+
     handleChangeName(name) {
         const sprite = this.props.vm.editingTarget.sprite;
         const models = sprite.models ? sprite.models : [];
@@ -188,6 +277,9 @@ class MartyMachineModelEditor extends React.Component {
     }
     setAudioCanvasRef(element) {
         this.audioCanvasRef = element;
+    }
+    setAccelerometerCanvasRef(element) {
+        this.accelerometerCanvasRef = element;
     }
     handleContainerClick(e) {
         // If the click is on the sound editor's div (and not any other element), delesect
@@ -214,6 +306,87 @@ class MartyMachineModelEditor extends React.Component {
         this.setState({});
     }
 
+    // A unified function to start recording accelerometer samples.
+    // It accepts a 'mode' parameter: 
+    // - mode === 'batch' will record batches over a fixed RECORD_TIME.
+    // - mode === 'continuous' will record one long sample (until stopped by the user).
+    async startRecordingAccelerometerSamples(mode, classTitle) {
+        classTitle = classTitle || this.state.className;
+        if (!classTitle) {
+            alert("Please add or select an existing class before recording samples.");
+            return;
+        }
+        // Find or add the class for this sample.
+        let selectedClassIdx = this.trainingDataReducer.state.classes.findIndex(c => c.name === classTitle);
+        if (selectedClassIdx === -1) {
+            this.trainingDataReducer.reduce({
+                type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS,
+                payload: { name: classTitle }
+            });
+            selectedClassIdx = this.trainingDataReducer.state.classes.length - 1;
+        }
+        this.isRecording = true;
+        this.setState({});
+
+        if (mode === 'batch') {
+            // Batch recording configuration.
+            const RECORD_TIME = 3000;        // Total recording time (ms)
+            const INTERVAL_TIME = 110;         // Interval between batch samples (ms) (this is on top of the time it takes to record a sample, so 100 + 10, just to make sure we have fresh data from raft since it publishes data every 100ms)
+            const BATCH_SAMPLE_SIZE = 10;      // Number of data points per sample. so we have 10 samples, each waiting for 100ms, so we have 1 second of data. if recording for 3 seconds, we have 3 samples
+            let lastCaptureTime = 0;
+
+            // This inner function records one batch sample repeatedly.
+            const recordBatch = async (timestamp) => {
+                if (!this.isRecording) return;
+
+                if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
+                    await recordAccelerometerSample({
+                        trainingDataReducer: this.trainingDataReducer,
+                        accelerometerCanvasRef: this.accelerometerCanvasRef,
+                        selectedClassIdx,
+                        collectOptions: {
+                            collectionMode: 'samples',
+                            sampleTime: null,
+                            sampleSize: BATCH_SAMPLE_SIZE,
+                            getIsUserRecording: null
+                        }
+                    });
+                    // Optionally update UI.
+                    this.setState({});
+                    lastCaptureTime = timestamp;
+                }
+
+                // Continue the recording loop.
+                requestAnimationFrame(recordBatch);
+            };
+
+            // Start the recording loop.
+            requestAnimationFrame(recordBatch);
+
+            // Stop the recording after RECORD_TIME milliseconds.
+            const stopLoopTimeout = setTimeout(() => {
+                this.isRecording = false;
+                this.setState({});
+                clearTimeout(stopLoopTimeout);
+            }, RECORD_TIME);
+
+        } else if (mode === 'continuous') {
+            // Continuous recording: record one sample that lasts until the user stops.
+            await recordAccelerometerSample({
+                trainingDataReducer: this.trainingDataReducer,
+                accelerometerCanvasRef: this.accelerometerCanvasRef,
+                selectedClassIdx,
+                collectOptions: {
+                    collectionMode: 'user',
+                    sampleTime: null,
+                    sampleSize: null,
+                    getIsUserRecording: () => this.isRecording
+                }
+            });
+            this.setState({});
+        }
+    }
+
     onStartRecordingSamples = async (classTitle) => {
         // select class 
         let selectedClassIdx = this.trainingDataReducer.state.classes.findIndex(c => c.name === classTitle);
@@ -225,7 +398,7 @@ class MartyMachineModelEditor extends React.Component {
         // selectedClass = MODEL_CLASSES.find(c => c.name === classTitle);
         this.isRecording = true;
         this.setState({});
-        
+
         if (this.props.modelType === 'image-device') {
             const RECORD_TIME = 2000;
             const INTERVAL_TIME = 60;
@@ -276,7 +449,7 @@ class MartyMachineModelEditor extends React.Component {
             this.audioExtractor = new AudioExtractor();
             await this.audioExtractor.start();
             await new Promise(resolve => setTimeout(resolve, SAMPLE_TIME));
-            drawData(this.canvasRef, this.audioExtractor.timeDataQueue);
+            drawAudioData(this.canvasRef, this.audioExtractor.timeDataQueue);
             let imageSrc = this.canvasRef.toDataURL('image/png');
             imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
             this.trainingDataReducer.reduce({
@@ -292,8 +465,11 @@ class MartyMachineModelEditor extends React.Component {
             this.isRecording = false;
             this.setState({});
             await this.audioExtractor.stop();
+        } else if (this.props.modelType === 'accelerometer') {
+            await this.startRecordingAccelerometerSamples('batch', classTitle);
         }
     }
+
     onStopRecordingSamples = () => {
         this.isRecording = false;
         this.setState({});
@@ -328,12 +504,13 @@ class MartyMachineModelEditor extends React.Component {
         this.setState({});
         setTimeout(() => {
             // setTimeout because it allows the UI to update before starting training
-            martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType).then((isTrained) => {
-                this.isTrained = isTrained;
-                this.hasRun = false;
-                this.isTraining = false;
-                this.setState({});
-            });
+            martyMachine.trainModel(this.props.model, this.trainingDataReducer.state, this.props.modelType)
+                .then((isTrained) => {
+                    this.isTrained = isTrained;
+                    this.hasRun = false;
+                    this.isTraining = false;
+                    this.setState({});
+                });
         }, 200);
     }
 
@@ -346,7 +523,7 @@ class MartyMachineModelEditor extends React.Component {
     onRunModel = async () => {
         this.isRunning = true;
         if (this.props.modelType === 'image-device') {
-            const INTERVAL_TIME = 30;
+            const INTERVAL_TIME = 100;
             const videoElement = this.deviceStreamRef;
             const canvas = this.canvasRef;
             const ctx = canvas.getContext('2d');
@@ -380,7 +557,54 @@ class MartyMachineModelEditor extends React.Component {
             await audioExtractor.start();
             this.props.model.runAudioModel();
             this.audioExtractor = audioExtractor;
-            this.setState({});
+        } else if (this.props.modelType === 'accelerometer') {
+            const INTERVAL_TIME = 110; // Time between samples (in milliseconds)
+            const BATCH_SAMPLE_SIZE = 10;   // Number of samples in the sliding window
+            let lastCaptureTime = 0;
+
+            // Pre-fill sliding windows (you could pre-fill with zeros or the first reading)
+            const slidingWindowX = new Array(BATCH_SAMPLE_SIZE).fill(-1000);
+            const slidingWindowY = new Array(BATCH_SAMPLE_SIZE).fill(-1000);
+            const slidingWindowZ = new Array(BATCH_SAMPLE_SIZE).fill(-1000);
+
+            // recordFrame will be called repeatedly using requestAnimationFrame
+            const recordFrame = (timestamp) => {
+                // Only capture if enough time has passed
+                if (!lastCaptureTime || timestamp - lastCaptureTime >= INTERVAL_TIME) {
+                    if (!this.isRunning) {
+                        return;
+                    }
+
+                    // Capture current accelerometer data from your connected raft
+                    const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                    const data = connectedRaft.raftStateInfo.accelerometer;
+
+                    // Update the sliding window by shifting out the oldest sample and pushing the new one
+                    slidingWindowX.push(data.ax);
+                    slidingWindowX.shift();
+
+                    slidingWindowY.push(data.ay);
+                    slidingWindowY.shift();
+
+                    slidingWindowZ.push(data.az);
+                    slidingWindowZ.shift();
+
+                    // Immediately request a prediction with the current window (no waiting loop)
+                    this.props.model.runAccelerometerModel({ x: slidingWindowX, y: slidingWindowY, z: slidingWindowZ });
+
+                    // Optionally update the UI or component state
+                    this.setState({});
+
+                    // Update last capture time
+                    lastCaptureTime = timestamp;
+                }
+
+                // Continue the loop
+                requestAnimationFrame(recordFrame);
+            };
+
+            // Start the loop
+            requestAnimationFrame(recordFrame);
         }
         this.setState({});
     }
@@ -485,6 +709,7 @@ class MartyMachineModelEditor extends React.Component {
                     isModelLoaded={this.props.isModelLoaded}
                     setRef={this.setRef}
                     setAudioCanvasRef={this.setAudioCanvasRef}
+                    setAccelerometerCanvasRef={this.setAccelerometerCanvasRef}
                     setDeviceStreamRef={this.setDeviceStreamRef}
                 />
                 <canvas ref={this.setCanvasRef} width={martyMachine.image_size} height={martyMachine.image_size} style={{ display: 'none' }} />
@@ -588,9 +813,7 @@ class AudioExtractor {
 
 }
 
-
-
-function drawData(canvas, dataQueue) {
+function drawAudioData(canvas, dataQueue) {
     const flattenedData = dataQueue.reduce((acc, arr) => acc.concat(Array.from(arr)), []);
     const ctx = canvas.getContext('2d');
     const bufferLength = flattenedData.length;
@@ -622,3 +845,124 @@ function drawData(canvas, dataQueue) {
     // Draw the path to the canvas
     ctx.stroke();
 }
+
+// A helper function to process a single accelerometer sample.
+async function recordAccelerometerSample({
+    trainingDataReducer,
+    accelerometerCanvasRef,
+    selectedClassIdx,
+    collectOptions
+}) {
+    // Collect the accelerometer sample.
+    const { x, y, z } = await collectAccelerometerDataSample(collectOptions);
+    // Draw the sample for UI feedback.
+    drawAccelerometerDataSample(accelerometerCanvasRef, { x, y, z });
+    // Convert the canvas to an image.
+    let imageSrc = accelerometerCanvasRef.toDataURL('image/png');
+    imageSrc = imageSrc.replace(/^data:image\/(png|jpg);base64,/, "");
+
+    // Add the sample to your training data.
+    trainingDataReducer.reduce({
+        type: martyMachine.trainingDataActionTypes.TD_ADD_SAMPLE,
+        payload: {
+            id: selectedClassIdx,
+            xDataQueue: x,
+            yDataQueue: y,
+            zDataQueue: z,
+            image: martyMachine.newImage(imageSrc),
+            sampleType: 'accelerometer'
+        }
+    });
+}
+
+async function collectAccelerometerDataSample(options) {
+    const {
+        collectionMode, // 'time' or 'samples' or 'user'
+        sampleSize,
+        sampleTime,
+        getIsUserRecording
+    } = options;
+    const dataBuffer = {
+        x: [],
+        y: [],
+        z: []
+    };
+
+    let lastDrawTime = 0;
+    const collectDataInterval = 100;
+
+    // decide stop condition
+    let stopCondition = () => false;
+    if (collectionMode === 'time') {
+        stopCondition = () => Date.now() - lastDrawTime >= sampleTime;
+    } else if (collectionMode === 'samples') {
+        stopCondition = () => dataBuffer.x.length >= sampleSize;
+    } else if (collectionMode === 'user') {
+        stopCondition = () => !getIsUserRecording();
+    }
+
+    return new Promise((resolve) => {
+        const _collectData = () => {
+            const currentTime = Date.now();
+            if (stopCondition()) {
+                resolve(dataBuffer);
+                return;
+            }
+            if (currentTime - lastDrawTime >= collectDataInterval) {
+                requestAnimationFrame(_collectData);
+                const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                const data = connectedRaft.raftStateInfo.accelerometer;
+                const x = data.ax;
+                const y = data.ay;
+                const z = data.az;
+                dataBuffer.x.push(x);
+                dataBuffer.y.push(y);
+                dataBuffer.z.push(z);
+                lastDrawTime = currentTime;
+            } else {
+                requestAnimationFrame(_collectData);
+            }
+        };
+        _collectData();
+    });
+}
+
+function drawAccelerometerDataSample(canvas, accelData) {
+    const canvasCtx = canvas.getContext('2d');
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    drawAccelerometerLine(accelData.x, 'rgb(91, 20, 19)', canvasCtx, canvas, accelData.x.length);
+    drawAccelerometerLine(accelData.y, 'rgb(3, 125, 60)', canvasCtx, canvas, accelData.x.length);
+    drawAccelerometerLine(accelData.z, 'rgb(0, 170, 255)', canvasCtx, canvas, accelData.x.length);
+}
+
+function getRaftUsingTargetId(targetId) {
+    const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+    const raft = window.applicationManager.connectedRafts[raftId];
+    return raft;
+}
+
+
+// Function to draw a single line for a given axis
+function drawAccelerometerLine(dataArray, color, canvasCtx, canvas, maxPoints = 100) {
+
+
+    const centerY = canvas.height / 2; // Middle of the canvas (y-axis)
+    const scale = 30; // Scale factor to magnify the acceleration values (adjust as needed)
+    const xStep = canvas.width / (maxPoints - 1);
+
+
+    canvasCtx.beginPath();
+    canvasCtx.strokeStyle = color;
+    dataArray.forEach((val, index) => {
+        // Map the data point to canvas coordinates:
+        // x position is based on the index and y position is centered and scaled.
+        const xCoord = canvas.width - ((dataArray.length - 1 - index) * xStep);
+        const yCoord = centerY - (val * scale);
+        if (index === 0) {
+            canvasCtx.moveTo(xCoord, yCoord);
+        } else {
+            canvasCtx.lineTo(xCoord, yCoord);
+        }
+    });
+    canvasCtx.stroke();
+};

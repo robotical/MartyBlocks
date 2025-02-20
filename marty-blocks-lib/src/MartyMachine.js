@@ -36,6 +36,8 @@ class MartyMachine {
       model = new MLModel("static/MLModelWorker.js");
     } else if (modelType === "audio") {
       model = new MLModel("static/MLModelWorker.js");
+    } else if (modelType === "accelerometer") {
+      model = new MLModel("static/MLModelWorker.js");
     }
     this.currentModel = model;
     this.currentModel.modelType = modelType;
@@ -68,6 +70,8 @@ class MartyMachine {
         model.loadModel({ modelJSON, weightBuffers, weightInfo });
       } else if (modelType === "audio") {
         model.loadAudioModel({ modelJSON, weightBuffers, weightInfo, audioAlphabeticalWords });
+      } else if (modelType === "accelerometer") {
+        model.loadModel({ modelJSON, weightBuffers, weightInfo });
       }
     });
   }
@@ -113,6 +117,8 @@ class MartyMachine {
         model.trainModel(trainingData, trainingOptions);
       } else if (modelType === "audio") {
         model.trainAudioModel(trainingData, trainingOptions);
+      } else if (modelType === "accelerometer") {
+        model.trainAccelerometerModel(trainingData, trainingOptions);
       }
     });
   }
@@ -124,7 +130,6 @@ class MartyMachine {
   streamAudioToWebWorker(model, data) {
     model.streamAudioToWebWorker(data);
   }
-
 
   getNewTrainingDataReducer() {
     const trainingReducer =  new TDReducerWrapper();
@@ -155,3 +160,4 @@ class TDReducerWrapper {
 }
 
 module.exports = MartyMachine;
+

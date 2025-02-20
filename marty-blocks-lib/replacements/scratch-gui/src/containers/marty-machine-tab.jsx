@@ -8,6 +8,8 @@ import AssetPanel from "../components/asset-panel/asset-panel.jsx";
 import audioIcon from "../components/asset-panel/icon--audio.svg";
 import audioIconBlack from "../components/asset-panel/icon--audio-black.svg";
 import imageIcon from "../components/asset-panel/icon--image.svg";
+import accelerometerIconBlack from "../components/asset-panel/icon--accelerometer-black.svg";
+import accelerometerIconWhite from "../components/asset-panel/icon--accelerometer-white.svg";
 import imageIconBlack from "../components/asset-panel/icon--image-black.svg";
 import fileUploadIcon from "../components/action-menu/icon--file-upload.svg";
 import addNewIcon from "../components/action-menu/icon--plus.svg";
@@ -158,7 +160,8 @@ class MartyMachineTab extends React.Component {
         }
     }
 
-    handleSelectModel(modelIndex) {
+    handleSelectModel(model) {
+        const modelIndex = model.index;
         console.log("setting isModelLoaded to true in handleSelectModel")
         this.setState({
             selectedModelIndex: modelIndex,
@@ -264,6 +267,19 @@ class MartyMachineTab extends React.Component {
     };
 
     confirmDialogForNewModel = (modelType) => {
+        if (modelType === "accelerometer") {
+            // check that the currently selected device is a cog or a marty
+            const raftType = window.vm.editingTarget.raftType;
+            if (raftType !== 'Marty' && raftType !== 'Cog') {
+                alert('Oops! Please select a Marty or a Cog device to use the accelerometer model.');
+                return;
+            }
+            // check that the device is connected
+            if (!window.raftManager.isDeviceConnected(window.vm.editingTarget.id)) {
+                alert('Oops! Please connect the device to use the accelerometer model.');
+                return;
+            }
+        }
         this.setState({ newModelConfirmationModalVisible: true, newModelModelType: modelType });
     }
 
@@ -295,8 +311,16 @@ class MartyMachineTab extends React.Component {
         const models = sprite.models
             ? sprite.models.map((model) => {
                 // console.log("model", model);
+                let modelImage;
+                if (model.modelType === "audio") {
+                    modelImage = audioIcon;
+                } else if (model.modelType === "accelerometer") {
+                    modelImage = accelerometerIconBlack;
+                } else {
+                    modelImage = imageIcon;
+                }
                 return ({
-                    url: model.modelType === 'audio' ? audioIconBlack : imageIconBlack,
+                    url: modelImage,
                     name: model.name,
                     details: model.modelType,
                     dragPayload: model,
@@ -320,6 +344,11 @@ class MartyMachineTab extends React.Component {
                 defaultMessage: "New Image Model (Device)",
                 description: "Button to create a new image model using the device camera",
                 id: "gui.martyMachineTab.newImageModelDevice",
+            },
+            newAccelerometerModel: {
+                defaultMessage: "New Accelerometer Model",
+                description: "Button to create a new accelerometer model",
+                id: "gui.martyMachineTab.newAccelerometerModel",
             },
             newAudioModel: {
                 defaultMessage: "New Audio Model",
@@ -387,6 +416,11 @@ class MartyMachineTab extends React.Component {
                             title: intl.formatMessage(messages.newImageModelDevice),
                             img: imageIcon,
                             onClick: () => this.confirmDialogForNewModel("image-device"),
+                        },
+                        {
+                            title: intl.formatMessage(messages.newAccelerometerModel),
+                            img: accelerometerIconWhite,
+                            onClick: () => this.confirmDialogForNewModel("accelerometer"),
                         },
                         {
                             title: intl.formatMessage(messages.newAudioModel),
