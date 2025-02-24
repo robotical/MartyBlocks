@@ -416,7 +416,11 @@ class Mv2Interface extends EventDispatcher {
    * Currently available only in the desktop version of MartyBlocks
    */
   toggleSensorsDashboard() {
-    this.send_REST("toggle-sensors-dashboard");
+    try {
+      window.applicationManager.toggleSensorsDashboard();
+    } catch (e) {
+      console.log("Error toggling sensors dashboard:", e);
+    }
   }
 
   /**
