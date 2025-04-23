@@ -1,4 +1,4 @@
-hostStatusesCache = require("./HostStatusesCache");
+hostStatusesCache = require("./HostStatusesCache.js");
 const Mv2Interface = require("./Mv2Interface");
 const MartyMachine = require("./MartyMachine");
 const MSTTesting = require("./MSTTesting");

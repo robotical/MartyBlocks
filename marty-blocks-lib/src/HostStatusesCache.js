@@ -22,7 +22,11 @@ if (!window[BOOTSTRAP_FLAG]) {
             const timeoutId = setTimeout(() => {
                 controller.abort();
                 console.error(`[fetch timeout] → ${url}`);
-                alert(makeAlertMessage(url, timeoutMs));
+                if (window.applicationManager && window.applicationManager.toaster) {
+                    window.applicationManager.toaster.warn(makeAlertMessage(url, timeoutMs));
+                } else {
+                    alert(makeAlertMessage(url, timeoutMs));
+                }
             }, timeoutMs);
 
             // If caller passed a signal, chain it
@@ -53,7 +57,11 @@ if (!window[BOOTSTRAP_FLAG]) {
             this._timeoutId = setTimeout(() => {
                 this.abort();
                 console.error(`[xhr timeout] → ${this._xhrUrl}`);
-                alert(makeAlertMessage(url, timeoutMs));
+                if (window.applicationManager && window.applicationManager.toaster) {
+                    window.applicationManager.toaster.warn(makeAlertMessage(url, timeoutMs));
+                } else {
+                    alert(makeAlertMessage(url, timeoutMs));
+                }
             }, timeoutMs);
 
             // clear the timeout once the request finishes (success, error, or abort)
