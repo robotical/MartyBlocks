@@ -24,7 +24,7 @@ const blockIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYA
  * The url of the translate server.
  * @type {string}
  */
-const serverURL = 'https://translate-service.scratch.mit.edu/';
+const serverURL = 'https://appv2-analytics-server.robotical.io';
 
 /**
  * How long to wait in ms before timing out requests to translate server.
@@ -259,7 +259,7 @@ class Scratch3TranslateBlocks {
 
         const lang = this.getLanguageCodeFromArg(args.LANGUAGE);
 
-        let urlBase = `${serverURL}translate?language=`;
+        let urlBase = `${serverURL}/translate?language=`;
         urlBase += lang;
         urlBase += '&text=';
         urlBase += encodeURIComponent(args.WORDS);

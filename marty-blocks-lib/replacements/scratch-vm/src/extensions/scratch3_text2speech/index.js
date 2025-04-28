@@ -35,7 +35,7 @@ const martyBlockIconURI =
  * The url of the synthesis server.
  * @type {string}
  */
-const SERVER_HOST = "https://synthesis-service.scratch.mit.edu";
+const SERVER_HOST = "https://appv2-analytics-server.robotical.io";
 
 /**
  * How long to wait in ms before timing out requests to synthesis server.
