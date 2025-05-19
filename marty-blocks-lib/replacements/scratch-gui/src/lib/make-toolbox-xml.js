@@ -564,6 +564,35 @@ const control = function (isInitialSetup, targetType, raftType) {
 const sensing = function (isInitialSetup, targetType, targetId, raftType) {
     const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
 
+    const sharedSensingBlocks = `
+    ${blockSeparator}
+    <block type="sensing_keypressed">
+    <value name="KEY_OPTION">
+        <shadow type="sensing_keyoptions"/>
+    </value>
+    </block>
+    <block type="sensing_mousedown"/>
+    <block type="sensing_mousex"/>
+    <block type="sensing_mousey"/>
+
+    ${blockSeparator}
+    
+    <block id="loudness" type="sensing_loudness" />
+    ${blockSeparator}
+    <block id="timer" type="sensing_timer"/>
+    <block type="sensing_resettimer"/>
+    ${blockSeparator}
+    <block id="of" type="sensing_of">
+    <value name="OBJECT">
+    <shadow id="sensing_of_object_menu" type="sensing_of_object_menu" />
+    </value>
+    </block>
+    ${blockSeparator}
+    <block id="current" type="sensing_current"/>
+    <block type="sensing_dayssince2000"/>
+    ${blockSeparator}
+`;
+
     const stageSensingBlocks = targetType === targetTypes.stage ? `
      ${isInitialSetup ? '' : `
             <block id="askandwait" type="sensing_askandwait">
@@ -641,36 +670,11 @@ ${blockSeparator}
         `}
 
 <block id="answer" type="sensing_answer" />
-${blockSeparator}
-<block type="sensing_keypressed">
-    <value name="KEY_OPTION">
-        <shadow type="sensing_keyoptions"/>
-    </value>
-</block>
-<block type="sensing_mousedown"/>
-<block type="sensing_mousex"/>
-<block type="sensing_mousey"/>
-
-${blockSeparator}
-  
-<block id="loudness" type="sensing_loudness" />
-${blockSeparator}
-<block id="timer" type="sensing_timer"/>
-<block type="sensing_resettimer"/>
-${blockSeparator}
-<block id="of" type="sensing_of">
-<value name="OBJECT">
-<shadow id="sensing_of_object_menu" type="sensing_of_object_menu" />
-</value>
-</block>
-${blockSeparator}
-<block id="current" type="sensing_current"/>
-<block type="sensing_dayssince2000"/>
-${blockSeparator}
+${sharedSensingBlocks}
 <block type="sensing_username" />
     ` : ``;
-    const martySensingBlocks = (targetType === targetTypes.device && raftType === "Marty") ? martyblockslib.MartyBlocksToolbox_sensing() : ``;
-    const cogSensingBlocks = (targetType === targetTypes.device && raftType === "Cog") ? martyblockslib.CogBlocksToolbox_sensing() : ``;
+    const martySensingBlocks = (targetType === targetTypes.device && raftType === "Marty") ? `${martyblockslib.MartyBlocksToolbox_sensing()} ${sharedSensingBlocks}` : ``;
+    const cogSensingBlocks = (targetType === targetTypes.device && raftType === "Cog") ? `${martyblockslib.CogBlocksToolbox_sensing()} ${sharedSensingBlocks}` : ``;
     return `
     <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
             ${stageSensingBlocks}
