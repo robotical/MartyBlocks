@@ -171,6 +171,7 @@ class Scratch3CogBlocks {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
+    if (publishedDataAnalyser.cogState.objectSense === "both") return true;
     return publishedDataAnalyser.cogState.objectSense === args[cog_blocks_definitions.events.cog_onObjectSense.values.SIDE.name];
   }
   onLightSense(args, utils) {

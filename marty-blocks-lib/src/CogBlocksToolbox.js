@@ -940,6 +940,7 @@ class CogBlocks {
     }
 
     onObjectSense(args) {
+        if (cogBlocks.p2State.objectSense === "both") return true;
         return cogBlocks.p2State.objectSense === args.OBJECT_SENSE;
     }
 
