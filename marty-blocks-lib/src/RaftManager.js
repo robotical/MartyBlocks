@@ -13,7 +13,7 @@ class RaftManager {
     }
 
     onProjectLoaded() {
-        console.error("THIS NEEDS TO BE DEFINED IN THE TARGET PANE COMPONENT BEFORE EXECUTED IN THE PROJECT FETCHER HOC");
+        console.error("onProjectLoaded NEEDS TO BE DEFINED IN THE TARGET PANE COMPONENT BEFORE EXECUTED IN THE PROJECT FETCHER HOC");
     }
 
     isDeviceConnected(deviceId) {
@@ -56,11 +56,11 @@ class RaftManager {
             console.warn('appManager not defined');
         }
 
-        let connectFunction = appManager.connectGeneric;
+        let connectFunction = appManager.connectGeneric.bind(appManager);
         if (raftType === 'Cog') {
-            connectFunction = appManager.connectGenericCog;
+            connectFunction = appManager.connectGenericCog.bind(appManager);
         } else if (raftType === 'Marty') {
-            connectFunction = appManager.connectGenericMarty;
+            connectFunction = appManager.connectGenericMarty.bind(appManager);
         }
         connectFunction((raft) => {
             // set subscription to raft events so we can update the UI when:

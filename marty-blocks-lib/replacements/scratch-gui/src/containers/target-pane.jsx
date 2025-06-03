@@ -388,6 +388,7 @@ class TargetPane extends React.Component {
                 });
             },
             (raft) => { // on disconnect cb
+                const deviceId = window.raftManager.raftIdAndDeviceIdMap[raft.id];
                 try {
                     window.raftManager.getConnectionButtonState(deviceId).setState({
                         isConnected: false
@@ -395,6 +396,7 @@ class TargetPane extends React.Component {
                     window.raftManager.getConnectionButtonState(deviceId).props.onChangeDeviceName(raft.type, deviceId);
                 } catch (e) {
                     console.warn("Device was removed before name could be changed");
+                    console.error("Error in handleNewDeviceByConnection", e);
                 }
                 this.handleActivateBlocksTab();
             },

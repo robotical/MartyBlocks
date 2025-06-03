@@ -63,7 +63,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             setTimeout(() => {
               // give some time so all the buttons/devices are rendered before we start updating the UI
               window.raftManager.onProjectLoaded();
-            }, 1000)
+            }, 2000);
+            // }, window.applicationManager.isPhoneApp() ? 2000 : 1000)
           },
           // eslint-disable-next-line no-console
           (error) => console.error("Error fetching project", error.message)
