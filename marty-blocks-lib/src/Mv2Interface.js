@@ -228,7 +228,7 @@ class Mv2Interface extends EventDispatcher {
           Application: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: projectBase64 }),
+        body: JSON.stringify({ data: projectBase64, lastAccessed: Date.now() }),
       });
       this.sendFeedbackToServer({ success: true, fileName: fileName });
     } catch (e) {
@@ -297,6 +297,14 @@ class Mv2Interface extends EventDispatcher {
       if (!projectBase64String || !projectBase64String.data) {
         throw new Error("Invalid project id");
       }
+      // after loading, update the last accessed time
+      await fetch(dbUrl + fileId + ".json", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ lastAccessed: Date.now() }),
+      });
       return projectBase64String.data;
     } catch (e) {
       console.log("Couldn't load cloud project:", e);
