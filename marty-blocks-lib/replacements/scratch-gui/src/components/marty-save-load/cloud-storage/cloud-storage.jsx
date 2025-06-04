@@ -71,9 +71,9 @@ class SaveLoad extends React.Component {
 
     let projectId = fileName;
     if (this.validURL(fileName)) {
-        if (!fileName.includes("http")) fileName = "https://" + fileName;
-        const url = new URL(fileName);
-        projectId = url.searchParams.get('p') || "";
+      if (!fileName.includes("http")) fileName = "https://" + fileName;
+      const url = new URL(fileName);
+      projectId = url.searchParams.get('p') || "";
     }
 
     this.setState((oldState) => {
@@ -87,6 +87,10 @@ class SaveLoad extends React.Component {
       vm.loadProject(arrayBuffer);
       // eslint-disable-next-line no-alert
       alert("Loaded Project");
+      setTimeout(() => {
+        // give some time so all the buttons/devices are rendered before we start updating the UI
+        window.raftManager.onProjectLoaded();
+      }, 2000);
       // this seems to be required to let the wm load the project
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
@@ -145,12 +149,12 @@ class SaveLoad extends React.Component {
   }
 
   validURL(str) {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
     return !!pattern.test(str);
   }
 

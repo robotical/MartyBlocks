@@ -125,9 +125,26 @@ class RaftManager {
         delete this.raftIdAndDeviceIdMap[deviceId];
     }
 
+    removeDeviceIdRaftIdMapGivenOnlyDeviceId(deviceId) {
+        const raftId = this.raftIdAndDeviceIdMap[deviceId];
+        if (raftId) {
+            this.removeDeviceIdRaftIdMap(deviceId, raftId);
+        } else {
+            console.warn('No raftId found for deviceId: ', deviceId);
+        }
+    }
+
 
     addConnectionButtonState(deviceId, connectionButton) {
         this.connectionButtons[deviceId] = connectionButton;
+    }
+
+    removeConnectionButtonState(deviceId) {
+        if (this.connectionButtons[deviceId]) {
+            delete this.connectionButtons[deviceId];
+        } else {
+            console.warn('No connection button found for deviceId: ', deviceId);
+        }
     }
 
     getConnectionButtonState(deviceId) {

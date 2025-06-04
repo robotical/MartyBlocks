@@ -27,6 +27,8 @@ export default class ConnectionButton extends React.Component {
     componentWillUnmount() {
         console.log("UNMOUNTING CONNECTION BUTTON", this.props.deviceId);
         window.raftManager.removeSubscriptionsOfDevice(this.props.deviceId);
+        window.raftManager.removeConnectionButtonState(this.props.deviceId);
+        window.raftManager.removeDeviceIdRaftIdMapGivenOnlyDeviceId(this.props.deviceId);
     }
 
     onConnect() {
