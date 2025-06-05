@@ -309,7 +309,7 @@ class Scratch3CogBlocks {
     const ledIdArgValue = args[cog_blocks_definitions.looks.cog_setLEDToColour.values.LED_ID.name];
     let ledId = ledIdArgValue;
     const color = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setLEDToColour.values.COLOR.name]);
-    const command = `led//setled/${ledId}/${color}`;
+    const command = `led/ring/setled/${ledId}/${color}`;
     console.log("command", command);
     connectedRaft.sendRestMessage(command);
   }
@@ -439,23 +439,20 @@ module.exports = Scratch3CogBlocks;
  * Helpers
  */
 function setAllLEDsToColours_colourPicker(colours, cog) {
-  const commands = _LEDColourPickerApiCommandBuilder(colours);
-  for (const command of commands) {
-    cog.sendRestMessage(command);
-  }
+  const command = _LEDColourPickerApiCommandBuilder(colours);
+  cog.sendRestMessage(command);
 }
 
 function _LEDColourPickerApiCommandBuilder(colorsArray) {
-  const commands = [];
-  for (let i = 0; i < colorsArray.length; i++) {
-    let color = colorsArray[i].replace("#", "");
+  let commandStr = "led/ring/setleds/";
+  const numPixels = colorsArray.length;
+  const idOffset = 9;
+  for (let i = 0; i < numPixels; i++) {
+    let color = colorsArray[(i+idOffset)%numPixels].replace("#", "");
     if (color === "9966FF") color = "000000"; // that's our "off" colour
-    const idOffset = 3;
-    const ledIdMapped = ((i + idOffset) % colorsArray.length);
-    const command = `led//setled/${ledIdMapped + 1}/${color}`;
-    commands.push(command);
+    commandStr += color;
   }
-  return commands;
+  return commandStr;
 }
 
 function _getColourFromOperator(argumentValue) {
