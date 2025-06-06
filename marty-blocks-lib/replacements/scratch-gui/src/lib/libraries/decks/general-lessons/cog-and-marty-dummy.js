@@ -169,10 +169,22 @@ const cogAndMartyTutorial = {
                     values={{}}
                 />,
                 nextStepActions: [
+                    // we could either highlight the category first and then the block (using the onClickAction of the HighlightElement nextStepAction type, as shown below)
                     {
-                        type: "HighlightBlocks",
-                        blocks: ["cog_onButtonPush"]
+                        type: "HighlightElement",
+                        elementId: "category-events",
+                        hexColor: "#855cd659",
+                        onClickAction: "HighlightBlocks",
+                        args: {
+                            blocks: ["cog_onButtonPush"],
+                            hexColor: "#855cd659",
+                        }
                     },
+                    // or, we could highlight the block directly without highlighting the category first (the commented-out code below)
+                    // {
+                    //     type: "HighlightBlocks",
+                    //     blocks: ["cog_onButtonPush"]
+                    // },
                 ],
                 hint: {
                     description: <FormattedMessage
