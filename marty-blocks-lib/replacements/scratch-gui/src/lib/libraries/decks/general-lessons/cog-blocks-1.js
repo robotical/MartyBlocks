@@ -124,7 +124,7 @@ const cogBlocksTutorial1 = {
                 nextStepActions: [
                     {
                         type: "HighlightElement",
-                        elementId: "events",
+                        elementId: "category-events",
                         hexColor: "#855cd659",
                         onClickAction: "NextStep",
                     }
@@ -180,7 +180,7 @@ const cogBlocksTutorial1 = {
                 nextStepActions: [
                     {
                         type: "HighlightElement",
-                        elementId: "looks",
+                        elementId: "category-looks",
                         hexColor: "#855cd659",
                         onClickAction: "NextStep",
                     }
@@ -666,7 +666,7 @@ const cogBlocksTutorial1 = {
                 nextStepActions: [
                     {
                         type: "HighlightElement",
-                        elementId: "control",
+                        elementId: "category-control",
                         hexColor: "#855cd659",
                         onClickAction: "NextStep",
                     }
@@ -849,7 +849,7 @@ const cogBlocksTutorial1 = {
                 nextStepActions: [
                     {
                         type: "HighlightElement",
-                        elementId: "sound",
+                        elementId: "category-sound",
                         hexColor: "#855cd659",
                         onClickAction: "NextStep",
                     }
