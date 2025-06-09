@@ -40,10 +40,15 @@ const cogBlocksTutorial1 = {
                     }
                 ],
                 description: <FormattedMessage
-                    defaultMessage={"Let's learn how to program Cog with Blocks! <br /><br />We'll connect to Cog, and make it light up and make sounds when the button is pushed!<br /><Br />We'll also learn about <b>series code</b> that runs as a <b>sequence</b>, and <b>parallel code</b> that runs <b>at the same time</b>"}
+                    defaultMessage="Let's learn how to program Cog with Blocks! {newline} We'll connect to Cog, and make it light up and make sounds when the button is pushed!{newline} We'll also learn about {series} code that runs as a sequence, and {parallel} code that runs at the same time"
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-1`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                        series: <b><FormattedMessage id="gui.howtos.lessons.series" defaultMessage="series" /></b>,
+                        parallel: <b><FormattedMessage id="gui.howtos.lessons.parallel" defaultMessage="parallel" /></b>
+
+                    }}
                 />,
                 expectedCode: [],
             },
@@ -52,10 +57,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}device_button.png`,
                 description: <FormattedMessage
-                    defaultMessage={"First, let's connect to Cog. Click on the 'Connect a device' button and then select Cog. <br /><br />You can <b>skip this if a Cog is already connected</b>"}
+                    defaultMessage={"First, let's connect to Cog. Click on the 'Connect a device' button and then select Cog. {newline} You can skip this step if a Cog is already connected"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-2`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -77,10 +84,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}connect_device_button.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Great! Now click on the 'connect' button to connect to Cog<br /><br />Again, you can skip this if you're already connected to a Cog"}
+                    defaultMessage={"Great! Now click on the 'connect' button to connect to Cog{newline}Again, you can skip this if you're already connected to a Cog"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-3`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -136,10 +145,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}6-onButtonPush.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add an <b>On Button Press</b> block"}
+                    defaultMessage={"Add an {onButtonPress} block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-6`}
-                    values={{}}
+                    values={{
+                        onButtonPress: <b><FormattedMessage id="gui.howtos.lessons.onButtonPress" defaultMessage="On Button Press" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -191,10 +202,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}8-setLeds.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>Set [ring] LEDs to [color]</b> block, by dragging it to connect with the On Button Press block"}
+                    defaultMessage={"Add a {setLEDs} block, by dragging it to connect with the On Button Press block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-8`}
-                    values={{}}
+                    values={{
+                        setLEDs: <b><FormattedMessage id="gui.howtos.lessons.setLEDs" defaultMessage="Set [ring] LEDs to [color]" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -227,10 +240,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}pushCogButton.jpg`,
                 description: <FormattedMessage
-                    defaultMessage={"Try it out! <br /><br />Push the button on Cog and the lights should come on!"}
+                    defaultMessage={"Try it out! {newline}Push the button on Cog and the lights should come on!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-9`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -241,10 +256,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}10-changeColor.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Change the color of the LEDs by clicking or pressing on the color blob, then dragging the <b>Color</b> bar. <br /><br />You can also change the <b>Saturation</b> (how vivid a color is) and the <b>Brightness</b> - if you set that to 0 the LEDs will be off"}
+                    defaultMessage={"Change the color of the LEDs by clicking or pressing on the color blob, then dragging the Color bar. {newline}You can also change the Saturation (how vivid a color is) and the Brightness - if you set that to 0 the LEDs will be off"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-10`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -257,10 +274,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}pushCogButton.jpg`,
                 description: <FormattedMessage
-                    defaultMessage={"Try it out! <br /><br />Push the button on Cog and the lights should change to the new color you selected!"}
+                    defaultMessage={"Try it out! {newline}Push the button on Cog and the lights should change to the new color you selected!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-11`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -271,10 +290,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}12-onShake.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add an <b>On Shake</b> block"}
+                    defaultMessage={"Add an {onShake} block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-12`}
-                    values={{}}
+                    values={{
+                        onShake: <b><FormattedMessage id="gui.howtos.lessons.onShake" defaultMessage="On Shake" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -308,10 +329,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}13-turnOffLeds.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>Turn off LEDs</b> block under the On Shake block"}
+                    defaultMessage={"Add a {turnOffLEDs} block under the On Shake block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-13`}
-                    values={{}}
+                    values={{
+                        turnOffLEDs: <b><FormattedMessage id="gui.howtos.lessons.turnOffLEDs" defaultMessage="Turn off LEDs" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -345,10 +368,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}shakeCog.gif`,
                 description: <FormattedMessage
-                    defaultMessage={"Try it out! <br /><br />Shake Cog and the lights should turn off!"}
+                    defaultMessage={"Try it out! {newline}Shake Cog and the lights should turn off!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-14`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>,
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -360,10 +385,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}15-button.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Change the <b>Set [ring] LEDs to [color]</b> block to control the button LED instead, by selecting <b>button</b> from the dropdown menu"}
+                    defaultMessage={"Change the {setLEDs} block to control the button LED instead, by selecting 'button' from the dropdown menu"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-15`}
-                    values={{}}
+                    values={{
+                        setLEDs: <b><FormattedMessage id="gui.howtos.lessons.setLEDs" defaultMessage="Set [ring] LEDs to [color]" /></b>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -375,10 +402,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}pushCogButton.jpg`,
                 description: <FormattedMessage
-                    defaultMessage={"Try it out! <br /><br />Push the button on Cog and now the light in the button should turn on!"}
+                    defaultMessage={"Try it out! {newline}Push the button on Cog and now the light in the button should turn on!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-16`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -390,10 +419,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}17-all.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Shake Cog to turn off the LEDs<br /><br />Now change the same dropdown to select <b>all</b> instead."}
+                    defaultMessage={"Shake Cog to turn off the LEDs{newline}Now change the same dropdown to select 'all' instead."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-17`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -405,10 +436,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}pushCogButton.jpg`,
                 description: <FormattedMessage
-                    defaultMessage={"Try it out! <br /><br />Push the button on Cog and all the lights should turn on!"}
+                    defaultMessage={"Try it out! {newline}Push the button on Cog and all the lights should turn on!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-18`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -420,10 +453,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}19-pattern.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>Set [ring] LEDs to pattern [Flash]</b> block under the Set LED color block"}
+                    defaultMessage={"Add a {setLEDPattern} block under the Set LED color block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-19`}
-                    values={{}}
+                    values={{
+                        setLEDPattern: <b><FormattedMessage id="gui.howtos.lessons.setLEDPattern" defaultMessage="Set [ring] LEDs to pattern [Flash]" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -457,10 +492,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}20-tryItOut.gif`,
                 description: <FormattedMessage
-                    defaultMessage={"Try it out! <br /><br />Push the button on Cog and now the ring of LEDs should start flashing!"}
+                    defaultMessage={"Try it out! {newline}Push the button on Cog and now the ring of LEDs should start flashing!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-20`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -472,7 +509,7 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}21-spin1.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Change the pattern to <b>Spin1</b> and try it out!"}
+                    defaultMessage={"Change the pattern to 'Spin1' and try it out!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-21`}
                     values={{}}
@@ -502,10 +539,13 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}23-buttonPattern.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add another <b>Set [ring] LEDs to pattern [Flash]</b> block under the previous one, and change it so that it sets the button to flash.<br /><Br />Try it out by pushing the button on Cog"}
+                    defaultMessage={"Add another {setLEDPattern} block under the previous one, and change it so that it sets the button to flash.{newline}Try it out by pushing the button on Cog"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-23`}
-                    values={{}}
+                    values={{
+                        setLEDPattern: <b><FormattedMessage id="gui.howtos.lessons.setLEDPattern" defaultMessage="Set [ring] LEDs to pattern [Flash]" /></b>,
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -554,10 +594,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}25-colorPicker.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>Set LEDs using the ColorPicker<b> block connected to the On Button Press block"}
+                    defaultMessage={"Add a {setLEDColourPicker} block connected to the On Button Press block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-25`}
-                    values={{}}
+                    values={{
+                        setLEDColourPicker: <b><FormattedMessage id="gui.howtos.lessons.setLEDColourPicker" defaultMessage="Set LEDs using the ColorPicker" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -591,10 +633,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}26-changeColors.gif`,
                 description: <FormattedMessage
-                    defaultMessage={"Change the individual LED colors using the color picker.<br /><br />First select a color using the color wheel and the saturation and brightness sliders, then select the LEDs you want to set to that color"}
+                    defaultMessage={"Change the individual LED colors using the color picker.{newline}First select a color using the color wheel and the saturation and brightness sliders, then select the LEDs you want to set to that color"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-26`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -606,10 +650,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}27-buttonColor.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Set the button color too by adding a <b>Set [ring] LEDs to [color]</b> block and changing it to set the button to your favorite color"}
+                    defaultMessage={"Set the button color too by adding a {setLEDs} block and changing it to set the button to your favorite color"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-27`}
-                    values={{}}
+                    values={{
+                        setLEDs: <b><FormattedMessage id="gui.howtos.lessons.setLEDs" defaultMessage="Set [ring] LEDs to [color]" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -678,10 +724,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}30-wait.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>wait [1] seconds</b> block under the LED blocks"}
+                    defaultMessage={"Add a {wait} block under the LED blocks"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-30`}
-                    values={{}}
+                    values={{
+                        wait: <b><FormattedMessage id="gui.howtos.lessons.wait" defaultMessage="wait [1] seconds" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -715,10 +763,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}31-colorPicker.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add another <b>Set LEDs using the ColorPicker</b> block under the wait block, then change the colors to whatever you choose"}
+                    defaultMessage={"Add another {setLEDColourPicker} block under the wait block, then change the colors to whatever you choose"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-31`}
-                    values={{}}
+                    values={{
+                        setLEDColourPicker: <b><FormattedMessage id="gui.howtos.lessons.setLEDColourPicker" defaultMessage="Set LEDs using the ColorPicker" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -752,10 +802,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}32-buttonColor.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Change the button color too by adding a <b>Set [ring] LEDs to [color]</b> block and changing it to set the button to your favorite color"}
+                    defaultMessage={"Change the button color too by adding a {setLEDs} block and changing it to set the button to your favorite color"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-32`}
-                    values={{}}
+                    values={{
+                        setLEDs: <b><FormattedMessage id="gui.howtos.lessons.setLEDs" defaultMessage="Set [ring] LEDs to [color]" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -804,10 +856,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}34-onButtonPress.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add another <b>On Button Press</b> block"}
+                    defaultMessage={"Add another {onButtonPress} block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-34`}
-                    values={{}}
+                    values={{
+                        onButtonPress: <b><FormattedMessage id="gui.howtos.lessons.onButtonPress" defaultMessage="On Button Press" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -861,10 +915,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}36-playNote.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>Play note [C4] for [1] seconds</b> block under the On Button Press block you just added"}
+                    defaultMessage={"Add a {playNoteForTime} block under the On Button Press block you just added"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-36`}
-                    values={{}}
+                    values={{
+                        playNoteForTime: <b><FormattedMessage id="gui.howtos.lessons.playNoteForTime" defaultMessage="Play note [C4] for [1] seconds" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -913,10 +969,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}38-playTone.gif`,
                 description: <FormattedMessage
-                    defaultMessage={"Add a <b>Play tone from [200] to [300] Hz for [3] seconds</b> block between the On Button Push block and the Play Note block"}
+                    defaultMessage={"Add a {playTone} block between the On Button Push block and the Play Note block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-38`}
-                    values={{}}
+                    values={{
+                        playTone: <b><FormattedMessage id="gui.howtos.lessons.playTone" defaultMessage="Play tone from [200] to [300] Hz for [3] seconds" /></b>
+                    }}
                 />,
                 nextStepActions: [
                     {
@@ -950,10 +1008,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}39-playTone.png`,
                 description: <FormattedMessage
-                    defaultMessage={"Change the numbers in the Play Tone block to go from 260 to 523 Hz for 1 second.<br /><br />Every musical note has a frequency, and 523Hz is the frequency of C5 - C in the fifth octave.<br /><Br />Try it out by pushing the button on Cog"}
+                    defaultMessage={"Change the numbers in the Play Tone block to go from 260 to 523 Hz for 1 second.{newline}Every musical note has a frequency, and 523Hz is the frequency of C5 - C in the fifth octave.{newline}Try it out by pushing the button on Cog"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-39`}
-                    values={{}}
+                    values={{
+                        newline: <span><br /><br /></span>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -965,10 +1025,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}parallel.png`,
                 description: <FormattedMessage
-                    defaultMessage={"When you push the button, the sounds and lights happen at the same time - we say that they are running <b>in parallel</b>"}
+                    defaultMessage={"When you push the button, the sounds and lights happen at the same time - we say that they are running in {parallel}"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-40`}
-                    values={{}}
+                    values={{
+                        parallel: <b><FormattedMessage id="gui.howtos.lessons.parallel" defaultMessage="parallel" /></b>
+                    }}
                 />,
                 nextStepActions: [
                 ],
@@ -980,10 +1042,12 @@ const cogBlocksTutorial1 = {
                 type: "info",
                 image: `${BUCKET_URL}series.png`,
                 description: <FormattedMessage
-                    defaultMessage={"The individual sounds and lights happen one after another - we say they are running <b>in series</b> or <b>in a sequence</b>"}
+                    defaultMessage={"The individual sounds and lights happen one after another - we say they are running in {series} or in a sequence"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-41`}
-                    values={{}}
+                    values={{
+                        series: <b><FormattedMessage id="gui.howtos.lessons.series" defaultMessage="series" /></b>,
+                    }}
                 />,
                 nextStepActions: [
                 ],
