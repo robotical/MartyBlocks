@@ -4,7 +4,7 @@ import ImageStep from '../../lesson-image/lesson-image.jsx';
 import ModalBottomButtons from '../lesson-modal-bottom-buttons/lesson-modal-bottom-buttons.jsx';
 import classNames from 'classnames';
 import ReadOutLoudTextExtractor from '../../utils/extract-intl-text.jsx';
-
+import { renderFormattedMessage } from '../../lessons.jsx';
 class LessonStartModalContent extends React.Component {
 
     constructor() {
@@ -14,7 +14,7 @@ class LessonStartModalContent extends React.Component {
             extractedText: "",
         }
     }
-    
+
     handleTextExtracted(text) {
         this.setState({ extractedText: text });
     }
@@ -35,9 +35,7 @@ class LessonStartModalContent extends React.Component {
         return (
             <>
                 <div className={stepBodyClass}>
-                    <div className={stepDescriptionClass}>
-                        {description}
-                    </div>
+                    {renderFormattedMessage(description, stepDescriptionClass)}
                     <ImageStep
                         image={img}
                         title={""}

@@ -561,8 +561,8 @@ const STEP_21_DESCRIPTION = <FormattedMessage
         linebreak: <br />,
         em1: <em>remotely operated vehicle/robot</em>,
         emExploration: <em>exploration</em>,
-        em2: <em>Remember that each command word will require a new event block with the correct label so it 
-        does not need to attach to any of the previous blocks that have been added to your program.</em>,
+        em2: <em>Remember that each command word will require a new event block with the correct label so it
+            does not need to attach to any of the previous blocks that have been added to your program.</em>,
 
     }}
 />;
@@ -596,7 +596,7 @@ const STEP_22_DESCRIPTION = <FormattedMessage
     values={{
         linebreak: <br />,
         boldGreenFlag: <b>green flag</b>,
-        em1: <em>Click on the checkbox beside the sound label block to see the live predictions being used in your program, 
+        em1: <em>Click on the checkbox beside the sound label block to see the live predictions being used in your program,
             this might help you with debugging your code to make sure it is working correctly!</em>,
         bold1: <b>Remember that your program uses the microphone on your device so your voice needs to be heard clearly by your device and not by Marty!</b>,
 
@@ -650,11 +650,11 @@ const END_STEP_DESCRIPTION = <FormattedMessage
     id={`gui.howtos.lessons.type-lesson-ml-captains-orders.step_end.description`}
     values={{
         linebreak: <br />,
-        em1: <em>When the green flag is clicked and the program starts up, the machine learning model is 
-            loaded with a confidence threshold set so that only predictions with a confidence of 
+        em1: <em>When the green flag is clicked and the program starts up, the machine learning model is
+            loaded with a confidence threshold set so that only predictions with a confidence of
             80% or greater are used in the program to control Marty. Every second the program will label live audio data.</em>,
-        em2: <em>The other sections of the program contain event blocks that identify what Marty should do when each command has 
-            been identified using motion blocks. This section may look different for each person depending on the 
+        em2: <em>The other sections of the program contain event blocks that identify what Marty should do when each command has
+            been identified using motion blocks. This section may look different for each person depending on the
             command words that have been trained in the data model.</em>
     }}
 />;
@@ -710,12 +710,12 @@ export default {
                 type: STEP_7_TYPE,
                 description: STEP_7_DESCRIPTION,
                 image: STEP_7_IMAGE,
-            }, 
+            },
             {
                 type: STEP_8_TYPE,
                 description: STEP_8_DESCRIPTION,
                 image: STEP_8_IMAGE,
-            }, 
+            },
             {
                 type: STEP_9_TYPE,
                 question: STEP_9_QUESTION,
@@ -727,7 +727,7 @@ export default {
                 type: STEP_10_TYPE,
                 description: STEP_10_DESCRIPTION,
                 hint: STEP_10_HINT
-            }, 
+            },
             {
                 type: STEP_11_TYPE,
                 description: STEP_11_DESCRIPTION,
@@ -737,7 +737,7 @@ export default {
                 type: STEP_12_TYPE,
                 description: STEP_12_DESCRIPTION,
                 hint: STEP_12_HINT
-            }, 
+            },
             {
                 type: STEP_13_TYPE,
                 question: STEP_13_QUESTION,
@@ -749,7 +749,7 @@ export default {
                 type: STEP_14_TYPE,
                 description: STEP_14_DESCRIPTION,
                 hint: STEP_14_HINT
-            }, 
+            },
             {
                 type: STEP_15_TYPE,
                 description: STEP_15_DESCRIPTION,
@@ -780,7 +780,7 @@ export default {
                 question: STEP_20_QUESTION,
                 questionType: STEP_20_QUESTION_TYPE,
                 correctAnswers: STEP_20_CORRECT_ANSWERS,
-                possibleAnswers: STEP_20_POSSIBLE_ANSWERS, 
+                possibleAnswers: STEP_20_POSSIBLE_ANSWERS,
             },
             {
                 type: STEP_21_TYPE,

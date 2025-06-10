@@ -19,7 +19,8 @@ const cogAndMartyTutorial = {
         type: "lesson",
         urlId: "cog-and-marty-interaction",
         description: <FormattedMessage
-            defaultMessage={"Learn how Cog and Marty can interact with each other"}
+            isRaw={true}
+            defaultMessage={"Learn how <b>Cog</b> and Marty can interact with each other"}
             description=""
             id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.description`}
             values={{}}
@@ -40,7 +41,8 @@ const cogAndMartyTutorial = {
                     }
                 ],
                 description: <FormattedMessage
-                    defaultMessage={"In this tutorial we will learn how Cog and Marty can interact with each other. Press 'Next' to start!"}
+                    isRaw={true}
+                    defaultMessage={"In this tutorial we will learn how <b>Cog</b> and Marty can interact with each other. Press 'Next' to start!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1`}
                     values={{}}

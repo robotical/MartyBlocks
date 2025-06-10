@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { activateDeck as activateLessonsDeck } from '../../../../reducers/lessons.js';
 import classNames from 'classnames';
-import { getDefaultMessageOrText } from '../../lessons.jsx';
+import { getDefaultMessageOrText, renderFormattedMessage } from '../../lessons.jsx';
 
 class ExtensionProjectsModal extends React.Component {
     constructor() {
@@ -59,7 +59,7 @@ class ExtensionProjectsModal extends React.Component {
                                 return <div key={index} className={choiceContainerClass} onClick={() => this.onOpenProject(extensionProjectIds[index])}>
                                     <img className={choiceImageClass} src={project.img} alt={`Option ${project.name}`} />
                                     <div className={choiceCheckboxClass}>
-                                        <span className={choiceTextClass}>{project.name}</span>
+                                        {renderFormattedMessage(project.name, styles.choiceCheckboxText)}
                                     </div>
                                 </div>
                             })}
