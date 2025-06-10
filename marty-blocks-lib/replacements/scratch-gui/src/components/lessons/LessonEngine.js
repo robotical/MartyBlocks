@@ -63,6 +63,12 @@ export default class LessonEngine {
                         );
                     }, 500);
                 };
+            case "HighlightBlocks":
+                return () => {
+                    setTimeout(() => {
+                        LessonUIHelper.highlightBlocks(args.blocks);
+                    }, 500);
+                };
             default:
                 break;
         }

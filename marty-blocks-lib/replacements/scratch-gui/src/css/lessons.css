@@ -21,6 +21,7 @@
   z-index: 10000;
   opacity: 1;
   animation: glow 2s infinite alternate;
+  pointer-events: none;
 }
 
 @keyframes glow {

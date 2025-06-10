@@ -52,6 +52,7 @@
     "htmlparser2": "3.10.0",
     "immutable": "3.8.1",
     "jszip": "^3.1.5",
+    "marty-blocks-lib": "file:../marty-blocks-lib",
     "minilog": "3.1.0",
     "scratch-parser": "5.1.1",
     "scratch-sb1-converter": "0.2.7",
@@ -59,7 +60,8 @@
     "soundtouchjs": "^0.1.30",
     "text-encoding": "0.7.0",
     "uuid": "8.3.2",
-    "worker-loader": "^1.1.1"
+    "worker-loader": "^1.1.1",
+    "terser-webpack-plugin": "1.4.5"
   },
   "peerDependencies": {
     "scratch-svg-renderer": "^0.2.0-prerelease"

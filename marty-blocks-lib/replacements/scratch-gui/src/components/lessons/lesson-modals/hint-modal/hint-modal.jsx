@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import ImageStep from '../../lesson-image/lesson-image.jsx';
 import VideoStep from '../../lesson-video/lesson-video.jsx';
 import TextExtractor from '../../utils/extract-intl-text.jsx';
-
+import { renderFormattedMessage } from '../../lessons.jsx';
 class HintModal extends React.Component {
     constructor() {
         super();
@@ -42,9 +42,7 @@ class HintModal extends React.Component {
             <div className={stepBodyClass}>
                 <div className={hintContainerClass}>
                     {description && <div className={hintDescriptionClass}>
-                        <div className={styles.hintText}>
-                            {description}
-                        </div>
+                        {renderFormattedMessage(description, styles.hintText)}
                     </div>}
                     {image && <ImageStep
                         onImageClick={onExpandImage}

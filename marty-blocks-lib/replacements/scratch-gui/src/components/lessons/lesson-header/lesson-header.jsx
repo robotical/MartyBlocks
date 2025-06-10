@@ -5,6 +5,7 @@ import expandIcon from '../icon--expand.svg';
 import closeIcon from '../icon--close.svg';
 import styles from './lesson-header.css';
 import { FormattedMessage } from 'react-intl';
+import { renderFormattedMessage } from '../lessons.jsx';
 
 const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step, expanded, isAccessibilityEnabled, maxWidthTitleContainer }) => {
 
@@ -53,7 +54,7 @@ const LessonHeader = ({ onCloseLessons, onShrinkExpandLessons, lessonTitle, step
                 {step + 1}
             </div>}
             <div className={lessonTitleContainerClass} style={{ maxWidth: maxWidthTitleContainer ? maxWidthTitleContainer : "none" }}>
-                <span className={lessonTitleClass}>{lessonTitle}</span>
+                {renderFormattedMessage(lessonTitle, lessonTitleClass)}
             </div>
             <div className={headerButtonsRightClass}>
                 {onShrinkExpandLessons && <div
