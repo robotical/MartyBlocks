@@ -430,11 +430,7 @@ class Lessons extends React.Component {
                             {
                                 stepType === "info" && <>
                                     {
-                                        steps[step].description && (
-                                            <div className={stepDescriptionClass}>
-                                                {renderFormattedMessage(steps[step].description, stepDescriptionClass)}
-                                            </div>
-                                        )
+                                        steps[step].description && renderFormattedMessage(steps[step].description, stepDescriptionClass)
                                     }
                                     {steps[step].video && (
                                         <VideoStep
