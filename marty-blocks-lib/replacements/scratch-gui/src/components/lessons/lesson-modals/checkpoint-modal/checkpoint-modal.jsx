@@ -181,9 +181,7 @@ function QuestionSection(props) {
         <>
             <div className={stepBodyClass}>
                 <div className={styles.checkpointContainer}>
-                    <div className={checkpointQuestionClass}>
-                        {question}
-                    </div>
+                    {renderFormattedMessage(question, checkpointQuestionClass)}
                     <div className={checkpointAnswerClass}>
                         {answerFieldJSX}
                     </div>
@@ -255,9 +253,7 @@ function ResultSection(props) {
         <>
             <div className={stepBodyClass}>
                 <div className={styles.checkpointContainer}>
-                    <div className={checkpointQuestionClass}>
-                        {question}
-                    </div>
+                    {renderFormattedMessage(question, checkpointQuestionClass)}
                     <div className={checkpointAnswerClass}>
                         <span className={checkpointAnswerResultSpanClass}>{results === "correct" ? "CORRECT" : "INCORRECT"}</span><span className={checkpointAnswerAnswersSpanClass}> ({answers.join("- ")})</span>
                     </div>

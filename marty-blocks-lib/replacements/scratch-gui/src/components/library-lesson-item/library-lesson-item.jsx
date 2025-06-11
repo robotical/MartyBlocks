@@ -8,7 +8,7 @@ import styles from './library-lesson-item.css';
 import classNames from 'classnames';
 
 import internetConnectionIconURL from './internet-connection.svg';
-
+import { renderFormattedMessage } from '../lessons/lessons.jsx';
 /* eslint-disable react/prefer-stateless-function */
 class LibraryItemComponent extends React.PureComponent {
     render() {
@@ -55,7 +55,7 @@ class LibraryItemComponent extends React.PureComponent {
                 >
                     <span className={styles.libraryItemName}>{this.props.name}</span>
                     <br />
-                    <span className={styles.featuredDescription}>{this.props.description}</span>
+                    {renderFormattedMessage(this.props.description, styles.featuredDescription)}
                 </div>
                 {this.props.internetConnectionRequired || this.props.collaborator ? (
                     <div className={styles.featuredExtensionMetadata}>

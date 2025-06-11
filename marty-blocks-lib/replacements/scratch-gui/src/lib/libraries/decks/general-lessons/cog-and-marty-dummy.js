@@ -19,7 +19,8 @@ const cogAndMartyTutorial = {
         type: "lesson",
         urlId: "cog-and-marty-interaction",
         description: <FormattedMessage
-            defaultMessage={"Learn how Cog and Marty can interact with each other"}
+            isRaw={true}
+            defaultMessage={"Learn how <b>Cog</b> and <b>Marty</b> can interact with each other"}
             description=""
             id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.description`}
             values={{}}
@@ -40,7 +41,8 @@ const cogAndMartyTutorial = {
                     }
                 ],
                 description: <FormattedMessage
-                    defaultMessage={"In this tutorial we will learn how Cog and Marty can interact with each other. Press 'Next' to start!"}
+                    isRaw={true}
+                    defaultMessage={"In this tutorial we will learn how <b>Cog</b> and <b>Marty</b> can interact with each other. Press 'Next' to start!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1`}
                     values={{}}
@@ -169,10 +171,22 @@ const cogAndMartyTutorial = {
                     values={{}}
                 />,
                 nextStepActions: [
+                    // we could either highlight the category first and then the block (using the onClickAction of the HighlightElement nextStepAction type, as shown below)
                     {
-                        type: "HighlightBlocks",
-                        blocks: ["cog_onButtonPush"]
+                        type: "HighlightElement",
+                        elementId: "category-events",
+                        hexColor: "#855cd659",
+                        onClickAction: "HighlightBlocks",
+                        args: {
+                            blocks: ["cog_onButtonPush"],
+                            hexColor: "#855cd659",
+                        }
                     },
+                    // or, we could highlight the block directly without highlighting the category first (the commented-out code below)
+                    // {
+                    //     type: "HighlightBlocks",
+                    //     blocks: ["cog_onButtonPush"]
+                    // },
                 ],
                 hint: {
                     description: <FormattedMessage

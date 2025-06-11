@@ -26,6 +26,24 @@ export const getDefaultMessageOrText = (componentOrText) => {
     return componentOrText || '';
 }
 
+export const renderFormattedMessage = (componentOrText, divClass) => {
+    // If componentOrText is a FormattedMessage component, check if it is marked as raw.
+    // If raw, render it as inner HTML for proper formatting.
+    // Otherwise, render it normally as plain text or JSX.
+    if (componentOrText && componentOrText.props && componentOrText.props.defaultMessage) {
+        if (componentOrText.props.isRaw) {
+            return <div className={divClass} dangerouslySetInnerHTML={{ __html: componentOrText.props.defaultMessage }} />;
+        } else {
+            return <div className={divClass}>
+                {componentOrText}
+            </div>
+        }
+    }
+    // if it's not a FormattedMessage component, we return it as plain text
+    return <div className={divClass}>
+        {componentOrText}
+    </div>
+};
 class Lessons extends React.Component {
     constructor(props) {
         super(props);
@@ -412,11 +430,7 @@ class Lessons extends React.Component {
                             {
                                 stepType === "info" && <>
                                     {
-                                        steps[step].description && (
-                                            <div className={stepDescriptionClass}>
-                                                {steps[step].description}
-                                            </div>
-                                        )
+                                        steps[step].description && renderFormattedMessage(steps[step].description, stepDescriptionClass)
                                     }
                                     {steps[step].video && (
                                         <VideoStep
@@ -440,11 +454,7 @@ class Lessons extends React.Component {
                                         <span>Checkpoint Question</span>
                                     </div>
                                     {
-                                        steps[step].question && (
-                                            <div className={stepDescriptionClass}>
-                                                {steps[step].question}
-                                            </div>
-                                        )
+                                        steps[step].question && renderFormattedMessage(steps[step].question, stepDescriptionClass)
                                     }
                                     {
                                         <div className={checkpointTryAgainDivClass}>
@@ -465,9 +475,7 @@ class Lessons extends React.Component {
                                             isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                         />
                                     )}
-                                    <div className={stepDescriptionClass}>
-                                        {steps[step].description}
-                                    </div>
+                                    {renderFormattedMessage(steps[step].description, stepDescriptionClass)}
                                 </>
                             }
                         </div>
