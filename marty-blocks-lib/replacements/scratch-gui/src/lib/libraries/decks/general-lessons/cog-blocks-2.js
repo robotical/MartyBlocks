@@ -139,7 +139,7 @@ const cogBlocksTutorial2 = {
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
-                        blocks: ["button-make-variable"],
+                        blocks: ["make_a_variable"],
                         hexColor: "#855cd659",
                         onClickAction: "",
                     }
@@ -768,12 +768,6 @@ const cogBlocksTutorial2 = {
                     values={{}}
                 />,
                 nextStepActions: [
-                    {
-                        type: "HighlightElement",
-                        elementId: "category-control",
-                        hexColor: "#855cd659",
-                        onClickAction: "NextStep",
-                    }
                 ],
             },
 
