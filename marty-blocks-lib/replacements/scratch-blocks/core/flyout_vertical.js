@@ -421,8 +421,12 @@ Blockly.VerticalFlyout.prototype.scrollTo = function(pos) {
  * @param {!Blockly.Block} block The block to scroll to.
  */
 Blockly.VerticalFlyout.prototype.scrollToBlock = function(block) {
-  var blockY = block.getRelativeToSurfaceXY().y;
-  this.scrollTo(blockY);
+  try {
+    var blockY = block.getRelativeToSurfaceXY().y;
+    this.scrollTo(blockY);
+  } catch (e) {
+ 
+  }
 };
 
 /**

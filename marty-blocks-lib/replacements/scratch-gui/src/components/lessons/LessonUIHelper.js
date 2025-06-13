@@ -48,6 +48,7 @@ export default class LessonUIHelper {
         let found = false;
 
         let isTheFirstBlockVisible = false;
+        console.log("allBlocksInFlyout", allBlocksInFlyout);
         for (let i = 0; i < allBlocksInFlyout.length; i++) {
             allBlocksInFlyout[i].style.opacity = '0.1';
             allBlocksInFlyout[i].style.pointerEvents = 'none'; // Disable interaction

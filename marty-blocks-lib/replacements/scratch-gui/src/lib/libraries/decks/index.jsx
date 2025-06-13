@@ -12,6 +12,7 @@ import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 
 import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
 import cogBlocksTutorial1 from './general-lessons/cog-blocks-1';
+import cogBlocksTutorial2 from './general-lessons/cog-blocks-2';
 
 export default {
     ...MCH01,
@@ -19,6 +20,7 @@ export default {
     ...MCH03,
     ...cogAndMartyTutorial,
     ...cogBlocksTutorial1,
+    ...cogBlocksTutorial2,
     "mm-create-model": {
         name: (
             <FormattedMessage

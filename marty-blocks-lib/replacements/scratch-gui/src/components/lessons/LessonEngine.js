@@ -88,31 +88,39 @@ export default class LessonEngine {
     }
 
     static _evaluateExpectedCode(expectedCodeCondition) {
-        // expectedCodeCondition eg: ["block1=>block2"] meaning block1 should be followed by block2 (next block)
-        // actual blocks: {blocktype: "block1", next?: {blocktype: "block2", next?: {blocktype: "block3", next?: null}}}
-        const actualBlocksObj = window.workspace.getTopBlocks();
-        const actualBlocksThatArentShadow = Object.values(actualBlocksObj).filter(block => !block.isShadow_);
-        if (Object.keys(actualBlocksThatArentShadow).length === 0) {
-            return false;
+        // only real user blocks, no shadows/operators
+        const topBlocks = window.workspace.getTopBlocks(false);
+
+        // compile exactly one flat chain per top block
+        const chains = topBlocks.map(b => this._compileOneChain(b));
+
+        console.log(chains);
+        return chains.includes(expectedCodeCondition);
+    }
+
+    static _compileOneChain(block) {
+        let chain = block.type;
+
+        // 1) Descend into the first nested “statement” input, if any
+        const stmtInput = block.inputList.find(
+            input =>
+                input.type === 3 &&
+                input.connection.targetBlock()
+        );
+        if (stmtInput) {
+            const nested = stmtInput.connection.targetBlock();
+            chain += `=>${this._compileOneChain(nested)}`;
+            // once we’ve done nested to the bottom, we’ll come back out here
         }
-        const actualBlocks = Object.values(actualBlocksThatArentShadow);
-        const compilations = [];
-        for (const actualBlock of actualBlocks) {
-            let actualBlocksCompiledCondition = "";
-            let currentBlock = actualBlock;
-            while (currentBlock) {
-                actualBlocksCompiledCondition += `${currentBlock.type}`;
-                let childBlocks = Object.values(currentBlock.childBlocks_);
-                childBlocks = childBlocks.filter(block => !block.isShadow_);
-                if (childBlocks.length > 0) {
-                    actualBlocksCompiledCondition += "=>";
-                }
-                currentBlock = childBlocks[0];
-            }
-            compilations.push(actualBlocksCompiledCondition);
+
+        // 2) Then append exactly one next block
+        const next = block.getNextBlock();
+        if (next) {
+            // chain += `=>${next.type}`;
+            chain += `=>${this._compileOneChain(next)}`;
         }
-        console.log(compilations);
-        return compilations.includes(expectedCodeCondition);
+
+        return chain;
     }
 
 }
