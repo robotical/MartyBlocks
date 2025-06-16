@@ -2250,6 +2250,9 @@ class VolumeEffect {
 }
 
 function getRaftUsingTargetId(targetId) {
+  if (!window.raftManager || !window.applicationManager || !window.applicationManager.connectedRafts) {
+    return null;
+  }
   const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
   const raft = window.applicationManager.connectedRafts[raftId];
   return raft;
