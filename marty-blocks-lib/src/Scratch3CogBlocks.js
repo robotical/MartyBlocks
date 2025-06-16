@@ -151,24 +151,28 @@ class Scratch3CogBlocks {
   /* EVENT BLOCKS */
   onTilt(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.tilt === args[cog_blocks_definitions.events.cog_onTilt.values.DIRECTION.name];
   }
   onShake(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.movementType === "shake";
   }
   onButtonPush(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.buttonClick === 'click'
   }
   onObjectSense(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     if (publishedDataAnalyser.cogState.objectSense === "both") return true;
@@ -176,12 +180,14 @@ class Scratch3CogBlocks {
   }
   onLightSense(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.lightSense === "high"
   }
   onIRMessageReceived(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.irMessage === args[cog_blocks_definitions.events.cog_onIRMessageReceived.values.SIDE.name];
@@ -211,7 +217,7 @@ class Scratch3CogBlocks {
         tiltCorrection = tiltCorrectionForNewerCog;
       }
 
-    const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
+      const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
       const { x, y, z } = publishedDataAnalyser.TiltDetection.rotateAccelData(xRaw, yRaw, zRaw, window.tilt_rotate_z_deg || tiltCorrection);
       const axis = args[cog_blocks_definitions.sensing.cog_getAccelerometer.values.AXIS.name];
       if (axis === 'ax') return x;
@@ -264,12 +270,14 @@ class Scratch3CogBlocks {
   }
   getShakeSensed(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.movementType.toString() === "shake";
   }
   getTiltDirection(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return false;
     const publishedDataAnalyser = connectedRaft.publishedDataAnalyser;
     if (!publishedDataAnalyser) return false;
     return publishedDataAnalyser.cogState.tilt.toString();
@@ -448,7 +456,7 @@ function _LEDColourPickerApiCommandBuilder(colorsArray) {
   const numPixels = colorsArray.length;
   const idOffset = 9;
   for (let i = 0; i < numPixels; i++) {
-    let color = colorsArray[(i+idOffset)%numPixels].replace("#", "");
+    let color = colorsArray[(i + idOffset) % numPixels].replace("#", "");
     if (color === "9966FF") color = "000000"; // that's our "off" colour
     commandStr += color;
   }
@@ -463,6 +471,9 @@ function _getColourFromOperator(argumentValue) {
 }
 
 function getRaftUsingTargetId(targetId) {
+  if (!window.raftManager || !window.applicationManager || !window.applicationManager.connectedRafts) {
+    return null;
+  }
   const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
   const raft = window.applicationManager.connectedRafts[raftId];
   return raft;
