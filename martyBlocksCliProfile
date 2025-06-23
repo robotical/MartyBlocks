@@ -60,8 +60,8 @@ removeNodeModules() {
 # Step 2: Install scratch
 installScratch() {
     cd $blocks_original && npm install 
-    cd $vm_original && npm install && npm install soundtouchjs@0.1.30
-    cd $gui_original && npm install && npm i uglifyjs-webpack-plugin@2.2.0 && npm install prismjs@1.29.0 && npm install --save-dev babel-plugin-prismjs
+    cd $vm_original && npm install
+    cd $gui_original && npm install
 }
 
 # Step 3: Install marty blocks library
