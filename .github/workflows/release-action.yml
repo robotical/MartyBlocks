@@ -65,7 +65,7 @@ jobs:
         run: |
           cd ${{ env.blocks_original }} && npm install 
           cd ${{ env.vm_original }} && npm install && npm install soundtouchjs@0.1.30
-          cd ${{ env.gui_original }} && npm install
+          cd ${{ env.gui_original }} && npm install && npm install prismjs@1.29.0 && npm install --save-dev terser-webpack-plugin@4.2.0
 
       - name: Install marty blocks library
         run: |
