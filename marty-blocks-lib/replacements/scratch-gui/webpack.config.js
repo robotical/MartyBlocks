@@ -5,7 +5,8 @@ var webpack = require("webpack");
 // Plugins
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
-var UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
+const TerserPlugin = require('terser-webpack-plugin');
 
 // PostCss
 var autoprefixer = require("autoprefixer");
@@ -52,7 +53,7 @@ const base = {
           /node_modules[\\/]@vernier[\\/]godirect/,
         ],
         options: {
-          // Explicitly disable babelrc so we don't catch various config
+          // Explicitly disable babelrc so we don't cache various config
           // in much lower dependencies.
           babelrc: false,
           plugins: [
@@ -116,8 +117,17 @@ const base = {
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        include: /\.min\.js$/,
+      new TerserPlugin({
+        terserOptions: {
+          ecma: 2017, 
+          compress: {
+            drop_console: false, 
+          },
+          format: {
+            comments: false, 
+          },
+        },
+        extractComments: false,
       }),
     ],
   },
