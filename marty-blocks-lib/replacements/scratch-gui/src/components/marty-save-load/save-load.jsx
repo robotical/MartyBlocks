@@ -76,7 +76,7 @@ class SaveLoad extends React.Component {
             <p className={styles.buttonTitle}>Portable</p>
             <p className={styles.buttonSubtitle}>File Storage</p>
           </div>
-          <div
+          {/* <div
             className={
               this.state.currentTab === "demo-projects"
                 ? [styles.button, styles.buttonSelected].join(" ")
@@ -86,7 +86,7 @@ class SaveLoad extends React.Component {
           >
             <p className={styles.buttonTitle}>Demo Projects</p>
             <p className={styles.buttonSubtitle}>Load demo projects</p>
-          </div>
+          </div> */}
         </div>
         <div className={styles.content}>{contentJSX}</div>
       </div>
