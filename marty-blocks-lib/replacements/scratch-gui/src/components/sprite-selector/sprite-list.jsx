@@ -12,6 +12,8 @@ import ThrottledPropertyHOC from '../../lib/throttled-property-hoc.jsx';
 
 import styles from './sprite-selector.css';
 
+import { FormattedMessage } from 'react-intl';
+
 const ThrottledSpriteSelectorItem = ThrottledPropertyHOC('asset', 500)(SpriteSelectorItem);
 
 const SpriteList = function (props) {
@@ -46,7 +48,11 @@ const SpriteList = function (props) {
                 className={styles.itemsWrapper}
             >
                 {items.length === 0 && <div className={styles.noItemsInList}>
-                    No sprites in use
+                    <FormattedMessage
+                        id="gui.spriteSelector.noSpritesInUse"
+                        description="Message shown when there are no sprites in the sprite selector"
+                        defaultMessage="No sprites in use"
+                    />
                 </div>}
                 {items.map((sprite, index) => {
 

@@ -7,6 +7,7 @@ import PythonCodeModal from "../python-code-modal/index.jsx";
 import { activateDraggableModal } from "../../reducers/draggable-modal";
 import ModalComponent from "../modal/modal.jsx";
 import Box from "../box/box.jsx";
+import { FormattedMessage } from 'react-intl';
 
 class MartyPythonButton extends React.Component {
     constructor(props) {
@@ -89,7 +90,11 @@ class MartyPythonButton extends React.Component {
                     src={pythonLogo}
                     alt="Python Logo"
                 />
-                <div className={styles.buttonTitle}>Show Code</div>
+                <div className={styles.buttonTitle}><FormattedMessage
+                    defaultMessage="Show Code"
+                    description="Button to show the Python code"
+                    id="gui.menuBar.showCode"
+                /></div>
             </div>
         </>
     );

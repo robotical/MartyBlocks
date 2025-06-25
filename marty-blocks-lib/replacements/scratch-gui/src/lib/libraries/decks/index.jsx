@@ -6,18 +6,18 @@ import { FormattedMessage } from 'react-intl';
 
 // Text to Speech
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
-import MCH01 from './ML-lessons/MCH01-HappyOrSad';
-import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
-import MCH03 from './ML-lessons/MCH03-FarmingRobots';
+// import MCH01 from './ML-lessons/MCH01-HappyOrSad';
+// import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
+// import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 
 import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
 import cogBlocksTutorial1 from './general-lessons/cog-blocks-1';
 import cogBlocksTutorial2 from './general-lessons/cog-blocks-2';
 
 export default {
-    ...MCH01,
-    ...MCH02,
-    ...MCH03,
+    // ...MCH01,
+    // ...MCH02,
+    // ...MCH03,
     ...cogAndMartyTutorial,
     ...cogBlocksTutorial1,
     ...cogBlocksTutorial2,

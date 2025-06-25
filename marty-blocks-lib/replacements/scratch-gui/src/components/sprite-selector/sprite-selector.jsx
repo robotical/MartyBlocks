@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
 
 import Box from '../box/box.jsx';
 import SpriteInfo from '../../containers/sprite-info.jsx';
@@ -19,6 +19,7 @@ import connectToDeviceIcon from '../action-menu/icon--connect-to-device.svg';
 import surpriseIcon from '../action-menu/icon--surprise.svg';
 import searchIcon from '../action-menu/icon--search.svg';
 import DeviceList from "./device-list.jsx";
+
 
 const messages = defineMessages({
     addSpriteFromLibrary: {
@@ -125,7 +126,13 @@ const SpriteSelectorComponent = function (props) {
                 onChangeY={onChangeSpriteY}
             />
             <div className={styles.spritesSection}>
-                <div className={styles.sectionTitle}>SPRITES</div>
+                <div className={styles.sectionTitle}>
+                    <FormattedMessage
+                        id="gui.spriteSelector.sprites"
+                        description="Label for the section containing the list of sprites"
+                        defaultMessage="SPRITES"
+                    />
+                </div>
                 <SpriteList
                     editingTarget={editingTarget}
                     hoveredTarget={hoveredTarget}
@@ -175,7 +182,13 @@ const SpriteSelectorComponent = function (props) {
             </div>
             <hr style={{ height: "1px", width: "100%", backgroundColor: "#d8d8d8" }} />
             <div className={styles.deviceSection}>
-                <div className={styles.sectionTitle}>DEVICES</div>
+                <div className={styles.sectionTitle}>
+                    <FormattedMessage
+                        id="gui.deviceSelector.devices"
+                        description="Label for the section containing the list of devices"
+                        defaultMessage="DEVICES"
+                    />
+                </div>
                 <DeviceList
                     editingTarget={editingTarget}
                     hoveredTarget={hoveredTarget}

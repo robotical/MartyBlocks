@@ -7,6 +7,7 @@ export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
 export blocks_original=$MBHome/scratch-blocks
 export vm_original=$MBHome/scratch-vm
 export gui_original=$MBHome/scratch-gui
+export l10n_original=$MBHome/scratch-l10n
 export NODE_OPTIONS="--max-old-space-size=5120"
 alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
@@ -25,12 +26,14 @@ cloneScratch() {
     git clone -b develop https://github.com/llk/scratch-blocks.git MartyBlocks/scratch-blocks
     git clone -b develop https://github.com/llk/scratch-vm.git MartyBlocks/scratch-vm
     git clone -b develop https://github.com/llk/scratch-gui.git MartyBlocks/scratch-gui
+    git clone -b master https://github.com/scratchfoundation/scratch-l10n.git MartyBlocks/scratch-l10n
 }
 
 fetchScratch() {
     cd $blocks_original && git fetch
     cd $vm_original && git fetch
     cd $gui_original && git fetch
+    cd $l10n_original && git fetch
 }
 
 # Step 1b: Checkout appropriate commit
@@ -41,6 +44,7 @@ checkoutScratch() {
     cd $blocks_original && git reset --hard f210e042988b91bcdc2abeca7a2d85e178edadb2
     cd $vm_original && git reset --hard 7313ce5199f8a3da7850085d0f7f6a3ca2c89bf6
     cd $gui_original && git reset --hard 530d1ed7b8c45560f9a0580d6a00c87ecbec4721
+    cd $l10n_original && git reset --hard 21fe788aed29a37ab694ca5a6bbf2acd76260f1f
 }
 
 # Step 1c: Restore scratch repos (only relevant if you have made changes on the repos and want to restore them to their original state)
@@ -48,6 +52,7 @@ restoreScratch() {
     cd $blocks_original && git restore . && git clean -fd
     cd $vm_original && git restore . && git clean -fd
     cd $gui_original && git restore . && git clean -fd
+    cd $l10n_original && git restore . && git clean -fd
 }
 
 # Step 1d: Remove package-lock.json and node_modules from scratch repos
@@ -55,10 +60,12 @@ removeNodeModules() {
     cd $blocks_original && rm -rf package-lock.json node_modules
     cd $vm_original && rm -rf package-lock.json node_modules
     cd $gui_original && rm -rf package-lock.json node_modules
+    cd $l10n_original && rm -rf package-lock.json node_modules
 }
 
 # Step 2: Install scratch
 installScratch() {
+    cd $l10n_original && npm install
     cd $blocks_original && npm install 
     cd $vm_original && npm install && npm install soundtouchjs@0.1.30
     cd $gui_original && npm install && npm install prismjs@1.29.0 && npm install --save-dev terser-webpack-plugin@4.2.0
@@ -73,10 +80,11 @@ installMBLib() {
 # Step 4: Link repositories
 npmlinkAll() {
     # local type="${1:-all"}
-    cd $mblib && npm link #&& npm link ../../marty-machine-lib
-    cd $blocks_original && npm link && npm link marty-blocks-lib
-    cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks
-    cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm
+    cd $l10n_original && npm link
+    cd $mblib && npm link && npm link scratch-l10n
+    cd $blocks_original && npm link && npm link marty-blocks-lib scratch-l10n
+    cd $vm_original && npm link && npm link marty-blocks-lib scratch-blocks scratch-l10n
+    cd $gui_original && npm link marty-blocks-lib scratch-blocks scratch-vm scratch-l10n
 }
 
 # Step 4.1: Copy web worker of marty machine into scratch gui static
@@ -161,7 +169,8 @@ removeUnusedAssets () {
 buildScratch () {
     local type="${1:-all}"
     local NODE_ENV="${2:-development}"
-    if [ $type = all ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; buildGui $NODE_ENV; fi
+    if [ $type = all ]; then buildl10n $NODE_ENV; buildBlocks $NODE_ENV; buildVm $NODE_ENV; buildGui $NODE_ENV; fi
+    if [ $type = l10n ]; then buildl10n $NODE_ENV; fi
     if [ $type = blocks ]; then buildBlocks $NODE_ENV; fi
     if [ $type = vm ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; fi
     if [ $type = gui ]; then buildGui $NODE_ENV; fi
@@ -170,9 +179,11 @@ buildScratch () {
 buildScratchStart () {
     local type="${1:-all}"
     local NODE_ENV="${2:-development}"
-    if [ $type = all ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; buildGui $NODE_ENV; fi
+    if [ $type = all ]; then buildl10n $NODE_ENV; buildBlocks $NODE_ENV; buildVm $NODE_ENV; buildGuiStart $NODE_ENV; fi
+    if [ $type = l10n ]; then buildl10n $NODE_ENV; fi
     if [ $type = blocks ]; then buildBlocks $NODE_ENV; fi
     if [ $type = vm ]; then buildBlocks $NODE_ENV; buildVm $NODE_ENV; fi
+    if [ $type = l10n-gui ]; then buildl10n $NODE_ENV; buildGuiStart $NODE_ENV; fi
     if [ $type = gui ]; then buildGuiStart $NODE_ENV; fi
 }
 
@@ -205,6 +216,11 @@ cpToPublic () {
     setopt rm_star_wait
     rm -rf $MBHome/public/*
     cp -r $gui_original/build/* $MBHome/public
+}
+
+buildl10n() {
+    local NODE_ENV="${1:-development}"
+    cd $l10n_original && npm run build
 }
 
 buildBlocks() {

@@ -26,3 +26,10 @@ yarn-error.log*
 /public
 
 /venv
+
+
+**/scratch-l10n/editor/extensions/extensions_localizations.csv
+**/scratch-l10n/editor/paint-editor/paint-editor_localizations.csv
+**/scratch-l10n/editor/interface/interface_localizations.csv
+**/scratch-l10n/editor/blocks/blocks_localizations.csv
+**/scratch-l10n/editor/custom/custom_localizations.csv
