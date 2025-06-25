@@ -15,7 +15,13 @@ const BUCKET_URL = "https://roboticalpublic.s3.eu-west-1.amazonaws.com/marty-blo
 const cogAndMartyTutorial = {
     'type-lesson-cog-and-marty-tutorial': {
         id: "type-lesson-cog-and-marty-tutorial",
-        name: "Cog and Marty Interaction",
+        name: <FormattedMessage
+            isRaw={true}
+            defaultMessage={"Cog and Marty Interaction"}
+            description=""
+            id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.name`}
+            values={{}}
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         type: "lesson",
         urlId: "cog-and-marty-interaction",
         description: <FormattedMessage
@@ -24,7 +30,7 @@ const cogAndMartyTutorial = {
             description=""
             id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.description`}
             values={{}}
-        />,
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}cover_image.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
@@ -46,7 +52,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
             /* STEP 1.1 --connect to Cog */
@@ -58,7 +64,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1.1`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -83,7 +89,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1.1.1`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightConnectionButtonElement",
@@ -103,7 +109,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1.2`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -128,7 +134,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1.2.1`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightConnectionButtonElement",
@@ -149,7 +155,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-2`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightDeviceImageElement",
@@ -169,7 +175,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-3`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     // we could either highlight the category first and then the block (using the onClickAction of the HighlightElement nextStepAction type, as shown below)
                     {
@@ -194,7 +200,7 @@ const cogAndMartyTutorial = {
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-3.hint`}
                         values={{}}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -217,7 +223,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-5`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -230,7 +236,7 @@ const cogAndMartyTutorial = {
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-5.hint`}
                         values={{}}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -253,7 +259,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-6`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightDeviceImageElement",
@@ -274,7 +280,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-7`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -287,7 +293,7 @@ const cogAndMartyTutorial = {
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-7.hint`}
                         values={{}}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -310,7 +316,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-9`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -339,7 +345,7 @@ const cogAndMartyTutorial = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-10`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
         ]

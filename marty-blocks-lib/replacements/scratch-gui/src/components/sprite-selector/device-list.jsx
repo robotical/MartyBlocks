@@ -12,6 +12,8 @@ import ThrottledPropertyHOC from '../../lib/throttled-property-hoc.jsx';
 
 import styles from './sprite-selector.css';
 
+import { FormattedMessage } from 'react-intl';
+
 const ThrottledDeviceSelectorItem = ThrottledPropertyHOC('asset', 500)(DeviceSelectorItem);
 
 const DeviceList = function (props) {
@@ -47,7 +49,11 @@ const DeviceList = function (props) {
                 className={styles.itemsWrapper}
             >
                 {items.length === 0 && <div className={styles.noItemsInList}>
-                    Add a device
+                    <FormattedMessage
+                        id="gui.deviceSelector.noDevicesInUse"
+                        description="Message shown when there are no devices in the device selector"
+                        defaultMessage="Add a device"
+                    />
                 </div>}
                 {items.map((device, index) => {
 

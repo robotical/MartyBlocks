@@ -165,11 +165,15 @@ class RaftManager {
             console.warn('appManager not defined');
         }
         const raftId = this.raftIdAndDeviceIdMap[deviceId];
-        const raft = appManager.connectedRafts[raftId];
-        if (raft) {
-            raft.highlight();
-        } else {
-            console.warn('raft not found for deviceId: ', deviceId);
+        try {
+            const raft = appManager.connectedRafts[raftId];
+            if (raft) {
+                raft.highlight();
+            } else {
+                console.warn('raft not found for deviceId: ', deviceId);
+            }
+        } catch (error) {
+            console.warn('Warn highlighting device:', error);
         }
     }
 
