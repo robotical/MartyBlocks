@@ -176,8 +176,30 @@ class MenuBar extends React.Component {
     }
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
-        console.log('Changing language to:', window.applicationManager?.selectedLocale || "en");
-        this.props.onChangeLanguage(window.applicationManager?.selectedLocale || "en");
+        
+        const waitForLocale = (maxAttempts = 15, intervalMs = 500) =>{
+            console.log('Waiting for locale to be set...');
+            let attempts = 0;
+            
+            const interval = setInterval(() => {
+                const locale = window.applicationManager?.selectedLocale;
+
+                if (locale) {
+                    console.log(`Locale set to: ${locale}`);
+                    clearInterval(interval);
+                    this.props.onChangeLanguage(window.applicationManager?.selectedLocale || "en");
+                } else if (attempts >= maxAttempts) {
+                    console.warn('Locale not set after maximum attempts, defaulting to "en"');
+                    clearInterval(interval);
+                } else {
+                    console.log(`Attempt ${attempts + 1}: Locale not yet set, retrying...`);
+                }
+
+                attempts++;
+            }, intervalMs);
+        }
+
+        waitForLocale();
     }
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress);
