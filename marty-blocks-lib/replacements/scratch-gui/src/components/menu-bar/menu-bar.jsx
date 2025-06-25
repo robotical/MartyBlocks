@@ -24,6 +24,7 @@ import MartyPythonButton from "../marty-python-btn/index.jsx";
 
 import { openTipsLibrary } from '../../reducers/modals';
 import { setPlayer } from '../../reducers/mode';
+import { selectLocale } from '../../reducers/locales.js';
 import {
     isTimeTravel220022BC,
     isTimeTravel1920,
@@ -175,6 +176,8 @@ class MenuBar extends React.Component {
     }
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
+        console.log('Changing language to:', window.applicationManager?.selectedLocale || "en");
+        this.props.onChangeLanguage(window.applicationManager?.selectedLocale || "en");
     }
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress);
@@ -975,7 +978,10 @@ const mapDispatchToProps = dispatch => ({
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
-    onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode))
+    onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode)),
+    onChangeLanguage: locale => {
+        dispatch(selectLocale(locale));
+    },
 });
 
 export default compose(

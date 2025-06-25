@@ -34,11 +34,6 @@ class LanguageMenu extends React.PureComponent {
         ]);
     }
 
-    componentDidMount() {
-        // update the selectedLocale to the one from window.applicationManager?.selectedLocale
-        this.props.onChangeLanguage(window.applicationManager?.selectedLocale || this.props.currentLocale);
-    }
-
     componentDidUpdate(prevProps) {
         // If the submenu has been toggled open, try scrolling the selected option into view.
         if (!prevProps.menuOpen && this.props.menuOpen && this.selectedRef) {
