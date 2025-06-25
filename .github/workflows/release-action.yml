@@ -84,7 +84,7 @@ jobs:
       - name: Link repositories
         run: |
           cd ${{ env.l10n_original }} && npm link
-          cd ${{ env.mblib }} && npm link scratch-l10n
+          cd ${{ env.mblib }} && npm link && npm link scratch-l10n
           cd ${{ env.blocks_original }} && npm link && npm link marty-blocks-lib scratch-l10n
           cd ${{ env.vm_original }} && npm link && npm link marty-blocks-lib scratch-blocks scratch-l10n
           cd ${{ env.gui_original }} && npm link marty-blocks-lib scratch-blocks scratch-vm scratch-l10n
