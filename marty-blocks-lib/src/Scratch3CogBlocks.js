@@ -310,6 +310,7 @@ class Scratch3CogBlocks {
       const command = `led/${LEDType}/color/${colour}`;
       connectedRaft.sendRestMessage(command);
     }
+    return new Promise(resolve => setTimeout(resolve, 100));
   }
   setLEDToColour(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
@@ -320,6 +321,7 @@ class Scratch3CogBlocks {
     const command = `led/ring/setled/${ledId}/${color}`;
     console.log("command", command);
     connectedRaft.sendRestMessage(command);
+    return new Promise(resolve => setTimeout(resolve, 100));
   }
   setLEDPattern(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
@@ -354,6 +356,7 @@ class Scratch3CogBlocks {
     connectedRaft.currentColour = null;
     connectedRaft.sendRestMessage(command1);
     connectedRaft.sendRestMessage(command2);
+    return new Promise(resolve => setTimeout(resolve, 100));
   }
   /* END OF LOOKS BLOCKS */
 
