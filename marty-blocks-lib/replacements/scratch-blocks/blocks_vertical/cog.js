@@ -332,7 +332,7 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getButtonForceV
           type: "field_vertical_separator",
         }
       ],
-      extensions: ["colours_sensing", "output_boolean"],
+      extensions: ["colours_sensing", "output_number"],
     });
   }
 };
