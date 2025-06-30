@@ -44,6 +44,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.getButtonClicked.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getButtonForceValue.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getButtonForceValue.bind(this, args, utils)),
+      [cog_blocks_definitions.sensing.cog_getButtonForceValuePercentage.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.getButtonForceValuePercentage.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getObstacleSensed.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getObstacleSensed.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getLightSensed.type]: (args, utils) =>
@@ -246,6 +248,27 @@ class Scratch3CogBlocks {
     if (!data) return 0;
     return data.ir2;
   }
+  getButtonForceValuePercentage(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+    const data = connectedRaft.raftStateInfo.light;
+    if (!data) return 0;
+    const irMin = connectedRaft.publishedDataAnalyser.buttonClickDetection.irMin;
+    const irMax = connectedRaft.publishedDataAnalyser.buttonClickDetection.irMax;
+    if (irMin && irMax) {
+      const irValue = data.ir2;
+      const raw = ((irValue - irMin) / (irMax - irMin)) * 100;
+      // return +raw.toFixed(2);
+      // Shift and rescale from [10, 80] → [0, 100]
+      const minRaw = 10;
+      const maxRaw = 80;
+      const adjusted = ((raw - minRaw) / (maxRaw - minRaw)) * 100;
+
+      // Clamp to [0, 100]
+      return +Math.max(0, Math.min(100, adjusted)).toFixed(2);
+    }
+    return data.ir2;
+  }
   getObstacleSensed(args, utils) {
     return this.onObjectSense(args, utils).toString();
   }
@@ -310,7 +333,7 @@ class Scratch3CogBlocks {
       const command = `led/${LEDType}/color/${colour}`;
       connectedRaft.sendRestMessage(command);
     }
-    return new Promise(resolve => setTimeout(resolve, 100));
+    return new Promise(resolve => setTimeout(resolve, 20));
   }
   setLEDToColour(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);

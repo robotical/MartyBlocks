@@ -368,6 +368,7 @@ Blockly.Msg.COG_ACCELEROMETER = '%1 %2 Accelerometer %3';
 Blockly.Msg.COG_GYROSCOPE = '%1 %2 Gyroscope %3';
 Blockly.Msg.COG_BUTTON_CLICKED = '%1 %2 Button clicked';
 Blockly.Msg.COG_BUTTON_FORCE_VALUE = '%1 %2 Button force value';
+Blockly.Msg.COG_BUTTON_FORCE_VALUE_PERCENTAGE = '%1 %2 Button force value %';
 Blockly.Msg.COG_OBSTACLE_SENSED = '%1 %2 Obstacle sensed %3';
 Blockly.Msg.COG_LIGHT_SENSED = '%1 %2 Light sensed';
 Blockly.Msg.COG_IR_SENSOR_VALUE = '%1 %2 IR sensor value %3';

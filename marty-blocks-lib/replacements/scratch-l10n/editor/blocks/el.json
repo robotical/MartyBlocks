@@ -405,5 +405,22 @@
   "COG_SET_VOLUME": "%1 %2 Ρυθμίστε την ένταση σε %3",
   "COG_STOP_SOUNDS": "%1 %2 Διακοπή ήχων",
   "COG_SET_VOLUME_TO_PERCENTAGE": "%1 %2 Ορισμός έντασης σε %3 %",
-  "COG_PLAY_SOUND_AT_FREQUENCY": "%1 %2 Αναπαραγωγή ήχου στη συχνότητα %3"
+  "COG_PLAY_SOUND_AT_FREQUENCY": "%1 %2 Αναπαραγωγή ήχου στη συχνότητα %3",
+  "COG_EVENT_BLOCK_ONTILT": "%1 %2 στην κλίση %3",
+  "COG_EVENT_BLOCK_ONSHAKE": "%1 %2 σε ανακίνηση",
+  "COG_EVENT_BLOCK_ONBUTTONPUSH": "%1 %2 με το πάτημα του κουμπιού",
+  "COG_EVENT_BLOCK_ONOBJECTSENSED": "%1 %2 στο αντικείμενο ανίχνευσης %3",
+  "COG_EVENT_BLOCK_ONIRMESSAGERECEIVED": "%1 %2 Λήφθηκε στο μήνυμα IR %3",
+  "COG_EVENT_BLOCK_ONLIGHTSENSED": "%1 %2 σε ανίχνευση φωτός",
+  "COG_ACCELEROMETER": "%1 %2 Επιταχυνσιόμετρο %3",
+  "COG_GYROSCOPE": "%1 %2 Γυροσκόπιο %3",
+  "COG_BUTTON_CLICKED": "%1 %2 Έγινε κλικ στο κουμπί",
+  "COG_BUTTON_FORCE_VALUE": "%1 %2 Τιμή δύναμης κουμπιού",
+  "COG_BUTTON_FORCE_VALUE_PERCENTAGE": "%1 %2 Τιμή δύναμης κουμπιού %",
+  "COG_OBSTACLE_SENSED": "%1 %2 Ανιχνεύτηκε εμπόδιο %3",
+  "COG_LIGHT_SENSED": "%1 %2 Ανίχνευση φωτός",
+  "COG_IR_SENSOR_VALUE": "%1 %2 Τιμή αισθητήρα υπερύθρων %3",
+  "COG_AMBIENT_LIGHT_VALUE": "%1 %2 Τιμή φωτός περιβάλλοντος",
+  "COG_SHAKE_SENSED": "%1 %2 Αίσθηση ανακίνησης",
+  "COG_TILT_DIRECTION": "%1 %2 Κατεύθυνση κλίσης"
 }

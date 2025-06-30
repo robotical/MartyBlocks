@@ -336,6 +336,34 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getButtonForceV
     });
   }
 };
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getButtonForceValuePercentage.type] = {
+  /**
+   * GET BUTTON FORCE VALUE %
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_BUTTON_FORCE_VALUE_PERCENTAGE,
+      category: Blockly.Categories.sensing,
+      colour: "#4cbfe6",
+      checkboxInFlyout: true,
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        }
+      ],
+      extensions: ["colours_sensing", "output_number"],
+    });
+  }
+};
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.sensing.cog_getObstacleSensed.type] = {
   /**
    * GET OBSTACLE SENSED

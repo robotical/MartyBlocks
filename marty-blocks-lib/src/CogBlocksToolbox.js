@@ -89,6 +89,9 @@ export const cog_blocks_definitions = {
         cog_getButtonForceValue: {
             type: 'cog_getButtonForceValue',
         },
+        cog_getButtonForceValuePercentage: {
+            type: 'cog_getButtonForceValuePercentage',
+        },
         cog_getObstacleSensed: {
             type: 'cog_getObstacleSensed',
             values: {

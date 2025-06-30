@@ -82,6 +82,8 @@ import oldtimeyLogo from './oldtimey-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
 
+let hasLocaleFromMainAppBeenSet = false; 
+
 const ariaMessages = defineMessages({
     tutorials: {
         id: 'gui.menuBar.tutorialsLibrary',
@@ -176,11 +178,10 @@ class MenuBar extends React.Component {
     }
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
-        
-        const waitForLocale = (maxAttempts = 15, intervalMs = 500) =>{
+        const waitForLocale = (maxAttempts = 15, intervalMs = 500) => {
+            if (hasLocaleFromMainAppBeenSet) return;
             console.log('Waiting for locale to be set...');
             let attempts = 0;
-            
             const interval = setInterval(() => {
                 const locale = window.applicationManager?.selectedLocale;
 
@@ -188,6 +189,7 @@ class MenuBar extends React.Component {
                     console.log(`Locale set to: ${locale}`);
                     clearInterval(interval);
                     this.props.onChangeLanguage(window.applicationManager?.selectedLocale || "en");
+                    hasLocaleFromMainAppBeenSet = true;
                 } else if (attempts >= maxAttempts) {
                     console.warn('Locale not set after maximum attempts, defaulting to "en"');
                     clearInterval(interval);
