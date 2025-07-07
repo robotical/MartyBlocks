@@ -3,7 +3,7 @@ const Cast = require("./util/cast");
 const Color = require("./util/color");
 const { isVersionGreater_errorCatching } = require('./versionChecker.js');
 const { noteFrequencies } = require("./util/note-frequencies");
-
+const CogLEDCommandAggregator = require("./util/CogLEDCommandAggregator.js")
 class Scratch3CogBlocks {
   constructor(runtime) {
     /**
@@ -338,13 +338,22 @@ class Scratch3CogBlocks {
   setLEDToColour(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const ledIdArgValue = args[cog_blocks_definitions.looks.cog_setLEDToColour.values.LED_ID.name];
-    let ledId = ledIdArgValue;
+    const ledId = args[cog_blocks_definitions.looks.cog_setLEDToColour.values.LED_ID.name];
     const color = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setLEDToColour.values.COLOR.name]);
-    const command = `led/ring/setled/${ledId}/${color}`;
-    console.log("command", command);
-    connectedRaft.sendRestMessage(command);
-    return new Promise(resolve => setTimeout(resolve, 100));
+    const cogVersion = connectedRaft.getRaftVersion();
+    // CogLEDCommandAggregator is compatible only with versions greater than 1.9.4
+    if (isVersionGreater_errorCatching(cogVersion, "1.9.4")) {
+      CogLEDCommandAggregator.sendFunction = connectedRaft.sendRestMessage.bind(connectedRaft);
+      CogLEDCommandAggregator.setLED(ledId, color);
+      return;
+    } else {
+      // For older versions, send the LED command directly
+      const command = `led/ring/setled/${ledId}/${color}`;
+      console.log("Sending command:", command);
+      connectedRaft.sendRestMessage(command);
+      // Adding a slight delay to ensure we do not overload Cog with older version
+      return new Promise(resolve => setTimeout(resolve, 100));
+    }
   }
   setLEDPattern(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
