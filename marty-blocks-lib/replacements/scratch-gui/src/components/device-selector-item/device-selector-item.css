@@ -93,7 +93,8 @@
 }
 
 .is-selected .sprite-info {
-    background: $looks-secondary;
+    /* background: $looks-secondary; */
+    background: #89c761;
     color: $ui-white;
 }
 
