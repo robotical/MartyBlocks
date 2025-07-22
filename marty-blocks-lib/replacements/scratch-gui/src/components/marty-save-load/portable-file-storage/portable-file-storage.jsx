@@ -23,7 +23,12 @@ const messages = defineMessages({
   loadFromFile: {
     id: "gui.saveLoad.loadFromFile",
     defaultMessage: "Load from file",
-    description: "Button label for loading a project from a file",  
+    description: "Button label for loading a project from a file",
+  },
+  projectLoaded: {
+    id: 'gui.saveLoad.projectLoaded',
+    defaultMessage: 'Project loaded successfully!',
+    description: 'Message shown when the project has been loaded successfully'
   },
   fileSaved: {
     id: "gui.saveLoad.fileSaved",
@@ -36,7 +41,7 @@ const messages = defineMessages({
     description: "Error message shown when a project fails to load",
   },
   fileSaveError: {
-    id: "gui.saveLoad.fileSaveError", 
+    id: "gui.saveLoad.fileSaveError",
     defaultMessage: "Couldn't save file",
     description: "Error message shown when a file cannot be saved",
   },
@@ -122,7 +127,7 @@ class SaveLoad extends React.Component {
         <div className={styles.block}>
           <div className={styles.saveProjectContainer}>
             <div className={styles.button} onClick={() => this.saveFile()}>
-              <p className={styles.buttonTitle}>{this.props.intl.formatMessage(messages.saveProject)}</p>
+              <p className={styles.buttonTitle}>{this.props.intl.formatMessage(messages.saveToFile)}</p>
             </div>
           </div>
           <div className={styles.loadProjectContainer}>
@@ -135,7 +140,7 @@ class SaveLoad extends React.Component {
                 onChange={this.loadFile}
               />
               <label htmlFor="file-upload" className={styles.buttonTitle}>
-                {this.props.intl.formatMessage(messages.loadProject)}
+                {this.props.intl.formatMessage(messages.loadFromFile)}
               </label>
             </div>
           </div>
