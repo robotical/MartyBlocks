@@ -1,6 +1,6 @@
 export PhoneAppHome=/Users/ntheodoropoulos/Robotical/marty-react-native # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the phoneapp
 export WebappHome=/Users/ntheodoropoulos/Robotical/marty-web-app # <- replace this if you want to use the buildAllAndCpToWebApp function, which builds everything and copies the build files in the webapp
-export MBHome=/Users/ntheodoropoulos/Robotical/MartyBlocks # <- replace this
+export MBHome=/home/kirsty/robotical/MartyBlocks # <- replace this
 
 export mblib=$MBHome/marty-blocks-lib/
 export REPLACEMENTS=$MBHome/marty-blocks-lib/replacements
@@ -10,7 +10,10 @@ export gui_original=$MBHome/scratch-gui
 export NODE_OPTIONS="--max-old-space-size=5120"
 alias cdhome='cd $MBHome'
 alias sourceMBProf='cdhome && source martyBlocksCliProfile'
-export PATH=$(pyenv root)/shims:$PATH
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 ## install python 2 and add it to path
 ## install Java Runtime Environment (JRE)
 
@@ -35,10 +38,7 @@ fetchScratch() {
 
 # Step 1b: Checkout appropriate commit
 checkoutScratch() {
-    # cd $blocks_original && git reset --hard f9107bf5d0479d632658f2b203995f5ae6d75363
-    # cd $vm_original && git reset --hard 3b36a8e3ea7f3caa5b4bf4ae7b4f821a986a1378
-    # cd $gui_original && git reset --hard 738c86bb58e336711280aec33c510d7aef79408e
-    cd $blocks_original && git reset --hard f210e042988b91bcdc2abeca7a2d85e178edadb2
+    cd $blocks_original && git reset --hard f210e042988b91bcdc2abeca7a2d85e178edadb
     cd $vm_original && git reset --hard 7313ce5199f8a3da7850085d0f7f6a3ca2c89bf6
     cd $gui_original && git reset --hard 530d1ed7b8c45560f9a0580d6a00c87ecbec4721
 }

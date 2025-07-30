@@ -15,7 +15,7 @@ const BUCKET_URL = "https://roboticalpublic.s3.eu-west-1.amazonaws.com/marty-blo
 const cogAndMartyTutorial = {
     'type-lesson-cog-and-marty-tutorial': {
         id: "type-lesson-cog-and-marty-tutorial",
-        name: "Cog and Marty Interaction",
+        name: "Cog and Marty Tutorial",
         type: "lesson",
         urlId: "cog-and-marty-interaction",
         description: <FormattedMessage

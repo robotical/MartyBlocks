@@ -13,6 +13,15 @@ import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
 import cogBlocksTutorial1 from './general-lessons/cog-blocks-1';
 import cogBlocksTutorial2 from './general-lessons/cog-blocks-2';
+import martyBlocksIntroTutorial1 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-1';
+import martyBlocksIntroTutorial2 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-2';
+import martyBlocksIntroTutorial3 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-3';
+import martyBlocksIntroTutorial4 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-4';
+import martyBlocksCodingTutorial1 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-1';
+import martyBlocksCodingTutorial2 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-2';
+import martyBlocksCodingTutorial3 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-3';
+import martyBlocksCodingTutorial4 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-4';
+import martyBlocksCodingTutorial5 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-5';
 
 export default {
     ...MCH01,
@@ -21,6 +30,16 @@ export default {
     ...cogAndMartyTutorial,
     ...cogBlocksTutorial1,
     ...cogBlocksTutorial2,
+    ... martyBlocksIntroTutorial1,
+    ... martyBlocksIntroTutorial2,
+    ... martyBlocksIntroTutorial3,
+    ... martyBlocksIntroTutorial4,
+    ... martyBlocksCodingTutorial1,
+    ... martyBlocksCodingTutorial2,
+     ... martyBlocksCodingTutorial3,
+    ... martyBlocksCodingTutorial4,
+    ... martyBlocksCodingTutorial5,
+
     "mm-create-model": {
         name: (
             <FormattedMessage
