@@ -30,7 +30,7 @@ const cogBlocksTutorial2 = {
             id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
-        img: `${BUCKET_URL}cover_image.jpg`,
+        img: `${BUCKET_URL}cover_image.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['cog', 'sound', 'light', 'sequencing', 'parallel-code', 'variables', 'conditionals', 'for-loop'],

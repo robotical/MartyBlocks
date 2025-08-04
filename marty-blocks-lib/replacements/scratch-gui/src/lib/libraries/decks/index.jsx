@@ -13,6 +13,10 @@ import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
 import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
 import cogBlocksTutorial1 from './general-lessons/cog-blocks-1';
 import cogBlocksTutorial2 from './general-lessons/cog-blocks-2';
+import cogBlocksTutorial3 from './general-lessons/cog-blocks-3';
+import cogBlocksTutorial4 from './general-lessons/cog-blocks-4';
+import cogBlocksTutorial5 from './general-lessons/cog-blocks-5';
+import cogBlocksTutorial6 from './general-lessons/cog-blocks-6';
 
 export default {
     // ...MCH01,
@@ -21,6 +25,10 @@ export default {
     ...cogAndMartyTutorial,
     ...cogBlocksTutorial1,
     ...cogBlocksTutorial2,
+    ...cogBlocksTutorial3,
+    ...cogBlocksTutorial4,
+    ...cogBlocksTutorial5,
+    ...cogBlocksTutorial6,
     "mm-create-model": {
         name: (
             <FormattedMessage

@@ -11,7 +11,7 @@ const SensorsDashboardBtn = () => {
 
 
   return (
-    <div className={styles.button} onClick={clickHandler}>
+    <div id="sensor-dashboard-button" className={styles.button} onClick={clickHandler}>
       <img
         className={styles.icon}
         src={sensorsDashboardIcon}
