@@ -510,6 +510,18 @@ Blockly.Blocks.defaultToolbox = '<xml id="toolbox-categories" style="display: no
         '</shadow>' +
       '</value>' +
     '</block>' +
+    '<block type="operator_atan2" id="operator_atan2">' +
+      '<value name="Y">' +
+        '<shadow type="math_number">' +
+          '<field name="NUM">0</field>' +
+        '</shadow>' +
+      '</value>' +
+      '<value name="X">' +
+        '<shadow type="math_number">' +
+          '<field name="NUM">0</field>' +
+        '</shadow>' +
+      '</value>' +
+    '</block>' +
     '<block type="operator_mathop" id="operator_mathop">' +
       '<value name="NUM">' +
         '<shadow type="math_number">' +
