@@ -23,7 +23,7 @@ const martyBlocksIntroTutorial4 = {
             id={`gui.howtos.lessons.marty-blocks-intro-4.description`}
             values={{}}
         />,
-        img: `${BUCKET_URL}martyblocksintro4_cover.png`,
+        img: `${BUCKET_URL}blocksintro4_cover.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['sprites', 'functions', 'events' , 'sequencing', 'communication', 'messages', 'broadcast'],
@@ -31,7 +31,7 @@ const martyBlocksIntroTutorial4 = {
             /* STEP 1 -- intro*/
            {
                 type: "info",
-                image: `${BUCKET_URL}martyblocksintro4_cover.png`,
+                image: `${BUCKET_URL}blocksintro4_cover.png`,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -279,7 +279,7 @@ const martyBlocksIntroTutorial4 = {
             /* STEP 13 -- end */
             {
                 type: "end",
-                image: `${BUCKET_URL}martyblocksintro4_cover.png`,
+                image: `${BUCKET_URL}blocksintro4_cover.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={'You did it! Click on the speaker to start the music, and watch Marty party!'}

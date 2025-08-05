@@ -12,8 +12,8 @@ import { FormattedMessage } from 'react-intl';
 
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/6/";
 
-const martyBlocksCodingTutorial5 = {
-    'marty-blocks-coding-5': {
+const martyBlocksCodingTutorial6 = {
+    'marty-blocks-coding-6': {
         id: "marty-blocks-coding-6",
         name: "Coding Unplugged",
         type: "lesson",
@@ -21,7 +21,7 @@ const martyBlocksCodingTutorial5 = {
         description: <FormattedMessage
             defaultMessage={"Let's recreate unplugged mode using everything we've learned so far! If-statements, loops, parallel code, operator blocks and more..."}
             description=""
-            id={`gui.howtos.lessons.marty-blocks-coding-4.description`}
+            id={`gui.howtos.lessons.marty-blocks-coding-6.description`}
             values={{}}
         />,
         img: `${BUCKET_URL}blockscoding6_cover.png`,
@@ -426,7 +426,7 @@ const martyBlocksCodingTutorial5 = {
                         defaultMessage={`
                         There's two more things we need to do if we want to properly recreate unplugged mode.
                         <br/><br/>When Marty senses a new colour, he changes his eye LEDs to that colour and makes a "beep beep!" noise.
-                        <Let's put this into our code!><>
+                        <br/><br/>Let's put this into our code!
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-6.step-19`}
@@ -477,7 +477,7 @@ const martyBlocksCodingTutorial5 = {
                        <br/><br/>Copy the clip below to locate the <b/>Arcade Beep</b> function in Sounds.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-6.step-20`}
+                        id={`gui.howtos.lessons.marty-blocks-coding-6.step-21`}
                     />,
                     nextStepActions: [
                         {
@@ -496,10 +496,8 @@ const martyBlocksCodingTutorial5 = {
                     description: <FormattedMessage
                         isRaw={true}
                         defaultMessage={`
-                        Place a <b/>set Select LED eyes to</b> block <b/>inside the if-statement, but above the repeat until block</b> in each piece of code.
-                        <br/><br/>Change the LED colour to the relevant colour for that block, and make sure to use the dropdown box to select <b/>both eyes</b>.
+                        Place a <b/>Start sound: Arcade Beep</b> block after each LED eye block and before each repeat block.
                         <br/><br/>Your code should look like this:
-
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-6.step-22`}
@@ -507,7 +505,29 @@ const martyBlocksCodingTutorial5 = {
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
-                            blocks: ["mv2_LEDEyesColour"]
+                            blocks: ["sound_play"]
+                            
+                        }
+                    ],
+                    expectedCode: [""],
+                },
+                /* STEP 23 -- add start Sound*/
+                {
+                    type: "end",
+                    image: `${BUCKET_URL}blockscoding6_cover.png`,
+                    description: <FormattedMessage
+                        isRaw={true}
+                        defaultMessage={`
+                       You did it! Amazing!
+                       <br/><br/>You've used parallel programs, variables, operators, sensors, loops and more to recreate unplugged mode all by yourself!
+                       <br/><br/><i/>For an extra challenge - what else can you make Marty do when he sees each colour?
+                    `}
+                        description=""
+                        id={`gui.howtos.lessons.marty-blocks-coding-6.step-23`}
+                    />,
+                    nextStepActions: [
+                        {
+                            
                             
                         }
                     ],
@@ -519,4 +539,4 @@ const martyBlocksCodingTutorial5 = {
     }
 }
 
-export default martyBlocksCodingTutorial4;
+export default martyBlocksCodingTutorial6;

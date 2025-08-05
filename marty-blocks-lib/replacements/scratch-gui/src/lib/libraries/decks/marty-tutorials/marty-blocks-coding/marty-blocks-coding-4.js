@@ -67,7 +67,8 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/>Just like humans, there are some things that computers, and Martys, can't do at the same time. 
                         <br/><br/>For example, <b/>humans can't walk forwards and backwards at the same time - and neither can Marty!</b>
                         <br/><br/>Trying to do this creates what we call a <b/>race condition</b>, where our program can't actually run all our parallel code at once.
-                        <br/><br/>This can cause unpredictable behaviour - bad news for programmers!`}
+                        <br/><br/>This can cause unpredictable behaviour - bad news for programmers!
+                        <br/><br/><br/><i/>Click the image to expand the diagram.</i>`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-2`}
                 />,
@@ -86,10 +87,10 @@ const martyBlocksCodingTutorial4 = {
                 ],
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`So, how to programmers take back control when race conditions pop up?
-                         <br/><br/> They use <b/>mutual exclusion</b> to say, for example, <i/>don't walk backwards until I walk forwards first.</i>
-                         <br/><br/> Mutual exclusion can be implemented using lots of different methods, such as if blocks, wait blocks, variable control and lots more!
-                        `}
+                    defaultMessage={`So, how do programmers take back control when race conditions pop up?
+                         <br/><br/> They use <b/>mutual exclusion</b> to say things like, <i/>don't walk backwards until I walk forwards first.</i>
+                         <br/><br/> Mutual exclusion can be implemented using lots of different methods, such as if-statements, wait blocks, variable control and lots more!
+                        <br/><br/><br/><i/>Click the image to expand the diagram.</i>`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-3`}
                 />,
@@ -257,11 +258,11 @@ const martyBlocksCodingTutorial4 = {
                     description: <FormattedMessage
                         isRaw={true}
                         defaultMessage={`
-                        Click the green flag and watch what Marty does first now... he walks backwards first!
-                        <br/><br/> This is because Marty's software handles race conditions by accessing and running the oldest code first.
-                        <br/> This is why the first time Marty walked forward first, and the second time Marty walked backwards first.
-                        <br/><br/>The problem is, we can't tell by looking what code was made first, and as we write more complicated code, controlling parallel instructions can get confusing!
-                        <br/>Let's explore how we can use wait functions and variables to control our parallel code!
+                        Click the green flag and watch what Marty does now... <b/>he walks backwards first!</b>
+                        <br/><br/> This is because Marty's software handles race conditions by accessing and running the <b/>oldest</b> code first.
+                        <br/><br/>The problem is, we can't just tell by looking what code was created first, and as we write more complicated code, things can get confusing!
+                        <br/><br/>Let's explore how we can use <b/>wait functions and variables</b> to control our parallel code!
+                        <br/><br/><br/><i/>Click the image to expand the diagram.</i>
                         `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-11`}
@@ -276,8 +277,9 @@ const martyBlocksCodingTutorial4 = {
                         isRaw={true}
                         defaultMessage={`
                        Like we learned before, programmers get around race conditions by using mutual exclusion. 
-                       <br/>This means that we can press "go" on both pieces of code at the same time, but we can control what action actually happens first.
+                       <br/><br/>This means that we can press "go" on both pieces of code at the same time, but we can control what action <b/>actually</b> happens first.
                        <br/><br/>First, we'll use a wait block to mutually exclude our code.
+                       <br/><br/><br/><i/>Click the image to expand the diagram.</i>
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-12`}
@@ -320,9 +322,9 @@ const martyBlocksCodingTutorial4 = {
                         isRaw={true}
                         defaultMessage={`
                        Click the green flag and watch how Marty walks forward first, exactly like we wanted him to!
-                       <br/><br/> So, we know that using "wait" blocks can help us with mutual exclusion, but for longer, more complicated code they aren't so great
-                       <br/>The length of time code takes to run can be varied and complex, making it difficult to accurately predict a wait time.
-                       <br/><br/>Let's look at using variable control for a more accurate method of mutual exclusion.
+                       <br/><br/>So, we know that using wait blocks can help us with mutual exclusion, but for longer, more complicated code they aren't so great.
+                       <br/><br/>The length of time code takes to run can be varied and complex, making it difficult to accurately predict a wait time.
+                       <br/><br/>Let's look at using <b/>variable control</b> for a more accurate method of mutual exclusion.
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-14`}
@@ -345,7 +347,8 @@ const martyBlocksCodingTutorial4 = {
                         isRaw={true}
                         defaultMessage={`
                       We're going to use a variable called "next move" to mutually exclude our "walk backwards" and "walk forwards" code. 
-                      <br/><br/>Even though both blocks of code will run when we click the green flag, we can say - don't <i/>actually</i> take a step forward until the next move variable = forward.
+                      <br/><br/>Even though both blocks of code will run when we click the green flag, we can say:
+                      <br/><br/>Don't <i/>actually</i> take a step forward<b/> until next move = forward.</b>
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-15`}
@@ -388,7 +391,7 @@ const martyBlocksCodingTutorial4 = {
                     description: <FormattedMessage
                         isRaw={true}
                         defaultMessage={`
-                       Remove the wait block we previously added so your code matches the example below. Now you're ready to implement variable control!
+                       Remove the wait block we previously added so your code matches the example below. <br/><br/>Now you're ready to implement variable control!
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-17`}
@@ -432,8 +435,8 @@ const martyBlocksCodingTutorial4 = {
                         isRaw={true}
                         defaultMessage={`
                        We want Marty to <b/>wait until</b> next move=forwards or next move=backwards to do the relevant move.
-                       <br/><br/>Select two equals operators, and fill them out like shown below. 
-                       <br/>You can get two next move blocks from the orange Variables tab.
+                       <br/><br/>Select two <b/>equals operators</b>, and fill them out like shown below. 
+                       <br/><br/>You can get two next move blocks from the orange Variables tab.
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-19`}
@@ -475,7 +478,7 @@ const martyBlocksCodingTutorial4 = {
                         isRaw={true}
                         defaultMessage={`
                     If we want Marty to walk forwards first, he should walk backwards next, and vice versa.
-                    <br/>So, we want use the set <b/>next move</b> block to change next move after we walk.
+                    <br/><br/>So, we want use the set <b/>next move</b> block to change next move after we walk.
                     <br/><br/>Place two of these blocks at the end of each piece of code, and type "forwards" or "backwards" in each one, to match the sample code below:
                     `}
                         description=""
@@ -492,12 +495,12 @@ const martyBlocksCodingTutorial4 = {
                 /* STEP 22 -- add final set move block*/
                 {            
                     type: "info",
-                    image: `${BUCKET_URL}twoCompletedBlocks.png`,
+                    image: `${BUCKET_URL}controller.png`,
                     description: <FormattedMessage
                         isRaw={true}
                         defaultMessage={`
-                    To act as a "controller" to set whether we want Marty to go forwards or backwards first, we'll select one more <b/>set next move to</b> block.
-                    Let's say we want Marty to walk backwards first - type "backwards" into the parameter space, and click the block so that next move is backwards.
+                    Finally, select a <b/>set next move to</b> block to set whether we want Marty to go forwards or backwards first.
+                   <br/><br/> Let's say we want Marty to walk backwards first - type "backwards" into the parameter space, and click the block so that next move is set to backwards.
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-22`}
@@ -517,10 +520,10 @@ const martyBlocksCodingTutorial4 = {
                     description: <FormattedMessage
                         isRaw={true}
                         defaultMessage={`
-                    You did it! You can now use variables to mutually exclude parallel code, removing all race conditions.
+                    You did it! You can now use <b/>variable control</b> and wait functions to mutually exclude parallel code!
                     <br/> Click the green flag and watch your parallel code work together.
                     <br/><br/>Both code blocks run at the same time, but your "next move" variable makes sure we always know what's coming next!
-                    <br/><br/>In your "controller" block, why not try changing "backwards" to "forwards" (or even something random like "banana") and see how Marty walks now.
+                    <br/><br/><i/>For an extra challenge, why not try changing next move to "forwards" (or even something random like "banana") and see how Marty walks now...
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-23`}

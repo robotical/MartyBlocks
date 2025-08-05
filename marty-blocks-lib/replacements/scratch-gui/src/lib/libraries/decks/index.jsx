@@ -22,6 +22,9 @@ import martyBlocksCodingTutorial2 from './marty-tutorials/marty-blocks-coding/ma
 import martyBlocksCodingTutorial3 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-3';
 import martyBlocksCodingTutorial4 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-4';
 import martyBlocksCodingTutorial5 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-5';
+import martyBlocksCodingTutorial6 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-6';
+import martyBlocksCodingTutorial7 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-7';
+import martyBlocksCodingTutorial8 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-8';
 
 export default {
     ...MCH01,
@@ -39,6 +42,10 @@ export default {
      ... martyBlocksCodingTutorial3,
     ... martyBlocksCodingTutorial4,
     ... martyBlocksCodingTutorial5,
+    ... martyBlocksCodingTutorial6,
+    ... martyBlocksCodingTutorial7,
+    ... martyBlocksCodingTutorial8,
+
 
     "mm-create-model": {
         name: (

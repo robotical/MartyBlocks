@@ -21,7 +21,7 @@ const martyBlocksCodingTutorial5 = {
         description: <FormattedMessage
             defaultMessage={"Let's use parallel programming with variable control to help Marty show off all his funny faces!"}
             description="Let's use parallel programming with variable control to help Marty show off all his funny faces!"
-            id={`gui.howtos.lessons.marty-blocks-coding-4.description`}
+            id={`gui.howtos.lessons.marty-blocks-coding-5.description`}
             values={{}}
         />,
         img: `${BUCKET_URL}blockscoding5_cover.png`,
