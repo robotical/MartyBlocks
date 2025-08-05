@@ -133,7 +133,7 @@ class Scratch3OperatorsBlocks {
         const y = Cast.toNumber(args.Y);
         const x = Cast.toNumber(args.X);
         if (x === 0 && y === 0) return 0; // atan2(0, 0) is undefined, but Scratch returns 0.
-        return Math.atan2(y, x); 
+        return (Math.atan2(y, x) * 180) / Math.PI;
     }
 
     mathop (args) {
