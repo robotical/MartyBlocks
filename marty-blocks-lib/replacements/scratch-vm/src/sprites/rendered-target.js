@@ -1048,6 +1048,8 @@ class RenderedTarget extends Target {
             newTarget.effects = JSON.parse(JSON.stringify(this.effects));
             newTarget.variables = this.duplicateVariables(newTarget.blocks);
             newTarget.updateAllDrawableProperties();
+            newTarget.targetType = this.targetType;
+            newTarget.raftType = this.raftType;
             return newTarget;
         });
     }
