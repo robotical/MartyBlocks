@@ -31,7 +31,7 @@ const cogBlocksTutorial3 = {
             id={`gui.howtos.lessons.type-lesson-cog-tutorial-3.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
-        img: `${BUCKET_URL}cover_image.png`, // todo: add the image
+        img: `${BUCKET_URL}cover_image.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['cog', 'variables', 'for-loop', 'conditionals', 'timer', 'operators'],

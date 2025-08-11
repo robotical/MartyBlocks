@@ -24,7 +24,7 @@ const cogBlocksTutorial6 = {
             id={`gui.howtos.lessons.type-lesson-cog-tutorial-6.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
-        img: `${BUCKET_URL}cover_image.png`, // todo: add the image
+        img: `${BUCKET_URL}cover_image.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['cog', 'fractions', 'multiplication', 'coordinates', 'random numbers'],
@@ -987,7 +987,7 @@ const cogBlocksTutorial6 = {
                     isRaw={true}
                     defaultMessage={"Well done!<br /><br />You’ve learned how to make a game in Blocks! We’ve used the clone functionality to make lots of copies of trees to avoid, and made Cog control a character on the screen.<br /><br />Next steps:<ul><li>Can you make another type of obstacle to avoid - maybe rocks?</li><li>Can you make the penguin jump when you press the button on Cog?</li><li>Can you make it so that you can jump over the rock obstacles to get bonus points?</li></ul>"}
                     description=""
-                    id={`gui.howtos.lessons.type-lesson-cog-tutorial-5.step-56`}
+                    id={`gui.howtos.lessons.type-lesson-cog-tutorial-6.step-45`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [],
                 expectedCode: [],

@@ -22,7 +22,7 @@ const cogBlocksTutorial4 = {
             id={`gui.howtos.lessons.type-lesson-cog-tutorial-4.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
-        img: `${BUCKET_URL}cover_image.png`, // todo: add the image
+        img: `${BUCKET_URL}cover_image.png`, 
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['cog', 'blocks', 'animation', 'sensors', 'variables'],
@@ -48,7 +48,7 @@ const cogBlocksTutorial4 = {
             /* STEP 2 -- make sure you're connected to cog */
             {
                 type: "info",
-                image: `${BUCKET_URL}connected.png`, // todo: add the image
+                image: `${BUCKET_URL}connected.png`, 
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"First, make sure you are connected to a cog.<br /><br />If not, add one like you did in the last tutorial by pressing the Add button in the devices panel and selecting a Cog, then clicking connect. If you need to, skip back to the last tutorial to see how"}
