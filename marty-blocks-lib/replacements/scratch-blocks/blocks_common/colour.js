@@ -47,7 +47,7 @@ Blockly.Blocks['colour_picker'] = {
    * Block for colour picker.
    * @this Blockly.Block
    */
-  init: function() {
+  init: function () {
     this.jsonInit({
       "message0": "%1",
       "args0": [
@@ -68,7 +68,7 @@ Blockly.Blocks['colour_picker_LED_eyes'] = {
    * Block for colour picker LED eyes.
    * @this Blockly.Block
    */
-  init: function() {
+  init: function () {
     this.jsonInit({
       "message0": "%1",
       "args0": [
@@ -81,6 +81,58 @@ Blockly.Blocks['colour_picker_LED_eyes'] = {
       "outputShape": Blockly.OUTPUT_SHAPE_ROUND,
       "output": "String"
     });
+  },
+  
+  // === Persist LED colours into the block's XML ===
+  mutationToDom: function () {
+    const container = document.createElement('mutation');
+    const field = this.getField('COLOUR');
+
+    if (field && field.eyeMatrix) {
+      // Use a helper that works even when editor is closed (added in step 2)
+      const cols =
+        (typeof field.eyeMatrix.getLEDColoursSafe === 'function')
+          ? field.eyeMatrix.getLEDColoursSafe()
+          : (field.eyeMatrix.ledColours || []);
+
+      if (cols && cols.length) {
+        container.setAttribute('led_colours', JSON.stringify(cols));
+      }
+    }
+    return container;
+  },
+
+  // === Restore LED colours from XML into the field ===
+  domToMutation: function (xmlElement) {
+    const json = xmlElement.getAttribute('led_colours');
+    if (!json) return;
+
+    try {
+      const cols = JSON.parse(json);
+      const field = this.getField('COLOUR');
+      if (field && field.eyeMatrix) {
+        const eye = field.eyeMatrix;
+
+        // Persist for later openings of the editor
+        eye.ledColours = cols.slice();
+
+        // Sync binary selection state so thumbnails highlight correctly
+        const clear = eye.clearColour || '#9966FF';
+        eye.matrix_ = cols.map(c => c === clear ? '0' : '1').join('');
+
+        // Update the little thumbnail on the block (safe if editor is closed)
+        if (typeof eye.updateMatrix_ === 'function') {
+          eye.updateMatrix_();
+        }
+
+        // (Optional) refresh the small colour button preview
+        if (typeof field.updateColourBtn === 'function') {
+          field.updateColourBtn(field.getValue());
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse led_colours mutation:', e);
+    }
   }
 };
 

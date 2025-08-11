@@ -352,6 +352,17 @@ Blockly.FieldLEDEyeMatrix.prototype.setValue = function (matrix) {
   // this.updateMatrix_();
 };
 
+// Add this helper on the prototype (anywhere with the other methods)
+Blockly.FieldLEDEyeMatrix.prototype.getLEDColoursSafe = function () {
+  // If editor is open, read the live fills.
+  if (this.ledButtons_ && this.ledButtons_.length) {
+    return this.ledButtons_.map(btn => btn.getAttribute('fill') || this.clearColour);
+  }
+  // Otherwise return last persisted copy or clears.
+  if (this.ledColours && this.ledColours.length) return this.ledColours.slice();
+  return Array(Blockly.FieldLEDEyeMatrix.NODES_NUM).fill(this.clearColour);
+};
+
 /**
  * Get the value from this matrix menu.
  * @return {string} Current matrix value.
@@ -474,6 +485,8 @@ Blockly.FieldLEDEyeMatrix.prototype.showEditor_ = function () {
     this.onMouseDown
   );
 
+  this.ledColours = this.getLEDColoursSafe();
+
   // Update the matrix for the current value
   if (isLoaded) {
     this.matrix_ = ledColours.map(colour => colour === this.clearColour ? "0" : "1").join("");
@@ -579,6 +592,7 @@ Blockly.FieldLEDEyeMatrix.prototype.clearMatrix_ = function () {
     }
   }
   this.setColourPickerValue && this.setColourPickerValue();
+  this.ledColours = this.getLEDColoursSafe();
 };
 
 /**
@@ -600,6 +614,7 @@ Blockly.FieldLEDEyeMatrix.prototype.fillMatrix_ = function () {
     }
   }
   this.setColourPickerValue && this.setColourPickerValue();
+  this.ledColours = this.getLEDColoursSafe();
 };
 
 /**
@@ -686,6 +701,9 @@ Blockly.FieldLEDEyeMatrix.prototype.toggleLEDNode_ = function (led) {
     this.matrix_.charAt(led) === "1"
   );
   this.setColourPickerValue && this.setColourPickerValue();
+  
+  // persist current colours
+  this.ledColours = this.getLEDColoursSafe();
 };
 
 /**
@@ -792,6 +810,9 @@ Blockly.FieldLEDEyeMatrix.prototype.checkForLED_ = function (e) {
 Blockly.FieldLEDEyeMatrix.prototype.dispose_ = function () {
   var thisField = this;
   return function () {
+    try {
+      thisField.ledColours = thisField.getLEDColoursSafe();
+    } catch (e) {}
     Blockly.FieldLEDEyeMatrix.superClass_.dispose_.call(thisField)();
     thisField.matrixStage_ = null;
     if (thisField.mouseDownWrapper_) {

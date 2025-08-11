@@ -132,6 +132,7 @@ Blockly.FieldColourPickerLEDEyes.prototype.init = function (block) {
 };
 
 Blockly.FieldColourPickerLEDEyes.prototype.updateColourBtn = function (colour) {
+    if (!this.colourBtn) return;
   const nodes = this.colourBtn.getElementsByTagName("rect");
   for (let i = 0; i < nodes.length; i++) {
     if (i === 0) {
