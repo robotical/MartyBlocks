@@ -219,6 +219,7 @@ class TargetPane extends React.Component {
     }
 
     handleSelectSprite(target) {
+        console.log("selecting sprite in TargetPane", target);
         this.props.vm.setEditingTarget(target.id);
         // making sure we highlight the target only if it's a sprite
         if ((this.props.stage && target.id !== this.props.stage.id) && target.targetType !== target_types_enum.device) {
@@ -227,6 +228,7 @@ class TargetPane extends React.Component {
 
         // if the target is a device, we need to highlight the device visually (send an LED command or something like that)
         if (target.targetType === target_types_enum.device) {
+            workspace.toolbox_.refreshSelection(); // NT: Due to the timeout of a few seconds that needs to pass before the device is fully loaded, we need to refresh the toolbox selection here manually.
             window.raftManager.highlightDevice(target.id);
         }
     }
@@ -262,6 +264,7 @@ class TargetPane extends React.Component {
         });
     }
     handleActivateBlocksTab() {
+        workspace.toolbox_.refreshSelection(); // NT: Due to the timeout of a few seconds that needs to pass before the device is fully loaded, we need to refresh the toolbox selection here manually.
         this.props.onActivateTab(BLOCKS_TAB_INDEX);
     }
     handleNewSprite(spriteJSONString) {
