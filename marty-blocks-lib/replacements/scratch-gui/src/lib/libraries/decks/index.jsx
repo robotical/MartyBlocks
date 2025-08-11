@@ -19,6 +19,7 @@ import cogBlocksTutorial5 from './general-lessons/cog-blocks-5';
 import cogBlocksTutorial6 from './general-lessons/cog-blocks-6';
 import cogBlocksTutorial7 from './general-lessons/cog-blocks-7';
 import cogBlocksTutorial8 from './general-lessons/cog-blocks-8';
+import cogBlocksTutorial9 from './general-lessons/cog-blocks-9';
 import cogBlocksTutorial10 from './general-lessons/cog-blocks-10';
 import cogBlocksTutorial11 from './general-lessons/cog-blocks-11';
 
@@ -35,6 +36,7 @@ export default {
     ...cogBlocksTutorial6,
     ...cogBlocksTutorial7,
     ...cogBlocksTutorial8,
+    ...cogBlocksTutorial9,
     ...cogBlocksTutorial10,
     ...cogBlocksTutorial11,
     "mm-create-model": {
