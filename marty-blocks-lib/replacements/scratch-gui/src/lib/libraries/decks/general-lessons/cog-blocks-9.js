@@ -4,95 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/cog/blocks/9/";
 
-/*
-CONTEXT:
-
-Trundle Wheel
-Concepts: angles & measurement, geometry, trigonometry (optional), lists
-Lesson outline
-Use the accelerometer on Cog to measure the angle of tilt as it rotates
-Make a sprite of cog and get it to rotate on screen as you rotate the real cog
-Make an LED move around the face of cog to indicate the tilt
-Put cog into the middle of a cardboard circle, and make it calculate the distance that it has been rolled using the diameter of the circle
-Get the distance to reset when the button is pushed, and record the distances measured in a list
-Teacher guide notes and learning points
-For younger students
-The relationship between diameter and circumference
-Trundlewheels as measurement devices
-For older students
-Using the arctangent function to calculate an angle
-Vector maths
-New blocks and functionality:
-Atan2 (angle calculator)
-Drawing a sprite
-Step
-Instruction
-Expected Code
-Action to move on
-1
-In previous activities we’ve seen how we can use the accelerometer on cog to measure which direction cog is tilting in
-We can also use this sensor to figure out the angle that cog is at
-We’ll use that to turn cog into a trundle wheel - that’s a device for measuring distances by rolling a wheel along them
--
-2
-Add a when green flag clicked block and a forever loop
-3
-Make a variable called angle
-4
-Set the angle to atan2 of [Accelerometer [Y]] and [Accelerometer [X]]
-You can find the atan2 block in the operators category
-5
-Atan2 is a mathematical function that uses trigonometry to work out the angle inside a right angled triangle when given the lengths of the adjacent and opposite legs
-Here, we’re putting in the Y axis and X axis acceleration, which are perpendicular to each other (at 90 degrees), and the atan2 function will tell us the angle
-Make a fairly simple graphic to illustrate this
-6
-Try it out!
-Press the green flag and then hold Cog vertically with the yellow arrow pointing up, and rotate it around like a steering wheel
-7
-As you rotate Cog clockwise you’ll see that the angle changes from 0 degrees when cog is pointing up,  up to 180 degrees when cog is pointing down
-It will then jump to -180 degrees, before increasing back to 0 degrees as you continue rotating clockwise
-8
-For our trundle wheel we’d prefer if it counted up from 0 to 360 degrees
-Add these blocks inside the forever loop:
-If [[angle] < [0]] then
-Change [angle] by 360
-Now instead of -180 degrees, our angle will be set to +180 degrees
-It’ll keep increasing from there up to 360, and then loop back around to 0 degrees
-9
-Try it out!
-Now when you rotate cog the angle will go from 0-360 and then loop around
-This maths works because 360 degrees is a full turn so when we add an extra 360 degrees to the rotation we end up pointing the same way, but now with a positive angle that will be easier to deal with as we count revolutions
-10
-Let’s add a sprite on screen to show the rotation of Cog
-From the Choose a Sprite menu select the paint option
-11
-Let’s draw a sprite to represent Cog!
-Start off by adding a circle, and then use the line tool to make a hexagon around it
-The circle is just a guide to help us get the hexagon right - don’t worry if your hexagon isn’t perfect!
-12
-Delete the circle, and replace it with a smaller circle in the middle to represent the button on Cog
-13
-And finally draw a triangle using the Line tool, and color it yellow
-14
-Click the Code tab to go back to the coding screen
-15
-With the sprite selected, add these blocks:
-When green flag clicked
-Forever
-Point in direction [angle]
-16
-Try it out!
-Press the green flag and then rotate cog - you’ll see the sprite rotate too!
-There’s a problem though - the sprite is 90 degrees off from Cog - that’s because the Blocks interface counts point left as being 0 degrees, whereas we’re treating pointing up as being 0 degrees
-17
-To convert between these different conventions, change the code to add 90 degrees to the angle
-Try it again and the movement of the cog sprite will match that of your real life cog! 
-18
-Select Cog again
-19
-Let’s add an LED on Cog to show that the rotation sensing is working
-Add 2 new variables called LED and lastLED
-*/
 const cogBlocksTutorial9 = {
     'type-lesson-cog-tutorial-9': {
         id: "type-lesson-cog-tutorial-9",
@@ -329,132 +240,7 @@ const cogBlocksTutorial9 = {
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-9.step-19`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
             },
-            /*
-            20
-            Our angle variable is telling us a rotation from 0 to 360 degrees, but we only have 12 LEDs around the ring on cog
-            That means the resolution will be 30 degrees per LED, since 360 degrees / 12 LEDs = 30 degrees / LED
-            Add these blocks inside the forever loop
-            Set [LED] to [[round [angle]/[30]] mode [12]]
-            We divide the angle by 30 to get a number between 0 and 12, and then round it since we need a whole number (or integer) to specify which LED we’ll light up
-            Then, since our LEDs are only numbered from 0 to 11, we use the mod block like we did in the clock activity. This is the modulus operator and returns the remainder when the two numbers are divided - so instead of getting a number 12 for the LED id, we’ll get a 0 again instead - which is what we want because LED 0 is at the 12 o’clock position on cog
-            21
-            Now add these blocks inside the forever loop as well
-            If [not [[LED] = [lastLED]]] then
-            Set LED [LED] to [blue]
-            Set LED [lastLED] to [black]
-            Set [lastLED] to [LED]
-            Can you figure out how that new section of code works and what it will do?
-            We’re using the LED and lastLED variables to keep track of which LED is lit, and whether we need to change it. When the value of LED changes from one iteration of the loop to the next, the LED will not be equal to lastLED, and the condition in the if statement will be true. 
-            When that happens, we turn on the new LED, and turn off the old one (by setting it to black, which is the same as being off for a light). Finally, we update the lastLED variable so that it’s set for the next time around the loop
-            22
-            Try it out!
-            Press the green flag and then rotate cog
-            You’ll notice that something funny is happening! Sometimes the LED that’s on is at the top, and sometimes it’s at the bottom!
-            That’s a bit confusing, and not what we were going for
-            23
-            If you think about it, that’s because the LED is rotating clockwise at the same time as we’re rotation cog clockwise
-            What we actually want, for the LED to always be at the bottom of cog, is for it to rotate in the opposite direction to how we’re rotating cog
-            How could we make that happen?
-            Change your code so that it says set [LED] to [[round [[360] - [angle]] / [30]] mod [12]]
-            24
-            Try it out!
-            Now when you rotate cog, the LED will always be at the top!
-            When we subtract the [angle] variable from 360, what we’re effectively doing is flipping which direction we’re rotating around the circle.
-            For example, if we rotate 10 degrees clockwise from 0, we’ll be at 10 degrees. If we rotate 10 degrees anticlockwise from 0, we’ll be at 350 degrees
-            25
-            That’s pretty close, but it’s still not quite what we were going for. It would be more intuitive if the LED was at the bottom of cog, rather than the top
-            How could we do that?
-            Basically we need to add 6 to the LED variable - and just like adding 6 hours will rotate the hour hand halfway around a clock face, adding 6 to the LED variable will rotate halfway around the ring of 12 LEDs
-            We will be relying on the mod operator to loop the numbers around from 11->0 
-            26
-            Try it out!
-            Now when you rotate cog the LED that’s on will be at the bottom
-            27
-            Ok! Now we’ve got some good user feedback that the rotation sensing is working, let’s make cog measure distance!
-            For this next bit, you’ll need a card circle - this will be our wheel
-            28
-            Trace around the upper face of cog, and then cut out a hexagon in the middle of the circle
-            (you don’t need to be perfectly in the middle)
-            Measure the diameter of your circle
-            The one here is about 200mm diameter, which means the radius is 100mm
-            29
-            Let’s plug that number into our program
-            Make two new variables called radius and circumference
-            Add new blocks to set them before the forever loop
-            Set [radius] to [100]
-            Set [circumference] tp [2] * [[3.14] * [radius]]]
-            Replace the 100 there with whatever the radius of your wheel is
-            We’ll be measuring the distance covered as the wheel turns, where each revolution of the wheel will cover a distance equal to the circumference of the wheel
-            Remember that the circumference is equal to 2 * pi * radius. Here we’re approximating pi as 3.14
-            30
-            We’ll need a few more variables to help us calculate the distance travelled
-            Make these new variables
-            lastAngle - we’ll use that to track what the angle was the last time around the forever loop, like we did with the lastLED variable
-            revolutions - we’ll use that to keep track of how many complete revolutions there have been of the wheel
-            totalRotation - we’ll add up the complete and partial revolutions to get the total amount rotated in degrees
-            Distance - we’ll convert that total rotation into a distance
-            31
-            To let us count the number of revolutions, we’ll need to keep track of when the angle changes from 360 -> 0, and vice versa
-            We’ll use the lastAngle variable for this. When the angle goes from 360 to 0 degrees the result of [angle] - [lastAngle] will be -360
-            In practice our measurement will probably jump from something like 355 -> 5 degrees.
-            Add these blocks inside the forever loop
-            If [[angle] - [lastAngle] < [-180]] then
-            Change [revolutions] by [1]
-            So, if the angle decreases by a lot (180 degrees or more) suddenly, we’ll know that we should add 1 to the revolutions count
-            32
-            We also need to track revolutions in the opposite direction. When that happens, the angle will jump from 0 -> 360 degrees
-            Add these blocks inside the forever loop
-            If [[angle] - [lastAngle]] > [180]] then
-            Change [revolutions] by [-1]
-            That means that if the angle jumps up a lot suddenly, we’ll decrease the revolutions count by 1
-            33
-            Add a set [lastAngle] to [angle] block inside the forever loop
-            That will get the lastAngle variable ready for the next time around the loop
-            34
-            Now it’s time to work out the distance the wheel has rolled!
-            Add this block inside the forever loop
-            Set [totalRotation] tp [[[revolutions] * [360]] + [angle]]
-            This will add 360 degrees for every rotation to the current angle measurement, to get the total rotation
-            35
-            Now add this block
-            Set [distance] to [[[totalRotation] / [360]] * [circumference]]
-            The totalRotation variable gives the total rotation in degrees, so by dividing it by 360 we get the number of revolutions as a rational number - one that can have things after the decimal point rather than just whole numbers
-            Multiplying that by the circumference tells us the total distance the wheel has rolled!
-            36
-            Try it out! 
-            Put cog inside the cardboard wheel and try rolling it along!
-            37
-            It would be great to have a way to easily reset the distance counter
-            Add these blocks:
-            On button press
-            Set [distance] to [0]
-            Set [revolutions] to [0]
-            Set [startingAngle] to [angle]
-            Set [lastAngle] to [angle]
-            You’ll need to make a new variable called startingAngle.
-            We’ll use that to make sure that we can start counting from whatever angle cog is at when you push the button, not just when cog is pointing up
-            38
-            We’ll need to factor the startingAngle into our calculation of the total rotation, by subtracting it from the current angle
-            Change the block that sets the totalRotation variable to
-            Set [totalRotation] to [[[revolutions] * [360]] + [[angle] - [startingAngle]]]
-            39
-            Try it out!
-            Get a ruler and put your cog trundlewheel next to it at the 0 mark
-            Push the button to reset cog, and then rotate the wheel along the ruler - you should find that the distance variable keeps track of how far you’ve rolled
-            40
-            You might have noticed that in the last video there was a list of distances
-            To make that, click the Make a List button and make a list called distances
-            41
-            Then, add an add [distance] to [distances]  block just after the on button press block
-            42
-            Try it out!
-            You can measure distances and push the button to record them into the list to look at when you get back to your screen
-            43
-            Well done!
-            You’ve learned how to turn cog into a device for measuring distances! In real life, trundle wheels are used to measure long distances, and you get ones with handles that you can roll along
-            You used some maths to convert the diameter that you measured into a radius and then a circumference, and used that along with the angle measurement to calculate the distance
-            You thought a lot about angles, and used a variable to keep track of how the angle of cog was changing, and conditionals to record how the number of total revolutions changed
-            */
+          
            /* STEP 20 -- set LED variable */
             {
                 type: "info",
@@ -542,7 +328,6 @@ const cogBlocksTutorial9 = {
             /* STEP 28 -- trace around cog */
             {
                 type: "info",
-                image: `${BUCKET_URL}step-28.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Trace around the upper face of cog, and then cut out a hexagon in the middle of the circle.<br /><br />(you don’t need to be perfectly in the middle)<br /><br />Measure the diameter of your circle.<br /><br />The one here is about 200mm diameter, which means the radius is 100mm."}
@@ -566,7 +351,7 @@ const cogBlocksTutorial9 = {
                 type: "info",
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={"We’ll need a few more variables to help us calculate the distance travelled.<br /><br />Make these new variables:<ul><li>lastAngle - we’ll use that to track what the angle was the last time around the forever loop, like we did with the lastLED variable</li><li>revolutions - we’ll use that to keep track of how many complete revolutions there have been of the wheel</li><li>totalRotation - we’ll add up the complete and partial revolutions to get the total amount rotated in degrees</li><li>Distance - we’ll convert that total rotation into a distance</li></ul>"}
+                    defaultMessage={"We’ll need a few more variables to help us calculate the distance travelled.<br /><br />Make these new variables:<ul><li>lastAngle - we’ll use that to track what the angle was the last time around the forever loop, like we did with the lastLED variable</li><li>revolutions - we’ll use that to keep track of how many complete revolutions there have been of the wheel</li><li>totalRotation - we’ll add up the complete and partial revolutions to get the total amount rotated in degrees</li><li>distance - we’ll convert that total rotation into a distance</li></ul>"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-9.step-30`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
@@ -700,7 +485,7 @@ const cogBlocksTutorial9 = {
             },
             /* STEP 43 -- congratulations */
             {
-                type: "info",
+                type: "end",
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Well done!<br /><br />You’ve learned how to turn cog into a device for measuring distances! In real life, trundle wheels are used to measure long distances, and you get ones with handles that you can roll along.<br /><br />You used some maths to convert the diameter that you measured into a radius and then a circumference, and used that along with the angle measurement to calculate the distance.<br /><br />You thought a lot about angles, and used a variable to keep track of how the angle of cog was changing, and conditionals to record how the number of total revolutions changed."}

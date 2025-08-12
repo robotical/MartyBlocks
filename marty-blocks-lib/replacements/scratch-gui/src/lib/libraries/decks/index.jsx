@@ -23,6 +23,8 @@ import cogBlocksTutorial9 from './general-lessons/cog-blocks-9';
 import cogBlocksTutorial10 from './general-lessons/cog-blocks-10';
 import cogBlocksTutorial11 from './general-lessons/cog-blocks-11';
 
+import cogBlocksTutorial13 from './general-lessons/cog-blocks-13';
+
 export default {
     // ...MCH01,
     // ...MCH02,
@@ -39,6 +41,8 @@ export default {
     ...cogBlocksTutorial9,
     ...cogBlocksTutorial10,
     ...cogBlocksTutorial11,
+
+    ...cogBlocksTutorial13,
     "mm-create-model": {
         name: (
             <FormattedMessage
