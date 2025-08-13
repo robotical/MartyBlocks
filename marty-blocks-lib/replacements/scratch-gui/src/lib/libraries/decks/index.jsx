@@ -24,6 +24,7 @@ import cogBlocksTutorial10 from './general-lessons/cog-blocks-10';
 import cogBlocksTutorial11 from './general-lessons/cog-blocks-11';
 
 import cogBlocksTutorial13 from './general-lessons/cog-blocks-13';
+import cogBlocksTutorial14 from './general-lessons/cog-blocks-14';
 
 export default {
     // ...MCH01,
@@ -43,6 +44,7 @@ export default {
     ...cogBlocksTutorial11,
 
     ...cogBlocksTutorial13,
+    ...cogBlocksTutorial14,
     "mm-create-model": {
         name: (
             <FormattedMessage
