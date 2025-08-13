@@ -89,7 +89,9 @@ class MartyMachineModelEditor extends React.Component {
                 };
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 this.setState({ deviceStream: stream });
-                this.deviceStreamRef.srcObject = stream;
+                if (this.deviceStreamRef) {
+                    this.deviceStreamRef.srcObject = stream;
+                }
             } else if (this.props.modelType === 'audio') {
                 const constraints = {
                     audio: true
