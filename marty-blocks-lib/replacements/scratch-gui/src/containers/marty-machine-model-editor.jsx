@@ -156,7 +156,9 @@ class MartyMachineModelEditor extends React.Component {
             } else if (this.props.modelType === 'accelerometer') {
                 // get the accelerometer data from the connected device
                 const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
-
+                if (!connectedRaft) {
+                    return;
+                }
                 const canvas = this.accelerometerCanvasRef;
                 const canvasCtx = canvas.getContext('2d');
                 canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
@@ -219,7 +221,12 @@ class MartyMachineModelEditor extends React.Component {
         // set it in such a way that if the model changes, or the component unmounts, the event listener is removed
         if (this.props.modelType === 'accelerometer') {
             this.connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
-
+            if (!this.connectedRaft) {
+                setTimeout(() => {
+                    alert("Oops! Please connect the device to use the accelerometer model.");
+                }, 1000);
+                return;
+            }
             const cogButtonClickHandler = () => {
                 this.startRecordingAccelerometerSamples('continuous');
             };
@@ -603,6 +610,7 @@ class MartyMachineModelEditor extends React.Component {
 
                     // Capture current accelerometer data from your connected raft
                     const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                    if (!connectedRaft) return;
                     const data = connectedRaft.raftStateInfo.accelerometer;
 
                     // Update the sliding window by shifting out the oldest sample and pushing the new one
@@ -937,6 +945,7 @@ async function collectAccelerometerDataSample(options) {
             if (currentTime - lastDrawTime >= collectDataInterval) {
                 requestAnimationFrame(_collectData);
                 const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                if (!connectedRaft) return;
                 const data = connectedRaft.raftStateInfo.accelerometer;
                 const x = data.ax;
                 const y = data.ay;
