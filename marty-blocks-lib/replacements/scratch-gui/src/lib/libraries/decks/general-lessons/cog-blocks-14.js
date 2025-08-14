@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/cog/blocks/14/";
 
 const cogBlocksTutorial14 = {
