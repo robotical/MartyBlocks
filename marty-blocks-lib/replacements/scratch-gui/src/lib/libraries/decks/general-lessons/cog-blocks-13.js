@@ -413,10 +413,11 @@ const cogBlocksTutorial13 = {
                 image: `${BUCKET_URL}step-35.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={"It’s time to add more cogs in so we can have more players! <br/><br/>Right click on cog and select <i>duplicate</i>."}
+                    defaultMessage={"It's time to add more cogs in so we can have more players!<br/><br/>Right click on cog and select <i>duplicate</i>."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-35`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 36 -- add more questions */
             {
@@ -427,7 +428,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"A new cog has been added with the same code as the first!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-36`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 37 -- local variables */
             {
@@ -438,7 +440,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"As well as the code being duplicated, the <i>local</i> variables we made will have been as well. <br/><br/>With this new cog selected, change the player number to 2."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-37`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 38 -- test your quiz */
             {
@@ -448,7 +451,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Connect a second cog and try it out!<br/><br/>Now whichever cog buzzes first after a question was asked will get the chance to answer<br/><br/>You can add more players by duplicating cog more times!<br/><br/>Remember to update the <i>player number</i> variable on each cog<br/><br/>You’ll also need to set the number of players variable to match the <i>number</i> of players"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-38`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 39 -- work out the winner */
             {
@@ -459,7 +463,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Ok!<br/><br/>Now we need to work out who the winner is at the end of the quiz. <br/><br/>Go back to the sprite code <br/><br/>Make another block called <i>announce winners</i>, and call it after the main question loop"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-39`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 40 -- max score */
             {
@@ -470,7 +475,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Firstly, we'll work out what the highest score is. <br/><br/>Make another block called <i>find max score</i>. <br/><br/> Under the <i>define [find max score]</i> block, add these blocks:<ul><li>set [maxScore] to [item [1] of [scores]]</li><li>set [playerID] to [1]</li><li>repeat [length of [scores]]</li><ul>if [[item [playerID] of [scores]] > [maxScore]] then</li><ul><li>set [maxScore] to [item [playerID] of [scores]]</li><ul><li>change [playerID] by [1]</li></ul></li></ul></li></ul><br/><br/> You'll need to make the <i>maxScore</i> and <i>playerID</i> variables. <br/><br/>This code will <li>iterate</li> through the scoreboard - step through it one entry at a time - and will set the <i>maxScore</i> variable to the highest score it finds along the way.<br/><br/>Click on that section of code to run it - the <i>maxScore</i> variable should end up set to whatever the highest value is in the scores list"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-40`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 41 -- how many players with score */
             {
@@ -481,7 +487,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Now we know what the highest score is, we need to know how many players got that score. <br/><br/>Make another new block called <i>how many players with score [score]</i> - you can do this by pressing the <i>Add an input number or text</i> button in the Make a Block window."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-41`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 42 -- add blocks */
             {
@@ -492,7 +499,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Add these blocks to the <i>define [how many players with score [score]]</i> block:<ul><li>set [result] to [0]</li><li>set [playerID] to [0]</li><li>repeat [length of [scores]]</li><ul><li>change [playerID] by [1]</li><li>if [[item [playerID] of [scores]] = [score]] then</li><ul><li>change [result] by [1]</li></ul></ul></ul>This new block (or function) is a little different from the ones we made before, because it takes in a parameter - the score we want to look for. <br/><br/>You can drag that <i>score</i> parameter down from the define block to use it in your code. It's like a variable, but it can only be used in this function."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-42`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 43 -- try it out */
             {
@@ -503,7 +511,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"To try that out, try running the how many players with score [] block with the score parameter set to a number that is in your scores list. The result variable will be set to the number of players with that score."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-43`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 44 -- announce winners */
             {
@@ -514,7 +523,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Let’s start building the <i>announce winners</i> function that we created earlier. Add these blocks to the <i>define [announce winners]</i> block:<ul><li>Find max score</li><li>How many players with score [maxScore]</li><li>If [[result] = [1] then</li><ul><li>Say [ join [The winner, with a score of ] [maxScore]] for [5] seconds</li><li>Say [join [is Player ] [item # of [maxScore] in [scores]]</li></ul></ul>Now when this runs, the <i>maxScore</i> variable will be set to the highest score by the <i>find max score</i> function. Then, the <i>result</i> variable will be set to the number of players with that score by the <i>how many players with score [maxScore]</i> block. If there’s only one winner, it’s very easy just to say who they are - and we can use the <i>item # of [maxScore] in [scores]</i> block to look up where that score is on the scoreboard. But if there is a tie and there is more than one winner, things are a little more complicated."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-44`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 45 -- announce winners (continued) */
             {
@@ -525,7 +535,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Inside the <i>else</i> part of the <i>if … else</i> block, add these blocks<ul><li>Say [join [join [There are ] [result]] [ winners!]] for [5] seconds</li><li>Say [join [With scores of ] [maxScore]] for [5] seconds</li><li>Set [winners] to [join [Player] [item # of [maxScore] in [scores]]</li><li>Set [playerID] to [item # of [maxScore] in [scores]</li><li>Repeat until [[playerID] = [length of [scores]]</li><li>Change [playerID] by [1]</li><li>If [[item [playerID] of [scores] = [maxScore]] then</li><li>Set [winners] to [join [join [winners] [ and Player]] [playerID]</li><li>Say [winners]</li></ul>Now if there is more than one winner, the sprite will say how many there are, and then list them Variables can store more than just numbers - here the <i>winners</i> variable is used to build up a string of text that lists all the winners</br></br>The <i>repeat until</i> loop iterates through from the first score in the list that matches the <i>maxScore</i> variable through to the end. Every time it finds another score that matches, it adds that player to the <i>winners</i> variable."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-45`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
             /* STEP 46 -- try it out! */
             {
@@ -535,7 +546,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Try it out! <br/> Now at the end of the quiz the winners will be listed, even if there is a tie!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-46`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             },
 
             /* STEP 47 -- wrap up */
@@ -546,7 +558,8 @@ const cogBlocksTutorial13 = {
                     defaultMessage={"Well done! You coded up a game show using cogs as the contestants buzzers!<br/><br/>You used <b>lists</b> to store the questions, answers, and the scoreboards<br/><br/>You used <b>local variables</b> so that each cog could keep track of its player number separately.<br/><br/>We learned about using <b>functions</b> (making our own blocks) to keep our code neat and more easy to read. Easy to read code is easier to debug - and breaking down long complicated sections of code into smaller chunks is called <b>Functional Decomposition</b><br/><br/>Functions are also super useful where you might want to run code more than once and you don’t want to copy and paste it over and over again<br/><br/>You also learned how functions can have parameters. The how many players with score function takes in a score to look for<br/><br/>Next steps<ul><li>Can you add more questions and answers (and maybe more cogs) to your quiz?</li></ul>"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-13.step-47`}
-                />
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
+
             }
         ]
     }

@@ -329,8 +329,8 @@ const cogBlocksTutorial15 = {
                     isRaw={true}
                     defaultMessage={"Add these blocks:<ul><li>When green flag clicked</li><li>Load Machine Learning model [gesture]</li><li>Label once every [1] seconds</li><li>Set confidence threshold [0.5]</li></ul><br/>This will start the <i>gesture</i> model that we trained up. It will update its classification of what movement it thinks is happening every 1 second.<br/><br/>Remember before how when we tested the model we saw percentage bars about how confident it was in detections? The <i>confidence threshold</i> sets a threshold for how certain the model needs to be before it will give a classification.<br/>We’ll leave it at 0.5 (or 50%) for now, but we might need to increase it later if the model is giving spurious classifications"}
                     description=""
-                    id={"gui.howtos.lessons.type - lesson - cog - tutorial - 15.step-26"}
-                > {(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage >
+                    id={"gui.howtos.lessons.type-lesson-cog-tutorial-15.step-26"}
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
             },
 
             /* STEP 27 */
@@ -347,6 +347,7 @@ const cogBlocksTutorial15 = {
             /* STEP 28 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-28.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks:<ul><li>When received accelerometer label [swoosh]</li><li>Set [ring] LEDs to [green]</li><li>Broadcast [swoosh] and wait</li><li>Wait [1] seconds</li><li>Turn off all LEDs</li></ul><p>And</p><ul><li>When received accelerometer label [flick]</li><li>Set [ring] LEDs to [red]</li><li>Broadcast [flick] and wait</li><li>Wait [1] seconds</li><li>Turn off all LEDs</li></ul><br/>Now Cog will react by showing lights, and we’ll broadcast a message, whenever a swoosh or a flick is detected"}
@@ -369,6 +370,7 @@ const cogBlocksTutorial15 = {
             /* STEP 30 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-30.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Ok, let’s make a memory game using the motion detector!<br/>Add a <i>Witch</i> sprite and move it to the bottom left corner"}
@@ -380,6 +382,7 @@ const cogBlocksTutorial15 = {
             /* STEP 31 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-31.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now select the <i>Stage</i>"}
@@ -391,9 +394,10 @@ const cogBlocksTutorial15 = {
             /* STEP 32 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-32.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={"And go to the <i>Backdrops</i> tab"}
+                    defaultMessage={"And go to the <i>Costumes</i> tab"}
                     description=""
                     id={"gui.howtos.lessons.type-lesson-cog-tutorial-15.step-32"}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
@@ -402,6 +406,7 @@ const cogBlocksTutorial15 = {
             /* STEP 33 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-33.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add some text saying “Learn to Spell”.<br/>This will be the title screen for the game.<br/>You can also add other decoration if you like - like here where we’ve added a purple trapezoid and a white outline around the text"}
@@ -413,6 +418,7 @@ const cogBlocksTutorial15 = {
             /* STEP 34 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-34.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"We’ll add a few more backdrops to use in the game.<br/>Press the <i>Choose a Backdrop</i> button"}
@@ -424,6 +430,7 @@ const cogBlocksTutorial15 = {
             /* STEP 35 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-35.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Select the <i>Castle 3</i> backdrop"}
@@ -435,6 +442,7 @@ const cogBlocksTutorial15 = {
             /* STEP 36 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-36.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Also add <i>Castle 2</i> and <i>Witch House</i>, so that you have four backdrops total.<br/>Rename the first one to <i>title screen</i>, so that we can identify it easily"}
@@ -446,6 +454,7 @@ const cogBlocksTutorial15 = {
             /* STEP 37 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-37.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Go back to the code tab, with the stage still selected.<br/><br/>Add these blocks:<ul><li>When green flag clicked</li><li>Switch backdrop to [title screen]</li><li>Wait [2] seconds</li><li>Switch backdrop to [Castle 3]</li></ul><br/>Now when the game is started the player will be shown the title screen for 2 seconds, before it switches to Castle 3 - the inside of the castle"}
@@ -457,17 +466,19 @@ const cogBlocksTutorial15 = {
             /* STEP 38 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-38.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"We’re going to add a brief tutorial to the game, and get the player to confirm that they can do the swoosh and flick movements.<br/>We’ll make these movements be required to progress through the backdrops.<br/><br/>Add these blocks:<ul><li>When I receive [swoosh]</li><li>If [[backdrop [name]] = [Castle 3]] then<ul><li>Repeat [50]<ul><li>Change [fisheye] effect by [10]</li><li>Change [whirl] effect by [-10]</li></ul></li><li>Switch backdrop to [Castle 2]</li><li>Repeat [50]<ul><li>Change [fisheye] effect by [-10]</li><li>Change [whirl] effect by [10]</li></ul></li></ul></li></ul><br/>So now when the player makes a swoosh movement while the witch is inside the castle, it will do a fancy transition to the Castle 2 backdrop"}
                     description=""
-                    id={"gui.howtos.lessons.type - lesson - cog - tutorial - 15.step-38"}
-                > {(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage >
+                    id={"gui.howtos.lessons.type-lesson-cog-tutorial-15.step-38"}
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
             },
 
             /* STEP 39 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-39.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"We need one for the flick movement as well.<br/><br/>Add these blocks:<ul><li>When I receive [flick]</li><li>If [[backdrop [name]] = [Castle 2]] then<ul><li>Repeat [50]<ul><li>Change [fisheye] effect by [10]</li><li>Change [whirl] effect by [-10]</li></ul></li><li>Switch backdrop to [Witch House]</li><li>Repeat [50]<ul><li>Change [fisheye] effect by [-10]</li><li>Change [whirl] effect by [10]</li></ul></li><li>Broadcast [start game]</li></ul></li></ul><br/>You might find it quicker to right click and duplicate this code, just be careful to change it in the right places and add the broadcast block!"}
@@ -479,6 +490,7 @@ const cogBlocksTutorial15 = {
             /* STEP 40 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-40.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now select the <i>Witch</i> sprite"}
@@ -490,6 +502,7 @@ const cogBlocksTutorial15 = {
             /* STEP 41 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-41.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"We need to add some instructions to the tutorial steps.<br/><br/>Add these blocks:<ul><li>When backdrop switches to [Castle 3]</li><li>Wait [2] seconds</li><li>Say [It’s time to leave the castle] for [2] seconds</li><li>Say [Swoosh the wand to transport us outside]</li></ul><p>And</p><ul><li>When backdrop switches to [Castle 2]</li><li>Wait [2] seconds</li><li>Say [Let’s go to my house for spell practice] for [2] seconds</li><li>Say [Flick the wand to transport us there]</li></ul>"}
@@ -501,6 +514,7 @@ const cogBlocksTutorial15 = {
             /* STEP 42 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-42.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Ok, let’s try it out!<br/>To run the ML model, you’ll need to select Cog again and start the program with Cog selected"}
@@ -523,6 +537,7 @@ const cogBlocksTutorial15 = {
             /* STEP 44 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-44.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"With the witch in her house, let’s start the game properly.<br/>This is going to be a memory game, where the witch will read out a sequence of gestures and the player will have to remember them and do them in order.<br/>Select the <i>Witch</i> sprite again"}
@@ -534,6 +549,7 @@ const cogBlocksTutorial15 = {
             /* STEP 45 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-45.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks:<ul><li>When I receive [start game]</li><li>Delete all of [gestures]</li><li>Add [swoosh] to [gestures]</li><li>Add [flick] to [gestures]</li><li>Set [lives] to [3]</li><li>Set [sequenceLength] to [2]</li></ul><br/>You’ll need to make a list called <i>gestures</i>, and variables called <i>lives</i> and <i>sequenceLength</i>.<br/>The gestures list will list all the possible movements we can do - if you wanted to expand the game with more motions you could add them here once you’ve trained a model on them as well.<br/>We’ll give our player 3 lives to begin with, and they’ll lose one every time they get something wrong.<br/>And we’ll start off with a sequence of 2 movements"}
@@ -545,6 +561,7 @@ const cogBlocksTutorial15 = {
             /* STEP 46 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-46.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Make a new block called <i>make a sequence of [length] gestures</i>.<br/>You’ll need to use both the <i>Add an input number or text</i> and <i>Add a label</i> options"}
@@ -556,18 +573,20 @@ const cogBlocksTutorial15 = {
             /* STEP 47 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-47.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks:<ul><li>Define [make a sequence of [length] gestures]<ul><li>Delete all of [sequence]</li><li>Repeat [length]<ul><li>Add [item [pick random [1] to [length of [gestures]]] of [gestures]] to [sequence]</li></ul></li></ul></li></ul><br/>You’ll need to make another list called <i>sequence</i>"}
                     description=""
-                    id={"gui.howtos.lessons.type - lesson - cog - tutorial - 15.step-47"}
-                > {(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage >
+                    id={"gui.howtos.lessons.type-lesson-cog-tutorial-15.step-47"}
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>
             },
 
 
             /* STEP 48 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-48.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now add the block <i>make a sequence of [sequenceLength] gestures</i>.<br/>The make a sequence function will take in the value of the <i>sequenceLength</i> variable as an argument for its <i>length</i> parameter"}
@@ -579,6 +598,7 @@ const cogBlocksTutorial15 = {
             /* STEP 49 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-49.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks:<ul><li>When I receive [flick]</li><li>Add [flick] to [user input]</li></ul><p>And</p><ul><li>When I receive [swoosh]</li><li>Add [swoosh] to [user input]</li></ul><br/>You’ll need to make another list called <i>user input</i>.<br/>This is where we’ll keep track of the motions the player has made, so we can compare them against the ones they were supposed to make"}
@@ -590,6 +610,7 @@ const cogBlocksTutorial15 = {
             /* STEP 50 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-50.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks after the <i>make a sequence of [sequenceLength] gestures</i> block:<ul><li>Say [I’m going to read out some gestures] for [2] seconds</li><li>Say [You have to do them in the same order] for [2] seconds</li><li>Say [Ready?!] for [2] seconds</li><li>Repeat [10]<ul><li>Say [sequence] for [2] seconds</li></ul></li><li>Delete all of [user input]</li><li>Wait until [[length of [user input]] = [length of [sequence]]]</li><li>If [[user input] = [sequence]] then<ul><li>Say [Well Done!] for [2] seconds</li><li>Say [Let’s make it more complicated] for [2] seconds</li><li>Change [sequenceLength] by [1]</li><li>Make a sequence of [sequenceLength] gestures</li></ul></li><li>Else<ul><li>If [[lives] > [0]] then<ul><li>Say [Oops! Not quite] for [2] seconds</li><li>Say [Try again…] for [2] seconds</li><li>Change [lives] by [-1]</li></ul></li><li>Else<ul><li>Finish game</li></ul></li></ul></li></ul><br/>You’ll need to make a new block called <i>finish game</i>"}
@@ -601,6 +622,7 @@ const cogBlocksTutorial15 = {
             /* STEP 51 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-51.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks to define the finish game function:<ul><li>Define [finish game]<ul><li>Say [That’s enough for now. Well done!] for [2] seconds</li><li>Say [join [join [You learned a spell with] [[sequenceLength] - [1]]] [gestures]] for [10] seconds</li><li>Stop [all]</li></ul></li></ul><br/>Now when the player runs out of lives they’ll be told their score - how long a sequence of movements they were able to memorise and perform"}
@@ -612,6 +634,7 @@ const cogBlocksTutorial15 = {
             /* STEP 52 */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-52.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Select Cog again and try it out!<br/>You can still make the game fullscreen before starting it, to make it easier to see what the Witch is saying"}

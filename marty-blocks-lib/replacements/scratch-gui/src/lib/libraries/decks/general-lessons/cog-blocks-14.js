@@ -183,7 +183,6 @@ const cogBlocksTutorial14 = {
             /* STEP 13 */
             {
                 type: "info",
-                image: `${BUCKET_URL}step-13.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br/><br/>Every time motion is detected for more than 30 seconds during each 60 second window, that minute will be recorded as true in the <i>activeMinutes</i> list.<br/><br/>Otherwise, a <i>false</i> will be recorded."}
