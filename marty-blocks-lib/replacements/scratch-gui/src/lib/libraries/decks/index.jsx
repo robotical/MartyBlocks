@@ -6,13 +6,14 @@ import { FormattedMessage } from 'react-intl';
 
 // Text to Speech
 import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
-import MCH01 from './ML-lessons/MCH01-HappyOrSad';
-import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
-import MCH03 from './ML-lessons/MCH03-FarmingRobots';
+// import MCH01 from './ML-lessons/MCH01-HappyOrSad';
+// import MCH02 from './ML-lessons/MCH02-CaptainsOrders';
+// import MCH03 from './ML-lessons/MCH03-FarmingRobots';
 
 import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
 import cogBlocksTutorial1 from './general-lessons/cog-blocks-1';
 import cogBlocksTutorial2 from './general-lessons/cog-blocks-2';
+
 import martyBlocksIntroTutorial1 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-1';
 import martyBlocksIntroTutorial2 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-2';
 import martyBlocksIntroTutorial3 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-3';
@@ -26,13 +27,29 @@ import martyBlocksCodingTutorial6 from './marty-tutorials/marty-blocks-coding/ma
 import martyBlocksCodingTutorial7 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-7';
 import martyBlocksCodingTutorial8 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-8';
 
+import cogBlocksTutorial3 from './general-lessons/cog-blocks-3';
+import cogBlocksTutorial4 from './general-lessons/cog-blocks-4';
+import cogBlocksTutorial5 from './general-lessons/cog-blocks-5';
+import cogBlocksTutorial6 from './general-lessons/cog-blocks-6';
+import cogBlocksTutorial7 from './general-lessons/cog-blocks-7';
+import cogBlocksTutorial8 from './general-lessons/cog-blocks-8';
+import cogBlocksTutorial9 from './general-lessons/cog-blocks-9';
+import cogBlocksTutorial10 from './general-lessons/cog-blocks-10';
+import cogBlocksTutorial11 from './general-lessons/cog-blocks-11';
+
+import cogBlocksTutorial13 from './general-lessons/cog-blocks-13';
+import cogBlocksTutorial14 from './general-lessons/cog-blocks-14';
+import cogBlocksTutorial15 from './general-lessons/cog-blocks-15';
+
+
 export default {
-    ...MCH01,
-    ...MCH02,
-    ...MCH03,
+    // ...MCH01,
+    // ...MCH02,
+    // ...MCH03,
     ...cogAndMartyTutorial,
     ...cogBlocksTutorial1,
     ...cogBlocksTutorial2,
+
     ... martyBlocksIntroTutorial1,
     ... martyBlocksIntroTutorial2,
     ... martyBlocksIntroTutorial3,
@@ -46,6 +63,19 @@ export default {
     ... martyBlocksCodingTutorial7,
     ... martyBlocksCodingTutorial8,
 
+    ...cogBlocksTutorial3,
+    ...cogBlocksTutorial4,
+    ...cogBlocksTutorial5,
+    ...cogBlocksTutorial6,
+    ...cogBlocksTutorial7,
+    ...cogBlocksTutorial8,
+    ...cogBlocksTutorial9,
+    ...cogBlocksTutorial10,
+    ...cogBlocksTutorial11,
+
+    ...cogBlocksTutorial13,
+    ...cogBlocksTutorial14,
+    ...cogBlocksTutorial15,
 
     "mm-create-model": {
         name: (

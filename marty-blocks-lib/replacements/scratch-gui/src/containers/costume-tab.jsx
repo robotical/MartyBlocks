@@ -129,7 +129,8 @@ class CostumeTab extends React.Component {
             this.setState({selectedCostumeIndex: target.currentCostume});
         }
     }
-    handleSelectCostume (costumeIndex) {
+    handleSelectCostume (costume) {
+        const costumeIndex = costume.index;
         this.props.vm.editingTarget.setCostume(costumeIndex);
         this.setState({selectedCostumeIndex: costumeIndex});
     }

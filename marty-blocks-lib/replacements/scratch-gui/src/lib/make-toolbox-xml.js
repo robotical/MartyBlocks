@@ -863,13 +863,26 @@ const operators = function (isInitialSetup) {
             </value>
         </block>
         ${blockSeparator}
-<block type="operator_mathop">
-    <value name="NUM">
-        <shadow type="math_number">
-            <field name="NUM" />
-        </shadow>
-    </value>
-</block>
+        <block type="operator_atan2">
+            <value name="Y">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+            <value name="X">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        ${blockSeparator}
+        <block type="operator_mathop">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM" />
+                </shadow>
+            </value>
+        </block>
         ${categorySeparator}
     </category >
     `;

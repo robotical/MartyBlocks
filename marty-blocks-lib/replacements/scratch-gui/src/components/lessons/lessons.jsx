@@ -30,9 +30,12 @@ export const renderFormattedMessage = (componentOrText, divClass) => {
     // If componentOrText is a FormattedMessage component, check if it is marked as raw.
     // If raw, render it as inner HTML for proper formatting.
     // Otherwise, render it normally as plain text or JSX.
+    return <div className={divClass}>
+        {componentOrText}
+    </div>
     if (componentOrText && componentOrText.props && componentOrText.props.defaultMessage) {
         if (componentOrText.props.isRaw) {
-            return <div className={divClass} dangerouslySetInnerHTML={{ __html: componentOrText.props.defaultMessage }} />;
+            return <div className={divClass} dangerouslySetInnerHTML={{ __html: componentOrText.props.defaultMessage }} />
         } else {
             return <div className={divClass}>
                 {componentOrText}

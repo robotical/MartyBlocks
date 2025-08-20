@@ -16,6 +16,12 @@ const cogBlocksTutorial2 = {
     'type-lesson-cog-tutorial-2': {
         id: "type-lesson-cog-tutorial-2",
         name: "Make a 13-sided dice!",
+        name: <FormattedMessage
+            defaultMessage={"Make a 13-sided dice!"}
+            description=""
+            id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.name`}
+            values={{}}
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         type: "lesson",
         urlId: "cog-blocks-2",
         description: <FormattedMessage
@@ -23,8 +29,8 @@ const cogBlocksTutorial2 = {
             description=""
             id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.description`}
             values={{}}
-        />,
-        img: `${BUCKET_URL}cover_image.jpg`,
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+        img: `${BUCKET_URL}cover_image.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['cog', 'sound', 'light', 'sequencing', 'parallel-code', 'variables', 'conditionals', 'for-loop'],
@@ -41,15 +47,10 @@ const cogBlocksTutorial2 = {
                 ],
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Let's program Cog to be something useful - a dice!<br /><br />
-                        We'll make cog react to being shaken by showing a random number of lights and making the same number of beeps<br /><br />
-                        To do that, we're going to learn about <b>Variables</b> - special blocks that can <i>vary</i> or change in value, and <b>Conditionals</b> - blocks that make a decision!
-                        `}
-                    // old => defaultMessage="Let's learn how to program Cog with Blocks! {newline} We'll connect to Cog, and make it light up and make sounds when the button is pushed!{newline} We'll also learn about {series} code that runs as a sequence, and {parallel} code that runs at the same time"
+                    defaultMessage={"Let's program Cog to be something useful - a dice!<br /><br />We'll make cog react to being shaken by showing a random number of lights and making the same number of beeps<br /><br />To do that, we're going to learn about <b>Variables</b> - special blocks that can <i>vary</i> or change in value, and <b>Conditionals</b> - blocks that make a decision!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-1`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
             /* STEP 2 -- make sure you're connected to cog */
@@ -61,7 +62,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"First, make sure you are connected to a cog.<br /><br />If not, add one like you did in the last tutorial by pressing the Add button in the devices panel and selecting a Cog, then clicking connect. If you need to, skip back to the last tutorial to see how"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-2`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -86,7 +87,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Add an <b>On Shake</b> event block from the <b>Events</b> category"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-3`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -111,7 +112,7 @@ const cogBlocksTutorial2 = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-4`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -128,14 +129,11 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}5-makeVariable.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Click the <b>Make a Variable</b> button<br /><br />
-                        Set the New variable name to <b>ledID</b> and press OK
-                    `}
+                    defaultMessage={"Click the <b>Make a Variable</b> button<br /><br />Set the New variable name to <b>ledID</b> and press OK"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-5`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -155,7 +153,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Select the <b>Control</b> category"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-6`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -178,7 +176,7 @@ const cogBlocksTutorial2 = {
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-7`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -191,7 +189,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'repeat' block is under the Control category. Drag it to the script area and connect it to the On Shake block"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-7.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -214,7 +212,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Go to the <b>Looks</b> category and add a <b>Set LED [1] to [color]</b> block inside of the repeat block<br /><br />Change the color to your favorite color :-)"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-8`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -233,7 +231,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'set LED [1] to [color]' block is in the Looks category. Drag it to the script area and place it so it snaps inside the repeat block"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-8.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -256,7 +254,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Try it out! <br /><br />What happens if you shake cog?"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-9`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -270,7 +268,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Go back to the <b>Variables</b> category and add a <b>Change [ledID] by [1]</b> block just after the LED block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-10`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -289,7 +287,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Change [ledID] by [1]' block is in the Variables category. Drag it to the script area and place it so it snaps inside the repeat block, just after the Set LED block"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-10.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -312,7 +310,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Drag the <b>ledID variable</b> over into the <b>Set LED</b> block, so that it reads <b>Set LED <i>ledID</i> to [color]</b>"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-11`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -326,7 +324,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Try it out!<br /><br />What happens if you shake Cog?"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-12`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
             },
 
             // Step 13 - Try it again?
@@ -338,7 +336,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Try it again - more LEDs will turn on!<br /><br />But if you shake Cog <i>again</i> after that, nothing new happens. Let's change that!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-13`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
             },
 
             // Step 14 - reset variable
@@ -350,7 +348,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Add a <b>Set [ledID] to [0]</b> block straight after the <b>On Shake</b> block, before the repeat block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-14`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -364,7 +362,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Set [ledID] to [0]' block is in the Variables category. Drag it to the script area and place it so it snaps just after the 'On Shake' block, before the repeat block"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-14.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -385,13 +383,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}15-turnOffLEDs.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Also add a <b>Turn off all LEDs</b> block from the <b>Looks</b> category<br /><br />
-                        Add it just before the repeat block, after the <i>set [ledID] to [0]</i> block you just added
-                    `}
+                    defaultMessage={"Also add a <b>Turn off all LEDs</b> block from the <b>Looks</b> category<br /><br />Add it just before the repeat block, after the <i>set [ledID] to [0]</i> block you just added"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-15`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -410,7 +405,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Turn off all LEDs' block is in the Looks category.<br /><Br />Make sure you add it between the 'set [ledID] to [0]'' block and the 'repeat' block"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-15.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -434,7 +429,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Now try it again! <br /><br />Now when you shake cog it'll reset both the lights and the <i>value</i> of the <b>variable</b> <i>ledID</i>, so that it counts up from 1 to 10"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-16`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -449,7 +444,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Go to the <b>Operators</b> category"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-17`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -467,13 +462,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}18-random.gif`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Drag the <b>pick random [1] to [10]</b> block to replace the number in the repeat block<br /><br />
-                        Now, the repeat block will loop a random number of times from 1 to 10, changing each time!
-                    `}
+                    defaultMessage={"Drag the <b>pick random [1] to [10]</b> block to replace the number in the repeat block<br /><br />Now, the repeat block will loop a random number of times from 1 to 10, changing each time!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-18`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -488,7 +480,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Cog has 13 programmable LEDs - 12 in the ring and one in the button<br /><br />Change the <b>pick random</b> block to pick a number between 1 and <b>13</b> instead"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-19`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
             },
 
             // step 20 - try it out!
@@ -500,7 +492,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Try it out! <br /><br />Now every time you shake Cog you'll get a different number of lights<br /><Br />You've programmed Cog to be a dice!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-20`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -512,13 +504,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}21-variable.gif`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        <i>ledID</i> is a <b>variable</b> - it has a value which can be changed or <i>varied</i><br /><br />
-                        In this code it counts up to turn on a different LED each time through the loop!
-                    `}
+                    defaultMessage={"<i>ledID</i> is a <b>variable</b> - it has a value which can be changed or <i>varied</i><br /><br />In this code it counts up to turn on a different LED each time through the loop!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-21`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -530,14 +519,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}22-sound.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Let's add some sound feedback too.<br /><Br />
-                        Go to the <b>Sounds</b> category and add a <b>Play note [C4] for [1] seconds</b> block<br /><br />
-                        Change it to play the note for <b>0.1 seconds</b>
-                    `}
+                    defaultMessage={"Let's add some sound feedback too.<br /><Br />Go to the <b>Sounds</b> category and add a <b>Play note [C4] for [1] seconds</b> block<br /><br />Change it to play the note for <b>0.1 seconds</b>"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-22`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -556,7 +541,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Play note [C4] for [1] seconds' block is in the Sounds category.<br /><Br />Make sure you add it inside the Repeat loop!"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-22.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -577,14 +562,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}23-pause.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Also add a short pause by adding a <b>Wait [1] seconds</b> block from the <b>Control</b> category<br /><br />
-                        Change the length of the pause to be <b>0.1 seconds</b> as well<br /><br />
-                        If we don't add a pause then we won't be able to tell how many beeps there are, as they'll all merge into one long beep!
-                    `}
+                    defaultMessage={"Also add a short pause by adding a <b>Wait [1] seconds</b> block from the <b>Control</b> category<br /><br />Change the length of the pause to be <b>0.1 seconds</b> as well<br /><br />If we don't add a pause then we won't be able to tell how many beeps there are, as they'll all merge into one long beep!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-23`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -603,7 +584,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Wait [1] seconds' block is in the Control category. Add it to the code by dragging it inside of the repeat loop"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-23.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -627,7 +608,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Try it out!<br /><Br />Now you'll also hear a number of beeps that matches the number of lights!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-24`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: ["cog_onButtonPush", "cog_onShake=>cog_turnOffLEDs"],
@@ -642,7 +623,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Let's make something special happen <b>if</b> you roll the top score - 13<br /><br />Go to the <b>Control</b> category and add an <b>If __ then</b> block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-25`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -661,7 +642,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'if __ then' block is in the Control category. Add it to the code by dragging it so it connects after the repeat loop"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-25.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -685,7 +666,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Go to the <b>Operators</b> category"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-26`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -706,7 +687,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Drag the <b>=</b> block <b>into the <i>if</i> block</b><br /><br />This is where we'll set the <b>condition</b>"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-27`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -719,7 +700,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The '=' block is under the Operators category. Drag it to the matching shape in the if block"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-27.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -739,13 +720,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}28-ledID.gif`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Go back to the <b>Variables</b> category and drag the <b>ledID variable</b> into the <b>first box of the equals block</b><br /><br />
-                        Then <b>set the second box to 13</b>, so that the whole line reads <b>if ledID = 13 then</b>
-                    `}
+                    defaultMessage={"Go back to the <b>Variables</b> category and drag the <b>ledID variable</b> into the <b>first box of the equals block</b><br /><br />Then <b>set the second box to 13</b>, so that the whole line reads <b>if ledID = 13 then</b>"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-28`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -757,16 +735,11 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}29-if.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        The code inside this <b>if</b> block will only be run <b>if</b> the <b>variable</b> ledID is <b>equal</b> to 13<br /><br />
-                        It will check this after the <b>repeat</b> block has finished repeating, as the code continues down the sequence<br /><br />
-                        If the ledID <b>variable</b> is anything else other than 13 then the whole <b>if</b> block and any code in it will be skipped<br /><br />
-                        The <b>if</b> block is a type of <b>conditional</b> - the code inside it will only be run if the <b>condition</b> you set is true
-                    `}
+                    defaultMessage={"The code inside this <b>if</b> block will only be run <b>if</b> the <b>variable</b> ledID is <b>equal</b> to 13<br /><br />It will check this after the <b>repeat</b> block has finished repeating, as the code continues down the sequence<br /><br />If the ledID <b>variable</b> is anything else other than 13 then the whole <b>if</b> block and any code in it will be skipped<br /><br />The <b>if</b> block is a type of <b>conditional</b> - the code inside it will only be run if the <b>condition</b> you set is true"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-29`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
             },
@@ -777,13 +750,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}30-sound.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Let's add something inside the <b>if</b> block!<br /><br />
-                        Go to the <b>sounds</b> category and add a <b>Play tune</b> block
-                    `}
+                    defaultMessage={"Let's add something inside the <b>if</b> block!<br /><br />Go to the <b>sounds</b> category and add a <b>Play tune</b> block"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-30`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -802,7 +772,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Play tune' block is in the Sounds category. Add it to the code by dragging it so it connects inside the if condition"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-30.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -826,7 +796,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Change the tune to <b>whistle</b> from the dropdown menu"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-31`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
             },
 
             // step 32 - add some lights
@@ -835,13 +805,10 @@ const cogBlocksTutorial2 = {
                 image: `${BUCKET_URL}32-lights.png`,
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Also add some lighting effects from the looks menu<br /><br />
-                        For example we can make the ring and button LEDs show a pattern
-                    `}
+                    defaultMessage={"Also add some lighting effects from the looks menu<br /><br />For example we can make the ring and button LEDs show a pattern"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-32`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                     type: "HighlightElement",
@@ -860,7 +827,7 @@ const cogBlocksTutorial2 = {
                         defaultMessage={"The 'Set [ring] LED to pattern [Flash]' block is in the Looks category. Add two of them inside the if condition, and change one to set the button pattern"}
                         description=""
                         id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-32.hint`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     hintActions: [
                         {
                             type: "HighlightBlocks",
@@ -884,7 +851,7 @@ const cogBlocksTutorial2 = {
                     defaultMessage={"Try it out!<br /><br />See if you can roll a 13 on the dice by shaking Cog!"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-33`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                 ],
                 expectedCode: [],
@@ -895,16 +862,11 @@ const cogBlocksTutorial2 = {
                 type: "end",
                 description: <FormattedMessage
                     isRaw={true}
-                    defaultMessage={`
-                        Well done!<br /><br />
-                        You've learned that a <b>variable</b> is something that can change in <b>value</b>. We can use them to make our code do different things without needing to change the code<br /><br />
-                        We learned about <b>if</b> blocks - these can be used to make code only run if a certain <b>condition</b> is met<br /><br />
-                        And we learned how to use a repeat <b>loop</b> to do something lots of times - in this case turning on a different LED each time
-                    `}
+                    defaultMessage={"Well done!<br /><br />You've learned that a <b>variable</b> is something that can change in <b>value</b>. We can use them to make our code do different things without needing to change the code<br /><br />We learned about <b>if</b> blocks - these can be used to make code only run if a certain <b>condition</b> is met<br /><br />And we learned how to use a repeat <b>loop</b> to do something lots of times - in this case turning on a different LED each time"}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-2.step-42`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
         ]

@@ -6,15 +6,46 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import VM from "scratch-vm";
 import errorBoundaryHOC from "../../../lib/error-boundary-hoc.jsx";
 import { activateTab, BLOCKS_TAB_INDEX } from "../../../reducers/editor-tab";
-import Button from "../../button/button.jsx";
-import Input from "../../forms/input.jsx";
 import styles from "./portable-file-storage.css";
 import { blobToBase64 } from "../../../lib/save-load-utils";
 import { requestNewProject } from "../../../reducers/project-state";
+import { defineMessages, injectIntl } from 'react-intl';
+
+const messages = defineMessages({
+  saveToFile: {
+    id: "gui.saveLoad.saveToFile",
+    defaultMessage: "Save to file",
+    description: "Button label for saving the project to a file",
+  },
+  loadFromFile: {
+    id: "gui.saveLoad.loadFromFile",
+    defaultMessage: "Load from file",
+    description: "Button label for loading a project from a file",
+  },
+  projectLoaded: {
+    id: 'gui.saveLoad.projectLoaded',
+    defaultMessage: 'Project loaded successfully!',
+    description: 'Message shown when the project has been loaded successfully'
+  },
+  fileSaved: {
+    id: "gui.saveLoad.fileSaved",
+    defaultMessage: "File Saved!",
+    description: "Message shown when a file is successfully saved",
+  },
+  fileLoadError: {
+    id: "gui.saveLoad.fileLoadError",
+    defaultMessage: "Failed to load project",
+    description: "Error message shown when a project fails to load",
+  },
+  fileSaveError: {
+    id: "gui.saveLoad.fileSaveError",
+    defaultMessage: "Couldn't save file",
+    description: "Error message shown when a file cannot be saved",
+  },
+});
 
 function randomHashGenerator(length = 10) {
   var result = "";
@@ -46,9 +77,9 @@ class SaveLoad extends React.Component {
     try {
       const fileName = `sb-${randomHashGenerator(5)}.sb3`;
       await mv2Interface.saveScratchFileOnDevice(fileName, base64sb3);
-      window.applicationManager.toaster.success(`File ${fileName} Saved!`);
+      window.applicationManager.toaster.success(this.props.intl.formatMessage(messages.fileSaved) + `: ${fileName}`);
     } catch (e) {
-      window.applicationManager.toaster.error(`Couldn't save file`);
+      window.applicationManager.toaster.error(this.props.intl.formatMessage(messages.fileSaveError));
       console.log("Couldn't save file", e);
     }
     this.setState((oldState) => {
@@ -79,11 +110,15 @@ class SaveLoad extends React.Component {
         arrayBuffer = await file.arrayBuffer();
       }
       vm.loadProject(arrayBuffer);
-      window.applicationManager.toaster.success(`Project loaded!`);
+      setTimeout(() => {
+        // give some time so all the buttons/devices are rendered before we start updating the UI
+        window.raftManager.onProjectLoaded();
+      }, 2000);
+      window.applicationManager.toaster.success(this.props.intl.formatMessage(messages.projectLoaded));
       // this seems to be required to let the wm load the project
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
-      window.applicationManager.toaster.error(`Failed to load project`);
+      window.applicationManager.toaster.error(this.props.intl.formatMessage(messages.fileLoadError));
     }
     this.setState((oldState) => {
       return { ...oldState, isLoading: false };
@@ -96,7 +131,7 @@ class SaveLoad extends React.Component {
         <div className={styles.block}>
           <div className={styles.saveProjectContainer}>
             <div className={styles.button} onClick={() => this.saveFile()}>
-              <p className={styles.buttonTitle}>Save to file</p>
+              <p className={styles.buttonTitle}>{this.props.intl.formatMessage(messages.saveToFile)}</p>
             </div>
           </div>
           <div className={styles.loadProjectContainer}>
@@ -109,7 +144,7 @@ class SaveLoad extends React.Component {
                 onChange={this.loadFile}
               />
               <label htmlFor="file-upload" className={styles.buttonTitle}>
-                Load from file
+                {this.props.intl.formatMessage(messages.loadFromFile)}
               </label>
             </div>
           </div>

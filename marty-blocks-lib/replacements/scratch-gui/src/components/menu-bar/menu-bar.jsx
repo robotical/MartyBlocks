@@ -24,6 +24,7 @@ import MartyPythonButton from "../marty-python-btn/index.jsx";
 
 import { openTipsLibrary } from '../../reducers/modals';
 import { setPlayer } from '../../reducers/mode';
+import { selectLocale } from '../../reducers/locales.js';
 import {
     isTimeTravel220022BC,
     isTimeTravel1920,
@@ -80,6 +81,8 @@ import prehistoricLogo from './prehistoric-logo.svg';
 import oldtimeyLogo from './oldtimey-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
+
+let hasLocaleFromMainAppBeenSet = false; 
 
 const ariaMessages = defineMessages({
     tutorials: {
@@ -175,6 +178,30 @@ class MenuBar extends React.Component {
     }
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
+        const waitForLocale = (maxAttempts = 15, intervalMs = 500) => {
+            if (hasLocaleFromMainAppBeenSet) return;
+            console.log('Waiting for locale to be set...');
+            let attempts = 0;
+            const interval = setInterval(() => {
+                const locale = window.applicationManager?.selectedLocale;
+
+                if (locale) {
+                    console.log(`Locale set to: ${locale}`);
+                    clearInterval(interval);
+                    this.props.onChangeLanguage(window.applicationManager?.selectedLocale || "en");
+                    hasLocaleFromMainAppBeenSet = true;
+                } else if (attempts >= maxAttempts) {
+                    console.warn('Locale not set after maximum attempts, defaulting to "en"');
+                    clearInterval(interval);
+                } else {
+                    console.log(`Attempt ${attempts + 1}: Locale not yet set, retrying...`);
+                }
+
+                attempts++;
+            }, intervalMs);
+        }
+
+        waitForLocale();
     }
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress);
@@ -975,7 +1002,10 @@ const mapDispatchToProps = dispatch => ({
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
-    onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode))
+    onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode)),
+    onChangeLanguage: locale => {
+        dispatch(selectLocale(locale));
+    },
 });
 
 export default compose(

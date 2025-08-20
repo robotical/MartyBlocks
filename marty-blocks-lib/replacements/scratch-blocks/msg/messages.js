@@ -201,6 +201,7 @@ Blockly.Msg.OPERATORS_LENGTH = 'length of %1';
 Blockly.Msg.OPERATORS_CONTAINS = '%1 contains %2?';
 Blockly.Msg.OPERATORS_MOD = '%1 mod %2';
 Blockly.Msg.OPERATORS_ROUND = 'round %1';
+Blockly.Msg.OPERATORS_ATAN2 = 'atan2 of %1 and %2';
 Blockly.Msg.OPERATORS_MATHOP = '%1 of %2';
 Blockly.Msg.OPERATORS_MATHOP_ABS = 'abs';
 Blockly.Msg.OPERATORS_MATHOP_FLOOR = 'floor';
@@ -368,6 +369,7 @@ Blockly.Msg.COG_ACCELEROMETER = '%1 %2 Accelerometer %3';
 Blockly.Msg.COG_GYROSCOPE = '%1 %2 Gyroscope %3';
 Blockly.Msg.COG_BUTTON_CLICKED = '%1 %2 Button clicked';
 Blockly.Msg.COG_BUTTON_FORCE_VALUE = '%1 %2 Button force value';
+Blockly.Msg.COG_BUTTON_FORCE_VALUE_PERCENTAGE = '%1 %2 Button force value %';
 Blockly.Msg.COG_OBSTACLE_SENSED = '%1 %2 Obstacle sensed %3';
 Blockly.Msg.COG_LIGHT_SENSED = '%1 %2 Light sensed';
 Blockly.Msg.COG_IR_SENSOR_VALUE = '%1 %2 IR sensor value %3';
@@ -393,8 +395,6 @@ Blockly.Msg.COG_SET_VOLUME = '%1 %2 Set volume to %3';
 Blockly.Msg.COG_STOP_SOUNDS = '%1 %2 Stop sounds';
 Blockly.Msg.COG_SET_VOLUME_TO_PERCENTAGE = '%1 %2 Set volume to %3%';
 Blockly.Msg.COG_PLAY_SOUND_AT_FREQUENCY = '%1 %2 Play sound at frequency %3';
-
-
 
 // ====== End of COG Messages ======
 
@@ -471,6 +471,7 @@ Blockly.Msg.OPERATORS_LENGTH = 'length of %1';
 Blockly.Msg.OPERATORS_CONTAINS = '%1 contains %2?';
 Blockly.Msg.OPERATORS_MOD = '%1 mod %2';
 Blockly.Msg.OPERATORS_ROUND = 'round %1';
+Blockly.Msg.OPERATORS_ATAN2 = 'atan2 of %1 and %2';
 Blockly.Msg.OPERATORS_MATHOP = '%1 of %2';
 Blockly.Msg.OPERATORS_MATHOP_ABS = 'abs';
 Blockly.Msg.OPERATORS_MATHOP_FLOOR = 'floor';
@@ -545,14 +546,14 @@ Blockly.Msg.MV2_ACCELEROMETERZ = '%1 %2 Accelerometer Z';
 Blockly.Msg.MV2_MAGNETOMETERX = '%1 %2 Magnetometer X';
 Blockly.Msg.MV2_MAGNETOMETERY = '%1 %2 Magnetometer Y';
 Blockly.Msg.MV2_MAGNETOMETERZ = '%1 %2 Magnetometer Z';
-Blockly.Msg.MV2_OBSTACLE = "%1 %2 %3 Foot Obstacle Sensed";
-Blockly.Msg.MV2_GROUND = "%1 %2 %3 Foot sensor on the ground";
-Blockly.Msg.MV2_COLOUR = "%1 %2 %3 Color Sensor";
-Blockly.Msg.MV2_COLOUR_HEX = "%1 %2 %3 Color Sensor HEX";
-Blockly.Msg.MV2_COLOUR_RAW = "%1 %2 %3 Color Sensor %4 channel";
-Blockly.Msg.MV2_DISTANCE = "%1 %2 Distance sensor";
-Blockly.Msg.MV2_LIGHT_SENSOR = "%1 %2 %3 Light sensor %4";
-Blockly.Msg.MV2_NOISE_SENSOR = "%1 %2 %3 Noise sensor";
+Blockly.Msg.MV2_OBSTACLE = '%1 %2 %3 Foot Obstacle Sensed';
+Blockly.Msg.MV2_GROUND = '%1 %2 %3 Foot sensor on the ground';
+Blockly.Msg.MV2_COLOUR = '%1 %2 %3 Color Sensor';
+Blockly.Msg.MV2_COLOUR_HEX = '%1 %2 %3 Color Sensor HEX';
+Blockly.Msg.MV2_COLOUR_RAW = '%1 %2 %3 Color Sensor %4 channel';
+Blockly.Msg.MV2_DISTANCE = '%1 %2 Distance sensor';
+Blockly.Msg.MV2_LIGHT_SENSOR = '%1 %2 %3 Light sensor %4';
+Blockly.Msg.MV2_NOISE_SENSOR = '%1 %2 %3 Noise sensor';
 
 // Sound blocks
 Blockly.Msg.SOUND_PLAY = 'start sound %1';

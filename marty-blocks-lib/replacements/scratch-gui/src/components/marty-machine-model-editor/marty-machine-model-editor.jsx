@@ -39,6 +39,11 @@ const messages = defineMessages({
         description: 'Label for the name of the class',
         defaultMessage: 'Create class'
     },
+    samples: {
+        id: 'gui.martyMachineModelEditor.samples',
+        description: 'Label for the number of samples collected for a class',
+        defaultMessage: 'Samples'
+    },
     record: {
         id: 'gui.MartyMachineModelEditor.record',
         description: 'Title of the button to start recording samples',
@@ -63,6 +68,21 @@ const messages = defineMessages({
         id: 'gui.MartyMachineModelEditor.save',
         description: 'Title of the button to save the model',
         defaultMessage: 'Save'
+    },
+    saving: {
+        id: 'gui.MartyMachineModelEditor.saving',
+        description: 'Text shown when the model is being saved',
+        defaultMessage: 'Saving...'
+    },
+    requiresAtLeast10Samples: {
+        id: 'gui.MartyMachineModelEditor.requiresAtLeast10Samples',
+        description: 'Message shown when a class requires at least 10 samples',
+        defaultMessage: 'Requires at least 10 samples'
+    },
+    createNewClass: {   
+        id: 'gui.MartyMachineModelEditor.createNewClass',
+        description: 'Label for the button to create a new class',
+        defaultMessage: 'Create New Class'  
     },
 });
 
@@ -160,7 +180,7 @@ class MartyMachineModelEditor extends React.Component {
                     {!props.isModelLoaded && <>
                         <div className={styles.inputGroup}>
                             <Label text={props.intl.formatMessage(messages.createNewClass)} spanStyle={{ marginRight: 0 }}>
-                                <MoreInfoButton modalTitle="Create New Class" contentComponent={MMCreateNewClass}>
+                                <MoreInfoButton modalTitle={this.props.intl.formatMessage(messages.createNewClass)} contentComponent={MMCreateNewClass}>
                                     <div className={styles.moreInfoIconContainer}>
                                         <div className={styles.moreInfoIcon}>?</div>
                                     </div>
@@ -204,7 +224,7 @@ class MartyMachineModelEditor extends React.Component {
                             onClick={props.onTrain}
                             disabled={!canBeTrained}
                         >
-                            Train
+                            {props.intl.formatMessage(messages.train)}
                         </button>}
                     </div>
                     <div className={styles.inputGroup}>
@@ -223,18 +243,18 @@ class MartyMachineModelEditor extends React.Component {
                             onClick={props.onRun}
                             disabled={!canBeRun}
                         >
-                            Run
+                            {props.intl.formatMessage(messages.run)}
                         </button>}
                     </div>
                     <div className={styles.inputGroup}>
-                        {props.isSaving ? <div className={styles.saving}>Saving...</div> :
+                        {props.isSaving ? <div className={styles.saving}>{props.intl.formatMessage(messages.saving)}</div> :
                             <button
                                 className={classNames(styles.roundButton, styles.trainButton, canBeSaved ? '' : styles.buttonDisabled)}
                                 title={props.intl.formatMessage(messages.save)}
                                 onClick={props.onSaveModel}
                                 disabled={!canBeSaved}
                             >
-                                Save
+                                {props.intl.formatMessage(messages.save)}
                             </button>}
                     </div>
 
@@ -261,7 +281,7 @@ class MartyMachineModelEditor extends React.Component {
                                         alignSelf: 'self-start',
                                         padding: '2px 10px',
                                         borderRadius: '4px',
-                                    }}>{`Requires at least 10 samples (${modelClass.samples.length}/10)`}</span>;
+                                    }}>{this.props.intl.formatMessage(messages.requiresAtLeast10Samples) + ` (${modelClass.samples.length})`}</span>;
                                 }
                                 return <ModelClass
                                     onClassNameSelected={props.onClassNameSelected}
@@ -285,7 +305,7 @@ class MartyMachineModelEditor extends React.Component {
                                     <div className={styles.classLabel}>{modelClass.name}</div>
                                     <div className={styles.modelSamplesContainer}>
                                         <div className={styles.rowCustom}>
-                                            <p className={styles.samplesLengthTitle}>{modelClass.samples.length} samples</p>
+                                            <p className={styles.samplesLengthTitle}>{modelClass.samples.length} {props.intl.formatMessage(messages.samples)}</p>
                                         </div>
                                     </div>
                                 </div>

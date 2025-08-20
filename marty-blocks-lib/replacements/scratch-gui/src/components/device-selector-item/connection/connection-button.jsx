@@ -1,7 +1,5 @@
 import React from 'react';
 import ConnectButton from "./connect-button.jsx";
-import styles from "./styles.css";
-import { FormattedMessage } from "react-intl";
 import DisonnectButton from './disconnect-button.jsx';
 
 export default class ConnectionButton extends React.Component {

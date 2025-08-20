@@ -6,11 +6,9 @@ import VM from "scratch-vm";
 
 import AssetPanel from "../components/asset-panel/asset-panel.jsx";
 import audioIcon from "../components/asset-panel/icon--audio.svg";
-import audioIconBlack from "../components/asset-panel/icon--audio-black.svg";
 import imageIcon from "../components/asset-panel/icon--image.svg";
 import accelerometerIconBlack from "../components/asset-panel/icon--accelerometer-black.svg";
 import accelerometerIconWhite from "../components/asset-panel/icon--accelerometer-white.svg";
-import imageIconBlack from "../components/asset-panel/icon--image-black.svg";
 import fileUploadIcon from "../components/action-menu/icon--file-upload.svg";
 import addNewIcon from "../components/action-menu/icon--plus.svg";
 import helpIcon from "../lib/assets/icon--tutorials.svg";
@@ -30,6 +28,61 @@ import WrappedMartyMachineNewModelConfirmationModal from "../components/marty-ma
 import { activateDeck } from "../reducers/cards.js";
 
 const TUTORIALS_COOKIE = "ROBOTICAL_MARTYBLOCKS_hasSeenTutorials";
+
+const messages = defineMessages({
+    addNewModel: {
+        defaultMessage: "Add New Model",
+        description: "Button to add a new model",
+        id: "gui.martyMachineTab.addNew",
+    },
+    newImageModelMarty: {
+        defaultMessage: "New Image Model (Marty)",
+        description:
+            "Button to create a new image model using the Marty Camera",
+        id: "gui.martyMachineTab.newImageModelMarty",
+    },
+    newImageModelDevice: {
+        defaultMessage: "New Image Model (Device)",
+        description: "Button to create a new image model using the device camera",
+        id: "gui.martyMachineTab.newImageModelDevice",
+    },
+    newAccelerometerModel: {
+        defaultMessage: "New Accelerometer Model",
+        description: "Button to create a new accelerometer model",
+        id: "gui.martyMachineTab.newAccelerometerModel",
+    },
+    newAudioModel: {
+        defaultMessage: "New Audio Model",
+        description: "Button to create a new sound model",
+        id: "gui.martyMachineTab.newAudioModel",
+    },
+    loadTMModel: {
+        defaultMessage: "Load TM Model",
+        description: "Button to load a Teachable Machine model",
+        id: "gui.martyMachineTab.loadTMModel",
+    },
+    tutorials: {
+        defaultMessage: "Tutorials",
+        description: "Button to open the tutorials page",
+        id: "gui.martyMachineTab.tutorials",
+    },
+    alertSelectDevice: {
+        defaultMessage: "Oops! Please select a Marty or a Cog device to use the accelerometer model.",
+        description: "Alert message when the user tries to create an accelerometer model without selecting a device",
+        id: "gui.martyMachineTab.alertSelectDevice",
+    },
+    alertConnectDevice: {
+        defaultMessage: "Oops! Please connect the device to use the accelerometer model.",
+        description: "Alert message when the user tries to create an accelerometer model without connecting a device",
+        id: "gui.martyMachineTab.alertConnectDevice",   
+    },
+    alertModelNameExists: {
+        defaultMessage: "Model name already exists, please choose another name.",
+        description: "Alert message when the user tries to create a model with a name that already exists",
+        id: "gui.martyMachineTab.alertModelNameExists",
+    },
+    });
+
 
 export const modelNameCheckExists = (name) => {
     const allTargets = vm.runtime.targets;
@@ -271,12 +324,12 @@ class MartyMachineTab extends React.Component {
             // check that the currently selected device is a cog or a marty
             const raftType = window.vm.editingTarget.raftType;
             if (raftType !== 'Marty' && raftType !== 'Cog') {
-                alert('Oops! Please select a Marty or a Cog device to use the accelerometer model.');
+                alert(this.props.intl.formatMessage(messages.alertSelectDevice));
                 return;
             }
             // check that the device is connected
             if (!window.raftManager.isDeviceConnected(window.vm.editingTarget.id)) {
-                alert('Oops! Please connect the device to use the accelerometer model.');
+                alert(this.props.intl.formatMessage(messages.alertConnectDevice));
                 return;
             }
         }
@@ -286,7 +339,7 @@ class MartyMachineTab extends React.Component {
     setModelName = (newModelName) => {
         const doesExist = modelNameCheckExists(newModelName);
         if (doesExist) {
-            return alert("Model name already exists, please choose another name.");
+            return alert(this.props.intl.formatMessage(messages.alertModelNameExists));
         }
         const storedModel = this.props.vm.editingTarget.sprite.models[this.state.selectedModelIndex];
         storedModel.name = newModelName;
@@ -327,46 +380,6 @@ class MartyMachineTab extends React.Component {
                 })
             })
             : [];
-
-        const messages = defineMessages({
-            addNewModel: {
-                defaultMessage: "Add New Model",
-                description: "Button to add a new model",
-                id: "gui.martyMachineTab.addNew",
-            },
-            newImageModelMarty: {
-                defaultMessage: "New Image Model (Marty)",
-                description:
-                    "Button to create a new image model using the Marty Camera",
-                id: "gui.martyMachineTab.newImageModelMarty",
-            },
-            newImageModelDevice: {
-                defaultMessage: "New Image Model (Device)",
-                description: "Button to create a new image model using the device camera",
-                id: "gui.martyMachineTab.newImageModelDevice",
-            },
-            newAccelerometerModel: {
-                defaultMessage: "New Accelerometer Model",
-                description: "Button to create a new accelerometer model",
-                id: "gui.martyMachineTab.newAccelerometerModel",
-            },
-            newAudioModel: {
-                defaultMessage: "New Audio Model",
-                description: "Button to create a new sound model",
-                id: "gui.martyMachineTab.newAudioModel",
-            },
-            loadTMModel: {
-                defaultMessage: "Load TM Model",
-                description: "Button to load a Teachable Machine model",
-                id: "gui.martyMachineTab.loadTMModel",
-            },
-            tutorials: {
-                defaultMessage: "Tutorials",
-                description: "Button to open the tutorials page",
-                id: "gui.martyMachineTab.tutorials",
-            }
-        });
-
 
         let contentJSX = <MartyMachineModelEditor
             key={this.state.modelName + this.state.modelType}

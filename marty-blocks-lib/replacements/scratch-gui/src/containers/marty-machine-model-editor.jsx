@@ -7,6 +7,30 @@ import { connect } from 'react-redux';
 import MartyMachineModelEditorComponent from '../components/marty-machine-model-editor/marty-machine-model-editor.jsx';
 import { modelNameCheckExists } from './marty-machine-tab.jsx';
 
+import { defineMessages, injectIntl } from "react-intl";
+
+const messages = defineMessages({
+    modelNameExists: {
+        id: "martyMachine.modelNameExists",
+        defaultMessage: "Oops! Model name already exists, please choose a different name.",
+        description: "Message shown when a model name already exists",
+    },
+    backgroundNoiseClassNeedsSamples: {
+        id: "martyMachine.backgroundNoiseClassNeedsSamples",
+        defaultMessage: "Oops! The background noise class needs at least 10 samples to be trained. Please add more samples to the background noise class.",
+        description: "Message shown when the background noise class does not have enough samples to be trained",
+    },
+    classNameExists: {
+        id: "martyMachine.classNameExists",
+        defaultMessage: "Oops! Class name already exists, please choose a different name.",
+        description: "Message shown when a class name already exists",
+    },
+    selectClassAlert: {
+        id: "martyMachine.selectClassAlert",
+        defaultMessage: "Please add or select an existing class before recording samples.",
+        description: "Alert message shown when trying to record samples without selecting a class",
+    }
+});
 class MartyMachineModelEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -65,7 +89,9 @@ class MartyMachineModelEditor extends React.Component {
                 };
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 this.setState({ deviceStream: stream });
-                this.deviceStreamRef.srcObject = stream;
+                if (this.deviceStreamRef) {
+                    this.deviceStreamRef.srcObject = stream;
+                }
             } else if (this.props.modelType === 'audio') {
                 const constraints = {
                     audio: true
@@ -130,7 +156,9 @@ class MartyMachineModelEditor extends React.Component {
             } else if (this.props.modelType === 'accelerometer') {
                 // get the accelerometer data from the connected device
                 const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
-
+                if (!connectedRaft) {
+                    return;
+                }
                 const canvas = this.accelerometerCanvasRef;
                 const canvasCtx = canvas.getContext('2d');
                 canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
@@ -193,7 +221,12 @@ class MartyMachineModelEditor extends React.Component {
         // set it in such a way that if the model changes, or the component unmounts, the event listener is removed
         if (this.props.modelType === 'accelerometer') {
             this.connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
-
+            if (!this.connectedRaft) {
+                setTimeout(() => {
+                    alert("Oops! Please connect the device to use the accelerometer model.");
+                }, 1000);
+                return;
+            }
             const cogButtonClickHandler = () => {
                 this.startRecordingAccelerometerSamples('continuous');
             };
@@ -299,7 +332,7 @@ class MartyMachineModelEditor extends React.Component {
         const className = this.state.className;
         // check if class name already exists
         if (this.trainingDataReducer.state.classes.find(c => c.name === className)) {
-            alert("Oops! Class name already exists, please choose a different name.");
+            alert(this.props.intl.formatMessage(messages.classNameExists));
             return;
         }
         this.trainingDataReducer.reduce({ type: martyMachine.trainingDataActionTypes.TD_ADD_CLASS, payload: { name: className } });
@@ -313,7 +346,7 @@ class MartyMachineModelEditor extends React.Component {
     async startRecordingAccelerometerSamples(mode, classTitle) {
         classTitle = classTitle || this.state.className;
         if (!classTitle) {
-            alert("Please add or select an existing class before recording samples.");
+            alert(this.props.intl.formatMessage(messages.selectClassAlert));
             return;
         }
         // Find or add the class for this sample.
@@ -491,7 +524,7 @@ class MartyMachineModelEditor extends React.Component {
         if (this.props.modelType === "audio" && !this.props.isModelLoaded) {
             const backgroundNoiseClass = this.trainingDataReducer.state.classes.find(c => c.name === martyMachine.BACKGROUND_NOISE_TAG);
             if (backgroundNoiseClass && backgroundNoiseClass.samples.length < 10) {
-                alert("Oops! The background noise class needs at least 10 samples to be trained. Please add more samples to the background noise class.");
+                alert(this.props.intl.formatMessage(messages.backgroundNoiseClassNeedsSamples));
                 return false;
             }
         }
@@ -577,6 +610,7 @@ class MartyMachineModelEditor extends React.Component {
 
                     // Capture current accelerometer data from your connected raft
                     const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                    if (!connectedRaft) return;
                     const data = connectedRaft.raftStateInfo.accelerometer;
 
                     // Update the sliding window by shifting out the oldest sample and pushing the new one
@@ -638,7 +672,7 @@ class MartyMachineModelEditor extends React.Component {
             if (modelNameCheckExists(this.state.modelName)) {
                 this.isSaving = false;
                 this.setState({});
-                alert('Oops! Model name already exists, please choose a different name.');
+                alert(this.props.intl.formatMessage(messages.modelNameExists));
                 return;
             }
 
@@ -735,9 +769,9 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(
+export default injectIntl(connect(
     mapStateToProps
-)(MartyMachineModelEditor);
+)(MartyMachineModelEditor));
 
 
 
@@ -911,6 +945,7 @@ async function collectAccelerometerDataSample(options) {
             if (currentTime - lastDrawTime >= collectDataInterval) {
                 requestAnimationFrame(_collectData);
                 const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
+                if (!connectedRaft) return;
                 const data = connectedRaft.raftStateInfo.accelerometer;
                 const x = data.ax;
                 const y = data.ay;

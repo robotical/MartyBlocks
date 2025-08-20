@@ -4,6 +4,20 @@ import bindAll from 'lodash.bindall';
 import Spinner from '../../spinner/spinner.jsx';
 import spinnerStyles from '../../spinner/spinner.css';
 import styles from "./TfVisChart.css";
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+
+const messages = defineMessages({
+    loadingTitle: {
+        id: 'gui.TfVisChart.loadingTitle',
+        defaultMessage: "Loading Loss Plot",
+        description: 'Title shown while the loss plot is loading',
+    },
+    loadingSubtitle: {
+        id: 'gui.TfVisChart.loadingSubtitle',
+        defaultMessage: "This might take a while, please wait...",  
+        description: 'Subtitle shown while the loss plot is loading',
+    }
+});
 
 class TfVisChart extends React.Component {
     constructor(props) {
@@ -58,8 +72,8 @@ class TfVisChart extends React.Component {
                 :
                 <div className={`${styles.container} ${styles.modern_sharp}`}>
                     <Spinner level='warn' large className={spinnerStyles.primary} />
-                    <div className={styles.loading_title}>Loading Loss Plot</div>
-                    <div className={styles.loading_subtitle}>This might take a while, please wait...</div>
+                    <div className={styles.loading_title}><FormattedMessage {...messages.loadingTitle} /></div>
+                    <div className={styles.loading_subtitle}><FormattedMessage {...messages.loadingSubtitle} /></div>
                 </div>
         );
     }
@@ -75,4 +89,4 @@ TfVisChart.propTypes = {
     model: PropTypes.object.isRequired,
 };
 
-export default TfVisChart;
+export default injectIntl(TfVisChart);

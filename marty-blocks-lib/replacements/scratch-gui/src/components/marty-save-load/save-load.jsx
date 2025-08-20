@@ -6,7 +6,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import VM from "scratch-vm";
 import errorBoundaryHOC from "../../lib/error-boundary-hoc.jsx";
 import { activateTab, BLOCKS_TAB_INDEX } from "../../reducers/editor-tab";
@@ -16,6 +15,7 @@ import LocalStorage from "./local-storage/local-storage.jsx";
 import CloudStorage from "./cloud-storage/cloud-storage.jsx";
 import PortableFileStorage from "./portable-file-storage/portable-file-storage.jsx";
 import DemoProjects from "./demo-projects/demo-projects.jsx";
+import { FormattedMessage, injectIntl} from 'react-intl';
 
 class SaveLoad extends React.Component {
   constructor(props) {
@@ -48,8 +48,20 @@ class SaveLoad extends React.Component {
             }
             onClick={() => this.setState({ currentTab: "local-storage" })}
           >
-            <p className={styles.buttonTitle}>In the App</p>
-            <p className={styles.buttonSubtitle}>Local Storage</p>
+            <p className={styles.buttonTitle}>
+              <FormattedMessage
+                id="gui.saveLoad.localStorageTitle"
+                description="Label for the local storage tab in the Save/Load menu"
+                defaultMessage="In the App"
+              />
+            </p>
+            <p className={styles.buttonSubtitle}>
+              <FormattedMessage
+                id="gui.saveLoad.localStorageSubtitle"
+                description="Subtitle for the local storage tab in the Save/Load menu"
+                defaultMessage="Local Storage"
+              />
+            </p>
           </div>
           <div
             className={
@@ -59,8 +71,20 @@ class SaveLoad extends React.Component {
             }
             onClick={() => this.setState({ currentTab: "cloud-storage" })}
           >
-            <p className={styles.buttonTitle}>In the Cloud</p>
-            <p className={styles.buttonSubtitle}>Cloud Storage</p>
+            <p className={styles.buttonTitle}>
+              <FormattedMessage
+                id="gui.saveLoad.cloudStorageTitle"
+                description="Label for the cloud storage tab in the Save/Load menu"
+                defaultMessage="In the Cloud"
+              />
+            </p>
+            <p className={styles.buttonSubtitle}>
+              <FormattedMessage
+                id="gui.saveLoad.cloudStorageSubtitle"
+                description="Subtitle for the cloud storage tab in the Save/Load menu"
+                defaultMessage="Cloud Storage"
+              />
+            </p>
           </div>
 
           <div
@@ -73,10 +97,22 @@ class SaveLoad extends React.Component {
               this.setState({ currentTab: "portable-file-storage" })
             }
           >
-            <p className={styles.buttonTitle}>Portable</p>
-            <p className={styles.buttonSubtitle}>File Storage</p>
+            <p className={styles.buttonTitle}>
+              <FormattedMessage
+                id="gui.saveLoad.portableFileStorageTitle"
+                description="Label for the portable file storage tab in the Save/Load menu"
+                defaultMessage="Portable"
+              />
+            </p>
+            <p className={styles.buttonSubtitle}>
+              <FormattedMessage
+                id="gui.saveLoad.portableFileStorageSubtitle"
+                description="Subtitle for the portable file storage tab in the Save/Load menu"
+                defaultMessage="File Storage"
+              />
+            </p>
           </div>
-          <div
+          {/* <div
             className={
               this.state.currentTab === "demo-projects"
                 ? [styles.button, styles.buttonSelected].join(" ")
@@ -86,7 +122,7 @@ class SaveLoad extends React.Component {
           >
             <p className={styles.buttonTitle}>Demo Projects</p>
             <p className={styles.buttonSubtitle}>Load demo projects</p>
-          </div>
+          </div> */}
         </div>
         <div className={styles.content}>{contentJSX}</div>
       </div>

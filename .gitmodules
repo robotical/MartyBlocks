@@ -1,3 +1,7 @@
+[submodule "scratch-l10n"]
+    path = scratch-l10n
+    url = ./scratch-l10n
+
 [submodule "scratch-blocks"]
     path = scratch-blocks
     url = ./scratch-blocks

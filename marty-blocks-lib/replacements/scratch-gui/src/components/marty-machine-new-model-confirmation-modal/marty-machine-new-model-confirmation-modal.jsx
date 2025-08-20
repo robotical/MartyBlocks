@@ -12,7 +12,22 @@ const messages = defineMessages({
         id: 'gui.MartyMachineNewModelConfirmationModal.label',
         defaultMessage: "Unsaved changes will be lost.",
         description: 'Label for the MartyMachineNewModelConfirmationModal',
-    }
+    },
+    headsUp: {
+        id: 'gui.MartyMachineNewModelConfirmationModal.headsUp',
+        defaultMessage: "Just a heads-up! If you've made any changes to the current model, they won't be saved. Are you okay to continue?",
+        description: 'Heads-up message for the MartyMachineNewModelConfirmationModal',
+    },
+    close: {
+        id: 'gui.MartyMachineNewModelConfirmationModal.close',
+        defaultMessage: "Close",
+        description: 'Close button label for the MartyMachineNewModelConfirmationModal',
+    },
+    continue: {
+        id: 'gui.MartyMachineNewModelConfirmationModal.continue',
+        defaultMessage: "Continue",
+        description: 'Continue button label for the MartyMachineNewModelConfirmationModal',
+    },
 });
 
 class MartyMachineNewModelConfirmationModal extends React.Component {
@@ -52,7 +67,7 @@ class MartyMachineNewModelConfirmationModal extends React.Component {
                             <FormattedMessage {...label} />
                         </h2>
                         <Box className={styles.illustration}>
-                            Just a heads-up! If you've made any changes to the current model, they won't be saved. Are you okay to continue?
+                            <FormattedMessage {...messages.headsUp} />
                         </Box>
 
                         <Box justifyContent="space-between" className={styles.buttonRow}>
@@ -61,13 +76,13 @@ class MartyMachineNewModelConfirmationModal extends React.Component {
                                 className={styles.button}
                                 onClick={this.handleProceed}
                             >
-                                Continue
+                                <FormattedMessage {...messages.continue} />
                             </button>
                             <button
                                 className={styles.button}
                                 onClick={this.handleBack}
                             >
-                                Close
+                                <FormattedMessage {...messages.close} />
                             </button>
                         </Box>
                     </Box>

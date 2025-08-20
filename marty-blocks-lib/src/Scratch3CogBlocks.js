@@ -3,7 +3,7 @@ const Cast = require("./util/cast");
 const Color = require("./util/color");
 const { isVersionGreater_errorCatching } = require('./versionChecker.js');
 const { noteFrequencies } = require("./util/note-frequencies");
-
+const CogLEDCommandAggregator = require("./util/CogLEDCommandAggregator.js")
 class Scratch3CogBlocks {
   constructor(runtime) {
     /**
@@ -44,6 +44,8 @@ class Scratch3CogBlocks {
         this._cogIsConnectedWrapper(args, utils, this.getButtonClicked.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getButtonForceValue.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getButtonForceValue.bind(this, args, utils)),
+      [cog_blocks_definitions.sensing.cog_getButtonForceValuePercentage.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.getButtonForceValuePercentage.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getObstacleSensed.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.getObstacleSensed.bind(this, args, utils)),
       [cog_blocks_definitions.sensing.cog_getLightSensed.type]: (args, utils) =>
@@ -246,6 +248,27 @@ class Scratch3CogBlocks {
     if (!data) return 0;
     return data.ir2;
   }
+  getButtonForceValuePercentage(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+    const data = connectedRaft.raftStateInfo.light;
+    if (!data) return 0;
+    const irMin = connectedRaft.publishedDataAnalyser.buttonClickDetection.irMin;
+    const irMax = connectedRaft.publishedDataAnalyser.buttonClickDetection.irMax;
+    if (irMin && irMax) {
+      const irValue = data.ir2;
+      const raw = ((irValue - irMin) / (irMax - irMin)) * 100;
+      // return +raw.toFixed(2);
+      // Shift and rescale from [10, 80] → [0, 100]
+      const minRaw = 10;
+      const maxRaw = 80;
+      const adjusted = ((raw - minRaw) / (maxRaw - minRaw)) * 100;
+
+      // Clamp to [0, 100]
+      return +Math.max(0, Math.min(100, adjusted)).toFixed(2);
+    }
+    return data.ir2;
+  }
   getObstacleSensed(args, utils) {
     return this.onObjectSense(args, utils).toString();
   }
@@ -310,16 +333,27 @@ class Scratch3CogBlocks {
       const command = `led/${LEDType}/color/${colour}`;
       connectedRaft.sendRestMessage(command);
     }
+    return new Promise(resolve => setTimeout(resolve, 20));
   }
   setLEDToColour(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
-    const ledIdArgValue = args[cog_blocks_definitions.looks.cog_setLEDToColour.values.LED_ID.name];
-    let ledId = ledIdArgValue;
+    const ledId = args[cog_blocks_definitions.looks.cog_setLEDToColour.values.LED_ID.name];
     const color = _getColourFromOperator(args[cog_blocks_definitions.looks.cog_setLEDToColour.values.COLOR.name]);
-    const command = `led/ring/setled/${ledId}/${color}`;
-    console.log("command", command);
-    connectedRaft.sendRestMessage(command);
+    const cogVersion = connectedRaft.getRaftVersion();
+    // CogLEDCommandAggregator is compatible only with versions greater than 1.9.4
+    if (isVersionGreater_errorCatching(cogVersion, "1.9.4")) {
+      CogLEDCommandAggregator.sendFunction = connectedRaft.sendRestMessage.bind(connectedRaft);
+      CogLEDCommandAggregator.setLED(ledId, color);
+      return;
+    } else {
+      // For older versions, send the LED command directly
+      const command = `led/ring/setled/${ledId}/${color}`;
+      console.log("Sending command:", command);
+      connectedRaft.sendRestMessage(command);
+      // Adding a slight delay to ensure we do not overload Cog with older version
+      return new Promise(resolve => setTimeout(resolve, 100));
+    }
   }
   setLEDPattern(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
@@ -354,6 +388,7 @@ class Scratch3CogBlocks {
     connectedRaft.currentColour = null;
     connectedRaft.sendRestMessage(command1);
     connectedRaft.sendRestMessage(command2);
+    return new Promise(resolve => setTimeout(resolve, 100));
   }
   /* END OF LOOKS BLOCKS */
 

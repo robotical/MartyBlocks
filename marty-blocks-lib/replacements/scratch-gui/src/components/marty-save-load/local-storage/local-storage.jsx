@@ -6,7 +6,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
 import VM from "scratch-vm";
 import errorBoundaryHOC from "../../../lib/error-boundary-hoc.jsx";
 import { activateTab, BLOCKS_TAB_INDEX } from "../../../reducers/editor-tab";
@@ -16,6 +15,41 @@ import styles from "./local-storage.css";
 import collectMetadata from "../../../lib/collect-metadata";
 import { blobToBase64 } from "../../../lib/save-load-utils";
 import { requestNewProject } from "../../../reducers/project-state";
+
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+
+const messages = defineMessages({
+  saveFileNamePlaceholder: {
+    id: "gui.saveLoad.saveFileNamePlaceholder",
+    description: "Placeholder text for the save file name input",
+    defaultMessage: "Type what you would like to name your new save file here..."
+  },
+  fileLoadError: {
+    id: "gui.saveLoad.fileLoadError",
+    description: "Error message shown when a file fails to load",
+    defaultMessage: "Failed to load project."
+  },
+  projectLoaded: {
+    id: "gui.saveLoad.projectLoaded",
+    description: "Message shown when a project is successfully loaded",
+    defaultMessage: "Project loaded successfully."
+  },
+  fileSaveError: {
+    id: "gui.saveLoad.fileSaveError",
+    description: "Error message shown when a file fails to save",
+    defaultMessage: "Failed to save project."
+  },
+  projectSaved: {
+    id: "gui.saveLoad.projectSaved",
+    description: "Message shown when a project is successfully saved",
+    defaultMessage: "Project saved successfully."
+  },
+  overwriteFile: {
+    id: "gui.saveLoad.overwriteFile",
+    description: "Confirmation message shown when overwriting an existing file",
+    defaultMessage: "Are you sure you want to overwrite this file?"
+  }
+});
 
 class SaveLoad extends React.Component {
   constructor(props) {
@@ -45,9 +79,8 @@ class SaveLoad extends React.Component {
     const { fileNames } = this.state;
     const safeFileName = encodeURIComponent(fileName);
     if (fileNames.includes(safeFileName)) {
-      // eslint-disable-next-line no-alert
       if (
-        !window.confirm(`Are you sure you want to overwrite "${fileName}"?`)
+        !window.confirm(this.props.intl.formatMessage(messages.overwriteFile) + ` "${fileName}"?`)
       ) {
         return;
       }
@@ -57,8 +90,7 @@ class SaveLoad extends React.Component {
     // eslint-disable-next-line no-undef
     try {
       await mv2Interface.saveScratchFile(safeFileName, base64sb3);
-      // eslint-disable-next-line no-alert
-      alert("Project Saved.");
+      alert(this.props.intl.formatMessage(messages.projectSaved));
       // TODO is this required?
       if (this.props.onProjectTelemetryEvent) {
         const metadata = collectMetadata(
@@ -74,8 +106,7 @@ class SaveLoad extends React.Component {
       ];
       this.setState({ fileNames: newFileNames });
     } catch (error) {
-      // eslint-disable-next-line no-alert
-      alert(`Failed to save project`);
+      alert(this.props.intl.formatMessage(messages.fileSaveError));
     }
   }
 
@@ -92,13 +123,15 @@ class SaveLoad extends React.Component {
       const blob = await fetch(response.contents);
       const arrayBuffer = await blob.arrayBuffer();
       vm.loadProject(arrayBuffer);
-      // eslint-disable-next-line no-alert
-      alert("Loaded Project");
+      setTimeout(() => {
+        // give some time so all the buttons/devices are rendered before we start updating the UI
+        window.raftManager.onProjectLoaded();
+      }, 2000);
+      alert(this.props.intl.formatMessage(messages.projectLoaded));
       // this seems to be required to let the wm load the project
       window.setTimeout(() => this.props.onActivateBlocksTab());
     } catch (error) {
-      // eslint-disable-next-line no-alert
-      alert(`Failed to load project`);
+      alert(this.props.intl.formatMessage(messages.fileLoadError));
     }
   }
 
@@ -127,10 +160,14 @@ class SaveLoad extends React.Component {
         <div className={styles.block}>
           <div className={styles.saveHeaderContainer}>
             <div className={styles.newSaveTitleContainer}>
-              Create a new save file:
+              <FormattedMessage
+                id="gui.saveLoad.createNewSaveFile"
+                description="Label for creating a new save file"
+                defaultMessage="Create a new save file:"
+              />
             </div>
             <Input
-              placeholder="Type what you would like to name your new save file here..."
+              placeholder={this.props.intl.formatMessage(messages.saveFileNamePlaceholder)}
               style={{ flex: 1, marginLeft: 10 }}
               type="text"
               value={saveFileName}
@@ -148,7 +185,11 @@ class SaveLoad extends React.Component {
               disabled={!isValidFileName}
               onClick={() => this.saveFile(saveFileName)}
             >
-              Save
+              <FormattedMessage
+                id="gui.saveLoad.saveFile"
+                description="Button to save a file"
+                defaultMessage="Save"
+              />
             </Button>
           </div>
         </div>
@@ -156,7 +197,13 @@ class SaveLoad extends React.Component {
           <div
             className={[styles.block, styles["block-100"]].join(" ")}>
             <div className={styles.savedFilesContainer}>
-              <div className={styles.savedFilesTitle}>Your Saved Files:</div>
+              <div className={styles.savedFilesTitle}>
+                <FormattedMessage
+                  id="gui.saveLoad.savedFilesTitle"
+                  description="Title for the saved files section"
+                  defaultMessage="Your Saved Files:"
+                />
+              </div>
               <div className={styles.saveList}>
                 {fileNames.sort().map((key, index) => (
                   <div
@@ -170,21 +217,33 @@ class SaveLoad extends React.Component {
                         style={{ marginLeft: 10 }}
                         onClick={() => this.deleteFile(key)}
                       >
-                        Delete
+                        <FormattedMessage
+                          id="gui.saveLoad.deleteFile"
+                          description="Button to delete a saved file"
+                          defaultMessage="Delete"
+                        />
                       </Button>
                       <Button
                         className={styles.button}
                         style={{ marginLeft: 10 }}
                         onClick={() => this.loadFile(key)}
                       >
-                        Load
+                        <FormattedMessage
+                          id="gui.saveLoad.loadFile"
+                          description="Button to load a saved file"
+                          defaultMessage="Load"
+                        />
                       </Button>
                       <Button
                         className={styles.button}
                         style={{ marginLeft: 10 }}
                         onClick={() => this.saveFile(key)}
                       >
-                        Save
+                        <FormattedMessage
+                          id="gui.saveLoad.saveFile"
+                          description="Button to save a file"
+                          defaultMessage="Save"
+                        />
                       </Button>
                     </div>
                   </div>
