@@ -13,6 +13,20 @@ import libraryTXTSpeech from './thumbs/text-to-speech.jpg';
 import cogAndMartyTutorial from './general-lessons/cog-and-marty-dummy';
 import cogBlocksTutorial1 from './general-lessons/cog-blocks-1';
 import cogBlocksTutorial2 from './general-lessons/cog-blocks-2';
+
+import martyBlocksIntroTutorial1 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-1';
+import martyBlocksIntroTutorial2 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-2';
+import martyBlocksIntroTutorial3 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-3';
+import martyBlocksIntroTutorial4 from './marty-tutorials/marty-blocks-intro/marty-blocks-intro-4';
+import martyBlocksCodingTutorial1 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-1';
+import martyBlocksCodingTutorial2 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-2';
+import martyBlocksCodingTutorial3 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-3';
+import martyBlocksCodingTutorial4 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-4';
+import martyBlocksCodingTutorial5 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-5';
+import martyBlocksCodingTutorial6 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-6';
+import martyBlocksCodingTutorial7 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-7';
+import martyBlocksCodingTutorial8 from './marty-tutorials/marty-blocks-coding/marty-blocks-coding-8';
+
 import cogBlocksTutorial3 from './general-lessons/cog-blocks-3';
 import cogBlocksTutorial4 from './general-lessons/cog-blocks-4';
 import cogBlocksTutorial5 from './general-lessons/cog-blocks-5';
@@ -27,6 +41,7 @@ import cogBlocksTutorial13 from './general-lessons/cog-blocks-13';
 import cogBlocksTutorial14 from './general-lessons/cog-blocks-14';
 import cogBlocksTutorial15 from './general-lessons/cog-blocks-15';
 
+
 export default {
     // ...MCH01,
     // ...MCH02,
@@ -34,6 +49,20 @@ export default {
     ...cogAndMartyTutorial,
     ...cogBlocksTutorial1,
     ...cogBlocksTutorial2,
+
+    ... martyBlocksIntroTutorial1,
+    ... martyBlocksIntroTutorial2,
+    ... martyBlocksIntroTutorial3,
+    ... martyBlocksIntroTutorial4,
+    ... martyBlocksCodingTutorial1,
+    ... martyBlocksCodingTutorial2,
+     ... martyBlocksCodingTutorial3,
+    ... martyBlocksCodingTutorial4,
+    ... martyBlocksCodingTutorial5,
+    ... martyBlocksCodingTutorial6,
+    ... martyBlocksCodingTutorial7,
+    ... martyBlocksCodingTutorial8,
+
     ...cogBlocksTutorial3,
     ...cogBlocksTutorial4,
     ...cogBlocksTutorial5,
@@ -47,6 +76,7 @@ export default {
     ...cogBlocksTutorial13,
     ...cogBlocksTutorial14,
     ...cogBlocksTutorial15,
+
     "mm-create-model": {
         name: (
             <FormattedMessage
