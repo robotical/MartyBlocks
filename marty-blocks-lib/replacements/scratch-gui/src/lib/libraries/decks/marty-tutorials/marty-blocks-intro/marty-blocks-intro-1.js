@@ -15,7 +15,7 @@ const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/i
 const martyBlocksIntroTutorial1 = {
     'marty-blocks-intro-1': {
         id: "marty-blocks-intro-1",
-        name: " Moving with MartyBlocks",
+        name: "Moving with MartyBlocks",
         type: "lesson",
         urlId: "moving-with-MartyBlocks",
         description: <FormattedMessage
