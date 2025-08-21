@@ -18,11 +18,12 @@ const martyBlocksIntroTutorial3 = {
         type: "lesson",
         urlId: "arctic-marty",
         description: <FormattedMessage
+            isRaw={true}
             defaultMessage={"Let's explore Events and Sprites, and how they can control Marty's movements!"}
             description="Learn how to use event blocks along with sprites and backdrops to control Marty's movements in MartyBlocks."
             id={`gui.howtos.lessons.marty-blocks-intro-3.description`}
             values={{}}
-        />,
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blocksintro3_cover.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
@@ -43,7 +44,7 @@ const martyBlocksIntroTutorial3 = {
                     defaultMessage={`Now that we know how to control a Sprite, lets use a Sprite, a backdrop and some Event blocks to control Marty in the Arctic!`}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-1`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
             /* STEP 2 -- creating a sprite*/
@@ -56,7 +57,7 @@ const martyBlocksIntroTutorial3 = {
                         <b/>Search for "polar-bear"</b> and select the sprite to place it in the backdrop.`}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-2`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                        type: "HighlightElement",
@@ -78,7 +79,7 @@ const martyBlocksIntroTutorial3 = {
                      Open up the backdrops menu, then select the arctic backdrop to give our polar bear a home!`}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-3`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -99,7 +100,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-4`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -120,7 +121,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-5`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -141,7 +142,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-6`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -169,7 +170,7 @@ const martyBlocksIntroTutorial3 = {
                    description=""
                                 id={`gui.howtos.lessons.marty-blocks-intro-3.step-7`}
                                 values={{}}
-                            />,
+                            >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                             expectedCode: [],
                         },
             /* STEP 8 -- add switch backdrop to blocks*/
@@ -183,7 +184,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step- 8`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -204,7 +205,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-9`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightDeviceImageElement",
@@ -234,7 +235,7 @@ const martyBlocksIntroTutorial3 = {
                    description=""
                                 id={`gui.howtos.lessons.marty-blocks-intro-3.step-10`}
                                 values={{}}
-                            />,
+                            >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                             expectedCode: [],
                         },
             /* STEP 11 -- select when backdrop switches to block*/
@@ -247,7 +248,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-11`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -267,7 +268,7 @@ const martyBlocksIntroTutorial3 = {
                 `}
                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-12`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -287,7 +288,7 @@ const martyBlocksIntroTutorial3 = {
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-3.step-13`}
                     values={{}}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [""],
                 },
 

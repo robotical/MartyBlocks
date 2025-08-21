@@ -5,5 +5,7 @@ export default [
     // {tag: 'music', intlLabel: messages.music},
     // {tag: 'games', intlLabel: messages.games},
     // {tag: 'stories', intlLabel: messages.stories}
-    { tag: 'machineLearningLesson', intlLabel: messages.machineLearning }
+    // { tag: 'machineLearningLesson', intlLabel: messages.machineLearning }
+    { tag: 'cog', intlLabel: messages.cog },
+    { tag: 'marty', intlLabel: messages.marty }
 ];

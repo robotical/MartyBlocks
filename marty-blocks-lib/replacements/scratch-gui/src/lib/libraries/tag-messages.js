@@ -136,4 +136,14 @@ export default defineMessages({
         description: 'Tag for filtering a library for robots',
         id: 'gui.libraryTags.robot'
     },
+    cog: {
+        defaultMessage: 'Cog',
+        description: 'Tag for filtering a library for cog',
+        id: 'gui.libraryTags.cog'
+    },
+    marty: {
+        defaultMessage: 'Marty',
+        description: 'Tag for filtering a library for Marty',
+        id: 'gui.libraryTags.marty'
+    }
 });

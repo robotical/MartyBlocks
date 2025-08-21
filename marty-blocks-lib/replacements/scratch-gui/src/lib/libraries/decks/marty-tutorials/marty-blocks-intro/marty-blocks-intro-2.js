@@ -20,20 +20,21 @@ const martyBlocksIntroTutorial2 = {
         type: "lesson",
         urlId: "fun-with-sprites",
         description: <FormattedMessage
+            isRaw={true}
             defaultMessage={"Learn how to create and control Sprites in MartyBlocks!"}
             description="learn how to create and control a sprite to explore different backdrops."
             id={`gui.howtos.lessons.marty-blocks-intro-2.description`}
             values={{}}
-        />,
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blocksintro2_cover.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['sprites', 'functions', 'loops', 'sequencing'],
         steps: [
             /* STEP 1 -- intro*/
-           {
+            {
                 type: "info",
-                 image: `${BUCKET_URL}exampleGIF.gif`,
+                image: `${BUCKET_URL}exampleGIF.gif`,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -46,21 +47,21 @@ const martyBlocksIntroTutorial2 = {
                     defaultMessage={`We can use sprites to do so many things in MartyBlocks! From controlling Marty, to broadcasting messages and taking inputs. <br /><br />
                       <b/>Let's use our mouse to control a sprite and explore different backdrops!</b>
                         `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-1`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
             /* STEP 2 -- creating a sprite*/
-           {
+            {
                 type: "info",
                 image: `${BUCKET_URL}createASprite.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={`Choose a sprite to work with - you can select a sprite from the library or get a surprise sprite!`}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-2`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -70,7 +71,7 @@ const martyBlocksIntroTutorial2 = {
                 expectedCode: [""],
             },
             /* STEP 3 -- add green flag block*/
-           {
+            {
                 type: "info",
                 image: `${BUCKET_URL}whenflagclicked.png`,
                 description: <FormattedMessage
@@ -78,9 +79,9 @@ const martyBlocksIntroTutorial2 = {
                     defaultMessage={`
                   Let's select a green flag block to begin - drag it to the script area to start coding.
                         `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-3`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightBlocks",
@@ -88,9 +89,9 @@ const martyBlocksIntroTutorial2 = {
                     },
                 ],
                 expectedCode: ["event_whenflagclicked"],
-            },            
+            },
             /* STEP 4 -- add forever loop block*/
-           {
+            {
                 type: "info",
                 image: `${BUCKET_URL}foreverLoop.png`,
                 description: <FormattedMessage
@@ -98,10 +99,10 @@ const martyBlocksIntroTutorial2 = {
                     defaultMessage={`
                     Let’s use the “forever” loop so that the sprite keeps following until we tell it to stop with the red stop button.
                 `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-4`}
-                />,
-                 nextStepActions: [
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+                nextStepActions: [
                     {
                         type: "HighlightBlocks",
                         blocks: ["control_forever"]
@@ -110,7 +111,7 @@ const martyBlocksIntroTutorial2 = {
                 expectedCode: ["event_whenflagclicked=>control_forever"],
             },
             /* STEP 5 -- add point towards block*/
-           {
+            {
                 type: "info",
                 image: `${BUCKET_URL}pointTowards.png`,
                 description: <FormattedMessage
@@ -119,10 +120,10 @@ const martyBlocksIntroTutorial2 = {
                     In Motion, select the point towards mouse-pointer block. <br /><br /> 
                     Add this as our first block in the forever loop.
                 `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-5`}
-                />,
-                 nextStepActions: [
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+                nextStepActions: [
                     {
                         type: "HighlightBlocks",
                         blocks: ["motion_pointtowards"]
@@ -130,8 +131,8 @@ const martyBlocksIntroTutorial2 = {
                 ],
                 expectedCode: ["event_whenflagclicked=>control_forever=>motion_pointtowards"],
             },
-                       /* STEP 6 -- add move block*/
-           {
+            /* STEP 6 -- add move block*/
+            {
                 type: "info",
                 image: `${BUCKET_URL}moveStepsSampleCode.png`,
                 description: <FormattedMessage
@@ -140,10 +141,10 @@ const martyBlocksIntroTutorial2 = {
                     Also in Motion, select the walk 10 steps block. <br /><br /> 
                     Let’s add this below the point towards block, and change the number of steps to 5. 
                 `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-6`}
-                />,
-                 nextStepActions: [
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+                nextStepActions: [
                     {
                         type: "HighlightBlocks",
                         blocks: ["motion_movesteps"]
@@ -151,8 +152,8 @@ const martyBlocksIntroTutorial2 = {
                 ],
                 expectedCode: ["event_whenflagclicked=>control_forever=>motion_movesteps"],
             },
-                        /* STEP 7 -- add backgrounds*/
-           {
+            /* STEP 7 -- add backgrounds*/
+            {
                 type: "info",
                 image: `${BUCKET_URL}add10Backgrounds.png`,
                 description: <FormattedMessage
@@ -162,10 +163,10 @@ const martyBlocksIntroTutorial2 = {
                     These can help us do even more things with sprites.  <br /><br /> 
                    Choose ten different backdrops (you’ll know you’ve done this when it says backdrops: 10) 
                 `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-7`}
-                />,
-                 nextStepActions: [
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+                nextStepActions: [
                     {
                         type: "HighlightBlocks",
                         blocks: ["FINDTHIS"]
@@ -173,8 +174,8 @@ const martyBlocksIntroTutorial2 = {
                 ],
                 expectedCode: ["event_whenflagclicked=>control_forever=>motion_movesteps"],
             },
-             /* STEP 8 -- switch between backdrops*/
-           {
+            /* STEP 8 -- switch between backdrops*/
+            {
                 type: "info",
                 image: `${BUCKET_URL}sampleCodeFunWithSprites.png`,
                 description: <FormattedMessage
@@ -184,10 +185,10 @@ const martyBlocksIntroTutorial2 = {
                   Select a switch backdrop block, and use the dropdown menu to select “random backdrop".<br /><br />
                   Place this between the “when green flag clicked” block and the forever loop, like shown in the sample code here:
                 `}
-                   description=""
+                    description=""
                     id={`gui.howtos.lessons.marty-blocks-intro-2.step-8`}
-                />,
-                 nextStepActions: [
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+                nextStepActions: [
                     {
                         type: "HighlightBlocks",
                         blocks: ["looks_switchbackdropto"]
@@ -195,19 +196,19 @@ const martyBlocksIntroTutorial2 = {
                 ],
                 expectedCode: ["event_whenflagclicked=>looks_switchbackdropto=>control_forever=>motion_movesteps"],
             },
-              /* STEP 9 -- end */
-                        {
-                            type: "end",
-                            image: `${BUCKET_URL}finalStep.png`,
-                            description: <FormattedMessage
-                                isRaw={true}
-                                defaultMessage={"You did it! <br /><br /> <b/>Now every time we click the green flag, we can explore a new backdrop with our sprite! </b><br/><br /> You can use the button with four arrows to watch your sprite in full screen! "}
-                                description=""
-                                id={`gui.howtos.lessons.marty-blocks-intro-2.step-9`}
-                                values={{}}
-                            />,
-                            expectedCode: [],
-                        },
+            /* STEP 9 -- end */
+            {
+                type: "end",
+                image: `${BUCKET_URL}finalStep.png`,
+                description: <FormattedMessage
+                    isRaw={true}
+                    defaultMessage={"You did it! <br /><br /> <b/>Now every time we click the green flag, we can explore a new backdrop with our sprite! </b><br/><br /> You can use the button with four arrows to watch your sprite in full screen! "}
+                    description=""
+                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-9`}
+                    values={{}}
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
+                expectedCode: [],
+            },
         ]
     }
 }

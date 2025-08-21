@@ -15,15 +15,16 @@ const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/c
 const martyBlocksCodingTutorial4 = {
     'marty-blocks-coding-4': {
         id: "marty-blocks-coding-4",
-        name: " Parallel Programs",
+        name: "Parallel Programs 1",
         type: "lesson",
         urlId: "parallel-programs-1",
         description: <FormattedMessage
+            isRaw={true}
             defaultMessage={"Learn how computers control code that happens at the same time!"}
             description="An introduction to parallel programs, and how programs handle doing lots of things at once! "
             id={`gui.howtos.lessons.marty-blocks-coding-4.description`}
             values={{}}
-        />,
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding4_cover.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
@@ -46,7 +47,7 @@ const martyBlocksCodingTutorial4 = {
                         In this tutorial, we're going to learn how programmers use <b/>parallel programs, race conditions and mutual exclusion</b> to control the order that pieces of code runs in!`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-1`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
                 /* STEP 2 -- introduce race conditions */
@@ -71,7 +72,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/><br/><i/>Click the image to expand the diagram.</i>`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-2`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
                  /* STEP 3 -- introduce mutual exclusion*/
@@ -93,7 +94,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/><br/><i/>Click the image to expand the diagram.</i>`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-3`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
                 /* STEP 4 -- add first flag block*/
@@ -109,7 +110,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-4`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -129,7 +130,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-5`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -149,7 +150,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-6`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -171,7 +172,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-7`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -198,7 +199,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/>First, delete all of your code so we have a blank slate.`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-8`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked=>mv2_walk_fw","event_whenflagclicked=>mv2_walk_bw"],
                 },
                 /* STEP 9 -- recreate walk backwards block */
@@ -220,7 +221,7 @@ const martyBlocksCodingTutorial4 = {
                     <br/><br/><i/>If you need some help just skip back to steps 6 and 7!</i>`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-9`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked=>mv2_walk_bw"],
                 },
                 /* STEP 10 -- recreate walk forwards block */
@@ -241,7 +242,7 @@ const martyBlocksCodingTutorial4 = {
                      <br/><br/><i/>If you need some help, just skip back to steps 4 and 5!</i>`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-4.step-10`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked=>mv2_walk_bw","event_whenflagclicked=>mv2_walk_fw"],
                 },
                 /* STEP 11 -- what's different? */
@@ -266,7 +267,7 @@ const martyBlocksCodingTutorial4 = {
                         `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-11`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     expectedCode: ["event_whenflagclicked=>mv2_walk_bw","event_whenflagclicked=>mv2_walk_fw"],
                 },
                 /* STEP 12 -- mutual exclusion reminder*/
@@ -283,7 +284,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-12`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -305,7 +306,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-13`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -328,7 +329,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-14`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -352,7 +353,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-15`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -374,7 +375,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-16`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -395,7 +396,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-17`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -418,7 +419,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-18`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -440,7 +441,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-19`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -460,7 +461,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-20`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -483,7 +484,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-21`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -504,7 +505,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-22`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -527,7 +528,7 @@ const martyBlocksCodingTutorial4 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-4.step-23`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",

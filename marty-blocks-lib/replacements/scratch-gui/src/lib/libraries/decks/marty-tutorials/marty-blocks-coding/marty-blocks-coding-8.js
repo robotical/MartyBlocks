@@ -19,11 +19,12 @@ const martyBlocksCodingTutorial8 = {
         type: "lesson",
         urlId: "lists-2",
         description: <FormattedMessage
+            isRaw={true}
             defaultMessage={"Let's learn how programmers use lists to do so many cool things!"}
             description=""
             id={`gui.howtos.lessons.marty-blocks-coding-8.description`}
             values={{}}
-        />,
+        >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding8_cover.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
@@ -47,7 +48,7 @@ const martyBlocksCodingTutorial8 = {
                        <br/><br/>Then, we're going to write some code in an <b/>iterative loop</b> to get Marty to read his shopping list out loud!`}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-8.step-1`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
                 /* STEP 2 -- making the list*/
@@ -68,7 +69,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>Call the list "colours" and click "ok"  `}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-8.step-2`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
                  /* STEP 3 -- add first item to list */
@@ -90,7 +91,7 @@ const martyBlocksCodingTutorial8 = {
                        `}
                     description=""
                     id={`gui.howtos.lessons.marty-blocks-coding-8.step-3`}
-                />,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
                 /* STEP 4 -- add wires to list*/
@@ -105,7 +106,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-4`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                              type: "HighlightElement",
@@ -127,7 +128,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-5`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -150,7 +151,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-6`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                              type: "HighlightElement",
@@ -174,7 +175,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-7`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                              type: "HighlightElement",
@@ -200,7 +201,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-8`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -221,7 +222,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-9`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -242,7 +243,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-10`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightBlocks",
@@ -263,7 +264,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-11`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -287,7 +288,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-12`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                             type: "HighlightElement",
@@ -310,7 +311,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-13`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                              type: "HighlightBlocks",
@@ -332,7 +333,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-14`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                              type: "HighlightBlocks",
@@ -354,7 +355,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-15`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         { type: "HighlightElement",
                         elementId: "lesson-nextStep-btn",
@@ -376,7 +377,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-16`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                               type: "HighlightElement",
@@ -399,7 +400,7 @@ const martyBlocksCodingTutorial8 = {
                     `}
                         description=""
                         id={`gui.howtos.lessons.marty-blocks-coding-8.step-17`}
-                    />,
+                    >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
                               type: "HighlightElement",
