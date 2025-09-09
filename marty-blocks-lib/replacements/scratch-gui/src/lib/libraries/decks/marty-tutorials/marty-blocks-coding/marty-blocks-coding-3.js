@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/3/";
 
 const martyBlocksCodingTutorial3 = {
-    'marty-blocks-coding-3': {
-        id: "marty-blocks-coding-3",
+    'type-lesson-marty-blocks-coding-3': {
+        id: "type-lesson-marty-blocks-coding-3",
         name: "What Is A Variable?",
         type: "lesson",
         urlId: "what-is-a-variable",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial3 = {
             isRaw={true}
             defaultMessage={"Learn how programmers use variables and loops to supercharge their code!"}
             description="Learn about variables and an iterative loop to help Marty count to ten!"
-            id={`gui.howtos.lessons.marty-blocks-coding-3.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding3_cover.png`,
@@ -48,7 +48,7 @@ const martyBlocksCodingTutorial3 = {
                       <br /><br />Variables are really important in programming. They help computers <b/>remember and manipulate</b> data so we can do more complicated tasks in less lines of code.
                         `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -65,7 +65,7 @@ const martyBlocksCodingTutorial3 = {
                     <br /> The <b/>value</b> tells us <i/>"what exactly are we currently keeping in the box?"</i>
                      <br /><br /> In this exercise, we’re going to make and use a variable called <b/>my counter</b> to help Marty count to ten!  `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -86,7 +86,7 @@ const martyBlocksCodingTutorial3 = {
                    First let’s make our variable <b/>my counter</b>. 
                    <br /><br />Select "Make a Variable" and call it <b/>my counter</b>. Click "ok" and watch how the variable pops us in the top left corner, with a current value of 0`}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -108,7 +108,7 @@ const martyBlocksCodingTutorial3 = {
                    To code with our <b/>my counter</b> variable, we can drag it from the Variables category into the scripting area.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-4`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -130,7 +130,7 @@ const martyBlocksCodingTutorial3 = {
                     <br /><br />Select the “Marty speak” block, and replace “hello” with the <b/>my counter</b> variable like below. Click on this block and you should hear your Marty say “zero”.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -151,7 +151,7 @@ const martyBlocksCodingTutorial3 = {
                     <br /><br />Place this before "Marty speak" like below. Click these blocks and hear Marty say "one"!
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -171,7 +171,7 @@ const martyBlocksCodingTutorial3 = {
                     <br/><br/>Click the code block until Marty counts from 1 to 10!
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-7`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-7`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -194,7 +194,7 @@ const martyBlocksCodingTutorial3 = {
 
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -216,7 +216,7 @@ const martyBlocksCodingTutorial3 = {
 
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-9`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -238,7 +238,7 @@ const martyBlocksCodingTutorial3 = {
 
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-10`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-10`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -261,7 +261,7 @@ const martyBlocksCodingTutorial3 = {
 
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-11`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-11`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -284,7 +284,7 @@ const martyBlocksCodingTutorial3 = {
                     <br /><br /> Now Marty will always start from 0.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-12`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-12`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -306,7 +306,7 @@ const martyBlocksCodingTutorial3 = {
                    <br/><br/>Finally, add a <b/>when green flag clicked</b> block at the top of our code to finish it off.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-3.step-13`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-13`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {

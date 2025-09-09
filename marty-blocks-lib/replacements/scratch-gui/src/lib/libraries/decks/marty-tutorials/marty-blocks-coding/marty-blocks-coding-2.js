@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/2/";
 
 const martyBlocksCodingTutorial1 = {
-    'marty-blocks-coding-2': {
-        id: "marty-blocks-coding-2",
+    'type-lesson-marty-blocks-coding-2': {
+        id: "type-lesson-marty-blocks-coding-2",
         name: " Watch Out Marty! Pt 2: What Else?",
         type: "lesson",
         urlId: "watch-out-Marty-part-2",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial1 = {
             isRaw={true}
             defaultMessage={"Learn to use if else statements to keep Marty safe!"}
             description="Use an if else statement along with Marty's ground sensors to keep him from walking off a ledge!"
-            id={`gui.howtos.lessons.marty-blocks-coding-2.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding2_cover.png`,
@@ -48,7 +48,7 @@ const martyBlocksCodingTutorial1 = {
                       <br /><br /> We'll use Marty's ground sensors in an if-else statement to stop Marty walking off of an edge.
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -63,7 +63,7 @@ const martyBlocksCodingTutorial1 = {
                     If-else statements help us say <b /> if </b> this is true, run some code, <b/>else</b> run some other code.
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -83,7 +83,7 @@ const martyBlocksCodingTutorial1 = {
                     defaultMessage={`
                     Select an if-else statement. <br /><br /> Drag it into the scripting area to start our code.`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -106,7 +106,7 @@ const martyBlocksCodingTutorial1 = {
                     <br /><br /> We want to tell Marty to walk forward <b/>IF</b> both feet on the ground is true.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-4`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -127,7 +127,7 @@ const martyBlocksCodingTutorial1 = {
                    Place both sensor blocks inside the and block like shown in the sample code:
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -151,7 +151,7 @@ const martyBlocksCodingTutorial1 = {
                    Now let’s put the and block into our if-else block, so it matches the sample code below.<br /><br />
                    This code now says: <i/>If “left foot and right foot on the ground” is true, do something. If that’s not true, do something else.<i/>`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -173,7 +173,7 @@ const martyBlocksCodingTutorial1 = {
                     <br /><br /> Since we want Marty to check both feet are safely on the ground after <b/>every step</b>, change the "2" to "1" in the walk block.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-7`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-7`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -194,7 +194,7 @@ const martyBlocksCodingTutorial1 = {
                     Place a get ready block after "else", like shown below:
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -214,7 +214,7 @@ const martyBlocksCodingTutorial1 = {
                     Almost done! Except we don’t want our code to just run once, we want it to run over and over, so lets put it all inside a <b/>forever loop.</b>
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-9`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -236,7 +236,7 @@ const martyBlocksCodingTutorial1 = {
                         <br/>We recommend using a <b/>white surface</b> (like a piece of paper) for Marty to walk on, as this can help with the accuracy of his ground detection.
                         <br /><br /> Place your Marty on a small ledge and click the forever loop to test Marty’s fall prevention! `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-2.step-10`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-2.step-10`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["control_forever=>control_if_else=>operator_and=>mv2_groundsense=>mv2_groundsense=>mv2_walk_fw=>mv2_getReady"],

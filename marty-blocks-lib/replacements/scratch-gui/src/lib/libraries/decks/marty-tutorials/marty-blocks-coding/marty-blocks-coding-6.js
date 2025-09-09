@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/6/";
 
 const martyBlocksCodingTutorial6 = {
-    'marty-blocks-coding-6': {
-        id: "marty-blocks-coding-6",
+    'type-lesson-marty-blocks-coding-6': {
+        id: "type-lesson-marty-blocks-coding-6",
         name: "Coding Unplugged",
         type: "lesson",
         urlId: "coding-unplugged",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial6 = {
             isRaw={true}
             defaultMessage={"Let's recreate unplugged mode using everything we've learned so far! If-statements, loops, parallel code, operator blocks and more..."}
             description=""
-            id={`gui.howtos.lessons.marty-blocks-coding-6.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding6_cover.png`,
@@ -46,7 +46,7 @@ const martyBlocksCodingTutorial6 = {
                     defaultMessage={`
                        In this tutorial, we’re going to recreate unplugged mode using everything we’ve learned so far! `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -68,7 +68,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Collect one of each colour tile to test out your Marty’s colour sensor, see how unplugged works, then reconnect your Marty and come back to this tutorial!
                        `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -94,7 +94,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><b/>red</b> means <b/>stop & celebrate!</b>,
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [""],
             },
@@ -108,7 +108,7 @@ const martyBlocksCodingTutorial6 = {
                        First, place 5 green flag blocks in the scripting area, one for each colour tile in unplugged.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-4`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -129,7 +129,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>So, let’s place a forever loop below each green flag block.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -151,7 +151,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/>So let's place an if-statement in every forever loop.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -173,7 +173,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Your code should look like this:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-7`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-7`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -194,7 +194,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Make sure you use the dropdown menu to select <i/>LeftColorSensor</i>.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -216,7 +216,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/>Place one inside each if-statement like shown here:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-9`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -238,7 +238,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Add a not operator in each code block like shown below:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-10`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-10`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -261,7 +261,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/><br/><i/>Alternatively, go back to steps 7 and 8 to give you a hint on how to fill them in correctly!
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-11`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-11`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -283,7 +283,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Inside the code block that detects green, place <b/>walk forwards two steps</b> inside the repeat until block, like shown here:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-12`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-12`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -304,7 +304,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/><br/><i/>Remember to use the dropdown box to change left to right!
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-13`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-13`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -325,7 +325,7 @@ const martyBlocksCodingTutorial6 = {
                         
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-14`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-14`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -345,7 +345,7 @@ const martyBlocksCodingTutorial6 = {
                        Inside the code block that detects yellow, place <b/>walk backwards two steps</b> inside the repeat until block, like shown here:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-15`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-15`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -366,7 +366,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/>Inside the code block that detects red, place a <b/>pause movement</b> and a <b/>dance</b> block inside the repeat until block, like shown here:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-16`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-16`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -387,7 +387,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/>In between the pause and dance blocks, place <b/>start sound</b> and use the dropdown box to select </b>celebrate</b>!
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-17`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-17`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -408,7 +408,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/>Place a <b/>stop all</b> block after the dance block.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-18`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-18`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -430,7 +430,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Let's put this into our code!
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-19`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-19`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -456,7 +456,7 @@ const martyBlocksCodingTutorial6 = {
 
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-20`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-20`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -478,7 +478,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/>Copy the clip below to locate the <b/>Arcade Beep</b> function in Sounds.
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-21`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-21`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -501,7 +501,7 @@ const martyBlocksCodingTutorial6 = {
                         <br/><br/>Your code should look like this:
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-22`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-22`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -524,7 +524,7 @@ const martyBlocksCodingTutorial6 = {
                        <br/><br/><i/>For an extra challenge - what else can you make Marty do when he sees each colour?
                     `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-6.step-23`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-6.step-23`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {

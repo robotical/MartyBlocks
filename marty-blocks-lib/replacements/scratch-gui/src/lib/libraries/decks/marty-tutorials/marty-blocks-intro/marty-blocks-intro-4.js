@@ -12,8 +12,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/intro/4/";
 
 const martyBlocksIntroTutorial4 = {
-    'marty-blocks-intro-4': {
-        id: "marty-blocks-intro-4",
+    'type-lesson-marty-blocks-intro-4': {
+        id: "type-lesson-marty-blocks-intro-4",
         name: "Sprites Can Party With Marty",
         type: "lesson",
         urlId: "sprites-can-party-with-marty",
@@ -21,7 +21,7 @@ const martyBlocksIntroTutorial4 = {
             isRaw={true}
             defaultMessage={"Use a sprite to tell Marty that it’s party time!"}
             description="Learn how to use messages, sprites and events to control Marty."
-            id={`gui.howtos.lessons.marty-blocks-intro-4.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blocksintro4_cover.png`,
@@ -45,7 +45,7 @@ const martyBlocksIntroTutorial4 = {
                     defaultMessage={`We can use sprites to communicate with Marty, and with each other, by broadcasting messages.<br /><br />
                          We’re going to use a sprite to tell Marty that it’s party time!`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -60,7 +60,7 @@ const martyBlocksIntroTutorial4 = {
                      First, let’s select a party backdrop. <br/>
                      Open up the backdrop menu and search <b/>party</b> to set the scene.`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -80,7 +80,7 @@ const martyBlocksIntroTutorial4 = {
                     defaultMessage={`Now our party needs some music! <br/>
                         Click “Choose a Sprite” and search <b/>speaker</b> to complete our party scene.`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -107,7 +107,7 @@ const martyBlocksIntroTutorial4 = {
                     defaultMessage={`Click on the speaker in the sprites menu to navigate to the speaker's code. We want to write code that says:  <br /><br />
                                     <i> when this sprite clicked, broadcast “party time!"</i>`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-4`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
@@ -121,7 +121,7 @@ const martyBlocksIntroTutorial4 = {
                     defaultMessage={`Drag this block into the coding area to begin our sprite code.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -140,7 +140,7 @@ const martyBlocksIntroTutorial4 = {
                     defaultMessage={` Drag the "broadcast message1" block into position as shown. <br /><br /> 
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -165,7 +165,7 @@ const martyBlocksIntroTutorial4 = {
                     isRaw={true}
                     defaultMessage={`Use the dropdown box to select "new message", then create a new message called "party time!" to broadcast.`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-7`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-7`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
@@ -180,7 +180,7 @@ const martyBlocksIntroTutorial4 = {
                         <br/><br/>Now let's tell Marty what to do when he hears the message <i/>party time!</i>
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step- 8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step- 8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -202,7 +202,7 @@ const martyBlocksIntroTutorial4 = {
                         Navigate to your Marty’s blocks by clicking on Marty in the devices menu.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-9`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -225,7 +225,7 @@ const martyBlocksIntroTutorial4 = {
                         We'll use this to tell Marty what to do when it's party time - play music and dance!
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-10`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-10`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -245,7 +245,7 @@ const martyBlocksIntroTutorial4 = {
                         <br/><br/>Use the dropdown box to select "Celebrate!" and start the party!
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-11`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-11`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -266,7 +266,7 @@ const martyBlocksIntroTutorial4 = {
                         <br/><br/>Now Marty can really party!
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-12`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-12`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -285,7 +285,7 @@ const martyBlocksIntroTutorial4 = {
                     isRaw={true}
                     defaultMessage={'You did it! Click on the speaker to start the music, and watch Marty party!'}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-4.step-13`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-13`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [""],

@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/8/";
 
 const martyBlocksCodingTutorial8 = {
-    'marty-blocks-coding-8': {
-        id: "marty-blocks-coding-8",
+    'type-lesson-marty-blocks-coding-8': {
+        id: "type-lesson-marty-blocks-coding-8",
         name: "Lists Pt.2 - Marty's Shopping List",
         type: "lesson",
         urlId: "lists-2",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial8 = {
             isRaw={true}
             defaultMessage={"Let's learn how programmers use lists to do so many cool things!"}
             description=""
-            id={`gui.howtos.lessons.marty-blocks-coding-8.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding8_cover.png`,
@@ -47,7 +47,7 @@ const martyBlocksCodingTutorial8 = {
                        In this tutorial,In this tutorial, we’re going to use a <b/>list</b> to write Marty’s shopping list.
                        <br/><br/>Then, we're going to write some code in an <b/>iterative loop</b> to get Marty to read his shopping list out loud!`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-8.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -68,7 +68,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/> Navigate to the Variables tab and click "Make a List"
                         <br/><br/>Call the list "colours" and click "ok"  `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-8.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -90,7 +90,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>Instead of <b/>thing</b>, write <b/>batteries</b>. Click on the block and watch batteries appear on the list
                        `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-8.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -105,7 +105,7 @@ const martyBlocksCodingTutorial8 = {
                        <br/><br/>Keeping the same block as before, change <b/>batteries</b> to <b/>wires</b> and click on the block.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-4`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-4`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -127,7 +127,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>Use the same block to add nuts and bolts to the list.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-5`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-5`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -150,7 +150,7 @@ const martyBlocksCodingTutorial8 = {
                        <br/><br/>Instead of <b/>thing</b>, write <b/>candy</b>, click on the block and watch candy appear at number 1 on the list!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-6`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-6`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -174,7 +174,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>If we use a list, like on the right, we can write code that works all the time - no matter how long the list is, or what gets added/removed!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-7`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-7`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -200,7 +200,7 @@ const martyBlocksCodingTutorial8 = {
 
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-8`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-8`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -221,7 +221,7 @@ const martyBlocksCodingTutorial8 = {
                        To start our iterative loop, select a repeat until block.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-9`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-9`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -242,7 +242,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>Navigate to the variables tab, select Make a Variable, call it <b/>item number</b>, and click "ok".
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-10`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-10`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -263,7 +263,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>Navigate to the Speak tab, select a <b/>Marty speak</b> block and place it inside the repeat loop.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-11`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-11`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -287,7 +287,7 @@ const martyBlocksCodingTutorial8 = {
                         <br/><br/>Great work! Now if item number = 3, Marty would say "wires".
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-12`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-12`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -310,7 +310,7 @@ const martyBlocksCodingTutorial8 = {
                        <br/><br/>Place the <b/>change item number by 1</b> block after the speak block like shown:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-13`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-13`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -332,7 +332,7 @@ const martyBlocksCodingTutorial8 = {
                         
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-14`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-14`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -354,7 +354,7 @@ const martyBlocksCodingTutorial8 = {
                      
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-15`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-15`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         { type: "HighlightElement",
@@ -376,7 +376,7 @@ const martyBlocksCodingTutorial8 = {
                      
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-16`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-16`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -399,7 +399,7 @@ const martyBlocksCodingTutorial8 = {
                      
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-8.step-17`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-8.step-17`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {

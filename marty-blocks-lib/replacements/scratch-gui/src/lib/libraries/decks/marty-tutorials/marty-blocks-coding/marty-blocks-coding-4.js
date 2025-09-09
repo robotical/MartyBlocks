@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/4/";
 
 const martyBlocksCodingTutorial4 = {
-    'marty-blocks-coding-4': {
-        id: "marty-blocks-coding-4",
+    'type-lesson-marty-blocks-coding-4': {
+        id: "type-lesson-marty-blocks-coding-4",
         name: "Parallel Programs 1",
         type: "lesson",
         urlId: "parallel-programs-1",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial4 = {
             isRaw={true}
             defaultMessage={"Learn how computers control code that happens at the same time!"}
             description="An introduction to parallel programs, and how programs handle doing lots of things at once! "
-            id={`gui.howtos.lessons.marty-blocks-coding-4.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding4_cover.png`,
@@ -46,7 +46,7 @@ const martyBlocksCodingTutorial4 = {
                     defaultMessage={`
                         In this tutorial, we're going to learn how programmers use <b/>parallel programs, race conditions and mutual exclusion</b> to control the order that pieces of code runs in!`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-4.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -71,7 +71,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/>This can cause unpredictable behaviour - bad news for programmers!
                         <br/><br/><br/><i/>Click the image to expand the diagram.</i>`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-4.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -93,7 +93,7 @@ const martyBlocksCodingTutorial4 = {
                          <br/><br/> Mutual exclusion can be implemented using lots of different methods, such as if-statements, wait blocks, variable control and lots more!
                         <br/><br/><br/><i/>Click the image to expand the diagram.</i>`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-4.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -109,7 +109,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/> Select a <b/>when green flag clicked</b> block and drag it into the scripting area.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-4`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-4`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -129,7 +129,7 @@ const martyBlocksCodingTutorial4 = {
                        Place a <b/>walk 2 steps forward</b> block after the green flag block.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-5`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-5`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -149,7 +149,7 @@ const martyBlocksCodingTutorial4 = {
                       Select a second <b/>when green flag clicked</b> block and drag it into the scripting area to create our parallel "walk backwards" code.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-6`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-6`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -171,7 +171,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/><i/>Click the green flag and see what Marty will do first...</i>
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-7`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-7`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -198,7 +198,7 @@ const martyBlocksCodingTutorial4 = {
                         Did you notice that Marty walked <b/>forward first, and then backwards?</b> Let's investigate why. 
                         <br/><br/>First, delete all of your code so we have a blank slate.`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-4.step-8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked=>mv2_walk_fw","event_whenflagclicked=>mv2_walk_bw"],
                 },
@@ -220,7 +220,7 @@ const martyBlocksCodingTutorial4 = {
                     <br/><br/> Recreate the code shown in the image below.
                     <br/><br/><i/>If you need some help just skip back to steps 6 and 7!</i>`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-4.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-9`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked=>mv2_walk_bw"],
                 },
@@ -241,7 +241,7 @@ const martyBlocksCodingTutorial4 = {
                      Now let's recreate our <b/>walk forwards</b> code as well. Your parallel code should look like this:
                      <br/><br/><i/>If you need some help, just skip back to steps 4 and 5!</i>`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-4.step-10`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-10`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked=>mv2_walk_bw","event_whenflagclicked=>mv2_walk_fw"],
                 },
@@ -266,7 +266,7 @@ const martyBlocksCodingTutorial4 = {
                         <br/><br/><br/><i/>Click the image to expand the diagram.</i>
                         `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-11`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-11`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     expectedCode: ["event_whenflagclicked=>mv2_walk_bw","event_whenflagclicked=>mv2_walk_fw"],
                 },
@@ -283,7 +283,7 @@ const martyBlocksCodingTutorial4 = {
                        <br/><br/><br/><i/>Click the image to expand the diagram.</i>
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-12`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-12`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -305,7 +305,7 @@ const martyBlocksCodingTutorial4 = {
                        <br/><br/>It takes Marty around 3 seconds to walk forwards, so we'll place a wait block before "walk backwards" and change the parameter to 3 seconds, matching the sample code below.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-13`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-13`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -328,7 +328,7 @@ const martyBlocksCodingTutorial4 = {
                        <br/><br/>Let's look at using <b/>variable control</b> for a more accurate method of mutual exclusion.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-14`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-14`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -352,7 +352,7 @@ const martyBlocksCodingTutorial4 = {
                       <br/><br/>Don't <i/>actually</i> take a step forward<b/> until next move = forward.</b>
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-15`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-15`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -374,7 +374,7 @@ const martyBlocksCodingTutorial4 = {
                        Create a variable called next move. We'll use this to control which move Marty makes next.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-16`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-16`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -395,7 +395,7 @@ const martyBlocksCodingTutorial4 = {
                        Remove the wait block we previously added so your code matches the example below. <br/><br/>Now you're ready to implement variable control!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-17`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-17`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -418,7 +418,7 @@ const martyBlocksCodingTutorial4 = {
                        <br/><br/>Add a wait until block before each walk block, like shown here:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-18`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-18`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -440,7 +440,7 @@ const martyBlocksCodingTutorial4 = {
                        <br/><br/>You can get two next move blocks from the orange Variables tab.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-19`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-19`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -460,7 +460,7 @@ const martyBlocksCodingTutorial4 = {
                     Now use the green equals blocks to fill in the empty <b/>wait until</b> blocks, so they match the sample code below:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-20`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-20`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -483,7 +483,7 @@ const martyBlocksCodingTutorial4 = {
                     <br/><br/>Place two of these blocks at the end of each piece of code, and type "forwards" or "backwards" in each one, to match the sample code below:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-21`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-21`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -504,7 +504,7 @@ const martyBlocksCodingTutorial4 = {
                    <br/><br/> Let's say we want Marty to walk backwards first - type "backwards" into the parameter space, and click the block so that next move is set to backwards.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-22`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-22`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -527,7 +527,7 @@ const martyBlocksCodingTutorial4 = {
                     <br/><br/><i/>For an extra challenge, why not try changing next move to "forwards" (or even something random like "banana") and see how Marty walks now...
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-4.step-23`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-4.step-23`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {

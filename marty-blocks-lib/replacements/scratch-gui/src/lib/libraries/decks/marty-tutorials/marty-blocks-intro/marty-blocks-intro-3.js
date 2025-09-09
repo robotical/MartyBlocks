@@ -12,8 +12,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/intro/3/";
 
 const martyBlocksIntroTutorial3 = {
-    'marty-blocks-intro-3': {
-        id: "marty-blocks-intro-3",
+    'type-lesson-marty-blocks-intro-3': {
+        id: "type-lesson-marty-blocks-intro-3",
         name: "Arctic Marty",
         type: "lesson",
         urlId: "arctic-marty",
@@ -21,7 +21,7 @@ const martyBlocksIntroTutorial3 = {
             isRaw={true}
             defaultMessage={"Let's explore Events and Sprites, and how they can control Marty's movements!"}
             description="Learn how to use event blocks along with sprites and backdrops to control Marty's movements in MartyBlocks."
-            id={`gui.howtos.lessons.marty-blocks-intro-3.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blocksintro3_cover.png`,
@@ -43,7 +43,7 @@ const martyBlocksIntroTutorial3 = {
                     isRaw={true}
                     defaultMessage={`Now that we know how to control a Sprite, lets use a Sprite, a backdrop and some Event blocks to control Marty in the Arctic!`}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -56,7 +56,7 @@ const martyBlocksIntroTutorial3 = {
                     defaultMessage={`First things first, let's open up the sprite menu to choose our arctic sprite. <br /><br />
                         <b/>Search for "polar-bear"</b> and select the sprite to place it in the backdrop.`}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -78,7 +78,7 @@ const martyBlocksIntroTutorial3 = {
                      Great! Now let’s make sure our polar bear feels at home. <br /><br />
                      Open up the backdrops menu, then select the arctic backdrop to give our polar bear a home!`}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -99,7 +99,7 @@ const martyBlocksIntroTutorial3 = {
                     Click on the polar bear in the sprite menu to bring up its code.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-4`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -120,7 +120,7 @@ const martyBlocksIntroTutorial3 = {
                    These blocks say <b/>“when this happens, do that”</b>. They can help us make sure our code only runs when we want it to. 
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -141,7 +141,7 @@ const martyBlocksIntroTutorial3 = {
                   Select the green flag event block and the “when this sprite clicked” event block. 
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -168,7 +168,7 @@ const martyBlocksIntroTutorial3 = {
                                     When green flag clicked, switch backdrop back to default.</i>
 `}
                    description=""
-                                id={`gui.howtos.lessons.marty-blocks-intro-3.step-7`}
+                                id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-7`}
                                 values={{}}
                             >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                             expectedCode: [],
@@ -183,7 +183,7 @@ const martyBlocksIntroTutorial3 = {
                   Use the dropdown menu to choose arctic for one, and backdrop1 (the default) for the other.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step- 8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step- 8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -204,7 +204,7 @@ const martyBlocksIntroTutorial3 = {
                         Navigate to your Marty’s blocks by clicking on Marty in the devices menu.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-9`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -233,7 +233,7 @@ const martyBlocksIntroTutorial3 = {
                                     <i> When backdrop switches to arctic, wiggle! </i>
                     `}
                    description=""
-                                id={`gui.howtos.lessons.marty-blocks-intro-3.step-10`}
+                                id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-10`}
                                 values={{}}
                             >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                             expectedCode: [],
@@ -247,7 +247,7 @@ const martyBlocksIntroTutorial3 = {
                     defaultMessage={`In events, select a “when backdrop switches to” block. <br /> Use the dropdown menu to select Arctic.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-11`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-11`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -267,7 +267,7 @@ const martyBlocksIntroTutorial3 = {
                     defaultMessage={`Finally, navigate to Motion, select the "Wiggle!" block, and place it as shown in the sample code:
                 `}
                    description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-12`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-12`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
@@ -286,7 +286,7 @@ const martyBlocksIntroTutorial3 = {
                     isRaw={true}
                     defaultMessage={'You did it! Click the green flag to reset the scene, then click the polar bear to make an arctic scene, and watch Marty wiggle!'}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-3.step-13`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-13`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [""],

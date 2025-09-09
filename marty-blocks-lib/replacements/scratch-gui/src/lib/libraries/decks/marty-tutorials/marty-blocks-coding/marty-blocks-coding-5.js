@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/5/";
 
 const martyBlocksCodingTutorial5 = {
-    'marty-blocks-coding-5': {
-        id: "marty-blocks-coding-5",
+    'type-lesson-marty-blocks-coding-5': {
+        id: "type-lesson-marty-blocks-coding-5",
         name: "Parallel Programs 2",
         type: "lesson",
         urlId: "parallel-programs-2",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial5 = {
             isRaw={true}
             defaultMessage={"Let's use parallel programming with variable control to help Marty show off all his funny faces!"}
             description="Let's use parallel programming with variable control to help Marty show off all his funny faces!"
-            id={`gui.howtos.lessons.marty-blocks-coding-5.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding5_cover.png`,
@@ -46,7 +46,7 @@ const martyBlocksCodingTutorial5 = {
                     defaultMessage={`
                        Now that we’re experts at variable control of parallel programs, lets put our learning into practice by helping Marty show off all his funny faces!`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-5.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -66,7 +66,7 @@ const martyBlocksCodingTutorial5 = {
                         Select two green flag blocks. 
                         <br/><br/>When the green flag is clicked, both of these blocks will activate and run all the code underneath them at the same time, in parallel.`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-5.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked","event_whenflagclicked"],
                 },
@@ -91,7 +91,7 @@ const martyBlocksCodingTutorial5 = {
                             <br/> Play sound: Excited until done</i>
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-5.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: ["event_whenflagclicked","event_whenflagclicked"],
                 },
@@ -106,7 +106,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>Use the dropdown box to select "Disbelief", to go along with Marty's surprised face!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-4`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-4`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -127,7 +127,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>Use the dropdown box to select "No!", to go along with Marty's grumpy face!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-5`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-5`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -148,7 +148,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>Use the dropdown box to select "Excited", to go along with Marty's excited face!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-6`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-6`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -172,7 +172,7 @@ const martyBlocksCodingTutorial5 = {
                             <br/>Eyes excited</i>
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-7`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-7`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -194,7 +194,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>Use the dropdown box to select "Wide", to show off Marty's surprised face!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-8`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-8`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -215,7 +215,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>Use the dropdown box to select "angry", to show off Marty's angry face!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-9`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-9`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -236,7 +236,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>Use the dropdown box to select "Excited", to show off Marty's excited face!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-10`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-10`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -259,7 +259,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>This is because the sounds and expressions take <b/>different amounts of time.</b>
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-11`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-11`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -281,7 +281,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>In this tutorial, we're going to use variables to <b/>sync</b> our parallel code, making sure the right things <b/> do happen at the same time</b>.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-12`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-12`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -303,7 +303,7 @@ const martyBlocksCodingTutorial5 = {
                         <br/><br/>We'll use this to make sure Marty makes the right expression and sound at the same time.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-13`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-13`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -325,7 +325,7 @@ const martyBlocksCodingTutorial5 = {
                        <br/><br/>Fill in 0 with "suprised".
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-14`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-14`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -347,7 +347,7 @@ const martyBlocksCodingTutorial5 = {
                        <br/><br/>Fill in 0 with "angry".
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-15`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-15`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -369,7 +369,7 @@ const martyBlocksCodingTutorial5 = {
                        <br/><br/>Fill in 0 with "excited".
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-16`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-16`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -391,7 +391,7 @@ const martyBlocksCodingTutorial5 = {
                        <br/><br/>Place three <b/>wait until</b> blocks like shown below:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-17`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-17`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -414,7 +414,7 @@ const martyBlocksCodingTutorial5 = {
                        <br/>You can get thee <b/>Marty feels</b> blocks from the orange Variables tab.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-18`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-18`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -435,7 +435,7 @@ const martyBlocksCodingTutorial5 = {
                         Finally, we'll in the wait blocks with the relevant equals blocks like shown below:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-19`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-19`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -463,7 +463,7 @@ const martyBlocksCodingTutorial5 = {
 
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-5.step-20`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-5.step-20`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {

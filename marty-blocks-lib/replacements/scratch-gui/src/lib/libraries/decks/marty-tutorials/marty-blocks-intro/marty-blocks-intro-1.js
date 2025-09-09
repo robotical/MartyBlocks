@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/intro/1/";
 
 const martyBlocksIntroTutorial1 = {
-    'marty-blocks-intro-1': {
-        id: "marty-blocks-intro-1",
+    'type-lesson-marty-blocks-intro-1': {
+        id: "type-lesson-marty-blocks-intro-1",
         name: "Moving with MartyBlocks",
         type: "lesson",
         urlId: "moving-with-MartyBlocks",
@@ -22,7 +22,7 @@ const martyBlocksIntroTutorial1 = {
             isRaw={true}
             defaultMessage={"Progress from BlocksJr to MartyBlocks!"}
             description="Welcome to MartyBlocks! Time to recap what we know from MartyBlocks Jr and get used to this new setup. "
-            id={`gui.howtos.lessons.marty-blocks-intro-1.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blocksintro1_cover.png`,
@@ -46,7 +46,7 @@ const martyBlocksIntroTutorial1 = {
                       Welcome to MartyBlocks! <br /><br /> Let’s recap what we know from MartyBlocks Jr to get used to this new setup. 
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -60,7 +60,7 @@ const martyBlocksIntroTutorial1 = {
                     We can find the “start button” in Events. <br /><br /> Drag it to the script area to start coding
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -81,7 +81,7 @@ const martyBlocksIntroTutorial1 = {
                     <br /><br /> Place this below the green flag block.
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -102,7 +102,7 @@ const martyBlocksIntroTutorial1 = {
                     We already have the green flag and get ready block, let's do the rest!
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-4`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -124,7 +124,7 @@ const martyBlocksIntroTutorial1 = {
                     Add the block after "Get ready!" and change the number of steps Marty does in the white space. Type "4" to match the BlocksJr code.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -145,7 +145,7 @@ const martyBlocksIntroTutorial1 = {
                     Add the block after "Walk 4 steps forwards", set the dropdown box to "right" and type "3" to match the BlocksJr code.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -166,7 +166,7 @@ const martyBlocksIntroTutorial1 = {
                     Add the block after "Slide 3 times right", set the dropdown box to "left" and type "2" to match the BlocksJr code.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-7`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-7`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -187,7 +187,7 @@ const martyBlocksIntroTutorial1 = {
                     Add the block after "Slide 2 times left", and type "1" to match the BlocksJr code.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-1.step-8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {

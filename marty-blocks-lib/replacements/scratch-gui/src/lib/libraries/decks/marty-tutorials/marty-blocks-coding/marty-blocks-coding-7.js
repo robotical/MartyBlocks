@@ -13,8 +13,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/coding/7/";
 
 const martyBlocksCodingTutorial7 = {
-    'marty-blocks-coding-7': {
-        id: "marty-blocks-coding-7",
+    'type-lesson-marty-blocks-coding-7': {
+        id: "type-lesson-marty-blocks-coding-7",
         name: "Lists Pt.1 - Marty Memorises Colours",
         type: "lesson",
         urlId: "lists-1",
@@ -22,7 +22,7 @@ const martyBlocksCodingTutorial7 = {
             isRaw={true}
             defaultMessage={"Let's learn how programmers use lists to do so many cool things!"}
             description=""
-            id={`gui.howtos.lessons.marty-blocks-coding-7.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blockscoding7_cover.png`,
@@ -46,7 +46,7 @@ const martyBlocksCodingTutorial7 = {
                     defaultMessage={`
                        In this tutorial, we’re going to learn all about lists!`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-7.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -68,7 +68,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Programmers can control how data is added, removed and stored in the list, as well as talk about data by its number in the list (called an index). 
                        `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-7.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -91,7 +91,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Lists help programmers control and store information easily, even when it changes.
                        `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-coding-7.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
                 },
@@ -106,7 +106,7 @@ const martyBlocksCodingTutorial7 = {
                        <br/><br/>Before we start coding, you'll need 4 unplugged mode tiles laid out in a line like this:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-4`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-4`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -128,7 +128,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Call the list "colours" and click "ok"
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-5`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-5`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -150,7 +150,7 @@ const martyBlocksCodingTutorial7 = {
                        <br/><br/>Select the <b/>add thing to colours</b> block.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-6`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-6`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -171,7 +171,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/> Now our code says, <i/>whatever colour Marty is sensing, add this to the list "colours".</i>
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-7`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-7`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -193,7 +193,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/></i>We find 7 steps enough to go from one unplugged tile to the next, but you can try this out now and change if necessary!
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-8`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-8`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -214,7 +214,7 @@ const martyBlocksCodingTutorial7 = {
                        Add a <b/>pause movement</b> block as shown below:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-9`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-9`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -235,7 +235,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Change <b/>10</b> to <b/>4</b> to repeat the code 4 times.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-10`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-10`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -257,7 +257,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Use the dropdown box to select <b/>both eyes</b>.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-11`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-11`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -279,7 +279,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Replace the coloured circle with <b/>item 1 of colours</b>, and change the number to go 1,2,3 and 4 like shown here:
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-12`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-12`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -301,7 +301,7 @@ const martyBlocksCodingTutorial7 = {
                         <br/><br/>Add a <b/>wait 1 seconds</b> block before each LED block like below, to give enough time for each colour change.
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-13`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-13`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {
@@ -323,7 +323,7 @@ const martyBlocksCodingTutorial7 = {
                         
                     `}
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-7.step-14`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-7.step-14`}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     nextStepActions: [
                         {

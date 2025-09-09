@@ -14,8 +14,8 @@ import { FormattedMessage } from 'react-intl';
 const BUCKET_URL = "https://content.robotical.io/static/tutorials/marty/blocks/intro/2/";
 
 const martyBlocksIntroTutorial2 = {
-    'marty-blocks-intro-2': {
-        id: "marty-blocks-intro-2",
+    'type-lesson-marty-blocks-intro-2': {
+        id: "type-lesson-marty-blocks-intro-2",
         name: "Fun with Sprites",
         type: "lesson",
         urlId: "fun-with-sprites",
@@ -23,7 +23,7 @@ const martyBlocksIntroTutorial2 = {
             isRaw={true}
             defaultMessage={"Learn how to create and control Sprites in MartyBlocks!"}
             description="learn how to create and control a sprite to explore different backdrops."
-            id={`gui.howtos.lessons.marty-blocks-intro-2.description`}
+            id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
         img: `${BUCKET_URL}blocksintro2_cover.png`,
@@ -48,7 +48,7 @@ const martyBlocksIntroTutorial2 = {
                       <b/>Let's use our mouse to control a sprite and explore different backdrops!</b>
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-1`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-1`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
             },
@@ -60,7 +60,7 @@ const martyBlocksIntroTutorial2 = {
                     isRaw={true}
                     defaultMessage={`Choose a sprite to work with - you can select a sprite from the library or get a surprise sprite!`}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-2`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-2`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -80,7 +80,7 @@ const martyBlocksIntroTutorial2 = {
                   Let's select a green flag block to begin - drag it to the script area to start coding.
                         `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-3`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-3`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -100,7 +100,7 @@ const martyBlocksIntroTutorial2 = {
                     Let’s use the “forever” loop so that the sprite keeps following until we tell it to stop with the red stop button.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-4`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-4`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -121,7 +121,7 @@ const martyBlocksIntroTutorial2 = {
                     Add this as our first block in the forever loop.
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-5`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-5`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -142,7 +142,7 @@ const martyBlocksIntroTutorial2 = {
                     Let’s add this below the point towards block, and change the number of steps to 5. 
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-6`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-6`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -164,7 +164,7 @@ const martyBlocksIntroTutorial2 = {
                    Choose ten different backdrops (you’ll know you’ve done this when it says backdrops: 10) 
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-7`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-7`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -186,7 +186,7 @@ const martyBlocksIntroTutorial2 = {
                   Place this between the “when green flag clicked” block and the forever loop, like shown in the sample code here:
                 `}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
@@ -204,7 +204,7 @@ const martyBlocksIntroTutorial2 = {
                     isRaw={true}
                     defaultMessage={"You did it! <br /><br /> <b/>Now every time we click the green flag, we can explore a new backdrop with our sprite! </b><br/><br /> You can use the button with four arrows to watch your sprite in full screen! "}
                     description=""
-                    id={`gui.howtos.lessons.marty-blocks-intro-2.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-2.step-9`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],
