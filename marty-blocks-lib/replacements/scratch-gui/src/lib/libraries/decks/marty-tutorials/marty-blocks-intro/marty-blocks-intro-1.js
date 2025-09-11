@@ -205,7 +205,7 @@ const martyBlocksIntroTutorial1 = {
                     isRaw={true}
                     defaultMessage={"<b/>You did it! You've successfully transitioned from BlocksJr to MartyBlocks.</b> <br /><br /> Now you're ready to explore MartyBlocks and do so many cool things with Marty!"}
                     description=""
-                    id={`gui.howtos.lessons.type-lesson-cog-tutorial-1.step-9`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-1.step-9`}
                     values={{}}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 expectedCode: [],

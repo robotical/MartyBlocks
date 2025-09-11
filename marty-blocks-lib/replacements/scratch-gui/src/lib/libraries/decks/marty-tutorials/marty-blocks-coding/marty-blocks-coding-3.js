@@ -326,7 +326,7 @@ const martyBlocksCodingTutorial3 = {
                         defaultMessage={`You did it! 
                             You now know how to use variables, manipulate them, and make an <b/> iterative loop </b> to help Marty count to ten! `} 
                         description=""
-                        id={`gui.howtos.lessons.marty-blocks-coding-2.step-14`}
+                        id={`gui.howtos.lessons.type-lesson-marty-blocks-coding-3.step-14`}
                         values={{}}
                     >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                     expectedCode: [""],

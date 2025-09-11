@@ -180,7 +180,7 @@ const martyBlocksIntroTutorial4 = {
                         <br/><br/>Now let's tell Marty what to do when he hears the message <i/>party time!</i>
                 `}
                     description=""
-                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step- 8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-4.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {

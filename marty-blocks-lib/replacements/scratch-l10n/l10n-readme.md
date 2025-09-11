@@ -13,7 +13,7 @@ Translations are added in three phases:
 🧩 Steps to Add New Translations (Interface or Extensions)
 	1.	Add base strings
 Add your new English strings to:
-scratch-l10n/editor/custom/en.json
+`replacements/scratch-l10n/editor/custom/en.json`
 	2.	Convert to CSV for translation
 Run: `node marty-blocks-lib/replacements/scratch-l10n/localizations-to-csv.cjs`
 

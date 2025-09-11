@@ -183,7 +183,7 @@ const martyBlocksIntroTutorial3 = {
                   Use the dropdown menu to choose arctic for one, and backdrop1 (the default) for the other.
                 `}
                    description=""
-                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step- 8`}
+                    id={`gui.howtos.lessons.type-lesson-marty-blocks-intro-3.step-8`}
                 >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                  nextStepActions: [
                     {
