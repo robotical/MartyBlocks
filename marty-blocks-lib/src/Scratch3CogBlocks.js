@@ -76,6 +76,8 @@ class Scratch3CogBlocks {
       // SOUND
       [cog_blocks_definitions.sound.cog_playRtttlTune.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.playRtttlTune.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_createRtttlTune.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.createRtttlTune.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_playNoteForTime.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.playNoteForTime.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_playTone.type]: (args, utils) =>
@@ -399,6 +401,15 @@ class Scratch3CogBlocks {
 
     const tune = args[cog_blocks_definitions.sound.cog_playRtttlTune.values.TUNE.name];
     const { durationInMs, command } = _getRtttlTuneCommand(tune);
+    connectedRaft.sendRestMessage(command);
+    await new Promise(resolve => setTimeout(resolve, durationInMs));
+  }
+  async createRtttlTune(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+
+    const rtttl = args[cog_blocks_definitions.sound.cog_createRtttlTune.values.RTTTL.name];
+    const { durationInMs, command } = _getRtttlTuneCommand(rtttl); // TODO: get command given RTTTL string
     connectedRaft.sendRestMessage(command);
     await new Promise(resolve => setTimeout(resolve, durationInMs));
   }

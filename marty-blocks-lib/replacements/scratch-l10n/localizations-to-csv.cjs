@@ -3,7 +3,7 @@ const path = require('path');
 
 // Directory containing the localization files
 // blocks, extensions, interface, paint-editor, custom
-const folder = 'blocks';
+const folder = 'paint-editor';
 const dir = __dirname + '/editor/' + folder;
 
 // Find all .json files in the directory

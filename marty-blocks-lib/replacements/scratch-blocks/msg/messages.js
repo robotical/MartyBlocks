@@ -386,7 +386,10 @@ Blockly.Msg.COG_SET_LED_TO_COLOUR = '%1 %2 Set LED %3 to %4';
 Blockly.Msg.COG_SET_LED_PATTERN = '%1 %2 Set %3 LEDs to pattern %4';
 Blockly.Msg.COG_SET_MIDDLE_LED = '%1 %2 Set middle LED to %3';
 Blockly.Msg.COG_TURN_OFF_LEDS = '%1 %2 Turn off all LEDs';
+
+// Cog Sounds
 Blockly.Msg.COG_PLAY_RTTTL_TUNE = '%1 %2 Play tune %3';
+Blockly.Msg.COG_CREATE_RTTTL_TUNE = '%1 %2 Create tune %3';
 Blockly.Msg.COG_PLAY_NOTE_FOR_TIME = '%1 %2 Play note %3 for %4 seconds';
 Blockly.Msg.COG_START_NOTE = '%1 %2 Start note %3';
 Blockly.Msg.COG_PLAY_TONE = '%1 %2 Play tone from %3 to %4 Hz for %5 seconds';

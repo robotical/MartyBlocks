@@ -774,6 +774,37 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playRtttlTune.typ
     });
   }
 };
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_createRtttlTune.type] = {
+  /**
+   * CREATE RTTTL TUNE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_CREATE_RTTTL_TUNE,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "input_value",
+          name: martyblockslib.cog_blocks_definitions.sound.cog_createRtttlTune.values.RTTTL.name,
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"]
+    });
+  }
+};
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playNoteForTime.type] = {
   /**
    * PLAY NOTE FOR TIME

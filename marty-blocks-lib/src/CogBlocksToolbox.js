@@ -144,6 +144,17 @@ export const cog_blocks_definitions = {
                 }
             }
         },
+        cog_createRtttlTune: {
+            type: 'cog_createRtttlTune',
+            values: {
+                RTTTL: {
+                    name: 'RTTTL',
+                    shadow: {
+                        type: 'rtttl_cog_menu',
+                    },
+                }
+            }
+        },
         cog_playNoteForTime: {
             type: 'cog_playNoteForTime',
             values: {
@@ -658,6 +669,19 @@ class CogBlocks {
                     }
                 },
                 {
+                    opcode: 'createRtttlTune',
+                    text: 'create tune [RTTTL]',
+                    blockType: BlockType.COMMAND,
+                    colour: "#5ba591",
+                    colourSecondary: "#5ba591",
+                    arguments: {
+                        RTTTL: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'A4',
+                        }
+                    }
+                },
+                {
                     opcode: 'playNoteForTime',
                     text: 'play note [NOTE] for [TIME] seconds',
                     blockType: BlockType.COMMAND,
@@ -1109,6 +1133,11 @@ class CogBlocks {
     playRtttlTune(args, util) {
         const tune = args.TUNE;
         return cogBlocks.playRtttlTune(tune);
+    }
+
+    createRtttlTune(args, util) {
+        const rtttl = args.RTTTL;
+        return cogBlocks.createRtttlTune(rtttl);
     }
 
     setVolume(args, util) {
