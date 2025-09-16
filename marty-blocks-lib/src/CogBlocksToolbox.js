@@ -132,6 +132,40 @@ export const cog_blocks_definitions = {
     /* End of Sensor Blocks */
     /* Sound Blocks */
     sound: {
+        cog_composeTune: {
+            type: 'cog_composeTune',
+        },
+        cog_playCustomTune: {
+            type: 'cog_playCustomTune',
+            values: {
+                TUNE: {
+                    name: 'TUNE',
+                }
+            }
+        },
+        cog_tuneFromText: {
+            type: 'cog_tuneFromText',
+            values: {
+                TEXT: {
+                    name: 'TEXT',
+                    shadow: {
+                        type: 'text',
+                        field: {
+                            name: 'TEXT',
+                            value: 'MyTune:d=4,o=5,b=120:c',
+                        }
+                    }
+                }
+            }
+        },
+        cog_tuneGetProperty: {
+            type: 'cog_tuneGetProperty',
+            values: {
+                TUNE: {
+                    name: 'TUNE',
+                }
+            }
+        },
         cog_playRtttlTune: {
             type: 'cog_playRtttlTune',
             values: {
@@ -141,17 +175,6 @@ export const cog_blocks_definitions = {
                         name: 'TUNE',
                         value: ''
                     }
-                }
-            }
-        },
-        cog_createRtttlTune: {
-            type: 'cog_createRtttlTune',
-            values: {
-                RTTTL: {
-                    name: 'RTTTL',
-                    shadow: {
-                        type: 'rtttl_cog_menu',
-                    },
                 }
             }
         },
@@ -669,19 +692,6 @@ class CogBlocks {
                     }
                 },
                 {
-                    opcode: 'createRtttlTune',
-                    text: 'create tune [RTTTL]',
-                    blockType: BlockType.COMMAND,
-                    colour: "#5ba591",
-                    colourSecondary: "#5ba591",
-                    arguments: {
-                        RTTTL: {
-                            type: ArgumentType.STRING,
-                            defaultValue: 'A4',
-                        }
-                    }
-                },
-                {
                     opcode: 'playNoteForTime',
                     text: 'play note [NOTE] for [TIME] seconds',
                     blockType: BlockType.COMMAND,
@@ -1133,11 +1143,6 @@ class CogBlocks {
     playRtttlTune(args, util) {
         const tune = args.TUNE;
         return cogBlocks.playRtttlTune(tune);
-    }
-
-    createRtttlTune(args, util) {
-        const rtttl = args.RTTTL;
-        return cogBlocks.createRtttlTune(rtttl);
     }
 
     setVolume(args, util) {

@@ -74,10 +74,16 @@ class Scratch3CogBlocks {
       // END OF LOOKS
 
       // SOUND
+      [cog_blocks_definitions.sound.cog_composeTune.type]: (args) =>
+        this.composeTune(args),
+      [cog_blocks_definitions.sound.cog_playCustomTune.type]: (args, utils) =>
+        this._cogIsConnectedWrapper(args, utils, this.playCustomTune.bind(this, args, utils)),
+      [cog_blocks_definitions.sound.cog_tuneFromText.type]: (args) =>
+        this.tuneFromText(args),
+      [cog_blocks_definitions.sound.cog_tuneGetProperty.type]: (args) =>
+        this.getTuneProperty(args),
       [cog_blocks_definitions.sound.cog_playRtttlTune.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.playRtttlTune.bind(this, args, utils)),
-      [cog_blocks_definitions.sound.cog_createRtttlTune.type]: (args, utils) =>
-        this._cogIsConnectedWrapper(args, utils, this.createRtttlTune.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_playNoteForTime.type]: (args, utils) =>
         this._cogIsConnectedWrapper(args, utils, this.playNoteForTime.bind(this, args, utils)),
       [cog_blocks_definitions.sound.cog_playTone.type]: (args, utils) =>
@@ -395,21 +401,60 @@ class Scratch3CogBlocks {
   /* END OF LOOKS BLOCKS */
 
   /* SOUND BLOCKS */
+  composeTune(args) {
+    const rawTune = args && Object.prototype.hasOwnProperty.call(args, 'TUNE') ? args.TUNE : '';
+    const bundle = ensureTuneBundle(rawTune);
+    return JSON.stringify(bundle);
+  }
+
+  async playCustomTune(args, utils) {
+    const connectedRaft = getRaftUsingTargetId(utils.target.id);
+    if (!connectedRaft) return 0;
+
+    const rawTune = args && Object.prototype.hasOwnProperty.call(args, 'TUNE') ? args.TUNE : '';
+    const bundle = ensureTuneBundle(rawTune);
+    const command = `audio/rtttl/${bundle.rtttl}`;
+    connectedRaft.sendRestMessage(command);
+    const waitMs = estimateTuneDurationMs(bundle);
+    if (waitMs > 0) {
+      await new Promise(resolve => setTimeout(resolve, waitMs));
+    }
+  }
+
+  tuneFromText(args) {
+    const text = args && Object.prototype.hasOwnProperty.call(args, 'TEXT') ? args.TEXT : '';
+    const bundle = parseTuneFromText(text);
+    return JSON.stringify(bundle);
+  }
+
+  getTuneProperty(args) {
+    const property = args && Object.prototype.hasOwnProperty.call(args, 'PROPERTY') ? args.PROPERTY : '';
+    const rawTune = args && Object.prototype.hasOwnProperty.call(args, 'TUNE') ? args.TUNE : '';
+    const bundle = ensureTuneBundle(rawTune);
+    switch (property) {
+      case 'title':
+        return bundle.title;
+      case 'bpm':
+        return bundle.bpm;
+      case 'defaultDuration':
+        return bundle.defaultDuration;
+      case 'defaultOctave':
+        return bundle.defaultOctave;
+      case 'length':
+        return bundle.notes.length;
+      case 'rtttl':
+        return bundle.rtttl;
+      default:
+        return '';
+    }
+  }
+
   async playRtttlTune(args, utils) {
     const connectedRaft = getRaftUsingTargetId(utils.target.id);
     if (!connectedRaft) return 0;
 
     const tune = args[cog_blocks_definitions.sound.cog_playRtttlTune.values.TUNE.name];
     const { durationInMs, command } = _getRtttlTuneCommand(tune);
-    connectedRaft.sendRestMessage(command);
-    await new Promise(resolve => setTimeout(resolve, durationInMs));
-  }
-  async createRtttlTune(args, utils) {
-    const connectedRaft = getRaftUsingTargetId(utils.target.id);
-    if (!connectedRaft) return 0;
-
-    const rtttl = args[cog_blocks_definitions.sound.cog_createRtttlTune.values.RTTTL.name];
-    const { durationInMs, command } = _getRtttlTuneCommand(rtttl); // TODO: get command given RTTTL string
     connectedRaft.sendRestMessage(command);
     await new Promise(resolve => setTimeout(resolve, durationInMs));
   }
@@ -525,6 +570,315 @@ function getRaftUsingTargetId(targetId) {
   return raft;
 }
 
+const TUNE_MAX_EVENTS = 256;
+const TUNE_NOTE_PITCHES = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
+const TUNE_NOTE_LENGTHS = [1, 2, 4, 8, 16, 32];
+const TUNE_OCTAVES = [3, 4, 5, 6, 7];
+const DEFAULT_TUNE_BUNDLE = {
+  schemaVersion: 1,
+  title: 'MyTune',
+  bpm: 120,
+  defaultDuration: 4,
+  defaultOctave: 5,
+  notes: [],
+  rtttl: 'MyTune:d=4,o=5,b=120:'
+};
+
+function cloneTuneBundle(bundle) {
+  return JSON.parse(JSON.stringify(bundle));
+}
+
+function sanitiseTuneTitle(title) {
+  if (title === null || title === undefined) {
+    return DEFAULT_TUNE_BUNDLE.title;
+  }
+  const cleaned = String(title)
+    .trim()
+    .replace(/[^A-Za-z0-9_-]+/g, '_');
+  return cleaned.length ? cleaned : DEFAULT_TUNE_BUNDLE.title;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function normaliseTuneBpm(bpm) {
+  const numeric = Number(bpm);
+  if (!numeric && numeric !== 0) {
+    return DEFAULT_TUNE_BUNDLE.bpm;
+  }
+  return clamp(Math.round(numeric), 25, 900);
+}
+
+function normaliseTuneDuration(duration) {
+  const numeric = Number(duration);
+  if (TUNE_NOTE_LENGTHS.indexOf(numeric) !== -1) {
+    return numeric;
+  }
+  return DEFAULT_TUNE_BUNDLE.defaultDuration;
+}
+
+function normaliseTuneOctave(octave) {
+  const numeric = Number(octave);
+  if (TUNE_OCTAVES.indexOf(numeric) !== -1) {
+    return numeric;
+  }
+  return DEFAULT_TUNE_BUNDLE.defaultOctave;
+}
+
+function sanitiseTuneNotes(notes) {
+  if (!Array.isArray(notes)) {
+    return [];
+  }
+  const cleaned = [];
+  for (let i = 0; i < notes.length && cleaned.length < TUNE_MAX_EVENTS; i++) {
+    const event = notes[i];
+    if (!event || typeof event !== 'object') {
+      continue;
+    }
+    const kind = event.kind === 'rest' ? 'rest' : 'note';
+    const entry = {
+      kind: kind,
+      dotted: Boolean(event.dotted)
+    };
+    if (event.length !== undefined) {
+      entry.length = normaliseTuneDuration(event.length);
+    }
+    if (kind === 'note') {
+      let pitch = typeof event.pitch === 'string' ? event.pitch.toLowerCase() : 'c';
+      if (TUNE_NOTE_PITCHES.indexOf(pitch) === -1) {
+        pitch = 'c';
+      }
+      entry.pitch = pitch;
+      if (event.octave !== undefined && event.octave !== null) {
+        entry.octave = normaliseTuneOctave(event.octave);
+      }
+    }
+    cleaned.push(entry);
+  }
+  return cleaned;
+}
+
+function ensureTuneBundle(raw) {
+  let parsed = raw;
+  if (typeof raw === 'string') {
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      parsed = null;
+    }
+  }
+  const base = parsed && typeof parsed === 'object' ? parsed : {};
+  const bundle = {
+    schemaVersion: 1,
+    title: sanitiseTuneTitle(base.title),
+    bpm: normaliseTuneBpm(base.bpm !== undefined ? base.bpm : DEFAULT_TUNE_BUNDLE.bpm),
+    defaultDuration: normaliseTuneDuration(base.defaultDuration !== undefined ? base.defaultDuration : DEFAULT_TUNE_BUNDLE.defaultDuration),
+    defaultOctave: normaliseTuneOctave(base.defaultOctave !== undefined ? base.defaultOctave : DEFAULT_TUNE_BUNDLE.defaultOctave),
+    notes: sanitiseTuneNotes(base.notes || [])
+  };
+  const rtttlBuild = buildTuneRtttl(bundle);
+  bundle.notes = sanitiseTuneNotes(bundle.notes);
+  bundle.rtttl = rtttlBuild.rtttl;
+  return bundle;
+}
+
+function buildTuneRtttl(tune) {
+  const issues = [];
+  const title = sanitiseTuneTitle(tune.title);
+  const bpm = normaliseTuneBpm(tune.bpm);
+  const defaultDuration = normaliseTuneDuration(tune.defaultDuration);
+  const defaultOctave = normaliseTuneOctave(tune.defaultOctave);
+  const events = Array.isArray(tune.notes) ? tune.notes : [];
+
+  if (events.length > TUNE_MAX_EVENTS) {
+    issues.push('too_many_notes');
+  }
+
+  const body = [];
+  for (let i = 0; i < events.length && i < TUNE_MAX_EVENTS; i++) {
+    const event = events[i];
+    if (!event || typeof event !== 'object') {
+      continue;
+    }
+    const kind = event.kind === 'rest' ? 'rest' : 'note';
+    const pieces = [];
+    const duration = normaliseTuneDuration(event.length !== undefined ? event.length : defaultDuration);
+    if (duration !== defaultDuration) {
+      pieces.push(String(duration));
+    }
+    if (kind === 'rest') {
+      pieces.push('p');
+    } else {
+      let pitch = typeof event.pitch === 'string' ? event.pitch.toLowerCase() : 'c';
+      if (TUNE_NOTE_PITCHES.indexOf(pitch) === -1) {
+        pitch = 'c';
+      }
+      pieces.push(pitch);
+      const octave = event.octave !== undefined && event.octave !== null ? normaliseTuneOctave(event.octave) : defaultOctave;
+      if (octave !== defaultOctave) {
+        pieces.push(String(octave));
+      }
+    }
+    if (event.dotted) {
+      pieces.push('.');
+    }
+    body.push(pieces.join(''));
+  }
+
+  const header = `${title}:d=${defaultDuration},o=${defaultOctave},b=${bpm}`;
+  return {
+    rtttl: `${header}:${body.join(',')}`,
+    issues: issues
+  };
+}
+
+function estimateTuneDurationMs(tune) {
+  const bundle = ensureTuneBundle(tune);
+  const beatMs = 60000 / bundle.bpm;
+  let totalMs = 0;
+  const defaultDuration = bundle.defaultDuration;
+  for (let i = 0; i < bundle.notes.length; i++) {
+    const event = bundle.notes[i];
+    const duration = normaliseTuneDuration(event.length !== undefined ? event.length : defaultDuration);
+    let ms = beatMs * (4 / duration);
+    if (event.dotted) {
+      ms *= 1.5;
+    }
+    totalMs += ms;
+  }
+  totalMs = clamp(totalMs, 0, 60000 * 10);
+  return Math.round(totalMs) + 100;
+}
+
+function parseTuneFromText(text) {
+  if (typeof text !== 'string') {
+    return ensureTuneBundle(DEFAULT_TUNE_BUNDLE);
+  }
+  const trimmed = text.trim();
+  if (!trimmed.length) {
+    return ensureTuneBundle(DEFAULT_TUNE_BUNDLE);
+  }
+
+  const sections = trimmed.split(':');
+  if (sections.length < 3) {
+    return ensureTuneBundle(DEFAULT_TUNE_BUNDLE);
+  }
+  const title = sections[0];
+  const header = sections[1];
+  const body = sections.slice(2).join(':');
+
+  const headerParts = header.split(',');
+  let defaultDuration = DEFAULT_TUNE_BUNDLE.defaultDuration;
+  let defaultOctave = DEFAULT_TUNE_BUNDLE.defaultOctave;
+  let bpm = DEFAULT_TUNE_BUNDLE.bpm;
+  headerParts.forEach(part => {
+    const [key, value] = part.split('=');
+    if (!key || !value) return;
+    switch (key.trim()) {
+      case 'd':
+        defaultDuration = normaliseTuneDuration(value);
+        break;
+      case 'o':
+        defaultOctave = normaliseTuneOctave(value);
+        break;
+      case 'b':
+        bpm = normaliseTuneBpm(value);
+        break;
+      default:
+        break;
+    }
+  });
+
+  const rawEvents = body.split(',');
+  const events = [];
+  rawEvents.forEach(token => {
+    let noteStr = token.trim();
+    if (!noteStr) return;
+    let dotted = false;
+    if (noteStr.endsWith('.')) {
+      dotted = true;
+      noteStr = noteStr.slice(0, -1);
+    }
+    const lengthMatch = noteStr.match(/^(\d+)/);
+    let length = null;
+    if (lengthMatch) {
+      length = Number(lengthMatch[1]);
+      noteStr = noteStr.slice(lengthMatch[1].length);
+    }
+    if (!noteStr.length) {
+      return;
+    }
+    const kindChar = noteStr.charAt(0).toLowerCase();
+    if (kindChar === 'p') {
+      const restEvent = {
+        kind: 'rest',
+        dotted: dotted
+      };
+      if (length !== null) {
+        restEvent.length = length;
+      }
+      events.push(restEvent);
+      return;
+    }
+    let pitch = kindChar;
+    let remainder = noteStr.slice(1);
+    if (remainder.startsWith('#')) {
+      pitch += '#';
+      remainder = remainder.slice(1);
+    }
+    const octaveMatch = remainder.match(/^(\d+)/);
+    let octave = null;
+    if (octaveMatch) {
+      octave = Number(octaveMatch[1]);
+    }
+    const noteEvent = {
+      kind: 'note',
+      pitch: pitch,
+      dotted: dotted
+    };
+    if (length !== null) {
+      noteEvent.length = length;
+    }
+    if (octave !== null) {
+      noteEvent.octave = octave;
+    }
+    events.push(noteEvent);
+  });
+
+  return ensureTuneBundle({
+    schemaVersion: 1,
+    title: title,
+    bpm: bpm,
+    defaultDuration: defaultDuration,
+    defaultOctave: defaultOctave,
+    notes: events
+  });
+}
+
+function parseNotesValue(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      if (parsed && typeof parsed === 'object' && Array.isArray(parsed.notes)) {
+        return parsed.notes;
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+  if (value && typeof value === 'object' && Array.isArray(value.notes)) {
+    return value.notes;
+  }
+  return [];
+}
+
 function calculateBPM(seconds, d = 4) {
   // Calculate the BPM based on the fixed d value and the given duration in seconds
   let bpm = 240 / (seconds * d);
@@ -536,6 +890,13 @@ function calculateBPM(seconds, d = 4) {
 }
 
 function _getRtttlTuneCommand(tune) {
+  if (typeof tune === 'string' && tune.indexOf(':') !== -1) {
+    const bundle = parseTuneFromText(tune);
+    return {
+      durationInMs: estimateTuneDurationMs(bundle),
+      command: `audio/rtttl/${bundle.rtttl}`
+    };
+  }
   let durationInMs, command;
   switch (tune) {
     case "disbelief":

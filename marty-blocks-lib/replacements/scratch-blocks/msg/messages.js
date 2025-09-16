@@ -388,6 +388,17 @@ Blockly.Msg.COG_SET_MIDDLE_LED = '%1 %2 Set middle LED to %3';
 Blockly.Msg.COG_TURN_OFF_LEDS = '%1 %2 Turn off all LEDs';
 
 // Cog Sounds
+Blockly.Msg.COG_TUNE_CREATE = 'create tune %1';
+Blockly.Msg.COG_PLAY_TUNE_ON_COG = '%1 %2 play tune %3 on Cog';
+Blockly.Msg.COG_TUNE_FROM_TEXT = 'tune from text %1';
+Blockly.Msg.COG_TUNE_GET_PROPERTY = 'get %1 of tune %2';
+Blockly.Msg.COG_TUNE_PROPERTY_TITLE = 'title';
+Blockly.Msg.COG_TUNE_PROPERTY_BPM = 'tempo (BPM)';
+Blockly.Msg.COG_TUNE_PROPERTY_DEFAULT_DURATION = 'default duration';
+Blockly.Msg.COG_TUNE_PROPERTY_DEFAULT_OCTAVE = 'default octave';
+Blockly.Msg.COG_TUNE_PROPERTY_LENGTH = 'event count';
+Blockly.Msg.COG_TUNE_PROPERTY_RTTTL = 'RTTTL text';
+Blockly.Msg.COG_TUNE_PROPERTY_NOTES = 'notes';
 Blockly.Msg.COG_PLAY_RTTTL_TUNE = '%1 %2 Play tune %3';
 Blockly.Msg.COG_CREATE_RTTTL_TUNE = '%1 %2 Create tune %3';
 Blockly.Msg.COG_PLAY_NOTE_FOR_TIME = '%1 %2 Play note %3 for %4 seconds';
@@ -400,6 +411,36 @@ Blockly.Msg.COG_SET_VOLUME_TO_PERCENTAGE = '%1 %2 Set volume to %3%';
 Blockly.Msg.COG_PLAY_SOUND_AT_FREQUENCY = '%1 %2 Play sound at frequency %3';
 
 // ====== End of COG Messages ======
+
+
+// Tune Composer UI
+Blockly.Msg.TUNE_COMPOSER_TOOLTIP = 'Compose a Cog tune.';
+Blockly.Msg.TUNE_COMPOSER_EDIT_BUTTON = 'edit...';
+Blockly.Msg.TUNE_COMPOSER_TITLE = 'Title';
+Blockly.Msg.TUNE_COMPOSER_BPM = 'BPM';
+Blockly.Msg.TUNE_COMPOSER_DEFAULT_DURATION = 'Default length';
+Blockly.Msg.TUNE_COMPOSER_DEFAULT_OCTAVE = 'Default octave';
+Blockly.Msg.TUNE_COMPOSER_DOTTED = 'Dotted';
+Blockly.Msg.TUNE_COMPOSER_REST = 'Rest';
+Blockly.Msg.TUNE_COMPOSER_MAX_EVENTS_WARNING = 'Limit to 256 notes for reliable playback.';
+Blockly.Msg.TUNE_COMPOSER_EVENT_KIND = 'Event';
+Blockly.Msg.TUNE_COMPOSER_KIND_NOTE = 'Note';
+Blockly.Msg.TUNE_COMPOSER_KIND_REST = 'Rest';
+Blockly.Msg.TUNE_COMPOSER_NOTE_LENGTH = 'Length';
+Blockly.Msg.TUNE_COMPOSER_PERNOTE_DOTTED = 'Dotted';
+Blockly.Msg.TUNE_COMPOSER_NOTE_PITCH = 'Pitch';
+Blockly.Msg.TUNE_COMPOSER_NOTE_OCTAVE = 'Octave';
+Blockly.Msg.TUNE_COMPOSER_DEFAULT_OPTION = 'default';
+Blockly.Msg.TUNE_COMPOSER_DELETE_EVENT = 'Delete';
+Blockly.Msg.TUNE_COMPOSER_MOVE_LEFT = '<';
+Blockly.Msg.TUNE_COMPOSER_MOVE_RIGHT = '>';
+Blockly.Msg.TUNE_COMPOSER_UNDO = 'Undo';
+Blockly.Msg.TUNE_COMPOSER_REDO = 'Redo';
+Blockly.Msg.TUNE_COMPOSER_CLEAR = 'Clear';
+Blockly.Msg.TUNE_COMPOSER_PLAY = 'Play';
+Blockly.Msg.TUNE_COMPOSER_SAVE = 'Save';
+Blockly.Msg.TUNE_COMPOSER_CANCEL = 'Cancel';
+Blockly.Msg.TUNE_COMPOSER_HIGH_BPM_WARNING = 'Tempos above 240 BPM may not play reliably.';
 
 
 // Marty Messages
@@ -800,4 +841,3 @@ Blockly.Msg.COLOUR_CYAN = 'Cyan';
 Blockly.Msg.COLOUR_BLUE = 'Blue';
 Blockly.Msg.COLOUR_PURPLE = 'Purple';
 Blockly.Msg.COLOUR_PINK = 'Pink';
-

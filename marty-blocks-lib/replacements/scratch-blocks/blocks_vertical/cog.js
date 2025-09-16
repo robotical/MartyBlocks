@@ -735,6 +735,187 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.looks.cog_turnOffLEDs.type]
 /* END OF LOOKS BLOCKS */
 
 /* SOUND BLOCKS */
+const DEFAULT_TUNE_BUNDLE = JSON.stringify({
+  schemaVersion: 1,
+  title: "MyTune",
+  bpm: 120,
+  defaultDuration: 4,
+  defaultOctave: 5,
+  notes: [],
+  rtttl: "MyTune:d=4,o=5,b=120:"
+});
+
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_composeTune.type] = {
+  /**
+   * COMPOSE TUNE REPORTER
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_TUNE_CREATE,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        // {
+        //   type: "field_label_serializable",
+        //   name: "TUNE_TITLE",
+        //   text: "MyTune",
+        // },
+        {
+          type: "field_tune_composer",
+          name: "TUNE",
+        },
+      ],
+      inputsInline: true,
+      outputShape: Blockly.OUTPUT_SHAPE_ROUND,
+      output: "Tune",
+      extensions: ["colours_sounds"],
+    });
+  },
+  mutationToDom: function () {
+    const container = document.createElement("mutation");
+    const field = this.getField("TUNE");
+    if (!field) {
+      return container;
+    }
+    const raw = field.getValue();
+    if (!raw) {
+      return container;
+    }
+    try {
+      container.setAttribute("tune", encodeURIComponent(raw));
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.rtttl) {
+        container.setAttribute("rtttl", parsed.rtttl);
+      }
+      if (parsed && parsed.schemaVersion != null) {
+        container.setAttribute("version", parsed.schemaVersion);
+      }
+    } catch (e) {
+      console.warn("Unable to serialise tune mutation", e);
+    }
+    return container;
+  },
+  domToMutation: function (xmlElement) {
+    const field = this.getField("TUNE");
+    if (!field) {
+      return;
+    }
+    const encoded = xmlElement.getAttribute("tune");
+    if (encoded) {
+      try {
+        const raw = decodeURIComponent(encoded);
+        field.setValue(raw);
+      } catch (e) {
+        console.warn("Unable to restore tune mutation", e);
+        field.setValue(DEFAULT_TUNE_BUNDLE);
+      }
+    } else {
+      field.setValue(DEFAULT_TUNE_BUNDLE);
+    }
+    try {
+      const parsed = JSON.parse(field.getValue());
+      // this.setFieldValue(parsed.title || "MyTune", "TUNE_TITLE");
+      // field.setText(parsed.title || "MyTune");
+    } catch (e) {
+      // this.setFieldValue("MyTune", "TUNE_TITLE");
+      // field.setText("MyTune");
+    }
+  },
+};
+
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playCustomTune.type] = {
+  /**
+   * PLAY CUSTOM RTTTL TUNE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_PLAY_TUNE_ON_COG,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_image",
+          src:
+            Blockly.mainWorkspace.options.pathToMedia +
+            "extensions/cog-small.svg",
+          width: 40,
+          height: 40,
+        },
+        {
+          type: "field_vertical_separator",
+        },
+        {
+          type: "input_value",
+          name: "TUNE",
+        },
+      ],
+      extensions: ["colours_sounds", "shape_statement"],
+    });
+  },
+};
+
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_tuneFromText.type] = {
+  /**
+   * CONVERT RTTTL STRING TO TUNE BUNDLE
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_TUNE_FROM_TEXT,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "input_value",
+          name: "TEXT",
+        },
+      ],
+      inputsInline: true,
+      outputShape: Blockly.OUTPUT_SHAPE_ROUND,
+      output: "Tune",
+      extensions: ["colours_sounds"],
+    });
+  },
+};
+
+Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_tuneGetProperty.type] = {
+  /**
+   * GET TUNE PROPERTY REPORTER
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.jsonInit({
+      message0: Blockly.Msg.COG_TUNE_GET_PROPERTY,
+      category: Blockly.Categories.sound,
+      colour: "#ffab19",
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "PROPERTY",
+          options: [
+            [Blockly.Msg.COG_TUNE_PROPERTY_TITLE, "title"],
+            [Blockly.Msg.COG_TUNE_PROPERTY_BPM, "bpm"],
+            [Blockly.Msg.COG_TUNE_PROPERTY_DEFAULT_DURATION, "defaultDuration"],
+            [Blockly.Msg.COG_TUNE_PROPERTY_DEFAULT_OCTAVE, "defaultOctave"],
+            [Blockly.Msg.COG_TUNE_PROPERTY_LENGTH, "length"],
+            [Blockly.Msg.COG_TUNE_PROPERTY_RTTTL, "rtttl"],
+          ],
+        },
+        {
+          type: "input_value",
+          name: "TUNE",
+        },
+      ],
+      inputsInline: true,
+      outputShape: Blockly.OUTPUT_SHAPE_ROUND,
+      output: "String",
+      extensions: ["colours_sounds"],
+    });
+  },
+};
+
 Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playRtttlTune.type] = {
   /**
    * PLAY RTTTL TUNE
@@ -768,37 +949,6 @@ Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_playRtttlTune.typ
             [Blockly.Msg.DROPDOWN_OPTION_NOSOUND, 'no'],
             [Blockly.Msg.DROPDOWN_OPTION_WHISTLESOUND, 'whistle'],
           ]
-        },
-      ],
-      extensions: ["colours_sounds", "shape_statement"]
-    });
-  }
-};
-Blockly.Blocks[martyblockslib.cog_blocks_definitions.sound.cog_createRtttlTune.type] = {
-  /**
-   * CREATE RTTTL TUNE
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.jsonInit({
-      message0: Blockly.Msg.COG_CREATE_RTTTL_TUNE,
-      category: Blockly.Categories.sound,
-      colour: "#ffab19",
-      args0: [
-        {
-          type: "field_image",
-          src:
-            Blockly.mainWorkspace.options.pathToMedia +
-            "extensions/cog-small.svg",
-          width: 40,
-          height: 40
-        },
-        {
-          type: "field_vertical_separator",
-        },
-        {
-          type: "input_value",
-          name: martyblockslib.cog_blocks_definitions.sound.cog_createRtttlTune.values.RTTTL.name,
         },
       ],
       extensions: ["colours_sounds", "shape_statement"]
