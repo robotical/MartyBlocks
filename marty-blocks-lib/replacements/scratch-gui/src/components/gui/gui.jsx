@@ -44,6 +44,7 @@ import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import saveIcon from "./icon--save.svg";
+import robotSpeakingIcon from "./icon--robot-speaking.svg";
 import martyMachineIcon from "./icon--marty-machine.svg";
 
 import Controls from "../../containers/controls.jsx";
@@ -51,6 +52,7 @@ import StageHeader from "../../containers/editor-stagesize-header.jsx";
 import MonitorList from "../../containers/monitor-list.jsx";
 
 import KeyboardCaller from "../keyboard-caller/keyboard-caller.jsx";
+import TalkWithMartyTab from '../../containers/talk-with-marty-tab.jsx';
 
 
 const messages = defineMessages({
@@ -118,6 +120,7 @@ const GUIComponent = props => {
     onActivateSaveLoadTab,
     onActivateSoundsTab,
     onActivateMartyMachineTab,
+    onActivateTalkWithMartyTab,
     onActivateTab,
     onClickLogo,
     onExtensionButtonClick,
@@ -134,6 +137,7 @@ const GUIComponent = props => {
     onTelemetryModalOptOut,
     saveLoadTabVisible,
     martyMachineTabVisible,
+    talkWithMartyTabVisible,
     showComingSoon,
     soundsTabVisible,
     stageSizeForSensors,
@@ -342,6 +346,20 @@ const GUIComponent = props => {
                   </Tab>
                   <Tab
                     className={tabClassNames.tab}
+                    onClick={onActivateTalkWithMartyTab}
+                  >
+                    <img
+                      draggable={false}
+                      src={robotSpeakingIcon}
+                    />
+                    <FormattedMessage
+                      defaultMessage="Talk with Marty"
+                      description="Button to toggle Talk with Marty tab"
+                      id="gui.gui.toggleTalkWithMartyTab"
+                    />
+                  </Tab>
+                  <Tab
+                    className={tabClassNames.tab}
                     onClick={onActivateSaveLoadTab}
                   >
                     <img draggable={false} src={saveIcon} />
@@ -403,6 +421,9 @@ const GUIComponent = props => {
                 </TabPanel>
                 <TabPanel className={tabClassNames.tabPanel}>
                   {martyMachineTabVisible ? <MartyMachineTab vm={vm} /> : null}
+                </TabPanel>
+                <TabPanel className={tabClassNames.tabPanel}>
+                  {talkWithMartyTabVisible ? <TalkWithMartyTab vm={vm} /> : null}
                 </TabPanel>
                 <TabPanel
                   className={[
@@ -492,6 +513,7 @@ GUIComponent.propTypes = {
   onActivateCostumesTab: PropTypes.func,
   onActivateSoundsTab: PropTypes.func,
   onActivateMartyMachineTab: PropTypes.func,
+  onActivateTalkWithMartyTab: PropTypes.func,
   onActivateSaveLoadTab: PropTypes.func,
   onActivateTab: PropTypes.func,
   onClickAccountNav: PropTypes.func,
@@ -514,6 +536,7 @@ GUIComponent.propTypes = {
   onToggleLoginOpen: PropTypes.func,
   renderLogin: PropTypes.func,
   martyMachineTabVisible: PropTypes.bool,
+  talkWithMartyTabVisible: PropTypes.bool,
   saveLoadTabVisible: PropTypes.bool,
   showComingSoon: PropTypes.bool,
   soundsTabVisible: PropTypes.bool,

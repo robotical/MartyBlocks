@@ -746,6 +746,7 @@
   "gui.menuBar.showCode": "Show Code",
   "gui.gui.toggleMartyMachineTab": "Machine Learning",
   "gui.gui.toggleSaveLoadTab": "Save/Load",
+  "gui.gui.toggleTalkWithMartyTab": "Talk with Marty",
   "gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.name": "Cog and Marty Interaction",
   "gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.description": "Learn how <b>Cog</b> and <b>Marty</b> can interact with each other",
   "gui.howtos.lessons.type-lesson-cog-and-marty-tutorial.step-1": "In this tutorial we will learn how <b>Cog</b> and <b>Marty</b> can interact with each other. Press 'Next' to start!",

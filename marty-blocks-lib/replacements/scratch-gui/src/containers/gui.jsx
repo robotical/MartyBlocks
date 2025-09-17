@@ -17,7 +17,8 @@ import {
     COSTUMES_TAB_INDEX,
     SOUNDS_TAB_INDEX,
     MARTY_MACHINE_TAB_INDEX,
-    SAVE_LOAD_TAB_INDEX
+    SAVE_LOAD_TAB_INDEX,
+    TALK_WITH_MARTY_TAB_INDEX
 } from '../reducers/editor-tab';
 
 import {
@@ -168,6 +169,7 @@ const mapStateToProps = state => {
         saveLoadTabVisible: state.scratchGui.editorTab.activeTabIndex === SAVE_LOAD_TAB_INDEX,
         martyMachineTabVisible: state.scratchGui.editorTab.activeTabIndex === MARTY_MACHINE_TAB_INDEX,
         soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
+        talkWithMartyTabVisible: state.scratchGui.editorTab.activeTabIndex === TALK_WITH_MARTY_TAB_INDEX,
         targetIsStage: (
             state.scratchGui.targets.stage &&
             state.scratchGui.targets.stage.id === state.scratchGui.targets.editingTarget
@@ -185,6 +187,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onActivateMartyMachineTab: () => dispatch(activateTab(MARTY_MACHINE_TAB_INDEX)),
     onActivateSaveLoadTab: () => dispatch(activateTab(SAVE_LOAD_TAB_INDEX)),
+    onActivateTalkWithMartyTab: () => dispatch(activateTab(TALK_WITH_MARTY_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
     onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())
