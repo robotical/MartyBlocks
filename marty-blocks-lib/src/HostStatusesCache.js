@@ -2,7 +2,7 @@ const BOOTSTRAP_FLAG = "__martyNetworkBootstrapped";
 if (!window[BOOTSTRAP_FLAG]) {
     window[BOOTSTRAP_FLAG] = true;
 
-    const TIMEOUT_MS = 10000; 
+    const TIMEOUT_MS = 100000; 
 
     const makeAlertMessage = (url, timeoutMs) => `Whoops — the request to \`${url}\` took longer than ${timeoutMs / 1000} seconds and timed out.\n\n` +
                     `That usually means your connection dropped or a firewall is blocking access. ` +

@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
@@ -68,6 +69,10 @@ const messages = defineMessages({
     transcriptDownload: {
         id: 'talkWithMarty.transcriptDownload',
         defaultMessage: 'Download Transcript'
+    },
+    transcriptClear: {
+        id: 'talkWithMarty.transcriptClear',
+        defaultMessage: 'Clear Transcript'
     },
     sendMessageLabel: {
         id: 'talkWithMarty.sendMessageLabel',
@@ -152,6 +157,42 @@ const messages = defineMessages({
     safeguardsPlaceholder: {
         id: 'talkWithMarty.safeguardsPlaceholder',
         defaultMessage: 'Safety rules or restricted topics'
+    },
+    recordingIndicator: {
+        id: 'talkWithMarty.recordingIndicator',
+        defaultMessage: 'Recording…'
+    },
+    recordingUnsupported: {
+        id: 'talkWithMarty.recordingUnsupported',
+        defaultMessage: 'Audio recording is not supported in this browser.'
+    },
+    recordingPermissionDenied: {
+        id: 'talkWithMarty.recordingPermissionDenied',
+        defaultMessage: 'Microphone permission was denied. Please enable access to continue.'
+    },
+    recordingDeviceNotFound: {
+        id: 'talkWithMarty.recordingDeviceNotFound',
+        defaultMessage: 'No microphone was found. Connect a mic and try again.'
+    },
+    recordingGenericError: {
+        id: 'talkWithMarty.recordingGenericError',
+        defaultMessage: 'Something went wrong while recording audio. Please try again.'
+    },
+    lastRecordingLabel: {
+        id: 'talkWithMarty.lastRecordingLabel',
+        defaultMessage: 'Last recording'
+    },
+    processingRecording: {
+        id: 'talkWithMarty.processingRecording',
+        defaultMessage: 'Processing recording…'
+    },
+    speechRequestFailed: {
+        id: 'talkWithMarty.speechRequestFailed',
+        defaultMessage: 'Could not process the recording. Please try again.'
+    },
+    textRequestFailed: {
+        id: 'talkWithMarty.textRequestFailed',
+        defaultMessage: 'Could not send message. Please try again.'
     }
 });
 
@@ -172,8 +213,14 @@ class TalkWithMarty extends React.Component {
                 personalityVoice: '',
                 behavior: '',
                 safeguards: '',
-                responseLength: 'medium'
-            }
+                responseLength: 'short'
+            },
+            isMicLoading: false,
+            recordingError: null,
+            lastRecordingUrl: '',
+            isProcessingAudio: false,
+            isSendingText: false,
+            messageError: null
         };
 
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
@@ -183,6 +230,58 @@ class TalkWithMarty extends React.Component {
         this.handleSendMessage = this.handleSendMessage.bind(this);
         this.handleDownloadTranscript = this.handleDownloadTranscript.bind(this);
         this.handleSettingsChange = this.handleSettingsChange.bind(this);
+        this.handleClearTranscript = this.handleClearTranscript.bind(this);
+        this.startRecording = this.startRecording.bind(this);
+        this.stopRecording = this.stopRecording.bind(this);
+        this.ensureMediaStream = this.ensureMediaStream.bind(this);
+        this.handleAudioChunk = this.handleAudioChunk.bind(this);
+        this.handleRecorderStop = this.handleRecorderStop.bind(this);
+        this.handleRecordingError = this.handleRecordingError.bind(this);
+        this.disposeMedia = this.disposeMedia.bind(this);
+        this.processRecording = this.processRecording.bind(this);
+        this.buildWhisperFormData = this.buildWhisperFormData.bind(this);
+        this.getExtensionFromMime = this.getExtensionFromMime.bind(this);
+        this.buildConversationHistory = this.buildConversationHistory.bind(this);
+        this.buildLLMSettingsForRequest = this.buildLLMSettingsForRequest.bind(this);
+        this.shouldIncludeSpeech = this.shouldIncludeSpeech.bind(this);
+        this.buildSpeechRequestPayload = this.buildSpeechRequestPayload.bind(this);
+        this.sendSpeechRequest = this.sendSpeechRequest.bind(this);
+        this.applySpeechResponse = this.applySpeechResponse.bind(this);
+        this.createTranscriptEntry = this.createTranscriptEntry.bind(this);
+        this.appendTranscriptEntries = this.appendTranscriptEntries.bind(this);
+        this.buildTextRequestPayload = this.buildTextRequestPayload.bind(this);
+        this.sendTextRequest = this.sendTextRequest.bind(this);
+        this.handleSpeechAudioResult = this.handleSpeechAudioResult.bind(this);
+        this.postJson = this.postJson.bind(this);
+
+        this.mediaStream = null;
+        this.mediaRecorder = null;
+        this.audioChunks = [];
+        this.isComponentMounted = false;
+        this.mediaSupportAvailable = typeof window !== 'undefined' && typeof window.MediaRecorder !== 'undefined';
+        this.martySpeechUrl = '';
+    }
+
+    componentDidMount() {
+        this.isComponentMounted = true;
+    }
+
+    componentWillUnmount() {
+        this.isComponentMounted = false;
+        this.disposeMedia();
+        if (this.state.lastRecordingUrl) {
+            const urlCreator = window.URL || window.webkitURL;
+            if (urlCreator) {
+                urlCreator.revokeObjectURL(this.state.lastRecordingUrl);
+            }
+        }
+        if (this.martySpeechUrl) {
+            const urlCreator = window.URL || window.webkitURL;
+            if (urlCreator) {
+                urlCreator.revokeObjectURL(this.martySpeechUrl);
+            }
+            this.martySpeechUrl = '';
+        }
     }
 
     handleConversationModeChange(mode) {
@@ -204,25 +303,29 @@ class TalkWithMarty extends React.Component {
             isListening: shouldResetListening ? false : isListening
         }));
 
+        if (shouldResetListening) {
+            this.stopRecording();
+        }
+
         // Placeholder for future integration
         // eslint-disable-next-line no-console
         console.log('[TalkWithMarty] Interaction mode changed:', mode);
     }
 
     handleToggleListening() {
-        this.setState(({ isListening }) => {
-            const nextListening = !isListening;
+        if (this.state.isMicLoading || this.state.isProcessingAudio) {
+            return;
+        }
 
-            // Placeholder for future integration
-            // eslint-disable-next-line no-console
-            console.log('[TalkWithMarty] Push-to-Talk listening state:', nextListening ? 'start' : 'stop');
-
-            return { isListening: nextListening };
-        });
+        if (this.state.isListening) {
+            this.stopRecording();
+        } else {
+            this.startRecording();
+        }
     }
 
     handleMessageChange(event) {
-        this.setState({ currentMessage: event.target.value });
+        this.setState({ currentMessage: event.target.value, messageError: null });
     }
 
     handleSendMessage(event) {
@@ -243,12 +346,26 @@ class TalkWithMarty extends React.Component {
 
         this.setState(prevState => ({
             transcript: [...prevState.transcript, nextEntry],
-            currentMessage: ''
-        }));
-
-        // Placeholder for future integration
-        // eslint-disable-next-line no-console
-        console.log('[TalkWithMarty] handleSendMessage', trimmedMessage);
+            currentMessage: '',
+            messageError: null,
+            isSendingText: true
+        }), () => {
+            this.sendTextRequest(trimmedMessage)
+                .catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.error('[TalkWithMarty] Text request failed', error);
+                    if (this.isComponentMounted) {
+                        this.setState({
+                            messageError: this.props.intl.formatMessage(messages.textRequestFailed)
+                        });
+                    }
+                })
+                .finally(() => {
+                    if (this.isComponentMounted) {
+                        this.setState({ isSendingText: false });
+                    }
+                });
+        });
     }
 
     handleDownloadTranscript() {
@@ -286,6 +403,577 @@ class TalkWithMarty extends React.Component {
         console.log('[TalkWithMarty] Setting updated:', settingKey, value);
     }
 
+    handleClearTranscript() {
+        // confirm before clearing
+        const confirmed = window.confirm(this.props.intl.formatMessage(messages.transcriptClear) + '?');
+        if (!confirmed) return;
+
+        // revoke any existing object URLs
+        if (this.state.lastRecordingUrl) {
+            const urlCreator = window.URL || window.webkitURL;
+            if (urlCreator) {
+                urlCreator.revokeObjectURL(this.state.lastRecordingUrl);
+            }
+        }
+
+        if (this.martySpeechUrl) {
+            const urlCreator = window.URL || window.webkitURL;
+            if (urlCreator) {
+                urlCreator.revokeObjectURL(this.martySpeechUrl);
+            }
+            this.martySpeechUrl = '';
+        }
+
+        this.setState({
+            transcript: [],
+            lastRecordingUrl: '',
+            recordingError: null,
+            messageError: null
+        }, () => {
+            // eslint-disable-next-line no-console
+            console.log('[TalkWithMarty] Transcript cleared');
+        });
+    }
+
+    async ensureMediaStream() {
+        if (!this.mediaSupportAvailable) {
+            throw new Error(this.props.intl.formatMessage(messages.recordingUnsupported));
+        }
+        if (typeof navigator === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error(this.props.intl.formatMessage(messages.recordingUnsupported));
+        }
+        if (this.mediaStream) {
+            return;
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            this.mediaStream = stream;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async startRecording() {
+        if (this.state.isListening || this.state.isMicLoading) {
+            return;
+        }
+
+        if (!this.mediaSupportAvailable) {
+            this.setState({ recordingError: this.props.intl.formatMessage(messages.recordingUnsupported) });
+            return;
+        }
+
+        this.setState({ isMicLoading: true, recordingError: null, isProcessingAudio: false });
+
+        try {
+            await this.ensureMediaStream();
+            if (!this.mediaStream) {
+                throw new Error(this.props.intl.formatMessage(messages.recordingGenericError));
+            }
+
+            this.audioChunks = [];
+            if (this.mediaRecorder) {
+                this.mediaRecorder.removeEventListener('dataavailable', this.handleAudioChunk);
+                this.mediaRecorder.removeEventListener('stop', this.handleRecorderStop);
+            }
+
+            const recorder = new window.MediaRecorder(this.mediaStream);
+            recorder.addEventListener('dataavailable', this.handleAudioChunk);
+            recorder.addEventListener('stop', this.handleRecorderStop);
+            this.mediaRecorder = recorder;
+            recorder.start();
+
+            if (this.isComponentMounted) {
+                this.setState({ isListening: true, isMicLoading: false });
+            }
+
+            // Placeholder for future integration
+            // eslint-disable-next-line no-console
+            console.log('[TalkWithMarty] Recording started');
+        } catch (error) {
+            this.handleRecordingError(error);
+        }
+    }
+
+    async stopRecording() {
+        if (this.state.isMicLoading) {
+            return;
+        }
+
+        if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
+            if (this.isComponentMounted) {
+                this.setState({ isListening: false });
+            }
+            return;
+        }
+
+        if (this.isComponentMounted) {
+            this.setState({ isListening: false, isMicLoading: true });
+        }
+
+        try {
+            this.mediaRecorder.stop();
+
+            // Placeholder for future integration
+            // eslint-disable-next-line no-console
+            console.log('[TalkWithMarty] Recording stopped');
+        } catch (error) {
+            this.handleRecordingError(error);
+        }
+    }
+
+    handleAudioChunk(event) {
+        if (event.data && event.data.size > 0) {
+            this.audioChunks.push(event.data);
+        }
+    }
+
+    handleRecorderStop() {
+        const blob = this.audioChunks.length
+            ? new Blob(this.audioChunks, { type: (this.mediaRecorder && this.mediaRecorder.mimeType) || 'audio/webm' })
+            : null;
+
+        this.audioChunks = [];
+
+        if (blob) {
+            const urlCreator = window.URL || window.webkitURL;
+            const url = urlCreator ? urlCreator.createObjectURL(blob) : '';
+            if (this.state.lastRecordingUrl) {
+                const existingUrlCreator = window.URL || window.webkitURL;
+                if (existingUrlCreator) {
+                    existingUrlCreator.revokeObjectURL(this.state.lastRecordingUrl);
+                }
+            }
+            if (this.isComponentMounted) {
+                const stateUpdates = {
+                    recordingError: null,
+                    isMicLoading: false
+                };
+                if (url) {
+                    stateUpdates.lastRecordingUrl = url;
+                }
+                this.setState(stateUpdates);
+            }
+
+            // Placeholder for future integration
+            // eslint-disable-next-line no-console
+            console.log('[TalkWithMarty] Recorded audio clip', {
+                size: blob.size,
+                type: blob.type,
+                url
+            });
+        } else if (this.isComponentMounted) {
+            this.setState({ isMicLoading: false });
+        }
+
+        this.disposeMedia();
+
+        if (blob) {
+            this.processRecording(blob);
+        }
+    }
+
+    handleRecordingError(error) {
+        const { intl } = this.props;
+        let message = intl.formatMessage(messages.recordingGenericError);
+        if (error && error.name) {
+            if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                message = intl.formatMessage(messages.recordingPermissionDenied);
+            } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+                message = intl.formatMessage(messages.recordingDeviceNotFound);
+            } else if (error.message === intl.formatMessage(messages.recordingUnsupported)) {
+                message = error.message;
+            }
+        } else if (typeof error === 'string') {
+            message = error;
+        }
+
+        // Placeholder for future integration
+        // eslint-disable-next-line no-console
+        console.error('[TalkWithMarty] Recording error', error);
+
+        if (this.isComponentMounted) {
+            this.setState({
+                recordingError: message,
+                isListening: false,
+                isMicLoading: false,
+                isProcessingAudio: false
+            });
+        }
+
+        this.disposeMedia();
+    }
+
+    async processRecording(blob) {
+        if (!blob) {
+            return;
+        }
+
+        if (this.isComponentMounted) {
+            this.setState({ isProcessingAudio: true });
+        }
+
+        try {
+            const mimeType = blob.type || 'audio/webm';
+            const extension = this.getExtensionFromMime(mimeType);
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const fileName = `talk-with-marty-${timestamp}.${extension}`;
+            const arrayBuffer = await blob.arrayBuffer();
+            const payload = {
+                blob,
+                fileName,
+                mimeType,
+                size: blob.size,
+                arrayBuffer,
+                formData: this.buildWhisperFormData(blob, fileName)
+            };
+
+            if (this.props.onAudioCaptured) {
+                await this.props.onAudioCaptured(payload);
+            }
+
+            const requestPayload = this.buildSpeechRequestPayload(arrayBuffer, mimeType);
+            const response = await this.sendSpeechRequest(requestPayload);
+            this.applySpeechResponse(response);
+            if (response && response.speech) {
+                this.handleSpeechAudioResult(response.speech.audio);
+            }
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('[TalkWithMarty] Error processing recording', error);
+            if (this.isComponentMounted) {
+                this.setState({
+                    recordingError: this.props.intl.formatMessage(messages.speechRequestFailed)
+                });
+            }
+        } finally {
+            if (this.isComponentMounted) {
+                this.setState({ isProcessingAudio: false });
+            }
+        }
+    }
+
+    buildWhisperFormData(blob, fileName) {
+        if (typeof FormData === 'undefined') {
+            return null;
+        }
+
+        const formData = new FormData();
+        formData.append('file', blob, fileName);
+        formData.append('model', 'whisper-1');
+        formData.append('response_format', 'json');
+
+        return formData;
+    }
+
+    getExtensionFromMime(mimeType) {
+        if (!mimeType) {
+            return 'webm';
+        }
+        const normalized = mimeType.split(';')[0];
+        if (normalized === 'audio/webm' || normalized === 'audio/webm;codecs=opus') {
+            return 'webm';
+        }
+        if (normalized === 'audio/ogg') {
+            return 'ogg';
+        }
+        if (normalized === 'audio/wav' || normalized === 'audio/x-wav') {
+            return 'wav';
+        }
+        if (normalized === 'audio/mpeg') {
+            return 'mp3';
+        }
+        if (normalized === 'audio/mp4' || normalized === 'audio/m4a') {
+            return 'm4a';
+        }
+        const parts = normalized.split('/');
+        return parts.length > 1 ? parts[1] : 'webm';
+    }
+
+    buildConversationHistory() {
+        if (this.state.conversationMode === 'qa') {
+            return [];
+        }
+
+        return this.state.transcript.map(entry => ({
+            role: entry.sender === 'marty' ? 'assistant' : 'user',
+            content: entry.text,
+            timestamp: entry.timestamp
+        }));
+    }
+
+    buildLLMSettingsForRequest() {
+        const {
+            purposeRole,
+            knowledgeSources,
+            personalityName,
+            personalityVoice,
+            behavior,
+            safeguards,
+            responseLength
+        } = this.state.llmSettings;
+
+        const knowledgeList = knowledgeSources
+            ? knowledgeSources
+                .split(/\n|,/)
+                .map(value => value.trim())
+                .filter(value => value.length > 0)
+            : undefined;
+
+        const settings = {};
+
+        if (purposeRole) {
+            settings.role = purposeRole;
+        }
+        if (knowledgeList && knowledgeList.length) {
+            settings.knowledgeSources = knowledgeList;
+        }
+        if (personalityName || personalityVoice) {
+            settings.personality = {
+                name: personalityName || undefined,
+                voice: personalityVoice || undefined
+            };
+        }
+        if (behavior) {
+            settings.behavior = behavior;
+        }
+        if (safeguards) {
+            settings.safeguards = { notes: safeguards };
+        }
+        if (responseLength) {
+            settings.responseLength = responseLength;
+        }
+
+        return settings;
+    }
+
+    shouldIncludeSpeech() {
+        return true;
+        return Boolean(this.state.llmSettings.personalityVoice && this.state.llmSettings.personalityVoice.trim());
+    }
+
+    buildSpeechRequestPayload(arrayBuffer, mimeType) {
+        const includeSpeech = this.shouldIncludeSpeech();
+        const payload = {
+            audioBuffer: Array.from(new Uint8Array(arrayBuffer)),
+            stt: {
+                provider: 'openai-whisper',
+                config: { mimeType }
+            },
+            llm: {
+                provider: 'huggingface',
+                conversationHistory: this.buildConversationHistory(),
+                settings: this.buildLLMSettingsForRequest()
+            },
+            includeSpeech,
+            includeTranscript: true
+        };
+
+        if (includeSpeech) {
+            payload.tts = {
+                provider: 'elevenlabs',
+                options: this.state.llmSettings.personalityVoice
+                    ? { voice: this.state.llmSettings.personalityVoice }
+                    : undefined
+            };
+        }
+
+        return payload;
+    }
+
+    async sendSpeechRequest(payload) {
+        return this.postJson('http://localhost:3333/talkWithMarty/talk-with-marty-using-speech', payload);
+    }
+
+    applySpeechResponse(response) {
+        if (!response) {
+            return;
+        }
+
+        const entriesToAdd = [];
+
+        if (response.transcript && response.transcript.text) {
+            entriesToAdd.push(this.createTranscriptEntry(
+                'user',
+                response.transcript.text,
+                response.transcript.timestamp,
+                { raw: response.transcript.raw }
+            ));
+        }
+
+        if (response.llm && response.llm.text) {
+            entriesToAdd.push(this.createTranscriptEntry(
+                'marty',
+                response.llm.text,
+                response.llm.timestamp,
+                { raw: response.llm.raw }
+            ));
+        }
+
+        if (entriesToAdd.length) {
+            this.appendTranscriptEntries(entriesToAdd);
+        }
+    }
+
+    createTranscriptEntry(sender, text, timestamp, metadata) {
+        const entryTimestamp = timestamp || new Date().toISOString();
+        const uniqueSuffix = Math.random().toString(16).slice(2, 8);
+        const entry = {
+            id: `${entryTimestamp}-${sender}-${uniqueSuffix}`,
+            sender,
+            text,
+            timestamp: entryTimestamp
+        };
+
+        if (metadata) {
+            entry.metadata = metadata;
+        }
+
+        return entry;
+    }
+
+    appendTranscriptEntries(entries) {
+        if (!entries || !entries.length) {
+            return;
+        }
+
+        this.setState(prevState => ({
+            transcript: [...prevState.transcript, ...entries]
+        }));
+    }
+
+    buildTextRequestPayload(message) {
+        const includeSpeech = this.shouldIncludeSpeech();
+        const payload = {
+            text: message,
+            llm: {
+                provider: 'huggingface',
+                conversationHistory: this.buildConversationHistory(),
+                settings: this.buildLLMSettingsForRequest()
+            },
+            includeSpeech
+        };
+
+        if (includeSpeech) {
+            payload.tts = {
+                provider: 'elevenlabs',
+                options: this.state.llmSettings.personalityVoice
+                    ? { voice: this.state.llmSettings.personalityVoice }
+                    : undefined
+            };
+        }
+
+        return payload;
+    }
+
+    async sendTextRequest(message) {
+        try {
+            const payload = this.buildTextRequestPayload(message);
+            const response = await this.postJson('http://localhost:3333/talkWithMarty/talk-with-marty-using-text', payload);
+            if (response && response.llm && response.llm.text) {
+                this.appendTranscriptEntries([
+                    this.createTranscriptEntry('marty', response.llm.text, response.llm.timestamp, { raw: response.llm.raw })
+                ]);
+            }
+            console.log('[TalkWithMarty] speech response', response);
+            if (response && response.speech) {
+                this.handleSpeechAudioResult(response.speech.audio);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    handleSpeechAudioResult(audioData) {
+        if (!audioData) {
+            return;
+        }
+
+        let uint8Array = null;
+
+        if (audioData instanceof ArrayBuffer) {
+            uint8Array = new Uint8Array(audioData);
+        } else if (Array.isArray(audioData)) {
+            uint8Array = new Uint8Array(audioData);
+        } else if (audioData && typeof audioData === 'object' && Array.isArray(audioData.data)) {
+            uint8Array = new Uint8Array(audioData.data);
+        } else if (typeof audioData === 'string') {
+            try {
+                const binaryString = atob(audioData);
+                const length = binaryString.length;
+                const bytes = new Uint8Array(length);
+                for (let i = 0; i < length; i += 1) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                uint8Array = bytes;
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error('[TalkWithMarty] Failed to decode speech audio result', error);
+                return;
+            }
+        }
+
+        if (!uint8Array) {
+            return;
+        }
+
+        const urlCreator = window.URL || window.webkitURL;
+        if (!urlCreator) {
+            return;
+        }
+
+        if (this.martySpeechUrl) {
+            urlCreator.revokeObjectURL(this.martySpeechUrl);
+        }
+
+        const blob = new Blob([uint8Array.buffer], { type: 'audio/mpeg' });
+        this.martySpeechUrl = urlCreator.createObjectURL(blob);
+
+        const audio = new Audio(this.martySpeechUrl);
+        audio.play().catch(error => {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Unable to autoplay Marty response audio', error);
+        });
+    }
+
+    async postJson(url, payload) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || `Request failed with status ${response.status}`);
+        }
+
+        return response.json();
+    }
+
+    disposeMedia() {
+        if (this.mediaRecorder) {
+            this.mediaRecorder.removeEventListener('dataavailable', this.handleAudioChunk);
+            this.mediaRecorder.removeEventListener('stop', this.handleRecorderStop);
+            if (this.mediaRecorder.state !== 'inactive') {
+                try {
+                    this.mediaRecorder.stop();
+                } catch (error) {
+                    // ignore
+                }
+            }
+            this.mediaRecorder = null;
+        }
+
+        if (this.mediaStream) {
+            this.mediaStream.getTracks().forEach(track => track.stop());
+            this.mediaStream = null;
+        }
+    }
+
     renderTranscript() {
         const { transcript } = this.state;
         const { intl } = this.props;
@@ -321,8 +1009,14 @@ class TalkWithMarty extends React.Component {
             conversationMode,
             interactionMode,
             isListening,
+            isMicLoading,
+            isProcessingAudio,
+            isSendingText,
             currentMessage,
-            llmSettings
+            llmSettings,
+            recordingError,
+            lastRecordingUrl,
+            messageError
         } = this.state;
 
         const conversationDescription = conversationMode === 'conversation'
@@ -377,11 +1071,14 @@ class TalkWithMarty extends React.Component {
                                     [styles.toggleButtonActive]: interactionMode === 'pushToTalk'
                                 })}
                                 aria-pressed={interactionMode === 'pushToTalk'}
+                                // onClick={() => this.handleInteractionModeChange('pushToTalk')}
                                 onClick={() => this.handleInteractionModeChange('pushToTalk')}
+                                onPointerDown={() => this.handleToggleListening()}
+                                onPointerUp={() => this.handleToggleListening()}
                             >
                                 {intl.formatMessage(messages.interactionModePushToTalk)}
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 className={classNames(styles.toggleButton, {
                                     [styles.toggleButtonActive]: interactionMode === 'wakeWords'
@@ -390,40 +1087,82 @@ class TalkWithMarty extends React.Component {
                                 onClick={() => this.handleInteractionModeChange('wakeWords')}
                             >
                                 {intl.formatMessage(messages.interactionModeWakeWords)}
-                            </button>
+                            </button> */}
                         </div>
 
-                        {interactionMode === 'pushToTalk' && (
-                            <button
-                                type="button"
-                                className={classNames(styles.primaryButton, {
-                                    [styles.primaryButtonActive]: isListening
-                                })}
-                                onClick={this.handleToggleListening}
-                            >
-                                {intl.formatMessage(isListening ? messages.listeningStop : messages.listeningStart)}
-                            </button>
-                        )}
+                        {/* {interactionMode === 'pushToTalk' && (
+                            <>
+                                <button
+                                    type="button"
+                                    className={classNames(styles.primaryButton, {
+                                        [styles.primaryButtonActive]: isListening
+                                    })}
+                                    onClick={this.handleToggleListening}
+                                    disabled={isMicLoading || isProcessingAudio || !this.mediaSupportAvailable}
+                                >
+                                    {intl.formatMessage(isListening ? messages.listeningStop : messages.listeningStart)}
+                                </button>
+                            </>
+                        )} */}
 
                         {interactionMode === 'wakeWords' && (
                             <div className={styles.wakeWordsHint}>
                                 {intl.formatMessage(messages.wakeWordHint)}
                             </div>
                         )}
+
+                        {interactionMode === 'pushToTalk' && isListening && (
+                            <div className={styles.recordingIndicator}>
+                                {intl.formatMessage(messages.recordingIndicator)}
+                            </div>
+                        )}
+
+                        {interactionMode === 'pushToTalk' && isProcessingAudio && (
+                            <div className={styles.processingIndicator}>
+                                {intl.formatMessage(messages.processingRecording)}
+                            </div>
+                        )}
+
+                        {interactionMode === 'pushToTalk' && !this.mediaSupportAvailable && (
+                            <div className={styles.recordingError}>
+                                {intl.formatMessage(messages.recordingUnsupported)}
+                            </div>
+                        )}
+
+                        {interactionMode === 'pushToTalk' && recordingError && this.mediaSupportAvailable && (
+                            <div className={styles.recordingError}>{recordingError}</div>
+                        )}
+
+                        {/* {interactionMode === 'pushToTalk' && lastRecordingUrl && !isListening && !isProcessingAudio && (
+                            <div className={styles.recordingPlayback}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.lastRecordingLabel)}</span>
+                                <audio controls src={lastRecordingUrl} className={styles.audioPlayer} />
+                            </div>
+                        )} */}
                     </section>
                 </div>
 
                 <section className={classNames(styles.section, styles.transcriptSection)}>
                     <header className={styles.sectionHeader}>
                         <h2>{intl.formatMessage(messages.transcriptTitle)}</h2>
-                        <button
-                            type="button"
-                            className={styles.secondaryButton}
-                            onClick={this.handleDownloadTranscript}
-                            disabled={!this.state.transcript.length}
-                        >
-                            {intl.formatMessage(messages.transcriptDownload)}
-                        </button>
+                        <div className={styles.headerActions}>
+                            <button
+                                type="button"
+                                className={styles.secondaryButton}
+                                onClick={this.handleDownloadTranscript}
+                                disabled={!this.state.transcript.length}
+                            >
+                                {intl.formatMessage(messages.transcriptDownload)}
+                            </button>
+                            <button
+                                type="button"
+                                className={styles.secondaryButton}
+                                onClick={this.handleClearTranscript}
+                                disabled={!this.state.transcript.length}
+                            >
+                                {intl.formatMessage(messages.transcriptClear)}
+                            </button>
+                        </div>
                     </header>
                     <div className={styles.transcriptContainer}>
                         {this.renderTranscript()}
@@ -441,11 +1180,14 @@ class TalkWithMarty extends React.Component {
                             placeholder={intl.formatMessage(messages.sendMessagePlaceholder)}
                             rows={3}
                         />
+                        {messageError && (
+                            <div className={styles.messageError}>{messageError}</div>
+                        )}
                         <div className={styles.composerActions}>
                             <button
                                 type="submit"
                                 className={styles.primaryButton}
-                                disabled={!currentMessage.trim()}
+                                disabled={!currentMessage.trim() || isSendingText}
                             >
                                 {intl.formatMessage(messages.sendMessageButton)}
                             </button>
@@ -548,7 +1290,8 @@ class TalkWithMarty extends React.Component {
 }
 
 TalkWithMarty.propTypes = {
-    intl: intlShape
+    intl: intlShape,
+    onAudioCaptured: PropTypes.func
 };
 
 export default injectIntl(TalkWithMarty);

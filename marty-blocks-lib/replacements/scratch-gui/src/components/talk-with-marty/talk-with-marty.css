@@ -99,11 +99,6 @@
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.primaryButton:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
 .primaryButton:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(0, 102, 255, 0.25);
@@ -111,6 +106,12 @@
 
 .primaryButtonActive {
     background: linear-gradient(135deg, #ff4e60, #ff7f46);
+}
+
+.primaryButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .secondaryButton {
@@ -143,6 +144,66 @@
     color: #044089;
     font-size: 13px;
     line-height: 1.4;
+}
+
+.recordingIndicator {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e3572f;
+}
+
+.recordingIndicator::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e3572f;
+    animation: recordingBlink 1s ease-in-out infinite;
+}
+
+.processingIndicator {
+    margin-top: 12px;
+    font-size: 13px;
+    color: rgba(15, 29, 59, 0.75);
+}
+
+.recordingError {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #b00020;
+}
+
+.recordingPlayback {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.audioPlayer {
+    width: 100%;
+}
+
+.audioPlayer:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+    border-radius: 6px;
+}
+
+@keyframes recordingBlink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .transcriptSection {
@@ -226,6 +287,11 @@
 .composerActions {
     display: flex;
     justify-content: flex-end;
+}
+
+.messageError {
+    font-size: 13px;
+    color: #b00020;
 }
 
 .settingsGrid {
