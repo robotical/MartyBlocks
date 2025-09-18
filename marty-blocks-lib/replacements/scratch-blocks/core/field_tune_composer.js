@@ -31,6 +31,7 @@ goog.require("Blockly.Events");
 goog.require("Blockly.Field");
 goog.require("Blockly.Msg");
 goog.require("Blockly.utils");
+goog.require("Blockly.MusicalStaffComponent");
 goog.require("goog.math.Size");
 
 
@@ -325,6 +326,21 @@ Blockly.FieldTuneComposer = function (opt_value, opt_validator) {
   /** @type {?HTMLElement} */
   this.warningElement_ = null;
 
+  /** @type {?Blockly.MusicalStaffComponent} */
+  this.staffComponent_ = null;
+
+  /** @type {boolean} */
+  this.isAdvancedMode_ = false;
+
+  /** @type {?Object<string, !HTMLElement>} */
+  this.modeButtons_ = null;
+
+  /** @type {?HTMLElement} */
+  this.toolbarElement_ = null;
+
+  /** @type {?HTMLElement} */
+  this.sequencePanelElement_ = null;
+
   /** @type {?HTMLElement} */
   this.titleInput_ = null;
 
@@ -506,12 +522,19 @@ Blockly.FieldTuneComposer.prototype.showEditor_ = function () {
   this.selectedLength_ = this.editingTune_.defaultDuration || 4;
   this.selectedDotted_ = false;
   this.inputOctave_ = this.editingTune_.defaultOctave || 5;
+  this.isAdvancedMode_ = false;
+  this.modeButtons_ = null;
+  this.toolbarElement_ = null;
+  this.sequencePanelElement_ = null;
+  this.staffComponent_ = null;
 
   div.appendChild(this.buildHeader_());
   div.appendChild(this.buildToolbar_());
   div.appendChild(this.buildKeyboard_());
   div.appendChild(this.buildSequencePanel_());
   div.appendChild(this.buildFooter_());
+
+  this.setEditorMode_(false);
 
   Blockly.DropDownDiv.setColour(
     this.sourceBlock_ ? this.sourceBlock_.getColour() : "#ffab19",
@@ -532,6 +555,45 @@ Blockly.FieldTuneComposer.prototype.showEditor_ = function () {
 Blockly.FieldTuneComposer.prototype.buildHeader_ = function () {
   const header = document.createElement("div");
   header.className = "tune-composer__header";
+
+  const modeRow = document.createElement("div");
+  modeRow.className = "tune-composer__mode";
+
+  const modeLabel = document.createElement("span");
+  modeLabel.className = "tune-composer__mode-label";
+  modeLabel.textContent = Blockly.Msg.TUNE_COMPOSER_MODE_LABEL || "Mode";
+  modeRow.appendChild(modeLabel);
+
+  const modeToggle = document.createElement("div");
+  modeToggle.className = "tune-composer__mode-toggle";
+  modeToggle.setAttribute("role", "group");
+  modeToggle.setAttribute("aria-label", Blockly.Msg.TUNE_COMPOSER_MODE_LABEL || "Mode");
+
+  const beginnerBtn = document.createElement("button");
+  beginnerBtn.setAttribute("type", "button");
+  beginnerBtn.textContent = Blockly.Msg.TUNE_COMPOSER_MODE_BEGINNER || "Beginner";
+  beginnerBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    this.setEditorMode_(false);
+  }.bind(this));
+  modeToggle.appendChild(beginnerBtn);
+
+  const advancedBtn = document.createElement("button");
+  advancedBtn.setAttribute("type", "button");
+  advancedBtn.textContent = Blockly.Msg.TUNE_COMPOSER_MODE_ADVANCED || "Beethoven";
+  advancedBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    this.setEditorMode_(true);
+  }.bind(this));
+  modeToggle.appendChild(advancedBtn);
+
+  modeRow.appendChild(modeToggle);
+  header.appendChild(modeRow);
+
+  this.modeButtons_ = {
+    beginner: beginnerBtn,
+    advanced: advancedBtn
+  };
 
   const titleLabel = document.createElement("label");
   titleLabel.textContent = Blockly.Msg.TUNE_COMPOSER_TITLE || "Title";
@@ -619,6 +681,7 @@ Blockly.FieldTuneComposer.prototype.onHeaderChange_ = function () {
 Blockly.FieldTuneComposer.prototype.buildToolbar_ = function () {
   const toolbar = document.createElement("div");
   toolbar.className = "tune-composer__toolbar";
+  this.toolbarElement_ = toolbar;
 
   const lengthGroup = document.createElement("div");
   lengthGroup.className = "tune-composer__lengths";
@@ -779,6 +842,7 @@ Blockly.FieldTuneComposer.prototype.addNote_ = function (pitch) {
 Blockly.FieldTuneComposer.prototype.buildSequencePanel_ = function () {
   const panel = document.createElement("div");
   panel.className = "tune-composer__sequence";
+  this.sequencePanelElement_ = panel;
 
   this.sequenceContainer_ = document.createElement("div");
   this.sequenceContainer_.className = "tune-composer__sequence-list";
@@ -982,6 +1046,12 @@ Blockly.FieldTuneComposer.prototype.buildFooter_ = function () {
   this.previewElement_.className = "tune-composer__preview";
   footer.appendChild(this.previewElement_);
 
+  const staffWrapper = document.createElement("div");
+  staffWrapper.className = "tune-composer__staff";
+  this.staffComponent_ = new Blockly.MusicalStaffComponent();
+  staffWrapper.appendChild(this.staffComponent_.getElement());
+  footer.appendChild(staffWrapper);
+
   const controls = document.createElement("div");
   controls.className = "tune-composer__actions";
 
@@ -1115,6 +1185,42 @@ Blockly.FieldTuneComposer.prototype.redo_ = function () {
 };
 
 /**
+ * Switch between beginner and advanced composer modes.
+ * @param {boolean} advanced
+ * @private
+ */
+Blockly.FieldTuneComposer.prototype.setEditorMode_ = function (advanced) {
+  this.isAdvancedMode_ = Boolean(advanced);
+  if (this.modeButtons_) {
+    this.modeButtons_.beginner.classList.toggle("is-selected", !this.isAdvancedMode_);
+    this.modeButtons_.advanced.classList.toggle("is-selected", this.isAdvancedMode_);
+    this.modeButtons_.beginner.setAttribute("aria-pressed", String(!this.isAdvancedMode_));
+    this.modeButtons_.advanced.setAttribute("aria-pressed", String(this.isAdvancedMode_));
+  }
+  this.applyModeVisibility_();
+  if (this.isAdvancedMode_) {
+    this.refreshSequence_();
+  }
+};
+
+/**
+ * Apply visibility rules based on the current mode.
+ * @private
+ */
+Blockly.FieldTuneComposer.prototype.applyModeVisibility_ = function () {
+  const advanced = this.isAdvancedMode_;
+  if (this.toolbarElement_) {
+    this.toolbarElement_.style.display = advanced ? "" : "none";
+  }
+  if (this.sequencePanelElement_) {
+    this.sequencePanelElement_.style.display = advanced ? "" : "none";
+  }
+  if (this.previewElement_) {
+    this.previewElement_.style.display = advanced ? "" : "none";
+  }
+};
+
+/**
  * Update the preview textarea and guardrail warnings.
  * @private
  */
@@ -1126,6 +1232,9 @@ Blockly.FieldTuneComposer.prototype.updatePreview_ = function () {
   let warning = "";
   if (this.previewElement_) {
     this.previewElement_.value = preview.rtttl;
+  }
+  if (this.staffComponent_) {
+    this.staffComponent_.renderTune(this.editingTune_);
   }
   if (preview.issues.indexOf("too_many_notes") !== -1) {
     warning = Blockly.Msg.TUNE_COMPOSER_MAX_EVENTS_WARNING || "Too many notes";
@@ -1231,6 +1340,11 @@ Blockly.FieldTuneComposer.prototype.onHide_ = function () {
   this.sequenceContainer_ = null;
   this.previewElement_ = null;
   this.warningElement_ = null;
+  this.staffComponent_ = null;
+  this.modeButtons_ = null;
+  this.toolbarElement_ = null;
+  this.sequencePanelElement_ = null;
+  this.isAdvancedMode_ = false;
 };
 
 /**

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="24" height="24" viewBox="0 0 24 24"
+     role="img" aria-labelledby="title"
+     fill="none" stroke="currentColor" stroke-width="1.8"
+     stroke-linecap="round" stroke-linejoin="round">
+  <title id="title">Note icon</title>
+  <!-- Outer note -->
+  <rect x="3" y="3" width="18" height="18" rx="3"/>
+  <!-- Dog-eared corner hint -->
+  <path d="M15 3h3a3 3 0 0 1 3 3v3"/>
+  <path d="M15 3 L21 9"/>
+  <!-- Writing lines -->
+  <path d="M7 11h8"/>
+  <path d="M7 15h10"/>
+</svg>

@@ -10,6 +10,7 @@ const Color = require("./util/color");
 // const meSpeak = require("./util/mespeak"); // for text to speech locally -- removed as we don't use it anymore
 const { Project } = require("@robotical/scratch-to-python-transpiler");
 const { noteFrequencies } = require("./util/note-frequencies");
+Vex = require("./util/vexflow/vexflow.js");
 
 mv2Interface = new Mv2Interface();
 mstTesting = new MSTTesting(mv2Interface);
