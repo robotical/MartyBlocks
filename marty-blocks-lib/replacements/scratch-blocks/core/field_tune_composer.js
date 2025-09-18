@@ -601,7 +601,8 @@ Blockly.FieldTuneComposer.prototype.buildHeader_ = function () {
 
   this.titleInput_ = document.createElement("input");
   this.titleInput_.setAttribute("type", "text");
-  this.titleInput_.setAttribute("maxlength", "32");
+  this.titleInput_.setAttribute("maxlength", "22");
+  this.titleInput_.setAttribute("width", "120");
   this.titleInput_.value = this.editingTune_.title || "MyTune";
   this.titleInput_.addEventListener("input", this.onHeaderChange_.bind(this));
   header.appendChild(this.titleInput_);
@@ -780,23 +781,52 @@ Blockly.FieldTuneComposer.prototype.refreshLengthButtons_ = function () {
 Blockly.FieldTuneComposer.prototype.buildKeyboard_ = function () {
   const keyboard = document.createElement("div");
   keyboard.className = "tune-composer__keyboard";
-  const octaves = [this.editingTune_.defaultOctave - 1, this.editingTune_.defaultOctave];
-  const oct = octaves[0];
-  const row = document.createElement("div");
-  row.className = "tune-composer__keyboard-row";
-  NOTE_PITCHES.forEach(function (pitch) {
+  const piano = document.createElement("div");
+  piano.className = "tune-composer__piano";
+
+  const whiteContainer = document.createElement("div");
+  whiteContainer.className = "tune-composer__piano-whites";
+  const whiteKeys = ["c", "d", "e", "f", "g", "a", "b"];
+  whiteKeys.forEach(function (pitch) {
     const btn = document.createElement("button");
     btn.setAttribute("type", "button");
+    btn.className = "piano-key piano-key--white";
     btn.dataset["pitch"] = pitch;
-    btn.dataset["octave"] = String(oct);
-    btn.className = pitch.indexOf("#") !== -1 ? "key key--sharp" : "key";
     btn.textContent = pitch.toUpperCase();
+    btn.setAttribute("aria-label", pitch.toUpperCase());
     btn.addEventListener("click", function () {
       this.addNote_(pitch);
     }.bind(this));
-    row.appendChild(btn);
+    whiteContainer.appendChild(btn);
   }, this);
-  keyboard.appendChild(row);
+
+  const blackContainer = document.createElement("div");
+  blackContainer.className = "tune-composer__piano-blacks";
+  const blackKeyAnchors = [
+    { pitch: "c#", anchorIndex: 0 },
+    { pitch: "d#", anchorIndex: 1 },
+    { pitch: "f#", anchorIndex: 3 },
+    { pitch: "g#", anchorIndex: 4 },
+    { pitch: "a#", anchorIndex: 5 }
+  ];
+  const step = 100 / whiteKeys.length;
+  blackKeyAnchors.forEach(function (config) {
+    const btn = document.createElement("button");
+    btn.setAttribute("type", "button");
+    btn.className = "piano-key piano-key--black";
+    btn.dataset["pitch"] = config.pitch;
+    btn.textContent = config.pitch.toUpperCase();
+    btn.setAttribute("aria-label", config.pitch.toUpperCase());
+    btn.style.left = `${step * (config.anchorIndex + 1)}%`;
+    btn.addEventListener("click", function () {
+      this.addNote_(config.pitch);
+    }.bind(this));
+    blackContainer.appendChild(btn);
+  }, this);
+
+  piano.appendChild(whiteContainer);
+  piano.appendChild(blackContainer);
+  keyboard.appendChild(piano);
   return keyboard;
 };
 
