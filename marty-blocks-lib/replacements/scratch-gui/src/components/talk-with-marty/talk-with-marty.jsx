@@ -878,14 +878,14 @@ class TalkWithMarty extends React.Component {
             }
             console.log('[TalkWithMarty] speech response', response);
             if (response && response.speech) {
-                this.handleSpeechAudioResult(response.speech.audio);
+                await this.handleSpeechAudioResult(response.speech.audio);
             }
         } catch (error) {
             throw error;
         }
     }
 
-    handleSpeechAudioResult(audioData) {
+    async handleSpeechAudioResult(audioData) {
         if (!audioData) {
             return;
         }
@@ -915,6 +915,58 @@ class TalkWithMarty extends React.Component {
         }
 
         if (!uint8Array) {
+            console.warn('[TalkWithMarty] Unable to process speech audio result: unrecognized format');
+            return;
+        }
+
+        {
+            // stream to marty
+            console.log('[TalkWithMarty] Streaming audio to Marty');
+
+            const targetId = window.vm && window.vm.runtime && window.vm.runtime._editingTarget.id;
+            if (!targetId) {
+                console.warn('[TalkWithMarty] Unable to stream audio to Marty: target ID not found');
+                return;
+            }
+            const connectedRaft = getRaftUsingTargetId(targetId);
+            if (!connectedRaft || !connectedRaft.streamAudio) {
+                console.warn('[TalkWithMarty] Unable to stream audio to Marty: raft connection not found');
+                return;
+            }
+
+            // 1) Ensure we have a Uint8Array of the audio bytes (you already built uint8Array above)
+            const bytes = uint8Array;
+
+            // 2) Decode to AudioBuffer to get duration (works for MP3/WAV/WEBM/etc)
+            const audioCtx = window.__twAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            window.__twAudioCtx = audioCtx;
+            // In some browsers the context is suspended until a user gesture:
+            if (audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch (_) { } }
+
+            let audioBuffer;
+            try {
+                // slice(0) to pass a detached copy the decoder accepts
+                audioBuffer = await audioCtx.decodeAudioData(bytes.buffer.slice(0));
+            } catch (e) {
+                console.error('[TalkWithMarty] decodeAudioData failed; cannot derive duration', e);
+                return;
+            }
+
+            const durationSeconds = audioBuffer.duration;
+
+            // 3A) If you ALREADY have MP3 bytes (e.g., response is MP3):
+            // -> stream the raw MP3 bytes directly
+            // connectedRaft.streamAudio(bytes, false, durationSeconds);
+            // return;
+
+            // 3B) If you need to CONVERT to MP3 using the Scratch helpers:
+            // NOTE: convertSoundToMP3 expects an AudioBuffer, not ArrayBuffer.
+            const mp3SoundBuffers = window.Scratch3Mv2Blocks.convertSoundToMP3(audioBuffer);
+            const mp3SoundData = window.Scratch3Mv2Blocks.convertMp3BufferToData(mp3SoundBuffers);
+
+            // If streamAudio wants Uint8Array, pass mp3SoundData.
+            // If it wants ArrayBuffer, pass mp3SoundData.buffer.
+            connectedRaft.streamAudio(mp3SoundData, false, durationSeconds);
             return;
         }
 
@@ -1295,3 +1347,12 @@ TalkWithMarty.propTypes = {
 };
 
 export default injectIntl(TalkWithMarty);
+
+function getRaftUsingTargetId(targetId) {
+    if (!window.raftManager || !window.applicationManager || !window.applicationManager.connectedRafts) {
+        return null;
+    }
+    const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
+    const raft = window.applicationManager.connectedRafts[raftId];
+    return raft;
+}

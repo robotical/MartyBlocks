@@ -2280,3 +2280,4 @@ function getNearestNoteFromFrequency(frequency) {
   return closestNote;
 }
 module.exports = Scratch3Mv2Blocks;
+window.Scratch3Mv2Blocks = Scratch3Mv2Blocks;

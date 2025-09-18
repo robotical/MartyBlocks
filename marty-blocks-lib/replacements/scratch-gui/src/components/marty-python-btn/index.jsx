@@ -32,7 +32,7 @@ class MartyPythonButton extends React.Component {
     clickHandler() {
         pythonTranspiler
             .fromSb3JSON(JSON.parse(vm.toJSON()), { getAsset: () => { } })
-            .then((r) => r.toPython())
+            .then((r) => r.toCpp())
             .then((re) => {
                 if (re.trim() === "") {
                     re = `

@@ -109,7 +109,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 const projectJson = JSON.parse(vm.toJSON());
                 pythonTranspiler
                     .fromSb3JSON(projectJson, { getAsset: () => { } })
-                    .then((r) => r.toPython())
+                    .then((r) => r.toCpp())
                     .then((re) => {
                         pythonTranspiler.setModal(re)
                     });

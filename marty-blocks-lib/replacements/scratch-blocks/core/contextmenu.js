@@ -315,7 +315,7 @@ Blockly.ContextMenu.blockTranspileToPythonOption = function(block, event) {
 
       pythonTranspiler
         .fromSb3JSON(projectJson, { getAsset: () => {} })
-        .then((r) => r.toPython())
+        .then((r) => r.toCpp())
         .then((re) => {
           pythonTranspiler.setModal(re)
         }); 
