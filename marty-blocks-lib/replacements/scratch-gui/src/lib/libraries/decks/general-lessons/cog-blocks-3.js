@@ -251,6 +251,10 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-10.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-10.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Drag a < block into the if block from the <b>Operators</b> category<br /><br />The < symbol means 'less than' and will only be true if the number on the left is smaller than the number on the right"}
@@ -278,6 +282,10 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-11.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-11.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Drag the <b>timer</b> block from the <b>Sensing</b> category into the first box on the < block<br /><br />Then set the second box to 1, so that the line says <i>if timer &lt; 1 then</i>"}
@@ -314,6 +322,10 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-13.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-13.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add a <b>Reset timer</b> block under the <b>When flag clicked</b> block<br /><br />This will reset the timer variable back to 0 just before the button LED is turned on"}
@@ -435,6 +447,10 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-18.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-18.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now let's make the light turn on more than once!<br /><br />Go to the <b>Control</b> category and add a <b>Repeat</b> block around the code under the <b>When flag clicked</b> block<br /><br />This will make Cog light up multiple times!"}
@@ -485,6 +501,10 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-20.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-20.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Go to the <b>Operators</b> category, and change the time on that wait block to a random number between 1 and 5 seconds"}
@@ -620,6 +640,7 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 // image: `${BUCKET_URL}`, 
+                video: `${BUCKET_URL}step-26.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now every time you press in time the score will increase by 1!"}
@@ -718,6 +739,7 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 // image: `${BUCKET_URL}`, 
+                video: `${BUCKET_URL}step-30.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Over the 10 iterations of the repeat loop, the delay will decrease from 1 second to 0.5 (or half a second)"}
@@ -737,6 +759,10 @@ const cogBlocksTutorial3 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-31.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-31.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now let's use the delay variable<br /><br />One nice thing about variables is that we can use them in more than one place<br /><br />Drag the delay variable into the '<' block so that it says <i>if timer &lt; delay then</i><br /><br />Also drag it into the 'wait [1] second' block, so that it says 'wait [delay] seconds'"}

@@ -449,6 +449,28 @@ class Lessons extends React.Component {
                                             isAccessibilityEnabled={this.state.isAccessibilityEnabled}
                                         />
                                     )}
+                                    {steps[step].additionalContent &&
+                                        steps[step].additionalContent.images &&
+                                        steps[step].additionalContent.images.length > 0 &&
+                                        steps[step].additionalContent.images.map((img, index) => {
+                                            return (<ImageStep
+                                                key={img + index}
+                                                onImageClick={(e) => this.setExpandedImage(e, img)}
+                                                image={img}
+                                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                            />);
+                                        })}
+                                    {steps[step].additionalContent &&
+                                        steps[step].additionalContent.videos &&
+                                        steps[step].additionalContent.videos.length > 0 &&
+                                        steps[step].additionalContent.videos.map((vid, index) => {
+                                            return (<VideoStep
+                                                key={vid + index}
+                                                onVideoClick={(e) => this.setExpandedVideo(e, vid)}
+                                                video={vid}
+                                                isAccessibilityEnabled={this.state.isAccessibilityEnabled}
+                                            />);
+                                        })}
                                 </>
                             }
                             {

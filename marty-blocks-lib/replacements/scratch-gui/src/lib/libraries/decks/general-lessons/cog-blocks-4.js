@@ -22,7 +22,7 @@ const cogBlocksTutorial4 = {
             id={`gui.howtos.lessons.type-lesson-cog-tutorial-4.description`}
             values={{}}
         >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
-        img: `${BUCKET_URL}cover_image.png`, 
+        img: `${BUCKET_URL}cover_image.png`,
         internetConnectionRequired: true,
         collaborator: 'Robotical',
         tags: ['cog', 'blocks', 'animation', 'sensors', 'variables'],
@@ -48,7 +48,7 @@ const cogBlocksTutorial4 = {
             /* STEP 2 -- make sure you're connected to cog */
             {
                 type: "info",
-                image: `${BUCKET_URL}connected.png`, 
+                image: `${BUCKET_URL}connected.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"First, make sure you are connected to a cog.<br /><br />If not, add one like you did in the last tutorial by pressing the Add button in the devices panel and selecting a Cog, then clicking connect. If you need to, skip back to the last tutorial to see how"}
@@ -412,6 +412,10 @@ const cogBlocksTutorial4 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-21.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-21.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now drag the block that says <b>hue [360] saturation [100] lightness [100]</b> into the spot for the color in the <b>set [ring] LEDs to [color]</b> block.<br /><br />There are a couple of different ways to describe colors, and Hue, Saturation and Lightness (or Value) is one of them.<br /><br />With these three numbers we can describe any color."}
@@ -524,6 +528,7 @@ const cogBlocksTutorial4 = {
             /* STEP 27 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-27.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out! As you push down on the button the LEDs will turn on brighter and brighter red!"}
@@ -551,6 +556,7 @@ const cogBlocksTutorial4 = {
             /* STEP 29 -- now the lights will change from white to red as you push the button! */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-29.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now the lights will change from white to red as you push the button!"}
@@ -590,6 +596,7 @@ const cogBlocksTutorial4 = {
             /* STEP 31 -- set it to multiply the button force value by 3.6 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-31.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Set it to multiply the button force value by 3.6.<br /><br />This will mean that instead of giving numbers from 0 to 100, we’ll get numbers from 0 to 360 (3.6 x 100).<br /><br />Try it out!<br /><br />Now as you push the button the color of the lights will change from red to green to blue and back to red!"}
@@ -617,6 +624,10 @@ const cogBlocksTutorial4 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-33.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-33.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Next up, lets see if we can make Cog react to bright lights by glowing for a bit.<br /><br />Delete the code that you made to change the colors based on button force, by dragging it into the blocks palette."}
@@ -994,6 +1005,10 @@ const cogBlocksTutorial4 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-52.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-52.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Duplicate the code from inside the previous <b>repeat until</b> loop.<br /><br />You can do this by right clicking (or pressing and holding) and then selecting <b>Duplicate</b>.<br /><br />Put the new code into the new <b>repeat until</b> loop."}
