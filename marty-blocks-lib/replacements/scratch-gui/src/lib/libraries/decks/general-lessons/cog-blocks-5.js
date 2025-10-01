@@ -292,6 +292,10 @@ const cogBlocksTutorial5 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-14.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-14.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Select the checkbox next to <b>Accelerometer X</b>.<br /><br />Then change X to Y from the dropdown menu, and select the checkbox next to that."}
@@ -306,6 +310,10 @@ const cogBlocksTutorial5 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-15.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-15.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Tilt cog around and look at how the numbers change!"}
@@ -860,6 +868,10 @@ const cogBlocksTutorial5 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-49.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-49.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now as you tilt Cog you’ll be able to see a guide of how close you are to being level!<br /><br />When Cog is stationary, there’s always 1G of gravity acting on it. If you tilt cog a lot you’ll see that you can get ax or ay to be equal to 1 - that’ll happen when the indicator is as far as it’ll go from the middle."}
