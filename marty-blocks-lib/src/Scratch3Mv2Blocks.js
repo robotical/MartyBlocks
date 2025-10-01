@@ -1862,20 +1862,22 @@ class Scratch3Mv2Blocks {
     return Math.round(sampleCount * 1.2) // adjusting because when recording the sample count is smaller
   }
 
-  static convertMp3BufferToData(mp3SoundBuffers) {
-    let mp3Len = 0;
-    for (let mp3Buf of mp3SoundBuffers) {
-      mp3Len += mp3Buf.length;
-    }
-    const mp3SoundData = new Int8Array(mp3Len);
-    let curPos = 0;
-    for (let mp3Buf of mp3SoundBuffers) {
-      mp3SoundData.set(mp3Buf, curPos);
-      curPos += mp3Buf.length;
-    }
-    console.log(`encoded to MP3 len ${mp3SoundData.length}`);
-    return mp3SoundData;
+static convertMp3BufferToData(mp3SoundBuffers) {
+  let mp3Len = 0;
+  for (const buf of mp3SoundBuffers) mp3Len += buf.length;
+
+  // Use Uint8Array, not Int8Array
+  const mp3SoundData = new Uint8Array(mp3Len);
+
+  let curPos = 0;
+  for (const buf of mp3SoundBuffers) {
+    // `buf` from lamejs is already Uint8Array (or at least unsigned bytes)
+    mp3SoundData.set(buf, curPos);
+    curPos += buf.length;
   }
+  console.log(`encoded to MP3 len ${mp3SoundData.length}`);
+  return mp3SoundData;
+}
 
   static _testMp3SoundLocally(mp3SoundData) {
     // Test code to play locally

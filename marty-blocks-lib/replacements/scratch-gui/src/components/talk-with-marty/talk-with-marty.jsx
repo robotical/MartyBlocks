@@ -4,6 +4,8 @@ import React from 'react';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import styles from './talk-with-marty.css';
+import LoadingSpinnerMarty from './marty-is-thinking-svg.jsx';
+import SpeakingMarty from './marty-is-speaking-svg.jsx';
 
 const messages = defineMessages({
     conversationModeTitle: {
@@ -193,6 +195,18 @@ const messages = defineMessages({
     textRequestFailed: {
         id: 'talkWithMarty.textRequestFailed',
         defaultMessage: 'Could not send message. Please try again.'
+    },
+    thinkingIndicator: {
+        id: 'talkWithMarty.thinkingIndicator',
+        defaultMessage: 'Thinking…'
+    },
+    speakingIndicator: {
+        id: 'talkWithMarty.speakingIndicator',
+        defaultMessage: 'Speaking…'
+    },
+    activityOverlayLabel: {
+        id: 'talkWithMarty.activityOverlayLabel',
+        defaultMessage: 'Marty is responding'
     }
 });
 
@@ -220,7 +234,9 @@ class TalkWithMarty extends React.Component {
             lastRecordingUrl: '',
             isProcessingAudio: false,
             isSendingText: false,
-            messageError: null
+            messageError: null,
+            isThinking: false,
+            isSpeaking: false
         };
 
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
@@ -348,8 +364,10 @@ class TalkWithMarty extends React.Component {
             transcript: [...prevState.transcript, nextEntry],
             currentMessage: '',
             messageError: null,
-            isSendingText: true
+            isSendingText: true,
+            isThinking: true
         }), () => {
+            try { martyIsThinking(); } catch (_) { }
             this.sendTextRequest(trimmedMessage)
                 .catch(error => {
                     // eslint-disable-next-line no-console
@@ -362,7 +380,7 @@ class TalkWithMarty extends React.Component {
                 })
                 .finally(() => {
                     if (this.isComponentMounted) {
-                        this.setState({ isSendingText: false });
+                        this.setState({ isSendingText: false, isThinking: false });
                     }
                 });
         });
@@ -485,8 +503,9 @@ class TalkWithMarty extends React.Component {
             recorder.start();
 
             if (this.isComponentMounted) {
-                this.setState({ isListening: true, isMicLoading: false });
+                this.setState({ isListening: true, isMicLoading: false, isSpeaking: false });
             }
+            try { martyIsListening(); } catch (_) { }
 
             // Placeholder for future integration
             // eslint-disable-next-line no-console
@@ -611,7 +630,7 @@ class TalkWithMarty extends React.Component {
         }
 
         if (this.isComponentMounted) {
-            this.setState({ isProcessingAudio: true });
+            this.setState({ isProcessingAudio: true, isThinking: false });
         }
 
         try {
@@ -634,7 +653,14 @@ class TalkWithMarty extends React.Component {
             }
 
             const requestPayload = this.buildSpeechRequestPayload(arrayBuffer, mimeType);
+            if (this.isComponentMounted) {
+                this.setState({ isThinking: true });
+            }
+            try { martyIsThinking(); } catch (_) { }
             const response = await this.sendSpeechRequest(requestPayload);
+            if (this.isComponentMounted) {
+                this.setState({ isThinking: false });
+            }
             this.applySpeechResponse(response);
             if (response && response.speech) {
                 this.handleSpeechAudioResult(response.speech.audio);
@@ -649,7 +675,7 @@ class TalkWithMarty extends React.Component {
             }
         } finally {
             if (this.isComponentMounted) {
-                this.setState({ isProcessingAudio: false });
+                this.setState({ isProcessingAudio: false, isThinking: false });
             }
         }
     }
@@ -762,7 +788,7 @@ class TalkWithMarty extends React.Component {
                 config: { mimeType }
             },
             llm: {
-                provider: 'huggingface',
+                provider: 'openai',
                 conversationHistory: this.buildConversationHistory(),
                 settings: this.buildLLMSettingsForRequest()
             },
@@ -772,7 +798,7 @@ class TalkWithMarty extends React.Component {
 
         if (includeSpeech) {
             payload.tts = {
-                provider: 'elevenlabs',
+                provider: 'azure',
                 options: this.state.llmSettings.personalityVoice
                     ? { voice: this.state.llmSettings.personalityVoice }
                     : undefined
@@ -848,7 +874,7 @@ class TalkWithMarty extends React.Component {
         const payload = {
             text: message,
             llm: {
-                provider: 'huggingface',
+                provider: 'openai',
                 conversationHistory: this.buildConversationHistory(),
                 settings: this.buildLLMSettingsForRequest()
             },
@@ -857,7 +883,7 @@ class TalkWithMarty extends React.Component {
 
         if (includeSpeech) {
             payload.tts = {
-                provider: 'elevenlabs',
+                provider: 'azure',
                 options: this.state.llmSettings.personalityVoice
                     ? { voice: this.state.llmSettings.personalityVoice }
                     : undefined
@@ -871,6 +897,10 @@ class TalkWithMarty extends React.Component {
         try {
             const payload = this.buildTextRequestPayload(message);
             const response = await this.postJson('http://localhost:3333/talkWithMarty/talk-with-marty-using-text', payload);
+            // thinking done once response received
+            if (this.isComponentMounted) {
+                this.setState({ isThinking: false });
+            }
             if (response && response.llm && response.llm.text) {
                 this.appendTranscriptEntries([
                     this.createTranscriptEntry('marty', response.llm.text, response.llm.timestamp, { raw: response.llm.raw })
@@ -879,8 +909,16 @@ class TalkWithMarty extends React.Component {
             console.log('[TalkWithMarty] speech response', response);
             if (response && response.speech) {
                 await this.handleSpeechAudioResult(response.speech.audio);
+            } else {
+                if (this.isComponentMounted) {
+                    this.setState({ isSpeaking: false });
+                }
+                try { martyStopsTalking(); } catch (_) { }
             }
         } catch (error) {
+            if (this.isComponentMounted) {
+                this.setState({ isThinking: false, isSpeaking: false });
+            }
             throw error;
         }
     }
@@ -918,8 +956,7 @@ class TalkWithMarty extends React.Component {
             console.warn('[TalkWithMarty] Unable to process speech audio result: unrecognized format');
             return;
         }
-
-        {
+        const playMarty = async () => {
             // stream to marty
             console.log('[TalkWithMarty] Streaming audio to Marty');
 
@@ -953,7 +990,6 @@ class TalkWithMarty extends React.Component {
             }
 
             const durationSeconds = audioBuffer.duration;
-
             // 3A) If you ALREADY have MP3 bytes (e.g., response is MP3):
             // -> stream the raw MP3 bytes directly
             // connectedRaft.streamAudio(bytes, false, durationSeconds);
@@ -966,9 +1002,14 @@ class TalkWithMarty extends React.Component {
 
             // If streamAudio wants Uint8Array, pass mp3SoundData.
             // If it wants ArrayBuffer, pass mp3SoundData.buffer.
-            connectedRaft.streamAudio(mp3SoundData, false, durationSeconds);
-            return;
+            connectedRaft.streamAudio(mp3SoundData, false, durationSeconds * 1000);
+            // return;
         }
+        window.playMarty = playMarty;
+        await playMarty().catch(error => {
+            console.error('[TalkWithMarty] Error playing audio', error);
+        });
+        console.log("after playMarty");
 
         const urlCreator = window.URL || window.webkitURL;
         if (!urlCreator) {
@@ -983,9 +1024,25 @@ class TalkWithMarty extends React.Component {
         this.martySpeechUrl = urlCreator.createObjectURL(blob);
 
         const audio = new Audio(this.martySpeechUrl);
+        audio.onplay = () => {
+            if (this.isComponentMounted) {
+                this.setState({ isSpeaking: true });
+            }
+            try { martyStartsTalking(); } catch (_) { }
+        };
+        audio.onended = () => {
+            if (this.isComponentMounted) {
+                this.setState({ isSpeaking: false });
+            }
+            try { martyStopsTalking(); } catch (_) { }
+        };
         audio.play().catch(error => {
             // eslint-disable-next-line no-console
             console.warn('[TalkWithMarty] Unable to autoplay Marty response audio', error);
+            if (this.isComponentMounted) {
+                this.setState({ isSpeaking: false });
+            }
+            try { martyStopsTalking(); } catch (_) { }
         });
     }
 
@@ -1068,8 +1125,12 @@ class TalkWithMarty extends React.Component {
             llmSettings,
             recordingError,
             lastRecordingUrl,
-            messageError
+            messageError,
+            isThinking,
+            isSpeaking
         } = this.state;
+
+        const isBusy = isThinking || isSpeaking;
 
         const conversationDescription = conversationMode === 'conversation'
             ? intl.formatMessage(messages.conversationModeConversationDescription)
@@ -1080,270 +1141,330 @@ class TalkWithMarty extends React.Component {
             : intl.formatMessage(messages.interactionModeWakeWordsDescription);
 
         return (
-            <div className={styles.talkWithMarty}>
-                <div className={styles.primarySections}>
-                    <section className={styles.section}>
-                        <header className={styles.sectionHeader}>
-                            <h2>{intl.formatMessage(messages.conversationModeTitle)}</h2>
-                            <p>{conversationDescription}</p>
-                        </header>
-                        <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.conversationModeTitle)}>
-                            <button
-                                type="button"
-                                className={classNames(styles.toggleButton, {
-                                    [styles.toggleButtonActive]: conversationMode === 'conversation'
-                                })}
-                                aria-pressed={conversationMode === 'conversation'}
-                                onClick={() => this.handleConversationModeChange('conversation')}
-                            >
-                                {intl.formatMessage(messages.conversationModeConversation)}
-                            </button>
-                            <button
-                                type="button"
-                                className={classNames(styles.toggleButton, {
-                                    [styles.toggleButtonActive]: conversationMode === 'qa'
-                                })}
-                                aria-pressed={conversationMode === 'qa'}
-                                onClick={() => this.handleConversationModeChange('qa')}
-                            >
-                                {intl.formatMessage(messages.conversationModeQA)}
-                            </button>
+            <>
+                {isBusy && (
+                    <div
+                        className={styles.activityBackdrop || ''}
+                        aria-label={intl.formatMessage(messages.activityOverlayLabel)}
+                        role="dialog"
+                        aria-modal="true"
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.3)', // near-invisible but blocks clicks
+                            zIndex: 9999,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            pointerEvents: 'auto'
+                        }}
+                    >
+                        <div
+                            className={styles.activityOverlay || ''}
+                            style={{
+                                position: 'absolute',
+                                top: "50%",
+                                transform: 'translateY(-50%)',
+                                background: 'transparent',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                pointerEvents: 'none', // ensure no accidental interaction
+                                // animation: 'tm-slideDown 300ms ease-out'
+                            }}
+                        >
+                                {isThinking && <LoadingSpinnerMarty />}
+                                {isSpeaking && <SpeakingMarty />}
                         </div>
-                    </section>
-
-                    <section className={styles.section}>
-                        <header className={styles.sectionHeader}>
-                            <h2>{intl.formatMessage(messages.interactionModeTitle)}</h2>
-                            <p>{interactionDescription}</p>
-                        </header>
-                        <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionModeTitle)}>
-                            <button
-                                type="button"
-                                className={classNames(styles.toggleButton, {
-                                    [styles.toggleButtonActive]: interactionMode === 'pushToTalk'
-                                })}
-                                aria-pressed={interactionMode === 'pushToTalk'}
-                                // onClick={() => this.handleInteractionModeChange('pushToTalk')}
-                                onClick={() => this.handleInteractionModeChange('pushToTalk')}
-                                onPointerDown={() => this.handleToggleListening()}
-                                onPointerUp={() => this.handleToggleListening()}
-                            >
-                                {intl.formatMessage(messages.interactionModePushToTalk)}
-                            </button>
-                            {/* <button
-                                type="button"
-                                className={classNames(styles.toggleButton, {
-                                    [styles.toggleButtonActive]: interactionMode === 'wakeWords'
-                                })}
-                                aria-pressed={interactionMode === 'wakeWords'}
-                                onClick={() => this.handleInteractionModeChange('wakeWords')}
-                            >
-                                {intl.formatMessage(messages.interactionModeWakeWords)}
-                            </button> */}
-                        </div>
-
-                        {/* {interactionMode === 'pushToTalk' && (
-                            <>
+                        {/* <style>
+                            {`@keyframes tm-slideDown {
+                                from { transform: translateY(-40px); opacity: 0; }
+                                to { transform: translateY(50%); opacity: 1; }
+                             }`}
+                        </style> */}
+                    </div>
+                )}
+                <div
+                    className={styles.talkWithMarty}
+                    aria-busy={isBusy ? 'true' : 'false'}
+                    aria-hidden={isBusy ? 'true' : 'false'}
+                    style={isBusy ? { userSelect: 'none' } : undefined}
+                >
+                    <div className={styles.primarySections}>
+                        <section className={styles.section}>
+                            <header className={styles.sectionHeader}>
+                                <h2>{intl.formatMessage(messages.conversationModeTitle)}</h2>
+                                <p>{conversationDescription}</p>
+                            </header>
+                            <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.conversationModeTitle)}>
                                 <button
                                     type="button"
-                                    className={classNames(styles.primaryButton, {
-                                        [styles.primaryButtonActive]: isListening
+                                    className={classNames(styles.toggleButton, {
+                                        [styles.toggleButtonActive]: conversationMode === 'conversation'
                                     })}
-                                    onClick={this.handleToggleListening}
-                                    disabled={isMicLoading || isProcessingAudio || !this.mediaSupportAvailable}
+                                    aria-pressed={conversationMode === 'conversation'}
+                                    onClick={() => this.handleConversationModeChange('conversation')}
                                 >
-                                    {intl.formatMessage(isListening ? messages.listeningStop : messages.listeningStart)}
+                                    {intl.formatMessage(messages.conversationModeConversation)}
                                 </button>
-                            </>
-                        )} */}
-
-                        {interactionMode === 'wakeWords' && (
-                            <div className={styles.wakeWordsHint}>
-                                {intl.formatMessage(messages.wakeWordHint)}
+                                <button
+                                    type="button"
+                                    className={classNames(styles.toggleButton, {
+                                        [styles.toggleButtonActive]: conversationMode === 'qa'
+                                    })}
+                                    aria-pressed={conversationMode === 'qa'}
+                                    onClick={() => this.handleConversationModeChange('qa')}
+                                >
+                                    {intl.formatMessage(messages.conversationModeQA)}
+                                </button>
                             </div>
-                        )}
+                        </section>
 
-                        {interactionMode === 'pushToTalk' && isListening && (
-                            <div className={styles.recordingIndicator}>
-                                {intl.formatMessage(messages.recordingIndicator)}
+                        <section className={styles.section}>
+                            <header className={styles.sectionHeader}>
+                                <h2>{intl.formatMessage(messages.interactionModeTitle)}</h2>
+                                <p>{interactionDescription}</p>
+                            </header>
+                            <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionModeTitle)}>
+                                <button
+                                    type="button"
+                                    className={classNames(styles.toggleButton, {
+                                        [styles.toggleButtonActive]: interactionMode === 'pushToTalk'
+                                    })}
+                                    aria-pressed={interactionMode === 'pushToTalk'}
+                                    // onClick={() => this.handleInteractionModeChange('pushToTalk')}
+                                    onClick={() => this.handleInteractionModeChange('pushToTalk')}
+                                    onPointerDown={() => this.handleToggleListening()}
+                                    onPointerUp={() => this.handleToggleListening()}
+                                >
+                                    {intl.formatMessage(messages.interactionModePushToTalk)}
+                                </button>
+                                {/* <button
+                                    type="button"
+                                    className={classNames(styles.toggleButton, {
+                                        [styles.toggleButtonActive]: interactionMode === 'wakeWords'
+                                    })}
+                                    aria-pressed={interactionMode === 'wakeWords'}
+                                    onClick={() => this.handleInteractionModeChange('wakeWords')}
+                                >
+                                    {intl.formatMessage(messages.interactionModeWakeWords)}
+                                </button> */}
                             </div>
-                        )}
 
-                        {interactionMode === 'pushToTalk' && isProcessingAudio && (
-                            <div className={styles.processingIndicator}>
-                                {intl.formatMessage(messages.processingRecording)}
+                            {/* {interactionMode === 'pushToTalk' && (
+                                <>
+                                    <button
+                                        type="button"
+                                        className={classNames(styles.primaryButton, {
+                                            [styles.primaryButtonActive]: isListening
+                                        })}
+                                        onClick={this.handleToggleListening}
+                                        disabled={isMicLoading || isProcessingAudio || !this.mediaSupportAvailable}
+                                    >
+                                        {intl.formatMessage(isListening ? messages.listeningStop : messages.listeningStart)}
+                                    </button>
+                                </>
+                            )} */}
+
+                            {interactionMode === 'wakeWords' && (
+                                <div className={styles.wakeWordsHint}>
+                                    {intl.formatMessage(messages.wakeWordHint)}
+                                </div>
+                            )}
+
+                            {interactionMode === 'pushToTalk' && isListening && (
+                                <div className={styles.recordingIndicator}>
+                                    {intl.formatMessage(messages.recordingIndicator)}
+                                </div>
+                            )}
+                            {interactionMode === 'pushToTalk' && isThinking && !isListening && (
+                                <div className={styles.processingIndicator}>
+                                    {intl.formatMessage(messages.thinkingIndicator)}
+                                </div>
+                            )}
+                            {interactionMode === 'pushToTalk' && this.state.isSpeaking && !isListening && (
+                                <div className={styles.processingIndicator}>
+                                    {intl.formatMessage(messages.speakingIndicator)}
+                                </div>
+                            )}
+                            {interactionMode === 'pushToTalk' && isProcessingAudio && (
+                                <div className={styles.processingIndicator}>
+                                    {intl.formatMessage(messages.processingRecording)}
+                                </div>
+                            )}
+
+                            {interactionMode === 'pushToTalk' && !this.mediaSupportAvailable && (
+                                <div className={styles.recordingError}>
+                                    {intl.formatMessage(messages.recordingUnsupported)}
+                                </div>
+                            )}
+
+                            {interactionMode === 'pushToTalk' && recordingError && this.mediaSupportAvailable && (
+                                <div className={styles.recordingError}>{recordingError}</div>
+                            )}
+
+                            {/* {interactionMode === 'pushToTalk' && lastRecordingUrl && !isListening && !isProcessingAudio && (
+                                <div className={styles.recordingPlayback}>
+                                    <span className={styles.inputLabel}>{intl.formatMessage(messages.lastRecordingLabel)}</span>
+                                    <audio controls src={lastRecordingUrl} className={styles.audioPlayer} />
+                                </div>
+                            )} */}
+                        </section>
+                    </div>
+
+                    <section className={classNames(styles.section, styles.transcriptSection)}>
+                        <header className={styles.sectionHeader}>
+                            <h2>{intl.formatMessage(messages.transcriptTitle)}</h2>
+                            <div className={styles.headerActions}>
+                                <button
+                                    type="button"
+                                    className={styles.secondaryButton}
+                                    onClick={this.handleDownloadTranscript}
+                                    disabled={!this.state.transcript.length}
+                                >
+                                    {intl.formatMessage(messages.transcriptDownload)}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles.secondaryButton}
+                                    onClick={this.handleClearTranscript}
+                                    disabled={!this.state.transcript.length}
+                                >
+                                    {intl.formatMessage(messages.transcriptClear)}
+                                </button>
                             </div>
-                        )}
+                        </header>
+                        <div className={styles.transcriptContainer}>
+                            {this.renderTranscript()}
+                        </div>
 
-                        {interactionMode === 'pushToTalk' && !this.mediaSupportAvailable && (
-                            <div className={styles.recordingError}>
-                                {intl.formatMessage(messages.recordingUnsupported)}
+                        <form className={styles.messageComposer} onSubmit={this.handleSendMessage}>
+                            <label className={styles.inputLabel} htmlFor="talk-with-marty-message">
+                                {intl.formatMessage(messages.sendMessageLabel)}
+                            </label>
+                            <textarea
+                                id="talk-with-marty-message"
+                                className={styles.messageInput}
+                                value={currentMessage}
+                                onChange={this.handleMessageChange}
+                                placeholder={intl.formatMessage(messages.sendMessagePlaceholder)}
+                                rows={3}
+                            />
+                            {messageError && (
+                                <div className={styles.messageError}>{messageError}</div>
+                            )}
+                            <div className={styles.composerActions}>
+                                <button
+                                    type="submit"
+                                    className={styles.primaryButton}
+                                    disabled={!currentMessage.trim() || isSendingText}
+                                >
+                                    {intl.formatMessage(messages.sendMessageButton)}
+                                </button>
                             </div>
-                        )}
+                        </form>
+                    </section>
 
-                        {interactionMode === 'pushToTalk' && recordingError && this.mediaSupportAvailable && (
-                            <div className={styles.recordingError}>{recordingError}</div>
-                        )}
+                    <section className={styles.section}>
+                        <header className={styles.sectionHeader}>
+                            <h2>{intl.formatMessage(messages.llmSettingsTitle)}</h2>
+                        </header>
 
-                        {/* {interactionMode === 'pushToTalk' && lastRecordingUrl && !isListening && !isProcessingAudio && (
-                            <div className={styles.recordingPlayback}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.lastRecordingLabel)}</span>
-                                <audio controls src={lastRecordingUrl} className={styles.audioPlayer} />
-                            </div>
-                        )} */}
+                        <div className={styles.settingsGrid}>
+                            <label className={styles.inputGroup}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPurposeRole)}</span>
+                                <select
+                                    className={styles.selectInput}
+                                    value={llmSettings.purposeRole}
+                                    onChange={event => this.handleSettingsChange('purposeRole', event.target.value)}
+                                >
+                                    <option value="teacher">Teacher</option>
+                                    <option value="tutor">Tutor</option>
+                                    <option value="peer">Peer</option>
+                                    <option value="novice">Novice</option>
+                                </select>
+                            </label>
+
+                            <label className={styles.inputGroup}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingKnowledgeSources)}</span>
+                                <textarea
+                                    className={styles.textareaInput}
+                                    value={llmSettings.knowledgeSources}
+                                    onChange={event => this.handleSettingsChange('knowledgeSources', event.target.value)}
+                                    placeholder={intl.formatMessage(messages.knowledgePlaceholder)}
+                                    rows={2}
+                                />
+                            </label>
+
+                            <label className={styles.inputGroup}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPersonalityName)}</span>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={llmSettings.personalityName}
+                                    onChange={event => this.handleSettingsChange('personalityName', event.target.value)}
+                                    placeholder={intl.formatMessage(messages.personalityNamePlaceholder)}
+                                />
+                            </label>
+
+                            <label className={styles.inputGroup}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPersonalityVoice)}</span>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={llmSettings.personalityVoice}
+                                    onChange={event => this.handleSettingsChange('personalityVoice', event.target.value)}
+                                    placeholder={intl.formatMessage(messages.personalityVoicePlaceholder)}
+                                />
+                            </label>
+
+                            <label className={classNames(styles.inputGroup, styles.fullWidth)}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingBehavior)}</span>
+                                <textarea
+                                    className={styles.textareaInput}
+                                    value={llmSettings.behavior}
+                                    onChange={event => this.handleSettingsChange('behavior', event.target.value)}
+                                    placeholder={intl.formatMessage(messages.behaviorPlaceholder)}
+                                    rows={3}
+                                />
+                            </label>
+
+                            <label className={classNames(styles.inputGroup, styles.fullWidth)}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingSafeguards)}</span>
+                                <textarea
+                                    className={styles.textareaInput}
+                                    value={llmSettings.safeguards}
+                                    onChange={event => this.handleSettingsChange('safeguards', event.target.value)}
+                                    placeholder={intl.formatMessage(messages.safeguardsPlaceholder)}
+                                    rows={3}
+                                />
+                            </label>
+
+                            <label className={styles.inputGroup}>
+                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingResponseLength)}</span>
+                                <select
+                                    className={styles.selectInput}
+                                    value={llmSettings.responseLength}
+                                    onChange={event => this.handleSettingsChange('responseLength', event.target.value)}
+                                >
+                                    <option value="short">{intl.formatMessage(messages.responseShort)}</option>
+                                    <option value="medium">{intl.formatMessage(messages.responseMedium)}</option>
+                                    <option value="long">{intl.formatMessage(messages.responseLong)}</option>
+                                </select>
+                            </label>
+                        </div>
                     </section>
                 </div>
-
-                <section className={classNames(styles.section, styles.transcriptSection)}>
-                    <header className={styles.sectionHeader}>
-                        <h2>{intl.formatMessage(messages.transcriptTitle)}</h2>
-                        <div className={styles.headerActions}>
-                            <button
-                                type="button"
-                                className={styles.secondaryButton}
-                                onClick={this.handleDownloadTranscript}
-                                disabled={!this.state.transcript.length}
-                            >
-                                {intl.formatMessage(messages.transcriptDownload)}
-                            </button>
-                            <button
-                                type="button"
-                                className={styles.secondaryButton}
-                                onClick={this.handleClearTranscript}
-                                disabled={!this.state.transcript.length}
-                            >
-                                {intl.formatMessage(messages.transcriptClear)}
-                            </button>
-                        </div>
-                    </header>
-                    <div className={styles.transcriptContainer}>
-                        {this.renderTranscript()}
-                    </div>
-
-                    <form className={styles.messageComposer} onSubmit={this.handleSendMessage}>
-                        <label className={styles.inputLabel} htmlFor="talk-with-marty-message">
-                            {intl.formatMessage(messages.sendMessageLabel)}
-                        </label>
-                        <textarea
-                            id="talk-with-marty-message"
-                            className={styles.messageInput}
-                            value={currentMessage}
-                            onChange={this.handleMessageChange}
-                            placeholder={intl.formatMessage(messages.sendMessagePlaceholder)}
-                            rows={3}
-                        />
-                        {messageError && (
-                            <div className={styles.messageError}>{messageError}</div>
-                        )}
-                        <div className={styles.composerActions}>
-                            <button
-                                type="submit"
-                                className={styles.primaryButton}
-                                disabled={!currentMessage.trim() || isSendingText}
-                            >
-                                {intl.formatMessage(messages.sendMessageButton)}
-                            </button>
-                        </div>
-                    </form>
-                </section>
-
-                <section className={styles.section}>
-                    <header className={styles.sectionHeader}>
-                        <h2>{intl.formatMessage(messages.llmSettingsTitle)}</h2>
-                    </header>
-
-                    <div className={styles.settingsGrid}>
-                        <label className={styles.inputGroup}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPurposeRole)}</span>
-                            <select
-                                className={styles.selectInput}
-                                value={llmSettings.purposeRole}
-                                onChange={event => this.handleSettingsChange('purposeRole', event.target.value)}
-                            >
-                                <option value="teacher">Teacher</option>
-                                <option value="tutor">Tutor</option>
-                                <option value="peer">Peer</option>
-                                <option value="novice">Novice</option>
-                            </select>
-                        </label>
-
-                        <label className={styles.inputGroup}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingKnowledgeSources)}</span>
-                            <textarea
-                                className={styles.textareaInput}
-                                value={llmSettings.knowledgeSources}
-                                onChange={event => this.handleSettingsChange('knowledgeSources', event.target.value)}
-                                placeholder={intl.formatMessage(messages.knowledgePlaceholder)}
-                                rows={2}
-                            />
-                        </label>
-
-                        <label className={styles.inputGroup}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPersonalityName)}</span>
-                            <input
-                                type="text"
-                                className={styles.textInput}
-                                value={llmSettings.personalityName}
-                                onChange={event => this.handleSettingsChange('personalityName', event.target.value)}
-                                placeholder={intl.formatMessage(messages.personalityNamePlaceholder)}
-                            />
-                        </label>
-
-                        <label className={styles.inputGroup}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPersonalityVoice)}</span>
-                            <input
-                                type="text"
-                                className={styles.textInput}
-                                value={llmSettings.personalityVoice}
-                                onChange={event => this.handleSettingsChange('personalityVoice', event.target.value)}
-                                placeholder={intl.formatMessage(messages.personalityVoicePlaceholder)}
-                            />
-                        </label>
-
-                        <label className={classNames(styles.inputGroup, styles.fullWidth)}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingBehavior)}</span>
-                            <textarea
-                                className={styles.textareaInput}
-                                value={llmSettings.behavior}
-                                onChange={event => this.handleSettingsChange('behavior', event.target.value)}
-                                placeholder={intl.formatMessage(messages.behaviorPlaceholder)}
-                                rows={3}
-                            />
-                        </label>
-
-                        <label className={classNames(styles.inputGroup, styles.fullWidth)}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingSafeguards)}</span>
-                            <textarea
-                                className={styles.textareaInput}
-                                value={llmSettings.safeguards}
-                                onChange={event => this.handleSettingsChange('safeguards', event.target.value)}
-                                placeholder={intl.formatMessage(messages.safeguardsPlaceholder)}
-                                rows={3}
-                            />
-                        </label>
-
-                        <label className={styles.inputGroup}>
-                            <span className={styles.inputLabel}>{intl.formatMessage(messages.settingResponseLength)}</span>
-                            <select
-                                className={styles.selectInput}
-                                value={llmSettings.responseLength}
-                                onChange={event => this.handleSettingsChange('responseLength', event.target.value)}
-                            >
-                                <option value="short">{intl.formatMessage(messages.responseShort)}</option>
-                                <option value="medium">{intl.formatMessage(messages.responseMedium)}</option>
-                                <option value="long">{intl.formatMessage(messages.responseLong)}</option>
-                            </select>
-                        </label>
-                    </div>
-                </section>
-            </div>
+            </>
         );
     }
 }
 
 TalkWithMarty.propTypes = {
     intl: intlShape,
-    onAudioCaptured: PropTypes.func
+    onAudioCaptured: PropTypes.func,
+    activityImageSrc: PropTypes.string
 };
 
 export default injectIntl(TalkWithMarty);
@@ -1355,4 +1476,50 @@ function getRaftUsingTargetId(targetId) {
     const raftId = window.raftManager.raftIdAndDeviceIdMap[targetId];
     const raft = window.applicationManager.connectedRafts[raftId];
     return raft;
+}
+
+const getConnectedRaft = () => {
+    const targetId = window.vm && window.vm.runtime && window.vm.runtime._editingTarget.id;
+    if (!targetId) {
+        console.warn('[TalkWithMarty] Unable to stream audio to Marty: target ID not found');
+        return;
+    }
+    const connectedRaft = getRaftUsingTargetId(targetId);
+    if (!connectedRaft) {
+        console.warn('[TalkWithMarty] Unable to stream audio to Marty: raft connection not found');
+        return;
+    }
+    return connectedRaft;
+}
+const martyIsListening = () => {
+    const connectedRaft = getConnectedRaft();
+    if (!connectedRaft) {
+        return;
+    }
+    connectedRaft.sendRestMessage('led/LEDeye/pattern/pinwheel?c=ff0000');
+}
+
+const martyIsThinking = () => {
+    const connectedRaft = getConnectedRaft();
+    if (!connectedRaft) {
+        return;
+    }
+    connectedRaft.sendRestMessage('led/LEDeye/pattern/pinwheel?c=00ff00');
+    connectedRaft.sendRestMessage('traj/getReady/?moveTime=2000');
+}
+
+const martyStartsTalking = () => {
+    const connectedRaft = getConnectedRaft();
+    if (!connectedRaft) {
+        return;
+    }
+    connectedRaft.sendRestMessage('led/LEDeye/pattern/show-off');
+}
+
+const martyStopsTalking = () => {
+    const connectedRaft = getConnectedRaft();
+    if (!connectedRaft) {
+        return;
+    }
+    connectedRaft.sendRestMessage('led/LEDeye/off');
 }
