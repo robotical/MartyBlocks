@@ -6,6 +6,10 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import styles from './talk-with-marty.css';
 import LoadingSpinnerMarty from './marty-is-thinking-svg.jsx';
 import SpeakingMarty from './marty-is-speaking-svg.jsx';
+import TalkWithMartySettingsModal from './settings-modal/talk-with-marty-settings-modal.jsx';
+
+const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
+const serverUrlLocal = 'http://localhost:4444';
 
 const messages = defineMessages({
     conversationModeTitle: {
@@ -92,45 +96,21 @@ const messages = defineMessages({
         id: 'talkWithMarty.llmSettingsTitle',
         defaultMessage: 'LLM Settings'
     },
-    settingPurposeRole: {
-        id: 'talkWithMarty.settingPurposeRole',
-        defaultMessage: 'Purpose / Role'
-    },
-    settingKnowledgeSources: {
-        id: 'talkWithMarty.settingKnowledgeSources',
-        defaultMessage: 'Knowledge Sources'
-    },
-    settingPersonalityName: {
-        id: 'talkWithMarty.settingPersonalityName',
-        defaultMessage: 'Personality Name'
-    },
-    settingPersonalityVoice: {
-        id: 'talkWithMarty.settingPersonalityVoice',
-        defaultMessage: 'Personality Voice'
-    },
-    settingBehavior: {
-        id: 'talkWithMarty.settingBehavior',
-        defaultMessage: 'Behavior'
-    },
     settingSafeguards: {
         id: 'talkWithMarty.settingSafeguards',
         defaultMessage: 'Safeguards'
     },
-    settingResponseLength: {
-        id: 'talkWithMarty.settingResponseLength',
-        defaultMessage: 'Response Length'
+    safeguardsPlaceholder: {
+        id: 'talkWithMarty.safeguardsPlaceholder',
+        defaultMessage: 'Safety rules or restricted topics'
     },
-    responseShort: {
-        id: 'talkWithMarty.responseShort',
-        defaultMessage: 'Short'
+    settingInstructions: {
+        id: 'talkWithMarty.settingInstructions',
+        defaultMessage: 'Instructions'
     },
-    responseMedium: {
-        id: 'talkWithMarty.responseMedium',
-        defaultMessage: 'Medium'
-    },
-    responseLong: {
-        id: 'talkWithMarty.responseLong',
-        defaultMessage: 'Long'
+    instructionsPlaceholder: {
+        id: 'talkWithMarty.instructionsPlaceholder',
+        defaultMessage: 'Guidance for how Marty should respond'
     },
     transcriptLabelUser: {
         id: 'talkWithMarty.transcriptLabelUser',
@@ -139,26 +119,6 @@ const messages = defineMessages({
     transcriptLabelMarty: {
         id: 'talkWithMarty.transcriptLabelMarty',
         defaultMessage: 'Marty'
-    },
-    knowledgePlaceholder: {
-        id: 'talkWithMarty.knowledgePlaceholder',
-        defaultMessage: 'Add references or URLs (comma separated)'
-    },
-    personalityNamePlaceholder: {
-        id: 'talkWithMarty.personalityNamePlaceholder',
-        defaultMessage: 'e.g. Coach Marty'
-    },
-    personalityVoicePlaceholder: {
-        id: 'talkWithMarty.personalityVoicePlaceholder',
-        defaultMessage: 'e.g. Calm, energetic'
-    },
-    behaviorPlaceholder: {
-        id: 'talkWithMarty.behaviorPlaceholder',
-        defaultMessage: 'Guidance for how Marty should act during the conversation'
-    },
-    safeguardsPlaceholder: {
-        id: 'talkWithMarty.safeguardsPlaceholder',
-        defaultMessage: 'Safety rules or restricted topics'
     },
     recordingIndicator: {
         id: 'talkWithMarty.recordingIndicator',
@@ -207,8 +167,39 @@ const messages = defineMessages({
     activityOverlayLabel: {
         id: 'talkWithMarty.activityOverlayLabel',
         defaultMessage: 'Marty is responding'
+    },
+    settingsOpenLabel: {
+        id: 'talkWithMarty.settingsOpenLabel',
+        defaultMessage: 'Open Settings'
+    },
+    settingsCloseLabel: {
+        id: 'talkWithMarty.settingsCloseLabel',
+        defaultMessage: 'Close Settings'
+    },
+    currentSpeakerLabel: {
+        id: 'talkWithMarty.currentSpeakerLabel',
+        defaultMessage: 'Current Speaker'
+    },
+    usersSettingsTitle: {
+        id: 'talkWithMarty.usersSettingsTitle',
+        defaultMessage: 'Participants'
+    },
+    addUserPlaceholder: {
+        id: 'talkWithMarty.addUserPlaceholder',
+        defaultMessage: 'New participant name'
+    },
+    addUserButton: {
+        id: 'talkWithMarty.addUserButton',
+        defaultMessage: 'Add'
+    },
+    removeUserButton: {
+        id: 'talkWithMarty.removeUserButton',
+        defaultMessage: 'Remove'
     }
 });
+
+// Added: storage key
+const TRANSCRIPT_STORAGE_KEY = 'talkWithMartyTranscript';
 
 class TalkWithMarty extends React.Component {
     constructor(props) {
@@ -221,13 +212,8 @@ class TalkWithMarty extends React.Component {
             transcript: [],
             currentMessage: '',
             llmSettings: {
-                purposeRole: 'teacher',
-                knowledgeSources: '',
-                personalityName: '',
-                personalityVoice: '',
-                behavior: '',
                 safeguards: '',
-                responseLength: 'short'
+                instructions: ''
             },
             isMicLoading: false,
             recordingError: null,
@@ -236,7 +222,10 @@ class TalkWithMarty extends React.Component {
             isSendingText: false,
             messageError: null,
             isThinking: false,
-            isSpeaking: false
+            isSpeaking: false,
+            showSettingsModal: false,
+            users: ['You'],
+            currentUser: 'You'
         };
 
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
@@ -269,6 +258,11 @@ class TalkWithMarty extends React.Component {
         this.sendTextRequest = this.sendTextRequest.bind(this);
         this.handleSpeechAudioResult = this.handleSpeechAudioResult.bind(this);
         this.postJson = this.postJson.bind(this);
+        this.toggleSettingsModal = this.toggleSettingsModal.bind(this);
+        this.handleAddUser = this.handleAddUser.bind(this);
+        this.handleRemoveUser = this.handleRemoveUser.bind(this);
+        this.handleUpdateUser = this.handleUpdateUser.bind(this);
+        this.handleSetCurrentUser = this.handleSetCurrentUser.bind(this);
 
         this.mediaStream = null;
         this.mediaRecorder = null;
@@ -280,6 +274,8 @@ class TalkWithMarty extends React.Component {
 
     componentDidMount() {
         this.isComponentMounted = true;
+        // Load persisted transcript (if any)
+        this.loadTranscriptFromStorage();
     }
 
     componentWillUnmount() {
@@ -297,6 +293,41 @@ class TalkWithMarty extends React.Component {
                 urlCreator.revokeObjectURL(this.martySpeechUrl);
             }
             this.martySpeechUrl = '';
+        }
+    }
+
+    // Added: persist helpers
+    loadTranscriptFromStorage() {
+        if (typeof window === 'undefined' || !window.localStorage) return;
+        try {
+            const stored = window.localStorage.getItem(TRANSCRIPT_STORAGE_KEY);
+            if (!stored) return;
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) {
+                this.setState({ transcript: parsed });
+            }
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Failed to load stored transcript', e);
+        }
+    }
+
+    saveTranscriptToStorage() {
+        if (typeof window === 'undefined' || !window.localStorage) return;
+        try {
+            window.localStorage.setItem(
+                TRANSCRIPT_STORAGE_KEY,
+                JSON.stringify(this.state.transcript)
+            );
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Failed to save transcript', e);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.transcript !== this.state.transcript) {
+            this.saveTranscriptToStorage();
         }
     }
 
@@ -356,6 +387,7 @@ class TalkWithMarty extends React.Component {
         const nextEntry = {
             id: `${timestamp}-user`,
             sender: 'user',
+            displayName: this.state.currentUser,
             text: trimmedMessage,
             timestamp
         };
@@ -442,6 +474,10 @@ class TalkWithMarty extends React.Component {
             this.martySpeechUrl = '';
         }
 
+        // also remove persisted transcript
+        if (typeof window !== 'undefined' && window.localStorage) {
+            try { window.localStorage.removeItem(TRANSCRIPT_STORAGE_KEY); } catch (_) { }
+        }
         this.setState({
             transcript: [],
             lastRecordingUrl: '',
@@ -625,6 +661,9 @@ class TalkWithMarty extends React.Component {
     }
 
     async processRecording(blob) {
+        // capture user at start of processing for speech attribution
+        this.pendingSpeechUserName = this.state.currentUser;
+
         if (!blob) {
             return;
         }
@@ -724,179 +763,17 @@ class TalkWithMarty extends React.Component {
 
         return this.state.transcript.map(entry => ({
             role: entry.sender === 'marty' ? 'assistant' : 'user',
-            content: entry.text,
+            content: entry.sender === 'user' && entry.displayName
+                ? `${entry.displayName}: ${entry.text}`
+                : entry.text,
             timestamp: entry.timestamp
         }));
     }
 
-    buildLLMSettingsForRequest() {
-        const {
-            purposeRole,
-            knowledgeSources,
-            personalityName,
-            personalityVoice,
-            behavior,
-            safeguards,
-            responseLength
-        } = this.state.llmSettings;
-
-        const knowledgeList = knowledgeSources
-            ? knowledgeSources
-                .split(/\n|,/)
-                .map(value => value.trim())
-                .filter(value => value.length > 0)
-            : undefined;
-
-        const settings = {};
-
-        if (purposeRole) {
-            settings.role = purposeRole;
-        }
-        if (knowledgeList && knowledgeList.length) {
-            settings.knowledgeSources = knowledgeList;
-        }
-        if (personalityName || personalityVoice) {
-            settings.personality = {
-                name: personalityName || undefined,
-                voice: personalityVoice || undefined
-            };
-        }
-        if (behavior) {
-            settings.behavior = behavior;
-        }
-        if (safeguards) {
-            settings.safeguards = { notes: safeguards };
-        }
-        if (responseLength) {
-            settings.responseLength = responseLength;
-        }
-
-        return settings;
-    }
-
-    shouldIncludeSpeech() {
-        return true;
-        return Boolean(this.state.llmSettings.personalityVoice && this.state.llmSettings.personalityVoice.trim());
-    }
-
-    buildSpeechRequestPayload(arrayBuffer, mimeType) {
-        const includeSpeech = this.shouldIncludeSpeech();
-        const payload = {
-            audioBuffer: Array.from(new Uint8Array(arrayBuffer)),
-            stt: {
-                provider: 'openai-whisper',
-                config: { mimeType }
-            },
-            llm: {
-                provider: 'openai',
-                conversationHistory: this.buildConversationHistory(),
-                settings: this.buildLLMSettingsForRequest()
-            },
-            includeSpeech,
-            includeTranscript: true
-        };
-
-        if (includeSpeech) {
-            payload.tts = {
-                provider: 'azure',
-                options: this.state.llmSettings.personalityVoice
-                    ? { voice: this.state.llmSettings.personalityVoice }
-                    : undefined
-            };
-        }
-
-        return payload;
-    }
-
-    async sendSpeechRequest(payload) {
-        return this.postJson('http://localhost:3333/talkWithMarty/talk-with-marty-using-speech', payload);
-    }
-
-    applySpeechResponse(response) {
-        if (!response) {
-            return;
-        }
-
-        const entriesToAdd = [];
-
-        if (response.transcript && response.transcript.text) {
-            entriesToAdd.push(this.createTranscriptEntry(
-                'user',
-                response.transcript.text,
-                response.transcript.timestamp,
-                { raw: response.transcript.raw }
-            ));
-        }
-
-        if (response.llm && response.llm.text) {
-            entriesToAdd.push(this.createTranscriptEntry(
-                'marty',
-                response.llm.text,
-                response.llm.timestamp,
-                { raw: response.llm.raw }
-            ));
-        }
-
-        if (entriesToAdd.length) {
-            this.appendTranscriptEntries(entriesToAdd);
-        }
-    }
-
-    createTranscriptEntry(sender, text, timestamp, metadata) {
-        const entryTimestamp = timestamp || new Date().toISOString();
-        const uniqueSuffix = Math.random().toString(16).slice(2, 8);
-        const entry = {
-            id: `${entryTimestamp}-${sender}-${uniqueSuffix}`,
-            sender,
-            text,
-            timestamp: entryTimestamp
-        };
-
-        if (metadata) {
-            entry.metadata = metadata;
-        }
-
-        return entry;
-    }
-
-    appendTranscriptEntries(entries) {
-        if (!entries || !entries.length) {
-            return;
-        }
-
-        this.setState(prevState => ({
-            transcript: [...prevState.transcript, ...entries]
-        }));
-    }
-
-    buildTextRequestPayload(message) {
-        const includeSpeech = this.shouldIncludeSpeech();
-        const payload = {
-            text: message,
-            llm: {
-                provider: 'openai',
-                conversationHistory: this.buildConversationHistory(),
-                settings: this.buildLLMSettingsForRequest()
-            },
-            includeSpeech
-        };
-
-        if (includeSpeech) {
-            payload.tts = {
-                provider: 'azure',
-                options: this.state.llmSettings.personalityVoice
-                    ? { voice: this.state.llmSettings.personalityVoice }
-                    : undefined
-            };
-        }
-
-        return payload;
-    }
-
-    async sendTextRequest(message) {
+        async sendTextRequest(message) {
         try {
             const payload = this.buildTextRequestPayload(message);
-            const response = await this.postJson('http://localhost:3333/talkWithMarty/talk-with-marty-using-text', payload);
+            const response = await this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-text`, payload);
             // thinking done once response received
             if (this.isComponentMounted) {
                 this.setState({ isThinking: false });
@@ -1010,6 +887,7 @@ class TalkWithMarty extends React.Component {
             console.error('[TalkWithMarty] Error playing audio', error);
         });
         console.log("after playMarty");
+        return;
 
         const urlCreator = window.URL || window.webkitURL;
         if (!urlCreator) {
@@ -1044,6 +922,132 @@ class TalkWithMarty extends React.Component {
             }
             try { martyStopsTalking(); } catch (_) { }
         });
+    }
+
+
+    buildLLMSettingsForRequest() {
+        const {
+            safeguards,
+            instructions,
+        } = this.state.llmSettings;
+
+        const settings = {};
+        if (instructions) {
+            settings.instructions = instructions;
+        }
+        if (safeguards) {
+            settings.safeguards = { notes: safeguards };
+        }
+        return {
+            ...settings,
+            userName: this.state.currentUser
+        };
+    }
+
+    shouldIncludeSpeech() {
+        return true;
+        return Boolean(this.state.llmSettings.personalityVoice && this.state.llmSettings.personalityVoice.trim());
+    }
+
+    buildSpeechRequestPayload(arrayBuffer, mimeType) {
+        const includeSpeech = this.shouldIncludeSpeech();
+        const payload = {
+            audioBuffer: Array.from(new Uint8Array(arrayBuffer)),
+            stt: {
+                provider: 'openai-whisper',
+                config: { mimeType }
+            },
+            llm: {
+                provider: 'openai',
+                conversationHistory: this.buildConversationHistory(),
+                settings: this.buildLLMSettingsForRequest()
+            },
+            includeSpeech,
+            includeTranscript: true,
+            userName: this.state.currentUser
+        };
+
+        if (includeSpeech) {
+            payload.tts = {
+                provider: 'azure'
+                // removed voice options (personalityVoice no longer exists)
+            };
+        }
+        return payload;
+    }
+
+    buildTextRequestPayload(message) {
+        const includeSpeech = this.shouldIncludeSpeech();
+        const payload = {
+            text: message,
+            llm: {
+                provider: 'openai',
+                conversationHistory: this.buildConversationHistory(),
+                settings: this.buildLLMSettingsForRequest()
+            },
+            includeSpeech,
+            userName: this.state.currentUser
+        };
+        if (includeSpeech) {
+            payload.tts = {
+                provider: 'azure'
+            };
+        }
+        return payload;
+    }
+
+    async sendSpeechRequest(payload) {
+        return this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-speech`, payload);
+    }
+
+    applySpeechResponse(response, forcedUserName) {
+        if (!response) return;
+        const userName = forcedUserName || this.pendingSpeechUserName || this.state.currentUser;
+        const entriesToAdd = [];
+        if (response.transcript && response.transcript.text) {
+            entriesToAdd.push(this.createTranscriptEntry(
+                'user',
+                response.transcript.text,
+                response.transcript.timestamp,
+                { raw: response.transcript.raw },
+                userName
+            ));
+        }
+        if (response.llm && response.llm.text) {
+            entriesToAdd.push(this.createTranscriptEntry(
+                'marty',
+                response.llm.text,
+                response.llm.timestamp,
+                { raw: response.llm.raw }
+            ));
+        }
+        if (entriesToAdd.length) this.appendTranscriptEntries(entriesToAdd);
+    }
+
+    createTranscriptEntry(sender, text, timestamp, metadata, displayName) {
+        const entryTimestamp = timestamp || new Date().toISOString();
+        const uniqueSuffix = Math.random().toString(16).slice(2, 8);
+        const entry = {
+            id: `${entryTimestamp}-${sender}-${uniqueSuffix}`,
+            sender,
+            text,
+            timestamp: entryTimestamp
+        };
+        if (displayName && sender === 'user') {
+            entry.displayName = displayName;
+        }
+        if (metadata) entry.metadata = metadata;
+        return entry;
+    }
+
+    appendTranscriptEntries(entries) {
+        if (!entries || !entries.length) {
+            return;
+        }
+
+        this.setState(prevState => ({
+            transcript: [...prevState.transcript, ...entries]
+        }));
     }
 
     async postJson(url, payload) {
@@ -1083,6 +1087,46 @@ class TalkWithMarty extends React.Component {
         }
     }
 
+    toggleSettingsModal() {
+        this.setState(prev => ({ showSettingsModal: !prev.showSettingsModal }));
+    }
+
+    handleAddUser(name) {
+        const trimmed = (name || '').trim();
+        if (!trimmed) return;
+        this.setState(prev => {
+            if (prev.users.includes(trimmed)) return null;
+            return { users: [...prev.users, trimmed] };
+        });
+    }
+    handleRemoveUser(name) {
+        this.setState(prev => {
+            if (prev.users.length === 1) return null; // keep at least one
+            const nextUsers = prev.users.filter(u => u !== name);
+            const nextCurrent = nextUsers.includes(prev.currentUser) ? prev.currentUser : nextUsers[0];
+            return { users: nextUsers, currentUser: nextCurrent };
+        });
+    }
+    handleUpdateUser(oldName, newName) {
+        const trimmed = (newName || '').trim();
+        if (!trimmed) return;
+        this.setState(prev => {
+            if (prev.users.includes(trimmed) && trimmed !== oldName) return null;
+            const nextUsers = prev.users.map(u => u === oldName ? trimmed : u);
+            const nextCurrent = prev.currentUser === oldName ? trimmed : prev.currentUser;
+            // Also update existing transcript display names
+            const nextTranscript = prev.transcript.map(e =>
+                e.sender === 'user' && e.displayName === oldName
+                    ? { ...e, displayName: trimmed }
+                    : e
+            );
+            return { users: nextUsers, currentUser: nextCurrent, transcript: nextTranscript };
+        });
+    }
+    handleSetCurrentUser(name) {
+        this.setState({ currentUser: name });
+    }
+
     renderTranscript() {
         const { transcript } = this.state;
         const { intl } = this.props;
@@ -1101,8 +1145,8 @@ class TalkWithMarty extends React.Component {
                     <li key={entry.id} className={styles.transcriptItem}>
                         <span className={styles.transcriptSender}>
                             {entry.sender === 'user'
-                                ? intl.formatMessage(messages.transcriptLabelUser)
-                                : intl.formatMessage(messages.transcriptLabelMarty)}
+                                ? (entry.displayName || this.props.intl.formatMessage(messages.transcriptLabelUser))
+                                : this.props.intl.formatMessage(messages.transcriptLabelMarty)}
                         </span>
                         <span className={styles.transcriptMessage}>{entry.text}</span>
                         <span className={styles.transcriptTimestamp}>{new Date(entry.timestamp).toLocaleTimeString()}</span>
@@ -1127,7 +1171,10 @@ class TalkWithMarty extends React.Component {
             lastRecordingUrl,
             messageError,
             isThinking,
-            isSpeaking
+            isSpeaking,
+            showSettingsModal,
+            users,
+            currentUser
         } = this.state;
 
         const isBusy = isThinking || isSpeaking;
@@ -1142,6 +1189,20 @@ class TalkWithMarty extends React.Component {
 
         return (
             <>
+                {/* settings modal */}
+                <TalkWithMartySettingsModal
+                    open={showSettingsModal}
+                    onClose={this.toggleSettingsModal}
+                    intl={intl}
+                    settings={llmSettings}
+                    onSettingChange={this.handleSettingsChange}
+                    users={users}
+                    currentUser={currentUser}
+                    onAddUser={this.handleAddUser}
+                    onRemoveUser={this.handleRemoveUser}
+                    onUpdateUser={this.handleUpdateUser}
+                />
+                {/* busy overlay remains */}
                 {isBusy && (
                     <div
                         className={styles.activityBackdrop || ''}
@@ -1174,8 +1235,8 @@ class TalkWithMarty extends React.Component {
                                 // animation: 'tm-slideDown 300ms ease-out'
                             }}
                         >
-                                {isThinking && <LoadingSpinnerMarty />}
-                                {isSpeaking && <SpeakingMarty />}
+                            {isThinking && <LoadingSpinnerMarty />}
+                            {isSpeaking && <SpeakingMarty />}
                         </div>
                         {/* <style>
                             {`@keyframes tm-slideDown {
@@ -1227,19 +1288,33 @@ class TalkWithMarty extends React.Component {
                                 <p>{interactionDescription}</p>
                             </header>
                             <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionModeTitle)}>
-                                <button
-                                    type="button"
-                                    className={classNames(styles.toggleButton, {
-                                        [styles.toggleButtonActive]: interactionMode === 'pushToTalk'
-                                    })}
-                                    aria-pressed={interactionMode === 'pushToTalk'}
-                                    // onClick={() => this.handleInteractionModeChange('pushToTalk')}
-                                    onClick={() => this.handleInteractionModeChange('pushToTalk')}
-                                    onPointerDown={() => this.handleToggleListening()}
-                                    onPointerUp={() => this.handleToggleListening()}
-                                >
-                                    {intl.formatMessage(messages.interactionModePushToTalk)}
-                                </button>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                    <button
+                                        type="button"
+                                        className={classNames(styles.toggleButton, {
+                                            [styles.toggleButtonActive]: interactionMode === 'pushToTalk'
+                                        })}
+                                        aria-pressed={interactionMode === 'pushToTalk'}
+                                        onClick={() => this.handleInteractionModeChange('pushToTalk')}
+                                        onPointerDown={() => this.handleToggleListening()}
+                                        onPointerUp={() => this.handleToggleListening()}
+                                    >
+                                        {intl.formatMessage(messages.interactionModePushToTalk)}
+                                    </button>
+                                    {interactionMode === 'pushToTalk' && (
+                                        <select
+                                            className={styles.selectInput}
+                                            value={currentUser}
+                                            aria-label={intl.formatMessage(messages.currentSpeakerLabel)}
+                                            onChange={e => this.handleSetCurrentUser(e.target.value)}
+                                            style={{ minHeight: '32px' }}
+                                        >
+                                            {users.map(u => (
+                                                <option key={u} value={u}>{u}</option>
+                                            ))}
+                                        </select>
+                                    )}
+                                </div>
                                 {/* <button
                                     type="button"
                                     className={classNames(styles.toggleButton, {
@@ -1310,6 +1385,23 @@ class TalkWithMarty extends React.Component {
                                     <audio controls src={lastRecordingUrl} className={styles.audioPlayer} />
                                 </div>
                             )} */}
+
+                            {/* Settings (gear) button */}
+                            <div className={styles.settingsButtonContainer}>
+                                <button
+                                    type="button"
+                                    className={styles.settingsButton}
+                                    aria-haspopup="dialog"
+                                    aria-expanded={showSettingsModal ? 'true' : 'false'}
+                                    onClick={this.toggleSettingsModal}
+                                    title={intl.formatMessage(showSettingsModal ? messages.settingsCloseLabel : messages.settingsOpenLabel)}
+                                >
+                                    ⚙
+                                    <span style={{ position: 'absolute', left: '-9999px' }}>
+                                        {intl.formatMessage(showSettingsModal ? messages.settingsCloseLabel : messages.settingsOpenLabel)}
+                                    </span>
+                                </button>
+                            </div>
                         </section>
                     </div>
 
@@ -1364,96 +1456,6 @@ class TalkWithMarty extends React.Component {
                                 </button>
                             </div>
                         </form>
-                    </section>
-
-                    <section className={styles.section}>
-                        <header className={styles.sectionHeader}>
-                            <h2>{intl.formatMessage(messages.llmSettingsTitle)}</h2>
-                        </header>
-
-                        <div className={styles.settingsGrid}>
-                            <label className={styles.inputGroup}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPurposeRole)}</span>
-                                <select
-                                    className={styles.selectInput}
-                                    value={llmSettings.purposeRole}
-                                    onChange={event => this.handleSettingsChange('purposeRole', event.target.value)}
-                                >
-                                    <option value="teacher">Teacher</option>
-                                    <option value="tutor">Tutor</option>
-                                    <option value="peer">Peer</option>
-                                    <option value="novice">Novice</option>
-                                </select>
-                            </label>
-
-                            <label className={styles.inputGroup}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingKnowledgeSources)}</span>
-                                <textarea
-                                    className={styles.textareaInput}
-                                    value={llmSettings.knowledgeSources}
-                                    onChange={event => this.handleSettingsChange('knowledgeSources', event.target.value)}
-                                    placeholder={intl.formatMessage(messages.knowledgePlaceholder)}
-                                    rows={2}
-                                />
-                            </label>
-
-                            <label className={styles.inputGroup}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPersonalityName)}</span>
-                                <input
-                                    type="text"
-                                    className={styles.textInput}
-                                    value={llmSettings.personalityName}
-                                    onChange={event => this.handleSettingsChange('personalityName', event.target.value)}
-                                    placeholder={intl.formatMessage(messages.personalityNamePlaceholder)}
-                                />
-                            </label>
-
-                            <label className={styles.inputGroup}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingPersonalityVoice)}</span>
-                                <input
-                                    type="text"
-                                    className={styles.textInput}
-                                    value={llmSettings.personalityVoice}
-                                    onChange={event => this.handleSettingsChange('personalityVoice', event.target.value)}
-                                    placeholder={intl.formatMessage(messages.personalityVoicePlaceholder)}
-                                />
-                            </label>
-
-                            <label className={classNames(styles.inputGroup, styles.fullWidth)}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingBehavior)}</span>
-                                <textarea
-                                    className={styles.textareaInput}
-                                    value={llmSettings.behavior}
-                                    onChange={event => this.handleSettingsChange('behavior', event.target.value)}
-                                    placeholder={intl.formatMessage(messages.behaviorPlaceholder)}
-                                    rows={3}
-                                />
-                            </label>
-
-                            <label className={classNames(styles.inputGroup, styles.fullWidth)}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingSafeguards)}</span>
-                                <textarea
-                                    className={styles.textareaInput}
-                                    value={llmSettings.safeguards}
-                                    onChange={event => this.handleSettingsChange('safeguards', event.target.value)}
-                                    placeholder={intl.formatMessage(messages.safeguardsPlaceholder)}
-                                    rows={3}
-                                />
-                            </label>
-
-                            <label className={styles.inputGroup}>
-                                <span className={styles.inputLabel}>{intl.formatMessage(messages.settingResponseLength)}</span>
-                                <select
-                                    className={styles.selectInput}
-                                    value={llmSettings.responseLength}
-                                    onChange={event => this.handleSettingsChange('responseLength', event.target.value)}
-                                >
-                                    <option value="short">{intl.formatMessage(messages.responseShort)}</option>
-                                    <option value="medium">{intl.formatMessage(messages.responseMedium)}</option>
-                                    <option value="long">{intl.formatMessage(messages.responseLong)}</option>
-                                </select>
-                            </label>
-                        </div>
                     </section>
                 </div>
             </>
