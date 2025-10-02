@@ -773,7 +773,7 @@ class TalkWithMarty extends React.Component {
         async sendTextRequest(message) {
         try {
             const payload = this.buildTextRequestPayload(message);
-            const response = await this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-text`, payload);
+            const response = await this.postJson(`${serverUrlLocal}/talkWithMarty/talk-with-marty-using-text`, payload);
             // thinking done once response received
             if (this.isComponentMounted) {
                 this.setState({ isThinking: false });
@@ -997,7 +997,7 @@ class TalkWithMarty extends React.Component {
     }
 
     async sendSpeechRequest(payload) {
-        return this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-speech`, payload);
+        return this.postJson(`${serverUrlLocal}/talkWithMarty/talk-with-marty-using-speech`, payload);
     }
 
     applySpeechResponse(response, forcedUserName) {
