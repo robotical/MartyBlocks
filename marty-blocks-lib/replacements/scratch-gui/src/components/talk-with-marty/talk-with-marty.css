@@ -19,8 +19,9 @@
 }
 
 .primarySections {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 0.4fr 0.6fr;
+  /* flex-wrap: wrap; */
   gap: 16px;
 }
 
@@ -127,6 +128,10 @@
   flex: 1;
 }
 
+.userKeySelect {
+  width: 72px;
+}
+
 .settingsUserAddRow {
   display: flex;
   gap: 8px;
@@ -192,8 +197,22 @@
   box-shadow: 0 4px 8px rgba(255, 119, 72, 0.35);
 }
 
+.addRemoveUserButton {
+    border: none;
+    background: none;
+    color: #0066ff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
 .primaryButton {
-  margin-top: 16px;
+  /* margin-top: 16px; */
   display: inline-flex;
   align-items: center;
   justify-content: center;

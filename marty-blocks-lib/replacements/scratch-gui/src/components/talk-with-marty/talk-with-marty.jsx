@@ -9,7 +9,7 @@ import SpeakingMarty from './marty-is-speaking-svg.jsx';
 import TalkWithMartySettingsPanel from './settings-panel/talk-with-marty-settings-panel.jsx';
 
 const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
-const serverUrlLocal = 'http://localhost:4444';
+// const serverUrl = 'http://localhost:4444';
 
 const messages = defineMessages({
     interactionTypeTitle: {
@@ -42,7 +42,7 @@ const messages = defineMessages({
     },
     interactionModePushToTalkDescription: {
         id: 'talkWithMarty.interactionModePushToTalkDescription',
-        defaultMessage: 'Use the button to start and stop Marty listening.'
+        defaultMessage: 'Manage participants in the conversation.'
     },
     interactionModeWakeWords: {
         id: 'talkWithMarty.interactionModeWakeWords',
@@ -194,6 +194,9 @@ const messages = defineMessages({
     removeUserButton: { id: 'talkWithMarty.removeUserButton', defaultMessage: 'Remove' },
 });
 
+const AVAILABLE_USER_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+const DEFAULT_USER_KEY = AVAILABLE_USER_KEYS[0];
+
 // Added: storage key
 const TRANSCRIPT_STORAGE_KEY = 'talkWithMartyTranscript';
 
@@ -220,9 +223,10 @@ class TalkWithMarty extends React.Component {
             isThinking: false,
             isSpeaking: false,
             isSettingsOpen: false,
-            users: ['You'],
+            users: [{ name: 'You', key: DEFAULT_USER_KEY }],
             currentUser: 'You',
             newUserName: '',
+            newUserKey: AVAILABLE_USER_KEYS.find(key => key !== DEFAULT_USER_KEY) || '',
             editingUser: {}
         };
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
@@ -259,8 +263,12 @@ class TalkWithMarty extends React.Component {
         this.handleAddUser = this.handleAddUser.bind(this);
         this.handleRemoveUser = this.handleRemoveUser.bind(this);
         this.handleUpdateUser = this.handleUpdateUser.bind(this);
+        this.handleUpdateUserKey = this.handleUpdateUserKey.bind(this);
         this.handleSetCurrentUser = this.handleSetCurrentUser.bind(this);
         this.handleEditUser = this.handleEditUser.bind(this);
+        this.handleGlobalKeyDown = this.handleGlobalKeyDown.bind(this);
+        this.handleGlobalKeyUp = this.handleGlobalKeyUp.bind(this);
+        this.handleWindowBlur = this.handleWindowBlur.bind(this);
 
         this.mediaStream = null;
         this.mediaRecorder = null;
@@ -268,12 +276,18 @@ class TalkWithMarty extends React.Component {
         this.isComponentMounted = false;
         this.mediaSupportAvailable = typeof window !== 'undefined' && typeof window.MediaRecorder !== 'undefined';
         this.martySpeechUrl = '';
+        this.activeUserKey = null;
     }
 
     componentDidMount() {
         this.isComponentMounted = true;
         // Load persisted transcript (if any)
         this.loadTranscriptFromStorage();
+        if (typeof window !== 'undefined') {
+            window.addEventListener('keydown', this.handleGlobalKeyDown);
+            window.addEventListener('keyup', this.handleGlobalKeyUp);
+            window.addEventListener('blur', this.handleWindowBlur);
+        }
     }
 
     componentWillUnmount() {
@@ -291,6 +305,11 @@ class TalkWithMarty extends React.Component {
                 urlCreator.revokeObjectURL(this.martySpeechUrl);
             }
             this.martySpeechUrl = '';
+        }
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('keydown', this.handleGlobalKeyDown);
+            window.removeEventListener('keyup', this.handleGlobalKeyUp);
+            window.removeEventListener('blur', this.handleWindowBlur);
         }
     }
 
@@ -326,6 +345,14 @@ class TalkWithMarty extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevState.transcript !== this.state.transcript) {
             this.saveTranscriptToStorage();
+        }
+        if (prevState.users !== this.state.users) {
+            const availableKeys = this.getAvailableKeys();
+            if (this.state.newUserKey && !availableKeys.includes(this.state.newUserKey)) {
+                this.setState({ newUserKey: availableKeys[0] || '' });
+            } else if (!this.state.newUserKey && availableKeys.length) {
+                this.setState({ newUserKey: availableKeys[0] });
+            }
         }
     }
 
@@ -550,7 +577,11 @@ class TalkWithMarty extends React.Component {
     }
 
     async stopRecording() {
+        this.activeUserKey = null;
         if (this.state.isMicLoading) {
+            // try again in 1 second
+            console.log("stopRecording delayed");
+            setTimeout(this.stopRecording, 1000);
             return;
         }
 
@@ -655,6 +686,7 @@ class TalkWithMarty extends React.Component {
             });
         }
 
+        this.activeUserKey = null;
         this.disposeMedia();
     }
 
@@ -771,7 +803,7 @@ class TalkWithMarty extends React.Component {
     async sendTextRequest(message) {
         try {
             const payload = this.buildTextRequestPayload(message);
-            const response = await this.postJson(`${serverUrlLocal}/talkWithMarty/talk-with-marty-using-text`, payload);
+            const response = await this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-text`, payload);
             // thinking done once response received
             if (this.isComponentMounted) {
                 this.setState({ isThinking: false });
@@ -995,7 +1027,7 @@ class TalkWithMarty extends React.Component {
     }
 
     async sendSpeechRequest(payload) {
-        return this.postJson(`${serverUrlLocal}/talkWithMarty/talk-with-marty-using-speech`, payload);
+        return this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-speech`, payload);
     }
 
     applySpeechResponse(response, forcedUserName) {
@@ -1085,44 +1117,181 @@ class TalkWithMarty extends React.Component {
         }
     }
 
+    getAssignedKeys(options = {}) {
+        const excludeName = options.excludeName ? String(options.excludeName) : null;
+        return this.state.users
+            .filter(user => user && user.key && user.name !== excludeName)
+            .map(user => user.key);
+    }
+
+    getAvailableKeys(currentKey, excludeName) {
+        const assigned = this.getAssignedKeys({ excludeName });
+        return AVAILABLE_USER_KEYS.filter(key => key === currentKey || !assigned.includes(key));
+    }
+
+    getNextAvailableKey(users = this.state.users) {
+        const assigned = (users || []).filter(Boolean).map(user => user.key).filter(Boolean);
+        return AVAILABLE_USER_KEYS.find(key => !assigned.includes(key)) || '';
+    }
+
+    getUserByKey(key) {
+        const normalized = (key || '').toLowerCase();
+        if (!normalized) return null;
+        return this.state.users.find(user => (user.key || '').toLowerCase() === normalized) || null;
+    }
+
+    isEventFromTextInput(event) {
+        if (!event || !event.target) return false;
+        const target = event.target;
+        if (target.isContentEditable) return true;
+        const tagName = target.tagName ? target.tagName.toLowerCase() : '';
+        return tagName === 'input' || tagName === 'textarea' || tagName === 'select';
+    }
+
+    handleGlobalKeyDown(event) {
+        if (!event || event.repeat) return;
+        if (this.state.interactionMode !== 'pushToTalk') return;
+        if (this.isEventFromTextInput(event)) return;
+        const matchedUser = this.getUserByKey(event.key);
+        if (!matchedUser) return;
+        if (this.activeUserKey && this.activeUserKey !== matchedUser.key) return;
+        if (this.state.isListening || this.state.isMicLoading || this.state.isProcessingAudio) return;
+
+        this.activeUserKey = matchedUser.key;
+        event.preventDefault();
+
+        const startForUser = () => {
+            if (!this.isComponentMounted) return;
+            this.startRecording();
+        };
+
+        if (this.state.currentUser !== matchedUser.name) {
+            this.setState({ currentUser: matchedUser.name }, startForUser);
+        } else {
+            startForUser();
+        }
+    }
+
+    handleGlobalKeyUp(event) {
+        console.log("handleGlobalKeyUp", event);
+        if (!event) return;
+        if (this.state.interactionMode !== 'pushToTalk') return;
+        if (!this.activeUserKey) return;
+
+        const eventKey = (event.key || '').toLowerCase();
+        if (!eventKey || eventKey !== this.activeUserKey.toLowerCase()) {
+            return;
+        }
+
+        event.preventDefault();
+        this.activeUserKey = null;
+        this.stopRecording();
+    }
+
+    handleWindowBlur() {
+        if (!this.activeUserKey) return;
+        this.activeUserKey = null;
+        this.stopRecording();
+    }
+
+
     toggleSettingsPanel() {
         this.setState(prev => ({ isSettingsOpen: !prev.isSettingsOpen }));
     }
 
-    handleAddUser(name) {
+    handleAddUser(name, key) {
         const trimmed = (name || '').trim();
-        if (!trimmed) return;
+        const normalizedKey = (key || '').trim();
+        if (!trimmed || !normalizedKey) return;
         this.setState(prev => {
-            if (prev.users.includes(trimmed)) return null;
-            return { users: [...prev.users, trimmed] };
+            const nameAlreadyExists = prev.users.some(user => user.name === trimmed);
+            const keyInUse = prev.users.some(user => (user.key || '').toLowerCase() === normalizedKey.toLowerCase());
+            if (nameAlreadyExists || keyInUse) {
+                return null;
+            }
+            const nextUsers = [...prev.users, { name: trimmed, key: normalizedKey }];
+            return {
+                users: nextUsers,
+                newUserName: '',
+                newUserKey: this.getNextAvailableKey(nextUsers)
+            };
         });
-        this.setState({ newUserName: '' });
     }
     handleRemoveUser(name) {
         this.setState(prev => {
             if (prev.users.length === 1) return null; // keep at least one
-            const nextUsers = prev.users.filter(u => u !== name);
-            const nextCurrent = nextUsers.includes(prev.currentUser) ? prev.currentUser : nextUsers[0];
-            return { users: nextUsers, currentUser: nextCurrent };
+            const nextUsers = prev.users.filter(user => user.name !== name);
+            if (nextUsers.length === prev.users.length) return null;
+            const nextCurrentUser = nextUsers.some(user => user.name === prev.currentUser)
+                ? prev.currentUser
+                : (nextUsers[0] ? nextUsers[0].name : '');
+            const nextEditing = { ...prev.editingUser };
+            delete nextEditing[name];
+            return {
+                users: nextUsers,
+                currentUser: nextCurrentUser,
+                newUserKey: this.getNextAvailableKey(nextUsers),
+                editingUser: nextEditing
+            };
         });
     }
-    handleUpdateUser(oldName, newName) {
-        const trimmed = (newName || '').trim();
-        if (!trimmed) return;
+    handleUpdateUser(oldName) {
         this.setState(prev => {
-            if (prev.users.includes(trimmed) && trimmed !== oldName) return null;
-            const nextUsers = prev.users.map(u => u === oldName ? trimmed : u);
-            const nextCurrent = prev.currentUser === oldName ? trimmed : prev.currentUser;
-            // Also update existing transcript display names
-            const nextTranscript = prev.transcript.map(e =>
-                e.sender === 'user' && e.displayName === oldName
-                    ? { ...e, displayName: trimmed }
-                    : e
+            const pendingValue = Object.prototype.hasOwnProperty.call(prev.editingUser, oldName)
+                ? prev.editingUser[oldName]
+                : oldName;
+            const trimmed = (pendingValue || '').trim();
+            const nextEditing = { ...prev.editingUser };
+            delete nextEditing[oldName];
+            if (!trimmed || trimmed === oldName) {
+                return { editingUser: nextEditing };
+            }
+            const nameAlreadyExists = prev.users.some(user => user.name === trimmed && user.name !== oldName);
+            if (nameAlreadyExists) {
+                return { editingUser: nextEditing };
+            }
+            const nextUsers = prev.users.map(user =>
+                user.name === oldName ? { ...user, name: trimmed } : user
             );
-            return { users: nextUsers, currentUser: nextCurrent, transcript: nextTranscript };
+            const nextCurrent = prev.currentUser === oldName ? trimmed : prev.currentUser;
+            const nextTranscript = prev.transcript.map(entry =>
+                entry.sender === 'user' && entry.displayName === oldName
+                    ? { ...entry, displayName: trimmed }
+                    : entry
+            );
+            return {
+                users: nextUsers,
+                currentUser: nextCurrent,
+                transcript: nextTranscript,
+                editingUser: nextEditing
+            };
+        });
+    }
+    handleUpdateUserKey(name, key) {
+        const normalizedKey = (key || '').trim();
+        if (!normalizedKey) return;
+        this.setState(prev => {
+            const targetUser = prev.users.find(user => user.name === name);
+            if (!targetUser) return null;
+            const keyInUse = prev.users.some(user =>
+                user.name !== name && (user.key || '').toLowerCase() === normalizedKey.toLowerCase()
+            );
+            if (keyInUse) {
+                return null;
+            }
+            const nextUsers = prev.users.map(user =>
+                user.name === name ? { ...user, key: normalizedKey } : user
+            );
+            return {
+                users: nextUsers,
+                newUserKey: this.getNextAvailableKey(nextUsers)
+            };
         });
     }
     handleSetCurrentUser(name) {
+        if (!name) return;
+        const exists = this.state.users.some(user => user.name === name);
+        if (!exists) return;
         this.setState({ currentUser: name });
     }
 
@@ -1166,7 +1335,9 @@ class TalkWithMarty extends React.Component {
 
     renderUserManagement() {
         const { intl } = this.props;
-        const { editingUser, newUserName, users } = this.state;
+        const { editingUser, newUserName, newUserKey, users } = this.state;
+        const availableKeysForNewUser = this.getAvailableKeys();
+        const canAddUser = Boolean(newUserName.trim() && newUserKey);
 
         return (
             <div className={styles.settingsParticipants}>
@@ -1174,15 +1345,16 @@ class TalkWithMarty extends React.Component {
                     {intl.formatMessage(messages.usersSettingsTitle)}
                 </h3>
                 <ul className={styles.settingsUserList}>
-                    {users.map(name => {
-                        const pending = Object.prototype.hasOwnProperty.call(editingUser, name)
+                    {users.map(({ name, key }) => {
+                        const pendingName = Object.prototype.hasOwnProperty.call(editingUser, name)
                             ? editingUser[name]
                             : name;
+                        const keyOptions = this.getAvailableKeys(key, name);
                         return (
                             <li key={name} className={styles.settingsUserListItem}>
                                 <input
                                     type="text"
-                                    value={pending}
+                                    value={pendingName}
                                     onChange={event => this.handleEditUser(name, event.target.value)}
                                     onBlur={() => this.handleUpdateUser(name)}
                                     onKeyDown={event => {
@@ -1193,13 +1365,26 @@ class TalkWithMarty extends React.Component {
                                     }}
                                     className={classNames(styles.textInput, styles.settingsUserInput)}
                                 />
+                                <select
+                                    value={key || ''}
+                                    onChange={event => this.handleUpdateUserKey(name, event.target.value)}
+                                    className={classNames(styles.selectInput, styles.userKeySelect)}
+                                >
+                                    {keyOptions.map(optionKey => (
+                                        <option key={optionKey} value={optionKey}>
+                                            {optionKey}
+                                        </option>
+                                    ))}
+                                </select>
                                 <button
+                                    style={{ visibility: users.length === 1 ? 'hidden' : 'visible' }}
                                     type="button"
-                                    className={styles.secondaryButton}
+                                    className={styles.addRemoveUserButton}
                                     disabled={users.length === 1}
                                     onClick={() => this.handleRemoveUser && this.handleRemoveUser(name)}
                                 >
-                                    {intl.formatMessage(messages.removeUserButton)}
+                                    {/* {intl.formatMessage(messages.removeUserButton)}*/}
+                                    ➖
                                 </button>
                             </li>
                         );
@@ -1214,18 +1399,37 @@ class TalkWithMarty extends React.Component {
                         onKeyDown={event => {
                             if (event.key === 'Enter') {
                                 event.preventDefault();
-                                this.handleAddUser(newUserName);
+                                this.handleAddUser(newUserName, newUserKey);
                             }
                         }}
                         className={classNames(styles.textInput, styles.settingsUserInput)}
                     />
-                    <button
-                        type="button"
-                        className={styles.primaryButton}
-                        onClick={() => this.handleAddUser(newUserName)}
-                        disabled={!newUserName.trim()}
+                    <select
+                        value={newUserKey}
+                        onChange={event => this.setState({ newUserKey: event.target.value })}
+                        className={classNames(styles.selectInput, styles.userKeySelect)}
+                        disabled={!availableKeysForNewUser.length}
                     >
-                        {intl.formatMessage(messages.addUserButton)}
+                        {availableKeysForNewUser.length === 0 && (
+                            <option value="">
+                                —
+                            </option>
+                        )}
+                        {availableKeysForNewUser.map(optionKey => (
+                            <option key={optionKey} value={optionKey}>
+                                {optionKey}
+                            </option>
+                        ))}
+                    </select>
+                    <button
+                        style={{ visibility: canAddUser ? 'visible' : 'hidden' }}
+                        type="button"
+                        className={styles.addRemoveUserButton}
+                        onClick={() => this.handleAddUser(newUserName, newUserKey)}
+                        disabled={!canAddUser}
+                    >
+                        {/* {intl.formatMessage(messages.addUserButton)} */}
+                        ➕
                     </button>
                 </div>
             </div>
@@ -1352,7 +1556,7 @@ class TalkWithMarty extends React.Component {
                             </header>
                             <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionParametersTitle)}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                    <button
+                                    {/* <button
                                         type="button"
                                         className={classNames(styles.toggleButton, {
                                             [styles.toggleButtonActive]: interactionMode === 'pushToTalk'
@@ -1363,7 +1567,7 @@ class TalkWithMarty extends React.Component {
                                         onPointerUp={() => this.handleToggleListening()}
                                     >
                                         {intl.formatMessage(messages.interactionModePushToTalk)}
-                                    </button>
+                                    </button> */}
                                     {this.renderUserManagement()}
                                 </div>
                                 {/* <button
@@ -1498,8 +1702,10 @@ class TalkWithMarty extends React.Component {
                                     onChange={e => this.handleSetCurrentUser(e.target.value)}
                                     style={{ minHeight: '32px' }}
                                 >
-                                    {users.map(u => (
-                                        <option key={u} value={u}>{u}</option>
+                                    {users.map(user => (
+                                        <option key={user.name} value={user.name}>
+                                            {user.name}{user.key ? ` (${user.key})` : ''}
+                                        </option>
                                     ))}
                                 </select>
                             )}
