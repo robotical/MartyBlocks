@@ -6,15 +6,15 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import styles from './talk-with-marty.css';
 import LoadingSpinnerMarty from './marty-is-thinking-svg.jsx';
 import SpeakingMarty from './marty-is-speaking-svg.jsx';
-import TalkWithMartySettingsModal from './settings-modal/talk-with-marty-settings-modal.jsx';
+import TalkWithMartySettingsPanel from './settings-panel/talk-with-marty-settings-panel.jsx';
 
 const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
 const serverUrlLocal = 'http://localhost:4444';
 
 const messages = defineMessages({
-    conversationModeTitle: {
-        id: 'talkWithMarty.conversationModeTitle',
-        defaultMessage: 'Conversation Mode'
+    interactionTypeTitle: {
+        id: 'talkWithMarty.interactionTypeTitle',
+        defaultMessage: 'Interaction Type'
     },
     conversationModeConversation: {
         id: 'talkWithMarty.conversationModeConversation',
@@ -32,9 +32,9 @@ const messages = defineMessages({
         id: 'talkWithMarty.conversationModeQaDescription',
         defaultMessage: 'Single question and response — no memory between turns.'
     },
-    interactionModeTitle: {
-        id: 'talkWithMarty.interactionModeTitle',
-        defaultMessage: 'Interaction Mode'
+    interactionParametersTitle: {
+        id: 'talkWithMarty.interactionParametersTitle',
+        defaultMessage: 'Interaction Parameters'
     },
     interactionModePushToTalk: {
         id: 'talkWithMarty.interactionModePushToTalk',
@@ -138,7 +138,7 @@ const messages = defineMessages({
     },
     recordingGenericError: {
         id: 'talkWithMarty.recordingGenericError',
-        defaultMessage: 'Something went wrong while recording audio. Please try again.'
+        defaultMessage: 'Something went wrong while recording audio. Try pressing the key longer.'
     },
     lastRecordingLabel: {
         id: 'talkWithMarty.lastRecordingLabel',
@@ -150,7 +150,7 @@ const messages = defineMessages({
     },
     speechRequestFailed: {
         id: 'talkWithMarty.speechRequestFailed',
-        defaultMessage: 'Could not process the recording. Please try again.'
+        defaultMessage: 'Could not process the recording. Try pressing the key longer.'
     },
     textRequestFailed: {
         id: 'talkWithMarty.textRequestFailed',
@@ -167,14 +167,6 @@ const messages = defineMessages({
     activityOverlayLabel: {
         id: 'talkWithMarty.activityOverlayLabel',
         defaultMessage: 'Marty is responding'
-    },
-    settingsOpenLabel: {
-        id: 'talkWithMarty.settingsOpenLabel',
-        defaultMessage: 'Open Settings'
-    },
-    settingsCloseLabel: {
-        id: 'talkWithMarty.settingsCloseLabel',
-        defaultMessage: 'Close Settings'
     },
     currentSpeakerLabel: {
         id: 'talkWithMarty.currentSpeakerLabel',
@@ -195,7 +187,11 @@ const messages = defineMessages({
     removeUserButton: {
         id: 'talkWithMarty.removeUserButton',
         defaultMessage: 'Remove'
-    }
+    },
+    usersSettingsTitle: { id: 'talkWithMarty.usersSettingsTitle', defaultMessage: 'Participants' },
+    addUserPlaceholder: { id: 'talkWithMarty.addUserPlaceholder', defaultMessage: 'New participant name' },
+    addUserButton: { id: 'talkWithMarty.addUserButton', defaultMessage: 'Add' },
+    removeUserButton: { id: 'talkWithMarty.removeUserButton', defaultMessage: 'Remove' },
 });
 
 // Added: storage key
@@ -223,11 +219,12 @@ class TalkWithMarty extends React.Component {
             messageError: null,
             isThinking: false,
             isSpeaking: false,
-            showSettingsModal: false,
+            isSettingsOpen: false,
             users: ['You'],
-            currentUser: 'You'
+            currentUser: 'You',
+            newUserName: '',
+            editingUser: {}
         };
-
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
         this.handleInteractionModeChange = this.handleInteractionModeChange.bind(this);
         this.handleToggleListening = this.handleToggleListening.bind(this);
@@ -258,11 +255,12 @@ class TalkWithMarty extends React.Component {
         this.sendTextRequest = this.sendTextRequest.bind(this);
         this.handleSpeechAudioResult = this.handleSpeechAudioResult.bind(this);
         this.postJson = this.postJson.bind(this);
-        this.toggleSettingsModal = this.toggleSettingsModal.bind(this);
+        this.toggleSettingsPanel = this.toggleSettingsPanel.bind(this);
         this.handleAddUser = this.handleAddUser.bind(this);
         this.handleRemoveUser = this.handleRemoveUser.bind(this);
         this.handleUpdateUser = this.handleUpdateUser.bind(this);
         this.handleSetCurrentUser = this.handleSetCurrentUser.bind(this);
+        this.handleEditUser = this.handleEditUser.bind(this);
 
         this.mediaStream = null;
         this.mediaRecorder = null;
@@ -770,7 +768,7 @@ class TalkWithMarty extends React.Component {
         }));
     }
 
-        async sendTextRequest(message) {
+    async sendTextRequest(message) {
         try {
             const payload = this.buildTextRequestPayload(message);
             const response = await this.postJson(`${serverUrlLocal}/talkWithMarty/talk-with-marty-using-text`, payload);
@@ -1087,8 +1085,8 @@ class TalkWithMarty extends React.Component {
         }
     }
 
-    toggleSettingsModal() {
-        this.setState(prev => ({ showSettingsModal: !prev.showSettingsModal }));
+    toggleSettingsPanel() {
+        this.setState(prev => ({ isSettingsOpen: !prev.isSettingsOpen }));
     }
 
     handleAddUser(name) {
@@ -1098,6 +1096,7 @@ class TalkWithMarty extends React.Component {
             if (prev.users.includes(trimmed)) return null;
             return { users: [...prev.users, trimmed] };
         });
+        this.setState({ newUserName: '' });
     }
     handleRemoveUser(name) {
         this.setState(prev => {
@@ -1156,6 +1155,83 @@ class TalkWithMarty extends React.Component {
         );
     }
 
+    handleEditUser(name, value) {
+        this.setState(prev => ({
+            editingUser: {
+                ...prev.editingUser,
+                [name]: value
+            }
+        }));
+    }
+
+    renderUserManagement() {
+        const { intl } = this.props;
+        const { editingUser, newUserName, users } = this.state;
+
+        return (
+            <div className={styles.settingsParticipants}>
+                <h3 className={styles.settingsSubheading}>
+                    {intl.formatMessage(messages.usersSettingsTitle)}
+                </h3>
+                <ul className={styles.settingsUserList}>
+                    {users.map(name => {
+                        const pending = Object.prototype.hasOwnProperty.call(editingUser, name)
+                            ? editingUser[name]
+                            : name;
+                        return (
+                            <li key={name} className={styles.settingsUserListItem}>
+                                <input
+                                    type="text"
+                                    value={pending}
+                                    onChange={event => this.handleEditUser(name, event.target.value)}
+                                    onBlur={() => this.handleUpdateUser(name)}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter') {
+                                            event.preventDefault();
+                                            this.handleUpdateUser(name);
+                                        }
+                                    }}
+                                    className={classNames(styles.textInput, styles.settingsUserInput)}
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.secondaryButton}
+                                    disabled={users.length === 1}
+                                    onClick={() => this.handleRemoveUser && this.handleRemoveUser(name)}
+                                >
+                                    {intl.formatMessage(messages.removeUserButton)}
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <div className={styles.settingsUserAddRow}>
+                    <input
+                        type="text"
+                        placeholder={intl.formatMessage(messages.addUserPlaceholder)}
+                        value={newUserName}
+                        onChange={event => this.setState({ newUserName: event.target.value })}
+                        onKeyDown={event => {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                this.handleAddUser(newUserName);
+                            }
+                        }}
+                        className={classNames(styles.textInput, styles.settingsUserInput)}
+                    />
+                    <button
+                        type="button"
+                        className={styles.primaryButton}
+                        onClick={() => this.handleAddUser(newUserName)}
+                        disabled={!newUserName.trim()}
+                    >
+                        {intl.formatMessage(messages.addUserButton)}
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const { intl } = this.props;
         const {
@@ -1172,7 +1248,7 @@ class TalkWithMarty extends React.Component {
             messageError,
             isThinking,
             isSpeaking,
-            showSettingsModal,
+            isSettingsOpen,
             users,
             currentUser
         } = this.state;
@@ -1189,19 +1265,6 @@ class TalkWithMarty extends React.Component {
 
         return (
             <>
-                {/* settings modal */}
-                <TalkWithMartySettingsModal
-                    open={showSettingsModal}
-                    onClose={this.toggleSettingsModal}
-                    intl={intl}
-                    settings={llmSettings}
-                    onSettingChange={this.handleSettingsChange}
-                    users={users}
-                    currentUser={currentUser}
-                    onAddUser={this.handleAddUser}
-                    onRemoveUser={this.handleRemoveUser}
-                    onUpdateUser={this.handleUpdateUser}
-                />
                 {/* busy overlay remains */}
                 {isBusy && (
                     <div
@@ -1255,10 +1318,10 @@ class TalkWithMarty extends React.Component {
                     <div className={styles.primarySections}>
                         <section className={styles.section}>
                             <header className={styles.sectionHeader}>
-                                <h2>{intl.formatMessage(messages.conversationModeTitle)}</h2>
+                                <h2>{intl.formatMessage(messages.interactionTypeTitle)}</h2>
                                 <p>{conversationDescription}</p>
                             </header>
-                            <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.conversationModeTitle)}>
+                            <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionTypeTitle)}>
                                 <button
                                     type="button"
                                     className={classNames(styles.toggleButton, {
@@ -1269,7 +1332,7 @@ class TalkWithMarty extends React.Component {
                                 >
                                     {intl.formatMessage(messages.conversationModeConversation)}
                                 </button>
-                                <button
+                                {/* <button
                                     type="button"
                                     className={classNames(styles.toggleButton, {
                                         [styles.toggleButtonActive]: conversationMode === 'qa'
@@ -1278,16 +1341,16 @@ class TalkWithMarty extends React.Component {
                                     onClick={() => this.handleConversationModeChange('qa')}
                                 >
                                     {intl.formatMessage(messages.conversationModeQA)}
-                                </button>
+                                </button> */}
                             </div>
                         </section>
 
                         <section className={styles.section}>
                             <header className={styles.sectionHeader}>
-                                <h2>{intl.formatMessage(messages.interactionModeTitle)}</h2>
+                                <h2>{intl.formatMessage(messages.interactionParametersTitle)}</h2>
                                 <p>{interactionDescription}</p>
                             </header>
-                            <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionModeTitle)}>
+                            <div className={styles.toggleGroup} role="group" aria-label={intl.formatMessage(messages.interactionParametersTitle)}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                     <button
                                         type="button"
@@ -1301,19 +1364,7 @@ class TalkWithMarty extends React.Component {
                                     >
                                         {intl.formatMessage(messages.interactionModePushToTalk)}
                                     </button>
-                                    {interactionMode === 'pushToTalk' && (
-                                        <select
-                                            className={styles.selectInput}
-                                            value={currentUser}
-                                            aria-label={intl.formatMessage(messages.currentSpeakerLabel)}
-                                            onChange={e => this.handleSetCurrentUser(e.target.value)}
-                                            style={{ minHeight: '32px' }}
-                                        >
-                                            {users.map(u => (
-                                                <option key={u} value={u}>{u}</option>
-                                            ))}
-                                        </select>
-                                    )}
+                                    {this.renderUserManagement()}
                                 </div>
                                 {/* <button
                                     type="button"
@@ -1386,24 +1437,17 @@ class TalkWithMarty extends React.Component {
                                 </div>
                             )} */}
 
-                            {/* Settings (gear) button */}
-                            <div className={styles.settingsButtonContainer}>
-                                <button
-                                    type="button"
-                                    className={styles.settingsButton}
-                                    aria-haspopup="dialog"
-                                    aria-expanded={showSettingsModal ? 'true' : 'false'}
-                                    onClick={this.toggleSettingsModal}
-                                    title={intl.formatMessage(showSettingsModal ? messages.settingsCloseLabel : messages.settingsOpenLabel)}
-                                >
-                                    ⚙
-                                    <span style={{ position: 'absolute', left: '-9999px' }}>
-                                        {intl.formatMessage(showSettingsModal ? messages.settingsCloseLabel : messages.settingsOpenLabel)}
-                                    </span>
-                                </button>
-                            </div>
                         </section>
                     </div>
+
+                    <section className={classNames(styles.section, styles.headerSection)}>
+                        <TalkWithMartySettingsPanel
+                            isOpen={isSettingsOpen}
+                            onToggle={this.toggleSettingsPanel}
+                            settings={llmSettings}
+                            onSettingChange={this.handleSettingsChange}
+                        />
+                    </section>
 
                     <section className={classNames(styles.section, styles.transcriptSection)}>
                         <header className={styles.sectionHeader}>
@@ -1446,6 +1490,19 @@ class TalkWithMarty extends React.Component {
                             {messageError && (
                                 <div className={styles.messageError}>{messageError}</div>
                             )}
+                            {interactionMode === 'pushToTalk' && (
+                                <select
+                                    className={styles.selectInput}
+                                    value={currentUser}
+                                    aria-label={intl.formatMessage(messages.currentSpeakerLabel)}
+                                    onChange={e => this.handleSetCurrentUser(e.target.value)}
+                                    style={{ minHeight: '32px' }}
+                                >
+                                    {users.map(u => (
+                                        <option key={u} value={u}>{u}</option>
+                                    ))}
+                                </select>
+                            )}
                             <div className={styles.composerActions}>
                                 <button
                                     type="submit"
@@ -1457,6 +1514,7 @@ class TalkWithMarty extends React.Component {
                             </div>
                         </form>
                     </section>
+
                 </div>
             </>
         );
