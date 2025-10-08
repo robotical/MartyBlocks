@@ -42,7 +42,7 @@ const messages = defineMessages({
     },
     interactionModePushToTalkDescription: {
         id: 'talkWithMarty.interactionModePushToTalkDescription',
-        defaultMessage: 'Manage participants in the conversation.'
+        defaultMessage: 'Choose the key each user will press to talk. Hold the key while speaking.'
     },
     interactionModeWakeWords: {
         id: 'talkWithMarty.interactionModeWakeWords',
@@ -176,6 +176,10 @@ const messages = defineMessages({
         id: 'talkWithMarty.usersSettingsTitle',
         defaultMessage: 'Participants'
     },
+    usersSettingsDescription: {
+        id: 'talkWithMarty.usersSettingsDescription',
+        defaultMessage: 'Key'
+    },
     addUserPlaceholder: {
         id: 'talkWithMarty.addUserPlaceholder',
         defaultMessage: 'New participant name'
@@ -188,10 +192,6 @@ const messages = defineMessages({
         id: 'talkWithMarty.removeUserButton',
         defaultMessage: 'Remove'
     },
-    usersSettingsTitle: { id: 'talkWithMarty.usersSettingsTitle', defaultMessage: 'Participants' },
-    addUserPlaceholder: { id: 'talkWithMarty.addUserPlaceholder', defaultMessage: 'New participant name' },
-    addUserButton: { id: 'talkWithMarty.addUserButton', defaultMessage: 'Add' },
-    removeUserButton: { id: 'talkWithMarty.removeUserButton', defaultMessage: 'Remove' },
 });
 
 const AVAILABLE_USER_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -1343,6 +1343,9 @@ class TalkWithMarty extends React.Component {
             <div className={styles.settingsParticipants}>
                 <h3 className={styles.settingsSubheading}>
                     {intl.formatMessage(messages.usersSettingsTitle)}
+                    <span className={styles.settingsSubheadingDescription}>
+                        {intl.formatMessage(messages.usersSettingsDescription)}
+                    </span>
                 </h3>
                 <ul className={styles.settingsUserList}>
                     {users.map(({ name, key }) => {
