@@ -107,6 +107,7 @@ const cogBlocksTutorial10 = {
             /* STEP 6 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-6.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Press the green flag, and then tilt cog from side to side, the bat will move too!"}
@@ -218,6 +219,7 @@ const cogBlocksTutorial10 = {
             /* STEP 14 -- test the game */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-14.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Press the green flag to start the code, and then try tapping the right IR object sensor with your finger - the bat will fly up the screen!<br /><br />You can still tilt left and right to steer.<br /><br />Press the red stop sign to stop the code running."}
@@ -413,6 +415,7 @@ const cogBlocksTutorial10 = {
             /* STEP 28 -- test fruit picking */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-28.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now every 5 seconds the bat will pick a fruit at random to think about!<br /><br />The code will also send the <b>show fruit</b> message, which we’ll use shortly."}
@@ -553,6 +556,7 @@ const cogBlocksTutorial10 = {
             /* STEP 38 -- copy bananas code */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-38.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Copy the code from the Bananas to the Apple sprite by dragging it to the Apple sprite."}
@@ -580,6 +584,7 @@ const cogBlocksTutorial10 = {
             /* STEP 40 -- test the game */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-40.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Press the green flag to start, then try to collect the fruit that the bat is thinking of!<br /><br />Press the red stop sign to stop the code when you’re done."}

@@ -370,6 +370,7 @@ const cogBlocksTutorial6 = {
             /* STEP 15 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-15.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Cover the left object sensor to start the game, then tilt Cog left and right to move the penguin left and right."}
@@ -427,8 +428,7 @@ const cogBlocksTutorial6 = {
                     defaultMessage={"From the Looks category, add a <b>set size to [30]%</b> block, and a <b>hide</b> block."}
                     description=""
                     id={`gui.howtos.lessons.type-lesson-cog-tutorial-6.step-18`}
-                />,
-                id: `gui.howtos.lessons.type-lesson-cog-tutorial-6.step-18`,
+                >{(nodes) => <span dangerouslySetInnerHTML={{ __html: nodes }} />}</FormattedMessage>,
                 nextStepActions: [
                     {
                         type: "HighlightElement",
@@ -660,6 +660,7 @@ const cogBlocksTutorial6 = {
             /* STEP 28 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-28.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />A new tree will appear every second and move up the screen.<br /><br />To stop the program, press the red Stop sign."}
@@ -769,6 +770,7 @@ const cogBlocksTutorial6 = {
             /* STEP 33 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-33.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Cover the left object sensor to start the game, and tilt Cog to steer the penguin to avoid the trees.<br /><br />When you touch a tree the game will finish!"}
@@ -914,6 +916,7 @@ const cogBlocksTutorial6 = {
             /* STEP 40 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-40.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />You’ll notice that the trees start appearing much more quickly the further you go!"}

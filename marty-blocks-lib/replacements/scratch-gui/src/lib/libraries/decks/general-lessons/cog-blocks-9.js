@@ -95,6 +95,7 @@ const cogBlocksTutorial9 = {
             /* STEP 6 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-6.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Press the green flag and then hold Cog vertically with the yellow arrow pointing up, and rotate it around like a steering wheel."}
@@ -105,6 +106,7 @@ const cogBlocksTutorial9 = {
             /* STEP 7 -- explain angle */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-7.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"As you rotate Cog clockwise you’ll see that the angle changes from 0 degrees when cog is pointing up, up to 180 degrees when cog is pointing down.<br /><br />It will then jump to -180 degrees, before increasing back to 0 degrees as you continue rotating clockwise."}
@@ -126,6 +128,7 @@ const cogBlocksTutorial9 = {
             /* STEP 9 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-9.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now when you rotate cog the angle will go from 0-360 and then loop around.<br /><br />This maths works because 360 degrees is a full turn so when we add an extra 360 degrees to the rotation we end up pointing the same way, but now with a positive angle that will be easier to deal with as we count revolutions."}
@@ -201,6 +204,7 @@ const cogBlocksTutorial9 = {
             /* STEP 16 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-16.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Press the green flag and then rotate cog - you’ll see the sprite rotate too!<br /><br />There’s a problem though - the sprite is 90 degrees off from Cog - that’s because the Blocks interface counts point left as being 0 degrees, whereas we’re treating pointing up as being 0 degrees."}
@@ -233,6 +237,7 @@ const cogBlocksTutorial9 = {
             /* STEP 19 -- add LED blocks */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-19.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Let’s add an LED on Cog to show that the rotation sensing is working.<br /><br />Add 2 new variables called <i>LED</i> and <i>lastLED</i>."}
@@ -266,6 +271,7 @@ const cogBlocksTutorial9 = {
             /* STEP 22 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-22.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Press the green flag and then rotate cog.<br /><br />You’ll notice that something funny is happening! Sometimes the LED that’s on is at the top, and sometimes it’s at the bottom!<br /><br />That’s a bit confusing, and not what we were going for."}
@@ -287,6 +293,7 @@ const cogBlocksTutorial9 = {
             /* STEP 24 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-24.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now when you rotate cog, the LED will always be at the top!<br /><br />When we subtract the [angle] variable from 360, what we’re effectively doing is flipping which direction we’re rotating around the circle.<br /><br />For example, if we rotate 10 degrees clockwise from 0, we’ll be at 10 degrees. If we rotate 10 degrees anticlockwise from 0, we’ll be at 350 degrees."}
@@ -308,6 +315,7 @@ const cogBlocksTutorial9 = {
             /* STEP 26 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-26.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now when you rotate cog the LED that’s on will be at the bottom."}
@@ -318,6 +326,7 @@ const cogBlocksTutorial9 = {
             /* STEP 27 -- reset distance */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-27.jpg`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Ok! Now we’ve got some good user feedback that the rotation sensing is working, let’s make cog measure distance!<br /><br />For this next bit, you’ll need a card circle - this will be our wheel."}
@@ -328,6 +337,11 @@ const cogBlocksTutorial9 = {
             /* STEP 28 -- trace around cog */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-28.jpg`,
+                additionalContent: {
+                    images: [`${BUCKET_URL}step-28_2.jpg`, `${BUCKET_URL}step-28_3.jpg`, `${BUCKET_URL}step-28.jpg`],
+                    videos: [],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Trace around the upper face of cog, and then cut out a hexagon in the middle of the circle.<br /><br />(you don’t need to be perfectly in the middle)<br /><br />Measure the diameter of your circle.<br /><br />The one here is about 200mm diameter, which means the radius is 100mm."}
@@ -349,6 +363,7 @@ const cogBlocksTutorial9 = {
             /* STEP 30 -- make more variables */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-30.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"We’ll need a few more variables to help us calculate the distance travelled.<br /><br />Make these new variables:<ul><li>lastAngle - we’ll use that to track what the angle was the last time around the forever loop, like we did with the lastLED variable</li><li>revolutions - we’ll use that to keep track of how many complete revolutions there have been of the wheel</li><li>totalRotation - we’ll add up the complete and partial revolutions to get the total amount rotated in degrees</li><li>distance - we’ll convert that total rotation into a distance</li></ul>"}
@@ -414,6 +429,7 @@ const cogBlocksTutorial9 = {
             /* STEP 36 -- try it out */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-36.jpg`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Put cog inside the cardboard wheel and try rolling it along!"}
@@ -424,6 +440,7 @@ const cogBlocksTutorial9 = {
             /* STEP 37 -- reset button */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-37.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"It would be great to have a way to easily reset the distance counter.<br /><br />Add these blocks:<ul><li>On button press</li><li>Set [distance] to [0]</li><li>Set [revolutions] to [0]</li><li>Set [startingAngle] to [angle]</li><li>Set [lastAngle] to [angle]</li></ul><br />You’ll need to make a new variable called <i>startingAngle</i>.<br /><br />We’ll use that to make sure that we can start counting from whatever angle cog is at when you push the button, not just when cog is pointing up."}
@@ -466,6 +483,7 @@ const cogBlocksTutorial9 = {
             /* STEP 41 -- add distance to list */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-41.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Then, add an <b>add [distance] to [distances]</b> block just after the on button press block."}

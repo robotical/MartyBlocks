@@ -190,6 +190,7 @@ const cogBlocksTutorial8 = {
             /* STEP 11 -- try it out */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-11.jpg`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now you’ll get three “hands” on the clock - red for hours, blue for minutes, and green for seconds!"}
@@ -213,6 +214,7 @@ const cogBlocksTutorial8 = {
             /* STEP 13 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-13.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now every 5 seconds the time will update and the hands will move around the clock!"}
@@ -238,6 +240,7 @@ const cogBlocksTutorial8 = {
             /* STEP 15 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-15.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now it’ll show the hours, minutes and seconds one at a time."}
@@ -265,6 +268,7 @@ const cogBlocksTutorial8 = {
             /* STEP 17 -- try it out */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-17.jpg`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now your clock will show you whether it’s am or pm by changing color!"}
@@ -292,6 +296,7 @@ const cogBlocksTutorial8 = {
             /* STEP 19 -- three Cogs */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-19.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"If you have friends who also have a Cog, can you use three of them to show the time - one showing hours, one minutes, and one seconds, like this?"}
@@ -319,6 +324,7 @@ const cogBlocksTutorial8 = {
             /* STEP 21 -- try it out */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-21.jpg`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />The LEDs will slowly turn on as time passes - for example in this picture our clock is showing half past 6!"}
@@ -332,6 +338,7 @@ const cogBlocksTutorial8 = {
             /* STEP 22 -- animate seconds */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-22.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"If you have time, we can try and make our original clock more sophisticated.<br /><br />We can animate the second hand to flash every second, like this - then it won’t matter if it covers up the other hands."}
@@ -574,6 +581,7 @@ const cogBlocksTutorial8 = {
             /* STEP 39 -- try it out */
             {
                 type: "info",
+                image: `${BUCKET_URL}step-39.png`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Your code should now look like this - Try it out!"}
