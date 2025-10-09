@@ -133,6 +133,7 @@ const cogBlocksTutorial11 = {
             /* STEP 9 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-9.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Shake cog to reset everything, then push the button to start the timer - that will clear the old times from the list and reset the timer.<br /><br />Every time you push the button after that a new time will be added to the list!<br /><br />If you shake cog again after the last time has been recorded you’ll reset it so that the next button push will start a new set of times."}
@@ -180,6 +181,7 @@ const cogBlocksTutorial11 = {
             /* STEP 13 -- spot the bug */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-13.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Can you spot the bug in our code though?<br /><br />What happens if you try and record times less than 0.5 seconds?<br /><br />You won’t be able to - because the code from the previous button press will still be executing and playing the note.<br /><br />How could we fix this, while still playing the note for 0.5 seconds?"}
@@ -203,6 +205,7 @@ const cogBlocksTutorial11 = {
             /* STEP 15 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-15.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />It’s much easier now to see whether the stopwatch is stopped or started."}
@@ -286,6 +289,7 @@ const cogBlocksTutorial11 = {
             /* STEP 22 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-22.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br /><br />Now when you shake cog the average variable will be set to the average of all the times you recorded!"}
