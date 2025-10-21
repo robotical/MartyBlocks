@@ -22,7 +22,7 @@ import SettingsMenu from './settings-menu.jsx';
 import SensorsDashboardBtn from "../sensors-dashboard-btn/index.jsx";
 import MartyPythonButton from "../marty-python-btn/index.jsx";
 
-import { openTipsLibrary } from '../../reducers/modals';
+import { openTipsLibrary, openLLMSettingsModal } from '../../reducers/modals';
 import { setPlayer } from '../../reducers/mode';
 import { selectLocale } from '../../reducers/locales.js';
 import {
@@ -451,10 +451,11 @@ class MenuBar extends React.Component {
                                 onClick={this.props.onClickLogo}
                             /> */}
                         </div>
-                        {(this.props.canChangeTheme || this.props.canChangeLanguage) && (<SettingsMenu
+                        {(this.props.canChangeTheme || this.props.canChangeLanguage || this.props.onOpenLLMSettings) && (<SettingsMenu
                             canChangeLanguage={this.props.canChangeLanguage}
                             canChangeTheme={this.props.canChangeTheme}
                             isRtl={this.props.isRtl}
+                            onOpenLLMSettings={this.props.onOpenLLMSettings}
                             onRequestClose={this.props.onRequestCloseSettings}
                             onRequestOpen={this.props.onClickSettings}
                             settingsMenuOpen={this.props.settingsMenuOpen}
@@ -920,6 +921,7 @@ MenuBar.propTypes = {
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
+    onOpenLLMSettings: PropTypes.func,
     onProjectTelemetryEvent: PropTypes.func,
     onRequestCloseAbout: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
@@ -983,6 +985,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
+    onOpenLLMSettings: () => dispatch(openLLMSettingsModal()),
     onClickAccount: () => dispatch(openAccountMenu()),
     onRequestCloseAccount: () => dispatch(closeAccountMenu()),
     onClickFile: () => dispatch(openFileMenu()),

@@ -29,7 +29,6 @@ class TalkWithMartySettingsPanel extends React.Component {
         this.handleSafeguardsChange = this.handleSafeguardsChange.bind(this);
     }
 
-
     handleInstructionsChange(event) {
         this.props.onSettingChange('instructions', event.target.value);
     }
@@ -37,7 +36,6 @@ class TalkWithMartySettingsPanel extends React.Component {
     handleSafeguardsChange(event) {
         this.props.onSettingChange('safeguards', event.target.value);
     }
-
 
 
     renderSettingsForm() {

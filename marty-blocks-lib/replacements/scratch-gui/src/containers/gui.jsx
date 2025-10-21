@@ -25,6 +25,7 @@ import {
     closeCostumeLibrary,
     closeBackdropLibrary,
     closeTelemetryModal,
+    closeLLMSettingsModal,
     openExtensionLibrary
 } from '../reducers/modals';
 
@@ -130,8 +131,13 @@ GUI.propTypes = {
     onStorageInit: PropTypes.func,
     onUpdateProjectId: PropTypes.func,
     onVmInit: PropTypes.func,
+    onRequestCloseBackdropLibrary: PropTypes.func,
+    onRequestCloseCostumeLibrary: PropTypes.func,
+    onRequestCloseTelemetryModal: PropTypes.func,
+    onRequestCloseLLMSettingsModal: PropTypes.func,
     projectHost: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    llmSettingsModalVisible: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired
 };
@@ -176,6 +182,7 @@ const mapStateToProps = state => {
         ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
+        llmSettingsModalVisible: state.scratchGui.modals.llmSettingsModal,
         vm: state.scratchGui.vm
     };
 };
@@ -190,7 +197,8 @@ const mapDispatchToProps = dispatch => ({
     onActivateTalkWithMartyTab: () => dispatch(activateTab(TALK_WITH_MARTY_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
-    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())
+    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),
+    onRequestCloseLLMSettingsModal: () => dispatch(closeLLMSettingsModal())
 });
 
 const ConnectedGUI = injectIntl(connect(

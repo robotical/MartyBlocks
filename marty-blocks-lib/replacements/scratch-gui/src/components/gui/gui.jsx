@@ -33,6 +33,7 @@ import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
+import LLMSettingsModal from '../llm-settings-modal/llm-settings-modal.jsx';
 import DraggableModal from "../../containers/draggable-modal.jsx";
 import layout, { STAGE_SIZE_MODES } from '../../lib/layout-constants';
 import { getStageDimensions, resolveStageSize } from '../../lib/screen-utils';
@@ -128,6 +129,7 @@ const GUIComponent = props => {
     onRequestCloseBackdropLibrary,
     onRequestCloseCostumeLibrary,
     onRequestCloseTelemetryModal,
+    onRequestCloseLLMSettingsModal,
     onSeeCommunity,
     onShare,
     onShowPrivacyPolicy,
@@ -143,6 +145,7 @@ const GUIComponent = props => {
     stageSizeForSensors,
     stageSizeMode,
     targetIsStage,
+    llmSettingsModalVisible,
     telemetryModalVisible,
     theme,
     tipsLibraryVisible,
@@ -199,6 +202,12 @@ const GUIComponent = props => {
             onOptOut={onTelemetryModalOptOut}
             onRequestClose={onRequestCloseTelemetryModal}
             onShowPrivacyPolicy={onShowPrivacyPolicy}
+          />
+        ) : null}
+        {llmSettingsModalVisible ? (
+          <LLMSettingsModal
+            isRtl={isRtl}
+            onRequestClose={onRequestCloseLLMSettingsModal}
           />
         ) : null}
         {loading ? (
@@ -524,6 +533,7 @@ GUIComponent.propTypes = {
   onOpenRegistration: PropTypes.func,
   onRequestCloseBackdropLibrary: PropTypes.func,
   onRequestCloseCostumeLibrary: PropTypes.func,
+  onRequestCloseLLMSettingsModal: PropTypes.func,
   onRequestCloseTelemetryModal: PropTypes.func,
   onSeeCommunity: PropTypes.func,
   onShare: PropTypes.func,
@@ -542,6 +552,7 @@ GUIComponent.propTypes = {
   soundsTabVisible: PropTypes.bool,
   stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
   targetIsStage: PropTypes.bool,
+  llmSettingsModalVisible: PropTypes.bool,
   telemetryModalVisible: PropTypes.bool,
   theme: PropTypes.string,
   tipsLibraryVisible: PropTypes.bool,

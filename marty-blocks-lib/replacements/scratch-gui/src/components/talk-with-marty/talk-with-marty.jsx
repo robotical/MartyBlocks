@@ -3,10 +3,22 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import styles from './talk-with-marty.css';
 import LoadingSpinnerMarty from './marty-is-thinking-svg.jsx';
 import SpeakingMarty from './marty-is-speaking-svg.jsx';
 import TalkWithMartySettingsPanel from './settings-panel/talk-with-marty-settings-panel.jsx';
+import RecordingPreparationProgress from './recording-preparation-progress.jsx';
+import styles from './talk-with-marty.css';
+import {
+    ensureLLMSettingsHydrated,
+    getLLMSettings,
+    getLLMSettingsSource,
+    getServerLLMSettings,
+    setServerLLMSettingsSnapshot,
+    subscribeToLLMSettings,
+    subscribeToLLMSettingsSource,
+    subscribeToServerLLMSettings
+} from '../../lib/llm-settings.js';
+import { fetchLLMSettingsFromServer } from '../../lib/llm-settings-service.js';
 
 const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
 // const serverUrl = 'http://localhost:4444';
@@ -192,17 +204,49 @@ const messages = defineMessages({
         id: 'talkWithMarty.removeUserButton',
         defaultMessage: 'Remove'
     },
+    addUserHint: {
+        id: 'talkWithMarty.addUserHint',
+        defaultMessage: 'Press Enter or click Add to save the participant.'
+    },
+    recordingPreparingIndicator: {
+        id: 'talkWithMarty.recordingPreparingIndicator',
+        defaultMessage: 'Preparing to record…'
+    },
+    recordingStartCue: {
+        id: 'talkWithMarty.recordingStartCue',
+        defaultMessage: "Start speaking after the progress bar completes and see the recording indicator."
+    },
 });
 
 const AVAILABLE_USER_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 const DEFAULT_USER_KEY = AVAILABLE_USER_KEYS[0];
+const PREPARING_PROGRESS_DURATION_MS = 1000;
 
 // Added: storage key
-const TRANSCRIPT_STORAGE_KEY = 'talkWithMartyTranscript';
+const SESSION_STORAGE_KEY = 'talkWithMartyState';
+const LEGACY_TRANSCRIPT_STORAGE_KEY = 'talkWithMartyTranscript';
+
+const extractTeacherLLMSettings = rawSettings => {
+    const source = rawSettings && typeof rawSettings === 'object' ? rawSettings : {};
+    const legacySafeguards = typeof source.safeguards === 'string'
+        ? source.safeguards
+        : source.safeguards && typeof source.safeguards === 'object'
+            ? source.safeguards.notes || ''
+            : '';
+    return {
+        importantInstructions: source.importantInstructions || source.instructions || '',
+        importantSafeguards: source.importantSafeguards || legacySafeguards,
+        knowledgeBase: source.knowledgeBase || ''
+    };
+};
 
 class TalkWithMarty extends React.Component {
     constructor(props) {
         super(props);
+
+        const teacherLLMSettings = extractTeacherLLMSettings(getLLMSettings());
+        const serverLLMSettings = extractTeacherLLMSettings(getServerLLMSettings());
+        const llmSettingsSource = getLLMSettingsSource();
 
         this.state = {
             conversationMode: 'conversation',
@@ -227,7 +271,8 @@ class TalkWithMarty extends React.Component {
             currentUser: 'You',
             newUserName: '',
             newUserKey: AVAILABLE_USER_KEYS.find(key => key !== DEFAULT_USER_KEY) || '',
-            editingUser: {}
+            editingUser: {},
+            recordingStatus: 'idle'
         };
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
         this.handleInteractionModeChange = this.handleInteractionModeChange.bind(this);
@@ -269,20 +314,51 @@ class TalkWithMarty extends React.Component {
         this.handleGlobalKeyDown = this.handleGlobalKeyDown.bind(this);
         this.handleGlobalKeyUp = this.handleGlobalKeyUp.bind(this);
         this.handleWindowBlur = this.handleWindowBlur.bind(this);
+        this.playRecordingPreview = this.playRecordingPreview.bind(this);
 
         this.mediaStream = null;
         this.mediaRecorder = null;
+        this.lastRecordingAudio = null;
         this.audioChunks = [];
         this.isComponentMounted = false;
         this.mediaSupportAvailable = typeof window !== 'undefined' && typeof window.MediaRecorder !== 'undefined';
         this.martySpeechUrl = '';
         this.activeUserKey = null;
+        this.unsubscribeFromLLMSettings = null;
+        this.unsubscribeFromServerLLMSettings = null;
+        this.unsubscribeFromLLMSettingsSource = null;
+        this.teacherLLMSettings = teacherLLMSettings;
+        this.serverTeacherLLMSettings = serverLLMSettings;
+        this.llmSettingsSource = llmSettingsSource;
     }
 
     componentDidMount() {
         this.isComponentMounted = true;
-        // Load persisted transcript (if any)
-        this.loadTranscriptFromStorage();
+        this.unsubscribeFromLLMSettings = subscribeToLLMSettings(nextSettings => {
+            this.teacherLLMSettings = extractTeacherLLMSettings(nextSettings);
+        });
+        this.unsubscribeFromServerLLMSettings = subscribeToServerLLMSettings(nextSettings => {
+            this.serverTeacherLLMSettings = extractTeacherLLMSettings(nextSettings);
+        });
+        this.unsubscribeFromLLMSettingsSource = subscribeToLLMSettingsSource(nextSource => {
+            if (nextSource === 'local' || nextSource === 'server') {
+                this.llmSettingsSource = nextSource;
+            }
+        });
+        ensureLLMSettingsHydrated().catch(error => {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Failed to hydrate LLM settings', error);
+        });
+        fetchLLMSettingsFromServer()
+            .then(remoteSettings => {
+                setServerLLMSettingsSnapshot(remoteSettings);
+            })
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.warn('[TalkWithMarty] Failed to refresh server LLM settings', error);
+            });
+        // Load persisted session (if any)
+        this.loadSessionFromStorage();
         if (typeof window !== 'undefined') {
             window.addEventListener('keydown', this.handleGlobalKeyDown);
             window.addEventListener('keyup', this.handleGlobalKeyUp);
@@ -306,46 +382,131 @@ class TalkWithMarty extends React.Component {
             }
             this.martySpeechUrl = '';
         }
+        if (this.lastRecordingAudio) {
+            try {
+                this.lastRecordingAudio.pause();
+                this.lastRecordingAudio.src = '';
+            } catch (_) {
+                // ignore cleanup issues
+            }
+            this.lastRecordingAudio = null;
+        }
         if (typeof window !== 'undefined') {
             window.removeEventListener('keydown', this.handleGlobalKeyDown);
             window.removeEventListener('keyup', this.handleGlobalKeyUp);
             window.removeEventListener('blur', this.handleWindowBlur);
         }
-    }
-
-    // Added: persist helpers
-    loadTranscriptFromStorage() {
-        if (typeof window === 'undefined' || !window.localStorage) return;
-        try {
-            const stored = window.localStorage.getItem(TRANSCRIPT_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed)) {
-                this.setState({ transcript: parsed });
-            }
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.warn('[TalkWithMarty] Failed to load stored transcript', e);
+        if (this.unsubscribeFromLLMSettings) {
+            this.unsubscribeFromLLMSettings();
+            this.unsubscribeFromLLMSettings = null;
+        }
+        if (this.unsubscribeFromServerLLMSettings) {
+            this.unsubscribeFromServerLLMSettings();
+            this.unsubscribeFromServerLLMSettings = null;
+        }
+        if (this.unsubscribeFromLLMSettingsSource) {
+            this.unsubscribeFromLLMSettingsSource();
+            this.unsubscribeFromLLMSettingsSource = null;
         }
     }
 
-    saveTranscriptToStorage() {
+    // Added: persist helpers
+    loadSessionFromStorage() {
         if (typeof window === 'undefined' || !window.localStorage) return;
         try {
-            window.localStorage.setItem(
-                TRANSCRIPT_STORAGE_KEY,
-                JSON.stringify(this.state.transcript)
-            );
+            const storedSession = window.localStorage.getItem(SESSION_STORAGE_KEY);
+            const updates = {};
+
+            if (storedSession) {
+                const parsed = JSON.parse(storedSession);
+                if (parsed && typeof parsed === 'object') {
+                    const sanitizedUsers = this.sanitizeStoredUsers(parsed.users);
+                    if (sanitizedUsers.length) {
+                        updates.users = sanitizedUsers;
+                    }
+                    if (Array.isArray(parsed.transcript)) {
+                        updates.transcript = parsed.transcript;
+                    }
+                    if (parsed.llmSettings && typeof parsed.llmSettings === 'object') {
+                        const {
+                            prompt: _ignoredPrompt,
+                            instructions,
+                            safeguards
+                        } = parsed.llmSettings;
+                        updates.llmSettings = {
+                            instructions: typeof instructions === 'string' ? instructions : this.state.llmSettings.instructions,
+                            safeguards: typeof safeguards === 'string' ? safeguards : this.state.llmSettings.safeguards
+                        };
+                    }
+                    const storedCurrentUser = typeof parsed.currentUser === 'string' ? parsed.currentUser : null;
+                    if (storedCurrentUser && sanitizedUsers.some(user => user.name === storedCurrentUser)) {
+                        updates.currentUser = storedCurrentUser;
+                    } else if (updates.users && updates.users.length) {
+                        updates.currentUser = updates.users[0].name;
+                    }
+                }
+            } else {
+                const legacyTranscript = window.localStorage.getItem(LEGACY_TRANSCRIPT_STORAGE_KEY);
+                if (legacyTranscript) {
+                    const parsedTranscript = JSON.parse(legacyTranscript);
+                    if (Array.isArray(parsedTranscript)) {
+                        updates.transcript = parsedTranscript;
+                    }
+                }
+            }
+
+            if (Object.keys(updates).length) {
+                const usersForKey = updates.users || this.state.users;
+                const nextNewKey = this.getNextAvailableKey(usersForKey);
+                this.setState({
+                    ...updates,
+                    newUserName: '',
+                    newUserKey: nextNewKey || ''
+                });
+            }
         } catch (e) {
             // eslint-disable-next-line no-console
-            console.warn('[TalkWithMarty] Failed to save transcript', e);
+            console.warn('[TalkWithMarty] Failed to load stored session', e);
+        }
+    }
+
+    saveSessionToStorage() {
+        if (typeof window === 'undefined' || !window.localStorage) return;
+        try {
+            const { llmSettings } = this.state;
+            const payload = {
+                transcript: this.state.transcript,
+                users: this.state.users,
+                currentUser: this.state.currentUser,
+                llmSettings: {
+                    instructions: (llmSettings && llmSettings.instructions) || '',
+                    safeguards: (llmSettings && llmSettings.safeguards) || ''
+                }
+            };
+            window.localStorage.setItem(
+                SESSION_STORAGE_KEY,
+                JSON.stringify(payload)
+            );
+            try {
+                window.localStorage.removeItem(LEGACY_TRANSCRIPT_STORAGE_KEY);
+            } catch (_) { }
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Failed to save session', e);
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.transcript !== this.state.transcript) {
-            this.saveTranscriptToStorage();
+        const didChangeSession =
+            prevState.transcript !== this.state.transcript ||
+            prevState.users !== this.state.users ||
+            prevState.currentUser !== this.state.currentUser ||
+            prevState.llmSettings !== this.state.llmSettings;
+
+        if (didChangeSession) {
+            this.saveSessionToStorage();
         }
+
         if (prevState.users !== this.state.users) {
             const availableKeys = this.getAvailableKeys();
             if (this.state.newUserKey && !availableKeys.includes(this.state.newUserKey)) {
@@ -501,7 +662,7 @@ class TalkWithMarty extends React.Component {
 
         // also remove persisted transcript
         if (typeof window !== 'undefined' && window.localStorage) {
-            try { window.localStorage.removeItem(TRANSCRIPT_STORAGE_KEY); } catch (_) { }
+            try { window.localStorage.removeItem(LEGACY_TRANSCRIPT_STORAGE_KEY); } catch (_) { }
         }
         this.setState({
             transcript: [],
@@ -543,8 +704,12 @@ class TalkWithMarty extends React.Component {
             return;
         }
 
-        this.setState({ isMicLoading: true, recordingError: null, isProcessingAudio: false });
-
+        this.setState({
+            isMicLoading: true,
+            recordingError: null,
+            isProcessingAudio: false,
+            recordingStatus: 'preparing'
+        });
         try {
             await this.ensureMediaStream();
             if (!this.mediaStream) {
@@ -560,13 +725,30 @@ class TalkWithMarty extends React.Component {
             const recorder = new window.MediaRecorder(this.mediaStream);
             recorder.addEventListener('dataavailable', this.handleAudioChunk);
             recorder.addEventListener('stop', this.handleRecorderStop);
+            const markRecordingStart = async () => {
+                recorder.removeEventListener('start', markRecordingStart);
+                await new Promise(resolve => setTimeout(resolve, PREPARING_PROGRESS_DURATION_MS));
+                if (this.isComponentMounted && this.mediaRecorder === recorder && recorder.state === 'recording' && this.state.recordingStatus === 'preparing') {
+                    this.setState({ recordingStatus: 'recording' });
+                }
+            };
+            recorder.addEventListener('start', markRecordingStart);
             this.mediaRecorder = recorder;
             recorder.start();
-
-            if (this.isComponentMounted) {
-                this.setState({ isListening: true, isMicLoading: false, isSpeaking: false });
+            if (recorder.state === 'recording') {
+                if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+                    window.requestAnimationFrame(markRecordingStart);
+                } else {
+                    setTimeout(markRecordingStart, 0);
+                }
             }
-            try { martyIsListening(); } catch (_) { }
+
+            if (this.isComponentMounted && this.state.recordingStatus === 'recording') {
+                this.setState({ isListening: true, isMicLoading: false, isSpeaking: false });
+                try { martyIsListening(); } catch (_) { }
+            } else if (this.isComponentMounted) {
+                this.setState({ isListening: false, isMicLoading: false, isSpeaking: false });
+            }
 
             // Placeholder for future integration
             // eslint-disable-next-line no-console
@@ -587,13 +769,9 @@ class TalkWithMarty extends React.Component {
 
         if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
             if (this.isComponentMounted) {
-                this.setState({ isListening: false });
+                this.setState({ isListening: false, recordingStatus: 'idle' });
             }
             return;
-        }
-
-        if (this.isComponentMounted) {
-            this.setState({ isListening: false, isMicLoading: true });
         }
 
         try {
@@ -613,14 +791,53 @@ class TalkWithMarty extends React.Component {
         }
     }
 
+    playRecordingPreview(url) {
+        if (!url || typeof window === 'undefined') {
+            return;
+        }
+
+        try {
+            if (this.lastRecordingAudio) {
+                this.lastRecordingAudio.pause();
+                this.lastRecordingAudio.src = '';
+                this.lastRecordingAudio = null;
+            }
+
+            const audio = new window.Audio(url);
+            audio.addEventListener('ended', () => {
+                if (this.lastRecordingAudio === audio) {
+                    this.lastRecordingAudio = null;
+                }
+            });
+            audio.addEventListener('error', error => {
+                // eslint-disable-next-line no-console
+                console.warn('[TalkWithMarty] Failed to play last recording preview', error);
+            });
+            const maybePlayPromise = audio.play();
+            if (maybePlayPromise && typeof maybePlayPromise.catch === 'function') {
+                maybePlayPromise.catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.warn('[TalkWithMarty] Autoplay blocked for last recording preview', error);
+                });
+            }
+            this.lastRecordingAudio = audio;
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Unable to start last recording preview', error);
+        }
+    }
+
     handleRecorderStop() {
         const blob = this.audioChunks.length
-            ? new Blob(this.audioChunks, { type: (this.mediaRecorder && this.mediaRecorder.mimeType) || 'audio/webm' })
-            : null;
-
+        ? new Blob(this.audioChunks, { type: (this.mediaRecorder && this.mediaRecorder.mimeType) || 'audio/webm' })
+        : null;
+        
         this.audioChunks = [];
-
-        if (blob) {
+        let shouldProcess = false;
+        if (blob && blob.size > 500 && this.state.recordingStatus === 'recording') {
+            if (this.isComponentMounted) {
+                this.setState({ isListening: false, isMicLoading: true, recordingStatus: 'idle' });
+            }
             const urlCreator = window.URL || window.webkitURL;
             const url = urlCreator ? urlCreator.createObjectURL(blob) : '';
             if (this.state.lastRecordingUrl) {
@@ -632,7 +849,8 @@ class TalkWithMarty extends React.Component {
             if (this.isComponentMounted) {
                 const stateUpdates = {
                     recordingError: null,
-                    isMicLoading: false
+                    isMicLoading: false,
+                    recordingStatus: 'idle'
                 };
                 if (url) {
                     stateUpdates.lastRecordingUrl = url;
@@ -647,13 +865,13 @@ class TalkWithMarty extends React.Component {
                 type: blob.type,
                 url
             });
+            // this.playRecordingPreview(url);
+            shouldProcess = true;
         } else if (this.isComponentMounted) {
-            this.setState({ isMicLoading: false });
+            this.setState({ isMicLoading: false, isListening: false, recordingStatus: 'idle' });
         }
 
-        this.disposeMedia();
-
-        if (blob) {
+        if (shouldProcess) {
             this.processRecording(blob);
         }
     }
@@ -682,7 +900,8 @@ class TalkWithMarty extends React.Component {
                 recordingError: message,
                 isListening: false,
                 isMicLoading: false,
-                isProcessingAudio: false
+                isProcessingAudio: false,
+                recordingStatus: 'idle'
             });
         }
 
@@ -956,18 +1175,44 @@ class TalkWithMarty extends React.Component {
 
 
     buildLLMSettingsForRequest() {
+        const { safeguards, instructions } = this.state.llmSettings || {};
+        const teacherSourceSettings = this.llmSettingsSource === 'server'
+            ? this.serverTeacherLLMSettings
+            : this.teacherLLMSettings;
+        const teacherSettings = teacherSourceSettings || {};
         const {
-            safeguards,
-            instructions,
-        } = this.state.llmSettings;
+            importantInstructions,
+            importantSafeguards,
+            knowledgeBase
+        } = teacherSettings;
+
+        const studentInstructions = typeof instructions === 'string' ? instructions.trim() : '';
+        const studentSafeguards = typeof safeguards === 'string' ? safeguards.trim() : '';
+
+        const combinedInstructions = [importantInstructions, studentInstructions]
+            .filter(Boolean)
+            .join('\n\n');
+        const combinedSafeguards = [importantSafeguards, studentSafeguards]
+            .filter(Boolean)
+            .join('\n\n');
 
         const settings = {};
-        if (instructions) {
-            settings.instructions = instructions;
+        if (importantInstructions) {
+            settings.importantInstructions = importantInstructions;
         }
-        if (safeguards) {
-            settings.safeguards = { notes: safeguards };
+        if (combinedInstructions) {
+            settings.instructions = combinedInstructions;
         }
+        if (importantSafeguards) {
+            settings.importantSafeguards = importantSafeguards;
+        }
+        if (combinedSafeguards) {
+            settings.safeguards = combinedSafeguards;
+        }
+        if (knowledgeBase) {
+            settings.knowledgeBase = knowledgeBase;
+        }
+        console.log('LLM request settings', settings, 'source', this.llmSettingsSource);
         return {
             ...settings,
             userName: this.state.currentUser
@@ -1117,6 +1362,55 @@ class TalkWithMarty extends React.Component {
         }
     }
 
+    sanitizeStoredUsers(rawUsers) {
+        const input = Array.isArray(rawUsers) ? rawUsers : [];
+        const sanitized = [];
+        const seenNames = new Set();
+        const seenKeys = new Set();
+
+        input.forEach((entry, index) => {
+            if (!entry || typeof entry !== 'object') return;
+            const rawName = typeof entry.name === 'string' ? entry.name.trim() : '';
+            const fallbackName = `User ${sanitized.length + 1}`;
+            const safeName = rawName || fallbackName;
+            if (seenNames.has(safeName)) return;
+
+            let candidateKey = typeof entry.key === 'string' ? entry.key.trim() : '';
+            if (candidateKey && seenKeys.has(candidateKey.toLowerCase())) {
+                candidateKey = '';
+            }
+            if (!candidateKey) {
+                candidateKey = AVAILABLE_USER_KEYS.find(key => !seenKeys.has(key.toLowerCase())) || '';
+            }
+            if (candidateKey) {
+                seenKeys.add(candidateKey.toLowerCase());
+            }
+            seenNames.add(safeName);
+            sanitized.push({ name: safeName, key: candidateKey });
+        });
+
+        if (!sanitized.length) {
+            return [{ name: 'You', key: DEFAULT_USER_KEY }];
+        }
+
+        if (!sanitized[0].key) {
+            sanitized[0].key = DEFAULT_USER_KEY;
+            seenKeys.add(DEFAULT_USER_KEY.toLowerCase());
+        }
+
+        sanitized.forEach(user => {
+            if (!user.key) {
+                const nextKey = AVAILABLE_USER_KEYS.find(key => !seenKeys.has(key.toLowerCase()));
+                if (nextKey) {
+                    user.key = nextKey;
+                    seenKeys.add(nextKey.toLowerCase());
+                }
+            }
+        });
+
+        return sanitized;
+    }
+
     getAssignedKeys(options = {}) {
         const excludeName = options.excludeName ? String(options.excludeName) : null;
         return this.state.users
@@ -1173,7 +1467,6 @@ class TalkWithMarty extends React.Component {
     }
 
     handleGlobalKeyUp(event) {
-        console.log("handleGlobalKeyUp", event);
         if (!event) return;
         if (this.state.interactionMode !== 'pushToTalk') return;
         if (!this.activeUserKey) return;
@@ -1337,7 +1630,8 @@ class TalkWithMarty extends React.Component {
         const { intl } = this.props;
         const { editingUser, newUserName, newUserKey, users } = this.state;
         const availableKeysForNewUser = this.getAvailableKeys();
-        const canAddUser = Boolean(newUserName.trim() && newUserKey);
+        const trimmedNewName = newUserName.trim();
+        const canAddUser = Boolean(trimmedNewName && newUserKey);
 
         return (
             <div className={styles.settingsParticipants}>
@@ -1402,7 +1696,7 @@ class TalkWithMarty extends React.Component {
                         onKeyDown={event => {
                             if (event.key === 'Enter') {
                                 event.preventDefault();
-                                this.handleAddUser(newUserName, newUserKey);
+                                this.handleAddUser(event.target.value, this.state.newUserKey);
                             }
                         }}
                         className={classNames(styles.textInput, styles.settingsUserInput)}
@@ -1410,6 +1704,12 @@ class TalkWithMarty extends React.Component {
                     <select
                         value={newUserKey}
                         onChange={event => this.setState({ newUserKey: event.target.value })}
+                        onKeyDown={event => {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                this.handleAddUser(this.state.newUserName, event.target.value);
+                            }
+                        }}
                         className={classNames(styles.selectInput, styles.userKeySelect)}
                         disabled={!availableKeysForNewUser.length}
                     >
@@ -1425,16 +1725,20 @@ class TalkWithMarty extends React.Component {
                         ))}
                     </select>
                     <button
-                        style={{ visibility: canAddUser ? 'visible' : 'hidden' }}
                         type="button"
-                        className={styles.addRemoveUserButton}
+                        className={classNames(styles.addRemoveUserButton, styles.addUserButton)}
                         onClick={() => this.handleAddUser(newUserName, newUserKey)}
                         disabled={!canAddUser}
                     >
-                        {/* {intl.formatMessage(messages.addUserButton)} */}
-                        ➕
+                        <span aria-hidden="true">➕</span>
+                        <span className={styles.addUserButtonLabel}>
+                            {intl.formatMessage(messages.addUserButton)}
+                        </span>
                     </button>
                 </div>
+                <p className={styles.settingsUserHint}>
+                    {intl.formatMessage(messages.addUserHint)}
+                </p>
             </div>
         );
     }
@@ -1457,7 +1761,8 @@ class TalkWithMarty extends React.Component {
             isSpeaking,
             isSettingsOpen,
             users,
-            currentUser
+            currentUser,
+            recordingStatus
         } = this.state;
 
         const isBusy = isThinking || isSpeaking;
@@ -1606,17 +1911,28 @@ class TalkWithMarty extends React.Component {
                                 </div>
                             )}
 
-                            {interactionMode === 'pushToTalk' && isListening && (
+                            {interactionMode === 'pushToTalk' && recordingStatus === 'preparing' && (
+                                <div className={styles.preparingIndicator}>
+                                    <RecordingPreparationProgress
+                                        className={styles.preparingIndicatorCircle}
+                                        durationMs={PREPARING_PROGRESS_DURATION_MS}
+                                        size={60}
+                                        strokeWidth={8}
+                                    />
+                                    <span>{intl.formatMessage(messages.recordingPreparingIndicator)}</span>
+                                </div>
+                            )}
+                            {interactionMode === 'pushToTalk' && recordingStatus === 'recording' && (
                                 <div className={styles.recordingIndicator}>
                                     {intl.formatMessage(messages.recordingIndicator)}
                                 </div>
                             )}
-                            {interactionMode === 'pushToTalk' && isThinking && !isListening && (
+                            {interactionMode === 'pushToTalk' && isThinking && recordingStatus === 'idle' && (
                                 <div className={styles.processingIndicator}>
                                     {intl.formatMessage(messages.thinkingIndicator)}
                                 </div>
                             )}
-                            {interactionMode === 'pushToTalk' && this.state.isSpeaking && !isListening && (
+                            {interactionMode === 'pushToTalk' && this.state.isSpeaking && recordingStatus === 'idle' && (
                                 <div className={styles.processingIndicator}>
                                     {intl.formatMessage(messages.speakingIndicator)}
                                 </div>
@@ -1635,6 +1951,12 @@ class TalkWithMarty extends React.Component {
 
                             {interactionMode === 'pushToTalk' && recordingError && this.mediaSupportAvailable && (
                                 <div className={styles.recordingError}>{recordingError}</div>
+                            )}
+
+                            {interactionMode === 'pushToTalk' && (
+                                <div className={styles.recordingCue}>
+                                    {intl.formatMessage(messages.recordingStartCue)}
+                                </div>
                             )}
 
                             {/* {interactionMode === 'pushToTalk' && lastRecordingUrl && !isListening && !isProcessingAudio && (
