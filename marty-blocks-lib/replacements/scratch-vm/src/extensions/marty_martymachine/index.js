@@ -19,6 +19,7 @@ const Message = {
         'zh-tw': '載入Machine Learning模型[MODEL_NAME]',
         'el': 'Φόρτωση μοντέλου Μηχανικής Μάθησης [MODEL_NAME]',
         'pl': 'Załaduj model uczenia maszynowego [MODEL_NAME]',
+        'bg': 'Зареждане на модел за машинно обучение [MODEL_NAME]'
     },
     image_classification_model_url: {
         'ja': '画像分類モデルURL[URL]',
@@ -27,7 +28,8 @@ const Message = {
         'ko': '이미지 분류 모델 URL [URL]',
         'zh-tw': '影像分類模型網址[URL]',
         'el': 'Διεύθυνση URL μοντέλου ταξινόμησης εικόνας [URL]',
-        'pl': 'Adres URL modelu klasyfikacji obrazu [URL]'
+        'pl': 'Adres URL modelu klasyfikacji obrazu [URL]',
+        'bg': 'URL на модел за класификация на изображения [URL]'
     },
     image_classification_sample_model_url: {
         'ja': 'https://teachablemachine.withgoogle.com/models/0rX_3hoH/',
@@ -36,7 +38,8 @@ const Message = {
         'ko': ' ',
         'zh-tw': ' ',
         'el': ' ',
-        'pl': ' '
+        'pl': ' ',
+        'bg': ' '
     },
     sound_classification_model_url: {
         'ja': '音声分類モデルURL[URL]',
@@ -45,7 +48,8 @@ const Message = {
         'ko': '소리 분류 모델 URL [URL]',
         'zh-tw': '聲音分類模型網址[URL]',
         'el': 'Διεύθυνση URL μοντέλου ταξινόμησης ήχου [URL]',
-        'pl': 'Adres URL modelu klasyfikacji dźwięku [URL]'
+        'pl': 'Adres URL modelu klasyfikacji dźwięku [URL]',
+        'bg': 'URL на модел за класификация на звук [URL]'
     },
     sound_classification_sample_model_url: {
         'ja': 'https://teachablemachine.withgoogle.com/models/xP0spGSB/',
@@ -54,7 +58,8 @@ const Message = {
         'ko': ' ',
         'zh-tw': ' ',
         'el': ' ',
-        'pl': ' '
+        'pl': ' ',
+        'bg': ' '
     },
     classify_image: {
         'ja': '画像を分類する',
@@ -63,7 +68,8 @@ const Message = {
         'ko': '이미지 분류하기',
         'zh-tw': '影像分類',
         'el': 'Ταξινόμηση εικόνας',
-        'pl': 'Klasyfikuj obraz'
+        'pl': 'Klasyfikuj obraz',
+        'bg': 'Класифициране на изображение'
     },
     image_label: {
         'ja': '画像ラベル',
@@ -72,7 +78,8 @@ const Message = {
         'ko': '이미지 라벨',
         'zh-tw': '影像標籤',
         'el': 'Ετικέτα εικόνας',
-        'pl': 'Etykieta obrazu'
+        'pl': 'Etykieta obrazu',
+        'bg': 'Етикет на изображение'
     },
     accelerometer_label: {
         'en': 'accelerometer label',
@@ -82,7 +89,8 @@ const Message = {
         'ko': '가속도계 라벨',
         'zh-tw': '加速度感應器標籤',
         'el': 'Ετικέτα επιταχυνσιόμετρου',
-        'pl': 'Etykieta akcelerometru'
+        'pl': 'Etykieta akcelerometru',
+        'bg': 'Етикет на акселерометъра'
     },
     sound_label: {
         'ja': '音声ラベル',
@@ -91,7 +99,8 @@ const Message = {
         'ko': '소리 라벨',
         'zh-tw': '聲音標籤',
         'el': 'Ετικέτα ήχου',
-        'pl': 'Etykieta dźwięku'
+        'pl': 'Etykieta dźwięku',
+        'bg': 'Етикет на звук'
     },
     when_received_block: {
         'ja': '画像ラベル[LABEL]を受け取ったとき',
@@ -101,7 +110,8 @@ const Message = {
         'zh-cn': '接收到类别[LABEL]时',
         'zh-tw': '接收到影像標籤:[LABEL]時',
         'el': 'Όταν ληφθεί ετικέτα εικόνας: [LABEL]',
-        'pl': 'Kiedy otrzymano etykietę obrazu: [LABEL]'
+        'pl': 'Kiedy otrzymano etykietę obrazu: [LABEL]',
+        'bg': 'Когато е получен етикет на изображение: [LABEL]'
     },
     is_image_label_detected: {
         'ja': '[LABEL]の画像が見つかった',
@@ -110,7 +120,8 @@ const Message = {
         'ko': '[LABEL] 이미지가 감지됨',
         'zh-tw': '影像[LABEL]被偵測？',
         'el': 'Εικόνα [LABEL] ανιχνεύθηκε',
-        'pl': 'Wykryto obraz [LABEL]'
+        'pl': 'Wykryto obraz [LABEL]',
+        'bg': 'Открито е изображение [LABEL]'
     },
     is_sound_label_detected: {
         'ja': '[LABEL]の音声が聞こえた',
@@ -119,7 +130,8 @@ const Message = {
         'ko': '[LABEL] 소리가 감지됨',
         'zh-tw': '聲音[LABEL]被偵測？',
         'el': '[LABEL] ήχου ανιχνεύθηκε',
-        'pl': 'Wykryto dźwięk [LABEL]'
+        'pl': 'Wykryto dźwięk [LABEL]',
+        'bg': 'Открит е звук [LABEL]'
     },
     is_accelerometer_label_detected: {
         'en': 'accelerometer [LABEL] detected',
@@ -129,7 +141,8 @@ const Message = {
         'ko': '가속도계 [LABEL] 감지됨',
         'zh-tw': '加速度感應器[LABEL]被偵測？',
         'el': 'Επιταχυνσιόμετρο [LABEL] ανιχνεύθηκε',
-        'pl': 'Wykryto akcelerometr [LABEL]'
+        'pl': 'Wykryto akcelerometr [LABEL]',
+        'bg': 'Открит е акселерометър [LABEL]'
     },
     image_label_confidence: {
         'ja': '画像ラベル[LABEL]の確度',
@@ -138,7 +151,8 @@ const Message = {
         'ko': '[LABEL] 이미지 신뢰도',
         'zh-tw': '影像置信度[LABEL]',
         'el': 'Εμπιστοσύνη της εικόνας [LABEL]',
-        'pl': 'Pewność obrazu [LABEL]'
+        'pl': 'Pewność obrazu [LABEL]',
+        'bg': 'Доверие на изображение [LABEL]'
     },
     sound_label_confidence: {
         'ja': '音声ラベル[LABEL]の確度',
@@ -147,7 +161,8 @@ const Message = {
         'ko': '[LABEL] 소리 신뢰도',
         'zh-tw': '聲音置信度[LABEL]',
         'el': 'Εμπιστοσύνη του ήχου [LABEL]',
-        'pl': 'Pewność dźwięku [LABEL]'
+        'pl': 'Pewność dźwięku [LABEL]',
+        'bg': 'Доверие на звук [LABEL]'
     },
     accelerometer_label_confidence: {
         'en': 'confidence of accelerometer [LABEL]',
@@ -157,7 +172,8 @@ const Message = {
         'ko': '가속도계 [LABEL] 신뢰도',
         'zh-tw': '加速度感應器置信度[LABEL]',
         'el': 'Εμπιστοσύνη του επιταχυνσιόμετρου [LABEL]',
-        'pl': 'Pewność akcelerometru [LABEL]'
+        'pl': 'Pewność akcelerometru [LABEL]',
+        'bg': 'Доверие на акселерометър [LABEL]'
     },
     when_received_sound_label_block: {
         'ja': '音声ラベル[LABEL]を受け取ったとき',
@@ -167,7 +183,8 @@ const Message = {
         'ko': '[LABEL] 소리 라벨을 받았을 때:',
         'zh-tw': '接收到聲音標籤[LABEL]時',
         'el': 'Όταν ληφθεί ετικέτα ήχου: [LABEL]',
-        'pl': 'Kiedy otrzymano etykietę dźwięku: [LABEL]'
+        'pl': 'Kiedy otrzymano etykietę dźwięku: [LABEL]',
+        'bg': 'Когато е получен етикет на звук: [LABEL]'
     },
     when_received_accelerometer_label_block: {
         'en': 'when received accelerometer label:[LABEL]',
@@ -177,7 +194,8 @@ const Message = {
         'ko': '[LABEL] 가속도 센서 라벨을 받았을 때:',
         'zh-tw': '接收到加速度感應器標籤[LABEL]時',
         'el': 'Όταν ληφθεί ετικέτα επιταχυνσιόμετρου: [LABEL]',
-        'pl': 'Kiedy otrzymano etykietę akcelerometru: [LABEL]'
+        'pl': 'Kiedy otrzymano etykietę akcelerometru: [LABEL]',
+        'bg': 'Когато е получен етикет на акселерометър: [LABEL]'
     },
     label_block: {
         'ja': 'ラベル',
@@ -187,7 +205,8 @@ const Message = {
         'ko': '라벨',
         'zh-tw': '標籤',
         'el': 'Ετικέτα',
-        'pl': 'Etykieta'
+        'pl': 'Etykieta',
+        'bg': 'Етикет'
     },
     any: {
         'ja': 'のどれか',
@@ -197,7 +216,8 @@ const Message = {
         'ko': '어떤',
         'zh-tw': '任何',
         'el': 'Οποιοδήποτε',
-        'pl': 'dowolny'
+        'pl': 'dowolny',
+        'bg': 'някой'
     },
     any_without_of: {
         'ja': 'どれか',
@@ -207,7 +227,8 @@ const Message = {
         'zh-cn': '任何',
         'zh-tw': '任何',
         'el': 'Οποιοδήποτε',
-        'pl': 'dowolny'
+        'pl': 'dowolny',
+        'bg': 'някой'
     },
     all: {
         'ja': 'の全て',
@@ -217,7 +238,8 @@ const Message = {
         'zh-cn': '所有',
         'zh-tw': '全部',
         'el': 'Όλα',
-        'pl': 'wszystkie'
+        'pl': 'wszystkie',
+        'bg': 'всички'
     },
     toggle_classification: {
         'ja': 'ラベル付けを[CLASSIFICATION_STATE]にする',
@@ -227,7 +249,8 @@ const Message = {
         'zh-cn': '[CLASSIFICATION_STATE]分类',
         'zh-tw': '[CLASSIFICATION_STATE]分類',
         'el': 'Ενεργοποίηση ταξινόμησης [CLASSIFICATION_STATE]',
-        'pl': 'Przełącz klasyfikację [CLASSIFICATION_STATE]'
+        'pl': 'Przełącz klasyfikację [CLASSIFICATION_STATE]',
+        'bg': 'Превключване на класификация [CLASSIFICATION_STATE]'
     },
     set_confidence_threshold: {
         'ja': '確度のしきい値を[CONFIDENCE_THRESHOLD]にする',
@@ -236,7 +259,8 @@ const Message = {
         'ko': '신뢰도 기준 설정 [CONFIDENCE_THRESHOLD]',
         'zh-tw': '設定置信度閾值[CONFIDENCE_THRESHOLD]',
         'el': 'Ορισμός ορίου εμπιστοσύνης [CONFIDENCE_THRESHOLD]',
-        'pl': 'Ustaw próg pewności [CONFIDENCE_THRESHOLD]'
+        'pl': 'Ustaw próg pewności [CONFIDENCE_THRESHOLD]',
+        'bg': 'Задаване на праг на доверие [CONFIDENCE_THRESHOLD]'
     },
     get_confidence_threshold: {
         'ja': '確度のしきい値',
@@ -245,7 +269,8 @@ const Message = {
         'ko': '신뢰도 기준',
         'zh-tw': '置信度閾值',
         'el': 'Όριο εμπιστοσύνης',
-        'pl': 'Próg pewności'
+        'pl': 'Próg pewności',
+        'bg': 'Праг на доверие'
     },
     set_classification_interval: {
         'ja': 'ラベル付けを[CLASSIFICATION_INTERVAL]秒間に1回行う',
@@ -255,7 +280,8 @@ const Message = {
         'ko': '매 [CLASSIFICATION_INTERVAL]초마다 라벨 분류하기',
         'zh-tw': '每隔[CLASSIFICATION_INTERVAL]秒標記一次',
         'el': 'Ετικέτα κάθε [CLASSIFICATION_INTERVAL] δευτερόλεπτα',
-        'pl': 'Etykietuj raz na [CLASSIFICATION_INTERVAL] sekund'
+        'pl': 'Etykietuj raz na [CLASSIFICATION_INTERVAL] sekund',
+        'bg': 'Етикетиране веднъж на всеки [CLASSIFICATION_INTERVAL] секунди'
     },
     video_toggle: {
         'ja': 'ビデオを[VIDEO_STATE]にする',
@@ -265,7 +291,8 @@ const Message = {
         'ko': '비디오 화면 [VIDEO_STATE]',
         'zh-tw': '視訊設為[VIDEO_STATE]',
         'el': 'Ενεργοποίηση βίντεο [VIDEO_STATE]',
-        'pl': 'Przełącz wideo [VIDEO_STATE]'
+        'pl': 'Przełącz wideo [VIDEO_STATE]',
+        'bg': 'Превключване на видео [VIDEO_STATE]'
     },
     on: {
         'ja': '入',
@@ -275,7 +302,8 @@ const Message = {
         'zh-cn': '开启',
         'zh-tw': '開啟',
         'el': 'Ενεργοποίηση',
-        'pl': 'włącz'
+        'pl': 'włącz',
+        'bg': 'включен',
     },
     off: {
         'ja': '切',
@@ -285,7 +313,8 @@ const Message = {
         'zh-cn': '关闭',
         'zh-tw': '關閉',
         'el': 'Απενεργοποίηση',
-        'pl': 'wyłącz'
+        'pl': 'wyłącz',
+        'bg': 'изключен',
     },
     video_on_flipped: {
         'ja': '左右反転',
@@ -295,7 +324,8 @@ const Message = {
         'zh-cn': '镜像开启',
         'zh-tw': '翻轉',
         'el': 'Αναστροφή',
-        'pl': 'włączony odwrócony'
+        'pl': 'włączony odwrócony',
+        'bg': 'включен обърнат',
     },
     clear_model: {
         'ja': 'モデルをクリアする',
@@ -305,7 +335,8 @@ const Message = {
         'zh-cn': '清除模型',
         'zh-tw': '清除模型',
         'el': 'Καθαρισμός μοντέλου',
-        'pl': 'wyczyść model'
+        'pl': 'wyczyść model',
+        'bg': 'изчистване на модел'
     }
 };
 

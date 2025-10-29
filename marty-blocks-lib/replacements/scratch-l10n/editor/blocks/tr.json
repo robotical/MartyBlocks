@@ -272,7 +272,7 @@
   "NEW_LIST": "Bir Liste Oluştur",
   "NEW_LIST_TITLE": "Yeni liste adı:",
   "LIST_MODAL_TITLE": "Yeni Liste",
-  "LIST_ALREADY_EXISTS": "'%1' adlı bir liste zaten var.",
+  "LIST_ALREADY_EXISTS": "%1' adlı bir liste zaten var.",
   "RENAME_LIST_TITLE": "Tüm \"%1\" listelerini şöyle adlandır:",
   "RENAME_LIST_MODAL_TITLE": "Listeyi Yeniden Adlandır",
   "DEFAULT_LIST_ITEM": "şey",
