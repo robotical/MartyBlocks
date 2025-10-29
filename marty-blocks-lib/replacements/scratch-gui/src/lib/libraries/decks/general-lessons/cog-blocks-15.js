@@ -85,6 +85,7 @@ const cogBlocksTutorial15 = {
             /* STEP 5 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-5.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"The data we’ll use to train this model will be the three axes of the accelerometer. <br/><br/> You can see this data in real time on this screen, just like in the sensor dashboard"}
@@ -109,6 +110,10 @@ const cogBlocksTutorial15 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-7.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-7.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"That will create a class called <i>nothing</i>. <br/>We will have one class for each type of movement we want to detect - and that also means having a base case of no movement.<br/><br/>We now need to collect training data for the <i>nothing</i> class. You can collect samples of data for accelerometer models like this by holding down the button on Cog.<br/><br/>Pick up Cog, hold it steady and then push the button for a couple of seconds."}
@@ -120,6 +125,7 @@ const cogBlocksTutorial15 = {
             /* STEP 8 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-8.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Rotate cog into a different position, hold it steady and then push the button again for a couple of seconds to collect a new sample<br/>Repeat this with different positions until you have 10-20 samples"}
@@ -143,6 +149,7 @@ const cogBlocksTutorial15 = {
             /* STEP 10 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-10.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"This time you want to record samples of making a side-to-side slow swooshing motion.<br/>Move cog gently back and forth and hold the button down for each individual movement - letting go once that movement is finished.<br/>The movement you record here will hopefully be recognised later and classified as a swoosh."}
@@ -178,6 +185,7 @@ const cogBlocksTutorial15 = {
             /* STEP 13 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-13.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"This will be a short, sharp flick movement.<br/>Again, record samples by pressing the button down just long enough to capture one movement.<br/>Try to get examples of different finishing positions to make sure it’s representative of the motions you’d like to detect later"}
@@ -213,6 +221,7 @@ const cogBlocksTutorial15 = {
             /* STEP 16 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-16.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"You’ll see a notice about a Loading Loss Plot, and then a graph will appear.<br/>The loss plot shows how well the model is doing from step to step as it repeatedly tries to classify the training data. Each iteration of training is called an <i>epoch</i> - that’s what’s on the x-axis of the loss plot.<br/>A steep downwards gradient in the loss plot means that the model is changing a lot each epoch, and getting better at classifying the data.<br/>Training will finish when the level of loss isn’t changing much any more.<br/>A low loss means that it has been able to accurately classify most of the training data that we gave it - so we want the final amount of loss to be low"}
@@ -224,6 +233,7 @@ const cogBlocksTutorial15 = {
             /* STEP 17 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-17.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Now press the <i>Run</i> button to try running the model on new data.<br/>Then move Cog around - try doing the two movements you trained it on, and see if it can recognise them.<br/>The three percentage bars represent the model’s confidence level in its classification"}
@@ -235,6 +245,7 @@ const cogBlocksTutorial15 = {
             /* STEP 18 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-18.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"You might find that sometimes movements get misclassified - or for example that it’s easy to have a <i>swoosh</i> incorrectly detected just before a <i>flick</i>.<br/>To fix that we can try adding more training data.<br/>Click on the class you want to add samples to, and then record more.<br/>If there are any that you think you messed up, you can click on the individual samples to delete them"}
@@ -258,6 +269,7 @@ const cogBlocksTutorial15 = {
             /* STEP 20 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-20.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Your model will be well trained when each detection is distinct and clear - like here where it goes straight from <i>nothing → swoosh</i> and back, and the same for <i>nothing → flick</i> and back."}
@@ -314,6 +326,7 @@ const cogBlocksTutorial15 = {
             /* STEP 25 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-25.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Check the box next to the <i>accelerometer label</i> block.<br/>Once we start classification that will show us what the model is detecting"}
@@ -526,6 +539,7 @@ const cogBlocksTutorial15 = {
             /* STEP 43 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-43.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"With Cog selected, press the green flag to run the code!<br/>You’ll need to do a <i>swoosh</i> and a <i>flick</i> to help the witch magically travel from the castle to the forest, and then from the forest to her house"}

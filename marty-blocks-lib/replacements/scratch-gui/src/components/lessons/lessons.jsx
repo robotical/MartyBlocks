@@ -437,6 +437,7 @@ class Lessons extends React.Component {
                                     }
                                     {steps[step].video && (
                                         <VideoStep
+                                            key={steps[step].video}
                                             onVideoClick={(e) => this.setExpandedVideo(e, steps[step].video)}
                                             video={steps[step].video}
                                             isAccessibilityEnabled={this.state.isAccessibilityEnabled}
@@ -444,6 +445,7 @@ class Lessons extends React.Component {
                                     )}
                                     {steps[step].image && (
                                         <ImageStep
+                                            key={steps[step].image}
                                             onImageClick={(e) => this.setExpandedImage(e, steps[step].image)}
                                             image={steps[step].image}
                                             isAccessibilityEnabled={this.state.isAccessibilityEnabled}

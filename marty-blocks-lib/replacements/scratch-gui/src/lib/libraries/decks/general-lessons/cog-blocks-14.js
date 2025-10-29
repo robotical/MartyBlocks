@@ -74,6 +74,7 @@ const cogBlocksTutorial14 = {
             /* STEP 4 - try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-4.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br/><br/>Press the green flag to run the code, and then move cog around<br/><br/>You'll see the ax list being updated every 0.1 seconds with the latest reading (or <i>sample</i>) from the accelerometer x-axis.<br/><br/>Each new sample in the ax list replaces the oldest one, and we use the <i>mod</i> operator to ensure that the <i>sampleCounter</i> variable loops around from the end of the list back to the beginning of it."}
@@ -106,6 +107,7 @@ const cogBlocksTutorial14 = {
             /* STEP 7 - try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-7.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br/>Now once every second the program will look at the list of samples from the accelerometer and determine whether it thinks there’s been movement or not.<br/><br/>It takes the 10 individual accelerometer readings (or samples) and works out a single true or false detection for movement.<br/><br/>We could change the variables we’ve set to adjust this behaviour.<br/><br/>For example, we could change the <i>motionThreshold</i> to make the program more or less sensitive to movements.<br/><br/>We could also change the <i>numSamples</i> to vary how long a snapshot of movement we’re looking at each time. With 10 samples taken at 0.1 second intervals we’re looking to see if there’s been movement over the last 1 second, but if you increased <i>numSamples</i> it would check for movement over a longer window."}
@@ -183,6 +185,7 @@ const cogBlocksTutorial14 = {
             /* STEP 13 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-13.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br/><br/>Every time motion is detected for more than 30 seconds during each 60 second window, that minute will be recorded as true in the <i>activeMinutes</i> list.<br/><br/>Otherwise, a <i>false</i> will be recorded."}
@@ -219,6 +222,7 @@ const cogBlocksTutorial14 = {
             /* STEP 16 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-16.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br/>Now the program will also record the proportion of active seconds."}
@@ -262,6 +266,7 @@ const cogBlocksTutorial14 = {
             /* STEP 20 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-20.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!"}
@@ -326,6 +331,7 @@ const cogBlocksTutorial14 = {
             /* STEP 26 */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-26.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out!<br/>Put cog in your pocket and leave your code running while you do some other work or play — see what it reports."}

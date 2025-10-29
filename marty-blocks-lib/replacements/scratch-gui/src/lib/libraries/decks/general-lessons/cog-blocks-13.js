@@ -182,6 +182,7 @@ const cogBlocksTutorial13 = {
             /* STEP 14 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-14.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out - the sprite will read out the questions one by one. <br/><br/>You might need to move the sprite to the bottom left corner of the screen to give more room for the questions."}
@@ -379,6 +380,7 @@ const cogBlocksTutorial13 = {
             /* STEP 32 -- try it out */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-32.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out! <br/><br/>The questions will be asked one after another. If you buzz in you’ll get 6 seconds to answer while cog shows a countdown, and then you’ll be asked to select red or green depending on whether you got the question wrong or right."}
@@ -446,6 +448,7 @@ const cogBlocksTutorial13 = {
             /* STEP 38 -- test your quiz */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-38.mp4`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Connect a second cog and try it out!<br/><br/>Now whichever cog buzzes first after a question was asked will get the chance to answer<br/><br/>You can add more players by duplicating cog more times!<br/><br/>Remember to update the <i>player number</i> variable on each cog<br/><br/>You’ll also need to set the number of players variable to match the <i>number</i> of players"}
@@ -494,6 +497,10 @@ const cogBlocksTutorial13 = {
             {
                 type: "info",
                 image: `${BUCKET_URL}step-42.png`,
+                additionalContent: {
+                    images: [],
+                    videos: [`${BUCKET_URL}step-42.webm`],
+                },
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Add these blocks to the <i>define [how many players with score [score]]</i> block:<ul><li>set [result] to [0]</li><li>set [playerID] to [0]</li><li>repeat [length of [scores]]</li><ul><li>change [playerID] by [1]</li><li>if [[item [playerID] of [scores]] = [score]] then</li><ul><li>change [result] by [1]</li></ul></ul></ul>This new block (or function) is a little different from the ones we made before, because it takes in a parameter - the score we want to look for. <br/><br/>You can drag that <i>score</i> parameter down from the define block to use it in your code. It's like a variable, but it can only be used in this function."}
@@ -541,6 +548,7 @@ const cogBlocksTutorial13 = {
             /* STEP 46 -- try it out! */
             {
                 type: "info",
+                video: `${BUCKET_URL}step-46.webm`,
                 description: <FormattedMessage
                     isRaw={true}
                     defaultMessage={"Try it out! <br/> Now at the end of the quiz the winners will be listed, even if there is a tie!"}
