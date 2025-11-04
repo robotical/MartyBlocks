@@ -14,6 +14,7 @@ const messages = defineMessages({
         id: 'talkWithMarty.instructionsPlaceholder',
         defaultMessage: 'Guidance for how Marty should respond'
     },
+    settingModel: {id: 'talkWithMarty.settingModel', defaultMessage: 'Model'},
     settingSafeguards: {id: 'talkWithMarty.settingSafeguards', defaultMessage: 'Safeguards'},
     safeguardsPlaceholder: {
         id: 'talkWithMarty.safeguardsPlaceholder',
@@ -27,6 +28,7 @@ class TalkWithMartySettingsPanel extends React.Component {
 
         this.handleInstructionsChange = this.handleInstructionsChange.bind(this);
         this.handleSafeguardsChange = this.handleSafeguardsChange.bind(this);
+        this.handleModelChange = this.handleModelChange.bind(this);
     }
 
     handleInstructionsChange(event) {
@@ -37,15 +39,37 @@ class TalkWithMartySettingsPanel extends React.Component {
         this.props.onSettingChange('safeguards', event.target.value);
     }
 
+    handleModelChange(event) {
+        this.props.onSettingChange('model', event.target.value);
+    }
+
 
     renderSettingsForm() {
-        const {intl, settings} = this.props;
+        const {intl, settings, availableModels} = this.props;
+        const options = Array.isArray(availableModels) ? availableModels : [];
+        const modelValue = options.includes(settings.model) ? settings.model : (options[0] || '');
 
         return (
             <form
                 className={styles.settingsGrid}
                 onSubmit={event => event.preventDefault()}
             >
+                <label className={classNames(styles.inputGroup, styles.fullWidth)}>
+                    <span className={styles.inputLabel}>
+                        {intl.formatMessage(messages.settingModel)}
+                    </span>
+                    <select
+                        className={styles.selectInput}
+                        value={modelValue}
+                        onChange={this.handleModelChange}
+                    >
+                        {options.map(model => (
+                            <option key={model} value={model}>
+                                {model}
+                            </option>
+                        ))}
+                    </select>
+                </label>
                 <label className={classNames(styles.inputGroup, styles.fullWidth)}>
                     <span className={styles.inputLabel}>
                         {intl.formatMessage(messages.settingInstructions)}
@@ -120,8 +144,10 @@ TalkWithMartySettingsPanel.propTypes = {
     onToggle: PropTypes.func,
     settings: PropTypes.shape({
         instructions: PropTypes.string,
-        safeguards: PropTypes.string
+        safeguards: PropTypes.string,
+        model: PropTypes.string
     }),
+    availableModels: PropTypes.arrayOf(PropTypes.string),
     onSettingChange: PropTypes.func,
     users: PropTypes.arrayOf(PropTypes.string),
     onAddUser: PropTypes.func,
@@ -132,9 +158,11 @@ TalkWithMartySettingsPanel.propTypes = {
 TalkWithMartySettingsPanel.defaultProps = {
     settings: {
         instructions: '',
-        safeguards: ''
+        safeguards: '',
+        model: ''
     },
-    users: []
+    users: [],
+    availableModels: []
 };
 
 export default injectIntl(TalkWithMartySettingsPanel);

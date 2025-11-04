@@ -1,5 +1,5 @@
-const LLM_SERVER_BASE_URL = 'https://eth-server.appv2-analytics-server.robotical.io';
-// const LLM_SERVER_BASE_URL = 'http://localhost:4444';
+// const LLM_SERVER_BASE_URL = 'https://eth-server.appv2-analytics-server.robotical.io';
+const LLM_SERVER_BASE_URL = 'http://localhost:4444';
 const API_PREFIX = `${LLM_SERVER_BASE_URL}/talkWithMarty`;
 
 export const LLM_SETTINGS_ENDPOINTS = {

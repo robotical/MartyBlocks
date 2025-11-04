@@ -20,8 +20,8 @@ import {
 } from '../../lib/llm-settings.js';
 import { fetchLLMSettingsFromServer } from '../../lib/llm-settings-service.js';
 
-const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
-// const serverUrl = 'http://localhost:4444';
+// const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
+const serverUrl = 'http://localhost:4444';
 
 const messages = defineMessages({
     interactionTypeTitle: {
@@ -221,6 +221,8 @@ const messages = defineMessages({
 const AVAILABLE_USER_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 const DEFAULT_USER_KEY = AVAILABLE_USER_KEYS[0];
 const PREPARING_PROGRESS_DURATION_MS = 1000;
+const AVAILABLE_LLM_MODELS = ['gpt-4o', 'gpt-5', 'gpt-5-mini', 'gpt-5-chat'];
+const DEFAULT_LLM_MODEL = 'gpt-5';
 
 // Added: storage key
 const SESSION_STORAGE_KEY = 'talkWithMartyState';
@@ -256,7 +258,8 @@ class TalkWithMarty extends React.Component {
             currentMessage: '',
             llmSettings: {
                 safeguards: '',
-                instructions: ''
+                instructions: '',
+                model: DEFAULT_LLM_MODEL
             },
             isMicLoading: false,
             recordingError: null,
@@ -272,7 +275,9 @@ class TalkWithMarty extends React.Component {
             newUserName: '',
             newUserKey: AVAILABLE_USER_KEYS.find(key => key !== DEFAULT_USER_KEY) || '',
             editingUser: {},
-            recordingStatus: 'idle'
+            recordingStatus: 'idle',
+            activeTextJobId: null,
+            activeTextJobStatus: null
         };
         this.handleConversationModeChange = this.handleConversationModeChange.bind(this);
         this.handleInteractionModeChange = this.handleInteractionModeChange.bind(this);
@@ -300,10 +305,23 @@ class TalkWithMarty extends React.Component {
         this.applySpeechResponse = this.applySpeechResponse.bind(this);
         this.createTranscriptEntry = this.createTranscriptEntry.bind(this);
         this.appendTranscriptEntries = this.appendTranscriptEntries.bind(this);
+        this.removeTranscriptEntry = this.removeTranscriptEntry.bind(this);
         this.buildTextRequestPayload = this.buildTextRequestPayload.bind(this);
         this.sendTextRequest = this.sendTextRequest.bind(this);
         this.handleSpeechAudioResult = this.handleSpeechAudioResult.bind(this);
         this.postJson = this.postJson.bind(this);
+        this.ensureAbsoluteServerUrl = this.ensureAbsoluteServerUrl.bind(this);
+        this.normalizeTalkWithMartyPayload = this.normalizeTalkWithMartyPayload.bind(this);
+        this.upsertMartyTranscriptEntry = this.upsertMartyTranscriptEntry.bind(this);
+        this.handleTextJobUpdate = this.handleTextJobUpdate.bind(this);
+        this.waitForTextJobCompletion = this.waitForTextJobCompletion.bind(this);
+        this.streamTextJobUpdates = this.streamTextJobUpdates.bind(this);
+        this.pollTextJobStatus = this.pollTextJobStatus.bind(this);
+        this.delay = this.delay.bind(this);
+        this.resetActiveTextJobResources = this.resetActiveTextJobResources.bind(this);
+        this.safeParseEventData = this.safeParseEventData.bind(this);
+        this.resolveNormalizedPayload = this.resolveNormalizedPayload.bind(this);
+        this.isPayloadComplete = this.isPayloadComplete.bind(this);
         this.toggleSettingsPanel = this.toggleSettingsPanel.bind(this);
         this.handleAddUser = this.handleAddUser.bind(this);
         this.handleRemoveUser = this.handleRemoveUser.bind(this);
@@ -330,6 +348,12 @@ class TalkWithMarty extends React.Component {
         this.teacherLLMSettings = teacherLLMSettings;
         this.serverTeacherLLMSettings = serverLLMSettings;
         this.llmSettingsSource = llmSettingsSource;
+        this.activeTextJob = null;
+        this.activeTextJobEventSource = null;
+        this.activeTextJobAbortController = null;
+        this.activeTextJobDelayTimeout = null;
+        this.activeTextJobLastPayload = null;
+        this.transcriptContainerRef = React.createRef();
     }
 
     componentDidMount() {
@@ -396,6 +420,7 @@ class TalkWithMarty extends React.Component {
             window.removeEventListener('keyup', this.handleGlobalKeyUp);
             window.removeEventListener('blur', this.handleWindowBlur);
         }
+        this.resetActiveTextJobResources({ resetState: true });
         if (this.unsubscribeFromLLMSettings) {
             this.unsubscribeFromLLMSettings();
             this.unsubscribeFromLLMSettings = null;
@@ -431,11 +456,17 @@ class TalkWithMarty extends React.Component {
                         const {
                             prompt: _ignoredPrompt,
                             instructions,
-                            safeguards
+                            safeguards,
+                            model
                         } = parsed.llmSettings;
+                        const rawModel = typeof model === 'string' ? model : '';
+                        const sanitizedModel = AVAILABLE_LLM_MODELS.includes(rawModel)
+                            ? rawModel
+                            : (this.state.llmSettings.model || DEFAULT_LLM_MODEL);
                         updates.llmSettings = {
                             instructions: typeof instructions === 'string' ? instructions : this.state.llmSettings.instructions,
-                            safeguards: typeof safeguards === 'string' ? safeguards : this.state.llmSettings.safeguards
+                            safeguards: typeof safeguards === 'string' ? safeguards : this.state.llmSettings.safeguards,
+                            model: sanitizedModel
                         };
                     }
                     const storedCurrentUser = typeof parsed.currentUser === 'string' ? parsed.currentUser : null;
@@ -480,7 +511,10 @@ class TalkWithMarty extends React.Component {
                 currentUser: this.state.currentUser,
                 llmSettings: {
                     instructions: (llmSettings && llmSettings.instructions) || '',
-                    safeguards: (llmSettings && llmSettings.safeguards) || ''
+                    safeguards: (llmSettings && llmSettings.safeguards) || '',
+                    model: llmSettings && AVAILABLE_LLM_MODELS.includes(llmSettings.model)
+                        ? llmSettings.model
+                        : DEFAULT_LLM_MODEL
                 }
             };
             window.localStorage.setItem(
@@ -514,6 +548,41 @@ class TalkWithMarty extends React.Component {
             } else if (!this.state.newUserKey && availableKeys.length) {
                 this.setState({ newUserKey: availableKeys[0] });
             }
+        }
+
+        if (this.state.transcript.length > prevState.transcript.length) {
+            this.scrollTranscriptToBottom();
+        }
+    }
+
+    scrollTranscriptToBottom(options = {}) {
+        if (!this.transcriptContainerRef || !this.transcriptContainerRef.current) {
+            return;
+        }
+
+        const { behavior = 'smooth' } = options;
+        const container = this.transcriptContainerRef.current;
+        const scrollBehavior = behavior === 'smooth' ? 'smooth' : 'auto';
+
+        const applyScroll = () => {
+            if (typeof container.scrollTo === 'function') {
+                try {
+                    container.scrollTo({
+                        top: container.scrollHeight,
+                        behavior: scrollBehavior
+                    });
+                    return;
+                } catch (_) {
+                    // fall back to direct assignment when smooth scrolling is unsupported
+                }
+            }
+            container.scrollTop = container.scrollHeight;
+        };
+
+        if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+            window.requestAnimationFrame(applyScroll);
+        } else {
+            applyScroll();
         }
     }
 
@@ -627,16 +696,20 @@ class TalkWithMarty extends React.Component {
     }
 
     handleSettingsChange(settingKey, value) {
+        let nextValue = value;
+        if (settingKey === 'model' && !AVAILABLE_LLM_MODELS.includes(value)) {
+            nextValue = DEFAULT_LLM_MODEL;
+        }
         this.setState(prevState => ({
             llmSettings: {
                 ...prevState.llmSettings,
-                [settingKey]: value
+                [settingKey]: nextValue
             }
         }));
 
         // Placeholder for future integration
         // eslint-disable-next-line no-console
-        console.log('[TalkWithMarty] Setting updated:', settingKey, value);
+        console.log('[TalkWithMarty] Setting updated:', settingKey, nextValue);
     }
 
     handleClearTranscript() {
@@ -1020,32 +1093,70 @@ class TalkWithMarty extends React.Component {
     }
 
     async sendTextRequest(message) {
+        let activeJobId = null;
         try {
+            this.resetActiveTextJobResources({ resetState: true });
+
             const payload = this.buildTextRequestPayload(message);
-            const response = await this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-text`, payload);
-            // thinking done once response received
-            if (this.isComponentMounted) {
-                this.setState({ isThinking: false });
-            }
-            if (response && response.llm && response.llm.text) {
-                this.appendTranscriptEntries([
-                    this.createTranscriptEntry('marty', response.llm.text, response.llm.timestamp, { raw: response.llm.raw })
-                ]);
-            }
-            console.log('[TalkWithMarty] speech response', response);
-            if (response && response.speech) {
-                await this.handleSpeechAudioResult(response.speech.audio);
-            } else {
-                if (this.isComponentMounted) {
-                    this.setState({ isSpeaking: false });
+            const initialResponse = await this.postJson(
+                `${serverUrl}/talkWithMarty/talk-with-marty-using-text`,
+                payload
+            );
+            const initialStatus = initialResponse ? initialResponse.status : null;
+            const initialData = initialResponse ? initialResponse.data : null;
+
+            if (initialStatus === 202) {
+                if (!initialData || typeof initialData !== 'object') {
+                    throw new Error('Server response missing job information.');
                 }
-                try { martyStopsTalking(); } catch (_) { }
+
+                const jobInfo = {
+                    jobId: initialData.jobId,
+                    statusUrl: this.ensureAbsoluteServerUrl(initialData.statusUrl || initialData.statusEndpoint),
+                    streamUrl: this.ensureAbsoluteServerUrl(initialData.streamUrl || initialData.streamEndpoint)
+                };
+
+                if (!jobInfo.jobId || !jobInfo.statusUrl) {
+                    throw new Error('Talk With Marty job details are incomplete.');
+                }
+
+                this.activeTextJob = { jobId: jobInfo.jobId, entryId: null };
+                activeJobId = jobInfo.jobId;
+
+                if (this.isComponentMounted) {
+                    this.setState({
+                        activeTextJobId: jobInfo.jobId,
+                        activeTextJobStatus: initialData.status || 'pending'
+                    });
+                }
+
+                const finalPayload = await this.waitForTextJobCompletion(jobInfo);
+                console.log("finalPayload:", finalPayload);
+                if (!finalPayload) {
+                    throw new Error('Talk With Marty job did not return a final response.');
+                }
+
+                const normalizedFinal = this.normalizeTalkWithMartyPayload(finalPayload);
+                await this.applyNormalizedTextResponse(normalizedFinal, jobInfo.jobId);
+            } else {
+                const normalizedImmediate = this.normalizeTalkWithMartyPayload(initialData);
+                await this.applyNormalizedTextResponse(normalizedImmediate, null);
             }
         } catch (error) {
-            if (this.isComponentMounted) {
-                this.setState({ isThinking: false, isSpeaking: false });
+            if (activeJobId &&
+                this.activeTextJob &&
+                this.activeTextJob.jobId === activeJobId &&
+                this.activeTextJob.entryId) {
+                this.removeTranscriptEntry(this.activeTextJob.entryId);
             }
+            if (this.isComponentMounted) {
+                this.setState({ isSpeaking: false });
+            }
+            try { martyStopsTalking(); } catch (_) { }
+            this.resetActiveTextJobResources({ resetState: true });
             throw error;
+        } finally {
+            this.resetActiveTextJobResources({ resetState: true });
         }
     }
 
@@ -1136,7 +1247,7 @@ class TalkWithMarty extends React.Component {
             console.error('[TalkWithMarty] Error playing audio', error);
         });
         console.log("after playMarty");
-        return;
+        // return;
 
         const urlCreator = window.URL || window.webkitURL;
         if (!urlCreator) {
@@ -1219,6 +1330,14 @@ class TalkWithMarty extends React.Component {
         };
     }
 
+    getSelectedLLMModel() {
+        const { llmSettings } = this.state;
+        if (llmSettings && typeof llmSettings.model === 'string' && AVAILABLE_LLM_MODELS.includes(llmSettings.model)) {
+            return llmSettings.model;
+        }
+        return DEFAULT_LLM_MODEL;
+    }
+
     shouldIncludeSpeech() {
         return true;
         return Boolean(this.state.llmSettings.personalityVoice && this.state.llmSettings.personalityVoice.trim());
@@ -1235,7 +1354,8 @@ class TalkWithMarty extends React.Component {
             llm: {
                 provider: 'openai',
                 conversationHistory: this.buildConversationHistory(),
-                settings: this.buildLLMSettingsForRequest()
+                settings: this.buildLLMSettingsForRequest(),
+                model: this.getSelectedLLMModel()
             },
             includeSpeech,
             includeTranscript: true,
@@ -1258,7 +1378,8 @@ class TalkWithMarty extends React.Component {
             llm: {
                 provider: 'openai',
                 conversationHistory: this.buildConversationHistory(),
-                settings: this.buildLLMSettingsForRequest()
+                settings: this.buildLLMSettingsForRequest(),
+                model: this.getSelectedLLMModel()
             },
             includeSpeech,
             userName: this.state.currentUser
@@ -1271,8 +1392,544 @@ class TalkWithMarty extends React.Component {
         return payload;
     }
 
+    ensureAbsoluteServerUrl(candidate) {
+        if (!candidate || typeof candidate !== 'string') {
+            return candidate;
+        }
+
+        const trimmed = candidate.trim();
+        if (!trimmed) {
+            return trimmed;
+        }
+
+        try {
+            if (/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)) {
+                return trimmed;
+            }
+
+            if (trimmed.startsWith('//')) {
+                const baseUrl = new URL(serverUrl);
+                return `${baseUrl.protocol}${trimmed}`;
+            }
+
+            const base = serverUrl.endsWith('/') ? serverUrl : `${serverUrl}/`;
+            return new URL(trimmed, base).toString();
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Failed to resolve server URL', trimmed, error);
+            return trimmed;
+        }
+    }
+
+    normalizeTalkWithMartyPayload(payload) {
+        console.log("normalizeTalkWithMartyPayload:", payload);
+        if (!payload) {
+            return {
+                status: null,
+                llm: null,
+                speech: null,
+                error: null,
+                raw: payload
+            };
+        }
+
+        if (typeof payload === 'string') {
+            const normalized = payload.trim();
+            const lowered = normalized.toLowerCase();
+            return {
+                status: lowered === 'completed' || lowered === 'failed' ? lowered : null,
+                llm: null,
+                speech: null,
+                error: lowered === 'failed' ? normalized : null,
+                raw: payload
+            };
+        }
+
+        const status = typeof payload.status === 'string'
+            ? payload.status
+            : typeof payload.state === 'string'
+                ? payload.state
+                : null;
+
+        const candidateContainers = [
+            payload.result,
+            payload.payload,
+            payload.data,
+            payload.response
+        ];
+
+        let container = payload;
+        for (let index = 0; index < candidateContainers.length; index += 1) {
+            const candidate = candidateContainers[index];
+            if (candidate && typeof candidate === 'object' &&
+                (candidate.llm || candidate.speech || candidate.error)) {
+                container = candidate;
+                break;
+            }
+        }
+
+        const llm = container && typeof container === 'object' ? container.llm || null : null;
+        const speech = container && typeof container === 'object' ? container.speech || null : null;
+        const errorMessage = payload.error ||
+            (container && typeof container === 'object' && container.error) ||
+            null;
+
+        return {
+            status,
+            llm,
+            speech,
+            error: errorMessage,
+            raw: payload
+        };
+    }
+
+    upsertMartyTranscriptEntry(jobId, normalizedPayload) {
+        if (!normalizedPayload || !this.activeTextJob || this.activeTextJob.jobId !== jobId) {
+            return;
+        }
+
+        const { llm } = normalizedPayload;
+        if (!llm || typeof llm.text !== 'string') {
+            return;
+        }
+
+        const metadata = llm.raw ? { raw: llm.raw } : undefined;
+        if (!this.activeTextJob.entryId) {
+            const entry = this.createTranscriptEntry(
+                'marty',
+                llm.text,
+                llm.timestamp,
+                metadata
+            );
+            this.activeTextJob.entryId = entry.id;
+            this.appendTranscriptEntries([entry]);
+            return;
+        }
+
+        if (!this.isComponentMounted) {
+            return;
+        }
+
+        const entryId = this.activeTextJob.entryId;
+        this.setState(prevState => {
+            const entryIndex = prevState.transcript.findIndex(entry => entry.id === entryId);
+            if (entryIndex === -1) {
+                const fallbackEntry = {
+                    id: entryId,
+                    sender: 'marty',
+                    text: llm.text,
+                    timestamp: llm.timestamp || new Date().toISOString()
+                };
+                if (metadata) {
+                    fallbackEntry.metadata = metadata;
+                }
+                return {
+                    transcript: [...prevState.transcript, fallbackEntry]
+                };
+            }
+
+            const nextTranscript = prevState.transcript.slice();
+            const currentEntry = { ...nextTranscript[entryIndex] };
+            currentEntry.text = llm.text;
+            if (llm.timestamp) {
+                currentEntry.timestamp = llm.timestamp;
+            }
+            if (metadata) {
+                currentEntry.metadata = {
+                    ...(currentEntry.metadata || {}),
+                    ...metadata
+                };
+            }
+            nextTranscript[entryIndex] = currentEntry;
+            return { transcript: nextTranscript };
+        });
+    }
+
+    handleTextJobUpdate(jobId, rawPayload) {
+        if (!this.activeTextJob || this.activeTextJob.jobId !== jobId) {
+            return;
+        }
+
+        const normalized = this.normalizeTalkWithMartyPayload(rawPayload);
+        if (this.isComponentMounted && normalized.status) {
+            this.setState(prevState => {
+                if (prevState.activeTextJobId === jobId && prevState.activeTextJobStatus === normalized.status) {
+                    return null;
+                }
+                return {
+                    activeTextJobId: jobId,
+                    activeTextJobStatus: normalized.status
+                };
+            });
+        }
+        this.upsertMartyTranscriptEntry(jobId, normalized);
+        if (this.isPayloadComplete(normalized)) {
+            this.activeTextJobLastPayload = { jobId, payload: normalized };
+        } else if (normalized && typeof normalized.status === 'string') {
+            const existing = this.activeTextJobLastPayload;
+            if (existing && existing.jobId === jobId) {
+                const existingPayload = existing.payload || {};
+                const mergedStatus = normalized.status || existingPayload.status;
+                const merged = {
+                    ...existingPayload,
+                    status: mergedStatus
+                };
+                this.activeTextJobLastPayload = { jobId, payload: merged };
+            }
+        }
+    }
+
+    delay(durationMs) {
+        return new Promise(resolve => {
+            if (this.activeTextJobDelayTimeout) {
+                clearTimeout(this.activeTextJobDelayTimeout);
+            }
+            this.activeTextJobDelayTimeout = setTimeout(() => {
+                this.activeTextJobDelayTimeout = null;
+                resolve();
+            }, durationMs);
+        });
+    }
+
+    resetActiveTextJobResources(options = {}) {
+        const { resetState = false } = options;
+
+        if (this.activeTextJobEventSource) {
+            try {
+                this.activeTextJobEventSource.close();
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.warn('[TalkWithMarty] Failed to close EventSource', error);
+            }
+            this.activeTextJobEventSource = null;
+        }
+
+        if (this.activeTextJobAbortController) {
+            try {
+                this.activeTextJobAbortController.abort();
+            } catch (_) {
+                // ignore abort issues
+            }
+            this.activeTextJobAbortController = null;
+        }
+
+        if (this.activeTextJobDelayTimeout) {
+            clearTimeout(this.activeTextJobDelayTimeout);
+            this.activeTextJobDelayTimeout = null;
+        }
+
+        this.activeTextJobLastPayload = null;
+
+        if (resetState) {
+            this.activeTextJob = null;
+            if (this.isComponentMounted) {
+                this.setState({
+                    activeTextJobId: null,
+                    activeTextJobStatus: null
+                });
+            }
+        }
+    }
+
+    safeParseEventData(rawData) {
+        if (rawData === null || rawData === undefined) {
+            return null;
+        }
+
+        if (typeof rawData === 'object') {
+            return rawData;
+        }
+
+        if (typeof rawData !== 'string') {
+            return rawData;
+        }
+
+        const trimmed = rawData.trim();
+        if (!trimmed) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(trimmed);
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.warn('[TalkWithMarty] Failed to parse event data', error);
+            return trimmed;
+        }
+    }
+
+    resolveNormalizedPayload(normalizedPayload, jobId) {
+        if (!jobId) {
+            return normalizedPayload;
+        }
+
+        const fallbackRecord = this.activeTextJobLastPayload;
+        if (!fallbackRecord || fallbackRecord.jobId !== jobId || !fallbackRecord.payload) {
+            return normalizedPayload;
+        }
+
+        if (!normalizedPayload) {
+            return fallbackRecord.payload;
+        }
+
+        const originalStatus = typeof normalizedPayload.status === 'string'
+            ? normalizedPayload.status.toLowerCase()
+            : null;
+        if (originalStatus && originalStatus !== 'completed' && originalStatus !== 'success' && originalStatus !== 'succeeded') {
+            return normalizedPayload;
+        }
+
+        const fallbackPayload = fallbackRecord.payload;
+        const merged = { ...normalizedPayload };
+
+        const needsLLM = !merged.llm || typeof merged.llm.text !== 'string';
+        if (needsLLM && fallbackPayload.llm && typeof fallbackPayload.llm.text === 'string') {
+            merged.llm = fallbackPayload.llm;
+        }
+
+        const needsSpeech = !merged.speech || !merged.speech.audio;
+        if (needsSpeech && fallbackPayload.speech && fallbackPayload.speech.audio) {
+            merged.speech = fallbackPayload.speech;
+        }
+
+        if (!merged.raw && fallbackPayload.raw) {
+            merged.raw = fallbackPayload.raw;
+        }
+
+        if (!merged.status && fallbackPayload.status) {
+            merged.status = fallbackPayload.status;
+        }
+
+        return merged;
+    }
+
+    isPayloadComplete(normalized) {
+        if (!normalized || typeof normalized !== 'object') {
+            return false;
+        }
+        const hasLLMText = normalized.llm &&
+            typeof normalized.llm.text === 'string' &&
+            normalized.llm.text.trim();
+        const hasSpeechAudio = normalized.speech &&
+            normalized.speech.audio &&
+            (Array.isArray(normalized.speech.audio) || normalized.speech.audio instanceof ArrayBuffer);
+        return Boolean(hasLLMText || hasSpeechAudio);
+    }
+
+    async waitForTextJobCompletion(jobInfo) {
+        const canStream = typeof window !== 'undefined' &&
+            typeof window.EventSource !== 'undefined' &&
+            jobInfo.streamUrl;
+
+        if (canStream) {
+            try {
+                const streamedFinalPayload = await this.streamTextJobUpdates(jobInfo);
+                if (streamedFinalPayload && typeof streamedFinalPayload === 'object') {
+                    console.log("streamedFinalPayload:", streamedFinalPayload);
+                    return streamedFinalPayload;
+                }
+            } catch (streamError) {
+                // eslint-disable-next-line no-console
+                console.warn('[TalkWithMarty] SSE stream failed, falling back to polling', streamError);
+            }
+        }
+
+        return this.pollTextJobStatus(jobInfo);
+    }
+
+    streamTextJobUpdates(jobInfo) {
+        const EventSourceConstructor = typeof window !== 'undefined' ? window.EventSource : null;
+        if (!EventSourceConstructor || !jobInfo.streamUrl) {
+            return Promise.resolve(null);
+        }
+
+        return new Promise((resolve, reject) => {
+            const source = new EventSourceConstructor(jobInfo.streamUrl);
+            let isSettled = false;
+
+            this.activeTextJobEventSource = source;
+
+            const cleanup = () => {
+                if (this.activeTextJobEventSource === source) {
+                    this.activeTextJobEventSource = null;
+                }
+                source.removeEventListener('update', handleUpdate);
+                source.removeEventListener('end', handleEnd);
+                source.removeEventListener('error', handleError);
+                if (typeof source.close === 'function') {
+                    try { source.close(); } catch (_) { }
+                }
+            };
+
+            const settle = (fn, value) => {
+                if (isSettled) return;
+                isSettled = true;
+                cleanup();
+                fn(value);
+            };
+
+            const handleUpdate = event => {
+                const payload = this.safeParseEventData(event && event.data);
+                if (payload) {
+                    this.handleTextJobUpdate(jobInfo.jobId, payload);
+                }
+            };
+
+            const handleEnd = event => {
+                const payload = this.safeParseEventData(event && event.data);
+                if (payload) {
+                    this.handleTextJobUpdate(jobInfo.jobId, payload);
+                }
+                settle(resolve, payload);
+            };
+
+            const handleError = error => {
+                settle(reject, error || new Error('TalkWithMarty SSE stream error'));
+            };
+
+            source.addEventListener('update', handleUpdate);
+            source.addEventListener('end', handleEnd);
+            source.addEventListener('error', handleError);
+            source.onerror = handleError;
+        });
+    }
+
+    async pollTextJobStatus(jobInfo) {
+        const pollIntervalMs = 1500;
+
+        while (this.isComponentMounted && this.activeTextJob && this.activeTextJob.jobId === jobInfo.jobId) {
+            let response;
+            let responseData = null;
+
+            const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+            if (controller) {
+                this.activeTextJobAbortController = controller;
+            }
+
+            try {
+                response = await fetch(jobInfo.statusUrl, {
+                    method: 'GET',
+                    headers: { Accept: 'application/json' },
+                    signal: controller ? controller.signal : undefined
+                });
+            } catch (error) {
+                if (controller && controller.signal && controller.signal.aborted) {
+                    throw error;
+                }
+                throw error;
+            } finally {
+                if (this.activeTextJobAbortController === controller) {
+                    this.activeTextJobAbortController = null;
+                }
+            }
+
+            const contentType = response.headers.get('Content-Type') || '';
+            const responseText = await response.text();
+            if (responseText) {
+                if (contentType.includes('application/json')) {
+                    try {
+                        responseData = JSON.parse(responseText);
+                    } catch (parseError) {
+                        // eslint-disable-next-line no-console
+                        console.warn('[TalkWithMarty] Failed to parse status response', parseError);
+                        responseData = responseText;
+                    }
+                } else {
+                    responseData = responseText;
+                }
+            }
+
+            if (response.status >= 400) {
+                const message = responseData && typeof responseData === 'object'
+                    ? responseData.error || responseData.message || JSON.stringify(responseData)
+                    : typeof responseData === 'string'
+                        ? responseData
+                        : `Status request failed with status ${response.status}`;
+                const error = new Error(message);
+                error.status = response.status;
+                error.data = responseData;
+                throw error;
+            }
+
+            if (responseData && typeof responseData === 'object') {
+                this.handleTextJobUpdate(jobInfo.jobId, responseData);
+            }
+
+            if (response.status === 200) {
+                return responseData;
+            }
+
+            if (response.status !== 202) {
+                const unexpected = new Error(`Unexpected job status response: ${response.status}`);
+                unexpected.status = response.status;
+                unexpected.data = responseData;
+                throw unexpected;
+            }
+
+            await this.delay(pollIntervalMs);
+        }
+
+        return null;
+    }
+
+    async applyNormalizedTextResponse(normalizedPayload, jobId) {
+        if (!normalizedPayload) {
+            return;
+        }
+
+        if (normalizedPayload.status === 'failed') {
+            const errorMessage = normalizedPayload.error ||
+                this.props.intl.formatMessage(messages.textRequestFailed);
+            const error = new Error(errorMessage);
+            error.data = normalizedPayload.raw;
+            throw error;
+        }
+
+        const payloadToApply = this.resolveNormalizedPayload(normalizedPayload, jobId) || normalizedPayload;
+        if (jobId) {
+            const isComplete = this.isPayloadComplete(payloadToApply);
+            if (!isComplete) {
+                this.upsertMartyTranscriptEntry(jobId, payloadToApply);
+                const fallbackRecord = this.activeTextJobLastPayload;
+                const fallbackPayload = fallbackRecord && fallbackRecord.jobId === jobId
+                    ? fallbackRecord.payload
+                    : null;
+                if (!fallbackPayload || !this.isPayloadComplete(fallbackPayload)) {
+                    return;
+                }
+                return this.applyNormalizedTextResponse(fallbackPayload, jobId);
+            }
+        }
+
+        if (jobId) {
+            this.upsertMartyTranscriptEntry(jobId, payloadToApply);
+        } else if (payloadToApply.llm && typeof payloadToApply.llm.text === 'string') {
+            const metadata = payloadToApply.llm.raw ? { raw: payloadToApply.llm.raw } : undefined;
+            const entry = this.createTranscriptEntry(
+                'marty',
+                payloadToApply.llm.text,
+                payloadToApply.llm.timestamp,
+                metadata
+            );
+            this.appendTranscriptEntries([entry]);
+        }
+
+        if (payloadToApply.speech && payloadToApply.speech.audio) {
+            await this.handleSpeechAudioResult(payloadToApply.speech.audio);
+        } else {
+            if (this.isComponentMounted) {
+                this.setState({ isSpeaking: false });
+            }
+            try { martyStopsTalking(); } catch (_) { }
+        }
+    }
+
     async sendSpeechRequest(payload) {
-        return this.postJson(`${serverUrl}/talkWithMarty/talk-with-marty-using-speech`, payload);
+        const response = await this.postJson(
+            `${serverUrl}/talkWithMarty/talk-with-marty-using-speech`,
+            payload
+        );
+        return response ? response.data : null;
     }
 
     applySpeechResponse(response, forcedUserName) {
@@ -1325,6 +1982,22 @@ class TalkWithMarty extends React.Component {
         }));
     }
 
+    removeTranscriptEntry(entryId) {
+        if (!entryId || !this.isComponentMounted) {
+            return;
+        }
+
+        this.setState(prevState => {
+            const index = prevState.transcript.findIndex(entry => entry.id === entryId);
+            if (index === -1) {
+                return null;
+            }
+            const nextTranscript = prevState.transcript.slice();
+            nextTranscript.splice(index, 1);
+            return { transcript: nextTranscript };
+        });
+    }
+
     async postJson(url, payload) {
         const response = await fetch(url, {
             method: 'POST',
@@ -1334,12 +2007,40 @@ class TalkWithMarty extends React.Component {
             body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `Request failed with status ${response.status}`);
+        const contentType = response.headers.get('Content-Type') || '';
+        const responseText = await response.text();
+
+        let data = null;
+        if (responseText) {
+            if (contentType.includes('application/json')) {
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    // eslint-disable-next-line no-console
+                    console.warn('[TalkWithMarty] Failed to parse JSON response', parseError);
+                    data = responseText;
+                }
+            } else {
+                data = responseText;
+            }
         }
 
-        return response.json();
+        if (!response.ok) {
+            const messageFromObject = data && typeof data === 'object'
+                ? data.error || data.message || JSON.stringify(data)
+                : null;
+            const errorMessage = messageFromObject || (typeof data === 'string' ? data : '') ||
+                `Request failed with status ${response.status}`;
+            const error = new Error(errorMessage);
+            error.status = response.status;
+            error.data = data;
+            throw error;
+        }
+
+        return {
+            status: response.status,
+            data
+        };
     }
 
     disposeMedia() {
@@ -1975,6 +2676,7 @@ class TalkWithMarty extends React.Component {
                             onToggle={this.toggleSettingsPanel}
                             settings={llmSettings}
                             onSettingChange={this.handleSettingsChange}
+                            availableModels={AVAILABLE_LLM_MODELS}
                         />
                     </section>
 
@@ -2000,7 +2702,10 @@ class TalkWithMarty extends React.Component {
                                 </button>
                             </div>
                         </header>
-                        <div className={styles.transcriptContainer}>
+                        <div
+                            className={styles.transcriptContainer}
+                            ref={this.transcriptContainerRef}
+                        >
                             {this.renderTranscript()}
                         </div>
 
