@@ -20,8 +20,8 @@ import {
 } from '../../lib/llm-settings.js';
 import { fetchLLMSettingsFromServer } from '../../lib/llm-settings-service.js';
 
-// const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
-const serverUrl = 'http://localhost:4444';
+const serverUrl = 'https://eth-server.appv2-analytics-server.robotical.io';
+// const serverUrl = 'http://localhost:4444';
 
 const messages = defineMessages({
     interactionTypeTitle: {
@@ -1247,7 +1247,8 @@ class TalkWithMarty extends React.Component {
             console.error('[TalkWithMarty] Error playing audio', error);
         });
         console.log("after playMarty");
-        // return;
+        // comment in the return to playback locally as well
+        return;
 
         const urlCreator = window.URL || window.webkitURL;
         if (!urlCreator) {
