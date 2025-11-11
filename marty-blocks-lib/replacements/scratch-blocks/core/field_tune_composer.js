@@ -295,6 +295,7 @@ Blockly.FieldTuneComposer = function (opt_value, opt_validator) {
   Blockly.FieldTuneComposer.superClass_.constructor.call(this, value, opt_validator);
   this.size_ = new goog.math.Size(0, 24);
   this.tooltip_ = Blockly.Msg.TUNE_COMPOSER_TOOLTIP || "Compose a tune";
+  this.className_ += " blocklyTuneFieldText";
 
   /** @type {!Object} */
   this.editingTune_ = null;
@@ -379,6 +380,12 @@ Blockly.FieldTuneComposer = function (opt_value, opt_validator) {
 };
 
 goog.inherits(Blockly.FieldTuneComposer, Blockly.Field);
+
+/**
+ * Emphasise that the tune title is clickable.
+ * @type {string}
+ */
+Blockly.FieldTuneComposer.prototype.CURSOR = "pointer";
 
 
 /**
@@ -487,6 +494,26 @@ Blockly.FieldTuneComposer.prototype.init = function (block) {
     return;
   }
   Blockly.FieldTuneComposer.superClass_.init.call(this, block);
+  if (this.fieldGroup_) {
+    Blockly.utils.addClass(this.fieldGroup_, "blocklyTuneFieldGroup");
+  }
+  this.box_ = Blockly.utils.createSvgElement(
+    "rect",
+    {
+      rx: 6,
+      ry: 6,
+      x: 0,
+      y: 0,
+      width: this.size_.width,
+      height: this.size_.height,
+      class: "blocklyTuneFieldBorder",
+      "vector-effect": "non-scaling-stroke",
+    },
+    null
+  );
+  if (this.fieldGroup_ && this.textElement_) {
+    this.fieldGroup_.insertBefore(this.box_, this.textElement_);
+  }
   this.setText(this.tuneModel_ ? this.tuneModel_.title : "MyTune");
   this.applyTitleToLabel_();
 };
