@@ -859,10 +859,10 @@ class MartyMachineBlocks {
             this.toggleClassification({ CLASSIFICATION_STATE: 'on' });
             return `"${model.name}" Loaded!`;
         } else if (model?.modelType === "accelerometer") {
-            // check that the currently selected device is a cog or a marty
+            // check that the currently selected device is a cog
             const raftType = window.vm.editingTarget.raftType;
-            if (raftType !== 'Marty' && raftType !== 'Cog') {
-                alert('Oops! Please select a Marty or a Cog device to use the accelerometer model.');
+            if (raftType !== 'Cog') {
+                alert('Oops! Please select a Cog device to use the accelerometer model.');
                 return;
             }
             // check that the device is connected

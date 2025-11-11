@@ -159,6 +159,7 @@ class MartyMachineModelEditor extends React.Component {
                 if (!connectedRaft) {
                     return;
                 }
+                if (connectedRaft.type !== 'Cog') return;
                 const canvas = this.accelerometerCanvasRef;
                 const canvasCtx = canvas.getContext('2d');
                 canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
@@ -227,6 +228,7 @@ class MartyMachineModelEditor extends React.Component {
                 }, 1000);
                 return;
             }
+            if (this.connectedRaft.type !== 'Cog') return;
             const cogButtonClickHandler = () => {
                 this.startRecordingAccelerometerSamples('continuous');
             };
@@ -611,6 +613,7 @@ class MartyMachineModelEditor extends React.Component {
                     // Capture current accelerometer data from your connected raft
                     const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
                     if (!connectedRaft) return;
+                    if (connectedRaft.type !== 'Cog') return;
                     const data = connectedRaft.raftStateInfo.accelerometer;
 
                     // Update the sliding window by shifting out the oldest sample and pushing the new one
@@ -946,6 +949,7 @@ async function collectAccelerometerDataSample(options) {
                 requestAnimationFrame(_collectData);
                 const connectedRaft = getRaftUsingTargetId(window.vm.editingTarget.id);
                 if (!connectedRaft) return;
+                if (connectedRaft.type !== 'Cog') return;
                 const data = connectedRaft.raftStateInfo.accelerometer;
                 const x = data.ax;
                 const y = data.ay;

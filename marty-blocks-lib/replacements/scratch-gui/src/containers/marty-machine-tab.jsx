@@ -67,7 +67,7 @@ const messages = defineMessages({
         id: "gui.martyMachineTab.tutorials",
     },
     alertSelectDevice: {
-        defaultMessage: "Oops! Please select a Marty or a Cog device to use the accelerometer model.",
+        defaultMessage: "Oops! Please select a Cog device to use the accelerometer model.",
         description: "Alert message when the user tries to create an accelerometer model without selecting a device",
         id: "gui.martyMachineTab.alertSelectDevice",
     },
@@ -321,9 +321,9 @@ class MartyMachineTab extends React.Component {
 
     confirmDialogForNewModel = (modelType) => {
         if (modelType === "accelerometer") {
-            // check that the currently selected device is a cog or a marty
+            // check that the currently selected device is a cog
             const raftType = window.vm.editingTarget.raftType;
-            if (raftType !== 'Marty' && raftType !== 'Cog') {
+            if (raftType !== 'Cog') {
                 alert(this.props.intl.formatMessage(messages.alertSelectDevice));
                 return;
             }
