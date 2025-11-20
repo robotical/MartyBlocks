@@ -1395,6 +1395,7 @@
     },
      {
         "name": "Marty 2",
+        "targetType": "SPRITE",
         "tags": [
             "marty"
         ],
