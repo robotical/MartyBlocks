@@ -13,6 +13,19 @@
         "rotationCenterY": 50
     },
     {
+        "name": "Marty 2",
+        "tags": [
+            "marty",
+            "robot"
+        ],
+        "assetId": "8e41346f9e386948096815a9b5d6b3e5",
+        "bitmapResolution": 1,
+        "dataFormat": "svg",
+        "rawURL": "https://roboticalpublic.s3.eu-west-1.amazonaws.com/8e41346f9e386948096815a9b5d6b3e5.svg",
+        "rotationCenterX": 48,
+        "rotationCenterY": 50
+    },
+    {
         "name": "Cog",
         "tags": [
             "cog", "robot"

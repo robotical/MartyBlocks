@@ -1393,6 +1393,29 @@
         ],
         "blocks": {}
     },
+     {
+        "name": "Marty 2",
+        "tags": [
+            "marty"
+        ],
+        "isStage": false,
+        "variables": {},
+        "rawURL": "https://roboticalpublic.s3.eu-west-1.amazonaws.com/8e41346f9e386948096815a9b5d6b3e5.svg",
+        "costumes": [
+            {
+                "assetId": "8e41346f9e386948096815a9b5d6b3e5",
+                "name": "Marty 2",
+                "bitmapResolution": 1,
+                "dataFormat": "svg",
+                "rotationCenterX": 48,
+                "rotationCenterY": 50
+            }
+        ],
+        "sounds": [
+
+          ],
+        "blocks": {}
+    },
     {
         "name": "Broom",
         "tags": [
