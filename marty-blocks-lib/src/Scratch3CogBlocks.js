@@ -321,8 +321,10 @@ class Scratch3CogBlocks {
     if (!connectedRaft) return 0;
     let colours = args[cog_blocks_definitions.looks.cog_setLEDColourPicker.values.COLOR.name];
     if (!Array.isArray(colours)) {
-      const colour = colours;
+      const colour = _resolveColourValue(colours);
       colours = [colour, colour, colour, colour, colour, colour, colour, colour, colour, colour, colour, colour];
+    } else {
+      colours = colours.map((colourValue) => _resolveColourValue(colourValue));
     }
     return setAllLEDsToColours_colourPicker(colours, connectedRaft);
   }
@@ -556,9 +558,50 @@ function _LEDColourPickerApiCommandBuilder(colorsArray) {
 
 function _getColourFromOperator(argumentValue) {
   if (typeof argumentValue === 'function') {
-    return argumentValue();
+    return _resolveColourValue(argumentValue());
   }
-  return argumentValue;
+  return _resolveColourValue(argumentValue);
+}
+
+function _resolveColourValue(colourValue) {
+  if (typeof colourValue === 'function') {
+    return _resolveColourValue(colourValue());
+  }
+  if (typeof colourValue === 'number') {
+    return Color.decimalToHex(colourValue).replace('#', '');
+  }
+  if (typeof colourValue === 'string') {
+    const hexColour = _convertNamedColourToHex(colourValue);
+    return hexColour.replace('#', '');
+  }
+  return '000000';
+}
+
+function _convertNamedColourToHex(colour) {
+  if (typeof colour !== 'string') return colour;
+  const trimmedColour = colour.trim();
+  if (!trimmedColour) return '#000000';
+  const lower = trimmedColour.toLowerCase();
+  const colourMap = {
+    red: '#ff0000',
+    yellow: '#ffff00',
+    green: '#00ff00',
+    blue: '#0000ff',
+    purple: '#ff00ff',
+    pink: '#ff00d9',
+    white: '#ffffff',
+    orange: '#ffa500',
+    unclear: '#000000',
+    air: '#000000',
+    black: '#000000',
+    off: '#000000'
+  };
+  if (colourMap[lower]) return colourMap[lower];
+  const hexCandidate = trimmedColour.replace(/^#/, '');
+  if (/^[0-9a-f]{6}$/i.test(hexCandidate)) {
+    return `#${hexCandidate}`;
+  }
+  return trimmedColour;
 }
 
 function getRaftUsingTargetId(targetId) {

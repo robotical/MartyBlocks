@@ -627,15 +627,11 @@ class Scratch3Mv2Blocks {
   }
 
   static componentToHex(c) {
-    if (typeof c == "string") {
-      try {
-        c = +c;
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+    let component = Number(c);
+    if (Number.isNaN(component)) component = 0;
+    component = Math.max(0, Math.min(255, Math.round(component)));
+    const hex = component.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
   }
 
   static rgbToHex(r, g, b) {
@@ -1335,17 +1331,58 @@ class Scratch3Mv2Blocks {
     return [hue, chroma];
   }
 
-  getColour(addon) {
-    // helper function to get the colour of a colour sensor
-    let red, green, blue, clear, isOnAir;
+  getColourSensorValues(addon) {
+    const channelValues = {
+      red: null,
+      green: null,
+      blue: null,
+      clear: null,
+      isOnAir: false,
+    };
+    if (!addon || !addon.vals) return channelValues;
     for (const addonValKey in addon.vals) {
       const addonVal = addon.vals[addonValKey];
-      if (addonValKey.includes("Red")) red = addonVal;
-      if (addonValKey.includes("Green")) green = addonVal;
-      if (addonValKey.includes("Blue")) blue = addonVal;
-      if (addonValKey.includes("Clear")) clear = addonVal;
-      if (addonValKey.includes("Air")) isOnAir = addonVal;
+      if (addonValKey.includes("Red")) channelValues.red = addonVal;
+      if (addonValKey.includes("Green")) channelValues.green = addonVal;
+      if (addonValKey.includes("Blue")) channelValues.blue = addonVal;
+      if (addonValKey.includes("Clear")) channelValues.clear = addonVal;
+      if (addonValKey.includes("Air")) channelValues.isOnAir = Boolean(addonVal);
     }
+    return channelValues;
+  }
+
+  getNormalisedColourSensorValues(addon) {
+    const channelValues = this.getColourSensorValues(addon);
+    const numericChannels = [
+      channelValues.red,
+      channelValues.green,
+      channelValues.blue,
+      channelValues.clear,
+    ].filter((value) => typeof value === "number" && !Number.isNaN(value));
+    const highestObserved = numericChannels.length
+      ? Math.max(...numericChannels)
+      : 0;
+    const scaleFactor = highestObserved > 255 ? highestObserved / 255 : 1;
+    return {
+      red: this.normaliseColourChannel(channelValues.red, scaleFactor),
+      green: this.normaliseColourChannel(channelValues.green, scaleFactor),
+      blue: this.normaliseColourChannel(channelValues.blue, scaleFactor),
+      clear: this.normaliseColourChannel(channelValues.clear, scaleFactor),
+      isOnAir: channelValues.isOnAir,
+    };
+  }
+
+  normaliseColourChannel(value, scaleFactor = 1) {
+    if (typeof value !== "number" || Number.isNaN(value)) return null;
+    const safeScale = scaleFactor && Number.isFinite(scaleFactor) ? scaleFactor : 1;
+    const scaledValue = value / safeScale;
+    const rounded = Math.round(scaledValue);
+    return Math.max(0, Math.min(255, rounded));
+  }
+
+  getColour(addon) {
+    // helper function to get the colour of a colour sensor
+    const { red, green, blue, clear, isOnAir } = this.getColourSensorValues(addon);
     if (isOnAir) return "air";
     else {
       const colours = [
@@ -1443,15 +1480,14 @@ class Scratch3Mv2Blocks {
   }
 
   getHEXColourFromAddon(addon) {
-    // helper function to get the colour of a colour sensor
-    let red, green, blue;
-    for (const addonValKey in addon.vals) {
-      const addonVal = addon.vals[addonValKey];
-      if (addonValKey.includes("Red")) red = Math.round(addonVal);
-      if (addonValKey.includes("Green")) green = Math.round(addonVal);
-      if (addonValKey.includes("Blue")) blue = Math.round(addonVal);
-    }
-    return Scratch3Mv2Blocks.rgbToHex(red, green, blue);
+    const { red, green, blue } = this.getNormalisedColourSensorValues(addon);
+    const clampChannel = (value) =>
+      typeof value === "number" && !Number.isNaN(value) ? value : 0;
+    return Scratch3Mv2Blocks.rgbToHex(
+      clampChannel(red),
+      clampChannel(green),
+      clampChannel(blue)
+    );
   }
 
   colourSenseHEX(args, util) {
@@ -1476,14 +1512,20 @@ class Scratch3Mv2Blocks {
   }
 
   getColourRaw(addon, args) {
-    // helper function to get the RAW colour of a colour sensor
-    for (const addonValKey in addon.vals) {
-      const addonVal = addon.vals[addonValKey];
-      if (addonValKey.includes(args.SENSORCHANNEL)) {
-        return addonVal;
-      }
+    const normalisedChannels = this.getNormalisedColourSensorValues(addon);
+    const requestedChannel = (args.SENSORCHANNEL || "").toLowerCase();
+    switch (requestedChannel) {
+      case "red":
+        return normalisedChannels.red;
+      case "green":
+        return normalisedChannels.green;
+      case "blue":
+        return normalisedChannels.blue;
+      case "clear":
+        return normalisedChannels.clear;
+      default:
+        return null;
     }
-    return null;
   }
 
   colourSenseRaw(args, util) {
