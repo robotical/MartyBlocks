@@ -13,22 +13,38 @@ class Controls extends React.Component {
             'handleGreenFlagClick',
             'handleStopAllClick'
         ]);
+        this.state = {
+            greenFlagLocked: false
+        };
+    }
+    componentDidUpdate (prevProps) {
+        if (this.state.greenFlagLocked && prevProps.projectRunning && !this.props.projectRunning) {
+            this.setState({greenFlagLocked: false});
+        }
     }
     handleGreenFlagClick (e) {
         e.preventDefault();
+        if (this.state.greenFlagLocked || this.props.projectRunning) return;
+
         if (e.shiftKey) {
             this.props.vm.setTurboMode(!this.props.turbo);
-        } else {
+            return;
+        }
+
+        this.setState({greenFlagLocked: true}, () => {
             if (!this.props.isStarted) {
                 this.props.vm.start();
             }
             this.props.vm.greenFlag();
-        }
+        });
     }
     handleStopAllClick (e) {
         e.preventDefault();
         this.props.vm.stopAll();
         mv2Interface.send_REST("robot/stop");
+        if (this.state.greenFlagLocked) {
+            this.setState({greenFlagLocked: false});
+        }
     }
     render () {
         const {
@@ -38,10 +54,12 @@ class Controls extends React.Component {
             turbo,
             ...props
         } = this.props;
+        const greenFlagDisabled = this.state.greenFlagLocked || projectRunning;
         return (
             <ControlsComponent
                 {...props}
                 active={projectRunning}
+                greenFlagDisabled={greenFlagDisabled}
                 turbo={turbo}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStopAllClick={this.handleStopAllClick}

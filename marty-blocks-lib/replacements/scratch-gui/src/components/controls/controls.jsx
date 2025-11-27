@@ -26,6 +26,7 @@ const Controls = function (props) {
     const {
         active,
         className,
+        greenFlagDisabled,
         intl,
         onGreenFlagClick,
         onStopAllClick,
@@ -39,6 +40,7 @@ const Controls = function (props) {
         >
             <GreenFlag
                 active={active}
+                disabled={greenFlagDisabled}
                 title={intl.formatMessage(messages.goTitle)}
                 onClick={onGreenFlagClick}
             />
@@ -57,6 +59,7 @@ const Controls = function (props) {
 Controls.propTypes = {
     active: PropTypes.bool,
     className: PropTypes.string,
+    greenFlagDisabled: PropTypes.bool,
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
@@ -65,6 +68,7 @@ Controls.propTypes = {
 
 Controls.defaultProps = {
     active: false,
+    greenFlagDisabled: false,
     turbo: false
 };
 
